@@ -1,0 +1,39 @@
+  <layoutList>
+    <layout>
+      <configItem>
+        <name>rnk</name>
+        <!-- Keyboard indicator -->
+        <shortDescription>en</shortDescription>
+        <description>Programmer layouts</description>
+        <languageList>
+          <iso639Id>eng</iso639Id>
+          <iso639Id>rus</iso639Id>
+        </languageList>
+      </configItem>
+      <variantList>
+        <variant>
+          <configItem>
+            <name>en</name>
+            <!-- Keyboard indicator -->
+            <shortDescription>qwerty_for_programmers</shortDescription>
+            <description>Qwerty for programmers</description>
+            <languageList>
+              <iso639Id>eng</iso639Id>
+            </languageList>
+          </configItem>
+        </variant>
+        <variant>
+          <configItem>
+            <name>ru</name>
+            <!-- Keyboard indicator -->
+            <shortDescription>russian_for_programmers</shortDescription>
+            <description>Russian for programmers</description>
+            <languageList>
+              <iso639Id>rus</iso639Id>
+            </languageList>
+          </configItem>
+        </variant>
+      </variantList>
+    </layout>
+  </layoutList>
+

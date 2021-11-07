@@ -1,0 +1,28 @@
+[user]
+	name = Nikita Rudenko
+	email = rudenkornk@gmail.com
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
+[alias]
+	br = branch -vv
+	ck = checkout
+	cm = commit
+	st = status
+	cp = cherry-pick
+	rb = rebase
+	rv = remote -v
+	ll = log --oneline
+	llg = log --oneline --graph
+	ft = fetch --all
+	sg = diff --staged
+	amend = commit --amend
+[init]
+	defaultBranch = main
+[credentials]
+	helper = store
+[core]
+	editor = vim
+	fileMode = false
+

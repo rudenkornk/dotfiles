@@ -13,7 +13,7 @@
       <variantList>
         <variant>
           <configItem>
-            <name>en</name>
+            <name>rnk_qwerty</name>
             <!-- Keyboard indicator -->
             <shortDescription>rnk_qwerty</shortDescription>
             <description>Qwerty for programmers</description>
@@ -24,7 +24,7 @@
         </variant>
         <variant>
           <configItem>
-            <name>ru</name>
+            <name>rnk_russian</name>
             <!-- Keyboard indicator -->
             <shortDescription>rnk_russian</shortDescription>
             <description>Russian for programmers</description>

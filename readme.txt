@@ -3,6 +3,7 @@ Setup keyboard:
 2. Insert contents of evdev.xml into /usr/share/X11/xkb/rules/evdev.xml into appropriate place
 3. Copy rnk-russian-qwerty.vim to /usr/share/vim/vim*/keymap/
 4. Use .vimrc file
+5. sudo dpkg-reconfigure xkb-data
 
 
 Setup mouse:

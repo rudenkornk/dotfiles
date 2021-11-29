@@ -1,6 +1,6 @@
 // Qwerty for programmers
 partial alphanumeric_keys
-xkb_symbols "qwerty_for_programmers" {
+xkb_symbols "rnk_qwerty" {
 
     include "us"
     name[Group1]= "English (Qwerty for programmers)";
@@ -65,7 +65,7 @@ xkb_symbols "qwerty_for_programmers" {
 
 // Russian layout for programmers
 partial alphanumeric_keys
-xkb_symbols "russian_for_programmers" {
+xkb_symbols "rnk_russian" {
 
     include "ru(common)"
     name[Group1]= "Russian (Russian for programmers)";

@@ -15,7 +15,7 @@
           <configItem>
             <name>en</name>
             <!-- Keyboard indicator -->
-            <shortDescription>qwerty_for_programmers</shortDescription>
+            <shortDescription>rnk_qwerty</shortDescription>
             <description>Qwerty for programmers</description>
             <languageList>
               <iso639Id>eng</iso639Id>
@@ -26,7 +26,7 @@
           <configItem>
             <name>ru</name>
             <!-- Keyboard indicator -->
-            <shortDescription>russian_for_programmers</shortDescription>
+            <shortDescription>rnk_russian</shortDescription>
             <description>Russian for programmers</description>
             <languageList>
               <iso639Id>rus</iso639Id>

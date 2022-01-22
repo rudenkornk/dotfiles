@@ -1,4 +1,14 @@
+" Required for other settings
 set nocompatible
+
+set t_Co=256
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+
+syntax on
 
 " Allow backspacing over everything in insert mode.
 set backspace=indent,eol,start
@@ -11,8 +21,6 @@ set ruler
 
 " Show typing command
 set showcmd
-
-" display completion matches in a status line
 set wildmenu
 set wildmode=longest:list,full
 
@@ -29,20 +37,81 @@ set incsearch
 " Show @@@ in the last line if it is truncated.
 set display=truncate
 
-syntax on
-
-highlight RedundantSpaces ctermbg=red guibg=red
-match RedundantSpaces /\s\+$/
+colorscheme onehalfdark
+set background=dark
+set cursorline
 
 " Relative number lines on the left
-set number relativenumber
+set number " relativenumber
 
-" Fix different appearance in tmux vs raw terminal
-set background=dark
+set encoding=utf-8
+
+" Insert spaces instead of tabs
+set smarttab
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
+set wrap
+
+set foldmethod=syntax
+set foldlevel=5
+
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 15
+
+
+packadd termdebug
+let g:termdebug_wide = 163
+
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']
+
+" YouCompleteMe maps
+nnoremap <leader>gg :YcmCompleter GoTo<CR>
+nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gt :YcmCompleter GetType<CR>
+nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
+nnoremap <leader>rr :YcmCompleter GoToReferences<CR>
+nnoremap <leader>go :YcmCompleter GetDoc<CR>
+nmap     <leader>gf <Plug>(YCMFindSymbolInWorkspace)
+nnoremap <leader>gx :YcmCompleter FixIt<CR>
+nnoremap <leader>gn :YcmCompleter RefactorRename<Space>
+nnoremap <leader>gm :YcmCompleter Format<CR>
+xnoremap <leader>gm :YcmCompleter Format<CR>
+
+" gdb maps
+nnoremap <leader>db :Break<CR>
+nnoremap <leader>dr :call TermDebugSendCommand('run')<CR>
+nnoremap <leader>dn :call TermDebugSendCommand('next')<CR>
+nnoremap <leader>ds :call TermDebugSendCommand('step')<CR>
+nnoremap <leader>df :call TermDebugSendCommand('finish')<CR>
+nnoremap <leader>dc :call TermDebugSendCommand('continue')<CR>
+nnoremap <leader>du :call TermDebugSendCommand('up')<CR>
+nnoremap <leader>dd :call TermDebugSendCommand('down')<CR>
+nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<CR>
+
+" Invoke normal mode in terminal with double Esc
+tnoremap <Esc><Esc> <C-\><C-n>
 
 " Support russian with specific keyboard layouts
 set keymap=rnk-russian-qwerty
 set iminsert=0
 set imsearch=0
 highlight lCursor guifg=NONE guibg=Cyan
+
+" Fix C-arrow behaviour
+map <ESC>[1;5D <C-Left>
+map <ESC>[1;5C <C-Right>
+map! <ESC>[1;5D <C-Left>
+map! <ESC>[1;5C <C-Right>
+
+
+highlight RedundantSpaces ctermbg=red guibg=red
+match RedundantSpaces /\s\+$/
 

@@ -34,51 +34,27 @@ ln -s dotfiles/tmux.conf .tmux.conf
 ln -s dotfiles/gitconfig .gitconfig
 
 VIM plugins:
-mkdir -p ~/.vim/pack/plugins/start
 
-cd ~
-git clone https://github.com/sonph/onehalf --depth 1 --recursive
-cp -r onehalf/vim ~/.vim/pack/plugins/start/onehalf
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+:PluginInstall
+
+YouCompleteMe:
+cd ~/.vim/bundle/YouCompleteMe
+./install.py --clangd-completer # --all
+
+Highlight:
+needs compilation:
+https://github.com/jeaye/color_coded
+OR
+https://github.com/bfrg/vim-cpp-modern
+
+
 
 xfce4 terminal:
 mkdir --parents ~/.local/share/xfce4/terminal/colorschemes
 cp onehalf/xfce4-terminal/OneHalfDark.theme ~/.local/share/xfce4/terminal/colorschemes/
 cp onehalf/xfce4-terminal/OneHalfLight.theme ~/.local/share/xfce4/terminal/colorschemes
 
-cd ~/.vim/pack/plugins/start
-
-vim-surround:
-mkdir -p ~/.vim/pack/tpope/start
-cd ~/.vim/pack/tpope/start
-git clone https://github.com/tpope/vim-surround --depth 1 --recursive
-vim -u NONE -c "helptags vim-surround/doc" -c q
-
-git clone https://github.com/vim-airline/vim-airline --depth 1 --recursive
-vim -u NONE -c "helptags vim-airline/doc" -c q
-
-git clone https://github.com/vim-airline/vim-airline-themes --depth 1 --recursive
-vim -u NONE -c "helptags vim-airline-themes/doc" -c q
-
-git clone https://github.com/itchyny/vim-cursorword --depth 1 --recursive
-vim -u NONE -c "helptags vim-cursorword/doc" -c q
-
-# Only for vim < 8.2.2345
-git clone https://github.com/tmux-plugins/vim-tmux-focus-events --depth 1 --recursive
-vim -u NONE -c "helptags vim-tmux-focus-events/doc" -c q
-
-git clone https://github.com/tmux-plugins/vim-tmux --depth 1 --recursive
-vim -u NONE -c "helptags vim-tmux/doc" -c q
-
-git clone https://github.com/roxma/vim-tmux-clipboard --depth 1 --recursive
-vim -u NONE -c "helptags vim-tmux-clipboard/doc" -c q
-
-YouCompleteMe:
-mkdir -p ~/.vim/pack/ycm-core/start
-cd ~/.vim/pack/ycm-core/start
-git clone https://github.com/ycm-core/YouCompleteMe --depth 1 --recursive
-vim -u NONE -c "helptags YouCompleteMe/doc" -c q
-cd YouCompleteMe
-python3 install.py --clangd-completer
 
 bashrc:
 stty erase '^?'

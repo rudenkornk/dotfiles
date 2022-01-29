@@ -28,6 +28,11 @@ Plugin 'tpope/vim-surround'
 
 " Code completion
 Plugin 'ycm-core/YouCompleteMe'
+
+" Syntax highlight
+Plugin 'sheerun/vim-polyglot'
+
+" C family better syntax highlight
 Plugin 'jeaye/color_coded'
 
 " vim-tmux support
@@ -52,6 +57,8 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+set encoding=utf-8
+
 set t_Co=256
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -65,13 +72,15 @@ syntax on
 set backspace=indent,eol,start
 
 " keep more lines of command line history
-set history=200
+set history=1000
 
 " Show column number
 set ruler
 
 " Show typing command
 set showcmd
+
+" Display completion matches in a status line
 set wildmenu
 set wildmode=longest:list,full
 
@@ -88,15 +97,8 @@ set incsearch
 " Show @@@ in the last line if it is truncated.
 set display=truncate
 
-colorscheme onehalfdark
-let g:airline_theme='onehalfdark'
-set background=dark
-set cursorline
-
 " Relative number lines on the left
 set number " relativenumber
-
-set encoding=utf-8
 
 " Insert spaces instead of tabs
 set smarttab
@@ -109,16 +111,25 @@ set wrap
 set foldmethod=syntax
 set foldlevel=5
 
+" Setup netrw file explorer
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
 let g:netrw_winsize = 15
 
-
+" Enable gdb support
 packadd termdebug
 let g:termdebug_wide = 163
 
+colorscheme onehalfdark
+let g:airline_theme='onehalfdark'
+set background=dark
+set cursorline
+
+let g:python_highlight_all = 1
+
+" Setup YouCompleteMe code completer
 set completeopt-=preview
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_autoclose_preview_window_after_completion = 1

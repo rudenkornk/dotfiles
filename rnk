@@ -42,8 +42,8 @@ xkb_symbols "rnk_qwerty" {
     key <AC07> { [                 j,                 J,       parenleft,                1 ] };
     key <AC08> { [                 k,                 K,      parenright,                2 ] };
     key <AC09> { [                 l,                 L,      underscore,                3 ] };
-    key <AC10> { [        odiaeresis,        Odiaeresis,           colon,                4 ] };
-    key <AC11> { [        adiaeresis,        Adiaeresis,       semicolon,        semicolon ] };
+    key <AC10> { [        odiaeresis,        Odiaeresis,       semicolon,                4 ] };
+    key <AC11> { [        adiaeresis,        Adiaeresis,           colon,            colon ] };
 
     key <AB01> { [                 z,                 Z,      asciitilde,       asciitilde ] };
     key <AB02> { [                 x,                 X,      asciitilde,       asciitilde ] };
@@ -54,7 +54,7 @@ xkb_symbols "rnk_qwerty" {
     key <AB07> { [                 m,                 M,    bracketright,                6 ] };
     key <AB08> { [            oslash,            Oslash,        quotedbl,                7 ] };
     key <AB09> { [                ae,                AE,      apostrophe,                8 ] };
-    key <AB10> { [            period,             comma,           grave,            grave ] };
+    key <AB10> { [            period,             comma,           grave,           period ] };
 
     key <SPCE> { [             space,             space,           space,            space ] };
 
@@ -107,8 +107,8 @@ xkb_symbols "rnk_russian" {
     key <AC07> { [        Cyrillic_o,        Cyrillic_O,       parenleft,                1 ] };
     key <AC08> { [       Cyrillic_el,       Cyrillic_EL,      parenright,                2 ] };
     key <AC09> { [       Cyrillic_de,       Cyrillic_DE,      underscore,                3 ] };
-    key <AC10> { [      Cyrillic_zhe,      Cyrillic_ZHE,           colon,                4 ] };
-    key <AC11> { [        Cyrillic_e,        Cyrillic_E,       semicolon,        semicolon ] };
+    key <AC10> { [      Cyrillic_zhe,      Cyrillic_ZHE,       semicolon,                4 ] };
+    key <AC11> { [        Cyrillic_e,        Cyrillic_E,           colon,            colon ] };
 
     key <AB01> { [       Cyrillic_ya,       Cyrillic_YA,      asciitilde,       asciitilde ] };
     key <AB02> { [      Cyrillic_che,      Cyrillic_CHE,      asciitilde,       asciitilde ] };
@@ -119,7 +119,7 @@ xkb_symbols "rnk_russian" {
     key <AB07> { [ Cyrillic_softsign, Cyrillic_SOFTSIGN,    bracketright,                6 ] };
     key <AB08> { [       Cyrillic_be,       Cyrillic_BE,        quotedbl,                7 ] };
     key <AB09> { [       Cyrillic_yu,       Cyrillic_YU,      apostrophe,                8 ] };
-    key <AB10> { [            period,             comma,           grave,            grave ] };
+    key <AB10> { [            period,             comma,           grave,           period ] };
 
     key <SPCE> { [            space,              space,           space,            space ] };
 

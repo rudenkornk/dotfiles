@@ -111,6 +111,8 @@ set wrap
 set foldmethod=syntax
 set foldlevel=5
 
+set notimeout nottimeout
+
 " Setup netrw file explorer
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
@@ -131,6 +133,7 @@ let g:python_highlight_all = 1
 
 " Setup YouCompleteMe code completer
 set completeopt-=preview
+let g:ycm_auto_hover = ''
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']
@@ -141,12 +144,13 @@ nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gt :YcmCompleter GetType<CR>
 nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
 nnoremap <leader>rr :YcmCompleter GoToReferences<CR>
-nnoremap <leader>go :YcmCompleter GetDoc<CR>
-nmap     <leader>gf <Plug>(YCMFindSymbolInWorkspace)
 nnoremap <leader>gx :YcmCompleter FixIt<CR>
 nnoremap <leader>gn :YcmCompleter RefactorRename<Space>
 nnoremap <leader>gm :YcmCompleter Format<CR>
 xnoremap <leader>gm :YcmCompleter Format<CR>
+nnoremap <leader>ge :YcmShowDetailedDiagnostic<CR>
+nmap     <leader>gh <plug>(YCMHover)
+nmap     <leader>gf <Plug>(YCMFindSymbolInWorkspace)
 
 " gdb maps
 nnoremap <leader>db :Break<CR>

@@ -50,8 +50,8 @@ alias tmux='tmux -2 -u'
 export PS1="\[\e[1;32m\]${debian_chroot:+($debian_chroot)}\u@\h:\[\e[m\]\[\e[0;36m\]\w\\[\e[m\]$ "
 
 if [ -z "$SSH_AUTH_SOCK" ] ; then
-  eval `ssh-agent -s`
-  ssh-add
+  eval "$(ssh-agent -s)" &> /dev/null
+  ssh-add ~/.ssh/* &> /dev/null
 fi
 
 

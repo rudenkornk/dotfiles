@@ -4,26 +4,14 @@ Informal descripition, which should be rewritten as some setup script
 Setup keyboard:
 1. Copy rnk to /usr/share/X11/xkb/symbols
 2. Insert contents of evdev.xml into /usr/share/X11/xkb/rules/evdev.xml into appropriate place
-3. Copy rnk-russian-qwerty.vim to /usr/share/vim/vim*/keymap/
+3. ln -s dotfiles/rnk-russian-qwerty.vim /usr/share/vim/vim*/keymap/rnk-russian-qwerty.vim
 4. Use .vimrc file
 5. sudo dpkg-reconfigure xkb-data
 
 
-Setup mouse:
-1. Install logiops: https://github.com/PixlOne/logiops
-2. Run logid and copy name of mouse.
-   For example:
-   $ sudo logid
-   [INFO] Device found: Wireless Mouse MX Master 3 on /dev/hidraw1:1
-   Means name is "Wireless Mouse MX Master 3"
-3. Put this name into logid.cfg
-4. Copy logid.cfg to /etc/logid.cfg
-5. sudo systemctl enable --now logid
-
-
-
 c++ dev:
 sudo apt install clang clang-format clang-tidy
+
 
 Install xsel package for tmux-yank
 sudo apt install xsel
@@ -50,12 +38,8 @@ https://github.com/jeaye/color_coded
 OR
 https://github.com/bfrg/vim-cpp-modern
 
-
-
-xfce4 terminal:
-mkdir --parents ~/.local/share/xfce4/terminal/colorschemes
-cp onehalf/xfce4-terminal/OneHalfDark.theme ~/.local/share/xfce4/terminal/colorschemes/
-cp onehalf/xfce4-terminal/OneHalfLight.theme ~/.local/share/xfce4/terminal/colorschemes
+Download & install nerd fonts:
+https://github.com/ryanoasis/nerd-fonts
 
 
 bashrc:
@@ -65,7 +49,31 @@ alias grep='grep --color=auto'
 alias tmux='tmux -2 -u'
 export PS1="\[\e[1;32m\]${debian_chroot:+($debian_chroot)}\u@\h:\[\e[m\]\[\e[0;36m\]\w\\[\e[m\]$ "
 
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+  eval `ssh-agent -s`
+  ssh-add
+fi
+
+
+xfce4 terminal:
+mkdir --parents ~/.local/share/xfce4/terminal/colorschemes
+cp onehalf/xfce4-terminal/OneHalfDark.theme ~/.local/share/xfce4/terminal/colorschemes/
+cp onehalf/xfce4-terminal/OneHalfLight.theme ~/.local/share/xfce4/terminal/colorschemes
+
 imwheel --kill --buttons "4 5"
 imwheel --kill --quit
 source /usr/share/bash-completion/completions/git
+
+Setup mouse:
+1. Install logiops: https://github.com/PixlOne/logiops
+2. Run logid and copy name of mouse.
+   For example:
+   $ sudo logid
+   [INFO] Device found: Wireless Mouse MX Master 3 on /dev/hidraw1:1
+   Means name is "Wireless Mouse MX Master 3"
+3. Put this name into logid.cfg
+4. Copy logid.cfg to /etc/logid.cfg
+5. sudo systemctl enable --now logid
+
+
 

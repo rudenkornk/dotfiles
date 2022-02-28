@@ -13,6 +13,8 @@ call vundle#begin()
 " Let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'ryanoasis/vim-devicons'
+
 " Status line
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -33,7 +35,7 @@ Plugin 'ycm-core/YouCompleteMe'
 Plugin 'sheerun/vim-polyglot'
 
 " C family better syntax highlight
-Plugin 'jeaye/color_coded'
+"Plugin 'jeaye/color_coded'
 
 " vim-tmux support
 Plugin 'tmux-plugins/vim-tmux-focus-events' " Only for vim < 8.2.2345
@@ -106,12 +108,20 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
-set wrap
+set wrap linebreak nolist
 
 set foldmethod=syntax
 set foldlevel=5
 
 set notimeout nottimeout
+
+" Support russian with specific keyboard layouts
+if !empty(expand(glob("/usr/share/vim/vim*/keymap/rnk-russian-qwerty.vim")))
+  set keymap=rnk-russian-qwerty
+  set iminsert=0
+  set imsearch=0
+  highlight lCursor guifg=NONE guibg=Cyan
+endif
 
 " Setup netrw file explorer
 let g:netrw_banner = 0
@@ -123,6 +133,10 @@ let g:netrw_winsize = 15
 " Enable gdb support
 packadd termdebug
 let g:termdebug_wide = 163
+
+let g:airline_powerline_fonts = 1
+let g:airline_section_z = "ln:%l/%L Col:%c"
+let g:Powerline_symbols='unicode'
 
 colorscheme onehalfdark
 let g:airline_theme='onehalfdark'
@@ -166,20 +180,22 @@ nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<CR>
 " Invoke normal mode in terminal with double Esc
 tnoremap <Esc><Esc> <C-\><C-n>
 
-" Support russian with specific keyboard layouts
-if !empty(expand(glob("/usr/share/vim/vim*/keymap/rnk-russian-qwerty.vim")))
-  set keymap=rnk-russian-qwerty
-  set iminsert=0
-  set imsearch=0
-  highlight lCursor guifg=NONE guibg=Cyan
-endif
-
 " Fix C-arrow behaviour
 map <ESC>[1;5D <C-Left>
 map <ESC>[1;5C <C-Right>
 map! <ESC>[1;5D <C-Left>
 map! <ESC>[1;5C <C-Right>
 
+" Set custom cursor in different modes
+" 1 - blinking rectangle
+" 2 - normal rectangle
+" 3 - blinking underscore
+" 4 - normal underscore
+" 5 - blinking vertical bar
+" 6 - normal vertical bar
+let &t_SI.="\e[5 q" " Insert mode
+let &t_SR.="\e[3 q" " Replace mode
+let &t_EI.="\e[1 q" " Normal mode
 
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$/

@@ -54,6 +54,9 @@ if [ -z "$SSH_AUTH_SOCK" ] ; then
   ssh-add ~/.ssh/* &> /dev/null
 fi
 
+Hack for git on windows:
+git config --system core.sshCommand C:/Windows/System32/OpenSSH/ssh.exe
+
 
 xfce4 terminal:
 mkdir --parents ~/.local/share/xfce4/terminal/colorschemes

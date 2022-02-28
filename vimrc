@@ -167,10 +167,12 @@ nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<CR>
 tnoremap <Esc><Esc> <C-\><C-n>
 
 " Support russian with specific keyboard layouts
-set keymap=rnk-russian-qwerty
-set iminsert=0
-set imsearch=0
-highlight lCursor guifg=NONE guibg=Cyan
+if !empty(expand(glob("/usr/share/vim/vim*/keymap/rnk-russian-qwerty.vim")))
+  set keymap=rnk-russian-qwerty
+  set iminsert=0
+  set imsearch=0
+  highlight lCursor guifg=NONE guibg=Cyan
+endif
 
 " Fix C-arrow behaviour
 map <ESC>[1;5D <C-Left>

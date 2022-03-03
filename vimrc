@@ -102,13 +102,16 @@ set display=truncate
 " Relative number lines on the left
 set number " relativenumber
 
+" Disable formatting in insert mode
+set paste
+
 " Insert spaces instead of tabs
 set smarttab
 set tabstop=2
 set shiftwidth=2
 set expandtab
 
-set wrap linebreak nolist
+set wrap
 
 set foldmethod=syntax
 set foldlevel=5

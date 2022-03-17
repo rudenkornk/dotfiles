@@ -25,5 +25,4 @@
     helper = store
 [core]
     editor = vim
-    fileMode = false
 

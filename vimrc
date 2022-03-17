@@ -13,6 +13,7 @@ call vundle#begin()
 " Let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+" Use dev icons from powerline fonts
 Plugin 'ryanoasis/vim-devicons'
 
 " Status line
@@ -28,8 +29,18 @@ Plugin 'itchyny/vim-cursorword'
 " Surroundings: parentheses, brackets, quotes, XML tags, and more
 Plugin 'tpope/vim-surround'
 
+" Unified clipboard for vim and tmux
+Plugin 'tmux-plugins/vim-tmux-focus-events' " Only for vim < 8.2.2345
+Plugin 'roxma/vim-tmux-clipboard'
+
+" Seemless navigation between vim and tmux
+Plugin 'christoomey/vim-tmux-navigator'
+
 " Code completion
 Plugin 'ycm-core/YouCompleteMe'
+
+" Support for .tmux.conf
+Plugin 'tmux-plugins/vim-tmux'
 
 " Syntax highlight
 Plugin 'sheerun/vim-polyglot'
@@ -39,12 +50,6 @@ Plugin 'sheerun/vim-polyglot'
 
 " Formatting
 Plugin 'vim-autoformat/vim-autoformat'
-
-" vim-tmux support
-Plugin 'tmux-plugins/vim-tmux-focus-events' " Only for vim < 8.2.2345
-Plugin 'tmux-plugins/vim-tmux'
-Plugin 'roxma/vim-tmux-clipboard'
-
 
 call vundle#end()
 

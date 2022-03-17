@@ -37,6 +37,9 @@ Plugin 'sheerun/vim-polyglot'
 " C family better syntax highlight
 "Plugin 'jeaye/color_coded'
 
+" Formatting
+Plugin 'vim-autoformat/vim-autoformat'
+
 " vim-tmux support
 Plugin 'tmux-plugins/vim-tmux-focus-events' " Only for vim < 8.2.2345
 Plugin 'tmux-plugins/vim-tmux'
@@ -84,7 +87,7 @@ set showcmd
 
 " Display completion matches in a status line
 set wildmenu
-set wildmode=longest:list,full
+set wildmode=longest:list
 
 " Show a few lines of context around the cursor.  Note that this makes the
 " text scroll if you mouse-click near the start or end of the window.
@@ -169,6 +172,10 @@ nnoremap <leader>ge :YcmShowDetailedDiagnostic<CR>
 nmap     <leader>gh <plug>(YCMHover)
 nmap     <leader>gf <Plug>(YCMFindSymbolInWorkspace)
 
+" Autoformat maps
+nnoremap <leader>fm :Autoformat<CR>
+xnoremap <leader>fm :Autoformat<CR>
+
 " gdb maps
 nnoremap <leader>db :Break<CR>
 nnoremap <leader>dr :call TermDebugSendCommand('run')<CR>
@@ -197,8 +204,8 @@ map! <ESC>[1;5C <C-Right>
 " 5 - blinking vertical bar
 " 6 - normal vertical bar
 let &t_SI.="\e[5 q" " Insert mode
-let &t_SR.="\e[3 q" " Replace mode
-let &t_EI.="\e[1 q" " Normal mode
+let &t_SR.="\e[4 q" " Replace mode
+let &t_EI.="\e[6 q" " Normal mode
 
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$/

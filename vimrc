@@ -156,6 +156,15 @@ set cursorline
 
 let g:python_highlight_all = 1
 
+
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
+nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
+nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
+nnoremap <silent> <C-w>p :TmuxNavigatePrevious<cr>
+
+
 " Setup YouCompleteMe code completer
 set completeopt-=preview
 let g:ycm_auto_hover = ''
@@ -195,7 +204,8 @@ nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<CR>
 " Invoke normal mode in terminal with double Esc
 tnoremap <Esc><Esc> <C-\><C-n>
 
-" Fix C-arrow behaviour
+" Fix CTRL-arrow behaviour
+" https://unix.stackexchange.com/a/1764
 map <ESC>[1;5D <C-Left>
 map <ESC>[1;5C <C-Right>
 map! <ESC>[1;5D <C-Left>

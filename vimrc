@@ -33,30 +33,33 @@ Plugin 'tpope/vim-surround'
 Plugin 'tmux-plugins/vim-tmux-focus-events' " Only for vim < 8.2.2345
 Plugin 'roxma/vim-tmux-clipboard'
 
+" Support for .tmux.conf
+Plugin 'tmux-plugins/vim-tmux'
+
 " Seemless navigation between vim and tmux
 Plugin 'christoomey/vim-tmux-navigator'
+
+" Autoclose brackets
+Plugin 'Raimondi/delimitMate'
 
 " Code completion
 Plugin 'ycm-core/YouCompleteMe'
 
-" Support for .tmux.conf
-Plugin 'tmux-plugins/vim-tmux'
-
 " Syntax highlight
 Plugin 'sheerun/vim-polyglot'
-
-" C family better syntax highlight
-"Plugin 'jeaye/color_coded'
 
 " Formatting
 Plugin 'vim-autoformat/vim-autoformat'
 
+" LaTeX support
+Plugin 'lervag/vimtex'
+
 call vundle#end()
 
-" Required for Vundle
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
+" Required for Vundle and vimtex
+filetype plugin on
+" To ignore plugin indent changes, comment next line:
+filetype indent on
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -76,7 +79,8 @@ if exists('+termguicolors')
   set termguicolors
 endif
 
-syntax on
+" Useful itself and also required for vimtex
+syntax enable
 
 " Allow backspacing over everything in insert mode.
 set backspace=indent,eol,start
@@ -111,7 +115,11 @@ set display=truncate
 set number " relativenumber
 
 " Disable formatting in insert mode
-set paste
+" Unfortunatelly this breaks autocomplete with tab, so it is not permanently
+" enabled
+"set paste
+nnoremap <leader>vp :set invpaste<CR>
+
 
 " Insert spaces instead of tabs
 set smarttab
@@ -121,8 +129,8 @@ set expandtab
 
 set wrap
 
-set foldmethod=syntax
-set foldlevel=5
+"set foldmethod=syntax
+"set foldlevel=5
 
 set notimeout nottimeout
 
@@ -134,82 +142,15 @@ if !empty(expand(glob("/usr/share/vim/vim*/keymap/rnk-russian-qwerty.vim")))
   highlight lCursor guifg=NONE guibg=Cyan
 endif
 
-" Setup netrw file explorer
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 15
-
-" Enable gdb support
-packadd termdebug
-let g:termdebug_wide = 163
-
-let g:airline_powerline_fonts = 1
-let g:airline_section_z = "ln:%l/%L Col:%c"
-let g:Powerline_symbols='unicode'
-
-colorscheme onehalfdark
-let g:airline_theme='onehalfdark'
-set background=dark
-set cursorline
-
-let g:python_highlight_all = 1
-
-
-let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
-nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
-nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
-nnoremap <silent> <C-w>p :TmuxNavigatePrevious<cr>
-
-
-" Setup YouCompleteMe code completer
-set completeopt-=preview
-let g:ycm_auto_hover = ''
-let g:ycm_add_preview_to_completeopt = 0
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']
-
-" YouCompleteMe maps
-nnoremap <leader>gg :YcmCompleter GoTo<CR>
-nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>gt :YcmCompleter GetType<CR>
-nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
-nnoremap <leader>rr :YcmCompleter GoToReferences<CR>
-nnoremap <leader>gx :YcmCompleter FixIt<CR>
-nnoremap <leader>gn :YcmCompleter RefactorRename<Space>
-nnoremap <leader>gm :YcmCompleter Format<CR>
-xnoremap <leader>gm :YcmCompleter Format<CR>
-nnoremap <leader>ge :YcmShowDetailedDiagnostic<CR>
-nmap     <leader>gh <plug>(YCMHover)
-nmap     <leader>gf <Plug>(YCMFindSymbolInWorkspace)
-
-" Autoformat maps
-nnoremap <leader>fm :Autoformat<CR>
-xnoremap <leader>fm :Autoformat<CR>
-
-" gdb maps
-nnoremap <leader>db :Break<CR>
-nnoremap <leader>dr :call TermDebugSendCommand('run')<CR>
-nnoremap <leader>dn :call TermDebugSendCommand('next')<CR>
-nnoremap <leader>ds :call TermDebugSendCommand('step')<CR>
-nnoremap <leader>df :call TermDebugSendCommand('finish')<CR>
-nnoremap <leader>dc :call TermDebugSendCommand('continue')<CR>
-nnoremap <leader>du :call TermDebugSendCommand('up')<CR>
-nnoremap <leader>dd :call TermDebugSendCommand('down')<CR>
-nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<CR>
-
-" Invoke normal mode in terminal with double Esc
-tnoremap <Esc><Esc> <C-\><C-n>
-
 " Fix CTRL-arrow behaviour
 " https://unix.stackexchange.com/a/1764
-map <ESC>[1;5D <C-Left>
-map <ESC>[1;5C <C-Right>
-map! <ESC>[1;5D <C-Left>
-map! <ESC>[1;5C <C-Right>
+" But this breaks exit from insert mode
+"map <ESC>[1;5D] <C-Left>
+"map <ESC>[1;5C] <C-Right>
+"map! <ESC>[1;5D] <C-Left>
+"map! <ESC>[1;5C] <C-Right>
+
+
 
 " Set custom cursor in different modes
 " 1 - blinking rectangle
@@ -222,6 +163,89 @@ let &t_SI.="\e[5 q" " Insert mode
 let &t_SR.="\e[4 q" " Replace mode
 let &t_EI.="\e[6 q" " Normal mode
 
-highlight RedundantSpaces ctermbg=red guibg=red
-match RedundantSpaces /\s\+$/
+" Setup netrw file explorer
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 15
+
+" Setup gdb
+packadd termdebug
+let g:termdebug_wide = 163
+nnoremap <leader>db :Break<CR>
+nnoremap <leader>dr :call TermDebugSendCommand('run')<CR>
+nnoremap <leader>dn :call TermDebugSendCommand('next')<CR>
+nnoremap <leader>ds :call TermDebugSendCommand('step')<CR>
+nnoremap <leader>df :call TermDebugSendCommand('finish')<CR>
+nnoremap <leader>dc :call TermDebugSendCommand('continue')<CR>
+nnoremap <leader>du :call TermDebugSendCommand('up')<CR>
+nnoremap <leader>dd :call TermDebugSendCommand('down')<CR>
+nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<CR>
+" Invoke normal mode in terminal with double Esc
+tnoremap <Esc><Esc> <C-\><C-n>
+
+" Setup vim-airline and color theme
+" section_z notation:
+" %p% -- relative position in percent
+" %l -- line number
+" %L -- total lines
+" %c -- column number
+colorscheme onehalfdark
+let g:Powerline_symbols='unicode'
+let g:airline_powerline_fonts = 1
+let g:airline_section_z = "%l/%L %p%%"
+let g:airline_theme='onehalfdark'
+set background=dark
+set cursorline
+
+"Setup vim-tmux-navigator
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
+nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
+nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
+nnoremap <silent> <C-w>p :TmuxNavigatePrevious<cr>
+
+" Setup YouCompleteMe code completer
+set completeopt-=preview
+let g:ycm_auto_hover = ''
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']
+nnoremap <leader>gg :YcmCompleter GoTo<CR>
+nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gt :YcmCompleter GetType<CR>
+nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
+nnoremap <leader>gx :YcmCompleter FixIt<CR>
+nnoremap <leader>gn :YcmCompleter RefactorRename<Space>
+nnoremap <leader>gm :YcmCompleter Format<CR>
+xnoremap <leader>gm :YcmCompleter Format<CR>
+nnoremap <leader>ge :YcmShowDetailedDiagnostic<CR>
+nmap     <leader>gh <plug>(YCMHover)
+nmap     <leader>gf <Plug>(YCMFindSymbolInWorkspace)
+
+" Setup AutoFormat
+" latexindent must be at least 3.8
+let g:formatdef_latexindent = "'latexindent --logfile=/dev/null --local --lines '.a:firstline.'-'.a:lastline.' -'"
+nnoremap <leader>fm :Autoformat<CR>
+xnoremap <leader>fm :Autoformat<CR>
+" vim's native autoformat for tex files is broken
+autocmd FileType tex let g:autoformat_autoindent = 0
+autocmd FileType tex let g:autoformat_retab = 0
+autocmd FileType tex let g:autoformat_remove_trailing_spaces = 0
+
+
+" Setup vimtex
+" VimTeX uses latexmk as the default compiler backend. If you use it, which is
+" strongly recommended, you probably don't need to configure anything. If you
+" want another compiler backend, you can change it as follows. The list of
+" supported backends and further explanation is provided in the documentation,
+" see ":help vimtex-compiler".
+"let g:vimtex_compiler_method = 'latxmk'
+
+
+
+highlight RedundantSpacesAndTabs ctermbg=red guibg=red
+match RedundantSpacesAndTabs /\(\s\+$\|\t\+\)/
 

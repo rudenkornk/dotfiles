@@ -43,7 +43,6 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'Raimondi/delimitMate'
 
 " Code completion
-Plugin 'ycm-core/YouCompleteMe'
 
 " Syntax highlight
 Plugin 'sheerun/vim-polyglot'
@@ -207,23 +206,6 @@ nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
 nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
 nnoremap <silent> <C-w>p :TmuxNavigatePrevious<cr>
 
-" Setup YouCompleteMe code completer
-set completeopt-=preview
-let g:ycm_auto_hover = ''
-let g:ycm_add_preview_to_completeopt = 0
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']
-nnoremap <leader>gg :YcmCompleter GoTo<CR>
-nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>gt :YcmCompleter GetType<CR>
-nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
-nnoremap <leader>gx :YcmCompleter FixIt<CR>
-nnoremap <leader>gn :YcmCompleter RefactorRename<Space>
-nnoremap <leader>gm :YcmCompleter Format<CR>
-xnoremap <leader>gm :YcmCompleter Format<CR>
-nnoremap <leader>ge :YcmShowDetailedDiagnostic<CR>
-nmap     <leader>gh <plug>(YCMHover)
-nmap     <leader>gf <Plug>(YCMFindSymbolInWorkspace)
 
 " Setup AutoFormat
 " latexindent must be at least 3.8

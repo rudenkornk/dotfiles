@@ -48,9 +48,6 @@ Plugin 'neoclide/coc.nvim'
 " Syntax highlight
 Plugin 'sheerun/vim-polyglot'
 
-" Formatting
-Plugin 'vim-autoformat/vim-autoformat'
-
 call vundle#end()
 
 " Required for Vundle
@@ -203,17 +200,6 @@ nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
 nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
 nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
 nnoremap <silent> <C-w>p :TmuxNavigatePrevious<cr>
-
-
-" Setup AutoFormat
-" latexindent must be at least 3.8
-let g:formatdef_latexindent = "'latexindent --logfile=/dev/null --local --lines '.a:firstline.'-'.a:lastline.' -'"
-nnoremap <leader>fm :Autoformat<CR>
-xnoremap <leader>fm :Autoformat<CR>
-" vim's native autoformat for tex files is broken
-autocmd FileType tex let g:autoformat_autoindent = 0
-autocmd FileType tex let g:autoformat_retab = 0
-autocmd FileType tex let g:autoformat_remove_trailing_spaces = 0
 
 
 

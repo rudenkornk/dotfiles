@@ -45,9 +45,6 @@ Plugin 'Raimondi/delimitMate'
 " Code completion
 Plugin 'neoclide/coc.nvim'
 
-" Syntax highlight
-Plugin 'sheerun/vim-polyglot'
-
 call vundle#end()
 
 " Required for Vundle

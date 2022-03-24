@@ -39,9 +39,6 @@ Plugin 'tmux-plugins/vim-tmux'
 " Seemless navigation between vim and tmux
 Plugin 'christoomey/vim-tmux-navigator'
 
-" Code completion
-Plugin 'neoclide/coc.nvim'
-
 call vundle#end()
 
 " Required for Vundle

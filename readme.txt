@@ -33,6 +33,10 @@ YouCompleteMe:
 cd ~/.vim/bundle/YouCompleteMe
 ./install.py --clangd-completer # --all
 
+coc.nvim:
+curl -sL install-node.vercel.app/lts | bash
+git --git-dir=~/.vim/bundle/coc.nvim checkout release
+
 Highlight:
 needs compilation:
 https://github.com/jeaye/color_coded

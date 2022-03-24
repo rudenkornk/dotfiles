@@ -43,6 +43,7 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'Raimondi/delimitMate'
 
 " Code completion
+Plugin 'neoclide/coc.nvim'
 
 " Syntax highlight
 Plugin 'sheerun/vim-polyglot'
@@ -69,6 +70,7 @@ filetype indent on
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+" Also required for coc.nvim
 set encoding=utf-8
 
 set t_Co=256
@@ -198,7 +200,7 @@ let g:airline_theme='onehalfdark'
 set background=dark
 set cursorline
 
-"Setup vim-tmux-navigator
+" Setup vim-tmux-navigator
 let g:tmux_navigator_no_mappings = 1
 nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
 nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>

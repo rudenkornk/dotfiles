@@ -39,6 +39,9 @@ Plugin 'tmux-plugins/vim-tmux'
 " Seemless navigation between vim and tmux
 Plugin 'christoomey/vim-tmux-navigator'
 
+" Autoclose brackets
+Plugin 'Raimondi/delimitMate'
+
 " Code completion
 Plugin 'neoclide/coc.nvim'
 

@@ -42,6 +42,9 @@ Plugin 'christoomey/vim-tmux-navigator'
 " Autoclose brackets
 Plugin 'Raimondi/delimitMate'
 
+" Syntax highlight
+Plugin 'sheerun/vim-polyglot'
+
 " Code completion
 Plugin 'neoclide/coc.nvim'
 

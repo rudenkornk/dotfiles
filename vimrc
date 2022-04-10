@@ -138,11 +138,12 @@ endif
 
 " Fix CTRL-arrow behaviour
 " https://unix.stackexchange.com/a/1764
-" But this breaks exit from insert mode
-"map <ESC>[1;5D] <C-Left>
-"map <ESC>[1;5C] <C-Right>
-"map! <ESC>[1;5D] <C-Left>
-"map! <ESC>[1;5C] <C-Right>
+map <ESC>[1;5D <C-Left>
+map <ESC>[1;5C <C-Right>
+map! <ESC>[1;5D <C-Left>
+map! <ESC>[1;5C <C-Right>
+inoremap <nowait> <ESC> <ESC>
+xnoremap <nowait> <ESC> <ESC>
 
 
 

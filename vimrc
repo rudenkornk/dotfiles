@@ -145,6 +145,11 @@ map! <ESC>[1;5C <C-Right>
 inoremap <nowait> <ESC> <ESC>
 xnoremap <nowait> <ESC> <ESC>
 
+" Line text object
+xnoremap il g_o0
+onoremap il :normal vil<cr>
+xnoremap al $o0
+onoremap al :normal val<cr>
 
 
 " Set custom cursor in different modes

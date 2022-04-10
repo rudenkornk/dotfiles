@@ -281,6 +281,12 @@ nmap <leader>sx <Plug>(coc-fix-current)
 nmap <leader>sl <Plug>(coc-codelens-action)
 " Open link in browser
 nmap <leader>sk <Plug>(coc-openlink)
+augroup coc_complete
+  autocmd!
+  autocmd FileType cpp nnoremap <leader>ch :CocCommand clangd.switchSourceHeader<cr>
+  autocmd FileType cpp nnoremap <leader>ca :CocCommand clangd.ast<cr>
+  autocmd FileType cpp nnoremap <leader>cy :CocCommand clangd.symbolInfo<cr>
+augroup end
 " Map functios and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
@@ -334,6 +340,7 @@ let g:coc_global_extensions = []
 let g:coc_global_extensions += ['coc-marketplace']
 let g:coc_global_extensions += ['coc-snippets']
 
+let g:coc_global_extensions += ['coc-clangd']
 
 highlight RedundantSpacesAndTabs ctermbg=red guibg=red
 match RedundantSpacesAndTabs /\(\s\+$\|\t\+\)/

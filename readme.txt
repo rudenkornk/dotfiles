@@ -37,6 +37,7 @@ cd ~/.vim/bundle/YouCompleteMe
 coc.nvim:
 curl -sL install-node.vercel.app/lts | bash
 git --git-dir=~/.vim/bundle/coc.nvim checkout release
+CocCommand clangd.install
 
 Highlight:
 needs compilation:

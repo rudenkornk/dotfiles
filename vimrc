@@ -135,6 +135,7 @@ if !empty(expand(glob("/usr/share/vim/vim*/keymap/rnk-russian-qwerty.vim")))
   set imsearch=0
   highlight lCursor guifg=NONE guibg=Cyan
 endif
+inoremap <C-b> <C-^>
 
 " Fix CTRL-arrow behaviour
 " https://unix.stackexchange.com/a/1764

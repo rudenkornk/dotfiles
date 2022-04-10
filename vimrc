@@ -102,6 +102,9 @@ set hlsearch
 " Show search results immediately
 set incsearch
 
+" Ignore case in search
+set ignorecase
+
 " Show @@@ in the last line if it is truncated.
 set display=truncate
 

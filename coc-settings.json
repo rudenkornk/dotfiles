@@ -1,0 +1,4 @@
+{
+  "diagnostic.messageDelay": 50000,
+  "diagnostic.checkCurrentLine": true
+}

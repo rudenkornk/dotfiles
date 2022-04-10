@@ -103,7 +103,7 @@ set number " relativenumber
 " Unfortunatelly this breaks autocomplete with tab, so it is not permanently
 " enabled
 "set paste
-nnoremap <leader>vp :set invpaste<CR>
+nnoremap <leader>vp :set invpaste<cr>
 
 
 " Insert spaces instead of tabs
@@ -158,15 +158,15 @@ let g:netrw_winsize = 15
 " Setup gdb
 packadd termdebug
 let g:termdebug_wide = 163
-nnoremap <leader>db :Break<CR>
-nnoremap <leader>dr :call TermDebugSendCommand('run')<CR>
-nnoremap <leader>dn :call TermDebugSendCommand('next')<CR>
-nnoremap <leader>ds :call TermDebugSendCommand('step')<CR>
-nnoremap <leader>df :call TermDebugSendCommand('finish')<CR>
-nnoremap <leader>dc :call TermDebugSendCommand('continue')<CR>
-nnoremap <leader>du :call TermDebugSendCommand('up')<CR>
-nnoremap <leader>dd :call TermDebugSendCommand('down')<CR>
-nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<CR>
+nnoremap <leader>db :Break<cr>
+nnoremap <leader>dr :call TermDebugSendCommand('run')<cr>
+nnoremap <leader>dn :call TermDebugSendCommand('next')<cr>
+nnoremap <leader>ds :call TermDebugSendCommand('step')<cr>
+nnoremap <leader>df :call TermDebugSendCommand('finish')<cr>
+nnoremap <leader>dc :call TermDebugSendCommand('continue')<cr>
+nnoremap <leader>du :call TermDebugSendCommand('up')<cr>
+nnoremap <leader>dd :call TermDebugSendCommand('down')<cr>
+nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<cr>
 " Invoke normal mode in terminal with double Esc
 tnoremap <Esc><Esc> <C-\><C-n>
 

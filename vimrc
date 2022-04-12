@@ -104,6 +104,7 @@ set incsearch
 
 " Ignore case in search
 set ignorecase
+set smartcase
 
 " Show @@@ in the last line if it is truncated.
 set display=truncate

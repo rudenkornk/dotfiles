@@ -21,6 +21,8 @@ ln -s dotfiles/vimrc .vimrc
 ln -s dotfiles/tmux.conf .tmux.conf
 ln -s dotfiles/gitconfig .gitconfig
 ln -s dotfiles/coc-settings.json ~/.vim/coc-settings.json
+mkdir -p ~/.docker
+ln -s dotfiles/docker_config.json ~/.docker/config.json
 sudo ln -s dotfiles/wsl.conf /etc/conf
 
 sudo ln -s dotfiles/rnk /usr/share/X11/xkb/symbols/rnk

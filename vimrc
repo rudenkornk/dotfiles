@@ -355,7 +355,9 @@ augroup end
 " Add coc extensions
 let g:coc_global_extensions = []
 let g:coc_global_extensions += ['coc-marketplace']
+
 let g:coc_global_extensions += ['coc-snippets']
+let g:coc_snippet_next = '<tab>'
 
 let g:coc_global_extensions += ['coc-clangd']
 let g:coc_global_extensions += ['coc-cmake']

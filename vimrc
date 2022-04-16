@@ -96,6 +96,9 @@ set wildmode=longest:list
 " text scroll if you mouse-click near the start or end of the window.
 set scrolloff=1
 
+" Fix tmux scroll
+set mouse=a
+
 " Highlight search results
 set hlsearch
 

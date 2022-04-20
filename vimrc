@@ -120,6 +120,7 @@ set number " relativenumber
 " enabled
 "set paste
 nnoremap <leader>vp :set invpaste<cr>
+nnoremap <leader>vn :set invnumber<cr>
 
 
 " Insert spaces instead of tabs

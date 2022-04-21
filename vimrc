@@ -129,7 +129,7 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
-set wrap
+set linebreak
 
 "set foldmethod=syntax
 "set foldlevel=5

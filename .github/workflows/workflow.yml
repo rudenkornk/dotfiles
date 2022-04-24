@@ -1,0 +1,31 @@
+name: LaTeX workflow
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+jobs:
+  build:
+    runs-on: "ubuntu-20.04"
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Run container
+      run: |
+        docker run --interactive --tty --detach \
+          --user ci_user \
+          --env CI_UID="$(id --user)" --env CI_GID="$(id --group)" \
+          --env KEEP_CI_USER_SUDO="true" \
+          --name docker_ci_container \
+          --mount type=bind,source="$(pwd)",target=/home/repo \
+          rudenkornk/docker_ci:0.1.0
+        sleep 1
+    - name: Test
+      run: |
+        docker exec docker_ci_container bash -c "sudo ./config_system.sh"
+        docker exec docker_ci_container bash -c "source ./config_user.sh"
+

@@ -26,7 +26,7 @@ if [[ $IS_WAYLAND == "true" ]]; then
   :
 fi
 
-if [[ $IS_XSERVER ]]; then
+if [[ $IS_XSERVER == "true" ]]; then
   ln -s "$REPO_PATH/rnk" /usr/share/X11/xkb/symbols/rnk
   # Insert contents of evdev.xml into /usr/share/X11/xkb/rules/evdev.xml into appropriate place
   # sudo dpkg-reconfigure xkb-data

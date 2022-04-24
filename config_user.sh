@@ -3,6 +3,7 @@
 set -x
 
 REPO_PATH=$(realpath "$(dirname "$0")")
+echo $REPO_PATH
 
 mkdir ~/.vim
 mkdir ~/.vim/keymap

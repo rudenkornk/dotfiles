@@ -27,5 +27,5 @@ jobs:
     - name: Test
       run: |
         docker exec docker_ci_container bash -c "sudo ./config_system.sh"
-        docker exec docker_ci_container bash -c "source ./config_user.sh"
+        docker exec docker_ci_container bash -c "./config_user.sh"
 

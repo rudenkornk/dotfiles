@@ -1,70 +1,62 @@
-" Required for Vundle and other settings
+" Required for different settings
 set nocompatible
 
-" Required for Vundle
-filetype off
+call plug#begin()
+" The default plugin directory will be as follows:
+"   - Vim (Linux/macOS): '~/.vim/plugged'
+"   - Vim (Windows): '~/vimfiles/plugged'
+"   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
+" You can specify a custom plugin directory by passing it as the argument
+"   - e.g. `call plug#begin('~/.vim/plugged')`
+"   - Avoid using standard Vim directory names like 'plugin'
 
-" Set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" Alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" Let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Make sure you use single quotes
 
 " Use dev icons from powerline fonts
-Plugin 'ryanoasis/vim-devicons'
+Plug 'ryanoasis/vim-devicons'
 
 " Status line
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Colorscheme
-Plugin 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
 " Underlines the word under the cursor
-Plugin 'itchyny/vim-cursorword'
+Plug 'itchyny/vim-cursorword'
 
 " Surroundings: parentheses, brackets, quotes, XML tags, and more
-Plugin 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 
 " Unified clipboard for vim and tmux
-Plugin 'tmux-plugins/vim-tmux-focus-events' " Only for vim < 8.2.2345
-Plugin 'roxma/vim-tmux-clipboard'
+if v:version < 802
+  Plug 'tmux-plugins/vim-tmux-focus-events'
+endif
+Plug 'roxma/vim-tmux-clipboard'
 
 " Support for .tmux.conf
-Plugin 'tmux-plugins/vim-tmux'
+Plug 'tmux-plugins/vim-tmux'
 
 " Seemless navigation between vim and tmux
-Plugin 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-navigator'
 
 " Autoclose brackets
-Plugin 'Raimondi/delimitMate'
+Plug 'Raimondi/delimitMate'
 
 " Syntax highlight
-Plugin 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
 
 " Code completion
-Plugin 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
-call vundle#end()
+" Initialize plugin system
+call plug#end()
 
-" Required for Vundle
+" vim-plug utomatically executes filetype plugin indent on and syntax enable. You can revert the settings after the call. e.g. filetype indent off, syntax off
 filetype plugin on
-" To ignore plugin indent changes, comment next line:
 filetype indent on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
-" Also required for coc.nvim
+" Required for coc.nvim
 set encoding=utf-8
 
 set t_Co=256

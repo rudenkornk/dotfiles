@@ -129,12 +129,10 @@ set linebreak
 set notimeout nottimeout
 
 " Support russian with specific keyboard layouts
-if !empty(expand(glob("/usr/share/vim/vim*/keymap/rnk-russian-qwerty.vim")))
-  set keymap=rnk-russian-qwerty
-  set iminsert=0
-  set imsearch=0
-  highlight lCursor guifg=NONE guibg=Cyan
-endif
+set keymap=rnk-russian-qwerty
+set iminsert=0
+set imsearch=0
+highlight lCursor guifg=NONE guibg=Cyan
 inoremap <C-b> <C-^>
 
 " Fix CTRL-arrow behaviour

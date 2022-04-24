@@ -33,7 +33,8 @@ if [[ $IS_XSERVER == "true" ]]; then
   # sudo dpkg-reconfigure xkb-data
 fi
 
-if [[ $IS_WSL == "true" ]]; then
-  ln -s "$REPO_PATH/wsl.conf" /etc/wsl.conf
+WSL_CONF=/etc/wsl.conf
+if [[ $IS_WSL == "true" && ((-f $WSL_CONF && ! -s $WSL_CONF) || ! -f $WSL_CONF) ]]; then
+  ln --symbolic --force "$REPO_PATH/wsl.conf" $WSL_CONF
 fi
 

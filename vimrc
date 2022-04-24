@@ -29,9 +29,9 @@ Plug 'itchyny/vim-cursorword'
 Plug 'tpope/vim-surround'
 
 " Unified clipboard for vim and tmux
-if v:version < 802
+"if v:version < 802
   Plug 'tmux-plugins/vim-tmux-focus-events'
-endif
+"endif
 Plug 'roxma/vim-tmux-clipboard'
 
 " Support for .tmux.conf

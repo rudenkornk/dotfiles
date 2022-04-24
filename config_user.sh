@@ -35,10 +35,13 @@ vim -c "CocInstall -sync $COC_EXTENSIONS" -c qall
 # vim -c "CocCommand clangd.install" -c qall tmp.cpp
 
 
-wget --output-document ~/tmp/FiraCode.zip \
+wget --output-document FiraCode.zip \
   https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
-unzip ~/tmp/FiraCode.zip -d ~/tmp/FiraCode
+unzip FiraCode.zip -d FiraCode
 mv ~/tmp/FiraCode/*.otf ~/.local/share/fonts
+rm FiraCode.zip
+rm FiraCode/*
+rmdir FiraCode
 # fc-cache -f -v
 
 # xfce4 terminal:

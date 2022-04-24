@@ -10,14 +10,14 @@ IS_SSH=$([[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && echo true || echo false)
 
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-  vim \
   bash-completion \
-  xsel `# for tmux-yank`\
-  wget \
-  curl \
   ca-certificates \
-  tar gzip zip unzip bzip2 \
+  curl \
   openssh-client \
+  tar gzip zip unzip bzip2 \
+  vim \
+  wget \
+  xsel `# for tmux-yank`\
 
 # Some special processing is needed for tmux-yank on wayland, see
 # https://github.com/tmux-plugins/tmux-yank

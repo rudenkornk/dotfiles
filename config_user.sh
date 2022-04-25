@@ -11,7 +11,6 @@ mkdir ~/.vim/bundle
 mkdir ~/.docker
 mkdir --parents ~/.local/bin
 mkdir --parents ~/.local/share/fonts
-mkdir ~/tmp
 
 export PATH="$HOME/.local/bin:$PATH"
 

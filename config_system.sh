@@ -17,6 +17,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   curl \
   docker.io \
   make \
+  moreutils \
   openssh-client \
   tar gzip zip unzip bzip2 \
   vim \

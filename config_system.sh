@@ -2,6 +2,8 @@
 
 set -x
 
+PRIMARY_USER=${PRIMARY_USER:-rudenkornk}
+
 REPO_PATH=$(realpath "$(dirname "$0")")
 HAS_XSERVER=$([[ -d /usr/share/X11/ ]] && echo true || echo false)
 IS_WSL=$(uname -a | grep --quiet WSL && echo true || echo false)

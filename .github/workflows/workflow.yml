@@ -26,6 +26,6 @@ jobs:
         sleep 1
     - name: Test
       run: |
-        docker exec docker_ci_container bash -c "sudo ./config_system.sh"
+        docker exec docker_ci_container bash -c "sudo PRIMARY_USER=ci_user ./config_system.sh"
         docker exec docker_ci_container bash -c "./config_user.sh"
 

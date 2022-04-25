@@ -34,6 +34,8 @@ vim -c "CocInstall -sync $COC_EXTENSIONS" -c qall
 # vim -c "CocCommand clangd.install" -c qall tmp.cpp
 
 
+newgrp docker
+
 wget --output-document FiraCode.zip \
   https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
 unzip FiraCode.zip -d FiraCode

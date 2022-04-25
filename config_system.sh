@@ -41,3 +41,5 @@ if [[ $IS_WSL == "true" && ((-f $WSL_CONF && ! -s $WSL_CONF) || ! -f $WSL_CONF) 
   ln --symbolic --force "$REPO_PATH/wsl.conf" $WSL_CONF
 fi
 
+usermod -aG docker $PRIMARY_USER
+

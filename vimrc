@@ -131,9 +131,10 @@ set notimeout nottimeout
 " Support russian with specific keyboard layouts
 set keymap=rnk-russian-qwerty
 set iminsert=0
-set imsearch=0
+set imsearch=-1
 highlight lCursor guifg=NONE guibg=Cyan
-inoremap <C-b> <C-^>
+inoremap <C-j> <C-^>
+nnoremap <C-j> i<C-^><ESC>`^
 
 " Fix CTRL-arrow behaviour
 " https://unix.stackexchange.com/a/1764

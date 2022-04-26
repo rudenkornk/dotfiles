@@ -362,10 +362,10 @@ let g:coc_global_extensions += ['coc-json']
 let g:coc_global_extensions += ['coc-perl']
 let g:coc_global_extensions += ['coc-python']
 let g:coc_global_extensions += ['coc-sh']
+let g:coc_global_extensions += ['coc-texlab']
 let g:coc_global_extensions += ['coc-vimlsp']
 let g:coc_global_extensions += ['coc-xml']
 let g:coc_global_extensions += ['coc-yaml']
-let g:coc_global_extensions += ['coc-texlab']
 
 highlight RedundantSpacesAndTabs ctermbg=red guibg=red
 match RedundantSpacesAndTabs /\(\s\+$\|\t\+\)/

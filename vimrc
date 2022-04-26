@@ -111,8 +111,8 @@ set number " relativenumber
 " Unfortunatelly this breaks autocomplete with tab, so it is not permanently
 " enabled
 "set paste
-nnoremap <leader>vp :set invpaste<cr>
-nnoremap <leader>vn :set invnumber<cr>
+nnoremap <leader>vp :set invpaste<CR>
+nnoremap <leader>vn :set invnumber<CR>
 
 
 " Insert spaces instead of tabs
@@ -146,9 +146,9 @@ xnoremap <nowait> <ESC> <ESC>
 
 " Line text object
 xnoremap il g_o0
-onoremap il :normal vil<cr>
+onoremap il :normal vil<CR>
 xnoremap al $o0
-onoremap al :normal val<cr>
+onoremap al :normal val<CR>
 
 
 " Set custom cursor in different modes
@@ -172,15 +172,15 @@ let g:netrw_winsize = 15
 " Setup gdb
 packadd termdebug
 let g:termdebug_wide = 163
-nnoremap <leader>db :Break<cr>
-nnoremap <leader>dr :call TermDebugSendCommand('run')<cr>
-nnoremap <leader>dn :call TermDebugSendCommand('next')<cr>
-nnoremap <leader>ds :call TermDebugSendCommand('step')<cr>
-nnoremap <leader>df :call TermDebugSendCommand('finish')<cr>
-nnoremap <leader>dc :call TermDebugSendCommand('continue')<cr>
-nnoremap <leader>du :call TermDebugSendCommand('up')<cr>
-nnoremap <leader>dd :call TermDebugSendCommand('down')<cr>
-nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<cr>
+nnoremap <leader>db :Break<CR>
+nnoremap <leader>dr :call TermDebugSendCommand('run')<CR>
+nnoremap <leader>dn :call TermDebugSendCommand('next')<CR>
+nnoremap <leader>ds :call TermDebugSendCommand('step')<CR>
+nnoremap <leader>df :call TermDebugSendCommand('finish')<CR>
+nnoremap <leader>dc :call TermDebugSendCommand('continue')<CR>
+nnoremap <leader>du :call TermDebugSendCommand('up')<CR>
+nnoremap <leader>dd :call TermDebugSendCommand('down')<CR>
+nnoremap <leader>dt :call TermDebugSendCommand('backtrace')<CR>
 " Invoke normal mode in terminal with double Esc
 tnoremap <Esc><Esc> <C-\><C-n>
 
@@ -200,11 +200,11 @@ set cursorline
 
 " Setup vim-tmux-navigator
 let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
-nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
-nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
-nnoremap <silent> <C-w>p :TmuxNavigatePrevious<cr>
+nnoremap <silent> <C-w>h :TmuxNavigateLeft<CR>
+nnoremap <silent> <C-w>j :TmuxNavigateDown<CR>
+nnoremap <silent> <C-w>k :TmuxNavigateUp<CR>
+nnoremap <silent> <C-w>l :TmuxNavigateRight<CR>
+nnoremap <silent> <C-w>p :TmuxNavigatePrevious<CR>
 
 
 " Setup coc.nvim
@@ -260,10 +260,10 @@ if has('nvim')
 else
   inoremap <expr> <c-@> coc#refresh()
 endif
-" Make <cr> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <CR> could be remapped by other vim plugin
+inoremap <expr> <CR> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap [e <Plug>(coc-diagnostic-prev)
 nmap ]e <Plug>(coc-diagnostic-next)
@@ -273,7 +273,7 @@ nmap <leader>ss <Plug>(coc-definition)
 nmap <leader>st <Plug>(coc-type-definition)
 nmap <leader>si <Plug>(coc-implementation)
 nmap <leader>sr <Plug>(coc-references)
-nmap <leader>sd :call <SID>show_documentation()<cr>
+nmap <leader>sd :call <SID>show_documentation()<CR>
 " Symbol renaming.
 nmap <leader>sn <Plug>(coc-rename)
 " Formatting selected code.
@@ -294,9 +294,9 @@ nmap <leader>sl <Plug>(coc-codelens-action)
 nmap <leader>sk <Plug>(coc-openlink)
 augroup coc_complete
   autocmd!
-  autocmd FileType cpp nnoremap <leader>ch :CocCommand clangd.switchSourceHeader<cr>
-  autocmd FileType cpp nnoremap <leader>ca :CocCommand clangd.ast<cr>
-  autocmd FileType cpp nnoremap <leader>cy :CocCommand clangd.symbolInfo<cr>
+  autocmd FileType cpp nnoremap <leader>ch :CocCommand clangd.switchSourceHeader<CR>
+  autocmd FileType cpp nnoremap <leader>ca :CocCommand clangd.ast<CR>
+  autocmd FileType cpp nnoremap <leader>cy :CocCommand clangd.symbolInfo<CR>
 augroup end
 " Map functios and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -309,36 +309,36 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 " Use CTRL-S for selections ranges.  " Requires 'textDocument/selectionRange' support of language server.
-nmap <C-q> <Plug>(coc-range-select)
-xmap <C-q> <Plug>(coc-range-select)
+nmap <C-h> <Plug>(coc-range-select)
+xmap <C-h> <Plug>(coc-range-select)
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
   nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<CR>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<CR>" : "\<Left>"
   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 " Mappings for CoCList
 " Show commands.
-nnoremap <leader>ll :<C-u>CocList lists<cr>
+nnoremap <leader>ll :<C-u>CocList lists<CR>
 " Resume latest coc list.
-nnoremap <leader>lr :<C-u>CocListResume<cr>
+nnoremap <leader>lr :<C-u>CocListResume<CR>
 " Show commands.
-nnoremap <leader>lc :<C-u>CocList commands<cr>
+nnoremap <leader>lc :<C-u>CocList commands<CR>
 " Find symbol of current document.
-nnoremap <leader>lo :<C-u>CocList outline<cr>
+nnoremap <leader>lo :<C-u>CocList outline<CR>
 " Show all diagnostics.
-nnoremap <leader>le :<C-u>CocList diagnostics<cr>
+nnoremap <leader>le :<C-u>CocList diagnostics<CR>
 " Manage extensions.
-nnoremap <leader>lx :<C-u>CocList extensions<cr>
+nnoremap <leader>lx :<C-u>CocList extensions<CR>
 " Search workspace symbols.
-nnoremap <leader>ls :<C-u>CocList -I symbols<cr>
+nnoremap <leader>ls :<C-u>CocList -I symbols<CR>
 " Do default action for next item.
-nnoremap <leader>ln :<C-u>CocNext<cr>
+nnoremap <leader>ln :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <leader>lp :<C-u>CocPrev<cr>
+nnoremap <leader>lp :<C-u>CocPrev<CR>
 
 augroup coc_group
   autocmd!

@@ -293,12 +293,6 @@ nmap <leader>sx <Plug>(coc-fix-current)
 nmap <leader>sl <Plug>(coc-codelens-action)
 " Open link in browser
 nmap <leader>sk <Plug>(coc-openlink)
-augroup coc_complete
-  autocmd!
-  autocmd FileType cpp nnoremap <leader>ch :CocCommand clangd.switchSourceHeader<CR>
-  autocmd FileType cpp nnoremap <leader>ca :CocCommand clangd.ast<CR>
-  autocmd FileType cpp nnoremap <leader>cy :CocCommand clangd.symbolInfo<CR>
-augroup end
 " Map functios and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)

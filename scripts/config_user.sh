@@ -36,6 +36,7 @@ wget https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0
 tar -xvzf ltex-ls-*
 mv ltex-ls-* ~/.config/coc/extensions/node_modules/coc-ltex/lib/
 rm ltex-ls-*.tar.gz
+ln --symbolic "$REPO_PATH/vim/ftplugin" ~/.vim/ftplugin
 
 
 newgrp docker

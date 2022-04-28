@@ -29,7 +29,7 @@ curl --fail --location --output ~/.vim/autoload/plug.vim --create-dirs \
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 vim  -c PlugInstall -c qall
-COC_EXTENSIONS=$(cat vimrc | grep -oP "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')
+COC_EXTENSIONS=$(cat vimrc | grep --only-matching --perl-regexp "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')
 vim -c "CocInstall -sync $COC_EXTENSIONS" -c qall
 # vim -c "CocCommand clangd.install" -c qall tmp.cpp
 wget https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0-linux-x64.tar.gz

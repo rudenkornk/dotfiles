@@ -14,11 +14,11 @@ mkdir --parents ~/.local/share/fonts
 
 export PATH="$HOME/.local/bin:$PATH"
 
-ln --symbolic "$REPO_PATH/vimrc" ~/.vimrc
-ln --symbolic "$REPO_PATH/rnk-russian-qwerty.vim" ~/.vim/keymap/rnk-russian-qwerty.vim
+ln --symbolic "$REPO_PATH/vim/vimrc" ~/.vimrc
+ln --symbolic "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.vim/keymap/rnk-russian-qwerty.vim
 ln --symbolic "$REPO_PATH/tmux.conf" ~/.tmux.conf
 ln --symbolic "$REPO_PATH/gitconfig" ~/.gitconfig
-ln --symbolic "$REPO_PATH/coc-settings.json" ~/.vim/coc-settings.json
+ln --symbolic "$REPO_PATH/vim/coc-settings.json" ~/.vim/coc-settings.json
 cat "$REPO_PATH/docker_config.json" >> ~/.docker/config.json # Do not create symbolic because it might be populated with docker credentials
 
 cat "$REPO_PATH/bashrc" >> ~/.bashrc

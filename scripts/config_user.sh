@@ -2,7 +2,7 @@
 
 set -x
 
-REPO_PATH=$(realpath "$(dirname "$0")")
+REPO_PATH=$(realpath "$(dirname "$0")/..")
 echo $REPO_PATH
 
 mkdir ~/.vim
@@ -32,9 +32,10 @@ vim  -c PlugInstall -c qall
 COC_EXTENSIONS=$(cat vimrc | grep -oP "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')
 vim -c "CocInstall -sync $COC_EXTENSIONS" -c qall
 # vim -c "CocCommand clangd.install" -c qall tmp.cpp
-# wget --output-document  ltex.tag.gz\
-#   https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0-linux-x64.tar.gz
-# tar -xvzf ltex.tar.gz
+wget https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0-linux-x64.tar.gz
+tar -xvzf ltex-ls-*
+mv ltex-ls-* ~/.config/coc/extensions/node_modules/coc-ltex/lib/
+rm ltex-ls-*.tar.gz
 
 
 newgrp docker

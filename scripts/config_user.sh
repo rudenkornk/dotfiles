@@ -2,6 +2,7 @@
 
 set -x
 
+UBUNTU_VERSION=$(lsb_release -d | grep --only-matching --perl-regexp "[\d\.]+")
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 echo $REPO_PATH
 
@@ -36,6 +37,17 @@ wget https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0
 tar -xvzf ltex-ls-*
 mv ltex-ls-* ~/.config/coc/extensions/node_modules/coc-ltex/lib/
 rm ltex-ls-*.tar.gz
+if ! { echo "22.04"; echo "$UBUNTU_VERSION"; } | \
+  sort --version-sort --check &> /dev/null; then
+  wget https://github.com/cmhughes/latexindent.pl/releases/download/V3.17.2/latexindent.zip
+  unzip latexindent.zip
+  mv latexindent/latexindent.pl ~/.local/bin/
+  mv latexindent/defaultSettings.yaml ~/.local/bin/
+  mv latexindent/LatexIndent ~/.local/bin/
+  ln --symbolic ~/.local/bin/latexindent.pl ~/.local/bin/latexindent
+  rm latexindent.zip
+  rm -rf latexindent
+fi
 ln --symbolic "$REPO_PATH/vim/ftplugin" ~/.vim/ftplugin
 
 

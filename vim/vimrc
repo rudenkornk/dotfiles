@@ -46,6 +46,9 @@ Plug 'Raimondi/delimitMate'
 " Syntax highlight
 Plug 'sheerun/vim-polyglot'
 
+" Formatting for specific cases
+Plug 'vim-autoformat/vim-autoformat'
+
 " Code completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 

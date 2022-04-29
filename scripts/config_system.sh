@@ -2,13 +2,16 @@
 
 set -x
 
-PRIMARY_USER=${PRIMARY_USER:-rudenkornk}
-
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 HAS_XSERVER=$([[ -d /usr/share/X11/ ]] && echo true || echo false)
 IS_WSL=$(uname -a | grep --quiet WSL && echo true || echo false)
 IS_WAYLAND=$(echo $XDG_SESSION_TYPE | grep --quiet wayland && echo true || echo false)
 IS_SSH=$([[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && echo true || echo false)
+
+if [[ -z "$PRIMARY_USER" ]]; then
+  echo "Please set PRIMARY_USER var"
+  exit 1
+fi
 
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \

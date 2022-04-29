@@ -6,8 +6,7 @@ Simple repo for setting up new system or user.
 
 ## Set up
 ```shell
-sudo ./config_system.sh
-./config_user.sh
+make config
 # Reload shell
 ```
 

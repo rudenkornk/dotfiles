@@ -2,6 +2,11 @@
 
 set -x
 
+if [[ -z "$BUILD_PATH" ]]; then
+  echo "Please set BUILD_PATH var"
+  exit 1
+fi
+
 UBUNTU_VERSION=$(lsb_release -d | grep --only-matching --perl-regexp "[\d\.]+")
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 echo $REPO_PATH
@@ -12,6 +17,7 @@ mkdir ~/.vim/bundle
 mkdir ~/.docker
 mkdir --parents ~/.local/bin
 mkdir --parents ~/.local/share/fonts
+mkdir --parents "$BUILD_PATH"
 
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -33,33 +39,35 @@ vim  -c PlugInstall -c qall
 COC_EXTENSIONS=$(cat vimrc | grep --only-matching --perl-regexp "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')
 vim -c "CocInstall -sync $COC_EXTENSIONS" -c qall
 # vim -c "CocCommand clangd.install" -c qall tmp.cpp
-wget https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0-linux-x64.tar.gz
-tar -xvzf ltex-ls-*
-mv ltex-ls-* ~/.config/coc/extensions/node_modules/coc-ltex/lib/
-rm ltex-ls-*.tar.gz
+wget --output-document="$BUILD_PATH/ltex-ls.tar.gz"
+  https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0-linux-x64.tar.gz
+tar -xvzf --directory "$BUILD_PATH" ltex-ls-*
+rm "$BUILD_PATH/ltex-ls-*.tar.gz"
+mv "$BUILD_PATH/ltex-ls-*" ~/.config/coc/extensions/node_modules/coc-ltex/lib/
 if ! { echo "22.04"; echo "$UBUNTU_VERSION"; } | \
   sort --version-sort --check &> /dev/null; then
-  wget https://github.com/cmhughes/latexindent.pl/releases/download/V3.17.2/latexindent.zip
-  unzip latexindent.zip
-  mv latexindent/latexindent.pl ~/.local/bin/
-  mv latexindent/defaultSettings.yaml ~/.local/bin/
-  mv latexindent/LatexIndent ~/.local/bin/
+  wget --output-document "$BUILD_PATH/latexindent.zip"
+    https://github.com/cmhughes/latexindent.pl/releases/download/V3.17.2/latexindent.zip
+  unzip -d "$BUILD_PATH" latexindent.zip
+  mv "$BUILD_PATH/latexindent/latexindent.pl" ~/.local/bin/
+  mv "$BUILD_PATH/latexindent/defaultSettings.yaml" ~/.local/bin/
+  mv "$BUILD_PATH/latexindent/LatexIndent" ~/.local/bin/
   ln --symbolic ~/.local/bin/latexindent.pl ~/.local/bin/latexindent
-  rm latexindent.zip
-  rm -rf latexindent
+  rm "$BUILD_PATH/latexindent.zip"
+  rm -rf "$BUILD_PATH/latexindent"
 fi
 ln --symbolic "$REPO_PATH/vim/ftplugin" ~/.vim/ftplugin
 
 
 newgrp docker
 
-wget --output-document FiraCode.zip \
+wget --output-document "$BUILD_PATH/FiraCode.zip" \
   https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
-unzip FiraCode.zip -d FiraCode
-mv FiraCode/*.otf ~/.local/share/fonts
-rm FiraCode.zip
-rm FiraCode/*
-rmdir FiraCode
+unzip "$BUILD_PATH/FiraCode.zip" -d "$BUILD_PATH/FiraCode"
+mv "$BUILD_PATH/FiraCode/"*.otf ~/.local/share/fonts
+rm "$BUILD_PATH/FiraCode.zip"
+rm "$BUILD_PATH/FiraCode/"*
+rmdir "$BUILD_PATH/FiraCode"
 # fc-cache -f -v
 
 # xfce4 terminal:

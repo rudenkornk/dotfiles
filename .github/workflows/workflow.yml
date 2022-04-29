@@ -14,18 +14,10 @@ jobs:
       uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.sha }}
-    - name: Run container
-      run: |
-        docker run --interactive --tty --detach \
-          --user ci_user \
-          --env CI_UID="$(id --user)" --env CI_GID="$(id --group)" \
-          --env KEEP_CI_USER_SUDO="true" \
-          --name docker_ci_container \
-          --mount type=bind,source="$(pwd)",target=/home/repo \
-          rudenkornk/docker_ci:0.1.0
-        sleep 1
+    - name: Config
+      run: DOCKER_TARGET=config make in_docker
     - name: Test
-      run: |
-        docker exec docker_ci_container bash -c "sudo PRIMARY_USER=ci_user ./scripts/config_system.sh"
-        docker exec docker_ci_container bash -c "BUILD_PATH=$(pwd)/build ./scripts/config_user.sh"
+      run: DOCKER_TARGET=check make in_docker
+    - name: Clean
+      run: DOCKER_TARGET=clean make in_docker
 

@@ -157,6 +157,8 @@ inoremap <F2> <ESC>:set invpaste<CR>i
 nnoremap <leader>vp :set invpaste<CR>
 nnoremap <leader>vn :set invnumber<CR>
 
+" Allow refreshing screen in insert mode
+inoremap <C-l> <ESC><C-l>a
 
 " Insert spaces instead of tabs
 set smarttab

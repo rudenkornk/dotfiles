@@ -120,6 +120,8 @@ set nrformats+=alpha
 " Unfortunatelly this breaks autocomplete with tab, so it is not permanently
 " enabled
 "set paste
+nnoremap <F2> :set invpaste<CR>
+inoremap <F2> <ESC>:set invpaste<CR>i
 nnoremap <leader>vp :set invpaste<CR>
 nnoremap <leader>vn :set invnumber<CR>
 

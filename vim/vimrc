@@ -116,6 +116,38 @@ set number " relativenumber
 " The following setting allows to do it with characters
 set nrformats+=alpha
 
+
+" Notes about <leader> maps
+" Note you can't use noremap with <Plug> key-mappings
+" All <leader> maps are user-defined maps with the following reserved meaning:
+" <leader>a
+" <leader>b --- build
+" <leader>c --- c, c++
+" <leader>d --- debug
+" <leader>e
+" <leader>f
+" <leader>g
+" <leader>h
+" <leader>i
+" <leader>j
+" <leader>k
+" <leader>l --- coc lists
+" <leader>m
+" <leader>n
+" <leader>o
+" <leader>p --- python
+" <leader>q
+" <leader>r
+" <leader>s --- general coc
+" <leader>t --- latex
+" <leader>u
+" <leader>v --- vim
+" <leader>w
+" <leader>x
+" <leader>y
+" <leader>z
+
+
 " Disable formatting in insert mode
 " Unfortunatelly this breaks autocomplete with tab, so it is not permanently
 " enabled
@@ -306,6 +338,24 @@ nmap <leader>sl <Plug>(coc-codelens-action)
 nmap <leader>sk <Plug>(coc-openlink)
 " Convert visual selected code to snippet
 xmap <leader>sp  <Plug>(coc-convert-snippet)
+nmap <leader>sb :abstract_syntax_tree
+" Free maps:
+"nmap <leader>sc
+"nmap <leader>sg
+"nmap <leader>sh
+"nmap <leader>sj
+"nmap <leader>sm
+"nmap <leader>so
+"nmap <leader>sq
+"nmap <leader>su
+"nmap <leader>sv
+"nmap <leader>sw
+"nmap <leader>sy
+"nmap <leader>sz
+
+nnoremap <leader>bb :build
+
+
 " Map functios and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)

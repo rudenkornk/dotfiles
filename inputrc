@@ -1,0 +1,7 @@
+set editing-mode vi
+
+set vi-ins-mode-string \1\e[5 q\e]12;green\a\2
+set vi-cmd-mode-string \1\e[1 q\e]12;orange\a\2
+
+set show-mode-in-prompt on
+

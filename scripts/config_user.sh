@@ -30,6 +30,7 @@ ln --symbolic "$REPO_PATH/vim/ftplugin" ~/.vim/ftplugin
 ln --symbolic "$REPO_PATH/vim/ultisnips" ~/.config/coc/ultisnips
 cat "$REPO_PATH/docker_config.json" >> ~/.docker/config.json # Do not create symbolic because it might be populated with docker credentials
 
+#ln --symbolic "$REPO_PATH/inputrc" ~/.inputrc
 cat "$REPO_PATH/bashrc" >> ~/.bashrc
 
 curl --location install-node.vercel.app/lts | bash -s -- --yes --prefix=$HOME/.local

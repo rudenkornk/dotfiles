@@ -421,6 +421,7 @@ let g:coc_global_extensions += ['coc-clangd']
 let g:coc_global_extensions += ['coc-cmake']
 let g:coc_global_extensions += ['coc-css']
 let g:coc_global_extensions += ['coc-docker']
+let g:coc_global_extensions += ['coc-emoji'] "Emoji words, default enabled for markdown file only
 let g:coc_global_extensions += ['coc-html']
 let g:coc_global_extensions += ['coc-json']
 let g:coc_global_extensions += ['coc-ltex']
@@ -431,6 +432,7 @@ let g:coc_global_extensions += ['coc-texlab']
 let g:coc_global_extensions += ['coc-tsserver']
 let g:coc_global_extensions += ['coc-ultisnips'] " Integration of UltiSnips to coc completion
 let g:coc_global_extensions += ['coc-vimlsp']
+let g:coc_global_extensions += ['coc-word'] " Words from google 10000 english repo
 let g:coc_global_extensions += ['coc-xml']
 let g:coc_global_extensions += ['coc-yaml']
 

@@ -177,7 +177,7 @@ set iminsert=0
 set imsearch=-1
 highlight lCursor guifg=NONE guibg=Cyan
 inoremap <C-j> <C-^>
-nnoremap <C-j> i<C-^><ESC>`^
+nnoremap <C-j> a<C-^><ESC>
 
 " Fix CTRL-arrow behaviour
 " https://unix.stackexchange.com/a/1764

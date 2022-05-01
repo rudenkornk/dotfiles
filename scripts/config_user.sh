@@ -16,6 +16,7 @@ mkdir ~/.vim/keymap
 mkdir ~/.docker
 mkdir --parents ~/.local/bin
 mkdir --parents ~/.local/share/fonts
+mkdir --parents ~/.config/coc
 mkdir --parents "$BUILD_PATH"
 
 export PATH="$HOME/.local/bin:$PATH"
@@ -26,6 +27,7 @@ ln --symbolic "$REPO_PATH/tmux.conf" ~/.tmux.conf
 ln --symbolic "$REPO_PATH/gitconfig" ~/.gitconfig
 ln --symbolic "$REPO_PATH/vim/coc-settings.json" ~/.vim/coc-settings.json
 ln --symbolic "$REPO_PATH/vim/ftplugin" ~/.vim/ftplugin
+ln --symbolic "$REPO_PATH/vim/ultisnips" ~/.config/coc/ultisnips
 cat "$REPO_PATH/docker_config.json" >> ~/.docker/config.json # Do not create symbolic because it might be populated with docker credentials
 
 cat "$REPO_PATH/bashrc" >> ~/.bashrc

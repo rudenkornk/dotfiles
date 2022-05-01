@@ -22,6 +22,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   make \
   moreutils \
   openssh-client \
+  python3-pip \
   tar gzip zip unzip bzip2 \
   vim \
   wget \

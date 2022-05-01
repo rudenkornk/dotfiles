@@ -112,6 +112,10 @@ set display=truncate
 " Relative number lines on the left
 set number " relativenumber
 
+" <C-a> and <C-x> allow decrement and increment numbers
+" The following setting allows to do it with characters
+set nrformats+=alpha
+
 " Disable formatting in insert mode
 " Unfortunatelly this breaks autocomplete with tab, so it is not permanently
 " enabled

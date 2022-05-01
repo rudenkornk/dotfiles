@@ -7,5 +7,5 @@ let g:autoformat_remove_trailing_spaces = 0
 let g:formatdef_latexindent = "'latexindent --logfile=build/latexindent.log --local --lines '.a:firstline.'-'.a:lastline.' -'"
 nnoremap <leader>sF :Autoformat<CR>
 xnoremap <leader>sf :Autoformat<CR>
-nnoremap <leader>bb :!make in_docker<CR>
+nnoremap <leader>bb :w \| !make in_docker<CR>
 

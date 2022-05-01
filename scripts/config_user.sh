@@ -13,7 +13,6 @@ echo $REPO_PATH
 
 mkdir ~/.vim
 mkdir ~/.vim/keymap
-mkdir ~/.vim/bundle
 mkdir ~/.docker
 mkdir --parents ~/.local/bin
 mkdir --parents ~/.local/share/fonts

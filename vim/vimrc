@@ -49,6 +49,10 @@ Plug 'sheerun/vim-polyglot'
 " Formatting for specific cases
 Plug 'vim-autoformat/vim-autoformat'
 
+" Snippets
+Plug 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
 
 " Code completion
@@ -252,6 +256,10 @@ nnoremap <silent> <C-w>k :TmuxNavigateUp<CR>
 nnoremap <silent> <C-w>l :TmuxNavigateRight<CR>
 nnoremap <silent> <C-w>p :TmuxNavigatePrevious<CR>
 
+" Set up UltiSnips
+let g:UltiSnipsExpandTrigger="<C-b>"
+let g:UltiSnipsJumpForwardTrigger="<C-b>"
+let g:UltiSnipsJumpBackwardTrigger="<C-z>"
 
 " Setup coc.nvim
 " TextEdit might fail if hidden is not set.
@@ -338,8 +346,7 @@ nmap <leader>sx <Plug>(coc-fix-current)
 nmap <leader>sl <Plug>(coc-codelens-action)
 " Open link in browser
 nmap <leader>sk <Plug>(coc-openlink)
-" Convert visual selected code to snippet
-xmap <leader>sp  <Plug>(coc-convert-snippet)
+nmap <leader>sp :UltiSnipsEdit!<CR>
 nmap <leader>sb :abstract_syntax_tree
 " Free maps:
 "nmap <leader>sc
@@ -410,11 +417,6 @@ augroup end
 let g:coc_global_extensions = []
 let g:coc_global_extensions += ['coc-marketplace']
 
-let g:coc_global_extensions += ['coc-snippets']
-let g:coc_snippet_prev = '<C-z>'
-let g:coc_snippet_next = '<C-b>'
-imap <C-b> <Plug>(coc-snippets-expand-jump)
-
 let g:coc_global_extensions += ['coc-clangd']
 let g:coc_global_extensions += ['coc-cmake']
 let g:coc_global_extensions += ['coc-css']
@@ -427,6 +429,7 @@ let g:coc_global_extensions += ['coc-python']
 let g:coc_global_extensions += ['coc-sh']
 let g:coc_global_extensions += ['coc-texlab']
 let g:coc_global_extensions += ['coc-tsserver']
+let g:coc_global_extensions += ['coc-ultisnips'] " Integration of UltiSnips to coc completion
 let g:coc_global_extensions += ['coc-vimlsp']
 let g:coc_global_extensions += ['coc-xml']
 let g:coc_global_extensions += ['coc-yaml']

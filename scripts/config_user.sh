@@ -26,8 +26,8 @@ ln --symbolic "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.vim/keymap
 ln --symbolic "$REPO_PATH/tmux.conf" ~/.tmux.conf
 ln --symbolic "$REPO_PATH/gitconfig" ~/.gitconfig
 ln --symbolic "$REPO_PATH/vim/coc-settings.json" ~/.vim/coc-settings.json
-ln --symbolic "$REPO_PATH/vim/ftplugin" ~/.vim/ftplugin
-ln --symbolic "$REPO_PATH/vim/ultisnips" ~/.config/coc/ultisnips
+ln --symbolic "$REPO_PATH/vim/ftplugin" ftplugin; mv ftplugin ~/.vim/
+ln --symbolic "$REPO_PATH/vim/ultisnips" ultisnips; mv ultisnips ~/.config/coc/
 cat "$REPO_PATH/docker_config.json" >> ~/.docker/config.json # Do not create symbolic because it might be populated with docker credentials
 
 #ln --symbolic "$REPO_PATH/inputrc" ~/.inputrc

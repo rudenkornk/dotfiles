@@ -54,6 +54,8 @@ Plug 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
+" Support for some custom snippets
+Plug 'reconquest/vim-pythonx'
 
 " Code completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }

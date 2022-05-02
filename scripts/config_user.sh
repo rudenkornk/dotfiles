@@ -63,6 +63,9 @@ fi
 
 newgrp docker
 
+pip3 install px
+pip3 install jedi
+
 wget --output-document "$BUILD_PATH/FiraCode.zip" \
   https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
 unzip "$BUILD_PATH/FiraCode.zip" -d "$BUILD_PATH/FiraCode"

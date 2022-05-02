@@ -16,6 +16,21 @@ DOCKER_CONTAINER_NAME ?= docker_ci_container
 DOCKER_CONTAINER_NAME := $(DOCKER_CONTAINER_NAME)
 DOCKER_CONTAINER := $(BUILD_DIR)/$(DOCKER_CONTAINER_NAME)
 
+CONFIG_SYSTEM_DEPS := scripts/config_system.sh \
+                      keyboard_layouts/rnk \
+                      keyboard_layouts/evdev.xml \
+                      wsl.conf \
+
+CONFIG_USER_DEPS := scripts/config_user.sh \
+                    $(shell find vim -type f,l) \
+                    bashrc \
+                    inputrc \
+                    gitconfig \
+                    tmux.conf \
+                    keyboard_layouts/rnk-russian-qwerty.vim \
+                    docker_config.json \
+
+
 .PHONY: explicit_target
 explicit_target:
 	echo "Please specify target explicitly"
@@ -26,7 +41,7 @@ config: config_system config_user
 .PHONY: config_system
 config_system: $(BUILD_DIR)/config_system
 
-$(BUILD_DIR)/config_system:
+$(BUILD_DIR)/config_system: $(CONFIG_SYSTEM_DEPS)
 	sudo \
 	BUILD_PATH="$(BUILD_PATH)" \
 	PRIMARY_USER=$(PRIMARY_USER) \
@@ -36,7 +51,7 @@ $(BUILD_DIR)/config_system:
 .PHONY: config_user
 config_user: $(BUILD_DIR)/config_user
 
-$(BUILD_DIR)/config_user: config_system
+$(BUILD_DIR)/config_user: config_system $(CONFIG_USER_DEPS)
 	BUILD_PATH="$(BUILD_PATH)" \
 	PRIMARY_USER=$(PRIMARY_USER) \
 	./scripts/config_user.sh
@@ -45,7 +60,7 @@ $(BUILD_DIR)/config_user: config_system
 .PHONY: checkout_projects
 checkout_projects: $(BUILD_DIR)/checkout_projects
 
-$(BUILD_DIR)/checkout_projects:
+$(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
 	BUILD_PATH="$(BUILD_PATH)" \
 	PRIMARY_USER=$(PRIMARY_USER) \
 	PROJECTS_PATH=$(PROJECTS_PATH) \

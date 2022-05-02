@@ -23,4 +23,42 @@
 #    endsnippet
 #
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+global !p
+import px.snippets
+default_option_regex = re.compile("1\.(.*?)\|2\.")
+endglobal
+
+global !p
+def jump_after_choice(tabstop_number, snip):
+  if px.snippets.get_jumper_position(snip) and px.snippets.get_jumper_position(snip) == tabstop_number:
+    if not px.snippets.get_jumper_text(snip).startswith("1."):
+      px.snippets.advance_jumper(snip)
+
+def make_default_choice(tabstop_number, snip):
+  # Jumper is a helper for performing jumps in UltiSnips.
+  px.snippets.make_jumper(snip)
+
+  if not snip.tabstop == tabstop_number + 1:
+    return
+  line_number = snip.tabstops[tabstop_number].start.line
+  text = snip.buffer[line_number]
+  match = default_option_regex.search(text)
+  if not match:
+    return
+  line = snip.buffer[line_number]
+  newline = \
+    line[:snip.tabstops[tabstop_number].start.col] + \
+    match.group(1) + \
+    line[snip.tabstops[tabstop_number].end.col:]
+  snip.buffer[line_number] = newline
+  snip.cursor.preserve()
+endglobal
+
+context "px.snippets.make_context(snip)"
+post_jump "make_default_choice(1, snip)"
+snippet minted "minted environment" b
+\begin{minted}{${1|tex,cpp,python|}}
+  ${2:${VISUAL}}
+\end{minted}
+endsnippet
 

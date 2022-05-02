@@ -66,14 +66,16 @@ newgrp docker
 pip3 install px
 pip3 install jedi
 
-wget --output-document "$BUILD_PATH/FiraCode.zip" \
-  https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
-unzip "$BUILD_PATH/FiraCode.zip" -d "$BUILD_PATH/FiraCode"
-mv "$BUILD_PATH/FiraCode/"*.otf ~/.local/share/fonts
-rm "$BUILD_PATH/FiraCode.zip"
-rm "$BUILD_PATH/FiraCode/"*
-rmdir "$BUILD_PATH/FiraCode"
-# fc-cache -f -v
+if false; then
+  wget --output-document "$BUILD_PATH/FiraCode.zip" \
+    https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
+  unzip "$BUILD_PATH/FiraCode.zip" -d "$BUILD_PATH/FiraCode"
+  mv "$BUILD_PATH/FiraCode/"*.otf ~/.local/share/fonts
+  rm "$BUILD_PATH/FiraCode.zip"
+  rm "$BUILD_PATH/FiraCode/"*
+  rmdir "$BUILD_PATH/FiraCode"
+  # fc-cache -f -v
+fi
 
 # xfce4 terminal:
 #mkdir --parents ~/.local/share/xfce4/terminal/colorschemes

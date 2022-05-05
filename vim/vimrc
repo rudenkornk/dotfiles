@@ -126,6 +126,23 @@ set nrformats+=alpha
 " Notes about <leader> maps
 " Note you can't use noremap with <Plug> key-mappings
 " All <leader> maps are user-defined maps with the following reserved meaning:
+" <leader><leader>
+" <leader>%
+" <leader>^
+" <leader>-
+" <leader>+
+" <leader>*
+" <leader>!
+" <leader>~
+" <leader><
+" <leader>=
+" <leader>>
+" <leader>/
+" <leader>(
+" <leader>)
+" <leader>_
+" <leader>[
+" <leader>]
 " <leader>a
 " <leader>b --- build
 " <leader>c --- c, c++

@@ -50,8 +50,14 @@ def make_default_choice(tabstop_number, snip):
     line[:snip.tabstops[tabstop_number].start.col] + \
     match.group(1) + \
     line[snip.tabstops[tabstop_number].end.col:]
+
+  (cursor_line, cursor_column) = (snip.cursor[0], snip.cursor[1])
   snip.buffer[line_number] = newline
-  snip.cursor.preserve()
+  if cursor_line == line_number:
+    shift = len(line) - len(newline)
+    snip.cursor.set(cursor_line, cursor_column - shift)
+  else:
+    snip.cursor.preserve()
 endglobal
 
 context "px.snippets.make_context(snip)"

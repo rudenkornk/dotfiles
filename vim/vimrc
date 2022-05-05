@@ -176,7 +176,7 @@ set nrformats+=alpha
 " enabled
 "set paste
 nnoremap <F2> :set invpaste<CR>
-inoremap <F2> <ESC>:set invpaste<CR>i
+inoremap <F2> <ESC>:set invpaste<CR>a
 nnoremap <leader>vp :set invpaste<CR>
 nnoremap <leader>vn :set invnumber<CR>
 

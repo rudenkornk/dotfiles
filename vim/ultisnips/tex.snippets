@@ -68,3 +68,15 @@ snippet minted "minted environment" b
 \end{minted}
 endsnippet
 
+context "px.snippets.make_context(snip)"
+post_jump "make_default_choice(1, snip)"
+snippet mintinline "inline minted environment"
+\mintinline{${1|tex,cpp,python|}}{${2:${VISUAL}}}
+endsnippet
+
+snippet mdframed "mdframed environment"
+\begin{mdframed}[style=$1]
+  ${2:${VISUAL}}
+\end{mdframed}
+endsnippet
+

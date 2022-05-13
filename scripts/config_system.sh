@@ -19,6 +19,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   ca-certificates \
   curl \
   docker.io \
+  dos2unix \
   make \
   moreutils \
   openssh-client \

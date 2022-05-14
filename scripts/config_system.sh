@@ -29,6 +29,12 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   wget \
   xsel `# for tmux-yank`\
 
+DNS=8.8.8.8
+RESOLV_CONF=/etc/resolv.conf
+if ! grep $DNS $RESOLV_CONF --quiet; then
+  echo nameserver $DNS >> $RESOLV_CONF
+fi
+
 # Some special processing is needed for tmux-yank on wayland, see
 # https://github.com/tmux-plugins/tmux-yank
 if [[ $IS_WAYLAND == "true" ]]; then

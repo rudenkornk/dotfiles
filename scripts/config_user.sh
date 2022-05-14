@@ -66,6 +66,7 @@ newgrp docker
 
 pip3 install px
 pip3 install jedi
+pip3 install sympy
 
 if false; then
   wget --output-document "$BUILD_PATH/FiraCode.zip" \

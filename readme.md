@@ -1,4 +1,4 @@
-# My dotfiles
+# dotfiles
 
 [![GitHub Actions Status](https://github.com/rudenkornk/dotfiles/actions/workflows/workflow.yml/badge.svg)](https://github.com/rudenkornk/dotfiles/actions)
 

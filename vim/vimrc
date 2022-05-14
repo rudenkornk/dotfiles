@@ -281,8 +281,8 @@ nnoremap <silent> <C-w>p :TmuxNavigatePrevious<CR>
 let g:UltiSnipsExpandTrigger="<C-k>"
 let g:UltiSnipsJumpForwardTrigger="<C-b>"
 let g:UltiSnipsJumpBackwardTrigger="<C-z>"
-xnoremap <silent> <C-b> :call UltiSnips#SaveLastVisualSelection()<CR>gvs
-xnoremap <silent> <C-z> :call UltiSnips#SaveLastVisualSelection()<CR>
+xnoremap <silent> <C-r> :call UltiSnips#SaveLastVisualSelection()<CR>gvs
+xnoremap <silent> <C-t> :call UltiSnips#SaveLastVisualSelection()<CR>
 
 " Setup coc.nvim
 " TextEdit might fail if hidden is not set.

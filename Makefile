@@ -97,7 +97,7 @@ endif
 	sleep 1
 	mkdir --parents $(BUILD_DIR) && touch $@
 
-$(DOCKER_CONTAINER)_prepared: $(DOCKER_CONTAINER)
+$(DOCKER_CONTAINER)_prepare: $(DOCKER_CONTAINER)
 	docker exec $(DOCKER_CONTAINER_NAME) bash -c \
 		" \
 		sudo apt-get update && \
@@ -106,6 +106,6 @@ $(DOCKER_CONTAINER)_prepared: $(DOCKER_CONTAINER)
 		"
 
 .PHONY: in_docker
-in_docker: $(DOCKER_CONTAINER)_prepared
+in_docker: $(DOCKER_CONTAINER)_prepare
 	docker exec $(DOCKER_CONTAINER_NAME) make $(DOCKER_TARGET)
 

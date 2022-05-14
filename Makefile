@@ -104,6 +104,7 @@ $(DOCKER_CONTAINER)_prepare: $(DOCKER_CONTAINER)
 		sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 			make \
 		"
+	mkdir --parents $(BUILD_DIR) && touch $@
 
 .PHONY: in_docker
 in_docker: $(DOCKER_CONTAINER)_prepare

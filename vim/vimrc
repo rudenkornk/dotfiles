@@ -28,6 +28,8 @@ Plug 'itchyny/vim-cursorword'
 " Surroundings: parentheses, brackets, quotes, XML tags, and more
 Plug 'tpope/vim-surround'
 
+Plug 'godlygeek/tabular'
+
 " Unified clipboard for vim and tmux
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'roxma/vim-tmux-clipboard'
@@ -177,6 +179,7 @@ set nrformats+=alpha
 "set paste
 set pastetoggle=<C-q>
 nnoremap <leader>vn :set invnumber<CR>
+xnoremap <leader>vt :Tabularize /\s\+/l0<CR>
 
 " Allow refreshing screen in insert mode
 inoremap <C-l> <ESC><C-l>a

@@ -99,7 +99,7 @@ $(DOCKER_CONTAINER)_prepare: $(DOCKER_CONTAINER)
 	docker exec $(DOCKER_CONTAINER_NAME) bash -c \
 		" \
 		sudo apt-get update && \
-		sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+		sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
 			make \
 		"
 	mkdir --parents $(BUILD_DIR) && touch $@

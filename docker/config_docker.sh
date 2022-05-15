@@ -13,7 +13,7 @@ if [[ -z "$PRIMARY_USER" ]]; then
 fi
 
 apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   docker.io \
 
 usermod -aG docker $PRIMARY_USER

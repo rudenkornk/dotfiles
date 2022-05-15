@@ -2,6 +2,9 @@
 stty erase '^?'
 stty -ixon
 
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 alias tmux='tmux -2 -u'
 
 if [ -z "$SSH_AUTH_SOCK" ] ; then

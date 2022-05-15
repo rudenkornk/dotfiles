@@ -1,68 +1,59 @@
 SHELL = /usr/bin/env bash
 
+PROJECT_NAME := dotfiles
 BUILD_DIR ?= build
 BUILD_DIR := $(BUILD_DIR)
-BUILD_PATH := $(shell realpath $(BUILD_DIR))
 PRIMARY_USER ?= rudenkornk
 PRIMARY_USER := $(PRIMARY_USER)
 PROJECTS_PATH ?= /home/$(PRIMARY_USER)/projects
 PROJECTS_PATH := $(PROJECTS_PATH)
-KEEP_CI_USER_SUDO := true
-DOCKER_TARGET ?= config
-DOCKER_TARGET := $(DOCKER_TARGET)
-DOCKER_IMAGE_TAG ?= rudenkornk/docker_ci:1.0.0
-DOCKER_IMAGE_TAG := $(DOCKER_IMAGE_TAG)
-DOCKER_CONTAINER_NAME ?= docker_ci_container
-DOCKER_CONTAINER_NAME := $(DOCKER_CONTAINER_NAME)
-DOCKER_CONTAINER := $(BUILD_DIR)/$(DOCKER_CONTAINER_NAME)
 
-CONFIG_SYSTEM_DEPS := scripts/config_system.sh \
-                      keyboard_layouts/rnk \
-                      keyboard_layouts/evdev.xml \
-                      wsl.conf \
+SYSTEM_CONFIGS_DIRS := \
+                       docker \
+                       keyboard_layouts \
+                       wsl \
 
-CONFIG_USER_DEPS := scripts/config_user.sh \
-                    $(shell find vim -type f,l) \
-                    bashrc \
-                    inputrc \
-                    gitconfig \
-                    tmux.conf \
-                    keyboard_layouts/rnk-russian-qwerty.vim \
-                    docker_config.json \
+USER_CONFIGS_DIRS := \
+                     bash \
+                     fonts \
+                     git \
+                     latexindent \
+                     mouse \
+                     tmux \
+                     vim \
+                     xfce4 \
 
+CONFIG_SYSTEM_DEPS := $(shell find $(SYSTEM_CONFIGS_DIRS) -type f,l) scripts/config_system.sh
+CONFIG_USER_DEPS := $(shell find $(USER_CONFIGS_DIRS) -type f,l)
 
 .PHONY: explicit_target
 explicit_target:
 	echo "Please specify target explicitly"
 
 .PHONY: config
-config: config_system config_user
-
-.PHONY: config_system
-config_system: $(BUILD_DIR)/config_system
+config: $(BUILD_DIR)/config_system $(BUILD_DIR)/config_user
 
 $(BUILD_DIR)/config_system: $(CONFIG_SYSTEM_DEPS)
-	sudo \
-	BUILD_PATH="$(BUILD_PATH)" \
-	PRIMARY_USER=$(PRIMARY_USER) \
-	./scripts/config_system.sh
+	sudo ./scripts/config_system.sh
+	for i in $(SYSTEM_CONFIGS_DIRS); do \
+		sudo \
+		PRIMARY_USER=$(PRIMARY_USER) \
+		$$i/config_$$i.sh; \
+	done
 	touch $@
 
-.PHONY: config_user
-config_user: $(BUILD_DIR)/config_user
-
-$(BUILD_DIR)/config_user: config_system $(CONFIG_USER_DEPS)
-	BUILD_PATH="$(BUILD_PATH)" \
-	PRIMARY_USER=$(PRIMARY_USER) \
-	./scripts/config_user.sh
+$(BUILD_DIR)/config_user: $(BUILD_DIR)/config_system $(CONFIG_USER_DEPS)
+	for i in $(USER_CONFIGS_DIRS); do \
+		PRIMARY_USER=$(PRIMARY_USER) \
+		$$i/config_$$i.sh; \
+	done
+	sudo ./scripts/config_user.sh
 	touch $@
 
 .PHONY: checkout_projects
 checkout_projects: $(BUILD_DIR)/checkout_projects
 
 $(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
-	BUILD_PATH="$(BUILD_PATH)" \
-	PRIMARY_USER=$(PRIMARY_USER) \
 	PROJECTS_PATH=$(PROJECTS_PATH) \
 	./scripts/checkout_projects.sh
 	touch $@
@@ -72,11 +63,18 @@ check: config
 
 .PHONY: clean
 clean:
-	rm --force "$(BUILD_DIR)"/*.zip
-	rm --force "$(BUILD_DIR)"/*.gz
 
 
 ###################### docker support ######################
+KEEP_CI_USER_SUDO := true
+DOCKER_TARGET ?= config
+DOCKER_TARGET := $(DOCKER_TARGET)
+DOCKER_IMAGE_TAG ?= rudenkornk/docker_ci:1.0.0
+DOCKER_IMAGE_TAG := $(DOCKER_IMAGE_TAG)
+DOCKER_CONTAINER_NAME ?= $(PROJECT_NAME)_container
+DOCKER_CONTAINER_NAME := $(DOCKER_CONTAINER_NAME)
+DOCKER_CONTAINER := $(BUILD_DIR)/$(DOCKER_CONTAINER_NAME)
+
 DOCKER_CONTAINER_ID = $(shell command -v docker &> /dev/null && docker container ls --quiet --all --filter name=^/$(DOCKER_CONTAINER_NAME)$)
 DOCKER_CONTAINER_STATE = $(shell command -v docker &> /dev/null && docker container ls --format {{.State}} --all --filter name=^/$(DOCKER_CONTAINER_NAME)$)
 DOCKER_CONTAINER_RUN_STATUS = $(shell [[ "$(DOCKER_CONTAINER_STATE)" != "running" ]] && echo "$(DOCKER_CONTAINER)_not_running")

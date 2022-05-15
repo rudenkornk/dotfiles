@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-#set -x
+set -o errexit
+set -o pipefail
+set -o nounset
+#set -o xtrace
 
 if [[ -z "$PROJECTS_PATH" ]]; then
   echo "Please set PROJECTS_PATH var"

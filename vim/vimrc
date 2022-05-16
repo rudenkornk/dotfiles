@@ -40,9 +40,6 @@ Plug 'tmux-plugins/vim-tmux'
 " Seemless navigation between vim and tmux
 Plug 'christoomey/vim-tmux-navigator'
 
-" Autoclose brackets
-Plug 'Raimondi/delimitMate'
-
 " Syntax highlight
 Plug 'sheerun/vim-polyglot'
 

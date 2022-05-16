@@ -176,6 +176,8 @@ set nrformats+=alpha
 "set paste
 set pastetoggle=<C-q>
 nnoremap <leader>vn :set invnumber<CR>
+nnoremap <leader>vs :%s/\([^ ]\)\s\+/\1 /g \| noh<CR>
+xnoremap <leader>vs :s/\([^ ]\)\s\+/\1 /g \| noh<CR>
 xnoremap <leader>vt :s/\([^ ]\)\s\+/\1 /g \| noh \| '<,'>Tabularize /\s\+/l0<CR>
 
 " Allow refreshing screen in insert mode

@@ -14,9 +14,11 @@ mkdir --parents "$PROJECTS_PATH"
 
 REPOS=()
 REPOS+=("git@github.com:rudenkornk/docker_ci.git")
+REPOS+=("git@github.com:rudenkornk/docker_cpp.git")
 REPOS+=("git@github.com:rudenkornk/docker_latex.git")
 REPOS+=("git@github.com:rudenkornk/group_theory.git")
 REPOS+=("git@github.com:rudenkornk/latex_experiments.git")
+REPOS+=("git@github.com:rudenkornk/utility.git")
 
 for r in ${REPOS[@]}; do
   REPO_NAME=$(echo $r | grep -oP "git@github\.com:.*?/\K.*?(?=\.git)")

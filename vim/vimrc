@@ -58,6 +58,7 @@ Plug 'reconquest/vim-pythonx'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'lervag/vimtex'
+Plug 'codota/tabnine-vim'
 
 " Initialize plugin system
 call plug#end()
@@ -449,6 +450,7 @@ let g:coc_global_extensions += ['coc-json']
 let g:coc_global_extensions += ['coc-perl']
 let g:coc_global_extensions += ['coc-python']
 let g:coc_global_extensions += ['coc-sh']
+let g:coc_global_extensions += ['coc-tabnine']
 let g:coc_global_extensions += ['coc-texlab']
 let g:coc_global_extensions += ['coc-tsserver']
 let g:coc_global_extensions += ['coc-ultisnips'] " Integration of UltiSnips to coc completion

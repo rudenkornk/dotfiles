@@ -89,6 +89,7 @@ endif
 		--env PRIMARY_USER="ci_user" \
 		--env KEEP_CI_USER_SUDO="$(KEEP_CI_USER_SUDO)" \
 		--env CI_UID="$$(id --user)" --env CI_GID="$$(id --group)" \
+		--env "TERM=xterm-256color" \
 		--name $(DOCKER_CONTAINER_NAME) \
 		--mount type=bind,source="$$(pwd)",target=/home/repo \
 		$(DOCKER_IMAGE_TAG)

@@ -5,7 +5,7 @@
 Simple repo for setting up new system or user.
 
 ## Set up
-```shell
+```bash
 make config
 # Reload shell
 ```

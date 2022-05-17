@@ -180,6 +180,7 @@ nnoremap <leader>vc :%s/\([^ ]\)\s\+/\1 /g \| noh<CR>
 xnoremap <leader>vc :s/\([^ ]\)\s\+/\1 /g \| noh<CR>
 xnoremap <leader>vt :s/\([^ ]\)\s\+/\1 /g \| noh \| '<,'>Tabularize /\s\+/l0<CR>
 xnoremap <leader>vs :sort<CR>
+nnoremap <leader>vh :noh<CR>
 
 " Allow refreshing screen in insert mode
 inoremap <C-l> <ESC><C-l>a

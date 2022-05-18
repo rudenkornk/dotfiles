@@ -13,6 +13,7 @@ fi
 mkdir --parents "$PROJECTS_PATH"
 
 REPOS=()
+REPOS+=("git@github.com:rudenkornk/cpp_contests.git")
 REPOS+=("git@github.com:rudenkornk/docker_ci.git")
 REPOS+=("git@github.com:rudenkornk/docker_cpp.git")
 REPOS+=("git@github.com:rudenkornk/docker_latex.git")

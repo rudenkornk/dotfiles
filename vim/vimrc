@@ -460,6 +460,6 @@ let g:coc_global_extensions += ['coc-word'] " Words from google 10000 english re
 let g:coc_global_extensions += ['coc-xml']
 let g:coc_global_extensions += ['coc-yaml']
 
-highlight RedundantSpacesAndTabs ctermbg=red guibg=red
+highlight RedundantSpacesAndTabs ctermbg=100 guibg=#b5942e
 match RedundantSpacesAndTabs /\(\s\+$\|\t\+\)/
 

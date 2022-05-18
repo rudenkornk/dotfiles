@@ -323,6 +323,13 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
+function! s:coc_toggle() abort
+  if g:coc_enabled
+    :CocDisable
+  else
+    :CocEnable
+  endif
+endfunction
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -371,6 +378,8 @@ nmap <leader>sl <Plug>(coc-codelens-action)
 nmap <leader>sk <Plug>(coc-openlink)
 nmap <leader>sp :UltiSnipsEdit!<CR>
 nmap <leader>sb :abstract_syntax_tree
+nmap <leader>sq :call <SID>coc_toggle()<CR>
+
 " Free maps:
 "nmap <leader>sc
 "nmap <leader>sg

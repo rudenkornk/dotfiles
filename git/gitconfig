@@ -6,19 +6,19 @@
 [rebase]
     autoStash = true
 [alias]
+    amend = commit --amend
     br = branch -vv
     ck = checkout
     cm = commit
-    st = status
     cp = cherry-pick
-    rb = rebase
-    rv = remote -v
+    ft = fetch --all
     ll = log --oneline
     llg = log --oneline --graph
-    ft = fetch --all
-    sg = diff --staged
     mb = merge-base
-    amend = commit --amend
+    rb = rebase
+    rv = remote -v
+    sg = diff --staged
+    st = status
 [init]
     defaultBranch = main
 [credentials]

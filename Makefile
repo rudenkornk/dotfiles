@@ -105,6 +105,9 @@ $(DOCKER_CONTAINER)_prepare: $(DOCKER_CONTAINER)
 		"
 	mkdir --parents $(BUILD_DIR) && touch $@
 
+.PHONY: $(DOCKER_CONTAINER_NAME)
+$(DOCKER_CONTAINER_NAME): $(DOCKER_CONTAINER)
+
 .PHONY: in_docker
 in_docker: $(DOCKER_CONTAINER)_prepare
 	docker exec $(DOCKER_CONTAINER_NAME) make $(DOCKER_TARGET)

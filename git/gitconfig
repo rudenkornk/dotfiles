@@ -12,6 +12,7 @@
     cm = commit
     cp = cherry-pick
     ft = fetch --all
+    fp = format-patch
     ll = log --oneline
     llg = log --oneline --graph
     mb = merge-base

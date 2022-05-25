@@ -5,6 +5,7 @@ stty -ixon
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
+alias v=vi
 alias tmux='tmux -2 -u'
 
 if [ -z "$SSH_AUTH_SOCK" ] ; then

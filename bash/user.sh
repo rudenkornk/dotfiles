@@ -12,5 +12,3 @@ mkdir --parents ~/.local/bin
 #ln --symbolic "$REPO_PATH/bash/inputrc" ~/.inputrc # vi mode in bash
 cat "$REPO_PATH/bash/bashrc" >> ~/.bashrc
 
-newgrp docker
-

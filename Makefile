@@ -8,46 +8,42 @@ PRIMARY_USER := $(PRIMARY_USER)
 PROJECTS_PATH ?= /home/$(PRIMARY_USER)/projects
 PROJECTS_PATH := $(PROJECTS_PATH)
 
-SYSTEM_CONFIGS_DIRS := \
-                       docker \
-                       keyboard_layouts \
-                       wsl \
+CONFIG_DIRS := \
+               common_utils \
+               python \
+               bash \
+               docker \
+               fonts \
+               git \
+               keyboard_layouts \
+               latexindent \
+               mouse \
+               powershell \
+               tmux \
+               vim \
+               wsl \
+               xfce4 \
 
-USER_CONFIGS_DIRS := \
-                     bash \
-                     fonts \
-                     git \
-                     latexindent \
-                     mouse \
-                     tmux \
-                     vim \
-                     xfce4 \
-
-CONFIG_SYSTEM_DEPS := $(shell find $(SYSTEM_CONFIGS_DIRS) -type f,l) scripts/config_system.sh
-CONFIG_USER_DEPS := $(shell find $(USER_CONFIGS_DIRS) -type f,l)
+CONFIG_DEPS := $(shell find $(CONFIG_DIRS) -type f,l)
 
 .PHONY: explicit_target
 explicit_target:
 	echo "Please specify target explicitly"
 
 .PHONY: config
-config: $(BUILD_DIR)/config_system $(BUILD_DIR)/config_user
+config: $(BUILD_DIR)/config
 
-$(BUILD_DIR)/config_system: $(CONFIG_SYSTEM_DEPS)
-	sudo ./scripts/config_system.sh
-	for i in $(SYSTEM_CONFIGS_DIRS); do \
-		sudo \
-		PRIMARY_USER=$(PRIMARY_USER) \
-		$$i/config_$$i.sh; \
+$(BUILD_DIR)/config: $(CONFIG_DEPS)
+	for i in $(CONFIG_DIRS); do \
+		if [ -f "$$i/system.sh" ]; then \
+			sudo \
+			PRIMARY_USER=$(PRIMARY_USER) \
+			$$i/system.sh; \
+		fi; \
+		if [ -f "$$i/user.sh" ]; then \
+			$$i/user.sh; \
+		fi; \
 	done
-	touch $@
-
-$(BUILD_DIR)/config_user: $(BUILD_DIR)/config_system $(CONFIG_USER_DEPS)
-	for i in $(USER_CONFIGS_DIRS); do \
-		PRIMARY_USER=$(PRIMARY_USER) \
-		$$i/config_$$i.sh; \
-	done
-	sudo ./scripts/config_user.sh
 	touch $@
 
 .PHONY: checkout_projects

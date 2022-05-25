@@ -18,6 +18,3 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
 
 usermod -aG docker $PRIMARY_USER
 
-mkdir ~/.docker
-cat "$REPO_PATH/docker/docker_config.json" >> "/home/$PRIMARY_USER/.docker/config.json" # Do not create symbolic because it might be populated with docker credentials
-

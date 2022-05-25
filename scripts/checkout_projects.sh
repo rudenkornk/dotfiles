@@ -5,7 +5,7 @@ set -o pipefail
 set -o nounset
 #set -o xtrace
 
-if [[ -z "$PROJECTS_PATH" ]]; then
+if [[ -z "${PROJECTS_PATH:-}" ]]; then
   echo "Please set PROJECTS_PATH var"
   exit 1
 fi

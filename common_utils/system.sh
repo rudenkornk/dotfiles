@@ -3,13 +3,13 @@
 set -o errexit
 set -o pipefail
 set -o nounset
-#set -o xtrace
+set -o xtrace
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-  bash-completion \
+  apt-transport-https \
   ca-certificates \
   curl \
   dos2unix \
@@ -17,9 +17,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   make \
   moreutils `# for ifne tool` \
   openssh-client \
-  python3-pip \
+  software-properties-common \
   tar gzip zip unzip bzip2 \
-  vim \
   wget \
-  xsel `# for tmux-yank` \
 

@@ -181,6 +181,7 @@ xnoremap <leader>vc :s/\([^ ]\)\s\+/\1 /g \| noh<CR>
 xnoremap <leader>vt :s/\([^ ]\)\s\+/\1 /g \| noh \| '<,'>Tabularize /\s\+/l0<CR>
 xnoremap <leader>vs :sort<CR>
 nnoremap <leader>vh :noh<CR>
+nnoremap <leader>ve :Vexplore<CR>
 
 " Allow refreshing screen in insert mode
 inoremap <C-l> <ESC><C-l>a
@@ -240,7 +241,6 @@ let g:netrw_browse_split = 4
 let g:netrw_altv = 1
 let g:netrw_winsize = 15
 let g:netrw_preview = 1
-nnoremap <leader>ve :Vexplore<CR>
 
 " Setup gdb
 packadd termdebug

@@ -6,4 +6,5 @@
     "in_docker"
   ],
   "texlab.build.executable": "make",
+  "powershell.integratedConsole.showOnStartup": false,
 }

@@ -24,7 +24,7 @@ for r in ${REPOS[@]}; do
   REPO_NAME=$(echo $r | grep -oP "git@github\.com:.*?/\K.*?(?=\.git)")
   REPO_PATH="$PROJECTS_PATH/$REPO_NAME"
   git clone $r "$REPO_PATH"
-  git --git-dir="$REPO_PATH/.git" checkout -b dev_volatile
+  git --git-dir="$REPO_PATH/.git" checkout -b dev_volatile --track origin/main
   git --git-dir="$REPO_PATH/.git" branch -D main
 done
 

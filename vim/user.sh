@@ -22,7 +22,6 @@ ln --symbolic "$REPO_PATH/vim/ftdetect" ftdetect; mv ftdetect ~/.vim/
 ln --symbolic "$REPO_PATH/vim/ultisnips" ultisnips; mv ultisnips ~/.config/coc/
 
 # Install vim-plug
-curl --location install-node.vercel.app/lts | bash -s -- --yes --prefix=$HOME/.local/
 curl --fail --location --output ~/.vim/autoload/plug.vim --create-dirs \
   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 vim  -c PlugInstall -c qall

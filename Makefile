@@ -11,6 +11,7 @@ PROJECTS_PATH := $(PROJECTS_PATH)
 CONFIG_DIRS := \
                common_utils \
                python \
+               nodejs \
                bash \
                docker \
                fonts \

@@ -15,9 +15,9 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.sha }}
     - name: Config
-      run: DOCKER_TARGET=config make in_docker
+      run: make in_docker TARGET=config
     - name: Test
-      run: DOCKER_TARGET=check make in_docker
+      run: make in_docker TARGET=check
     - name: Clean
-      run: DOCKER_TARGET=clean make in_docker
+      run: make in_docker TARGET=clean
 

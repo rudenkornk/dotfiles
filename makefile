@@ -63,9 +63,10 @@ clean:
 
 
 ###################### docker support ######################
+TARGET ?= config
+TARGET := $(TARGET)
+COMMAND ?=
 KEEP_CI_USER_SUDO := true
-DOCKER_TARGET ?= config
-DOCKER_TARGET := $(DOCKER_TARGET)
 DOCKER_IMAGE_TAG ?= rudenkornk/docker_ci:1.0.0
 DOCKER_IMAGE_TAG := $(DOCKER_IMAGE_TAG)
 DOCKER_CONTAINER_NAME ?= $(PROJECT_NAME)_container
@@ -105,9 +106,13 @@ $(DOCKER_CONTAINER)_prepare: $(DOCKER_CONTAINER)
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 .PHONY: $(DOCKER_CONTAINER_NAME)
-$(DOCKER_CONTAINER_NAME): $(DOCKER_CONTAINER)
+$(DOCKER_CONTAINER_NAME): $(DOCKER_CONTAINER)_prepare
 
 .PHONY: in_docker
 in_docker: $(DOCKER_CONTAINER)_prepare
-	docker exec $(DOCKER_CONTAINER_NAME) make $(DOCKER_TARGET)
+ifneq ($(COMMAND),)
+	docker exec $(DOCKER_CONTAINER_NAME) bash -c "$(COMMAND)"
+else
+	docker exec $(DOCKER_CONTAINER_NAME) bash -c "make $(TARGET)"
+endif
 

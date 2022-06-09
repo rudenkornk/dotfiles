@@ -7,7 +7,7 @@ Simple repo for setting up new system or user.
 ## Test
 ### Option 1: Use docker container
 ```bash
-DOCKER_TARGET=config make in_docker
+make in_docker TARGET=config
 ```
 
 ### Option 2: Use docker container interactively:

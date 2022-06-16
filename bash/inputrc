@@ -1,7 +1,9 @@
-set editing-mode vi
+$include /etc/inputrc
 
-set vi-ins-mode-string \1\e[5 q\e]12;green\a\2
-set vi-cmd-mode-string \1\e[1 q\e]12;orange\a\2
+#set editing-mode vi
+#set vi-ins-mode-string \1\e[5 q\e]12;green\a\2
+#set vi-cmd-mode-string \1\e[1 q\e]12;orange\a\2
+#set show-mode-in-prompt on
 
-set show-mode-in-prompt on
+set completion-ignore-case On
 

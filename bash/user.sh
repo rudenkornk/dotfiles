@@ -9,6 +9,6 @@ REPO_PATH=$(realpath "$(dirname "$0")/..")
 
 mkdir --parents ~/.local/bin
 
-#ln --symbolic "$REPO_PATH/bash/inputrc" ~/.inputrc # vi mode in bash
+ln --symbolic "$REPO_PATH/bash/inputrc" ~/.inputrc
 cat "$REPO_PATH/bash/bashrc" >> ~/.bashrc
 

@@ -1,4 +1,4 @@
-name: LaTeX workflow
+name: Workflow
 on:
   push:
     branches:

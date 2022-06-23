@@ -22,7 +22,7 @@ CONFIG_DIRS := \
                wsl \
                xfce4 \
 
-CONFIG_DEPS := $(shell find $(CONFIG_DIRS) -type f,l)
+CONFIG_DEPS != find $(CONFIG_DIRS) -type f,l
 
 .PHONY: explicit_target
 explicit_target:
@@ -69,9 +69,9 @@ DOCKER_CONTAINER := $(BUILD_DIR)/$(DOCKER_CONTAINER_NAME)
 
 IF_DOCKERD_UP := command -v docker &> /dev/null && pidof dockerd &> /dev/null
 
-DOCKER_CONTAINER_ID := $(shell $(IF_DOCKERD_UP) && docker container ls --quiet --all --filter name=^/$(DOCKER_CONTAINER_NAME)$)
-DOCKER_CONTAINER_STATE := $(shell $(IF_DOCKERD_UP) && docker container ls --format {{.State}} --all --filter name=^/$(DOCKER_CONTAINER_NAME)$)
-DOCKER_CONTAINER_RUN_STATUS := $(shell [[ "$(DOCKER_CONTAINER_STATE)" != "running" ]] && echo "$(DOCKER_CONTAINER)_not_running")
+DOCKER_CONTAINER_ID != $(IF_DOCKERD_UP) && docker container ls --quiet --all --filter name=^/$(DOCKER_CONTAINER_NAME)$
+DOCKER_CONTAINER_STATE != $(IF_DOCKERD_UP) && docker container ls --format {{.State}} --all --filter name=^/$(DOCKER_CONTAINER_NAME)$
+DOCKER_CONTAINER_RUN_STATUS != [[ "$(DOCKER_CONTAINER_STATE)" != "running" ]] && echo "$(DOCKER_CONTAINER)_not_running"
 .PHONY: $(DOCKER_CONTAINER)_not_running
 $(DOCKER_CONTAINER): $(DOCKER_CONTAINER_RUN_STATUS)
 ifneq ($(DOCKER_CONTAINER_ID),)

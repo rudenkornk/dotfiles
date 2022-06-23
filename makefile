@@ -99,8 +99,8 @@ $(DOCKER_CONTAINER)_prepare: $(DOCKER_CONTAINER)
 		"
 	mkdir --parents $(BUILD_DIR) && touch $@
 
-.PHONY: $(DOCKER_CONTAINER_NAME)
-$(DOCKER_CONTAINER_NAME): $(DOCKER_CONTAINER)_prepare
+.PHONY: container
+container: $(DOCKER_CONTAINER)_prepare
 
 .PHONY: in_docker
 in_docker: $(DOCKER_CONTAINER)_prepare

@@ -62,7 +62,7 @@ clean:
 ###################### docker support ######################
 TARGET ?= config
 COMMAND ?=
-KEEP_CI_USER_SUDO := true
+DOCKER_KEEP_CI_USER_SUDO := true
 DOCKER_IMAGE_TAG := rudenkornk/docker_ci:1.0.0
 DOCKER_CONTAINER_NAME := $(PROJECT_NAME)_container
 DOCKER_CONTAINER := $(BUILD_DIR)/$(DOCKER_CONTAINER_NAME)
@@ -81,7 +81,7 @@ endif
 		--user ci_user \
 		--env BUILD_DIR="$(BUILD_DIR)" \
 		--env PRIMARY_USER="ci_user" \
-		--env KEEP_CI_USER_SUDO="$(KEEP_CI_USER_SUDO)" \
+		--env KEEP_CI_USER_SUDO="$(DOCKER_KEEP_CI_USER_SUDO)" \
 		--env CI_UID="$$(id --user)" --env CI_GID="$$(id --group)" \
 		--env "TERM=xterm-256color" \
 		--name $(DOCKER_CONTAINER_NAME) \

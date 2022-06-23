@@ -2,11 +2,8 @@ SHELL = /usr/bin/env bash
 
 PROJECT_NAME := dotfiles
 BUILD_DIR ?= build
-BUILD_DIR := $(BUILD_DIR)
 PRIMARY_USER ?= rudenkornk
-PRIMARY_USER := $(PRIMARY_USER)
-PROJECTS_PATH ?= /home/$(PRIMARY_USER)/projects
-PROJECTS_PATH := $(PROJECTS_PATH)
+PROJECTS_PATH := /home/$(PRIMARY_USER)/projects
 
 CONFIG_DIRS := \
                common_utils \
@@ -64,13 +61,10 @@ clean:
 
 ###################### docker support ######################
 TARGET ?= config
-TARGET := $(TARGET)
 COMMAND ?=
 KEEP_CI_USER_SUDO := true
-DOCKER_IMAGE_TAG ?= rudenkornk/docker_ci:1.0.0
-DOCKER_IMAGE_TAG := $(DOCKER_IMAGE_TAG)
-DOCKER_CONTAINER_NAME ?= $(PROJECT_NAME)_container
-DOCKER_CONTAINER_NAME := $(DOCKER_CONTAINER_NAME)
+DOCKER_IMAGE_TAG := rudenkornk/docker_ci:1.0.0
+DOCKER_CONTAINER_NAME := $(PROJECT_NAME)_container
 DOCKER_CONTAINER := $(BUILD_DIR)/$(DOCKER_CONTAINER_NAME)
 
 IF_DOCKERD_UP := command -v docker &> /dev/null && pidof dockerd &> /dev/null

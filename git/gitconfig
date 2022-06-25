@@ -1,18 +1,11 @@
-[user]
-    name = Nikita Rudenko
-    email = rudenkornk@gmail.com
-[pull]
-    rebase = true
-[rebase]
-    autoStash = true
 [alias]
     amend = commit --amend
     br = branch -vv
     ck = checkout
     cm = commit
     cp = cherry-pick
-    ft = fetch --all
     fp = format-patch
+    ft = fetch --all
     ll = log --oneline
     llg = log --oneline --graph
     mb = merge-base
@@ -20,12 +13,18 @@
     rv = remote -v
     sg = diff --staged
     st = status
-[init]
-    defaultBranch = main
-[credentials]
-    helper = store
 [core]
     editor = vim
-
+[credentials]
+    helper = store
+[init]
+    defaultBranch = main
+[pull]
+    rebase = true
 [push]
     default = current
+[rebase]
+    autoStash = true
+[user]
+    email = rudenkornk@gmail.com
+    name = Nikita Rudenko

@@ -1,5 +1,6 @@
 [alias]
     amend = commit --amend
+    bl = blame -s
     br = branch -vv
     ck = checkout
     cm = commit
@@ -13,6 +14,9 @@
     rv = remote -v
     sg = diff --staged
     st = status
+[blame]
+    coloring = highlightRecent
+    date = short
 [core]
     editor = vim
 [credentials]

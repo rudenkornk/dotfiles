@@ -13,6 +13,7 @@
     rb = rebase
     rv = remote -v
     sg = diff --staged
+    sh = show
     st = status
 [blame]
     coloring = highlightRecent

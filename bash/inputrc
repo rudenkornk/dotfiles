@@ -5,5 +5,5 @@ $include /etc/inputrc
 #set vi-cmd-mode-string \1\e[1 q\e]12;orange\a\2
 #set show-mode-in-prompt on
 
-set completion-ignore-case On
+#set completion-ignore-case On
 

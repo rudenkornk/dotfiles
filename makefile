@@ -20,7 +20,7 @@ CONFIG_DIRS := \
                tmux \
                vim \
                wsl \
-               xfce4 \
+               onehalf \
 
 CONFIG_DEPS != find $(CONFIG_DIRS) -type f,l
 

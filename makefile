@@ -23,6 +23,8 @@ GUI_CONFIG_DIRS := \
                    keyboard_layouts \
                    mouse \
                    onehalf \
+                   telegram \
+                   vscode \
 
 CONFIG_DEPS != find $(CONFIG_DIRS) -type f,l
 GUI_CONFIG_DEPS != find $(GUI_CONFIG_DIRS) -type f,l

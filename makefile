@@ -18,6 +18,7 @@ CONFIG_DIRS := \
                wsl \
 
 GUI_CONFIG_DIRS := \
+                   chrome \
                    fonts \
                    keyboard_layouts \
                    mouse \

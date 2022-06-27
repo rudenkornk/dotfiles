@@ -42,7 +42,7 @@ $(BUILD_DIR)/config: $(CONFIG_DEPS)
 			$$i/user.sh; \
 		fi; \
 	done
-	touch $@
+	mkdir --parents $(BUILD_DIR) && touch $@
 
 .PHONY: checkout_projects
 checkout_projects: $(BUILD_DIR)/checkout_projects
@@ -50,7 +50,7 @@ checkout_projects: $(BUILD_DIR)/checkout_projects
 $(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
 	PROJECTS_PATH=$(PROJECTS_PATH) \
 	./scripts/checkout_projects.sh
-	touch $@
+	mkdir --parents $(BUILD_DIR) && touch $@
 
 .PHONY: check
 check: config

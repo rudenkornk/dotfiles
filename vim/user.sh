@@ -35,3 +35,4 @@ pip3 install px
 pip3 install jedi
 pip3 install sympy
 
+cat "$REPO_PATH/bash/bashrc" >> ~/.bashrc

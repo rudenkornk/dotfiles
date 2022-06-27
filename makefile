@@ -2,8 +2,7 @@ SHELL = /usr/bin/env bash
 
 PROJECT_NAME := dotfiles
 BUILD_DIR ?= build
-PRIMARY_USER ?= rudenkornk
-PROJECTS_PATH := /home/$(PRIMARY_USER)/projects
+PROJECTS_PATH := echo /home/$$USER/projects
 
 CONFIG_DIRS := \
                common_utils \
@@ -35,7 +34,7 @@ $(BUILD_DIR)/config: $(CONFIG_DEPS)
 	for i in $(CONFIG_DIRS); do \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
-			PRIMARY_USER=$(PRIMARY_USER) \
+			PRIMARY_USER=$$USER \
 			$$i/system.sh; \
 		fi; \
 		if [ -f "$$i/user.sh" ]; then \
@@ -80,7 +79,6 @@ endif
 	docker run --interactive --tty --detach \
 		--user ci_user \
 		--env BUILD_DIR="$(BUILD_DIR)" \
-		--env PRIMARY_USER="ci_user" \
 		--env KEEP_CI_USER_SUDO="$(DOCKER_KEEP_CI_USER_SUDO)" \
 		--env CI_UID="$$(id --user)" --env CI_GID="$$(id --group)" \
 		--env "TERM=xterm-256color" \

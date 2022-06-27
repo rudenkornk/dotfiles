@@ -11,5 +11,7 @@ ln --symbolic "$REPO_PATH/git/gitconfig" ~/.gitconfig
 
 npm install --global git-run
 
+cat "$REPO_PATH/bash/bashrc" >> ~/.bashrc
+
 # gr tag discover
 

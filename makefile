@@ -10,28 +10,61 @@ CONFIG_DIRS := \
                nodejs \
                bash \
                docker \
-               fonts \
                git \
-               keyboard_layouts \
                latexindent \
-               mouse \
                powershell \
                tmux \
                vim \
                wsl \
-               onehalf \
+
+GUI_CONFIG_DIRS := \
+                   fonts \
+                   keyboard_layouts \
+                   mouse \
+                   onehalf \
 
 CONFIG_DEPS != find $(CONFIG_DIRS) -type f,l
+GUI_CONFIG_DEPS != find $(GUI_CONFIG_DIRS) -type f,l
 
 .PHONY: explicit_target
 explicit_target:
 	echo "Please specify target explicitly"
 
-.PHONY: config
-config: $(BUILD_DIR)/config
+.PHONY: user_config
+user_config: $(BUILD_DIR)/user_config
 
-$(BUILD_DIR)/config: $(CONFIG_DEPS)
+.PHONY: system_config
+system_config: $(BUILD_DIR)/system_config
+
+.PHONY: config
+config: system_config user_config
+
+.PHONY: gui_config
+gui_config: $(BUILD_DIR)/gui_config
+
+.PHONY: checkout_projects
+checkout_projects: $(BUILD_DIR)/checkout_projects
+
+$(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 	for i in $(CONFIG_DIRS); do \
+		if [ -f "$$i/system.sh" ]; then \
+			sudo \
+			PRIMARY_USER=$$USER \
+			$$i/system.sh; \
+		fi; \
+	done
+	mkdir --parents $(BUILD_DIR) && touch $@
+
+$(BUILD_DIR)/user_config: $(CONFIG_DEPS)
+	for i in $(CONFIG_DIRS); do \
+		if [ -f "$$i/user.sh" ]; then \
+			$$i/user.sh; \
+		fi; \
+	done
+	mkdir --parents $(BUILD_DIR) && touch $@
+
+$(BUILD_DIR)/gui_config: $(GUI_CONFIG_DEPS)
+	for i in $(GUI_CONFIG_DIRS); do \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
 			PRIMARY_USER=$$USER \
@@ -42,9 +75,6 @@ $(BUILD_DIR)/config: $(CONFIG_DEPS)
 		fi; \
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@
-
-.PHONY: checkout_projects
-checkout_projects: $(BUILD_DIR)/checkout_projects
 
 $(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
 	PROJECTS_PATH=$(PROJECTS_PATH) \

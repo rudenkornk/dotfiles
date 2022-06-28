@@ -7,7 +7,13 @@ set -o nounset
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
-mkdir ~/.docker
-cat "$REPO_PATH/docker/docker_config.json" >> "~/.docker/config.json" # Do not create symbolic because it might be populated with docker credentials
+mkdir --parents ~/.docker
+
+config=~/.docker/config.json
+if [[ ! -f $config ]]; then
+  echo "{}" > $config
+fi
+# Do not create symbolic because it might be populated with docker credentials
+cat $config | jq '.detachKeys="ctrl-z"' | sponge $config
 
 newgrp docker

@@ -13,6 +13,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   ca-certificates \
   curl \
   dos2unix \
+  jq \
   lsb-release \
   make \
   moreutils `# for ifne tool` \

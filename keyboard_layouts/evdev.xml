@@ -1,4 +1,4 @@
-  <layoutList>
+    <!-- DO NOT EDIT THIS BLOCK MANUALLY. CHANGES WILL BE DISCARDED! -->
     <layout>
       <configItem>
         <name>rnk</name>
@@ -35,5 +35,3 @@
         </variant>
       </variantList>
     </layout>
-  </layoutList>
-

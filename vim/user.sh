@@ -7,23 +7,25 @@ set -o nounset
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
-mkdir ~/.vim
-mkdir ~/.vim/keymap
+mkdir --parents ~/.vim
+mkdir --parents ~/.vim/keymap
 mkdir --parents ~/.config/coc
 mkdir --parents ~/.local/
 export PATH="$HOME/.local/bin:$PATH"
 
 # Link configs
-ln --symbolic "$REPO_PATH/vim/vimrc" ~/.vimrc
-ln --symbolic "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.vim/keymap/rnk-russian-qwerty.vim
-ln --symbolic "$REPO_PATH/vim/coc-settings.json" ~/.vim/coc-settings.json
-ln --symbolic "$REPO_PATH/vim/ftplugin" ftplugin; mv ftplugin ~/.vim/
-ln --symbolic "$REPO_PATH/vim/ftdetect" ftdetect; mv ftdetect ~/.vim/
-ln --symbolic "$REPO_PATH/vim/ultisnips" ultisnips; mv ultisnips ~/.config/coc/
+ln --symbolic --force "$REPO_PATH/vim/vimrc" ~/.vimrc
+ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.vim/keymap/rnk-russian-qwerty.vim
+ln --symbolic --force "$REPO_PATH/vim/coc-settings.json" ~/.vim/coc-settings.json
+ln --symbolic --force "$REPO_PATH/vim/ftplugin" ~/.vim/ftplugin; rm --force "$REPO_PATH/vim/ftplugin/ftplugin"
+ln --symbolic --force "$REPO_PATH/vim/ftdetect" ~/.vim/ftdetect; rm --force "$REPO_PATH/vim/ftdetect/ftdetect"
+ln --symbolic --force "$REPO_PATH/vim/ultisnips" ~/.config/coc/ultisnips; rm --force "$REPO_PATH/vim/ultisnips/ultisnips"
 
-# Install vim-plug
-curl --fail --location --output ~/.vim/autoload/plug.vim --create-dirs \
-  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+if [[ ! -d ~/.vim/autoload/plug.vim ]]; then
+  # Install vim-plug
+  curl --fail --location --output ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
 vim  -c PlugInstall -c qall
 
 # Install coc-nvim extensions
@@ -35,4 +37,6 @@ pip3 install px
 pip3 install jedi
 pip3 install sympy
 
-cat "$REPO_PATH/bash/bashrc" >> ~/.bashrc
+begin="# --- dotfiles vim begin --- #"
+end="# --- dotfiles vim end --- #"
+"$REPO_PATH/scripts/insert_text.sh" "$REPO_PATH/vim/bashrc" ~/.bashrc "$begin" "$end"

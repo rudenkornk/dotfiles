@@ -7,10 +7,14 @@ set -o nounset
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
-ln --symbolic "$REPO_PATH/tmux/tmux.conf" ~/.tmux.conf
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+ln --symbolic --force "$REPO_PATH/tmux/tmux.conf" ~/.tmux.conf
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
 
-cat "$REPO_PATH/bash/bashrc" >> ~/.bashrc
+begin="# --- dotfiles tmux begin --- #"
+end="# --- dotfiles tmux end --- #"
+"$REPO_PATH/scripts/insert_text.sh" "$REPO_PATH/tmux/bashrc" ~/.bashrc "$begin" "$end"
 
 # <prefix>I
 

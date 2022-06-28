@@ -1,3 +1,4 @@
+# DO NOT EDIT THIS BLOCK MANUALLY, CHANGES WILL BE DISCARDED
 alias tmux='tmux -2 -u'
 
 if : \

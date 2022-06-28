@@ -28,6 +28,9 @@ Plug 'itchyny/vim-cursorword'
 " Surroundings: parentheses, brackets, quotes, XML tags, and more
 Plug 'tpope/vim-surround'
 
+" Allow repeating surrounds with "."
+Plug 'tpope/vim-repeat'
+
 Plug 'godlygeek/tabular'
 
 " Unified clipboard for vim and tmux

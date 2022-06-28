@@ -180,17 +180,24 @@ set nrformats+=alpha
 " Unfortunatelly this breaks autocomplete with tab, so it is not permanently
 " enabled
 "set paste
+" Instead use pastetoggle workaround
 set pastetoggle=<C-q>
+" Use <C-L> to clear the highlighting of :set hlsearch. Credit: tpope/vim-sensible
+nnoremap <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
+" Allow refreshing screen in insert mode
+inoremap <C-l> <ESC>:nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>a
+" Improve C-u and C-w behaviour in insert mode
+inoremap <C-u> <C-g>u<C-u>
+inoremap <C-w> <C-g>u<C-w>
+
 nnoremap <leader>vn :set invnumber<CR>
+" Remove redundant spaces
 nnoremap <leader>vc :%s/\([^ ]\)\s\+/\1 /g \| noh<CR>
 xnoremap <leader>vc :s/\([^ ]\)\s\+/\1 /g \| noh<CR>
+" Tabularize
 xnoremap <leader>vt :s/\([^ ]\)\s\+/\1 /g \| noh \| '<,'>Tabularize /\s\+/l0<CR>
 xnoremap <leader>vs :sort<CR>
-nnoremap <leader>vh :noh<CR>
 nnoremap <leader>ve :Vexplore<CR>
-
-" Allow refreshing screen in insert mode
-inoremap <C-l> <ESC><C-l>a
 
 " Insert spaces instead of tabs
 set smarttab

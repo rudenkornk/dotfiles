@@ -1,4 +1,4 @@
-
+# DO NOT EDIT THIS BLOCK MANUALLY, CHANGES WILL BE DISCARDED
 alias grs="gr status"
 alias grl="gr git --no-pager log --decorate --graph --oneline -n 1"
 

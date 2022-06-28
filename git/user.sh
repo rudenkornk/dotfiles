@@ -7,11 +7,12 @@ set -o nounset
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
-ln --symbolic "$REPO_PATH/git/gitconfig" ~/.gitconfig
+ln --symbolic --force "$REPO_PATH/git/gitconfig" ~/.gitconfig
 
-npm install --global git-run
-
-cat "$REPO_PATH/bash/bashrc" >> ~/.bashrc
-
+npm install --global --no-audit git-run
 # gr tag discover
+
+begin="# --- dotfiles git begin --- #"
+end="# --- dotfiles git end --- #"
+"$REPO_PATH/scripts/insert_text.sh" "$REPO_PATH/git/bashrc" ~/.bashrc "$begin" "$end"
 

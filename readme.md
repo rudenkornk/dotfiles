@@ -19,9 +19,8 @@ make config
 
 ## Bootstrap
 ```bash
-export PROJECTS_PATH=~/projects; \
-  git clone https://github.com/rudenkornk/dotfiles $PROJECTS_PATH/dotfiles && \
-  cd $PROJECTS_PATH/dotfiles && sudo apt-get install make && make config
+git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
+  cd ~/projects/dotfiles && sudo apt-get install make && make config
 # Reload shell
 ```
 

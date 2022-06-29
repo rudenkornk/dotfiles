@@ -2,7 +2,6 @@ SHELL = /usr/bin/env bash
 
 PROJECT_NAME := dotfiles
 BUILD_DIR ?= build
-PROJECTS_PATH != echo /home/$$USER/projects
 
 CONFIG_DIRS := \
                common_utils \
@@ -80,7 +79,6 @@ $(BUILD_DIR)/gui_config: $(GUI_CONFIG_DEPS)
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 $(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
-	PROJECTS_PATH=$(PROJECTS_PATH) \
 	./scripts/checkout_projects.sh
 	mkdir --parents $(BUILD_DIR) && touch $@
 

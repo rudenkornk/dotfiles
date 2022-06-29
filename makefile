@@ -2,7 +2,7 @@ SHELL = /usr/bin/env bash
 
 PROJECT_NAME := dotfiles
 BUILD_DIR ?= build
-PROJECTS_PATH := echo /home/$$USER/projects
+PROJECTS_PATH != echo /home/$$USER/projects
 
 CONFIG_DIRS := \
                common_utils \

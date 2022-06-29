@@ -12,9 +12,11 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
+echo "source $REPO_PATH/tmux/bashrc" > source_bashrc
 begin="# --- dotfiles tmux begin --- #"
 end="# --- dotfiles tmux end --- #"
-"$REPO_PATH/scripts/insert_text.sh" "$REPO_PATH/tmux/bashrc" ~/.bashrc "$begin" "$end"
+"$REPO_PATH/scripts/insert_text.sh" source_bashrc ~/.bashrc "$begin" "$end"
+rm source_bashrc
 
 # <prefix>I
 

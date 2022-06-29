@@ -13,14 +13,29 @@ REPOS+=("git@github.com:rudenkornk/docker_ci.git")
 REPOS+=("git@github.com:rudenkornk/docker_cpp.git")
 REPOS+=("git@github.com:rudenkornk/docker_cpp_windows.git")
 REPOS+=("git@github.com:rudenkornk/docker_latex.git")
+REPOS+=("git@github.com:rudenkornk/dotfiles.git")
 REPOS+=("git@github.com:rudenkornk/group_theory.git")
 REPOS+=("git@github.com:rudenkornk/latex_experiments.git")
 
-for r in ${REPOS[@]}; do
-  REPO_NAME=$(echo $r | grep --only-matching --perl-regexp "git@github\.com:.*?/\K.*?(?=\.git)")
+if ssh -q git@github.com; [ ! $? -eq 1 ]; then
+  echo "Cannot login to GitHub, check ssh keys."
+  exit 1
+fi
+
+for URL in ${REPOS[@]}; do
+  REPO_NAME=$(echo $URL | grep --only-matching --perl-regexp "git@github\.com:.*?/\K.*?(?=\.git)")
   REPO_PATH="$PROJECTS_PATH/$REPO_NAME"
-  git clone $r "$REPO_PATH"
-  git --git-dir="$REPO_PATH/.git" checkout -b dev_volatile --track origin/main
-  git --git-dir="$REPO_PATH/.git" branch -D main
+  if [[ ! -d "$REPO_PATH" ]]; then
+    git clone $URL "$REPO_PATH"
+    git --git-dir="$REPO_PATH/.git" checkout -b dev_volatile --track origin/main
+    git --git-dir="$REPO_PATH/.git" branch -D main
+  fi
+  REMOTES=$(git --git-dir="$REPO_PATH/.git" remote --verbose)
+  if ! echo $REMOTES | grep --quiet "origin git@github.com:rudenkornk"; then
+    if echo "$REMOTES" | grep --quiet "origin "; then
+      git --git-dir="$REPO_PATH/.git" remote remove origin
+    fi
+    git --git-dir="$REPO_PATH/.git" remote add origin $URL
+  fi
 done
 

@@ -98,7 +98,7 @@ set showcmd
 
 " Display completion matches in a status line
 set wildmenu
-set wildmode=longest:list
+set wildmode=longest:list,full
 
 " Show a few lines of context around the cursor.  Note that this makes the
 " text scroll if you mouse-click near the start or end of the window.

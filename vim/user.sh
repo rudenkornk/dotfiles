@@ -10,7 +10,6 @@ SELF_PATH=$(realpath "$(dirname "$0")")
 
 mkdir --parents ~/.vim
 mkdir --parents ~/.vim/keymap
-mkdir --parents ~/.config/coc
 mkdir --parents ~/.local/
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -20,7 +19,7 @@ ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.vi
 ln --symbolic --force "$SELF_PATH/coc-settings.json" ~/.vim/coc-settings.json
 ln --symbolic --force "$SELF_PATH/ftplugin" ~/.vim/ftplugin; rm --force "$SELF_PATH/ftplugin/ftplugin"
 ln --symbolic --force "$SELF_PATH/ftdetect" ~/.vim/ftdetect; rm --force "$SELF_PATH/ftdetect/ftdetect"
-ln --symbolic --force "$SELF_PATH/ultisnips" ~/.config/coc/ultisnips; rm --force "$SELF_PATH/ultisnips/ultisnips"
+ln --symbolic --force "$REPO_PATH/ultisnips" ~/.vim/UltiSnips; rm --force "$REPO_PATH/ultisnips/ultisnips"
 
 if [[ ! -d ~/.vim/autoload/plug.vim ]]; then
   # Install vim-plug

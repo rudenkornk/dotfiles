@@ -1,7 +1,1 @@
 # DO NOT EDIT THIS BLOCK MANUALLY, CHANGES WILL BE DISCARDED
-
-export VISUAL=vim
-export EDITOR="$VISUAL"
-
-alias vi=vim
-

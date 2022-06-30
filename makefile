@@ -54,7 +54,7 @@ $(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 		scripts/caption.sh "CONFIGURING SYSTEM FOR $$i"; \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
-			PRIMARY_USER=$$USER \
+			PRIMARY_USER=$$(id --user --name) \
 			$$i/system.sh || \
 			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \
@@ -76,7 +76,7 @@ $(BUILD_DIR)/gui_system_config: $(GUI_CONFIG_DEPS)
 		scripts/caption.sh "CONFIGURING SYSTEM FOR $$i"; \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
-			PRIMARY_USER=$$USER \
+			PRIMARY_USER=$$(id --user --name) \
 			$$i/system.sh || \
 			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \

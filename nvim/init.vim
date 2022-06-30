@@ -48,6 +48,8 @@ Plug 'Raimondi/delimitMate'
 
 " Syntax highlight
 Plug 'nvim-treesitter/nvim-treesitter'
+" Syntax for fish
+Plug 'dag/vim-fish'
 
 " Formatting for specific cases
 Plug 'vim-autoformat/vim-autoformat'
@@ -473,6 +475,7 @@ let g:coc_global_extensions += ['coc-cmake']
 let g:coc_global_extensions += ['coc-css']
 let g:coc_global_extensions += ['coc-docker']
 let g:coc_global_extensions += ['coc-emoji'] "Emoji words, default enabled for markdown file only
+let g:coc_global_extensions += ['coc-fish']
 let g:coc_global_extensions += ['coc-html']
 let g:coc_global_extensions += ['coc-json']
 let g:coc_global_extensions += ['coc-perl']

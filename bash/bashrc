@@ -4,7 +4,7 @@ stty -ixon
 
 if [ -z "$SSH_AUTH_SOCK" ] ; then
   eval "$(ssh-agent -s)" &> /dev/null
-  ssh-add ~/.ssh/* &> /dev/null
+  ssh-add ~/.ssh/*id_rsa &> /dev/null
 fi
 
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;36m\]\w\[\033[00m\]\$ '

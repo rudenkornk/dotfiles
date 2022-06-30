@@ -45,6 +45,7 @@ checkout_projects: $(BUILD_DIR)/checkout_projects
 
 $(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 	for i in $(CONFIG_DIRS); do \
+		scripts/caption.sh "CONFIGURING SYSTEM FOR $$i"; \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
 			PRIMARY_USER=$$USER \
@@ -56,6 +57,7 @@ $(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 
 $(BUILD_DIR)/user_config: $(CONFIG_DEPS)
 	for i in $(CONFIG_DIRS); do \
+		scripts/caption.sh "CONFIGURING USER FOR $$i"; \
 		if [ -f "$$i/user.sh" ]; then \
 			$$i/user.sh || \
 			{ echo "ERROR when configuring $$i!"; exit 1; }; \
@@ -66,12 +68,14 @@ $(BUILD_DIR)/user_config: $(CONFIG_DEPS)
 $(BUILD_DIR)/gui_config: $(GUI_CONFIG_DEPS)
 	for i in $(GUI_CONFIG_DIRS); do \
 		if [ -f "$$i/system.sh" ]; then \
+			scripts/caption.sh "CONFIGURING SYSTEM FOR $$i"; \
 			sudo \
 			PRIMARY_USER=$$USER \
 			$$i/system.sh || \
 			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \
 		if [ -f "$$i/user.sh" ]; then \
+			scripts/caption.sh "CONFIGURING USER FOR $$i"; \
 			$$i/user.sh || \
 			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \

@@ -20,58 +20,34 @@
     date = short
 [color "blame"]
     # round((alpha.^range - 1)/(alpha - 1))
-    # where alpha = 1.1
+    # where alpha = 1.3
+    # Credits: https://stackoverflow.com/a/66250482/8099151
     highlightRecent = \
-                      17, \
-         960 day ago, 18, \
-         872 day ago, 19, \
-         792 day ago, 20, \
-         719 day ago, 21, \
-         653 day ago, 57, \
-         592 day ago, 56, \
-         538 day ago, 93, \
-         488 day ago, 92, \
-         443 day ago, 129, \
-         401 day ago, 128, \
-         364 day ago, 165, \
-         330 day ago, 164, \
-         299 day ago, 201, \
-         271 day ago, 200, \
-         245 day ago, 163, \
-         222 day ago, 199, \
-         201 day ago, 162, \
-         182 day ago, 198, \
-         164 day ago, 161, \
-         149 day ago, 197, \
-         134 day ago, 167, \
-         121 day ago, 203, \
-         109 day ago, 209, \
-          98 day ago, 173, \
-          88 day ago, 215, \
-          80 day ago, 179, \
-          71 day ago, 221, \
-          64 day ago, 185, \
-          57 day ago, 227, \
-          51 day ago, 191, \
-          46 day ago, 149, \
-          41 day ago, 155, \
-          36 day ago, 113, \
-          32 day ago, 119, \
-          28 day ago, 77, \
-          25 day ago, 83, \
-          21 day ago, 84, \
-          19 day ago, 78, \
-          16 day ago, 85, \
-          14 day ago, 79, \
-          11 day ago, 86, \
-           9 day ago, 80, \
-           8 day ago, 87, \
-           6 day ago, 123, \
-           5 day ago, 159, \
-           4 day ago, 152, \
-           3 day ago, 195, \
-           2 day ago, 7, \
-           1 day ago, 231
+                    237, \
+      1388 day ago, 238, \
+      1067 day ago, 239, \
+       820 day ago, 240, \
+       630 day ago, 241, \
+       484 day ago, 242, \
+       372 day ago, 243, \
+       285 day ago, 244, \
+       218 day ago, 245, \
+       167 day ago, 246, \
+       128 day ago, 247, \
+        98 day ago, 248, \
+        74 day ago, 249, \
+        56 day ago, 250, \
+        43 day ago, 251, \
+        32 day ago, 252, \
+        24 day ago, 253, \
+        18 day ago, 254, \
+        13 day ago, 231, \
+         9 day ago, 230, \
+         6 day ago, 229, \
+         4 day ago, 228, \
+         2 day ago, 227, \
+         1 day ago, 226
+
 [core]
     editor = vim
 [credentials]

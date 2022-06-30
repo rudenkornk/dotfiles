@@ -28,18 +28,14 @@ GUI_CONFIG_DIRS := \
 CONFIG_DEPS != find $(CONFIG_DIRS) -type f,l
 GUI_CONFIG_DEPS != find $(GUI_CONFIG_DIRS) -type f,l
 
-.PHONY: explicit_target
-explicit_target:
-	echo "Please specify target explicitly"
+.PHONY: config
+config: system_config user_config
 
 .PHONY: user_config
 user_config: $(BUILD_DIR)/user_config
 
 .PHONY: system_config
 system_config: $(BUILD_DIR)/system_config
-
-.PHONY: config
-config: system_config user_config
 
 .PHONY: gui_config
 gui_config: $(BUILD_DIR)/gui_config

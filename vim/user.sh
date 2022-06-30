@@ -6,6 +6,7 @@ set -o nounset
 #set -o xtrace
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
+SELF_PATH=$(realpath "$(dirname "$0")")
 
 mkdir --parents ~/.vim
 mkdir --parents ~/.vim/keymap
@@ -37,8 +38,5 @@ pip3 install px
 pip3 install jedi
 pip3 install sympy
 
-echo "source $REPO_PATH/vim/bashrc" > source_bashrc
-begin="# --- dotfiles vim begin --- #"
-end="# --- dotfiles vim end --- #"
-"$REPO_PATH/scripts/insert_text.sh" source_bashrc ~/.bashrc "$begin" "$end"
-rm source_bashrc
+"$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
+

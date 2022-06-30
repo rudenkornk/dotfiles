@@ -12,6 +12,7 @@ CONFIG_DIRS := \
                fish \
                git \
                latexindent \
+               nvim \
                powershell \
                tmux \
                vim \

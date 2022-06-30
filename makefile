@@ -9,6 +9,7 @@ CONFIG_DIRS := \
                nodejs \
                bash \
                docker \
+               fish \
                git \
                latexindent \
                powershell \

@@ -38,4 +38,5 @@ pip3 install jedi
 pip3 install sympy
 
 "$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
+"$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"
 

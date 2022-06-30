@@ -8,12 +8,5 @@ set -o nounset
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 SELF_PATH=$(realpath "$(dirname "$0")")
 
-ln --symbolic --force "$SELF_PATH/gitconfig" ~/.gitconfig
-
-export PATH="$HOME/.local/bin:$PATH"
-npm install --global --no-audit git-run
-# gr tag discover
-
-"$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
 "$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"
 

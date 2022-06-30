@@ -14,6 +14,7 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
 fi
 
 "$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
+"$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"
 
 # <prefix>I
 

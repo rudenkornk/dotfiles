@@ -48,7 +48,8 @@ $(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
 			PRIMARY_USER=$$USER \
-			$$i/system.sh; \
+			$$i/system.sh || \
+			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@
@@ -56,7 +57,8 @@ $(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 $(BUILD_DIR)/user_config: $(CONFIG_DEPS)
 	for i in $(CONFIG_DIRS); do \
 		if [ -f "$$i/user.sh" ]; then \
-			$$i/user.sh; \
+			$$i/user.sh || \
+			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@
@@ -66,10 +68,12 @@ $(BUILD_DIR)/gui_config: $(GUI_CONFIG_DEPS)
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
 			PRIMARY_USER=$$USER \
-			$$i/system.sh; \
+			$$i/system.sh || \
+			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \
 		if [ -f "$$i/user.sh" ]; then \
-			$$i/user.sh; \
+			$$i/user.sh || \
+			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@

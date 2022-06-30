@@ -7,4 +7,3 @@ if [ -z "$SSH_AUTH_SOCK" ] ; then
   ssh-add ~/.ssh/*id_rsa &> /dev/null
 fi
 
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;36m\]\w\[\033[00m\]\$ '

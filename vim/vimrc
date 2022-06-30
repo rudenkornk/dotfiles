@@ -291,6 +291,11 @@ nnoremap <silent> <C-w>j :TmuxNavigateDown<CR>
 nnoremap <silent> <C-w>k :TmuxNavigateUp<CR>
 nnoremap <silent> <C-w>l :TmuxNavigateRight<CR>
 nnoremap <silent> <C-w>p :TmuxNavigatePrevious<CR>
+nnoremap <silent> <F2> :TmuxNavigateLeft<CR>
+nnoremap <silent> <F3> :TmuxNavigateDown<CR>
+nnoremap <silent> <F4> :TmuxNavigateUp<CR>
+nnoremap <silent> <F5> :TmuxNavigateRight<CR>
+nnoremap <silent> <F6> :TmuxNavigatePrevious<CR>
 
 " Set up UltiSnips
 let g:UltiSnipsExpandTrigger="<C-k>"

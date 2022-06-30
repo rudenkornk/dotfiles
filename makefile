@@ -38,7 +38,13 @@ user_config: $(BUILD_DIR)/user_config
 system_config: $(BUILD_DIR)/system_config
 
 .PHONY: gui_config
-gui_config: $(BUILD_DIR)/gui_config
+gui_config: gui_system_config gui_user_config
+
+.PHONY: gui_user_config
+gui_user_config: $(BUILD_DIR)/gui_user_config
+
+.PHONY: gui_system_config
+gui_system_config: $(BUILD_DIR)/gui_system_config
 
 .PHONY: checkout_projects
 checkout_projects: $(BUILD_DIR)/checkout_projects
@@ -65,17 +71,22 @@ $(BUILD_DIR)/user_config: $(CONFIG_DEPS)
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@
 
-$(BUILD_DIR)/gui_config: $(GUI_CONFIG_DEPS)
+$(BUILD_DIR)/gui_system_config: $(GUI_CONFIG_DEPS)
 	for i in $(GUI_CONFIG_DIRS); do \
+		scripts/caption.sh "CONFIGURING SYSTEM FOR $$i"; \
 		if [ -f "$$i/system.sh" ]; then \
-			scripts/caption.sh "CONFIGURING SYSTEM FOR $$i"; \
 			sudo \
 			PRIMARY_USER=$$USER \
 			$$i/system.sh || \
 			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \
+	done
+	mkdir --parents $(BUILD_DIR) && touch $@
+
+$(BUILD_DIR)/gui_user_config: $(GUI_CONFIG_DEPS)
+	for i in $(GUI_CONFIG_DIRS); do \
+		scripts/caption.sh "CONFIGURING USER FOR $$i"; \
 		if [ -f "$$i/user.sh" ]; then \
-			scripts/caption.sh "CONFIGURING USER FOR $$i"; \
 			$$i/user.sh || \
 			{ echo "ERROR when configuring $$i!"; exit 1; }; \
 		fi; \

@@ -15,12 +15,12 @@ mkdir --parents ~/.local/
 export PATH="$HOME/.local/bin:$PATH"
 
 # Link configs
-ln --symbolic --force "$REPO_PATH/vim/vimrc" ~/.vimrc
+ln --symbolic --force "$SELF_PATH/vimrc" ~/.vimrc
 ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.vim/keymap/rnk-russian-qwerty.vim
-ln --symbolic --force "$REPO_PATH/vim/coc-settings.json" ~/.vim/coc-settings.json
-ln --symbolic --force "$REPO_PATH/vim/ftplugin" ~/.vim/ftplugin; rm --force "$REPO_PATH/vim/ftplugin/ftplugin"
-ln --symbolic --force "$REPO_PATH/vim/ftdetect" ~/.vim/ftdetect; rm --force "$REPO_PATH/vim/ftdetect/ftdetect"
-ln --symbolic --force "$REPO_PATH/vim/ultisnips" ~/.config/coc/ultisnips; rm --force "$REPO_PATH/vim/ultisnips/ultisnips"
+ln --symbolic --force "$SELF_PATH/coc-settings.json" ~/.vim/coc-settings.json
+ln --symbolic --force "$SELF_PATH/ftplugin" ~/.vim/ftplugin; rm --force "$SELF_PATH/ftplugin/ftplugin"
+ln --symbolic --force "$SELF_PATH/ftdetect" ~/.vim/ftdetect; rm --force "$SELF_PATH/ftdetect/ftdetect"
+ln --symbolic --force "$SELF_PATH/ultisnips" ~/.config/coc/ultisnips; rm --force "$SELF_PATH/ultisnips/ultisnips"
 
 if [[ ! -d ~/.vim/autoload/plug.vim ]]; then
   # Install vim-plug

@@ -8,7 +8,7 @@ set -o nounset
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 SELF_PATH=$(realpath "$(dirname "$0")")
 
-ln --symbolic --force "$REPO_PATH/git/gitconfig" ~/.gitconfig
+ln --symbolic --force "$SELF_PATH/gitconfig" ~/.gitconfig
 
 npm install --global --no-audit git-run
 # gr tag discover

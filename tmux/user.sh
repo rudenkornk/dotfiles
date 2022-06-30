@@ -8,7 +8,7 @@ set -o nounset
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 SELF_PATH=$(realpath "$(dirname "$0")")
 
-ln --symbolic --force "$REPO_PATH/tmux/tmux.conf" ~/.tmux.conf
+ln --symbolic --force "$SELF_PATH/tmux.conf" ~/.tmux.conf
 if [[ ! -d ~/.tmux/plugins/tpm ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi

@@ -10,6 +10,6 @@ SELF_PATH=$(realpath "$(dirname "$0")")
 
 mkdir --parents ~/.local/bin
 
-ln --symbolic --force "$REPO_PATH/bash/inputrc" ~/.inputrc
+ln --symbolic --force "$SELF_PATH/inputrc" ~/.inputrc
 
 "$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"

@@ -6,6 +6,7 @@ set -o nounset
 #set -o xtrace
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
+SELF_PATH=$(realpath "$(dirname "$0")")
 
 mkdir --parents ~/.docker
 

@@ -17,4 +17,4 @@ fi
 # Do not create symbolic because it might be populated with docker credentials
 cat $config | jq '.detachKeys="ctrl-z"' | sponge $config
 
-newgrp docker
+#newgrp docker

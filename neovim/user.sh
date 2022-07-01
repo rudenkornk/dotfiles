@@ -26,7 +26,7 @@ pip3 install sympy
 npm install --location=global neovim
 
 # Link configs
-ln --symbolic --force "$SELF_PATH/init.vim" ~/.config/nvim/init.vim
+ln --symbolic --force "$SELF_PATH/init.lua" ~/.config/nvim/init.lua
 ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.config/nvim/keymap/rnk-russian-qwerty.vim
 ln --symbolic --force "$SELF_PATH/coc-settings.json" ~/.config/nvim/coc-settings.json
 ln --symbolic --force "$SELF_PATH/ftplugin" ~/.config/nvim/ftplugin; rm --force "$SELF_PATH/ftplugin/ftplugin"
@@ -41,7 +41,7 @@ fi
 nvim -c PlugInstall -c qall
 
 # Install coc-nvim extensions
-COC_EXTENSIONS=$(cat "$SELF_PATH/init.vim" | grep --only-matching --perl-regexp "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')
+COC_EXTENSIONS=$(cat "$SELF_PATH/init.lua" | grep --only-matching --perl-regexp "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')
 nvim -c "CocInstall -sync $COC_EXTENSIONS" -c qall
 # nvim -c "CocCommand clangd.install" -c qall tmp.cpp
 

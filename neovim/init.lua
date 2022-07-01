@@ -1,3 +1,4 @@
+vim.cmd([[
 " Required for different settings
 set nocompatible
 
@@ -494,3 +495,4 @@ let g:coc_global_extensions += ['coc-yaml']
 highlight RedundantSpacesAndTabs ctermbg=100 guibg=#b5942e
 match RedundantSpacesAndTabs /\(\s\+$\|\t\+\)/
 
+]])

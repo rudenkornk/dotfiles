@@ -6,7 +6,7 @@ set -o nounset
 #set -o xtrace
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
-IS_WSL=$(uname -a | grep --quiet WSL && echo true || echo false)
+IS_WSL=$(uname --all | grep --quiet WSL && echo true || echo false)
 
 if [[ $IS_WSL != "true" ]]; then
   exit

@@ -16,6 +16,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   g++ \
   gcc \
   jq \
+  locales \
   lsb-release \
   make \
   moreutils `# for ifne tool` \
@@ -23,4 +24,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   software-properties-common \
   tar gzip zip unzip bzip2 \
   wget \
+
+locale-gen en_US.UTF-8
+update-locale LANG=en_US.UTF-8
 

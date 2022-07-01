@@ -13,6 +13,8 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   ca-certificates \
   curl \
   dos2unix \
+  g++ \
+  gcc \
   jq \
   lsb-release \
   make \

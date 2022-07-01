@@ -42,10 +42,10 @@ nvim -c PlugInstall -c qall
 
 # Install coc-nvim extensions
 COC_EXTENSIONS=$(cat "$SELF_PATH/init.lua" | grep --only-matching --perl-regexp "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')
-nvim -c "CocInstall -sync $COC_EXTENSIONS" -c qall
+nvim -c "CocInstall -sync $COC_EXTENSIONS" -c quitall
 # nvim -c "CocCommand clangd.install" -c qall tmp.cpp
 
-nvim -c UpdateRemotePlugins -c qall
+nvim --headless -c UpdateRemotePlugins -c quitall
 
 "$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
 "$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"

@@ -53,44 +53,44 @@ checkout_projects: $(BUILD_DIR)/checkout_projects
 
 $(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 	for i in $(CONFIG_DIRS); do \
-		scripts/caption.sh "CONFIGURING SYSTEM FOR $$i"; \
+		scripts/caption.sh "CONFIGURING SYSTEM FOR $${i^^}"; \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
 			PRIMARY_USER=$$(id --user --name) \
 			$$i/system.sh || \
-			{ echo "ERROR when configuring $$i!"; exit 1; }; \
+			{ scripts/caption.sh "ERROR CONFIGURING SYSTEM FOR $${i^^}!"; exit 1; }; \
 		fi; \
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 $(BUILD_DIR)/user_config: $(CONFIG_DEPS)
 	for i in $(CONFIG_DIRS); do \
-		scripts/caption.sh "CONFIGURING USER FOR $$i"; \
+		scripts/caption.sh "CONFIGURING USER FOR $${i^^}"; \
 		if [ -f "$$i/user.sh" ]; then \
 			$$i/user.sh || \
-			{ echo "ERROR when configuring $$i!"; exit 1; }; \
+			{ scripts/caption.sh "ERROR CONFIGURING USER FOR $${i^^}!"; exit 1; }; \
 		fi; \
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 $(BUILD_DIR)/gui_system_config: $(GUI_CONFIG_DEPS)
 	for i in $(GUI_CONFIG_DIRS); do \
-		scripts/caption.sh "CONFIGURING SYSTEM FOR $$i"; \
+		scripts/caption.sh "CONFIGURING SYSTEM FOR $${i^^}"; \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo \
 			PRIMARY_USER=$$(id --user --name) \
 			$$i/system.sh || \
-			{ echo "ERROR when configuring $$i!"; exit 1; }; \
+			{ scripts/caption.sh "ERROR CONFIGURING SYSTEM FOR $${i^^}!"; exit 1; }; \
 		fi; \
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 $(BUILD_DIR)/gui_user_config: $(GUI_CONFIG_DEPS)
 	for i in $(GUI_CONFIG_DIRS); do \
-		scripts/caption.sh "CONFIGURING USER FOR $$i"; \
+		scripts/caption.sh "CONFIGURING USER FOR $${i^^}"; \
 		if [ -f "$$i/user.sh" ]; then \
 			$$i/user.sh || \
-			{ echo "ERROR when configuring $$i!"; exit 1; }; \
+			{ scripts/caption.sh "ERROR CONFIGURING USER FOR $${i^^}!"; exit 1; }; \
 		fi; \
 	done
 	mkdir --parents $(BUILD_DIR) && touch $@

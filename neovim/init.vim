@@ -47,7 +47,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'Raimondi/delimitMate'
 
 " Syntax highlight
-Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 " Syntax for fish
 Plug 'dag/vim-fish'
 

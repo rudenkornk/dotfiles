@@ -39,7 +39,7 @@ if [[ ! -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
    ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 fi
 
-nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' || true
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' &> /dev/null || true # Suppress error once
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
 # Install coc-nvim extensions

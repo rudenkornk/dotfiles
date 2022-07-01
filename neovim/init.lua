@@ -36,8 +36,6 @@ require('packer').startup(function()
 
   -- Syntax highlight
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  -- Syntax for fish
-  use { 'dag/vim-fish' }
 
   -- Formatting for specific cases
   use { 'vim-autoformat/vim-autoformat' }

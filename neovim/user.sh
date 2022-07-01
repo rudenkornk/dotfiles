@@ -50,3 +50,4 @@ nvim -c UpdateRemotePlugins -c qall
 "$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
 "$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"
 
+"$SELF_PATH/checkhealth.sh"

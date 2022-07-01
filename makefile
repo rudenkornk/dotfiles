@@ -113,6 +113,7 @@ DOCKER_KEEP_CI_USER_SUDO := true
 DOCKER_IMAGE_TAG := rudenkornk/docker_ci:1.0.0
 DOCKER_CONTAINER_NAME := $(PROJECT_NAME)_container
 DOCKER_CONTAINER := $(BUILD_DIR)/$(DOCKER_CONTAINER_NAME)
+DOCKER_COMMAND != [[ ! -z "$(COMMAND)" ]] && echo "$(COMMAND)" || echo "make $(TARGET)"
 
 IF_DOCKERD_UP := command -v docker &> /dev/null && pidof dockerd &> /dev/null
 
@@ -150,9 +151,5 @@ container: $(DOCKER_CONTAINER)_prepare
 
 .PHONY: in_docker
 in_docker: $(DOCKER_CONTAINER)_prepare
-ifneq ($(COMMAND),)
-	docker exec $(DOCKER_CONTAINER_NAME) bash -c "$(COMMAND)"
-else
-	docker exec $(DOCKER_CONTAINER_NAME) bash -c "make $(TARGET)"
-endif
+	docker exec $(DOCKER_CONTAINER_NAME) bash -c "$(DOCKER_COMMAND)"
 

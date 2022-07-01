@@ -7,6 +7,10 @@ set -o nounset
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
+wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+python2 get-pip.py
+rm get-pip.py
+
 wget https://bootstrap.pypa.io/get-pip.py
 python3 get-pip.py
 rm get-pip.py

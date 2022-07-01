@@ -18,6 +18,10 @@ jobs:
       run: make container
     - name: Config
       run: make in_docker TARGET=config
+    - name: Check idempotence
+      run: |
+        rm build/*_config
+        make in_docker TARGET=config
     - name: Test
       run: make in_docker TARGET=check
     - name: Clean

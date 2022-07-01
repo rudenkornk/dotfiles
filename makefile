@@ -7,6 +7,7 @@ CONFIG_DIRS := \
                common_utils \
                nodejs \
                python \
+               ruby \
                bash \
                docker \
                fish \

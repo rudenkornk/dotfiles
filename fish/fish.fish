@@ -7,7 +7,7 @@ else
 end
 
 if not set -q SSH_AUTH_SOCK && [ -d ~/.ssh ] && [ (find ~/.ssh -name "*id_rsa" | wc -l) -gt 0 ]
-  eval "ssh-agent -s" &> /dev/null
+  eval (ssh-agent -c) &> /dev/null
   ssh-add ~/.ssh/*id_rsa &> /dev/null
 end
 

@@ -16,7 +16,6 @@ CONFIG_DIRS := \
                neovim \
                powershell \
                tmux \
-               vim \
                wsl \
 
 GUI_CONFIG_DIRS := \

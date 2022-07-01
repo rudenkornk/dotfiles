@@ -1,77 +1,69 @@
+require('packer').startup(function()
+  -- Packer can manage itself
+  use { 'wbthomason/packer.nvim' }
+
+  use { 'ryanoasis/vim-devicons' }
+
+  use { 'vim-airline/vim-airline' }
+  use { 'vim-airline/vim-airline-themes' }
+
+  -- Colorscheme
+  use { 'sonph/onehalf', rtp = 'vim' }
+
+  -- Underlines the word under the cursor
+  use { 'itchyny/vim-cursorword' }
+
+  -- Surroundings: parentheses, brackets, quotes, XML tags, and more
+  use { 'tpope/vim-surround' }
+
+  -- Allow repeating surrounds with --.--
+  use { 'tpope/vim-repeat' }
+
+  use { 'godlygeek/tabular' }
+
+  -- Unified clipboard for vim and tmux
+  use { 'tmux-plugins/vim-tmux-focus-events' }
+  use { 'roxma/vim-tmux-clipboard' }
+
+  -- Support for .tmux.conf
+  use { 'tmux-plugins/vim-tmux' }
+
+  -- Seemless navigation between vim and tmux
+  use { 'christoomey/vim-tmux-navigator' }
+
+  -- Autoclose brackets
+  use { 'Raimondi/delimitMate' }
+
+  -- Syntax highlight
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  -- Syntax for fish
+  use { 'dag/vim-fish' }
+
+  -- Formatting for specific cases
+  use { 'vim-autoformat/vim-autoformat' }
+
+  -- Snippets
+  use { 'SirVer/ultisnips' }
+
+  -- Snippets are separated from the engine. Add this if you want them:
+  use { 'honza/vim-snippets' }
+  -- Support for some custom snippets
+  use { 'reconquest/vim-pythonx' }
+
+  -- Code completion
+  use { 'neoclide/coc.nvim', branch = 'release' }
+
+  use { 'lervag/vimtex' }
+end)
+
+-- runtime path workaround, see https://github.com/soywod/himalaya/issues/188#issuecomment-906296736
+local packer_compiled = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'
+vim.cmd('luafile'  .. packer_compiled)
+
 vim.cmd([[
 " Required for different settings
 set nocompatible
 
-call plug#begin()
-" The default plugin directory will be as follows:
-"   - Vim (Linux/macOS): '~/.vim/plugged'
-"   - Vim (Windows): '~/vimfiles/plugged'
-"   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
-" You can specify a custom plugin directory by passing it as the argument
-"   - e.g. `call plug#begin('~/.vim/plugged')`
-"   - Avoid using standard Vim directory names like 'plugin'
-
-" Make sure you use single quotes
-
-" Use dev icons from powerline fonts
-Plug 'ryanoasis/vim-devicons'
-
-" Status line
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-" Colorscheme
-Plug 'sonph/onehalf', { 'rtp': 'vim' }
-
-" Underlines the word under the cursor
-Plug 'itchyny/vim-cursorword'
-
-" Surroundings: parentheses, brackets, quotes, XML tags, and more
-Plug 'tpope/vim-surround'
-
-" Allow repeating surrounds with "."
-Plug 'tpope/vim-repeat'
-
-Plug 'godlygeek/tabular'
-
-" Unified clipboard for vim and tmux
-Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'roxma/vim-tmux-clipboard'
-
-" Support for .tmux.conf
-Plug 'tmux-plugins/vim-tmux'
-
-" Seemless navigation between vim and tmux
-Plug 'christoomey/vim-tmux-navigator'
-
-" Autoclose brackets
-Plug 'Raimondi/delimitMate'
-
-" Syntax highlight
-Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-" Syntax for fish
-Plug 'dag/vim-fish'
-
-" Formatting for specific cases
-Plug 'vim-autoformat/vim-autoformat'
-
-" Snippets
-Plug 'SirVer/ultisnips'
-
-" Snippets are separated from the engine. Add this if you want them:
-Plug 'honza/vim-snippets'
-" Support for some custom snippets
-Plug 'reconquest/vim-pythonx'
-
-" Code completion
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-
-Plug 'lervag/vimtex'
-
-" Initialize plugin system
-call plug#end()
-
-" vim-plug utomatically executes filetype plugin indent on and syntax enable. You can revert the settings after the call. e.g. filetype indent off, syntax off
 filetype plugin on
 filetype indent on
 

@@ -33,12 +33,12 @@ ln --symbolic --force "$SELF_PATH/ftplugin" ~/.config/nvim/ftplugin; rm --force 
 ln --symbolic --force "$SELF_PATH/ftdetect" ~/.config/nvim/ftdetect; rm --force "$SELF_PATH/ftdetect/ftdetect"
 ln --symbolic --force "$REPO_PATH/ultisnips" ~/.config/nvim/UltiSnips; rm --force "$REPO_PATH/ultisnips/ultisnips"
 
-if [[ ! -d "${XDG_DATA_HOME:-$HOME/.local/share}/nvim/site/autoload/plug.vim" ]]; then
-  # Install vim-plug
-  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+if [[ ! -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
+  # Install packer
+  git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+   ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 fi
-nvim -c PlugInstall -c qall
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
 # Install coc-nvim extensions
 COC_EXTENSIONS=$(cat "$SELF_PATH/init.lua" | grep --only-matching --perl-regexp "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')

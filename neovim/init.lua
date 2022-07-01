@@ -74,11 +74,15 @@ require'nvim-treesitter.configs'.setup {
     "html",
     "json",
     "latex",
+    "llvm",
     "lua",
+    "make",
     "markdown",
     "ninja",
     "perl",
     "python",
+    "regex",
+    "ruby",
     "toml",
     "vim",
     "yaml",
@@ -519,6 +523,7 @@ let g:coc_global_extensions += ['coc-emoji'] "Emoji words, default enabled for m
 let g:coc_global_extensions += ['coc-fish']
 let g:coc_global_extensions += ['coc-html']
 let g:coc_global_extensions += ['coc-json']
+let g:coc_global_extensions += ['coc-lists']
 let g:coc_global_extensions += ['coc-perl']
 let g:coc_global_extensions += ['coc-powershell']
 let g:coc_global_extensions += ['coc-python']

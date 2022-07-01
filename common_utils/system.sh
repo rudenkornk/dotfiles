@@ -10,15 +10,13 @@ REPO_PATH=$(realpath "$(dirname "$0")/..")
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   apt-transport-https \
+  build-essential \
   ca-certificates \
   curl \
   dos2unix \
-  g++ \
-  gcc \
   jq \
   locales \
   lsb-release \
-  make \
   moreutils `# for ifne tool` \
   openssh-client \
   software-properties-common \

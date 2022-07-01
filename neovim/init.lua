@@ -2,7 +2,7 @@ require('packer').startup(function()
   -- Packer can manage itself
   use { 'wbthomason/packer.nvim' }
 
-  use { 'ryanoasis/vim-devicons' }
+  use { 'kyazdani42/nvim-web-devicons' }
 
   use { 'vim-airline/vim-airline' }
   use { 'vim-airline/vim-airline-themes' }

@@ -5,8 +5,8 @@ BUILD_DIR ?= build
 
 CONFIG_DIRS := \
                common_utils \
-               python \
                nodejs \
+               python \
                bash \
                docker \
                fish \

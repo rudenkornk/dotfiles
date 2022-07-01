@@ -26,7 +26,7 @@ if [[ ! -d "${XDG_DATA_HOME:-$HOME/.local/share}/nvim/site/autoload/plug.vim" ]]
   sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
-nvim  -c PlugInstall -c qall
+nvim -c PlugInstall -c qall
 
 # Install coc-nvim extensions
 COC_EXTENSIONS=$(cat "$SELF_PATH/init.vim" | grep --only-matching --perl-regexp "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')

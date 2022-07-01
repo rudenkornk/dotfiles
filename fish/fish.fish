@@ -11,3 +11,7 @@ if not set -q SSH_AUTH_SOCK && [ -d ~/.ssh ] && [ (find ~/.ssh -name "*id_rsa" |
   ssh-add ~/.ssh/*id_rsa &> /dev/null
 end
 
+if uname --all | grep --quiet WSL
+  set --erase DISPLAY
+end
+

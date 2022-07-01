@@ -13,6 +13,8 @@ require('packer').startup(function()
   -- Underlines the word under the cursor
   use { 'itchyny/vim-cursorword' }
 
+  use { 'lukas-reineke/indent-blankline.nvim' }
+
   -- Surroundings: parentheses, brackets, quotes, XML tags, and more
   use { 'tpope/vim-surround' }
 

@@ -11,3 +11,5 @@ apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   neovim \
 
+sudo gem install neovim
+

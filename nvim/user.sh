@@ -13,6 +13,18 @@ mkdir --parents ~/.config/nvim/keymap
 mkdir --parents ~/.local/
 export PATH="$HOME/.local/bin:$PATH"
 
+
+pip2 install pynvim
+pip2 install pypi
+
+pip3 install jedi
+pip3 install px
+pip3 install pynvim
+pip3 install pypi
+pip3 install sympy
+
+npm install --location=global neovim
+
 # Link configs
 ln --symbolic --force "$SELF_PATH/init.vim" ~/.config/nvim/init.vim
 ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.config/nvim/keymap/rnk-russian-qwerty.vim
@@ -33,9 +45,7 @@ COC_EXTENSIONS=$(cat "$SELF_PATH/init.vim" | grep --only-matching --perl-regexp 
 nvim -c "CocInstall -sync $COC_EXTENSIONS" -c qall
 # nvim -c "CocCommand clangd.install" -c qall tmp.cpp
 
-pip3 install px
-pip3 install jedi
-pip3 install sympy
+nvim -c UpdateRemotePlugins -c qall
 
 "$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
 "$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"

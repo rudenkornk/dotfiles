@@ -320,166 +320,173 @@ set updatetime=300
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 set signcolumn=number
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+]])
+
+if packer_plugins and packer_plugins['coc.nvim'] and packer_plugins['coc.nvim'].loaded then
+  vim.cmd([[
+  " Add (Neo)Vim's native statusline support.
+  " NOTE: Please see `:h coc-status` for integrations with external plugins that
+  " provide custom statusline: lightline.vim, vim-airline.
+  set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+      call CocActionAsync('doHover')
+    else
+      execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+  endfunction
+  function! s:coc_toggle() abort
+    if g:coc_enabled
+      :CocDisable
+    else
+      :CocEnable
+    endif
+  endfunction
+  " Use tab for trigger completion with characters ahead and navigate.
+  " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+  " other plugin before putting this into your config.
+  inoremap <expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  " Use <c-space> to trigger completion.
+  inoremap <expr> <c-space> coc#refresh()
+
+  " Make <CR> auto-select the first completion item and notify coc.nvim to
+  " format on enter, <CR> could be remapped by other vim plugin
+  inoremap <expr> <CR> pumvisible() ? coc#_select_confirm()
+                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+  nmap [e <Plug>(coc-diagnostic-prev)
+  nmap ]e <Plug>(coc-diagnostic-next)
+  nmap <leader>se <Plug>(coc-diagnostic-info)
+  " GoTo code navigation.
+  nmap <leader>ss <Plug>(coc-definition)
+  nmap <leader>st <Plug>(coc-type-definition)
+  nmap <leader>si <Plug>(coc-implementation)
+  nmap <leader>sr <Plug>(coc-references)
+  nmap <leader>sd :call <SID>show_documentation()<CR>
+  " Symbol renaming.
+  nmap <leader>sn <Plug>(coc-rename)
+  " Formatting selected code.
+  xmap <leader>sf <Plug>(coc-format-selected)
+  nmap <leader>sf <Plug>(coc-format-selected)
+  nmap <leader>sF <Plug>(coc-format)
+  " Applying codeAction to the selected region.
+  " Example: `<leader>aap` for current paragraph
+  xmap <leader>sa <Plug>(coc-codeaction-selected)
+  nmap <leader>sa <Plug>(coc-codeaction-line)
+  " Remap keys for applying codeAction to the current buffer.
+  nmap <leader>sA <Plug>(coc-codeaction)
+  " Apply AutoFsx to problem on the current line.
+  nmap <leader>sx <Plug>(coc-fix-current)
+  " Run the Cods Lens action on the current line.
+  nmap <leader>sl <Plug>(coc-codelens-action)
+  " Open link in browser
+  nmap <leader>sk <Plug>(coc-openlink)
+  nmap <leader>sb :abstract_syntax_tree
+  nmap <leader>sq :call <SID>coc_toggle()<CR>
+
+  " Free maps:
+  "nmap <leader>sc
+  "nmap <leader>sg
+  "nmap <leader>sh
+  "nmap <leader>sj
+  "nmap <leader>sm
+  "nmap <leader>so
+  "nmap <leader>sq
+  "nmap <leader>su
+  "nmap <leader>sv
+  "nmap <leader>sw
+  "nmap <leader>sy
+  "nmap <leader>sz
+
+  " Map functios and class text objects
+  " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+  xmap if <Plug>(coc-funcobj-i)
+  omap if <Plug>(coc-funcobj-i)
+  xmap af <Plug>(coc-funcobj-a)
+  omap af <Plug>(coc-funcobj-a)
+  xmap ic <Plug>(coc-classobj-i)
+  omap ic <Plug>(coc-classobj-i)
+  xmap ac <Plug>(coc-classobj-a)
+  omap ac <Plug>(coc-classobj-a)
+  " Use CTRL-S for selections ranges.  " Requires 'textDocument/selectionRange' support of language server.
+  nmap <C-h> <Plug>(coc-range-select)
+  xmap <C-h> <Plug>(coc-range-select)
+  " Remap <C-f> and <C-b> for scroll float windows/popups.
+  if has('nvim-0.4.0') || has('patch-8.2.0750')
+    nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<CR>" : "\<Right>"
+    inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<CR>" : "\<Left>"
+    vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
   endif
-endfunction
-function! s:coc_toggle() abort
-  if g:coc_enabled
-    :CocDisable
-  else
-    :CocEnable
-  endif
-endfunction
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" Use <c-space> to trigger completion.
-inoremap <expr> <c-space> coc#refresh()
+  " Mappings for CoCList
+  " Show commands.
+  nnoremap <leader>ll :<C-u>CocList lists<CR>
+  " Resume latest coc list.
+  nnoremap <leader>lr :<C-u>CocListResume<CR>
+  " Show commands.
+  nnoremap <leader>lc :<C-u>CocList commands<CR>
+  " Find symbol of current document.
+  nnoremap <leader>lo :<C-u>CocList outline<CR>
+  " Show all diagnostics.
+  nnoremap <leader>le :<C-u>CocList diagnostics<CR>
+  " Manage extensions.
+  nnoremap <leader>lx :<C-u>CocList extensions<CR>
+  " Search workspace symbols.
+  nnoremap <leader>ls :<C-u>CocList -I symbols<CR>
+  " Do default action for next item.
+  nnoremap <leader>ln :<C-u>CocNext<CR>
+  " Do default action for previous item.
+  nnoremap <leader>lp :<C-u>CocPrev<CR>
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <CR> could be remapped by other vim plugin
-inoremap <expr> <CR> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap [e <Plug>(coc-diagnostic-prev)
-nmap ]e <Plug>(coc-diagnostic-next)
-nmap <leader>se <Plug>(coc-diagnostic-info)
-" GoTo code navigation.
-nmap <leader>ss <Plug>(coc-definition)
-nmap <leader>st <Plug>(coc-type-definition)
-nmap <leader>si <Plug>(coc-implementation)
-nmap <leader>sr <Plug>(coc-references)
-nmap <leader>sd :call <SID>show_documentation()<CR>
-" Symbol renaming.
-nmap <leader>sn <Plug>(coc-rename)
-" Formatting selected code.
-xmap <leader>sf <Plug>(coc-format-selected)
-nmap <leader>sf <Plug>(coc-format-selected)
-nmap <leader>sF <Plug>(coc-format)
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap <leader>sa <Plug>(coc-codeaction-selected)
-nmap <leader>sa <Plug>(coc-codeaction-line)
-" Remap keys for applying codeAction to the current buffer.
-nmap <leader>sA <Plug>(coc-codeaction)
-" Apply AutoFsx to problem on the current line.
-nmap <leader>sx <Plug>(coc-fix-current)
-" Run the Cods Lens action on the current line.
-nmap <leader>sl <Plug>(coc-codelens-action)
-" Open link in browser
-nmap <leader>sk <Plug>(coc-openlink)
-nmap <leader>sb :abstract_syntax_tree
-nmap <leader>sq :call <SID>coc_toggle()<CR>
+  augroup coc_group
+    autocmd!
+    " Update signature help on jump placeholder.
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  augroup end
 
-" Free maps:
-"nmap <leader>sc
-"nmap <leader>sg
-"nmap <leader>sh
-"nmap <leader>sj
-"nmap <leader>sm
-"nmap <leader>so
-"nmap <leader>sq
-"nmap <leader>su
-"nmap <leader>sv
-"nmap <leader>sw
-"nmap <leader>sy
-"nmap <leader>sz
+  " Add coc extensions
+  let g:coc_global_extensions = []
+  let g:coc_global_extensions += ['coc-marketplace']
 
-" Map functios and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-" Use CTRL-S for selections ranges.  " Requires 'textDocument/selectionRange' support of language server.
-nmap <C-h> <Plug>(coc-range-select)
-xmap <C-h> <Plug>(coc-range-select)
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<CR>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<CR>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
-" Mappings for CoCList
-" Show commands.
-nnoremap <leader>ll :<C-u>CocList lists<CR>
-" Resume latest coc list.
-nnoremap <leader>lr :<C-u>CocListResume<CR>
-" Show commands.
-nnoremap <leader>lc :<C-u>CocList commands<CR>
-" Find symbol of current document.
-nnoremap <leader>lo :<C-u>CocList outline<CR>
-" Show all diagnostics.
-nnoremap <leader>le :<C-u>CocList diagnostics<CR>
-" Manage extensions.
-nnoremap <leader>lx :<C-u>CocList extensions<CR>
-" Search workspace symbols.
-nnoremap <leader>ls :<C-u>CocList -I symbols<CR>
-" Do default action for next item.
-nnoremap <leader>ln :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <leader>lp :<C-u>CocPrev<CR>
+  let g:coc_global_extensions += ['coc-clangd']
+  let g:coc_global_extensions += ['coc-cmake']
+  let g:coc_global_extensions += ['coc-css']
+  let g:coc_global_extensions += ['coc-docker']
+  let g:coc_global_extensions += ['coc-emoji'] "Emoji words, default enabled for markdown file only
+  let g:coc_global_extensions += ['coc-fish']
+  let g:coc_global_extensions += ['coc-html']
+  let g:coc_global_extensions += ['coc-json']
+  let g:coc_global_extensions += ['coc-lists']
+  let g:coc_global_extensions += ['coc-perl']
+  let g:coc_global_extensions += ['coc-powershell']
+  let g:coc_global_extensions += ['coc-python']
+  let g:coc_global_extensions += ['coc-sh']
+  let g:coc_global_extensions += ['coc-texlab']
+  let g:coc_global_extensions += ['coc-tsserver']
+  let g:coc_global_extensions += ['coc-ultisnips'] " Integration of UltiSnips to coc completion
+  let g:coc_global_extensions += ['coc-vimlsp']
+  let g:coc_global_extensions += ['coc-vimtex']
+  let g:coc_global_extensions += ['coc-word'] " Words from google 10000 english repo
+  let g:coc_global_extensions += ['coc-xml']
+  let g:coc_global_extensions += ['coc-yaml']
+  ]])
+end
 
-augroup coc_group
-  autocmd!
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Add coc extensions
-let g:coc_global_extensions = []
-let g:coc_global_extensions += ['coc-marketplace']
-
-let g:coc_global_extensions += ['coc-clangd']
-let g:coc_global_extensions += ['coc-cmake']
-let g:coc_global_extensions += ['coc-css']
-let g:coc_global_extensions += ['coc-docker']
-let g:coc_global_extensions += ['coc-emoji'] "Emoji words, default enabled for markdown file only
-let g:coc_global_extensions += ['coc-fish']
-let g:coc_global_extensions += ['coc-html']
-let g:coc_global_extensions += ['coc-json']
-let g:coc_global_extensions += ['coc-lists']
-let g:coc_global_extensions += ['coc-perl']
-let g:coc_global_extensions += ['coc-powershell']
-let g:coc_global_extensions += ['coc-python']
-let g:coc_global_extensions += ['coc-sh']
-let g:coc_global_extensions += ['coc-texlab']
-let g:coc_global_extensions += ['coc-tsserver']
-let g:coc_global_extensions += ['coc-ultisnips'] " Integration of UltiSnips to coc completion
-let g:coc_global_extensions += ['coc-vimlsp']
-let g:coc_global_extensions += ['coc-vimtex']
-let g:coc_global_extensions += ['coc-word'] " Words from google 10000 english repo
-let g:coc_global_extensions += ['coc-xml']
-let g:coc_global_extensions += ['coc-yaml']
-
+vim.cmd([[
 highlight RedundantSpacesAndTabs ctermbg=100 guibg=#b5942e
 match RedundantSpacesAndTabs /\(\s\+$\|\t\+\)/
 

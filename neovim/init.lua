@@ -56,61 +56,70 @@ require('packer').startup(function()
   use { 'lervag/vimtex' }
 end)
 
+function exists(name)
+  if type(name)~="string" then return false end
+  return os.rename(name,name) and true or false
+end
+
 -- runtime path workaround, see https://github.com/soywod/himalaya/issues/188#issuecomment-906296736
 local packer_compiled = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'
-vim.cmd('luafile'  .. packer_compiled)
+if exists(packer_compiled) then
+  vim.cmd('luafile'  .. packer_compiled)
+end
 
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all"
-  ensure_installed = {
-    "bash",
-    "bibtex",
-    "c",
-    "cmake",
-    "cpp",
-    "css",
-    "dockerfile",
-    "fish",
-    "html",
-    "json",
-    "latex",
-    "llvm",
-    "lua",
-    "make",
-    "markdown",
-    "ninja",
-    "perl",
-    "python",
-    "regex",
-    "ruby",
-    "toml",
-    "vim",
-    "yaml",
-  },
+if packer_plugins and packer_plugins['nvim-treesitter'] and packer_plugins['nvim-treesitter'].loaded then
+  require'nvim-treesitter.configs'.setup {
+    -- A list of parser names, or "all"
+    ensure_installed = {
+      "bash",
+      "bibtex",
+      "c",
+      "cmake",
+      "cpp",
+      "css",
+      "dockerfile",
+      "fish",
+      "html",
+      "json",
+      "latex",
+      "llvm",
+      "lua",
+      "make",
+      "markdown",
+      "ninja",
+      "perl",
+      "python",
+      "regex",
+      "ruby",
+      "toml",
+      "vim",
+      "yaml",
+    },
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
 
-  -- List of parsers to ignore installing (for "all")
-  ignore_install = { "" },
+    -- List of parsers to ignore installing (for "all")
+    ignore_install = { "" },
 
-  highlight = {
-    -- `false` will disable the whole extension
-    enable = true,
+    highlight = {
+      -- `false` will disable the whole extension
+      enable = true,
 
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-    disable = { "" },
+      -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+      -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+      -- the name of the parser)
+      -- list of language that will be disabled
+      disable = { "" },
 
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-}
+      -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+      -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+      -- Using this option may slow down your editor, and you may see some duplicate highlights.
+      -- Instead of true it can also be a list of languages
+      additional_vim_regex_highlighting = false,
+    },
+  }
+end
 
 vim.cmd([[
 " Required for different settings
@@ -348,7 +357,11 @@ nnoremap <silent> <F6> :TmuxNavigatePrevious<CR>
 let g:UltiSnipsExpandTrigger="<C-k>"
 let g:UltiSnipsJumpForwardTrigger="<C-b>"
 let g:UltiSnipsJumpBackwardTrigger="<C-z>"
+nmap <leader>sp :UltiSnipsEdit!<CR>
 xnoremap <silent> & :call UltiSnips#SaveLastVisualSelection()<CR>
+
+nnoremap <leader>bb :build
+
 
 " Setup coc.nvim
 " TextEdit might fail if hidden is not set.
@@ -362,14 +375,7 @@ set nowritebackup
 set updatetime=300
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+set signcolumn=number
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
@@ -405,11 +411,8 @@ inoremap <expr> <TAB>
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <expr> <c-space> coc#refresh()
-else
-  inoremap <expr> <c-@> coc#refresh()
-endif
+inoremap <expr> <c-space> coc#refresh()
+
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <CR> could be remapped by other vim plugin
 inoremap <expr> <CR> pumvisible() ? coc#_select_confirm()
@@ -442,7 +445,6 @@ nmap <leader>sx <Plug>(coc-fix-current)
 nmap <leader>sl <Plug>(coc-codelens-action)
 " Open link in browser
 nmap <leader>sk <Plug>(coc-openlink)
-nmap <leader>sp :UltiSnipsEdit!<CR>
 nmap <leader>sb :abstract_syntax_tree
 nmap <leader>sq :call <SID>coc_toggle()<CR>
 
@@ -459,9 +461,6 @@ nmap <leader>sq :call <SID>coc_toggle()<CR>
 "nmap <leader>sw
 "nmap <leader>sy
 "nmap <leader>sz
-
-nnoremap <leader>bb :build
-
 
 " Map functios and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.

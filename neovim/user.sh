@@ -25,6 +25,12 @@ pip3 install sympy
 
 npm install --location=global neovim
 
+if [[ ! -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
+  # Install packer
+  git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+   ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+fi
+
 # Link configs
 ln --symbolic --force "$SELF_PATH/init.lua" ~/.config/nvim/init.lua
 ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.config/nvim/keymap/rnk-russian-qwerty.vim
@@ -32,12 +38,6 @@ ln --symbolic --force "$SELF_PATH/coc-settings.json" ~/.config/nvim/coc-settings
 ln --symbolic --force "$SELF_PATH/ftplugin" ~/.config/nvim/ftplugin; rm --force "$SELF_PATH/ftplugin/ftplugin"
 ln --symbolic --force "$SELF_PATH/ftdetect" ~/.config/nvim/ftdetect; rm --force "$SELF_PATH/ftdetect/ftdetect"
 ln --symbolic --force "$REPO_PATH/ultisnips" ~/.config/nvim/UltiSnips; rm --force "$REPO_PATH/ultisnips/ultisnips"
-
-if [[ ! -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
-  # Install packer
-  git clone --depth 1 https://github.com/wbthomason/packer.nvim\
-   ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-fi
 
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' &> /dev/null || true # Suppress error once
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'

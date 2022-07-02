@@ -12,6 +12,7 @@ wget https://github.com/neovim/neovim/releases/download/v0.7.2/nvim-linux64.deb
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   ./nvim-linux64.deb \
+  vim \
 
 rm nvim-linux64.deb
 

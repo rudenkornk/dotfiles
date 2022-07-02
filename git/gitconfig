@@ -49,7 +49,7 @@
          1 day ago, 226
 
 [core]
-    editor = nvim
+    editor = vim
 [credentials]
     helper = store
 [init]

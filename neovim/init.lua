@@ -323,7 +323,7 @@ tnoremap <Esc><Esc> <C-\><C-n>
 " %l -- line number
 " %L -- total lines
 " %c -- column number
-colorscheme onehalfdark
+silent! colorscheme onehalfdark
 let g:Powerline_symbols='unicode'
 let g:airline_powerline_fonts = 1
 let g:airline_section_z = "%l/%L %p%%"

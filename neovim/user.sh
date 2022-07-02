@@ -9,6 +9,7 @@ REPO_PATH=$(realpath "$(dirname "$0")/..")
 SELF_PATH=$(realpath "$(dirname "$0")")
 
 mkdir --parents ~/.config/nvim
+mkdir --parents ~/.config/nvim/lua
 mkdir --parents ~/.config/nvim/keymap
 mkdir --parents ~/.local/
 export PATH="$HOME/.local/bin:$PATH"
@@ -33,6 +34,7 @@ fi
 
 # Link configs
 ln --symbolic --force "$SELF_PATH/init.lua" ~/.config/nvim/init.lua
+ln --symbolic --force "$SELF_PATH/plugins.lua" ~/.config/nvim/lua/plugins.lua
 ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.config/nvim/keymap/rnk-russian-qwerty.vim
 ln --symbolic --force "$SELF_PATH/coc-settings.json" ~/.config/nvim/coc-settings.json
 ln --symbolic --force "$SELF_PATH/ftplugin" ~/.config/nvim/ftplugin; rm --force "$SELF_PATH/ftplugin/ftplugin"

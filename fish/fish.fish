@@ -6,11 +6,6 @@ else
   contains "$local_bin" $fish_user_paths; or set -Ua fish_user_paths "$local_bin"
 end
 
-if uname --all | grep --quiet WSL
-  set --erase DISPLAY
-end
-
-
 # Credits: https://gist.github.com/gerbsen/5fd8aa0fde87ac7a2cae
 setenv SSH_ENV $HOME/.ssh/environment
 function start_agent

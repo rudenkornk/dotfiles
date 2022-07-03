@@ -17,7 +17,6 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   jq \
   locales \
   lsb-release \
-  moreutils `# for ifne tool` \
   openssh-client \
   software-properties-common \
   tar gzip zip unzip bzip2 \

@@ -14,12 +14,12 @@ function start_agent
   echo "succeeded"
   chmod 600 $SSH_ENV
   . $SSH_ENV > /dev/null
-  ssh-add "~/.ssh/*_id_rsa"
+  ssh-add ~/.ssh/*_id_rsa
 end
 function test_identities
   ssh-add -l | grep "The agent has no identities" > /dev/null
   if [ $status -eq 0 ]
-    ssh-add "~/.ssh/*_id_rsa"
+    ssh-add ~/.ssh/*_id_rsa
     if [ $status -eq 2 ]
       start_agent
     end

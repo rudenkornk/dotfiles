@@ -1,3 +1,3 @@
-function v
+function v --wraps nvim
   nvim $argv
 end

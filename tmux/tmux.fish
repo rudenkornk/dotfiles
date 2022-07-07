@@ -1,3 +1,5 @@
+fish_add_path "$HOME/.local/tmux/bin"
+
 if status is-interactive
 and not set -q TMUX
   not tmux ls &> /dev/null; and exec tmux

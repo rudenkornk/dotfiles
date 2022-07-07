@@ -9,6 +9,5 @@ REPO_PATH=$(realpath "$(dirname "$0")/..")
 
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-  tmux \
   xsel `# for tmux-yank` \
 

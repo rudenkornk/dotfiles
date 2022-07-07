@@ -5,6 +5,7 @@ BUILD_DIR ?= build
 
 CONFIG_DIRS := \
                common_utils \
+               go \
                nodejs \
                python \
                ruby \

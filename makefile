@@ -10,7 +10,6 @@ CONFIG_DIRS := \
                python \
                ruby \
                cmd_utils \
-               bash \
                docker \
                fish \
                git \

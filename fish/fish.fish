@@ -1,10 +1,4 @@
-set local_bin "$HOME/.local/bin"
-
-if printf "3.2.0\n$FISH_VERSION" | sort --version-sort --check &> /dev/null
-  fish_add_path $local_bin
-else
-  contains "$local_bin" $fish_user_paths; or set -Ua fish_user_paths "$local_bin"
-end
+fish_add_path "$HOME/.local/bin"
 
 # Credits: https://gist.github.com/gerbsen/5fd8aa0fde87ac7a2cae
 setenv SSH_ENV $HOME/.ssh/environment

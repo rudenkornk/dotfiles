@@ -9,6 +9,7 @@ CONFIG_DIRS := \
                nodejs \
                python \
                ruby \
+               clipboard \
                cmd_utils \
                docker \
                fish \
@@ -56,7 +57,7 @@ $(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 	for i in $(CONFIG_DIRS); do \
 		scripts/caption.sh "CONFIGURING SYSTEM FOR $${i^^}"; \
 		if [ -f "$$i/system.sh" ]; then \
-			sudo \
+			sudo WSL_INTEROP=$$WSL_INTEROP \
 			PRIMARY_USER=$$(id --user --name) \
 			$$i/system.sh || \
 			{ scripts/caption.sh "ERROR CONFIGURING SYSTEM FOR $${i^^}!"; exit 1; }; \
@@ -78,7 +79,7 @@ $(BUILD_DIR)/gui_system_config: $(GUI_CONFIG_DEPS)
 	for i in $(GUI_CONFIG_DIRS); do \
 		scripts/caption.sh "CONFIGURING SYSTEM FOR $${i^^}"; \
 		if [ -f "$$i/system.sh" ]; then \
-			sudo \
+			sudo WSL_INTEROP=$$WSL_INTEROP \
 			PRIMARY_USER=$$(id --user --name) \
 			$$i/system.sh || \
 			{ scripts/caption.sh "ERROR CONFIGURING SYSTEM FOR $${i^^}!"; exit 1; }; \
@@ -121,6 +122,8 @@ IF_DOCKERD_UP := command -v docker &> /dev/null && pidof dockerd &> /dev/null
 DOCKER_CONTAINER_ID != $(IF_DOCKERD_UP) && docker container ls --quiet --all --filter name=^/$(DOCKER_CONTAINER_NAME)$
 DOCKER_CONTAINER_STATE != $(IF_DOCKERD_UP) && docker container ls --format {{.State}} --all --filter name=^/$(DOCKER_CONTAINER_NAME)$
 DOCKER_CONTAINER_RUN_STATUS != [[ "$(DOCKER_CONTAINER_STATE)" != "running" ]] && echo "$(DOCKER_CONTAINER)_not_running"
+WSL_MOUNT != [[ -S $$WSL_INTEROP ]] && echo "--mount type=bind,source=$$WSL_INTEROP,target=$$WSL_INTEROP"
+
 .PHONY: $(DOCKER_CONTAINER)_not_running
 $(DOCKER_CONTAINER): $(DOCKER_CONTAINER_RUN_STATUS)
 ifneq ($(DOCKER_CONTAINER_ID),)
@@ -134,6 +137,7 @@ endif
 		--env "TERM=xterm-256color" \
 		--name $(DOCKER_CONTAINER_NAME) \
 		--mount type=bind,source="$$(pwd)",target=/home/repo \
+		$(WSL_MOUNT) \
 		$(DOCKER_IMAGE_TAG)
 	sleep 1
 	mkdir --parents $(BUILD_DIR) && touch $@

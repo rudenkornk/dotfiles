@@ -11,4 +11,5 @@ apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   python2 \
   python3-distutils \
+  python3-venv \
 

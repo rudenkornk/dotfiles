@@ -8,50 +8,61 @@ set -o xtrace
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 SELF_PATH=$(realpath "$(dirname "$0")")
 
-mkdir --parents ~/.config/nvim
-mkdir --parents ~/.config/nvim/lua
-mkdir --parents ~/.config/nvim/keymap
-mkdir --parents ~/.local/
+
+# Preconfigured Configuration notes:
+# LunarVim --- too slow, about 400ms to start
+# nvoid --- unpopular compared to others, otherwise looking ok
+# NvChad --- looks ok
+# AstroNvim --- looks ok, though wants strange dependencies like htop and lazygit
+# CosmicNvim --- looks ok; no whichkey plugin?
+# nyoom.nvim --- weird configuration language instead of pure lua
+
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/go/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
+go install github.com/rhysd/actionlint/cmd/actionlint@latest
+go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
-pip2 install pynvim
-pip2 install pypi
+cargo install stylua
 
-pip3 install jedi
-pip3 install px
-pip3 install pynvim
-pip3 install pypi
-pip3 install sympy
+pip2 install --user pynvim
+pip2 install --user pypi
 
-npm install --location=global neovim
+pip3 install --user autopep8
+pip3 install --user cmakelang
+pip3 install --user flake8
+pip3 install --user jedi
+pip3 install --user proselint
+pip3 install --user px
+pip3 install --user pydocstyle
+pip3 install --user pynvim
+pip3 install --user pypi
+pip3 install --user sympy
 
-if [[ ! -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
-  # Install packer
-  git clone --depth 1 https://github.com/wbthomason/packer.nvim\
-   ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+npm list --location=global alex || npm install --location=global alex
+npm list --location=global eslint_d || npm install --location=global eslint_d
+npm list --location=global jsonlint || npm install --location=global jsonlint
+npm list --location=global neovim || npm install --location=global neovim
+
+if ! command -v hadolint &> /dev/null; then
+  wget https://github.com/hadolint/hadolint/releases/download/v2.10.0/hadolint-Linux-x86_64 --output-document=hadolint
+  chmod +x hadolint
+  mv hadolint ~/.local/bin
 fi
 
-# Link configs
-ln --symbolic --force "$SELF_PATH/init.lua" ~/.config/nvim/init.lua
-ln --symbolic --force "$SELF_PATH/plugins.lua" ~/.config/nvim/lua/plugins.lua
-ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.config/nvim/keymap/rnk-russian-qwerty.vim
-ln --symbolic --force "$SELF_PATH/coc-settings.json" ~/.config/nvim/coc-settings.json
-ln --symbolic --force "$SELF_PATH/ftplugin" ~/.config/nvim/ftplugin; rm --force "$SELF_PATH/ftplugin/ftplugin"
-ln --symbolic --force "$SELF_PATH/ftdetect" ~/.config/nvim/ftdetect; rm --force "$SELF_PATH/ftdetect/ftdetect"
-ln --symbolic --force "$REPO_PATH/ultisnips" ~/.config/nvim/UltiSnips; rm --force "$REPO_PATH/ultisnips/ultisnips"
+if [[ ! -d ~/.config/nvim ]]; then
+  git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+fi
 
-nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' &> /dev/null || true # Suppress error once
+mkdir --parents ~/.config/nvim/keymap
+ln --symbolic --force "$REPO_PATH/keyboard_layouts/rnk-russian-qwerty.vim" ~/.config/nvim/keymap/rnk-russian-qwerty.vim
+
+rm --force ~/.config/nvim/lua/custom
+ln --symbolic --force "$SELF_PATH/nvchad" ~/.config/nvim/lua/custom
+
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
-# Install coc-nvim extensions
-COC_EXTENSIONS=$(cat "$SELF_PATH/init.lua" | grep --only-matching --perl-regexp "let g:coc_global_extensions \+= \['\K[\w\d-]+(?='\])" | awk 'BEGIN { ORS = " " } { print }')
-nvim -c "CocInstall -sync $COC_EXTENSIONS" -c quitall
-# nvim -c "CocCommand clangd.install" -c qall tmp.cpp
-
-nvim --headless -c UpdateRemotePlugins -c quitall
-
-"$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
 "$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"
 
 "$SELF_PATH/checkhealth.sh"

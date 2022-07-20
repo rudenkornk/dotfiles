@@ -59,7 +59,6 @@ $(BUILD_DIR)/system_config: $(CONFIG_DEPS)
 		scripts/caption.sh "CONFIGURING SYSTEM FOR $${i^^}"; \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo WSL_INTEROP=$$WSL_INTEROP \
-			PRIMARY_USER=$$(id --user --name) \
 			$$i/system.sh || \
 			{ scripts/caption.sh "ERROR CONFIGURING SYSTEM FOR $${i^^}!"; exit 1; }; \
 		fi; \
@@ -81,7 +80,6 @@ $(BUILD_DIR)/gui_system_config: $(GUI_CONFIG_DEPS)
 		scripts/caption.sh "CONFIGURING SYSTEM FOR $${i^^}"; \
 		if [ -f "$$i/system.sh" ]; then \
 			sudo WSL_INTEROP=$$WSL_INTEROP \
-			PRIMARY_USER=$$(id --user --name) \
 			$$i/system.sh || \
 			{ scripts/caption.sh "ERROR CONFIGURING SYSTEM FOR $${i^^}!"; exit 1; }; \
 		fi; \

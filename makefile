@@ -9,6 +9,7 @@ CONFIG_DIRS := \
                nodejs \
                python \
                ruby \
+               rust \
                clipboard \
                cmd_utils \
                docker \

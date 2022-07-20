@@ -21,4 +21,5 @@ mkdir --parents ~/.config/fish/completions
 wget https://raw.githubusercontent.com/docker/cli/master/contrib/completion/fish/docker.fish
 mv docker.fish ~/.config/fish/completions
 
+#sudo usermod -aG docker $USER
 #newgrp docker

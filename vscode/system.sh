@@ -7,5 +7,5 @@ set -o nounset
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
-sudo snap install --classic code
+snap install --classic code
 

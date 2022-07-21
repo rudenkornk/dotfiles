@@ -13,6 +13,7 @@ CONFIG_DIRS := \
                clipboard \
                cmd_utils \
                docker \
+               ssh \
                fish \
                git \
                latexindent \

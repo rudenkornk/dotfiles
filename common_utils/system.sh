@@ -22,6 +22,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   ncurses-dev \
   openssh-client \
   pkg-config \
+  snap \
   software-properties-common \
   tar gzip zip unzip bzip2 \
   wget \

@@ -7,5 +7,5 @@ set -o nounset
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
-sudo snap install telegram-desktop
+snap install telegram-desktop
 

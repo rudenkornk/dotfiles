@@ -3,99 +3,181 @@ SHELL = /usr/bin/env bash
 PROJECT_NAME := dotfiles
 BUILD_DIR ?= build
 
-CONFIG_DIRS := \
-               common_utils \
-               go \
-               nodejs \
-               python \
-               ruby \
-               rust \
-               clipboard \
-               cmd_utils \
-               docker \
-               ssh \
-               fish \
-               git \
-               latexindent \
-               neovim \
-               powershell \
-               tmux \
-               wsl \
-
-GUI_CONFIG_DIRS := \
-                   chrome \
-                   fonts \
-                   keyboard_layouts \
-                   mouse \
-                   onehalf \
-                   telegram \
-                   vscode \
-
-CONFIG_DEPS != find $(CONFIG_DIRS) -type f,l
-GUI_CONFIG_DEPS != find $(GUI_CONFIG_DIRS) -type f,l
-
 .PHONY: config
-config: system_config user_config
+config: config_system config_user
 
-.PHONY: user_config
-user_config: $(BUILD_DIR)/user_config
+.PHONY: config_gui
+config_gui: config_system config_gui_system config_gui_user
 
-.PHONY: system_config
-system_config: $(BUILD_DIR)/system_config
+.PHONY: config_system
+config_system: \
+	clipboard_system \
+	cmd_utils_system \
+	common_utils_system \
+	docker_system \
+	fish_system \
+	git_system \
+	neovim_system \
+	powershell_system \
+	python_system \
+	ruby_system \
+	ssh_system \
+	wsl_system \
 
-.PHONY: gui_config
-gui_config: gui_system_config gui_user_config
+.PHONY: config_user
+config_user: \
+	cmd_utils_user \
+	docker_user \
+	fish_user \
+	git_user \
+	go_user \
+	latexindent_user \
+	neovim_user \
+	nodejs_user \
+	python_user \
+	rust_user \
+	ssh_user \
+	tmux_user \
 
-.PHONY: gui_user_config
-gui_user_config: $(BUILD_DIR)/gui_user_config
+.PHONY: config_gui_system
+config_gui_system: \
+	chrome_system \
+	keyboard_layouts_system \
+	telegram_system \
+	vscode_system \
 
-.PHONY: gui_system_config
-gui_system_config: $(BUILD_DIR)/gui_system_config
+.PHONY: config_gui_user
+config_gui_user: \
+	fonts_user \
+	mouse_user \
+	onehalf_user \
 
 .PHONY: checkout_projects
 checkout_projects: $(BUILD_DIR)/checkout_projects
 
-$(BUILD_DIR)/system_config: $(CONFIG_DEPS)
-	for i in $(CONFIG_DIRS); do \
-		scripts/caption.sh "CONFIGURING SYSTEM FOR $${i^^}"; \
-		if [ -f "$$i/system.sh" ]; then \
-			sudo WSL_INTEROP=$$WSL_INTEROP \
-			$$i/system.sh || \
-			{ scripts/caption.sh "ERROR CONFIGURING SYSTEM FOR $${i^^}!"; exit 1; }; \
-		fi; \
-	done
-	mkdir --parents $(BUILD_DIR) && touch $@
+.PHONY: clipboard_system
+clipboard_system: common_utils_system
+	sudo scripts/config_system.sh clipboard
 
-$(BUILD_DIR)/user_config: $(CONFIG_DEPS)
-	for i in $(CONFIG_DIRS); do \
-		scripts/caption.sh "CONFIGURING USER FOR $${i^^}"; \
-		if [ -f "$$i/user.sh" ]; then \
-			$$i/user.sh || \
-			{ scripts/caption.sh "ERROR CONFIGURING USER FOR $${i^^}!"; exit 1; }; \
-		fi; \
-	done
-	mkdir --parents $(BUILD_DIR) && touch $@
+.PHONY: cmd_utils_system
+cmd_utils_system: common_utils_system
+	sudo scripts/config_system.sh cmd_utils
 
-$(BUILD_DIR)/gui_system_config: $(GUI_CONFIG_DEPS)
-	for i in $(GUI_CONFIG_DIRS); do \
-		scripts/caption.sh "CONFIGURING SYSTEM FOR $${i^^}"; \
-		if [ -f "$$i/system.sh" ]; then \
-			sudo WSL_INTEROP=$$WSL_INTEROP \
-			$$i/system.sh || \
-			{ scripts/caption.sh "ERROR CONFIGURING SYSTEM FOR $${i^^}!"; exit 1; }; \
-		fi; \
-	done
-	mkdir --parents $(BUILD_DIR) && touch $@
+.PHONY: common_utils_system
+common_utils_system:
+	sudo scripts/config_system.sh common_utils
 
-$(BUILD_DIR)/gui_user_config: $(GUI_CONFIG_DEPS)
-	for i in $(GUI_CONFIG_DIRS); do \
-		scripts/caption.sh "CONFIGURING USER FOR $${i^^}"; \
-		if [ -f "$$i/user.sh" ]; then \
-			$$i/user.sh || \
-			{ scripts/caption.sh "ERROR CONFIGURING USER FOR $${i^^}!"; exit 1; }; \
-		fi; \
-	done
-	mkdir --parents $(BUILD_DIR) && touch $@
+.PHONY: docker_system
+docker_system:
+	sudo scripts/config_system.sh docker
+
+.PHONY: fish_system
+fish_system: common_utils_system ssh_system
+	sudo scripts/config_system.sh fish
+
+.PHONY: git_system
+git_system:
+	sudo scripts/config_system.sh git
+
+.PHONY: neovim_system
+neovim_system: common_utils_system ruby_system
+	sudo scripts/config_system.sh neovim
+
+.PHONY: powershell_system
+powershell_system: common_utils_system
+	sudo scripts/config_system.sh powershell
+
+.PHONY: python_system
+python_system:
+	sudo scripts/config_system.sh python
+
+.PHONY: ruby_system
+ruby_system:
+	sudo scripts/config_system.sh ruby
+
+.PHONY: ssh_system
+ssh_system:
+	sudo scripts/config_system.sh ssh
+
+.PHONY: wsl_system
+wsl_system:
+	sudo scripts/config_system.sh wsl
+
+.PHONY: chrome_system
+chrome_system: common_utils_system
+	sudo scripts/config_system.sh chrome
+
+.PHONY: keyboard_layouts_system
+keyboard_layouts_system:
+	sudo scripts/config_system.sh keyboard_layouts
+
+.PHONY: telegram_system
+telegram_system: common_utils_system
+	sudo scripts/config_system.sh telegram
+
+.PHONY: vscode_system
+vscode_system: common_utils_system
+	sudo scripts/config_system.sh vscode
+
+.PHONY: cmd_utils_user
+cmd_utils_user:
+	scripts/config_user.sh cmd_utils
+
+.PHONY: docker_user
+docker_user:
+	scripts/config_user.sh docker
+
+.PHONY: fish_user
+fish_user:
+	scripts/config_user.sh fish
+
+.PHONY: git_user
+git_user: nodejs_user
+	scripts/config_user.sh git
+
+.PHONY: go_user
+go_user:
+	scripts/config_user.sh go
+
+.PHONY: latexindent_user
+latexindent_user:
+	scripts/config_user.sh latexindent
+
+.PHONY: neovim_user
+neovim_user: python_user nodejs_user go_user rust_user
+	scripts/config_user.sh neovim
+
+.PHONY: nodejs_user
+nodejs_user:
+	scripts/config_user.sh nodejs
+
+.PHONY: python_user
+python_user:
+	scripts/config_user.sh python
+
+.PHONY: rust_user
+rust_user:
+	scripts/config_user.sh rust
+
+.PHONY: ssh_user
+ssh_user:
+	scripts/config_user.sh ssh
+
+.PHONY: tmux_user
+tmux_user: python_user
+	scripts/config_user.sh tmux
+
+.PHONY: fonts_user
+fonts_user:
+	scripts/config_user.sh fonts
+
+.PHONY: mouse_user
+mouse_user:
+	scripts/config_user.sh mouse
+
+.PHONY: onehalf_user
+onehalf_user:
+	scripts/config_user.sh onehalf
 
 $(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
 	./scripts/checkout_projects.sh
@@ -122,7 +204,7 @@ IF_DOCKERD_UP := command -v docker &> /dev/null && pidof dockerd &> /dev/null
 DOCKER_CONTAINER_ID != $(IF_DOCKERD_UP) && docker container ls --quiet --all --filter name=^/$(DOCKER_CONTAINER_NAME)$
 DOCKER_CONTAINER_STATE != $(IF_DOCKERD_UP) && docker container ls --format {{.State}} --all --filter name=^/$(DOCKER_CONTAINER_NAME)$
 DOCKER_CONTAINER_RUN_STATUS != [[ "$(DOCKER_CONTAINER_STATE)" != "running" ]] && echo "$(DOCKER_CONTAINER)_not_running"
-WSL_MOUNT != [[ -S $$WSL_INTEROP ]] && echo "--mount type=bind,source=$$WSL_INTEROP,target=$$WSL_INTEROP"
+WSL_ARGS != [[ -S $$WSL_INTEROP ]] && echo "--mount type=bind,source=$$WSL_INTEROP,target=$$WSL_INTEROP --env WSL_INTEROP=$$WSL_INTEROP"
 
 .PHONY: $(DOCKER_CONTAINER)_not_running
 $(DOCKER_CONTAINER): $(DOCKER_CONTAINER_RUN_STATUS)
@@ -137,7 +219,7 @@ endif
 		--env "TERM=xterm-256color" \
 		--name $(DOCKER_CONTAINER_NAME) \
 		--mount type=bind,source="$$(pwd)",target=/home/repo \
-		$(WSL_MOUNT) \
+		$(WSL_ARGS) \
 		$(DOCKER_IMAGE_TAG)
 	sleep 1
 	mkdir --parents $(BUILD_DIR) && touch $@

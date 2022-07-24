@@ -17,6 +17,7 @@ config_system: \
 	docker_system \
 	fish_system \
 	git_system \
+	lua_system \
 	neovim_system \
 	powershell_system \
 	python_system \
@@ -78,6 +79,10 @@ fish_system: common_utils_system ssh_system
 .PHONY: git_system
 git_system:
 	sudo scripts/config_system.sh git
+
+.PHONY: lua_system
+lua_system:
+	sudo scripts/config_system.sh lua
 
 .PHONY: neovim_system
 neovim_system: common_utils_system ruby_system

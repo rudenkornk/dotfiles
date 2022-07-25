@@ -11,6 +11,32 @@ M.disabled = {
   },
 }
 
+M.utils = {
+  n = {
+    ["<leader>vc"] = { "<CMD>%s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", " Clear extra spaces" },
+  },
+  x = {
+    ["<leader>vc"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", " Clear extra spaces" },
+    ["<leader>vt"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh | '<,'>Tabularize /\\s\\+/l0<CR>", "璘 Tabularize" },
+    ["<leader>vs"] = { ":sort<CR>", " Sort" },
+  },
+}
+
+M.cmd_search = {
+  c = {
+    ["<C-a>"] = { "<HOME>", " Beginning of the line" },
+  },
+}
+
+M.layout = {
+  n = {
+    ["<C-g>"] = { "a<C-^><ESC>", "וּ Toggle layout" },
+  },
+  i = {
+    ["<C-g>"] = { "<C-^>", "וּ Toggle layout" },
+  },
+}
+
 M.tabufline = {
   n = {
     ["<leader>tp"] = { "<CMD> Tbufnext <CR>", "  goto next buffer" },
@@ -60,31 +86,17 @@ M.termdebug = {
 M.illuminate = {
   n = {
     ["<A-n>"] = { "<CMD>lua require('illuminate').next_reference{wrap=true}<CR>", " Next reference" },
-    ["<A-p>"] = { "<CMD>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>", " Previous reference" },
+    ["<A-p>"] = {
+      "<CMD>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>",
+      " Previous reference",
+    },
   },
   i = {
     ["<A-n>"] = { "<cmd>lua require('illuminate').next_reference{wrap=true}<CR>", " Next reference" },
-    ["<A-p>"] = { "<cmd>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>", " Previous reference" },
-  },
-}
-
-M.layout = {
-  n = {
-    ["<C-g>"] = { "a<C-^><ESC>", "וּ Toggle layout" },
-  },
-  i = {
-    ["<C-g>"] = { "<C-^>", "וּ Toggle layout" },
-  },
-}
-
-M.utils = {
-  n = {
-    ["<leader>vc"] = { "<CMD>%s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", " Clear extra spaces" },
-  },
-  x = {
-    ["<leader>vc"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", " Clear extra spaces" },
-    ["<leader>vt"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh | '<,'>Tabularize /\\s\\+/l0<CR>", "璘 Tabularize" },
-    ["<leader>vs"] = { ":sort<CR>", " Sort" },
+    ["<A-p>"] = {
+      "<cmd>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>",
+      " Previous reference",
+    },
   },
 }
 

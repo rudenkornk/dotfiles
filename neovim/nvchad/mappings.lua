@@ -21,12 +21,8 @@ M.utils = {
     ["<leader>vs"] = { ":sort<CR>", " Sort" },
   },
 }
-
-M.cmd_search = {
-  c = {
-    ["<C-a>"] = { "<HOME>", " Beginning of the line" },
-  },
-}
+vim.o.pastetoggle = "<C-q>"
+vim.cmd([[ cnoremap <C-a> <HOME>]])
 
 M.layout = {
   n = {

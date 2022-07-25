@@ -16,6 +16,12 @@ return {
         mode = function()
           return st_modules.mode() .. lang .. paste_status
         end,
+        cursor_position = function()
+          local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+          local total = vim.fn.line("$")
+          local line = row .. "/" .. total .. " " .. col .. ""
+          return st_modules.cursor_position() .. line
+        end,
       }
     end,
   },

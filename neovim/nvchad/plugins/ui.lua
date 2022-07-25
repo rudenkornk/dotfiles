@@ -20,6 +20,7 @@ return {
     end,
   },
   tabufline = {
-    disable = true,
+    enabled = false,
+    lazyload = false,
   }
 }

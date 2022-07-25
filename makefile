@@ -3,6 +3,9 @@ SHELL = /usr/bin/env bash
 PROJECT_NAME := dotfiles
 BUILD_DIR ?= build
 
+# It is implicitly implied that all user configs depend on all system configs
+# The reason for not to set this explicitly is to be able to run user configs separately from system config
+# This is helpful on systems, managed by third-party system administrator
 .PHONY: config
 config: config_system config_user
 

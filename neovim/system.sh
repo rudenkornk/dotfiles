@@ -13,7 +13,6 @@ apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --allow-downgrades --no-install-recommends \
   ./nvim-linux64.deb \
   bibclean \
-  shellcheck \
   vim \
 
 rm nvim-linux64.deb

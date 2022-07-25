@@ -6,6 +6,7 @@ M.override = {
   ["lukas-reineke/indent-blankline.nvim"] = require("custom/plugins/indent-blankline"),
   ["nvim-telescope/telescope.nvim"] = require("custom/plugins/telescope"),
   ["nvim-treesitter/nvim-treesitter"] = require("custom/plugins/treesitter"),
+  ["williamboman/mason"] = require("custom/plugins/mason"),
 }
 
 M.remove = {}

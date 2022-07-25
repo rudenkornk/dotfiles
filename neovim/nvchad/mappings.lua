@@ -1,5 +1,9 @@
 local M = {}
 
+local function termcodes(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
 M.disabled = {
   n = {
     ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
@@ -31,15 +35,25 @@ M.navigator = {
 
 M.termdebug = {
   n = {
-    ["<leader>db"] = { ":Break<CR>", " Set breakpoint" },
-    ["<leader>dr"] = { ":call TermDebugSendCommand('run')<CR>", " Run" },
-    ["<leader>dn"] = { ":call TermDebugSendCommand('next')<CR>", " Step over" },
-    ["<leader>ds"] = { ":call TermDebugSendCommand('step')<CR>", " Step into" },
-    ["<leader>df"] = { ":call TermDebugSendCommand('finish')<CR>", " Step out" },
-    ["<leader>dc"] = { ":call TermDebugSendCommand('continue')<CR>", "懶 Continue" },
-    ["<leader>du"] = { ":call TermDebugSendCommand('up')<CR>", " Up stack" },
-    ["<leader>dd"] = { ":call TermDebugSendCommand('down')<CR>", " Down stack" },
-    ["<leader>dt"] = { ":call TermDebugSendCommand('backtrace')<CR>", " Show backtrace" },
+    ["<A-g>"] = { "<CMD>Termdebug<CR>i", "ﴫ Run gdb" },
+    ["<A-r>"] = { "<CMD>call TermDebugSendCommand('run')<CR>", " Run" },
+    ["<A-b>"] = { "<CMD>Break<CR>", " Set breakpoint" },
+    ["<A-j>"] = { "<CMD>call TermDebugSendCommand('next')<CR>", " Step over" },
+    ["<A-k>"] = { "<CMD>call TermDebugSendCommand('step')<CR>", " Step into" },
+    ["<A-o>"] = { "<CMD>call TermDebugSendCommand('finish')<CR>", " Step out" },
+    ["<A-c>"] = { "<CMD>call TermDebugSendCommand('continue')<CR>", "懶 Continue" },
+    ["<A-u>"] = { "<CMD>call TermDebugSendCommand('up')<CR>", " Up stack" },
+    ["<A-d>"] = { "<CMD>call TermDebugSendCommand('down')<CR>", " Down stack" },
+  },
+  t = {
+    ["<A-r>"] = { "<CMD>call TermDebugSendCommand('run')<CR>", " Run" },
+    ["<A-j>"] = { "<CMD>call TermDebugSendCommand('next')<CR>", " Step over" },
+    ["<A-k>"] = { "<CMD>call TermDebugSendCommand('step')<CR>", " Step into" },
+    ["<A-o>"] = { "<CMD>call TermDebugSendCommand('finish')<CR>", " Step out" },
+    ["<A-c>"] = { "<CMD>call TermDebugSendCommand('continue')<CR>", "懶 Continue" },
+    ["<A-u>"] = { "<CMD>call TermDebugSendCommand('up')<CR>", " Up stack" },
+    ["<A-d>"] = { "<CMD>call TermDebugSendCommand('down')<CR>", " Down stack" },
+    ["<ESC>"] = { termcodes("<C-\\><C-N>"), "   escape terminal mode" },
   },
 }
 

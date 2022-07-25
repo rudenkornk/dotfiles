@@ -2,10 +2,6 @@ local M = {}
 
 M.disabled = {
   n = {
-    ["<C-h>"] = "", -- Unmap pane switch. This will be managed by Navigator.
-    ["<C-j>"] = "", -- Unmap pane switch. This will be managed by Navigator.
-    ["<C-k>"] = "", -- Unmap pane switch. This will be managed by Navigator.
-    ["<C-l>"] = "", -- Unmap pane switch. This will be managed by Navigator.
     ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
     ["<S-b>"] = "", -- Unmap creating new buffer. This interferes with default <S-b> behaviour.
   },
@@ -20,11 +16,10 @@ M.tabufline = {
 
 M.navigator = {
   n = {
-    ["<C-w>h"] = { "<CMD>NavigatorLeft<CR>", " Left pane" },
-    ["<C-w>j"] = { "<CMD>NavigatorDown<CR>", " Lower pane" },
-    ["<C-w>k"] = { "<CMD>NavigatorUp<CR>", " Upper pane" },
-    ["<C-w>l"] = { "<CMD>NavigatorRight<CR>", " Right pane" },
-    ["<C-w>p"] = { "<CMD>NavigatoPrevious<CR>", " Previous pane" },
+    ["<C-h>"] = { "<CMD>NavigatorLeft<CR>", " Left pane" },
+    ["<C-j>"] = { "<CMD>NavigatorDown<CR>", " Lower pane" },
+    ["<C-k>"] = { "<CMD>NavigatorUp<CR>", " Upper pane" },
+    ["<C-l>"] = { "<CMD>NavigatorRight<CR>", " Right pane" },
   },
 }
 

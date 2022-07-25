@@ -9,8 +9,8 @@ M.override = {
 
 M.remove = {}
 M.user = {
-  ["RRethy/vim-illuminate"] = {},
-  ["godlygeek/tabular"] = {},
+  ["RRethy/vim-illuminate"] = require("custom/plugins/illuminate"),
+  ["godlygeek/tabular"] = require("custom/plugins/tabular"),
   ["jose-elias-alvarez/null-ls.nvim"] = require("custom/plugins/null-ls"),
   ["kylechui/nvim-surround"] = require("custom/plugins/surround"),
   ["max397574/better-escape.nvim"] = require("custom/plugins/better-escape"),

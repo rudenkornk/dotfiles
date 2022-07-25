@@ -3,14 +3,14 @@ vim.o.keymap = "rnk-russian-qwerty"
 vim.o.iminsert = 0
 vim.o.imsearch = -1
 
--- Disable formatting in insert mode
--- Unfortunatelly this breaks autocomplete with tab, so it is not permanently
--- enabled
--- vim.cmd([[ set paste ]])
--- Instead use pastetoggle workaround
-vim.o.pastetoggle = "<C-q>"
-
---vim.cmd([[ set wildmode=longest:list,full ]])
+vim.g.fileignorecase = true
+vim.cmd([[
+augroup dynamic_smartcase
+    autocmd!
+    autocmd CmdLineEnter : set nosmartcase
+    autocmd CmdLineLeave : set smartcase
+augroup END
+]])
 
 vim.g.nobackup = true
 vim.g.nowritebackup = true

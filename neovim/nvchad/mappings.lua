@@ -21,6 +21,12 @@ M.navigator = {
     ["<C-k>"] = { "<CMD>NavigatorUp<CR>", " Upper pane" },
     ["<C-l>"] = { "<CMD>NavigatorRight<CR>", " Right pane" },
   },
+  t = {
+    ["<C-h>"] = { "<CMD>NavigatorLeft<CR>", " Left pane" },
+    ["<C-j>"] = { "<CMD>NavigatorDown<CR>", " Lower pane" },
+    ["<C-k>"] = { "<CMD>NavigatorUp<CR>", " Upper pane" },
+    ["<C-l>"] = { "<CMD>NavigatorRight<CR>", " Right pane" },
+  },
 }
 
 M.termdebug = {

@@ -28,9 +28,6 @@ return {
       null_ls.builtins.diagnostics.eslint_d,
       null_ls.builtins.formatting.eslint_d,
 
-      -- json
-      null_ls.builtins.diagnostics.jsonlint,
-
       -- latex
       null_ls.builtins.formatting.bibclean,
       null_ls.builtins.formatting.latexindent.with({

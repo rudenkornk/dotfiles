@@ -10,6 +10,7 @@ return {
       "cssls",
       "dockerls",
       "dotls",
+      "pylsp",
       "html",
       "jedi_language_server",
       "jsonls",
@@ -17,6 +18,7 @@ return {
       "perlnavigator",
       "powershell_es",
       "texlab",
+      "yamlls",
     }
     nvchad.capabilities.offsetEncoding = { "utf-16" }
 

@@ -1,0 +1,3 @@
+return {
+  after = "nvim-cmp",
+}

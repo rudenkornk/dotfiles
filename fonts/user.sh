@@ -15,5 +15,5 @@ mv "FiraCode/"*.otf ~/.local/share/fonts
 rm "FiraCode.zip"
 rm "FiraCode/"*
 rmdir "FiraCode"
-#fc-cache -f -v
+fc-cache -f -v
 

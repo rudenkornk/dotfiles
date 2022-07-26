@@ -58,6 +58,12 @@ M.lspconfig = {
       end,
       "  goto_next",
     },
+    ["gt"] = {
+      function()
+        vim.lsp.buf.type_definition()
+      end,
+      "  type definition",
+    },
   },
 }
 

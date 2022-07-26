@@ -24,6 +24,7 @@ M.user = {
   ["roxma/vim-tmux-clipboard"] = {},
   ["simrat39/symbols-outline.nvim"] = require("custom/plugins/symbols-outline"),
   ["stevearc/aerial.nvim"] = require("custom/plugins/aerial"),
+  ["weilbith/nvim-code-action-menu"] = require("custom/plugins/code-action-menu"),
 }
 
 return M

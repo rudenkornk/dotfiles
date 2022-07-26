@@ -24,5 +24,5 @@ git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
 # Reload shell
 ```
 `WARNING:` do not run make as sudo, or it will install configs for root user.
-Instead, either enter sudo password when requested, or ask system administrator to install necessary packages and then run `make user_config`.
+Instead, either enter sudo password when requested, or ask system administrator to install necessary packages and then run `make config_user`.
 

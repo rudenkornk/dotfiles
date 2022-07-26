@@ -54,7 +54,6 @@ config_gui_system: \
 config_gui_user: \
 	fonts_user \
 	mouse_user \
-	onehalf_user \
 
 .PHONY: checkout_projects
 checkout_projects: $(BUILD_DIR)/checkout_projects
@@ -182,10 +181,6 @@ fonts_user:
 .PHONY: mouse_user
 mouse_user:
 	scripts/config_user.sh mouse
-
-.PHONY: onehalf_user
-onehalf_user:
-	scripts/config_user.sh onehalf
 
 $(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
 	./scripts/checkout_projects.sh

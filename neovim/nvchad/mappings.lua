@@ -33,6 +33,12 @@ M.layout = {
   },
 }
 
+M.aerial = {
+  n = {
+    ["<leader>o"] = { "<CMD>AerialToggle<CR>", "ƒ  Code outline" },
+  },
+}
+
 M.trouble = {
   n = {
     ["<leader>q"] = { "<CMD>TroubleToggle<CR>", "  diagnostic list" },

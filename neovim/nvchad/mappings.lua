@@ -62,6 +62,20 @@ M.trouble = {
   },
 }
 
+M.goto_preview = {
+  n = {
+    ["gpd"] = { "<CMD>lua require('goto-preview').goto_preview_definition()<CR>", "  preview definition" },
+    ["gpt"] = {
+      "<CMD>lua require('goto-preview').goto_preview_type_definition()<CR>",
+      "  preview type definition",
+    },
+    ["gpi"] = { "<CMD>lua require('goto-preview').goto_preview_implementation()<CR>", "  preview implementation" },
+    ["gq"] = { "<CMD>lua require('goto-preview').close_all_win()<CR>", "  close previews" },
+    -- does not work
+    ["gpr"] = { "<CMD>lua require('goto-preview').goto_preview_references()<CR>", "  preview references" },
+  },
+}
+
 M.lspconfig = {
   n = {
     ["]d"] = {

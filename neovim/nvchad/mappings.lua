@@ -36,11 +36,11 @@ M.layout = {
 M.trouble = {
   n = {
     ["<leader>q"] = { "<CMD>TroubleToggle<CR>", "  diagnostic list" },
+    ["gr"] = { "<CMD>TroubleToggle lsp_references<CR>", "  lsp references" },
     ["<leader>xw"] = { "<CMD>TroubleToggle workspace_diagnostics<CR>", "  workspace diagnostic list" },
     ["<leader>xd"] = { "<CMD>TroubleToggle document_diagnostics<CR>", "  document diagnostic list" },
     ["<leader>xq"] = { "<CMD>TroubleToggle quickfix<CR>", "  quickfix list" },
     ["<leader>xl"] = { "<CMD>TroubleToggle loclist<CR>", "  location list" },
-    ["gr"] = { "<CMD>TroubleToggle lsp_references<CR>", "  lsp references" },
   },
 }
 

@@ -22,6 +22,7 @@ M.user = {
   ["neovim/nvim-lspconfig"] = require("custom/plugins/lspconfig"),
   ["numToStr/Navigator.nvim"] = require("custom/plugins/Navigator"),
   ["roxma/vim-tmux-clipboard"] = {},
+  ["simrat39/symbols-outline.nvim"] = require("custom/plugins/symbols-outline"),
   ["stevearc/aerial.nvim"] = require("custom/plugins/aerial"),
 }
 

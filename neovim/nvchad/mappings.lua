@@ -39,6 +39,12 @@ M.aerial = {
   },
 }
 
+M.symbols_outline = {
+  n = {
+    ["<leader>s"] = { "<CMD>SymbolsOutline<CR>", "  symbols outline" },
+  },
+}
+
 M.trouble = {
   n = {
     ["<leader>q"] = { "<CMD>TroubleToggle<CR>", "  diagnostic list" },

@@ -19,8 +19,9 @@ make config
 
 ## Bootstrap
 ```bash
-git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
-  cd ~/projects/dotfiles && sudo apt-get install make && make config
+sudo apt-get install git make && \
+  git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
+  cd ~/projects/dotfiles && make config
 # Reload shell
 ```
 `WARNING:` do not run make as sudo, or it will install configs for root user.

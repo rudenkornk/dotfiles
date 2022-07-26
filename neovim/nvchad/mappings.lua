@@ -45,6 +45,12 @@ M.symbols_outline = {
   },
 }
 
+M.code_action_menu = {
+  n = {
+    ["<leader>ca"] = { "<CMD>CodeActionMenu<CR>", "  code actions" },
+  },
+}
+
 M.trouble = {
   n = {
     ["<leader>q"] = { "<CMD>TroubleToggle<CR>", "  diagnostic list" },

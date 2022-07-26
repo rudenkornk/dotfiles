@@ -33,6 +33,17 @@ M.layout = {
   },
 }
 
+M.lspconfig = {
+  n = {
+    ["]d"] = {
+      function()
+        vim.diagnostic.goto_next()
+      end,
+      " goto_next",
+    },
+  },
+}
+
 M.tabufline = {
   n = {
     ["<leader>tp"] = { "<CMD> Tbufnext <CR>", " goto next buffer" },

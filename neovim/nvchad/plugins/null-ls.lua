@@ -48,9 +48,6 @@ return {
       null_ls.builtins.code_actions.shellcheck,
       null_ls.builtins.formatting.shfmt,
       null_ls.builtins.diagnostics.shellcheck.with({ diagnostics_format = "#{m} [#{c}]" }),
-
-      -- snippets
-      null_ls.builtins.completion.luasnip,
     }
     null_ls.setup({
       sources = sources,

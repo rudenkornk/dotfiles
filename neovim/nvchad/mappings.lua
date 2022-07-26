@@ -35,8 +35,8 @@ M.layout = {
 
 M.tabufline = {
   n = {
-    ["<leader>tp"] = { "<CMD> Tbufnext <CR>", "  goto next buffer" },
-    ["<leader>tn"] = { "<CMD> Tbufprev <CR>", "  goto prev buffer" },
+    ["<leader>tp"] = { "<CMD> Tbufnext <CR>", " goto next buffer" },
+    ["<leader>tn"] = { "<CMD> Tbufprev <CR>", " goto prev buffer" },
   },
 }
 

@@ -13,6 +13,7 @@ M.remove = {}
 M.user = {
   ["RRethy/vim-illuminate"] = require("custom/plugins/illuminate"),
   ["andersevenrud/cmp-tmux"] = require("custom/plugins/cmp-tmux"),
+  ["folke/trouble.nvim"] = require("custom/plugins/trouble"),
   ["godlygeek/tabular"] = require("custom/plugins/tabular"),
   ["jose-elias-alvarez/null-ls.nvim"] = require("custom/plugins/null-ls"),
   ["kylechui/nvim-surround"] = require("custom/plugins/surround"),

@@ -21,6 +21,7 @@ M.user = {
   ["max397574/better-escape.nvim"] = require("custom/plugins/better-escape"),
   ["neovim/nvim-lspconfig"] = require("custom/plugins/lspconfig"),
   ["numToStr/Navigator.nvim"] = require("custom/plugins/Navigator"),
+  ["rmagatti/goto-preview"] = require("custom/plugins/goto-preview"),
   ["roxma/vim-tmux-clipboard"] = {},
   ["simrat39/symbols-outline.nvim"] = require("custom/plugins/symbols-outline"),
   ["stevearc/aerial.nvim"] = require("custom/plugins/aerial"),

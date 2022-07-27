@@ -9,7 +9,7 @@ local colors = {
   ["dark"] = {
     illuminate = {
       fg = "cyan",
-      bg = "lightbg",
+      bg = "one_bg2",
     },
     spaces = {
       bg = "grey",
@@ -21,7 +21,7 @@ local colors = {
   ["light"] = {
     illuminate = {
       fg = "cyan",
-      bg = "lightbg",
+      bg = "one_bg2",
     },
     spaces = {
       bg = "yellow",

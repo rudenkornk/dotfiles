@@ -1,6 +1,6 @@
 return {
   module = "illuminate",
-  config = function()
+  setup = function()
     -- does not work :(
     vim.g.Illuminate_highlightUnderCursor = 0
     local autocmd = vim.api.nvim_create_autocmd

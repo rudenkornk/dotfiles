@@ -17,6 +17,7 @@ return {
       "perlnavigator",
       "powershell_es",
       "pylsp",
+      "sumneko_lua",
       "texlab",
       "yamlls",
     }
@@ -29,6 +30,24 @@ return {
       end
       local capabilities = nvchad.capabilities
       local settings = {}
+      if lsp == "sumneko_lua" then
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+            workspace = {
+              library = {
+                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+              },
+              maxPreload = 100000,
+              preloadFileSize = 10000,
+            },
+          },
+        }
+      end
+
       lspconfig[lsp].setup({
         on_attach = on_attach,
         capabilities = capabilities,

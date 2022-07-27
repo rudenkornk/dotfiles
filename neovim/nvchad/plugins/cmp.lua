@@ -2,6 +2,7 @@ return function()
   local cmp = require("cmp")
   return {
     sources = {
+      { name = "copilot" },
       { name = "buffer" },
       { name = "git" },
       { name = "luasnip" },
@@ -16,6 +17,11 @@ return function()
         local icons = require("nvchad_ui.icons").lspkind
         local kind = vim_item.kind
         local icon = icons[kind]
+        if entry.source.name == "copilot" then
+          kind = "Copilot"
+          icon = " "
+          vim_item.kind_hl_group = "CmpItemKindCopilot"
+        end
         vim_item.kind = string.format("%s %s", icon, kind)
         return vim_item
       end,
@@ -23,6 +29,8 @@ return function()
     sorting = {
       priority_weight = 2,
       comparators = {
+        require("copilot_cmp.comparators").prioritize,
+        require("copilot_cmp.comparators").score,
         cmp.config.compare.offset,
         cmp.config.compare.exact,
         -- cmp.config.compare.scopes,

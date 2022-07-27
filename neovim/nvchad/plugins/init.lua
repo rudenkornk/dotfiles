@@ -29,6 +29,8 @@ M.user = {
   ["simrat39/symbols-outline.nvim"] = require("custom/plugins/symbols-outline"),
   ["stevearc/aerial.nvim"] = require("custom/plugins/aerial"),
   ["weilbith/nvim-code-action-menu"] = require("custom/plugins/code-action-menu"),
+  ["zbirenbaum/copilot-cmp"] = require("custom/plugins/copilot-cmp"),
+  ["zbirenbaum/copilot.lua"] = require("custom/plugins/copilot"),
 }
 
 return M

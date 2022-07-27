@@ -14,6 +14,9 @@ local colors = {
     spaces = {
       bg = "grey",
     },
+    copilot = {
+      fg = "blue",
+    },
   },
   ["light"] = {
     illuminate = {
@@ -22,6 +25,9 @@ local colors = {
     },
     spaces = {
       bg = "yellow",
+    },
+    copilot = {
+      fg = "blue",
     },
   },
 }
@@ -41,6 +47,7 @@ return {
   },
   hl_add = {
     RedundantSpacesAndTabs = get_colors("spaces"),
+    CmpItemKindCopilot = get_colors("copilot"),
   },
   transparency = false,
 }

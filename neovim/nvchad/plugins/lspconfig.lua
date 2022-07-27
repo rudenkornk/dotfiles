@@ -23,12 +23,16 @@ return {
     nvchad.capabilities.offsetEncoding = { "utf-16" }
 
     for _, lsp in ipairs(servers) do
+      local on_attach = function(client, bufnr)
+        nvchad.on_attach(client, bufnr)
+        require("illuminate").on_attach(client)
+      end
+      local capabilities = nvchad.capabilities
+      local settings = {}
       lspconfig[lsp].setup({
-        on_attach = function(client, bufnr)
-          nvchad.on_attach(client, bufnr)
-          require("illuminate").on_attach(client)
-        end,
-        capabilities = nvchad.capabilities,
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = settings,
       })
     end
   end,

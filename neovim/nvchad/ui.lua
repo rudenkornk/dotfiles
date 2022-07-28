@@ -32,7 +32,7 @@ local colors = {
     nvim_lua_cmp = { fg = "yellow" },
     path_cmp = { fg = "white" },
     rg_cmp = { fg = "green" },
-    spaces = { bg = "yellow" },
+    spaces = { bg = "grey" },
     tabnine_cmp = { fg = "dark_purple" },
     tmux_tmp = { fg = "green" },
   },

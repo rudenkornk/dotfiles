@@ -1,6 +1,6 @@
 local themes = {
-  ["dark"] = "onedark",
-  ["light"] = "one_light",
+  ["dark"] = "radium",
+  ["light"] = "catppuccin_latte",
 }
 local kind = "dark"
 local theme_name = themes[kind]

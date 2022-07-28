@@ -68,7 +68,7 @@ return function()
         if entry.source.name == "copilot" then
           kind = "Copilot"
           icon = " "
-          vim_item.kind_hl_group = "CmpItemKindCopilot"
+          vim_item.kind_hl_group = "CmpItemMenuCopilot"
         end
         vim_item.kind = string.format("%s %s", icon, kind)
         return vim_item

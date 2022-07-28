@@ -32,7 +32,7 @@ return {
     LspReferenceWrite = get_colors("illuminate"),
   },
   hl_add = {
-    CmpItemKindCopilot = get_colors("copilot_cmp"),
+    CmpItemMenuCopilot = get_colors("copilot_cmp"),
     RedundantSpacesAndTabs = get_colors("spaces"),
   },
   transparency = false,

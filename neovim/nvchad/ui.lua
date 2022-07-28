@@ -18,6 +18,7 @@ local colors = {
     path_cmp = { fg = "while" },
     rg_cmp = { fg = "green" },
     spaces = { bg = "grey" },
+    tabnine_cmp = { fg = "dark_purple" },
     tmux_tmp = { fg = "green" },
   },
   light = {
@@ -32,6 +33,7 @@ local colors = {
     path_cmp = { fg = "while" },
     rg_cmp = { fg = "green" },
     spaces = { bg = "yellow" },
+    tabnine_cmp = { fg = "dark_purple" },
     tmux_tmp = { fg = "green" },
   },
 }
@@ -59,6 +61,7 @@ return {
     CmpItemMenuNeovimLua = get_colors("nvim_lua_cmp"),
     CmpItemMenuPath = get_colors("path_cmp"),
     CmpItemMenuRipGrep = get_colors("rg_cmp"),
+    CmpItemMenuTabnine = get_colors("tabnine_cmp"),
     CmpItemMenuTmux = get_colors("tmux_tmp"),
     RedundantSpacesAndTabs = get_colors("spaces"),
   },

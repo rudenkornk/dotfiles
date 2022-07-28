@@ -7,6 +7,7 @@ return function()
   local sources = {
     buffer = { display_name = "buffer", icon = "", menu_hl = "CmpItemMenuBuffer" },
     cmdline = { display_name = "cmdline", icon = "", menu_hl = "CmpItemCmdLine" },
+    cmp_tabnine = { display_name = "tabnine", icon = "", menu_hl = "CmpItemMenuTabnine" },
     copilot = { display_name = "copilot", icon = "", menu_hl = "CmpItemMenuCopilot" },
     git = { display_name = "git", icon = "", menu_hl = "CmpItemMenuGit" },
     luasnip = { display_name = "luasnip", icon = "", menu_hl = "CmpItemMenuLuasnip" },
@@ -20,7 +21,7 @@ return function()
     local source_name = entry.source.name
     local kind = vim_item.kind
     local menu = string.format("%s %s", sources[source_name].icon, sources[source_name].display_name)
-    if source_name == "copilot" then
+    if source_name == "copilot" or source_name == "cmp_tabnine" then
       kind = "AI"
       vim_item.kind_hl_group = sources[source_name].menu_hl
       if vim_item.menu then
@@ -36,6 +37,7 @@ return function()
   end
 
   -- comparators
+  local tabnine_loaded, tabnine = pcall(require, "cmp_tabnine")
   local copilot_loaded, copilot_compare = pcall(require, "copilot_cmp.comparators")
   local cmp_compare = require("cmp.config.compare")
   local comparators = {
@@ -50,6 +52,9 @@ return function()
     cmp_compare.length,
     cmp_compare.order,
   }
+  if tabnine_loaded then
+    table.insert(comparators, 1, tabnine.compare)
+  end
   if copilot_loaded then
     table.insert(comparators, 1, copilot_compare.score)
     table.insert(comparators, 1, copilot_compare.prioritize)
@@ -85,6 +90,7 @@ return function()
     mapping = mapping,
     sources = {
       { name = "copilot" },
+      { name = "cmp_tabnine" },
       { name = "nvim_lsp" },
       { name = "nvim_lua" },
       { name = "luasnip" },

@@ -15,6 +15,9 @@ augroup END
 vim.g.nobackup = true
 vim.g.nowritebackup = true
 
+vim.g.notimeout = true
+vim.g.nottimeout = true
+
 -- Setup gdb
 vim.cmd([[ packadd termdebug ]])
 vim.g.termdebug_wide = 163

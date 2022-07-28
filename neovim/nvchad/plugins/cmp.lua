@@ -85,14 +85,14 @@ return function()
     mapping = mapping,
     sources = {
       { name = "copilot" },
-      { name = "buffer" },
-      { name = "git" },
-      { name = "luasnip" },
       { name = "nvim_lsp" },
       { name = "nvim_lua" },
+      { name = "luasnip" },
+      { name = "buffer" },
+      { name = "git" },
       { name = "path" },
-      { name = "rg" },
       { name = "tmux" },
+      { name = "rg" },
     },
     formatting = {
       format = format,

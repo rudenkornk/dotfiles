@@ -6,29 +6,15 @@ local kind = "dark"
 local theme_name = themes[kind]
 
 local colors = {
-  ["dark"] = {
-    illuminate = {
-      fg = "cyan",
-      bg = "one_bg2",
-    },
-    spaces = {
-      bg = "grey",
-    },
-    copilot = {
-      fg = "blue",
-    },
+  dark = {
+    copilot_cmp = { fg = "blue" },
+    illuminate = { fg = "cyan", bg = "one_bg2" },
+    spaces = { bg = "grey" },
   },
-  ["light"] = {
-    illuminate = {
-      fg = "cyan",
-      bg = "one_bg2",
-    },
-    spaces = {
-      bg = "yellow",
-    },
-    copilot = {
-      fg = "blue",
-    },
+  light = {
+    copilot_cmp = { fg = "blue" },
+    illuminate = { fg = "cyan", bg = "one_bg2" },
+    spaces = { bg = "yellow" },
   },
 }
 
@@ -46,8 +32,8 @@ return {
     LspReferenceWrite = get_colors("illuminate"),
   },
   hl_add = {
+    CmpItemKindCopilot = get_colors("copilot_cmp"),
     RedundantSpacesAndTabs = get_colors("spaces"),
-    CmpItemKindCopilot = get_colors("copilot"),
   },
   transparency = false,
 }

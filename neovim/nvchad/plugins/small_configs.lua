@@ -39,7 +39,7 @@ M.cmp_tabnine = {
   config = function()
     local tabnine = require("cmp_tabnine.config")
     tabnine:setup({
-      max_num_results = 4,
+      max_num_results = 2,
       show_prediction_strength = true,
     })
   end,

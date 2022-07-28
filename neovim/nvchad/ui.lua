@@ -10,6 +10,7 @@ local colors = {
     buffer_cmp = { fg = "green" },
     cmdline_cmp = { fg = "purple" },
     copilot_cmp = { fg = "blue" },
+    focused_symbol = {},
     git_cmp = { fg = "green" },
     illuminate = { fg = "cyan", bg = "one_bg2" },
     lsp_cmp = { fg = "yellow" },
@@ -25,6 +26,7 @@ local colors = {
     buffer_cmp = { fg = "green" },
     cmdline_cmp = { fg = "purple" },
     copilot_cmp = { fg = "blue" },
+    focused_symbol = {},
     git_cmp = { fg = "green" },
     illuminate = { fg = "cyan", bg = "one_bg2" },
     lsp_cmp = { fg = "yellow" },
@@ -52,6 +54,7 @@ return {
     LspReferenceWrite = get_colors("illuminate"),
   },
   hl_add = {
+    FocusedSymbol = get_colors("focused_symbol"),
     CmpItemMenuBuffer = get_colors("buffer_cmp"),
     CmpItemMenuCmdLine = get_colors("cmdline_cmp"),
     CmpItemMenuCopilot = get_colors("copilot_cmp"),

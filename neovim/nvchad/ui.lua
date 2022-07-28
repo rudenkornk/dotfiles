@@ -41,9 +41,9 @@ return {
   theme = theme_name,
   theme_toggle = { themes.dark, themes.light },
   hl_override = {
+    LspReferenceRead = get_colors("illuminate"),
     LspReferenceText = get_colors("illuminate"),
     LspReferenceWrite = get_colors("illuminate"),
-    LspReferenceRead = get_colors("illuminate"),
   },
   hl_add = {
     RedundantSpacesAndTabs = get_colors("spaces"),

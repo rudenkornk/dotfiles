@@ -10,7 +10,7 @@ Simple repo for setting up new system or user.
 make in_docker TARGET=config
 ```
 
-### Option 2: Use docker container interactively:
+### Option 2: Use docker container interactively
 ```bash
 make dotfiles_container
 docker attach dotfiles_container

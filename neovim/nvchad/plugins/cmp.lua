@@ -1,5 +1,23 @@
 return function()
   local cmp = require("cmp")
+
+  -- comparators
+  local cmp_compare = require("cmp.config.compare")
+  local comparators = {
+    require("copilot_cmp.comparators").prioritize,
+    require("copilot_cmp.comparators").score,
+    cmp_compare.offset,
+    cmp_compare.exact,
+    -- cmp_compare.scopes,
+    cmp_compare.score,
+    cmp_compare.recently_used,
+    cmp_compare.locality,
+    cmp_compare.kind,
+    cmp_compare.sort_text,
+    cmp_compare.length,
+    cmp_compare.order,
+  }
+
   -- setup
   cmp.setup.cmdline("/", {
     mapping = require("cmp").mapping.preset.cmdline(),
@@ -45,20 +63,7 @@ return function()
     },
     sorting = {
       priority_weight = 2,
-      comparators = {
-        require("copilot_cmp.comparators").prioritize,
-        require("copilot_cmp.comparators").score,
-        cmp.config.compare.offset,
-        cmp.config.compare.exact,
-        -- cmp.config.compare.scopes,
-        cmp.config.compare.score,
-        cmp.config.compare.recently_used,
-        cmp.config.compare.locality,
-        cmp.config.compare.kind,
-        cmp.config.compare.sort_text,
-        cmp.config.compare.length,
-        cmp.config.compare.order,
-      },
+      comparators = comparators,
     },
   }
 end

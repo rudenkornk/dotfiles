@@ -5,6 +5,8 @@ return function()
     mapping = require("cmp").mapping.preset.cmdline(),
     sources = {
       { name = "buffer" },
+      { name = "tmux" },
+      { name = "rg" },
     },
   })
   cmp.setup.cmdline(":", {
@@ -12,6 +14,7 @@ return function()
     sources = {
       { name = "cmdline" },
       { name = "path" },
+      { name = "tmux" },
     },
   })
   return {

@@ -21,6 +21,15 @@ return function()
     table.insert(comparators, 1, copilot_compare.prioritize)
   end
 
+  -- mapping
+  local map_funcs = cmp.mapping
+  local mapping = {
+    ["<C-f>"] = map_funcs.scroll_docs(8),
+    ["<C-b>"] = map_funcs.scroll_docs(-8),
+    ["<C-d>"] = map_funcs.scroll_docs(4),
+    ["<C-u>"] = map_funcs.scroll_docs(-4),
+  }
+
   -- setup
   cmp.setup.cmdline("/", {
     mapping = require("cmp").mapping.preset.cmdline(),
@@ -39,6 +48,7 @@ return function()
     },
   })
   return {
+    mapping = mapping,
     sources = {
       { name = "copilot" },
       { name = "buffer" },

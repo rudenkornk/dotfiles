@@ -2,10 +2,9 @@ return function()
   local cmp = require("cmp")
 
   -- comparators
+  local copilot_loaded, copilot_compare = pcall(require, "copilot_cmp.comparators")
   local cmp_compare = require("cmp.config.compare")
   local comparators = {
-    require("copilot_cmp.comparators").prioritize,
-    require("copilot_cmp.comparators").score,
     cmp_compare.offset,
     cmp_compare.exact,
     -- cmp_compare.scopes,
@@ -17,6 +16,10 @@ return function()
     cmp_compare.length,
     cmp_compare.order,
   }
+  if copilot_loaded then
+    table.insert(comparators, 1, copilot_compare.score)
+    table.insert(comparators, 1, copilot_compare.prioritize)
+  end
 
   -- setup
   cmp.setup.cmdline("/", {

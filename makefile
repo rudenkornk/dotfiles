@@ -36,6 +36,7 @@ config_user: \
 	git_user \
 	go_user \
 	latexindent_user \
+	lua_user \
 	neovim_user \
 	nodejs_user \
 	python_user \
@@ -149,6 +150,10 @@ go_user:
 .PHONY: latexindent_user
 latexindent_user:
 	scripts/config_user.sh latexindent
+
+.PHONY: lua_user
+lua_user:
+	scripts/config_user.sh lua
 
 .PHONY: neovim_user
 neovim_user: python_user nodejs_user go_user rust_user

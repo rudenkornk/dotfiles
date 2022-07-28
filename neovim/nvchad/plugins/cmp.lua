@@ -1,6 +1,40 @@
 return function()
   local cmp = require("cmp")
 
+  -- format
+  local token_icons = require("nvchad_ui.icons").lspkind
+  token_icons["AI"] = "ﱦ "
+  local sources = {
+    buffer = { display_name = "buffer", icon = "", menu_hl = "CmpItemMenuBuffer" },
+    cmdline = { display_name = "cmdline", icon = "", menu_hl = "CmpItemCmdLine" },
+    copilot = { display_name = "copilot", icon = "", menu_hl = "CmpItemMenuCopilot" },
+    git = { display_name = "git", icon = "", menu_hl = "CmpItemMenuGit" },
+    luasnip = { display_name = "luasnip", icon = "", menu_hl = "CmpItemMenuLuasnip" },
+    nvim_lsp = { display_name = "lsp", icon = "", menu_hl = "CmpItemMenuLSP" },
+    nvim_lua = { display_name = "neovim lua", icon = "", menu_hl = "CmpItemMenuNeovimLua" },
+    path = { display_name = "path", icon = "פּ", menu_hl = "CmpItemMenuPath" },
+    rg = { display_name = "rg", icon = "", menu_hl = "CmpItemMenuRipGrep" },
+    tmux = { display_name = "tmux", icon = "", menu_hl = "CmpItemMenuTmux" },
+  }
+  local format = function(entry, vim_item)
+    local source_name = entry.source.name
+    local kind = vim_item.kind
+    local menu = string.format("%s %s", sources[source_name].icon, sources[source_name].display_name)
+    if source_name == "copilot" then
+      kind = "AI"
+      vim_item.kind_hl_group = sources[source_name].menu_hl
+      if vim_item.menu then
+        menu = menu .. " " .. vim_item.menu
+      end
+    end
+    local icon = token_icons[kind]
+    vim_item.kind = string.format("%s %s", icon, kind)
+    vim_item.menu = menu
+    vim_item.menu_hl_group = sources[source_name].menu_hl
+    vim_item.abbr = string.sub(vim_item.abbr, 1, 50)
+    return vim_item
+  end
+
   -- comparators
   local copilot_loaded, copilot_compare = pcall(require, "copilot_cmp.comparators")
   local cmp_compare = require("cmp.config.compare")
@@ -61,18 +95,7 @@ return function()
       { name = "tmux" },
     },
     formatting = {
-      format = function(entry, vim_item)
-        local icons = require("nvchad_ui.icons").lspkind
-        local kind = vim_item.kind
-        local icon = icons[kind]
-        if entry.source.name == "copilot" then
-          kind = "Copilot"
-          icon = " "
-          vim_item.kind_hl_group = "CmpItemMenuCopilot"
-        end
-        vim_item.kind = string.format("%s %s", icon, kind)
-        return vim_item
-      end,
+      format = format,
     },
     sorting = {
       priority_weight = 2,

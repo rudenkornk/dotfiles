@@ -20,6 +20,7 @@ SELF_PATH=$(realpath "$(dirname "$0")")
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/go/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export GOPATH="$HOME/.local/go"
 
 go install github.com/rhysd/actionlint/cmd/actionlint@latest
 

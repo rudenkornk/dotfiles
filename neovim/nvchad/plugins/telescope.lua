@@ -7,5 +7,6 @@ return {
         ["<C-a>"] = { "<ESC>^Wi", type = "command" },
       },
     },
+    scroll_strategy = "limit",
   },
 }

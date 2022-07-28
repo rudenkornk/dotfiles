@@ -192,7 +192,7 @@ $(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 .PHONY: check
-check: config
+check:
 
 .PHONY: clean
 clean:

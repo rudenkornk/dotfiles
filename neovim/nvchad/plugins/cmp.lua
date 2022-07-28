@@ -1,5 +1,19 @@
 return function()
   local cmp = require("cmp")
+  -- setup
+  cmp.setup.cmdline("/", {
+    mapping = require("cmp").mapping.preset.cmdline(),
+    sources = {
+      { name = "buffer" },
+    },
+  })
+  cmp.setup.cmdline(":", {
+    mapping = require("cmp").mapping.preset.cmdline(),
+    sources = {
+      { name = "cmdline" },
+      { name = "path" },
+    },
+  })
   return {
     sources = {
       { name = "copilot" },

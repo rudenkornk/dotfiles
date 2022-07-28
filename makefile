@@ -83,7 +83,7 @@ git_system:
 	sudo scripts/config_system.sh git
 
 .PHONY: lua_system
-lua_system:
+lua_system: common_utils_system
 	sudo scripts/config_system.sh lua
 
 .PHONY: neovim_system

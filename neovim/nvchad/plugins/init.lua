@@ -18,6 +18,7 @@ M.user = {
   ["hrsh7th/cmp-cmdline"] = require("custom/plugins/cmp-cmdline"),
   ["jose-elias-alvarez/null-ls.nvim"] = require("custom/plugins/null-ls"),
   ["kylechui/nvim-surround"] = require("custom/plugins/surround"),
+  ["lewis6991/gitsigns.nvim"] = require("custom/plugins/gitsigns"),
   ["lukas-reineke/cmp-rg"] = require("custom/plugins/cmp-rg"),
   ["max397574/better-escape.nvim"] = require("custom/plugins/better-escape"),
   ["neovim/nvim-lspconfig"] = require("custom/plugins/lspconfig"),

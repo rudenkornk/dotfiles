@@ -1,6 +1,7 @@
 return {
   ensure_installed = {
     "bash-language-server",
+    "clang-format",
     "clangd",
     "cmake-language-server",
     "cmakelang",

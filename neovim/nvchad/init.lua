@@ -5,6 +5,11 @@ vim.o.imsearch = -1
 
 vim.g.fileignorecase = true
 
+vim.api.nvim_create_autocmd("VimLeave", {
+  pattern = "*",
+  command = "set guicursor=a:ver10",
+})
+
 vim.g.nobackup = true
 vim.g.nowritebackup = true
 

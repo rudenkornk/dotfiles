@@ -4,6 +4,7 @@ local small_configs = require("custom/plugins/small_configs")
 M.override = {
   ["NvChad/ui"] = require("custom/plugins/ui"),
   ["hrsh7th/nvim-cmp"] = require("custom/plugins/cmp"),
+  ["kyazdani42/nvim-tree.lua"] = small_configs.nvimtree,
   ["lukas-reineke/indent-blankline.nvim"] = small_configs.indent_blankline,
   ["nvim-telescope/telescope.nvim"] = small_configs.telescope,
   ["nvim-treesitter/nvim-treesitter"] = require("custom/plugins/treesitter"),

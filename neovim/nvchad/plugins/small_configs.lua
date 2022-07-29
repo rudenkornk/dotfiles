@@ -107,6 +107,12 @@ M.navigator = {
   end,
 }
 
+M.nvimtree = {
+  renderer = {
+    symlink_destination = false,
+  },
+}
+
 M.surround = {
   keys = { "c", "d", "y" },
   config = function()

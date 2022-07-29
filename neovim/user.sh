@@ -50,10 +50,10 @@ ln --symbolic --force "$SELF_PATH/nvchad" ~/.config/nvim/lua/custom
 
 mkdir --parents ~/.local/share/nvim/site/pack/packer/opt/ui
 mkdir --parents ~/.local/share/nvim/site/pack/packer/opt/extensions
-# TODO
 # Also, please see https://github.com/zbirenbaum/copilot.lua#preliminary-steps
-#nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-#nvim --headless -c 'MasonInstallAll'
+fish --command "nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
+fish --command "nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
+#fish --command "nvim --headless -c 'MasonInstallAll'"
 
 "$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"
 

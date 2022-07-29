@@ -50,6 +50,7 @@
 
 [core]
     editor = nvim
+    pager = bat --plain
 [credentials]
     helper = store
 [init]

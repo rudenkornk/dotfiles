@@ -11,7 +11,7 @@ local function convert_to_windows_terminal(name, theme)
     foreground = "white",
     cursorColor = "white",
     black = "black",
-    brightBlack = "black2",
+    brightBlack = "grey",
     white = "light_grey",
     brightWhite = "white",
     blue = "blue",

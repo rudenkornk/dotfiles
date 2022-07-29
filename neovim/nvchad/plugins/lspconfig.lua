@@ -16,7 +16,6 @@ return {
       "opencl_ls",
       "perlnavigator",
       "powershell_es",
-      "pylsp",
       "sumneko_lua",
       "texlab",
       "yamlls",

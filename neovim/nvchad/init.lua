@@ -4,13 +4,6 @@ vim.o.iminsert = 0
 vim.o.imsearch = -1
 
 vim.g.fileignorecase = true
-vim.cmd([[
-augroup dynamic_smartcase
-    autocmd!
-    autocmd CmdLineEnter : set nosmartcase
-    autocmd CmdLineLeave : set smartcase
-augroup END
-]])
 
 vim.g.nobackup = true
 vim.g.nowritebackup = true

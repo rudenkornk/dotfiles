@@ -1,5 +1,5 @@
 local themes = {
-  ["dark"] = "monekai",
+  ["dark"] = "radium",
   ["light"] = "catppuccin_latte",
 }
 local kind = "dark"

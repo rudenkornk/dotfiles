@@ -12,6 +12,7 @@
     llg = log --oneline --graph
     mb = merge-base
     rb = rebase
+    rbi = rebase --interactive HEAD~26 # mid of the page is exactly at the last commit
     rv = remote -v
     sg = diff --staged
     sh = show

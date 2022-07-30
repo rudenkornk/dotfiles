@@ -197,7 +197,13 @@ $(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 .PHONY: check
-check:
+check: \
+	check_git_status \
+
+.PHONY: check_git_status
+check_git_status:
+	[[ -z $$(git status --porcelain) ]] || exit 1
+
 
 .PHONY: clean
 clean:

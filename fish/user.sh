@@ -9,10 +9,12 @@ REPO_PATH=$(realpath "$(dirname "$0")/..")
 SELF_PATH=$(realpath "$(dirname "$0")")
 
 mkdir --parents ~/.config/fish
-ln --symbolic --force "$SELF_PATH/fish_plugins" ~/.config/fish/fish_plugins
 
 mkdir --parents ~/.config/fish/functions
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish &> ~/.config/fish/functions/fisher.fish
+# Unlink fish_plugins, so that fisher will not overrite it
+rm --force ~/.config/fish/fish_plugins
+fish --command "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
+ln --symbolic --force "$SELF_PATH/fish_plugins" ~/.config/fish/fish_plugins
 fish --command "fisher update"
 
 # Configure tide prompt

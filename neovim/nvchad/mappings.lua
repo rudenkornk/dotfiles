@@ -101,6 +101,26 @@ M.navigator = {
   },
 }
 
+M.nvterm = {
+  t = {
+    ["<A-f>"] = {
+      function()
+        require("nvterm.terminal").toggle("float")
+      end,
+      "  toggle floating term",
+    },
+  },
+
+  n = {
+    ["<A-f>"] = {
+      function()
+        require("nvterm.terminal").toggle("float")
+      end,
+      "  toggle floating term",
+    },
+  },
+}
+
 M.symbols_outline = {
   n = {
     ["<leader>s"] = { "<CMD>SymbolsOutline<CR>", "  symbols outline" },
@@ -120,8 +140,8 @@ M.termdebug = {
     ["<A-r>"] = { "<CMD>call TermDebugSendCommand('run')<CR>", "  Run" },
     ["<A-b>"] = { "<CMD>Break<CR>", "  Set breakpoint" },
     ["<A-j>"] = { "<CMD>call TermDebugSendCommand('next')<CR>", "  Step over" },
-    ["<A-k>"] = { "<CMD>call TermDebugSendCommand('step')<CR>", "  Step into" },
-    ["<A-o>"] = { "<CMD>call TermDebugSendCommand('finish')<CR>", "  Step out" },
+    ["<A-i>"] = { "<CMD>call TermDebugSendCommand('step')<CR>", "  Step into" },
+    ["<A-k>"] = { "<CMD>call TermDebugSendCommand('finish')<CR>", "  Step out" },
     ["<A-c>"] = { "<CMD>call TermDebugSendCommand('continue')<CR>", "懶  Continue" },
     ["<A-u>"] = { "<CMD>call TermDebugSendCommand('up')<CR>", "  Up stack" },
     ["<A-d>"] = { "<CMD>call TermDebugSendCommand('down')<CR>", "  Down stack" },
@@ -129,8 +149,8 @@ M.termdebug = {
   t = {
     ["<A-r>"] = { "<CMD>call TermDebugSendCommand('run')<CR>", "  Run" },
     ["<A-j>"] = { "<CMD>call TermDebugSendCommand('next')<CR>", "  Step over" },
-    ["<A-k>"] = { "<CMD>call TermDebugSendCommand('step')<CR>", "  Step into" },
-    ["<A-o>"] = { "<CMD>call TermDebugSendCommand('finish')<CR>", "  Step out" },
+    ["<A-i>"] = { "<CMD>call TermDebugSendCommand('step')<CR>", "  Step into" },
+    ["<A-k>"] = { "<CMD>call TermDebugSendCommand('finish')<CR>", "  Step out" },
     ["<A-c>"] = { "<CMD>call TermDebugSendCommand('continue')<CR>", "懶  Continue" },
     ["<A-u>"] = { "<CMD>call TermDebugSendCommand('up')<CR>", "  Up stack" },
     ["<A-d>"] = { "<CMD>call TermDebugSendCommand('down')<CR>", "  Down stack" },

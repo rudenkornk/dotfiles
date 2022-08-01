@@ -4,44 +4,9 @@ local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-M.disabled = {
-  n = {
-    ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
-    ["<S-b>"] = "", -- Unmap creating new buffer. This interferes with default <S-b> behaviour.
-  },
-}
-
-M.utils = {
-  n = {
-    ["<leader>vc"] = { "<CMD>%s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", "  Clear extra spaces" },
-  },
-  x = {
-    ["<leader>vc"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", "  Clear extra spaces" },
-    ["<leader>vt"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh | '<,'>Tabularize /\\s\\+/l0<CR>", "璘  Tabularize" },
-    ["<leader>vs"] = { ":sort<CR>", "  Sort" },
-  },
-}
-vim.o.pastetoggle = "<C-q>"
-vim.cmd([[ cnoremap <C-a> <HOME>]])
-
-M.layout = {
-  n = {
-    ["<C-g>"] = { "a<C-^><ESC>", "וּ  Toggle layout" },
-  },
-  i = {
-    ["<C-g>"] = { "<C-^>", "וּ  Toggle layout" },
-  },
-}
-
 M.aerial = {
   n = {
     ["<leader>o"] = { "<CMD>AerialToggle<CR>", "ƒ  Code outline" },
-  },
-}
-
-M.symbols_outline = {
-  n = {
-    ["<leader>s"] = { "<CMD>SymbolsOutline<CR>", "  symbols outline" },
   },
 }
 
@@ -51,14 +16,10 @@ M.code_action_menu = {
   },
 }
 
-M.trouble = {
+M.disabled = {
   n = {
-    ["<leader>q"] = { "<CMD>TroubleToggle<CR>", "  diagnostic list" },
-    ["gr"] = { "<CMD>TroubleToggle lsp_references<CR>", "  lsp references" },
-    ["<leader>xw"] = { "<CMD>TroubleToggle workspace_diagnostics<CR>", "  workspace diagnostic list" },
-    ["<leader>xd"] = { "<CMD>TroubleToggle document_diagnostics<CR>", "  document diagnostic list" },
-    ["<leader>xq"] = { "<CMD>TroubleToggle quickfix<CR>", "  quickfix list" },
-    ["<leader>xl"] = { "<CMD>TroubleToggle loclist<CR>", "  location list" },
+    ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
+    ["<S-b>"] = "", -- Unmap creating new buffer. This interferes with default <S-b> behaviour.
   },
 }
 
@@ -73,6 +34,32 @@ M.goto_preview = {
     ["gq"] = { "<CMD>lua require('goto-preview').close_all_win()<CR>", "  close previews" },
     -- does not work
     ["gpr"] = { "<CMD>lua require('goto-preview').goto_preview_references()<CR>", "  preview references" },
+  },
+}
+
+M.illuminate = {
+  i = {
+    ["<A-n>"] = { "<cmd>lua require('illuminate').next_reference{wrap=true}<CR>", "  Next reference" },
+    ["<A-p>"] = {
+      "<cmd>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>",
+      "  Previous reference",
+    },
+  },
+  n = {
+    ["<A-n>"] = { "<CMD>lua require('illuminate').next_reference{wrap=true}<CR>", "  Next reference" },
+    ["<A-p>"] = {
+      "<CMD>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>",
+      "  Previous reference",
+    },
+  },
+}
+
+M.layout = {
+  n = {
+    ["<C-g>"] = { "a<C-^><ESC>", "וּ  Toggle layout" },
+  },
+  i = {
+    ["<C-g>"] = { "<C-^>", "וּ  Toggle layout" },
   },
 }
 
@@ -93,14 +80,13 @@ M.lspconfig = {
   },
 }
 
-M.tabufline = {
-  n = {
-    ["<leader>tp"] = { "<CMD> Tbufnext <CR>", "  goto next buffer" },
-    ["<leader>tn"] = { "<CMD> Tbufprev <CR>", "  goto prev buffer" },
-  },
-}
-
 M.navigator = {
+  c = {
+    ["<C-h>"] = { "<CMD>NavigatorLeft<CR>", "  Left pane" },
+    ["<C-j>"] = { "<CMD>NavigatorDown<CR>", "  Lower pane" },
+    ["<C-k>"] = { "<CMD>NavigatorUp<CR>", "  Upper pane" },
+    ["<C-l>"] = { "<CMD>NavigatorRight<CR>", "  Right pane" },
+  },
   n = {
     ["<C-h>"] = { "<CMD>NavigatorLeft<CR>", "  Left pane" },
     ["<C-j>"] = { "<CMD>NavigatorDown<CR>", "  Lower pane" },
@@ -113,11 +99,18 @@ M.navigator = {
     ["<C-k>"] = { "<CMD>NavigatorUp<CR>", "  Upper pane" },
     ["<C-l>"] = { "<CMD>NavigatorRight<CR>", "  Right pane" },
   },
-  c = {
-    ["<C-h>"] = { "<CMD>NavigatorLeft<CR>", "  Left pane" },
-    ["<C-j>"] = { "<CMD>NavigatorDown<CR>", "  Lower pane" },
-    ["<C-k>"] = { "<CMD>NavigatorUp<CR>", "  Upper pane" },
-    ["<C-l>"] = { "<CMD>NavigatorRight<CR>", "  Right pane" },
+}
+
+M.symbols_outline = {
+  n = {
+    ["<leader>s"] = { "<CMD>SymbolsOutline<CR>", "  symbols outline" },
+  },
+}
+
+M.tabufline = {
+  n = {
+    ["<leader>tp"] = { "<CMD> Tbufnext <CR>", "  goto next buffer" },
+    ["<leader>tn"] = { "<CMD> Tbufprev <CR>", "  goto prev buffer" },
   },
 }
 
@@ -145,21 +138,28 @@ M.termdebug = {
   },
 }
 
-M.illuminate = {
+M.trouble = {
   n = {
-    ["<A-n>"] = { "<CMD>lua require('illuminate').next_reference{wrap=true}<CR>", "  Next reference" },
-    ["<A-p>"] = {
-      "<CMD>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>",
-      "  Previous reference",
-    },
-  },
-  i = {
-    ["<A-n>"] = { "<cmd>lua require('illuminate').next_reference{wrap=true}<CR>", "  Next reference" },
-    ["<A-p>"] = {
-      "<cmd>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>",
-      "  Previous reference",
-    },
+    ["<leader>q"] = { "<CMD>TroubleToggle<CR>", "  diagnostic list" },
+    ["gr"] = { "<CMD>TroubleToggle lsp_references<CR>", "  lsp references" },
+    ["<leader>xw"] = { "<CMD>TroubleToggle workspace_diagnostics<CR>", "  workspace diagnostic list" },
+    ["<leader>xd"] = { "<CMD>TroubleToggle document_diagnostics<CR>", "  document diagnostic list" },
+    ["<leader>xq"] = { "<CMD>TroubleToggle quickfix<CR>", "  quickfix list" },
+    ["<leader>xl"] = { "<CMD>TroubleToggle loclist<CR>", "  location list" },
   },
 }
+
+M.utils = {
+  n = {
+    ["<leader>vc"] = { "<CMD>%s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", "  Clear extra spaces" },
+  },
+  x = {
+    ["<leader>vc"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", "  Clear extra spaces" },
+    ["<leader>vt"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh | '<,'>Tabularize /\\s\\+/l0<CR>", "璘  Tabularize" },
+    ["<leader>vs"] = { ":sort<CR>", "  Sort" },
+  },
+}
+vim.o.pastetoggle = "<C-q>"
+vim.cmd([[ cnoremap <C-a> <HOME>]])
 
 return M

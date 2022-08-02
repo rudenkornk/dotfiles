@@ -73,7 +73,7 @@ common_utils_system:
 	sudo scripts/config_system.sh common_utils
 
 .PHONY: docker_system
-docker_system:
+docker_system: common_utils_system
 	sudo scripts/config_system.sh docker
 
 .PHONY: fish_system

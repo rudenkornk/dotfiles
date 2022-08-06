@@ -48,13 +48,13 @@ xkb_symbols "rnk_qwerty" {
     key <AB01> { [                 z,                 Z,      asciitilde,       asciitilde ] };
     key <AB02> { [                 x,                 X,      asciitilde,       asciitilde ] };
     key <AB03> { [                 c,                 C,      asciitilde,       asciitilde ] };
-    key <AB04> { [                 v,                 V,          dollar,           dollar ] };
+    key <AB04> { [                 v,                 V,          dollar,           period ] };
     key <AB05> { [                 b,                 B,       backslash,                6 ] };
     key <AB06> { [                 n,                 N,     bracketleft,                7 ] };
     key <AB07> { [                 m,                 M,    bracketright,                8 ] };
     key <AB08> { [            oslash,            Oslash,        quotedbl,                9 ] };
     key <AB09> { [                ae,                AE,      apostrophe,       apostrophe ] };
-    key <AB10> { [            period,             comma,           grave,           period ] };
+    key <AB10> { [            period,             comma,           grave,            comma ] };
 
     key <SPCE> { [             space,             space,           space,            space ] };
 
@@ -113,13 +113,13 @@ xkb_symbols "rnk_russian" {
     key <AB01> { [       Cyrillic_ya,       Cyrillic_YA,      asciitilde,       asciitilde ] };
     key <AB02> { [      Cyrillic_che,      Cyrillic_CHE,      asciitilde,       asciitilde ] };
     key <AB03> { [       Cyrillic_es,       Cyrillic_ES,      asciitilde,       asciitilde ] };
-    key <AB04> { [       Cyrillic_em,       Cyrillic_EM,          dollar,           dollar ] };
+    key <AB04> { [       Cyrillic_em,       Cyrillic_EM,          dollar,           period ] };
     key <AB05> { [        Cyrillic_i,        Cyrillic_I,       backslash,                6 ] };
     key <AB06> { [       Cyrillic_te,       Cyrillic_TE,     bracketleft,                7 ] };
     key <AB07> { [ Cyrillic_softsign, Cyrillic_SOFTSIGN,    bracketright,                8 ] };
     key <AB08> { [       Cyrillic_be,       Cyrillic_BE,        quotedbl,                9 ] };
     key <AB09> { [       Cyrillic_yu,       Cyrillic_YU,      apostrophe,       apostrophe ] };
-    key <AB10> { [            period,             comma,           grave,           period ] };
+    key <AB10> { [            period,             comma,           grave,            comma ] };
 
     key <SPCE> { [            space,              space,           space,            space ] };
 

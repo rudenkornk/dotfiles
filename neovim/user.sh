@@ -8,7 +8,6 @@ set -o xtrace
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 SELF_PATH=$(realpath "$(dirname "$0")")
 
-
 # Preconfigured Configuration notes:
 # LunarVim --- too slow, about 400ms to start
 # nvoid --- unpopular compared to others, otherwise looking ok
@@ -38,7 +37,7 @@ npm list --location=global neovim || npm install --location=global neovim
 
 if [[ ! -d ~/.config/nvim ]]; then
   git clone https://github.com/NvChad/NvChad ~/.config/nvim
-  git --git-dir=$HOME/.config/nvim/.git --work-tree=$HOME/.config/nvim checkout \
+  git --git-dir="$HOME/.config/nvim/.git" --work-tree="$HOME/.config/nvim" checkout \
     243552c21e87be32d0e4ec45ca60e06039eb2198
 fi
 

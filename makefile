@@ -44,6 +44,7 @@ config_user: \
 	rust_user \
 	ssh_user \
 	tmux_user \
+	windows_terminal_user \
 
 .PHONY: config_gui_system
 config_gui_system: \
@@ -183,6 +184,10 @@ ssh_user:
 .PHONY: tmux_user
 tmux_user: python_user
 	scripts/config_user.sh tmux
+
+.PHONY: windows_terminal_user
+windows_terminal_user:
+	scripts/config_user.sh windows_terminal
 
 .PHONY: fonts_user
 fonts_user:

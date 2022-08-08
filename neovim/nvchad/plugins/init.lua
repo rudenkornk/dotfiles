@@ -8,7 +8,7 @@ M.override = {
   ["lukas-reineke/indent-blankline.nvim"] = small_configs.indent_blankline,
   ["nvim-telescope/telescope.nvim"] = small_configs.telescope,
   ["nvim-treesitter/nvim-treesitter"] = require("custom/plugins/treesitter"),
-  ["williamboman/mason"] = require("custom/plugins/mason"),
+  ["williamboman/mason.nvim"] = require("custom/plugins/mason"),
 }
 
 M.remove = {}

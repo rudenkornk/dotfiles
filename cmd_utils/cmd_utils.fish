@@ -1,3 +1,4 @@
+fish_add_path ~/.fzf/bin
 set --export FZF_DEFAULT_OPTS \
   --cycle \
   --layout=reverse \

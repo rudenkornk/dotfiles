@@ -25,7 +25,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   pkg-config \
   snap \
   software-properties-common \
-  tar gzip zip unzip bzip2 \
+  tar gzip zip unzip bzip2 p7zip-full p7zip-rar \
   wget \
 
 locale-gen en_US.UTF-8

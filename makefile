@@ -237,7 +237,7 @@ ifneq ($(DOCKER_CONTAINER_ID),)
 endif
 	docker run --interactive --tty --detach \
 		--user ci_user \
-		--env BUILD_DIR="$(BUILD_DIR)" \
+		--env BUILD_DIR="/home/ci_user/build" \
 		--env KEEP_CI_USER_SUDO="$(DOCKER_KEEP_CI_USER_SUDO)" \
 		--env CI_UID="$$(id --user)" --env CI_GID="$$(id --group)" \
 		--env "TERM=xterm-256color" \

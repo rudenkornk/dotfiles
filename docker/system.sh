@@ -21,5 +21,5 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   containerd.io \
   docker-compose-plugin \
 
- systemctl enable docker.service
- systemctl enable containerd.service
+systemctl enable docker.service
+systemctl enable containerd.service

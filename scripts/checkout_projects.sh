@@ -22,20 +22,21 @@ if ssh -q git@github.com; [ ! $? -eq 1 ]; then
   exit 1
 fi
 
-for URL in ${REPOS[@]}; do
-  REPO_NAME=$(echo $URL | grep --only-matching --perl-regexp "git@github\.com:.*?/\K.*?(?=\.git)")
+for URL in "${REPOS[@]}"; do
+  REPO_NAME=$(echo "$URL" | grep --only-matching --perl-regexp "git@git.*?\.com:(.*?/)+\K.*?(?=\.git)")
+  echo "$REPO_NAME"
   REPO_PATH="$PROJECTS_PATH/$REPO_NAME"
   if [[ ! -d "$REPO_PATH" ]]; then
-    git clone $URL "$REPO_PATH"
+    git clone "$URL" "$REPO_PATH"
     git --git-dir="$REPO_PATH/.git" checkout -b dev_volatile --track origin/main
     git --git-dir="$REPO_PATH/.git" branch -D main
   fi
   REMOTES=$(git --git-dir="$REPO_PATH/.git" remote --verbose)
-  if ! echo $REMOTES | grep --quiet "origin git@github.com:rudenkornk"; then
+  if ! echo "$REMOTES" | grep --quiet "origin git@git"; then
     if echo "$REMOTES" | grep --quiet "origin "; then
       git --git-dir="$REPO_PATH/.git" remote remove origin
     fi
-    git --git-dir="$REPO_PATH/.git" remote add origin $URL
+    git --git-dir="$REPO_PATH/.git" remote add origin "$URL"
   fi
 done
 

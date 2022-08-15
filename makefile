@@ -197,8 +197,8 @@ fonts_user:
 mouse_user:
 	scripts/config_user.sh mouse
 
-$(BUILD_DIR)/checkout_projects: scripts/checkout_projects.sh
-	./scripts/checkout_projects.sh
+$(BUILD_DIR)/checkout_projects: git/checkout_projects.sh
+	./git/checkout_projects.sh
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 .PHONY: check

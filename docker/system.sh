@@ -6,6 +6,7 @@ set -o nounset
 #set -o xtrace
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
+SELF_PATH=$(realpath "$(dirname "$0")")
 
 mkdir --parents /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -20,6 +21,10 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   docker-ce-cli \
   containerd.io \
   docker-compose-plugin \
+
+mkdir --parents /etc/docker
+ln --symbolic --force "$SELF_PATH/daemon.json" /etc/docker/daemon.json
+
 
 systemctl enable docker.service
 systemctl enable containerd.service

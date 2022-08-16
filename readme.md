@@ -16,6 +16,7 @@ fish
 
 ## Bootstrap
 ```bash
+sudo apt-get update && \
 sudo apt-get install git make && \
   git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
   cd ~/projects/dotfiles && make config

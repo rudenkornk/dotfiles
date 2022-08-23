@@ -83,7 +83,7 @@ fish_system: common_utils_system ssh_system
 	sudo scripts/config_system.sh fish
 
 .PHONY: git_system
-git_system:
+git_system: common_utils_system
 	sudo scripts/config_system.sh git
 
 .PHONY: lua_system

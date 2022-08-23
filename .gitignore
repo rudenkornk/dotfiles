@@ -1,5 +1,5 @@
 **/build*
 
+ssh/keys/*id_rsa
 .gitsecret/keys/random_seed
 !*.secret
-ssh/keys/id_rsa

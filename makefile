@@ -22,6 +22,7 @@ config_system: \
 	git_system \
 	lua_system \
 	neovim_system \
+	openvpn_system \
 	powershell_system \
 	python_system \
 	ruby_system \
@@ -93,6 +94,10 @@ lua_system: common_utils_system
 .PHONY: neovim_system
 neovim_system: common_utils_system ruby_system
 	sudo scripts/config_system.sh neovim
+
+.PHONY: openvpn_system
+openvpn_system:
+	sudo scripts/config_system.sh openvpn
 
 .PHONY: powershell_system
 powershell_system: common_utils_system

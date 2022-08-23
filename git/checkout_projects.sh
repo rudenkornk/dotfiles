@@ -32,8 +32,8 @@ for URL in "${REPOS[@]}"; do
     git --git-dir="$REPO_PATH/.git" branch -D main
   fi
   REMOTES=$(git --git-dir="$REPO_PATH/.git" remote --verbose)
-  if ! echo "$REMOTES" | grep --quiet "origin git@git"; then
-    if echo "$REMOTES" | grep --quiet "origin "; then
+  if ! echo $REMOTES | grep --quiet "origin git@git"; then # NOLINT
+    if echo $REMOTES | grep --quiet "origin "; then # NOLINT
       git --git-dir="$REPO_PATH/.git" remote remove origin
     fi
     git --git-dir="$REPO_PATH/.git" remote add origin "$URL"

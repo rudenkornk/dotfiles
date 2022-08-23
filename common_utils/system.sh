@@ -18,6 +18,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   gnupg \
   jq \
   libevent-dev \
+  linux-tools-common \
   locales \
   lsb-release \
   ncurses-dev \
@@ -26,6 +27,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   snap \
   software-properties-common \
   tar gzip zip unzip bzip2 p7zip-full p7zip-rar \
+  tcl \
   wget \
 
 locale-gen en_US.UTF-8

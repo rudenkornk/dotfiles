@@ -56,6 +56,7 @@ config_gui_system: \
 .PHONY: config_gui_user
 config_gui_user: \
 	fonts_user \
+	konsole_user \
 	mouse_user \
 
 .PHONY: checkout_projects
@@ -192,6 +193,10 @@ windows_terminal_user:
 .PHONY: fonts_user
 fonts_user:
 	scripts/config_user.sh fonts
+
+.PHONY: konsole_user
+konsole_user:
+	scripts/config_user.sh konsole
 
 .PHONY: mouse_user
 mouse_user:

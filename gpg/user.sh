@@ -5,7 +5,8 @@ set -o pipefail
 set -o nounset
 #set -o xtrace
 
-gpg --list-secret-keys
+gpg --list-secret-keys &> /dev/null
+GPG_KEY=${GPG_KEY:-""}
 
 if [[ ! -f "$GPG_KEY" ]]; then
   gpg --list-secret-keys | grep -q uid || echo "GPG key at \"$GPG_KEY\" path not found. GPG key will not be installed"

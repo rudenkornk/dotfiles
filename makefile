@@ -2,6 +2,7 @@ SHELL = /usr/bin/env bash
 
 PROJECT_NAME := dotfiles
 BUILD_DIR ?= build
+GPG_KEY ?=
 
 # It is implicitly implied that all user configs depend on all system configs
 # The reason for not to set this explicitly is to be able to run user configs separately from system config
@@ -37,6 +38,7 @@ config_user: \
 	fish_user \
 	git_user \
 	go_user \
+	gpg_user \
 	latexindent_user \
 	lua_user \
 	neovim_user \
@@ -152,12 +154,16 @@ fish_user:
 	scripts/config_user.sh fish
 
 .PHONY: git_user
-git_user: nodejs_user
+git_user: nodejs_user gpg_user
 	scripts/config_user.sh git
 
 .PHONY: go_user
 go_user:
 	scripts/config_user.sh go
+
+.PHONY: gpg_user
+gpg_user:
+	GPG_KEY=$(GPG_KEY) scripts/config_user.sh gpg
 
 .PHONY: latexindent_user
 latexindent_user:

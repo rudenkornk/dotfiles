@@ -154,7 +154,7 @@ fish_user:
 	scripts/config_user.sh fish
 
 .PHONY: git_user
-git_user: nodejs_user gpg_user
+git_user: nodejs_user
 	scripts/config_user.sh git
 
 .PHONY: go_user
@@ -190,7 +190,7 @@ rust_user:
 	scripts/config_user.sh rust
 
 .PHONY: ssh_user
-ssh_user:
+ssh_user: gpg_user
 	scripts/config_user.sh ssh
 
 .PHONY: tmux_user

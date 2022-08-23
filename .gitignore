@@ -1,5 +1,6 @@
 **/build*
 
 ssh/keys/*id_rsa
+openvpn/configs/*
 .gitsecret/keys/random_seed
 !*.secret

@@ -58,6 +58,7 @@ config_gui_system: \
 	slack_system \
 	telegram_system \
 	vscode_system \
+	zoom_system \
 
 .PHONY: config_gui_user
 config_gui_user: \
@@ -152,6 +153,10 @@ telegram_system: common_utils_system
 .PHONY: vscode_system
 vscode_system: common_utils_system
 	sudo scripts/config_system.sh vscode
+
+.PHONY: zoom_system
+zoom_system:
+	sudo scripts/config_system.sh zoom
 
 .PHONY: bash_user
 bash_user:

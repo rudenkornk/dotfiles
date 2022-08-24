@@ -53,6 +53,7 @@ config_user: \
 config_gui_system: \
 	chrome_system \
 	keyboard_layouts_system \
+	slack_system \
 	telegram_system \
 	vscode_system \
 
@@ -132,6 +133,10 @@ chrome_system: common_utils_system
 .PHONY: keyboard_layouts_system
 keyboard_layouts_system:
 	sudo scripts/config_system.sh keyboard_layouts
+
+.PHONY: slack_system
+slack_system: common_utils_system
+	sudo scripts/config_system.sh slack
 
 .PHONY: telegram_system
 telegram_system: common_utils_system

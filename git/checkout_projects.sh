@@ -31,6 +31,7 @@ for URL in "${REPOS[@]}"; do
     git --git-dir="$REPO_PATH/.git" checkout -b dev_volatile --track origin/main
     git --git-dir="$REPO_PATH/.git" branch -D main
   fi
+  git --git-dir="$REPO_PATH/.git" config user.email "rudenkornk@gmail.com"
   REMOTES=$(git --git-dir="$REPO_PATH/.git" remote --verbose)
   if ! echo $REMOTES | grep --quiet "origin git@git"; then # NOLINT
     if echo $REMOTES | grep --quiet "origin "; then # NOLINT

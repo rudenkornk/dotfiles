@@ -1,0 +1,3 @@
+# DO NOT EDIT THIS BLOCK MANUALLY, CHANGES WILL BE DISCARDED
+stty erase '^?'
+stty -ixon

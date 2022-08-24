@@ -1,0 +1,8 @@
+# DO NOT EDIT THIS BLOCK MANUALLY, CHANGES WILL BE DISCARDED
+
+export VISUAL=nvim
+export EDITOR="$VISUAL"
+
+alias v=nvim
+alias vi=nvim
+alias vd=nvim -d

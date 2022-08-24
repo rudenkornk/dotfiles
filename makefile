@@ -62,6 +62,7 @@ config_gui_user: \
 	fonts_user \
 	konsole_user \
 	mouse_user \
+	tilda_user \
 
 .PHONY: checkout_projects
 checkout_projects: $(BUILD_DIR)/checkout_projects
@@ -217,6 +218,10 @@ konsole_user:
 .PHONY: mouse_user
 mouse_user:
 	scripts/config_user.sh mouse
+
+.PHONY: tilda_user
+tilda_user:
+	scripts/config_user.sh tilda
 
 $(BUILD_DIR)/checkout_projects: git/checkout_projects.sh
 	./git/checkout_projects.sh

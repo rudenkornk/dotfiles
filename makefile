@@ -15,6 +15,7 @@ config_gui: config_system config_gui_system config_gui_user
 
 .PHONY: config_system
 config_system: \
+	bash_system \
 	clipboard_system \
 	cmd_utils_system \
 	common_utils_system \
@@ -33,6 +34,7 @@ config_system: \
 
 .PHONY: config_user
 config_user: \
+	bash_user \
 	cmd_utils_user \
 	docker_user \
 	fish_user \
@@ -66,6 +68,10 @@ config_gui_user: \
 
 .PHONY: checkout_projects
 checkout_projects: $(BUILD_DIR)/checkout_projects
+
+.PHONY: bash_system
+bash_system:
+	sudo scripts/config_system.sh bash
 
 .PHONY: clipboard_system
 clipboard_system: common_utils_system
@@ -146,6 +152,10 @@ telegram_system: common_utils_system
 .PHONY: vscode_system
 vscode_system: common_utils_system
 	sudo scripts/config_system.sh vscode
+
+.PHONY: bash_user
+bash_user:
+	scripts/config_user.sh bash
 
 .PHONY: cmd_utils_user
 cmd_utils_user:

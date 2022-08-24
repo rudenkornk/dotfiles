@@ -29,6 +29,7 @@ fi
 # For tmux-window-name
 pip3 install libtmux
 
+"$REPO_PATH/scripts/config_bash.sh" "$SELF_PATH"
 "$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"
 
 # <prefix>I

@@ -75,7 +75,7 @@ return function()
     sources = {
       { name = "buffer" },
       { name = "tmux" },
-      { name = "rg" },
+      -- { name = "rg" }, -- takes too much resources
     },
   })
   cmp.setup.cmdline(":", {
@@ -98,7 +98,7 @@ return function()
       { name = "git" },
       { name = "path" },
       { name = "tmux" },
-      { name = "rg" },
+      -- { name = "rg" }, -- takes too much resources
     },
     formatting = {
       format = format,

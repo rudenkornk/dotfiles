@@ -1,4 +1,4 @@
-**/build*
+/build*
 
 ssh/keys/*id_rsa
 openvpn/configs/*

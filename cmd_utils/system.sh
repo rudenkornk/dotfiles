@@ -13,6 +13,7 @@ wget https://github.com/sharkdp/fd/releases/download/v8.4.0/fd-musl_8.4.0_amd64.
 wget https://github.com/sharkdp/bat/releases/download/v0.21.0/bat-musl_0.21.0_amd64.deb --output-document bat.deb
 chmod 777 fd.deb
 chmod 777 bat.deb
+apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   ./bat.deb \
   ./fd.deb \

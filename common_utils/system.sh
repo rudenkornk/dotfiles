@@ -17,6 +17,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   dos2unix \
   gnupg \
   jq \
+  lftp \
   libevent-dev \
   linux-tools-common \
   locales \

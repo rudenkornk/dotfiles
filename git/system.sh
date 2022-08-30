@@ -12,5 +12,5 @@ wget -qO - 'https://gitsecret.jfrog.io/artifactory/api/gpg/key/public' | apt-key
 
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-  git \
+  git=1:2.34.1-1ubuntu1.4 \
   git-secret \

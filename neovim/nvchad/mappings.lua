@@ -19,7 +19,6 @@ M.code_action_menu = {
 M.disabled = {
   n = {
     ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
-    ["<S-b>"] = "", -- Unmap creating new buffer. This interferes with default <S-b> behaviour.
   },
 }
 

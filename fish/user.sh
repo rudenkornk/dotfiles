@@ -22,3 +22,4 @@ fish --command "echo 1 1 1 2 2 2 1 2 y | tide configure"
 
 "$REPO_PATH/scripts/config_fish.sh" "$SELF_PATH"
 
+#chsh --shell /usr/bin/fish

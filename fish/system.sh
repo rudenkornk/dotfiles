@@ -12,4 +12,3 @@ apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   fish \
 
-chsh --shell /usr/bin/fish

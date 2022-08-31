@@ -9,7 +9,10 @@ Simple repo for setting up new system or user.
 make in_docker TARGET=config
 docker attach dotfiles_container
 fish
-# In neovim run
+```
+
+Reload tmux environment with `C-s I` and run in neovim commands:
+```vim
 :PackerSync
 :MasonInstallAll
 ```
@@ -20,8 +23,9 @@ sudo apt-get update && \
 sudo apt-get install git make && \
   git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
   cd ~/projects/dotfiles && make config
-# Reload shell
-# In neovim run
+```
+Reload tmux environment with `C-s I` and run in neovim commands:
+```vim
 :PackerSync
 :MasonInstallAll
 ```

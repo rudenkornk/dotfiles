@@ -6,17 +6,17 @@ function start_agent
   echo "succeeded"
   chmod 600 $SSH_ENV
   . $SSH_ENV > /dev/null
-  set -l keys ~/.ssh/*_id_rsa
+  set -l keys ~/.ssh/*id_rsa
   if test (count $keys) -gt 0
-    ssh-add ~/.ssh/*_id_rsa
+    ssh-add ~/.ssh/*id_rsa
   end
 end
 function test_identities
   ssh-add -l | grep "The agent has no identities" > /dev/null
   if [ $status -eq 0 ]
-    set -l keys ~/.ssh/*_id_rsa
+    set -l keys ~/.ssh/*id_rsa
     if test (count $keys) -gt 0
-      ssh-add ~/.ssh/*_id_rsa
+      ssh-add ~/.ssh/*id_rsa
     end
     if [ $status -eq 2 ]
       start_agent

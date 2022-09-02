@@ -1,2 +1,2 @@
-set -U VISUAL nvim
-set -U EDITOR nvim
+set -Ux VISUAL nvim
+set -Ux EDITOR nvim

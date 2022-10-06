@@ -38,7 +38,7 @@ npm list --location=global neovim || npm install --location=global neovim
 if [[ ! -d ~/.config/nvim ]]; then
   git clone https://github.com/NvChad/NvChad ~/.config/nvim
   git --git-dir="$HOME/.config/nvim/.git" --work-tree="$HOME/.config/nvim" checkout \
-    7fe754342aa65fd46d0473b97c0de693762f1743
+    27560319cc4cf753e5a4d8713f82206d84a70d61
 fi
 
 mkdir --parents ~/.config/nvim/keymap

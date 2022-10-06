@@ -10,6 +10,7 @@ return {
       "cssls",
       "dockerls",
       "dotls",
+      "groovyls",
       "html",
       "jedi_language_server",
       "jsonls",

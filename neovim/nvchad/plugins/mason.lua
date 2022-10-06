@@ -10,6 +10,7 @@ return {
     "dot-language-server",
     "eslint_d",
     "flake8",
+    "groovy-language-server",
     "hadolint",
     "html-lsp",
     "jedi-language-server",

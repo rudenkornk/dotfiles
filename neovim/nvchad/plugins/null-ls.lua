@@ -20,6 +20,9 @@ return {
       -- git
       null_ls.builtins.code_actions.gitsigns,
 
+      -- groovy
+      null_ls.builtins.formatting.npm_groovy_lint,
+
       -- GitHub Actions
       null_ls.builtins.diagnostics.actionlint,
 

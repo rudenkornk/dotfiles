@@ -29,7 +29,6 @@ config_system: \
 	python_system \
 	ruby_system \
 	ssh_system \
-	system_utils_system \
 	wsl_system \
 
 .PHONY: config_user
@@ -125,10 +124,6 @@ ruby_system:
 .PHONY: ssh_system
 ssh_system:
 	sudo scripts/config_system.sh ssh
-
-.PHONY: system_utils_system
-system_utils_system:
-	sudo scripts/config_system.sh system_utils
 
 .PHONY: wsl_system
 wsl_system:

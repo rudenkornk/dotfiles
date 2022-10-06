@@ -9,6 +9,7 @@ REPO_PATH=$(realpath "$(dirname "$0")/..")
 
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
+  acpi \
   apt-transport-https \
   bison \
   build-essential \
@@ -16,6 +17,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   curl \
   dos2unix \
   gnupg \
+  htop \
   jq \
   lftp \
   libevent-dev \
@@ -23,6 +25,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   locales \
   lsb-release \
   ncurses-dev \
+  net-tools \
   openssh-client \
   pkg-config \
   snap \

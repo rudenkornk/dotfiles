@@ -22,6 +22,7 @@ config_system: \
 	docker_system \
 	fish_system \
 	git_system \
+	java_system \
 	lua_system \
 	neovim_system \
 	openvpn_system \
@@ -96,6 +97,10 @@ fish_system: common_utils_system ssh_system
 .PHONY: git_system
 git_system: common_utils_system
 	sudo scripts/config_system.sh git
+
+.PHONY: java_system
+java_system:
+	sudo scripts/config_system.sh java
 
 .PHONY: lua_system
 lua_system: common_utils_system

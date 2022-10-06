@@ -7,7 +7,7 @@ set -o nounset
 
 REPO_PATH=$(realpath "$(dirname "$0")/..")
 
-sh -c "echo 'deb https://gitsecret.jfrog.io/artifactory/git-secret-deb git-secret main' >> /etc/apt/sources.list"
+grep git-secret /etc/apt/sources.list --quiet || sh -c "echo 'deb https://gitsecret.jfrog.io/artifactory/git-secret-deb git-secret main' >> /etc/apt/sources.list"
 wget -qO - 'https://gitsecret.jfrog.io/artifactory/api/gpg/key/public' | apt-key add -
 
 apt-get update

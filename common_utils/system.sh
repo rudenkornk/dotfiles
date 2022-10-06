@@ -17,7 +17,10 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   curl \
   dos2unix \
   gnupg \
+  gpg-agent \
   htop \
+  iptables \
+  iputils-ping \
   jq \
   lftp \
   libevent-dev \
@@ -27,9 +30,11 @@ DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
   ncurses-dev \
   net-tools \
   openssh-client \
+  openssh-server \
   pkg-config \
   snap \
   software-properties-common \
+  sshpass \
   tar gzip zip unzip bzip2 p7zip-full p7zip-rar \
   tcl \
   wget \

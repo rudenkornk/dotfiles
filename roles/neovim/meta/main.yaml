@@ -1,0 +1,14 @@
+dependencies:
+  - role: ansible
+  - role: cpp
+  - role: git
+  - role: go
+  - role: java
+  - role: latex
+  - role: nodejs
+  - role: python
+  - role: ruby
+  - role: rust
+  - role: shell
+  - role: shell_utils
+  - role: tmux

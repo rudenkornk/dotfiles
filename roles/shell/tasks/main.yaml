@@ -1,0 +1,68 @@
+- name: Add fish repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: ppa:fish-shell/release-3
+
+- name: Install fish
+  become: true
+  ansible.builtin.apt:
+    name: fish
+
+- name: Create fish functions directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/fish/functions"
+    state: directory
+    mode: 0755
+
+- name: Create fish conf.d directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/fish/conf.d"
+    state: directory
+    mode: 0755
+
+- name: Create fish completions directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/fish/completions"
+    state: directory
+    mode: 0755
+
+- name: Create symlink to {{ role_name }}.fish
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
+    state: link
+    force: true
+
+- name: Change user shell to fish
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    shell: /usr/bin/fish
+
+- name: Install bash-completion
+  become: true
+  ansible.builtin.apt:
+    name: bash-completion
+
+- name: Create bash completions directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/share/bash-completion/completions"
+    state: directory
+    mode: 0755
+
+- name: Set up bash
+  ansible.builtin.lineinfile:
+    path: "{{ home }}/.bashrc"
+    regexp: 'source .*/{{ role_name }}/files'
+    line: source {{ remote_role_path }}/files/bash.sh
+    create: true
+    mode: 0644
+
+- name: Fix path in WSL
+  become: true
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/wsl.conf"
+    dest: /etc/wsl.conf
+    state: link
+    force: true
+  when: in_wsl

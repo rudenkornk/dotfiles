@@ -1,27 +1,65 @@
 name: Workflow
+
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
-  build:
-    runs-on: "ubuntu-20.04"
+
+  config:
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-    - name: Download and start container
-      run: make container
     - name: Config
-      run: make in_docker TARGET=config
+      run: make
     - name: Check idempotence
-      run: make in_docker TARGET=config
-    - name: Test
-      run: make in_docker TARGET=check
-    - name: Clean
-      run: make in_docker TARGET=clean
+      run: |
+        make | tee __build__/log
+        ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
 
+  check:
+    strategy:
+      matrix:
+        ubuntu_tag: ["22.04", "22.10"]
+    runs-on: ubuntu-22.04
+    env:
+      UBUNTU_TAG: ${{ matrix.ubuntu_tag }}
+      USER: random_user
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Check bootstrap control node
+      run: make check_bootstrap_control_node
+    - name: Check config
+      run: make check
+    - name: Check idempotence
+      run: |
+        make check | tee __build__/log
+        ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
+
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Lint
+      run: make lint
+
+  updater:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Check update works
+      run: make update
+    - name: Show diff
+      run: git diff

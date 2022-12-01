@@ -1,0 +1,4 @@
+actionlint_url: github.com/rhysd/actionlint/cmd/actionlint
+neovim_url: https://github.com/neovim/neovim/releases/download/v0.8.2/nvim-linux64.deb
+nvchad_url: https://github.com/NvChad/NvChad
+nvchad_version: 9680078c6a5cc9d498bba2303fb399528f48a071

@@ -1,0 +1,22 @@
+diff --git a/lua/plugins/init.lua b/lua/plugins/init.lua
+index 778efd5..f60e951 100644
+--- a/lua/plugins/init.lua
++++ b/lua/plugins/init.lua
+@@ -214,6 +214,17 @@ if present then
+   -- Override with default plugins with user ones
+   plugins = require("core.utils").merge_plugins(plugins)
+ 
++  -- Check plugin versions are pinned
++  local unpinned = ""
++  for _, v in pairs(plugins) do
++    if not v.commit then
++      unpinned = unpinned..v[1] .. "\n"
++    end
++  end
++  if unpinned ~= "" then
++     vim.api.nvim_echo({{"Please pin versions of the following plugins:\n" .. unpinned}}, true, {})
++  end
++
+   -- load packer init options
+   local init_options = require("plugins.configs.others").packer_init()
+   init_options = require("core.utils").load_override(init_options, "wbthomason/packer.nvim")

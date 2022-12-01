@@ -1,0 +1,20 @@
+- name: Install podman
+  become: true
+  ansible.builtin.apt:
+    name: podman
+
+- name: Install podman completions
+  ansible.builtin.shell: |
+    podman completion bash --file {{ home }}/.local/share/bash-completion/completions/podman
+    podman completion fish --file {{ home }}/.config/fish/completions/podman.fish
+  args:
+    executable: bash
+  changed_when: false
+
+- name: Create symlinks to fish functions
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"
+    dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
+    state: link
+    force: true
+  loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"

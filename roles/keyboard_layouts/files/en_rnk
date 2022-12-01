@@ -1,0 +1,64 @@
+// Qwerty for programmers
+partial alphanumeric_keys
+xkb_symbols "qwerty_rnk" {
+
+    include "us"
+    name[Group1]= "English (Qwerty for programmers)";
+
+    key <TLDE> { [            ssharp,             U0122,      asciitilde,       asciitilde ] };
+    key <AE01> { [                 1,            exclam,          exclam,           exclam ] };
+    key <AE02> { [                 2,                at,              at,               at ] };
+    key <AE03> { [                 3,        numbersign,      numbersign,       numbersign ] };
+    key <AE04> { [                 4,            dollar,          dollar,           dollar ] };
+    key <AE05> { [                 5,           percent,         percent,          percent ] };
+    key <AE06> { [                 6,       asciicircum,     asciicircum,      asciicircum ] };
+    key <AE07> { [                 7,         ampersand,       ampersand,        ampersand ] };
+    key <AE08> { [                 8,          asterisk,        asterisk,         asterisk ] };
+    key <AE09> { [                 9,         parenleft,       parenleft,        parenleft ] };
+    key <AE10> { [                 0,        parenright,      parenright,       parenright ] };
+    key <AE11> { [             minus,        underscore,      underscore,       underscore ] };
+    key <AE12> { [             equal,              plus,            plus,             plus ] };
+
+    key <AD01> { [                 q,                 Q,         percent,          percent ] };
+    key <AD02> { [                 w,                 W,     asciicircum,      asciicircum ] };
+    key <AD03> { [                 e,                 E,           minus,            minus ] };
+    key <AD04> { [                 r,                 R,            plus,             plus ] };
+    key <AD05> { [                 t,                 T,        asterisk,         asterisk ] };
+    key <AD06> { [                 y,                 Y,             bar,              bar ] };
+    key <AD07> { [                 u,                 U,       ampersand,                2 ] };
+    key <AD08> { [                 i,                 I,       braceleft,                3 ] };
+    key <AD09> { [                 o,                 O,      braceright,                4 ] };
+    key <AD10> { [                 p,                 P,        question,                5 ] };
+    key <AD11> { [        udiaeresis,        Udiaeresis,      asciitilde,       asciitilde ] };
+    key <AD12> { [             aring,             Aring,      asciitilde,       asciitilde ] };
+    key <BKSL> { [         backslash,               bar,             bar,              bar ] };
+
+    key <AC01> { [                 a,                 A,          exclam,           exclam ] };
+    key <AC02> { [                 s,                 S,      asciitilde,       asciitilde ] };
+    key <AC03> { [                 d,                 D,            less,             less ] };
+    key <AC04> { [                 f,                 F,           equal,            equal ] };
+    key <AC05> { [                 g,                 G,         greater,          greater ] };
+    key <AC06> { [                 h,                 H,           slash,            slash ] };
+    key <AC07> { [                 j,                 J,       parenleft,                0 ] };
+    key <AC08> { [                 k,                 K,      parenright,                1 ] };
+    key <AC09> { [                 l,                 L,      underscore,       underscore ] };
+    key <AC10> { [        odiaeresis,        Odiaeresis,           colon,            colon ] };
+    key <AC11> { [        adiaeresis,        Adiaeresis,       semicolon,        semicolon ] };
+
+    key <AB01> { [                 z,                 Z,      asciitilde,       asciitilde ] };
+    key <AB02> { [                 x,                 X,      asciitilde,       asciitilde ] };
+    key <AB03> { [                 c,                 C,      asciitilde,       asciitilde ] };
+    key <AB04> { [                 v,                 V,          dollar,           period ] };
+    key <AB05> { [                 b,                 B,       backslash,                6 ] };
+    key <AB06> { [                 n,                 N,     bracketleft,                7 ] };
+    key <AB07> { [                 m,                 M,    bracketright,                8 ] };
+    key <AB08> { [            oslash,            Oslash,        quotedbl,                9 ] };
+    key <AB09> { [                ae,                AE,      apostrophe,       apostrophe ] };
+    key <AB10> { [            period,             comma,           grave,            comma ] };
+
+    key <SPCE> { [             space,             space,           space,            space ] };
+
+    include "altwin(alt_win)"
+    include "level3(lalt_switch)"
+    include "capslock(ctrl_modifier)"
+};

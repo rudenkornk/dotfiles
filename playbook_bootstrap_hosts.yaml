@@ -1,0 +1,41 @@
+- name: Bootstrap hosts
+  hosts: "{{ __hosts__ }}"
+  vars:
+    ansible_user: root
+  gather_facts: false
+  tasks:
+    - name: Install python
+      become: true
+      ansible.builtin.raw: |
+        if ! command -v python3 &> /dev/null; then
+          apt-get update && \
+          DEBIAN_FRONTEND=noninteractive apt-get \
+            install --yes --no-install-recommends \
+            python3-venv \
+            && \
+          echo "bootstrapped";
+        fi
+      args:
+        executable: bash
+      register: bootstrap
+      changed_when: ("bootstrapped" in bootstrap.stdout)
+
+    - name: Install sudo
+      become: true
+      ansible.builtin.apt:
+        name: sudo
+
+    - name: Add user "{{ user }}"
+      become: true
+      ansible.builtin.user:
+        name: "{{ user }}"
+        password: ''
+        groups:
+          - adm
+          - sudo
+        append: true
+
+    - name: Add authorized_key for {{ user }}
+      ansible.posix.authorized_key:
+        user: "{{ user }}"
+        key: "{{ lookup('file', '{{ playbook_dir }}/roles/ssh/files/id_rsa.pub') }}"

@@ -1,0 +1,30 @@
+- name: Install common utils
+  become: true
+  ansible.builtin.apt:
+    name:
+      - acpi
+      - apt-transport-https
+      - build-essential
+      - bzip2
+      - ca-certificates
+      - dos2unix
+      - file
+      - gzip
+      - htop
+      - iptables
+      - iputils-ping
+      - lftp
+      - libevent-dev
+      - linux-tools-common
+      - locales
+      - lsb-release
+      - ncurses-dev
+      - net-tools
+      - p7zip-full
+      - p7zip-rar
+      - pkg-config
+      - tar
+      - tcl
+      - unzip
+      - wget
+      - zip

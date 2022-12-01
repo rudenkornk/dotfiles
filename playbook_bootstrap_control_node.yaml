@@ -1,0 +1,41 @@
+- name: Configure control node
+  hosts: localhost
+  tasks:
+  - name: Install community.general
+    ansible.builtin.command: ansible-galaxy collection install community.general
+    changed_when: '"Nothing to do" not in collection_installed.stdout'
+    delay: 300
+    register: collection_installed
+    retries: 10
+    until: collection_installed is not failed
+
+  - name: Install ansible.posix
+    ansible.builtin.command: ansible-galaxy collection install ansible.posix
+    changed_when: '"Nothing to do" not in collection_installed.stdout'
+    delay: 300
+    register: collection_installed
+    retries: 10
+    until: collection_installed is not failed
+
+  - name: Install containers.podman
+    ansible.builtin.command: ansible-galaxy collection install containers.podman
+    changed_when: '"Nothing to do" not in collection_installed.stdout'
+    delay: 300
+    register: collection_installed
+    retries: 10
+    until: collection_installed is not failed
+
+  - name: Install rsync (for ansible synchronize tasks)
+    become: true
+    ansible.builtin.apt:
+      name: rsync
+
+  - name: Install git (for updating dependencies)
+    become: true
+    ansible.builtin.apt:
+      name: git
+
+  - name: Install podman (for checking config in containers)
+    become: true
+    ansible.builtin.apt:
+      name: podman

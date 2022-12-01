@@ -1,0 +1,87 @@
+- name: Install aptitude
+  become: true
+  ansible.builtin.apt:
+    name:
+      - aptitude
+
+- name: Install common utils for other Ansible tasks
+  become: true
+  ansible.builtin.apt:
+    name:
+      - curl
+      - gnupg
+      - gpg-agent
+      - locales
+      - rsync
+      - snapd
+      - software-properties-common
+      - tzdata
+      - xz-utils
+
+- name: Set locale
+  become: true
+  community.general.locale_gen:
+    name: en_US.UTF-8
+
+- name: Set timezone
+  become: true
+  community.general.timezone:
+    name: Europe/Moscow
+
+- name: Check if inside WSL
+  ansible.builtin.shell: |
+    set -o pipefail
+    kernel_is_wsl=$(uname --all | grep --quiet WSL && echo true || echo false)
+    has_wsl_interop=$([[ -n "$WSL_INTEROP" ]] && echo true || echo false)
+    c_is_mounted=$(ls /mnt/c &> /dev/null && echo true || echo false)
+    if [[
+        "$kernel_is_wsl" == "true" &&
+        "$has_wsl_interop" == "true" &&
+        "$c_is_mounted" == "true" &&
+        : ]]; then
+      echo true
+    else
+      echo false
+    fi
+  args:
+    executable: bash
+  changed_when: false
+  register: wsl_check
+
+- name: Check if inside container
+  ansible.builtin.shell: ([[ -f /.dockerenv || -f /run/.containerenv ]]) && echo true || echo false
+  args:
+    executable: bash
+  changed_when: false
+  register: container_check
+
+- name: Set common facts
+  ansible.builtin.set_fact:
+    in_container: "{{ container_check.stdout }}"
+    in_wsl: "{{ wsl_check.stdout }}"
+
+- name: Print detected facts
+  ansible.builtin.debug:
+    msg:
+      - "in_container: {{ in_container }}"
+      - "in_wsl: {{ in_wsl }}"
+
+- name: Install WSL utils
+  become: true
+  ansible.builtin.apt:
+    name: wslu
+  when: in_wsl
+
+- name: Gather WSL facts
+  ansible.builtin.shell: |
+    wslpath $(wslvar USERPROFILE)
+  args:
+    executable: bash
+  changed_when: false
+  register: windows_home_out
+  when: in_wsl
+
+- name: Set WSL facts
+  ansible.builtin.set_fact:
+    windows_home: "{{ windows_home_out.stdout }}"
+  when: in_wsl

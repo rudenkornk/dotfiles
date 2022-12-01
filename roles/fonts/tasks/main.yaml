@@ -1,0 +1,46 @@
+- name: Create {{ dotfiles_tmp }}/FiraCode directory
+  ansible.builtin.file:
+    dest: "{{ dotfiles_tmp }}/FiraCode"
+    state: directory
+    mode: 0755
+
+- name: Create ~/.local/share/fonts directory
+  ansible.builtin.file:
+    dest: "{{ home }}/.local/share/fonts"
+    state: directory
+    mode: 0755
+
+- name: Download FiraCode font
+  ansible.builtin.unarchive:
+    src: "{{ fira_code_url }}"
+    dest: "{{ dotfiles_tmp }}/FiraCode"
+    remote_src: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: downloaded
+  until: downloaded is not failed
+
+- name: Find *.otf fonts
+  ansible.builtin.find:
+    paths: "{{ dotfiles_tmp }}/FiraCode/"
+    patterns: '*.otf'
+  register: otf_fonts
+
+- name: Copy *otf fonts to ~/.local/share/fonts
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: "{{ home }}/.local/share/fonts/{{ item.path | basename }}"
+    remote_src: true
+    mode: 0644
+  loop: "{{ otf_fonts.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+
+- name: Install fontconfig
+  become: true
+  ansible.builtin.apt:
+    name: fontconfig
+
+- name: Update fonts cache
+  ansible.builtin.command: fc-cache --force --verbose
+  changed_when: false

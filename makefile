@@ -1,307 +1,106 @@
 SHELL = /usr/bin/env bash
 
-PROJECT_NAME := dotfiles
-BUILD_DIR ?= build
-GPG_KEY ?=
+############################# Arguments ############################
+GPG ?=
+HOSTS ?= localhost
+USER ?= $(shell id --user --name)
 
-# It is implicitly implied that all user configs depend on all system configs
-# The reason for not to set this explicitly is to be able to run user configs separately from system config
-# This is helpful on systems, managed by third-party system administrator
+
+############################## Setup ###############################
+# DO NOT MANUALLY CHANGE BUILD_DIR
+# This parameter is used for in-container checks
+BUILD_DIR ?= __build__
+VENV := source $(BUILD_DIR)/venv/bin/activate
+
+
+########################### Main targets ###########################
 .PHONY: config
-config: config_system config_user
+config: $(BUILD_DIR)/bootstrap_control_node
+	if [[ "$(HOSTS)" =~ "localhost" || "$(HOSTS)" =~ "127.0.0.1" ]]; then \
+		sudo bash -c ''; \
+	fi
+	if [[ "$(HOSTS)" =~ ^dotfiles_ ]]; then \
+		$(VENV) && ansible-playbook --extra-vars "ubuntu_tag=$(UBUNTU_TAG)" --inventory localhost, --connection local playbook_dotfiles_container.yaml; \
+	fi
+	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS) user=$(USER)" \
+		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
+	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS) ansible_user=$(USER) gpg_key=$(GPG)" \
+		--inventory inventory.yaml playbook.yaml
 
-.PHONY: config_gui
-config_gui: config_system config_gui_system config_gui_user
+.PHONY: update
+update: $(BUILD_DIR)/bootstrap_control_node
+	$(VENV) && ./scripts/support.py update
 
-.PHONY: config_system
-config_system: \
-	bash_system \
-	clipboard_system \
-	cmd_utils_system \
-	common_utils_system \
-	docker_system \
-	fish_system \
-	git_system \
-	java_system \
-	lua_system \
-	neovim_system \
-	openvpn_system \
-	powershell_system \
-	python_system \
-	ruby_system \
-	ssh_system \
-	wsl_system \
 
-.PHONY: config_user
-config_user: \
-	bash_user \
-	cmd_utils_user \
-	docker_user \
-	fish_user \
-	git_user \
-	go_user \
-	gpg_user \
-	latexindent_user \
-	lua_user \
-	neovim_user \
-	nodejs_user \
-	python_user \
-	rust_user \
-	ssh_user \
-	tmux_user \
-	windows_terminal_user \
+############################## Checks ##############################
+UBUNTU_TAG ?= 22.04
 
-.PHONY: config_gui_system
-config_gui_system: \
-	chrome_system \
-	keyboard_layouts_system \
-	slack_system \
-	telegram_system \
-	vscode_system \
-	zoom_system \
-
-.PHONY: config_gui_user
-config_gui_user: \
-	fonts_user \
-	konsole_user \
-	mouse_user \
-	tilda_user \
-
-.PHONY: checkout_projects
-checkout_projects: $(BUILD_DIR)/checkout_projects
-
-.PHONY: bash_system
-bash_system:
-	sudo scripts/config_system.sh bash
-
-.PHONY: clipboard_system
-clipboard_system: common_utils_system
-	sudo scripts/config_system.sh clipboard
-
-.PHONY: cmd_utils_system
-cmd_utils_system: common_utils_system
-	sudo scripts/config_system.sh cmd_utils
-
-.PHONY: common_utils_system
-common_utils_system:
-	sudo scripts/config_system.sh common_utils
-
-.PHONY: docker_system
-docker_system: common_utils_system
-	sudo scripts/config_system.sh docker
-
-.PHONY: fish_system
-fish_system: common_utils_system ssh_system
-	sudo scripts/config_system.sh fish
-
-.PHONY: git_system
-git_system: common_utils_system
-	sudo scripts/config_system.sh git
-
-.PHONY: java_system
-java_system:
-	sudo scripts/config_system.sh java
-
-.PHONY: lua_system
-lua_system: common_utils_system
-	sudo scripts/config_system.sh lua
-
-.PHONY: neovim_system
-neovim_system: common_utils_system ruby_system
-	sudo scripts/config_system.sh neovim
-
-.PHONY: openvpn_system
-openvpn_system:
-	sudo scripts/config_system.sh openvpn
-
-.PHONY: powershell_system
-powershell_system: common_utils_system
-	sudo scripts/config_system.sh powershell
-
-.PHONY: python_system
-python_system:
-	sudo scripts/config_system.sh python
-
-.PHONY: ruby_system
-ruby_system:
-	sudo scripts/config_system.sh ruby
-
-.PHONY: ssh_system
-ssh_system:
-	sudo scripts/config_system.sh ssh
-
-.PHONY: wsl_system
-wsl_system:
-	sudo scripts/config_system.sh wsl
-
-.PHONY: chrome_system
-chrome_system: common_utils_system
-	sudo scripts/config_system.sh chrome
-
-.PHONY: keyboard_layouts_system
-keyboard_layouts_system:
-	sudo scripts/config_system.sh keyboard_layouts
-
-.PHONY: slack_system
-slack_system: common_utils_system
-	sudo scripts/config_system.sh slack
-
-.PHONY: telegram_system
-telegram_system: common_utils_system
-	sudo scripts/config_system.sh telegram
-
-.PHONY: vscode_system
-vscode_system: common_utils_system
-	sudo scripts/config_system.sh vscode
-
-.PHONY: zoom_system
-zoom_system:
-	sudo scripts/config_system.sh zoom
-
-.PHONY: bash_user
-bash_user:
-	scripts/config_user.sh bash
-
-.PHONY: cmd_utils_user
-cmd_utils_user:
-	scripts/config_user.sh cmd_utils
-
-.PHONY: docker_user
-docker_user:
-	scripts/config_user.sh docker
-
-.PHONY: fish_user
-fish_user:
-	scripts/config_user.sh fish
-
-.PHONY: git_user
-git_user: nodejs_user
-	scripts/config_user.sh git
-
-.PHONY: go_user
-go_user:
-	scripts/config_user.sh go
-
-.PHONY: gpg_user
-gpg_user:
-	GPG_KEY=$(GPG_KEY) scripts/config_user.sh gpg
-
-.PHONY: latexindent_user
-latexindent_user:
-	scripts/config_user.sh latexindent
-
-.PHONY: lua_user
-lua_user:
-	scripts/config_user.sh lua
-
-.PHONY: neovim_user
-neovim_user: python_user nodejs_user go_user rust_user
-	scripts/config_user.sh neovim
-
-.PHONY: nodejs_user
-nodejs_user:
-	scripts/config_user.sh nodejs
-
-.PHONY: python_user
-python_user:
-	scripts/config_user.sh python
-
-.PHONY: rust_user
-rust_user:
-	scripts/config_user.sh rust
-
-.PHONY: ssh_user
-ssh_user: gpg_user
-	scripts/config_user.sh ssh
-
-.PHONY: tmux_user
-tmux_user: python_user
-	scripts/config_user.sh tmux
-
-.PHONY: windows_terminal_user
-windows_terminal_user:
-	scripts/config_user.sh windows_terminal
-
-.PHONY: fonts_user
-fonts_user:
-	scripts/config_user.sh fonts
-
-.PHONY: konsole_user
-konsole_user:
-	scripts/config_user.sh konsole
-
-.PHONY: mouse_user
-mouse_user:
-	scripts/config_user.sh mouse
-
-.PHONY: tilda_user
-tilda_user:
-	scripts/config_user.sh tilda
-
-$(BUILD_DIR)/checkout_projects: git/checkout_projects.sh
-	./git/checkout_projects.sh
-	mkdir --parents $(BUILD_DIR) && touch $@
+.PHONY: lint
+lint: $(BUILD_DIR)/bootstrap_control_node
+	$(VENV) && ansible-lint playbook.yaml
+	$(VENV) && ansible-lint playbook_bootstrap_control_node.yaml
+	$(VENV) && ansible-lint playbook_bootstrap_hosts.yaml
+	$(VENV) && ansible-lint playbook_dotfiles_container.yaml
+	$(VENV) && python3 -m black --line-length 120 --check .
+	
+	dirs=($$(ls roles)); \
+	roles=($$(grep --perl-regex --only-matching "\- role\: \K\w+" playbook.yaml | sort)); \
+	for i in $$(seq 1 $$(($${#dirs[@]} - 1))); do \
+		if [[ "$${dirs[$$i]}" != "$${roles[$$i]}" ]]; then \
+			echo "playbook.yaml is missing \"$${dirs[$$i]}\" role"; \
+			exit 1; \
+		fi; \
+	done
 
 .PHONY: check
-check: \
-	check_git_status \
+check: $(BUILD_DIR)/bootstrap_control_node
+	make HOSTS=dotfiles_$(UBUNTU_TAG) config
 
-.PHONY: check_git_status
-check_git_status:
-	[[ -z $$(git status --porcelain) ]] || exit 1
+.PHONY: check_bootstrap_control_node
+check_bootstrap_control_node: $(BUILD_DIR)/$(UBUNTU_TAG)/bootstrap_control_node
+
+$(BUILD_DIR)/$(UBUNTU_TAG)/bootstrap_control_node: $(BUILD_DIR)/bootstrap_control_node
+	podman run --rm --interactive --tty \
+		--mount=type=bind,source=$$(pwd),target=$$(pwd) \
+		--workdir $$(pwd) ubuntu:$(UBUNTU_TAG) bash -c \
+			' \
+			apt-get update && apt-get install make --yes --no-install-recommends && \
+			make BUILD_DIR=$(BUILD_DIR)/$(UBUNTU_TAG) $(BUILD_DIR)/$(UBUNTU_TAG)/bootstrap_control_node \
+			'
 
 
-.PHONY: clean
-clean:
+###################### Bootstrap control node ######################
+.PHONY: $(BUILD_DIR)/not_ready
 
-
-###################### docker support ######################
-TARGET ?= config
-COMMAND ?=
-DOCKER_KEEP_CI_USER_SUDO := true
-DOCKER_IMAGE_TAG := rudenkornk/docker_ci:1.1.0
-DOCKER_CONTAINER_NAME := $(PROJECT_NAME)_container
-DOCKER_CONTAINER := $(BUILD_DIR)/$(DOCKER_CONTAINER_NAME)
-DOCKER_COMMAND != [[ ! -z '$(COMMAND)' ]] && echo '$$(COMMAND)' || echo 'make $$(TARGET)'
-
-IF_DOCKERD_UP := command -v docker &> /dev/null && pidof dockerd &> /dev/null
-
-DOCKER_CONTAINER_ID != $(IF_DOCKERD_UP) && docker container ls --quiet --all --filter name=^/$(DOCKER_CONTAINER_NAME)$
-DOCKER_CONTAINER_STATE != $(IF_DOCKERD_UP) && docker container ls --format {{.State}} --all --filter name=^/$(DOCKER_CONTAINER_NAME)$
-DOCKER_CONTAINER_RUN_STATUS != [[ "$(DOCKER_CONTAINER_STATE)" != "running" ]] && echo "$(DOCKER_CONTAINER)_not_running"
-WSL_ARGS != [[ -S $$WSL_INTEROP ]] && echo "--mount type=bind,source=$$WSL_INTEROP,target=$$WSL_INTEROP --env WSL_INTEROP=$$WSL_INTEROP"
-
-.PHONY: $(DOCKER_CONTAINER)_not_running
-$(DOCKER_CONTAINER): $(DOCKER_CONTAINER_RUN_STATUS)
-ifneq ($(DOCKER_CONTAINER_ID),)
-	docker container rename $(DOCKER_CONTAINER_NAME) $(DOCKER_CONTAINER_NAME)_$(DOCKER_CONTAINER_ID)
-endif
-	docker run --interactive --tty --detach \
-		--user ci_user \
-		--env BUILD_DIR="/home/ci_user/build" \
-		--env KEEP_CI_USER_SUDO="$(DOCKER_KEEP_CI_USER_SUDO)" \
-		--env CI_UID="$$(id --user)" --env CI_GID="$$(id --group)" \
-		--env "TERM=xterm-256color" \
-		--name $(DOCKER_CONTAINER_NAME) \
-		--mount type=bind,source="$$(pwd)",target=/home/repo \
-		$(WSL_ARGS) \
-		$(DOCKER_IMAGE_TAG)
-	sleep 1
+$(BUILD_DIR)/bootstrap_control_node: $(BUILD_DIR)/ansible playbook_bootstrap_control_node.yaml
+	sudo bash -c ''
+	$(VENV) && ansible-playbook --inventory localhost, --connection=local playbook_bootstrap_control_node.yaml
 	mkdir --parents $(BUILD_DIR) && touch $@
 
-$(DOCKER_CONTAINER)_prepare: $(DOCKER_CONTAINER)
-	docker exec $(DOCKER_CONTAINER_NAME) bash -c \
-		" \
+ANSIBLE_INSTALLED != ($(VENV) &> /dev/null && command -v ansible &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
+$(BUILD_DIR)/ansible: $(BUILD_DIR)/venv requirements.txt $(ANSIBLE_INSTALLED)
+	$(VENV) && pip3 install -r requirements.txt
+	mkdir --parents $(BUILD_DIR) && touch $@
+
+$(BUILD_DIR)/venv: $(BUILD_DIR)/python
+	python3 -m venv $(BUILD_DIR)/venv
+
+PYTHON_INSTALLED != (command -v python3 &> /dev/null && command -v pip3 &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
+$(BUILD_DIR)/python: $(BUILD_DIR)/sudo $(PYTHON_INSTALLED)
+	if [[ -n "$(PYTHON_INSTALLED)" ]]; then \
 		sudo apt-get update && \
-		sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-			make \
-		"
+		DEBIAN_FRONTEND=noninteractive sudo apt-get install --yes --no-install-recommends \
+			python3-venv \
+			python3-pip \
+			; \
+	fi
 	mkdir --parents $(BUILD_DIR) && touch $@
 
-.PHONY: container
-container: $(DOCKER_CONTAINER)_prepare
-
-.PHONY: in_docker
-in_docker: $(DOCKER_CONTAINER)_prepare
-	docker exec $(DOCKER_CONTAINER_NAME) bash -c '$(DOCKER_COMMAND)'
-
+SUDO_INSTALLED != command -v sudo &> /dev/null || echo "$(BUILD_DIR)/not_ready"
+$(BUILD_DIR)/sudo: $(SUDO_INSTALLED)
+	if [[ -n "$(SUDO_INSTALLED)" ]]; then \
+		apt-get update && \
+		DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
+			sudo; \
+	fi
+	mkdir --parents $(BUILD_DIR) && touch $@

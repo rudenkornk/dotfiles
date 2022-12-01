@@ -1,0 +1,26 @@
+- name: Create projects directory
+  ansible.builtin.file:
+    path: "{{ dotfiles_parent_path }}"
+    state: directory
+    mode: 0755
+
+- name: Copy dotfiles repository
+  ansible.posix.synchronize:
+    src: "{{ playbook_dir }}"
+    dest: "{{ dotfiles_parent_path }}"
+    rsync_opts: "--filter=':- .gitignore'"
+  register: changed_dotfiles
+  changed_when: changed_dotfiles.stdout_lines | length >= 5
+
+- name: Show changed files
+  ansible.builtin.debug:
+    msg:
+      - "Total changed files: {{ changed_dotfiles.stdout_lines | length }}"
+      - "First 5 changed files:"
+      - "{{ changed_dotfiles.stdout_lines[0:5] }}"
+
+- name: Create tmp dir in dotfiles repo
+  ansible.builtin.file:
+    path: "{{ dotfiles_tmp }}"
+    state: directory
+    mode: 0755

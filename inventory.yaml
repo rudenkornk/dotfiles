@@ -1,0 +1,11 @@
+all:
+  hosts:
+    dotfiles_22.04:
+      ansible_connection: podman
+      ansible_python_interpreter: auto_silent
+    dotfiles_22.10:
+      ansible_connection: podman
+      ansible_python_interpreter: auto_silent
+    dotfiles_23.04:
+      ansible_connection: podman
+      ansible_python_interpreter: auto_silent

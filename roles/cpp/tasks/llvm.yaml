@@ -1,0 +1,464 @@
+- name: Add LLVM gpg key
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ llvm_gpg }}"
+    dest: /etc/apt/trusted.gpg.d/llvm.asc
+
+- name: Add LLVM repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/llvm.asc] {{ llvm_repo }} llvm-toolchain-{{ ansible_distribution_release }}-{{ llvm_version }} main
+
+- name: Install LLVM
+  become: true
+  ansible.builtin.apt:
+    name:
+      - clang-format-{{ llvm_version }}
+      - clang-tidy-{{ llvm_version }}
+      - clang-tools-{{ llvm_version }}
+      - clang-{{ llvm_version }}
+      - clangd-{{ llvm_version }}
+      - libc++-{{ llvm_version }}-dev
+      - libc++abi-{{ llvm_version }}-dev
+      - libclang-common-{{ llvm_version }}-dev
+      - libclang-cpp{{ llvm_version }}-dev
+      - libclang-{{ llvm_version }}-dev
+      - libomp-{{ llvm_version }}-dev
+      - libunwind-{{ llvm_version }}-dev
+      - lld-{{ llvm_version }}
+      - lld-{{ llvm_version }}
+      - lldb-{{ llvm_version }}
+      - lldb-{{ llvm_version }}
+      - llvm-{{ llvm_version }}-dev
+      - llvm-{{ llvm_version }}-tools
+
+- name: Update LLVM alternatives
+  become: true
+  community.general.alternatives:
+    name: clang
+    link: /usr/bin/clang
+    path: /usr/bin/clang-{{ llvm_version }}
+    priority: "{{ llvm_version }}0"
+    subcommands:
+      - name: FileCheck
+        link: /usr/bin/FileCheck
+        path: /usr/bin/FileCheck-{{ llvm_version }}
+      - name: analyze-build
+        link: /usr/bin/analyze-build
+        path: /usr/bin/analyze-build-{{ llvm_version }}
+      - name: asan_symbolize
+        link: /usr/bin/asan_symbolize
+        path: /usr/bin/asan_symbolize-{{ llvm_version }}
+      - name: bugpoint
+        link: /usr/bin/bugpoint
+        path: /usr/bin/bugpoint-{{ llvm_version }}
+      - name: c-index-test
+        link: /usr/bin/c-index-test
+        path: /usr/bin/c-index-test-{{ llvm_version }}
+      - name: clang-apply-replacements
+        link: /usr/bin/clang-apply-replacements
+        path: /usr/bin/clang-apply-replacements-{{ llvm_version }}
+      - name: clang-change-namespace
+        link: /usr/bin/clang-change-namespace
+        path: /usr/bin/clang-change-namespace-{{ llvm_version }}
+      - name: clang-check
+        link: /usr/bin/clang-check
+        path: /usr/bin/clang-check-{{ llvm_version }}
+      - name: clang-cl
+        link: /usr/bin/clang-cl
+        path: /usr/bin/clang-cl-{{ llvm_version }}
+      - name: clang-cpp
+        link: /usr/bin/clang-cpp
+        path: /usr/bin/clang-cpp-{{ llvm_version }}
+      - name: clang-doc
+        link: /usr/bin/clang-doc
+        path: /usr/bin/clang-doc-{{ llvm_version }}
+      - name: clang-extdef-mapping
+        link: /usr/bin/clang-extdef-mapping
+        path: /usr/bin/clang-extdef-mapping-{{ llvm_version }}
+      - name: clang-include-fixer
+        link: /usr/bin/clang-include-fixer
+        path: /usr/bin/clang-include-fixer-{{ llvm_version }}
+      - name: clang-linker-wrapper
+        link: /usr/bin/clang-linker-wrapper
+        path: /usr/bin/clang-linker-wrapper-{{ llvm_version }}
+      - name: clang-move
+        link: /usr/bin/clang-move
+        path: /usr/bin/clang-move-{{ llvm_version }}
+      - name: clang-nvlink-wrapper
+        link: /usr/bin/clang-nvlink-wrapper
+        path: /usr/bin/clang-nvlink-wrapper-{{ llvm_version }}
+      - name: clang-offload-bundler
+        link: /usr/bin/clang-offload-bundler
+        path: /usr/bin/clang-offload-bundler-{{ llvm_version }}
+      - name: clang-offload-wrapper
+        link: /usr/bin/clang-offload-wrapper
+        path: /usr/bin/clang-offload-wrapper-{{ llvm_version }}
+      - name: clang-query
+        link: /usr/bin/clang-query
+        path: /usr/bin/clang-query-{{ llvm_version }}
+      - name: clang-refactor
+        link: /usr/bin/clang-refactor
+        path: /usr/bin/clang-refactor-{{ llvm_version }}
+      - name: clang-rename
+        link: /usr/bin/clang-rename
+        path: /usr/bin/clang-rename-{{ llvm_version }}
+      - name: clang-reorder-fields
+        link: /usr/bin/clang-reorder-fields
+        path: /usr/bin/clang-reorder-fields-{{ llvm_version }}
+      - name: clang-repl
+        link: /usr/bin/clang-repl
+        path: /usr/bin/clang-repl-{{ llvm_version }}
+      - name: clang-scan-deps
+        link: /usr/bin/clang-scan-deps
+        path: /usr/bin/clang-scan-deps-{{ llvm_version }}
+      - name: clangd
+        link: /usr/bin/clangd
+        path: /usr/bin/clangd-{{ llvm_version }}
+      - name: count
+        link: /usr/bin/count
+        path: /usr/bin/count-{{ llvm_version }}
+      - name: diagtool
+        link: /usr/bin/diagtool
+        path: /usr/bin/diagtool-{{ llvm_version }}
+      - name: dsymutil
+        link: /usr/bin/dsymutil
+        path: /usr/bin/dsymutil-{{ llvm_version }}
+      - name: find-all-symbols
+        link: /usr/bin/find-all-symbols
+        path: /usr/bin/find-all-symbols-{{ llvm_version }}
+      - name: git-clang-format
+        link: /usr/bin/git-clang-format
+        path: /usr/bin/git-clang-format-{{ llvm_version }}
+      - name: hmaptool
+        link: /usr/bin/hmaptool
+        path: /usr/bin/hmaptool-{{ llvm_version }}
+      - name: hwasan_symbolize
+        link: /usr/bin/hwasan_symbolize
+        path: /usr/bin/hwasan_symbolize-{{ llvm_version }}
+      - name: intercept-build
+        link: /usr/bin/intercept-build
+        path: /usr/bin/intercept-build-{{ llvm_version }}
+      - name: ld.lld
+        link: /usr/bin/ld.lld
+        path: /usr/bin/ld.lld-{{ llvm_version }}
+      - name: ld64.lld
+        link: /usr/bin/ld64.lld
+        path: /usr/bin/ld64.lld-{{ llvm_version }}
+      - name: llc
+        link: /usr/bin/llc
+        path: /usr/bin/llc-{{ llvm_version }}
+      - name: lld
+        link: /usr/bin/lld
+        path: /usr/bin/lld-{{ llvm_version }}
+      - name: lld-link
+        link: /usr/bin/lld-link
+        path: /usr/bin/lld-link-{{ llvm_version }}
+      - name: lldb
+        link: /usr/bin/lldb
+        path: /usr/bin/lldb-{{ llvm_version }}
+      - name: lldb-argdumper
+        link: /usr/bin/lldb-argdumper
+        path: /usr/bin/lldb-argdumper-{{ llvm_version }}
+      - name: lldb-instr
+        link: /usr/bin/lldb-instr
+        path: /usr/bin/lldb-instr-{{ llvm_version }}
+      - name: lldb-server
+        link: /usr/bin/lldb-server
+        path: /usr/bin/lldb-server-{{ llvm_version }}
+      - name: lldb-vscode
+        link: /usr/bin/lldb-vscode
+        path: /usr/bin/lldb-vscode-{{ llvm_version }}
+      - name: lli
+        link: /usr/bin/lli
+        path: /usr/bin/lli-{{ llvm_version }}
+      - name: lli-child-target
+        link: /usr/bin/lli-child-target
+        path: /usr/bin/lli-child-target-{{ llvm_version }}
+      - name: llvm-PerfectShuffle
+        link: /usr/bin/llvm-PerfectShuffle
+        path: /usr/bin/llvm-PerfectShuffle-{{ llvm_version }}
+      - name: llvm-addr2line
+        link: /usr/bin/llvm-addr2line
+        path: /usr/bin/llvm-addr2line-{{ llvm_version }}
+      - name: llvm-ar
+        link: /usr/bin/llvm-ar
+        path: /usr/bin/llvm-ar-{{ llvm_version }}
+      - name: llvm-as
+        link: /usr/bin/llvm-as
+        path: /usr/bin/llvm-as-{{ llvm_version }}
+      - name: llvm-bcanalyzer
+        link: /usr/bin/llvm-bcanalyzer
+        path: /usr/bin/llvm-bcanalyzer-{{ llvm_version }}
+      - name: llvm-bitcode-strip
+        link: /usr/bin/llvm-bitcode-strip
+        path: /usr/bin/llvm-bitcode-strip-{{ llvm_version }}
+      - name: llvm-c-test
+        link: /usr/bin/llvm-c-test
+        path: /usr/bin/llvm-c-test-{{ llvm_version }}
+      - name: llvm-cat
+        link: /usr/bin/llvm-cat
+        path: /usr/bin/llvm-cat-{{ llvm_version }}
+      - name: llvm-cfi-verify
+        link: /usr/bin/llvm-cfi-verify
+        path: /usr/bin/llvm-cfi-verify-{{ llvm_version }}
+      - name: llvm-config
+        link: /usr/bin/llvm-config
+        path: /usr/bin/llvm-config-{{ llvm_version }}
+      - name: llvm-cov
+        link: /usr/bin/llvm-cov
+        path: /usr/bin/llvm-cov-{{ llvm_version }}
+      - name: llvm-cvtres
+        link: /usr/bin/llvm-cvtres
+        path: /usr/bin/llvm-cvtres-{{ llvm_version }}
+      - name: llvm-cxxdump
+        link: /usr/bin/llvm-cxxdump
+        path: /usr/bin/llvm-cxxdump-{{ llvm_version }}
+      - name: llvm-cxxfilt
+        link: /usr/bin/llvm-cxxfilt
+        path: /usr/bin/llvm-cxxfilt-{{ llvm_version }}
+      - name: llvm-cxxmap
+        link: /usr/bin/llvm-cxxmap
+        path: /usr/bin/llvm-cxxmap-{{ llvm_version }}
+      - name: llvm-debuginfod-find
+        link: /usr/bin/llvm-debuginfod-find
+        path: /usr/bin/llvm-debuginfod-find-{{ llvm_version }}
+      - name: llvm-diff
+        link: /usr/bin/llvm-diff
+        path: /usr/bin/llvm-diff-{{ llvm_version }}
+      - name: llvm-dis
+        link: /usr/bin/llvm-dis
+        path: /usr/bin/llvm-dis-{{ llvm_version }}
+      - name: llvm-dlltool
+        link: /usr/bin/llvm-dlltool
+        path: /usr/bin/llvm-dlltool-{{ llvm_version }}
+      - name: llvm-dwarfdump
+        link: /usr/bin/llvm-dwarfdump
+        path: /usr/bin/llvm-dwarfdump-{{ llvm_version }}
+      - name: llvm-dwp
+        link: /usr/bin/llvm-dwp
+        path: /usr/bin/llvm-dwp-{{ llvm_version }}
+      - name: llvm-exegesis
+        link: /usr/bin/llvm-exegesis
+        path: /usr/bin/llvm-exegesis-{{ llvm_version }}
+      - name: llvm-extract
+        link: /usr/bin/llvm-extract
+        path: /usr/bin/llvm-extract-{{ llvm_version }}
+      - name: llvm-gsymutil
+        link: /usr/bin/llvm-gsymutil
+        path: /usr/bin/llvm-gsymutil-{{ llvm_version }}
+      - name: llvm-ifs
+        link: /usr/bin/llvm-ifs
+        path: /usr/bin/llvm-ifs-{{ llvm_version }}
+      - name: llvm-install-name-tool
+        link: /usr/bin/llvm-install-name-tool
+        path: /usr/bin/llvm-install-name-tool-{{ llvm_version }}
+      - name: llvm-jitlink
+        link: /usr/bin/llvm-jitlink
+        path: /usr/bin/llvm-jitlink-{{ llvm_version }}
+      - name: llvm-jitlink-executor
+        link: /usr/bin/llvm-jitlink-executor
+        path: /usr/bin/llvm-jitlink-executor-{{ llvm_version }}
+      - name: llvm-lib
+        link: /usr/bin/llvm-lib
+        path: /usr/bin/llvm-lib-{{ llvm_version }}
+      - name: llvm-libtool-darwin
+        link: /usr/bin/llvm-libtool-darwin
+        path: /usr/bin/llvm-libtool-darwin-{{ llvm_version }}
+      - name: llvm-link
+        link: /usr/bin/llvm-link
+        path: /usr/bin/llvm-link-{{ llvm_version }}
+      - name: llvm-lipo
+        link: /usr/bin/llvm-lipo
+        path: /usr/bin/llvm-lipo-{{ llvm_version }}
+      - name: llvm-lto
+        link: /usr/bin/llvm-lto
+        path: /usr/bin/llvm-lto-{{ llvm_version }}
+      - name: llvm-lto2
+        link: /usr/bin/llvm-lto2
+        path: /usr/bin/llvm-lto2-{{ llvm_version }}
+      - name: llvm-mc
+        link: /usr/bin/llvm-mc
+        path: /usr/bin/llvm-mc-{{ llvm_version }}
+      - name: llvm-mca
+        link: /usr/bin/llvm-mca
+        path: /usr/bin/llvm-mca-{{ llvm_version }}
+      - name: llvm-ml
+        link: /usr/bin/llvm-ml
+        path: /usr/bin/llvm-ml-{{ llvm_version }}
+      - name: llvm-modextract
+        link: /usr/bin/llvm-modextract
+        path: /usr/bin/llvm-modextract-{{ llvm_version }}
+      - name: llvm-mt
+        link: /usr/bin/llvm-mt
+        path: /usr/bin/llvm-mt-{{ llvm_version }}
+      - name: llvm-nm
+        link: /usr/bin/llvm-nm
+        path: /usr/bin/llvm-nm-{{ llvm_version }}
+      - name: llvm-objcopy
+        link: /usr/bin/llvm-objcopy
+        path: /usr/bin/llvm-objcopy-{{ llvm_version }}
+      - name: llvm-objdump
+        link: /usr/bin/llvm-objdump
+        path: /usr/bin/llvm-objdump-{{ llvm_version }}
+      - name: llvm-opt-report
+        link: /usr/bin/llvm-opt-report
+        path: /usr/bin/llvm-opt-report-{{ llvm_version }}
+      - name: llvm-otool
+        link: /usr/bin/llvm-otool
+        path: /usr/bin/llvm-otool-{{ llvm_version }}
+      - name: llvm-pdbutil
+        link: /usr/bin/llvm-pdbutil
+        path: /usr/bin/llvm-pdbutil-{{ llvm_version }}
+      - name: llvm-profdata
+        link: /usr/bin/llvm-profdata
+        path: /usr/bin/llvm-profdata-{{ llvm_version }}
+      - name: llvm-profgen
+        link: /usr/bin/llvm-profgen
+        path: /usr/bin/llvm-profgen-{{ llvm_version }}
+      - name: llvm-ranlib
+        link: /usr/bin/llvm-ranlib
+        path: /usr/bin/llvm-ranlib-{{ llvm_version }}
+      - name: llvm-rc
+        link: /usr/bin/llvm-rc
+        path: /usr/bin/llvm-rc-{{ llvm_version }}
+      - name: llvm-readelf
+        link: /usr/bin/llvm-readelf
+        path: /usr/bin/llvm-readelf-{{ llvm_version }}
+      - name: llvm-readobj
+        link: /usr/bin/llvm-readobj
+        path: /usr/bin/llvm-readobj-{{ llvm_version }}
+      - name: llvm-reduce
+        link: /usr/bin/llvm-reduce
+        path: /usr/bin/llvm-reduce-{{ llvm_version }}
+      - name: llvm-rtdyld
+        link: /usr/bin/llvm-rtdyld
+        path: /usr/bin/llvm-rtdyld-{{ llvm_version }}
+      - name: llvm-sim
+        link: /usr/bin/llvm-sim
+        path: /usr/bin/llvm-sim-{{ llvm_version }}
+      - name: llvm-size
+        link: /usr/bin/llvm-size
+        path: /usr/bin/llvm-size-{{ llvm_version }}
+      - name: llvm-split
+        link: /usr/bin/llvm-split
+        path: /usr/bin/llvm-split-{{ llvm_version }}
+      - name: llvm-stress
+        link: /usr/bin/llvm-stress
+        path: /usr/bin/llvm-stress-{{ llvm_version }}
+      - name: llvm-strings
+        link: /usr/bin/llvm-strings
+        path: /usr/bin/llvm-strings-{{ llvm_version }}
+      - name: llvm-strip
+        link: /usr/bin/llvm-strip
+        path: /usr/bin/llvm-strip-{{ llvm_version }}
+      - name: llvm-symbolizer
+        link: /usr/bin/llvm-symbolizer
+        path: /usr/bin/llvm-symbolizer-{{ llvm_version }}
+      - name: llvm-tapi-diff
+        link: /usr/bin/llvm-tapi-diff
+        path: /usr/bin/llvm-tapi-diff-{{ llvm_version }}
+      - name: llvm-tblgen
+        link: /usr/bin/llvm-tblgen
+        path: /usr/bin/llvm-tblgen-{{ llvm_version }}
+      - name: llvm-tli-checker
+        link: /usr/bin/llvm-tli-checker
+        path: /usr/bin/llvm-tli-checker-{{ llvm_version }}
+      - name: llvm-undname
+        link: /usr/bin/llvm-undname
+        path: /usr/bin/llvm-undname-{{ llvm_version }}
+      - name: llvm-windres
+        link: /usr/bin/llvm-windres
+        path: /usr/bin/llvm-windres-{{ llvm_version }}
+      - name: llvm-xray
+        link: /usr/bin/llvm-xray
+        path: /usr/bin/llvm-xray-{{ llvm_version }}
+      - name: modularize
+        link: /usr/bin/modularize
+        path: /usr/bin/modularize-{{ llvm_version }}
+      - name: not
+        link: /usr/bin/not
+        path: /usr/bin/not-{{ llvm_version }}
+      - name: obj2yaml
+        link: /usr/bin/obj2yaml
+        path: /usr/bin/obj2yaml-{{ llvm_version }}
+      - name: opt
+        link: /usr/bin/opt
+        path: /usr/bin/opt-{{ llvm_version }}
+      - name: pp-trace
+        link: /usr/bin/pp-trace
+        path: /usr/bin/pp-trace-{{ llvm_version }}
+      - name: sancov
+        link: /usr/bin/sancov
+        path: /usr/bin/sancov-{{ llvm_version }}
+      - name: sanstats
+        link: /usr/bin/sanstats
+        path: /usr/bin/sanstats-{{ llvm_version }}
+      - name: scan-build
+        link: /usr/bin/scan-build
+        path: /usr/bin/scan-build-{{ llvm_version }}
+      - name: scan-build-py
+        link: /usr/bin/scan-build-py
+        path: /usr/bin/scan-build-py-{{ llvm_version }}
+      - name: scan-view
+        link: /usr/bin/scan-view
+        path: /usr/bin/scan-view-{{ llvm_version }}
+      - name: split-file
+        link: /usr/bin/split-file
+        path: /usr/bin/split-file-{{ llvm_version }}
+      - name: verify-uselistorder
+        link: /usr/bin/verify-uselistorder
+        path: /usr/bin/verify-uselistorder-{{ llvm_version }}
+      - name: wasm-ld
+        link: /usr/bin/wasm-ld
+        path: /usr/bin/wasm-ld-{{ llvm_version }}
+      - name: yaml-bench
+        link: /usr/bin/yaml-bench
+        path: /usr/bin/yaml-bench-{{ llvm_version }}
+      - name: yaml2obj
+        link: /usr/bin/yaml2obj
+        path: /usr/bin/yaml2obj-{{ llvm_version }}
+
+- name: Update clang++ alternatives
+  become: true
+  community.general.alternatives:
+    name: clang++
+    link: /usr/bin/clang++
+    path: /usr/bin/clang++-{{ llvm_version }}
+    priority: "{{ llvm_version }}0"
+
+- name: Update clang-format alternatives
+  become: true
+  community.general.alternatives:
+    name: clang-format
+    link: /usr/bin/clang-format
+    path: /usr/bin/clang-format-{{ llvm_version }}
+    priority: "{{ llvm_version }}0"
+    subcommands:
+      - name: clang-format-diff
+        link: /usr/bin/clang-format-diff
+        path: /usr/bin/clang-format-diff-{{ llvm_version }}
+
+- name: Update clang-tidy alternatives
+  become: true
+  community.general.alternatives:
+    name: clang-tidy
+    link: /usr/bin/clang-tidy
+    path: /usr/bin/clang-tidy-{{ llvm_version }}
+    priority: "{{ llvm_version }}0"
+    subcommands:
+      - name: clang-tidy-diff.py
+        link: /usr/bin/clang-tidy-diff.py
+        path: /usr/bin/clang-tidy-diff-{{ llvm_version }}.py
+
+- name: Update run-clang-tidy alternatives
+  become: true
+  community.general.alternatives:
+    name: run-clang-tidy
+    link: /usr/bin/run-clang-tidy
+    path: /usr/bin/run-clang-tidy-{{ llvm_version }}
+    priority: "{{ llvm_version }}0"
+    subcommands:
+      - name: run-clang-tidy.py
+        link: /usr/bin/run-clang-tidy.py
+        path: /usr/bin/run-clang-tidy-{{ llvm_version }}.py

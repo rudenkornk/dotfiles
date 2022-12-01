@@ -1,0 +1,71 @@
+- name: Add docker gpg key
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ docker_gpg }}"
+    dest: /etc/apt/trusted.gpg.d/docker.asc
+
+- name: Add docker repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] {{ docker_repo }} {{ ansible_distribution_release }} stable
+
+- name: Install docker
+  become: true
+  ansible.builtin.apt:
+    name:
+      - containerd.io
+      - docker-ce
+      - docker-ce-cli
+      - docker-compose-plugin
+
+- name: Create /etc/docker dir
+  become: true
+  ansible.builtin.file:
+    path: "/etc/docker"
+    state: directory
+    mode: 0755
+
+- name: Copy daemon.json
+  become: true
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/daemon.json"
+    dest: "/etc/docker/daemon.json"
+    mode: 0644
+
+- name: Add {{ ansible_user }} to docker group
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups:
+      - docker
+    append: true
+
+- name: Create ~/.docker dir
+  ansible.builtin.file:
+    path: "{{ home }}/.docker"
+    state: directory
+    mode: 0755
+
+- name: Create ~/.docker/config.json
+  ansible.builtin.shell: |
+    set -o pipefail
+    config={{ home }}/.docker/config.json
+    if [[ ! -f $config || ! -s $config ]]; then
+      echo "{}" > $config
+    fi
+    # Do not create symbolic because it might be populated with docker credentials
+    jq -s '.[0] * .[1]' "{{ remote_role_path }}/files/config.json" "$config" | sponge $config
+  args:
+    executable: bash
+  changed_when: false
+
+- name: Install fish completions
+  ansible.builtin.get_url:
+    url: "{{ docker_fish_url }}"
+    dest: "{{ home }}/.config/fish/completions/docker.fish"
+    mode: 0755
+    force: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: downloaded
+  until: downloaded is not failed

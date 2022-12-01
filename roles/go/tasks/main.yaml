@@ -1,0 +1,17 @@
+- name: Install go
+  become: true
+  ansible.builtin.apt:
+    name: golang-go
+
+- name: Set up bash
+  ansible.builtin.lineinfile:
+    path: "{{ home }}/.bashrc"
+    regexp: 'source .*/{{ role_name }}/files'
+    line: source {{ remote_role_path }}/files/bash.sh
+
+- name: Create symlink to {{ role_name }}.fish
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
+    state: link
+    force: true

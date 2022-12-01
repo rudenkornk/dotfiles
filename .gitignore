@@ -1,6 +1,6 @@
-/build*
+/__build*
+__pycache__
 
-ssh/keys/*id_rsa
-openvpn/configs/*
 .gitsecret/keys/random_seed
 !*.secret
+roles/ssh/files/*id_rsa

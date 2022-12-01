@@ -1,0 +1,14 @@
+- name: Create Powershell config dir
+  ansible.builtin.file:
+    dest: "{{ windows_home }}/Documents/Powershell"
+    state: directory
+    mode: 0777
+  when: in_wsl
+
+# Powershell on Windows does not recognize symlinks
+- name: Copy Profile.ps1
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/Profile.ps1"
+    dest: "{{ windows_home }}/Documents/Powershell/Profile.ps1"
+    mode: 0777
+  when: in_wsl

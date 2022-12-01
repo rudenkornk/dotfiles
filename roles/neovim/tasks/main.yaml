@@ -1,0 +1,110 @@
+- name: Install neovim
+  become: true
+  ansible.builtin.apt:
+    deb: "{{ neovim_url }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: installed
+  until: installed is not failed
+
+- name: Install vim as a backup
+  become: true
+  ansible.builtin.apt:
+    name: vim
+
+- name: Install neovim gem
+  become: true
+  community.general.gem:
+    name: neovim
+
+- name: Install python packages
+  become: true
+  ansible.builtin.apt:
+    name:
+      - python3-autopep8
+      - python3-pynvim
+      - python3-sympy
+
+- name: Install node.js packages
+  become: true
+  community.general.npm:
+    name: "{{ item }}"
+    global: true
+  loop:
+    - alex
+    - neovim
+    - npm-groovy-lint
+
+- name: Install go packages
+  ansible.builtin.command: go install {{ actionlint_url }}@latest
+  register: go_status
+  changed_when: go_status.stdout != ""
+
+- name: Install tree-sitter-cli
+  ansible.builtin.shell: |
+    {{ home }}/.cargo/bin/cargo install tree-sitter-cli 2>&1
+  args:
+    executable: bash
+  register: status
+  changed_when: "'already installed' not in status.stdout"
+
+- name: Install NvChad
+  ansible.builtin.git:
+    repo: "{{ nvchad_url }}"
+    dest: "{{ home }}/.config/nvim"
+    version: "{{ nvchad_version }}"
+    force: true
+  register: nvchad_installed
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  until: nvchad_installed is not failed
+  changed_when: nvchad_installed.before != nvchad_installed.after
+
+- name: Patch NvChad - add plugin version pinning check
+  ansible.posix.patch:
+    src: "{{ role_path }}/files/nvchad.patch"
+    basedir: "{{ home }}/.config/nvim"
+    strip: 1
+    state: present
+  changed_when: nvchad_installed.before != nvchad_installed.after
+
+- name: Create neovim keymap directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/nvim/keymap"
+    state: directory
+    mode: 0755
+
+- name: Create symlink to rnk keymap
+  ansible.builtin.file:
+    src: "{{ dotfiles_path }}/roles/keyboard_layouts/files/rnk-qwerty-jcuken.vim"
+    dest: "{{ home }}/.config/nvim/keymap/rnk-qwerty-jcuken.vim"
+    state: link
+    force: true
+
+- name: Create symlink to NvChad config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/nvchad"
+    dest: "{{ home }}/.config/nvim/lua/custom"
+    state: link
+    force: true
+
+- name: Set up bash
+  ansible.builtin.lineinfile:
+    path: "{{ home }}/.bashrc"
+    regexp: 'source .*/{{ role_name }}/files'
+    line: source {{ remote_role_path }}/files/bash.sh
+
+- name: Create symlink to {{ role_name }}.fish
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
+    state: link
+    force: true
+
+- name: Create symlinks to fish functions
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"
+    dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
+    state: link
+    force: true
+  loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"

@@ -1,0 +1,106 @@
+diff --git a/functions/_fzf_configure_bindings_help.fish b/functions/_fzf_configure_bindings_help.fish
+index ecfe68e..02e57c7 100644
+--- a/functions/_fzf_configure_bindings_help.fish
++++ b/functions/_fzf_configure_bindings_help.fish
+@@ -17,6 +17,7 @@ DESCRIPTION
+         Search History     |  Ctrl+R     (R for reverse)   |  --history
+         Search Processes   |  Ctrl+Alt+P (P for process)   |  --processes
+         Search Variables   |  Ctrl+V     (V for variable)  |  --variables
++        Search Files       |  Ctrl+Y     (Y for fYles)     |  --files
+     Override a command's binding by specifying its corresponding option with the desired key
+     sequence. Disable a command's binding by specifying its corresponding option with no value.
+ 
+diff --git a/functions/_fzf_preview_file.fish b/functions/_fzf_preview_file.fish
+index eaa68d0..ecadfc3 100644
+--- a/functions/_fzf_preview_file.fish
++++ b/functions/_fzf_preview_file.fish
+@@ -2,7 +2,11 @@
+ function _fzf_preview_file --description "Print a preview for the given file based on its file type."
+     # because there's no way to guarantee that _fzf_search_directory passes the path to _fzf_preview_file
+     # as one argument, we collect all the arguments into one single variable and treat that as the path
+-    set file_path $argv
++    set file_path $argv[1]
++    if test (count $argv) -gt 1
++      set line_number $argv[2]
++      set bat_highlight_opt --highlight-line $line_number
++    end
+ 
+     if test -L "$file_path" # symlink
+         # notify user and recurse on the target of the symlink, which can be any of these file types
+@@ -18,7 +22,7 @@ function _fzf_preview_file --description "Print a preview for the given file bas
+             # need to escape quotes to make sure eval receives file_path as a single arg
+             eval "$fzf_preview_file_cmd '$file_path'"
+         else
+-            bat --style=numbers --color=always "$file_path"
++            bat --style=numbers --color=always $bat_highlight_opt "$file_path"
+         end
+     else if test -d "$file_path" # directory
+         if set --query fzf_preview_dir_cmd
+diff --git a/functions/_fzf_search_processes.fish b/functions/_fzf_search_processes.fish
+index 9424aad..dda66b5 100644
+--- a/functions/_fzf_search_processes.fish
++++ b/functions/_fzf_search_processes.fish
+@@ -2,8 +2,13 @@ function _fzf_search_processes --description "Search all running processes. Repl
+     # use all caps to be consistent with ps default format
+     # snake_case because ps doesn't seem to allow spaces in the field names
+     set ps_preview_fmt (string join ',' 'pid' 'ppid=PARENT' 'user' '%cpu' 'rss=RSS_IN_KB' 'start=START_TIME' 'command')
++    if not set --query fzf_ps_opts
++      set ps_opts '-A -opid,command'
++    else
++      set ps_opts $fzf_ps_opts
++    end
+     set processes_selected (
+-        ps -A -opid,command | \
++        ps $ps_opts | \
+         _fzf_wrapper --multi \
+                     --prompt="Search Processes> " \
+                     --query (commandline --current-token) \
+diff --git a/functions/fzf_configure_bindings.fish b/functions/fzf_configure_bindings.fish
+index ec24f73..47c3ceb 100644
+--- a/functions/fzf_configure_bindings.fish
++++ b/functions/fzf_configure_bindings.fish
+@@ -4,7 +4,7 @@ function fzf_configure_bindings --description "Installs the default key bindings
+     # no need to install bindings if not in interactive mode or running tests
+     status is-interactive || test "$CI" = true; or return
+ 
+-    set options_spec h/help 'directory=?' 'git_log=?' 'git_status=?' 'history=?' 'processes=?' 'variables=?'
++    set options_spec h/help 'directory=?' 'git_log=?' 'git_status=?' 'history=?' 'processes=?' 'variables=?' 'files=?'
+     argparse --max-args=0 --ignore-unknown $options_spec -- $argv 2>/dev/null
+     if test $status -ne 0
+         echo "Invalid option or a positional argument was provided." >&2
+@@ -16,13 +16,14 @@ function fzf_configure_bindings --description "Installs the default key bindings
+     else
+         # Initialize with default key sequences and then override or disable them based on flags
+         # index 1 = directory, 2 = git_log, 3 = git_status, 4 = history, 5 = processes, 6 = variables
+-        set key_sequences \e\cf \e\cl \e\cs \cr \e\cp \cv # \c = control, \e = escape
++        set key_sequences \e\cf \e\cl \e\cs \cr \e\cp \cv \cy # \c = control, \e = escape
+         set --query _flag_directory && set key_sequences[1] "$_flag_directory"
+         set --query _flag_git_log && set key_sequences[2] "$_flag_git_log"
+         set --query _flag_git_status && set key_sequences[3] "$_flag_git_status"
+         set --query _flag_history && set key_sequences[4] "$_flag_history"
+         set --query _flag_processes && set key_sequences[5] "$_flag_processes"
+         set --query _flag_variables && set key_sequences[6] "$_flag_variables"
++        set --query _flag_variables && set key_sequences[7] "$_flag_files"
+ 
+         # If fzf bindings already exists, uninstall it first for a clean slate
+         if functions --query _fzf_uninstall_bindings
+@@ -30,12 +31,13 @@ function fzf_configure_bindings --description "Installs the default key bindings
+         end
+ 
+         for mode in default insert
+-            test -n $key_sequences[1] && bind --mode $mode $key_sequences[1] _fzf_search_directory
+-            test -n $key_sequences[2] && bind --mode $mode $key_sequences[2] _fzf_search_git_log
+-            test -n $key_sequences[3] && bind --mode $mode $key_sequences[3] _fzf_search_git_status
+-            test -n $key_sequences[4] && bind --mode $mode $key_sequences[4] _fzf_search_history
+-            test -n $key_sequences[5] && bind --mode $mode $key_sequences[5] _fzf_search_processes
+-            test -n $key_sequences[6] && bind --mode $mode $key_sequences[6] "$_fzf_search_vars_command"
++            test -n $key_sequences[1] && bind --mode $mode $key_sequences[1] __fish_disable_focus _fzf_search_directory
++            test -n $key_sequences[2] && bind --mode $mode $key_sequences[2] __fish_disable_focus _fzf_search_git_log
++            test -n $key_sequences[3] && bind --mode $mode $key_sequences[3] __fish_disable_focus _fzf_search_git_status
++            test -n $key_sequences[4] && bind --mode $mode $key_sequences[4] __fish_disable_focus _fzf_search_history
++            test -n $key_sequences[5] && bind --mode $mode $key_sequences[5] __fish_disable_focus _fzf_search_processes
++            test -n $key_sequences[6] && bind --mode $mode $key_sequences[6] __fish_disable_focus "$_fzf_search_vars_command"
++            test -n $key_sequences[7] && bind --mode $mode $key_sequences[7] __fish_disable_focus _fzf_search_files
+         end
+ 
+         function _fzf_uninstall_bindings --inherit-variable key_sequences

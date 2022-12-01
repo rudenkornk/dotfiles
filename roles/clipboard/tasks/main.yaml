@@ -1,0 +1,61 @@
+- name: Set WSL clipboard and path
+  when: in_wsl
+  block:
+    - name: Create symlink to clip.exe
+      become: true
+      ansible.builtin.file:
+        src: /mnt/c/Windows/System32/clip.exe
+        dest: /usr/bin/clip.exe
+        state: link
+        force: true
+
+    - name: Create tmp dir for win32yank
+      ansible.builtin.file:
+        dest: "{{ dotfiles_tmp }}/win32yank"
+        state: directory
+        mode: 0777
+
+    - name: Download win32yank.exe
+      ansible.builtin.unarchive:
+        src: "{{ win32yank_url }}"
+        dest: "{{ dotfiles_tmp }}/win32yank"
+        remote_src: true
+      retries: "{{ web_retries }}"
+      delay: "{{ web_delay }}"
+      register: downloaded
+      until: downloaded is not failed
+
+    - name: Create dir for win32yank
+      become: true
+      ansible.builtin.file:
+        dest: "{{ windows_home }}/AppData/Local/win32yank"
+        state: directory
+        mode: 0777
+
+    - name: Copy win32yank.exe to Windows dir
+      become: true
+      ansible.builtin.copy:
+        src: "{{ dotfiles_tmp }}/win32yank/win32yank.exe"
+        dest: "{{ windows_home }}/AppData/Local/win32yank/win32yank.exe"
+        remote_src: true
+        mode: 0777
+
+    - name: Create symlink to win32yank.exe
+      become: true
+      ansible.builtin.file:
+        src: "{{ windows_home }}/AppData/Local/win32yank/win32yank.exe"
+        dest: /usr/bin/win32yank.exe
+        state: link
+        force: true
+
+    - name: Remove xsel package if in WSL
+      become: true
+      ansible.builtin.apt:
+        name: xsel
+        state: absent
+
+- name: Set clipboard when not in WSL
+  become: true
+  ansible.builtin.apt:
+    name: xsel
+  when: not in_wsl

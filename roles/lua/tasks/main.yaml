@@ -1,0 +1,101 @@
+- name: Install lua
+  become: true
+  ansible.builtin.apt:
+    name:
+      - liblua{{ lua_version }}-dev
+      - lua{{ lua_version }}
+      - lua-filesystem
+
+- name: Download luarocks
+  ansible.builtin.unarchive:
+    src: "{{ luarocks_url }}"
+    dest: "{{ dotfiles_tmp }}"
+    remote_src: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: downloaded
+  until: downloaded is not failed
+
+- name: Compile luarocks
+  ansible.builtin.shell: |
+    set -o pipefail
+    current_version=$(luarocks --version 2>&1 | grep --perl-regexp --only-matching "\d+\.\d+\.\d+" || true)
+    if [[ "{{ luarocks_version }}" != "$current_version" ]]; then
+      ./configure
+      make
+    else
+      echo true
+    fi
+  args:
+    executable: bash
+    chdir: "{{ dotfiles_tmp }}/luarocks-{{ luarocks_version }}"
+  changed_when: luarocks_matches.stdout != "true"
+  register: luarocks_matches
+
+- name: Install luarocks
+  become: true
+  ansible.builtin.shell: |
+    set -o pipefail
+    current_version=$(luarocks --version 2>&1 | grep --perl-regexp --only-matching "\d+\.\d+\.\d+" || true)
+    if [[ "{{ luarocks_version }}" != "$current_version" ]]; then
+      make install
+    fi
+  args:
+    executable: bash
+    chdir: "{{ dotfiles_tmp }}/luarocks-{{ luarocks_version }}"
+  changed_when: luarocks_matches.stdout != "true"
+
+- name: Install luarocks completions
+  ansible.builtin.shell: |
+    luarocks completion bash > {{ home }}/.local/share/bash-completion/completions/luarocks
+    luarocks completion fish > {{ home }}/.config/fish/completions/luarocks.fish
+  args:
+    executable: bash
+  changed_when: false
+
+- name: Create lua.fish config
+  ansible.builtin.template:
+    src: lua.fish
+    dest: "{{ home }}/.config/fish/conf.d/lua.fish"
+    mode: 0644
+
+- name: Install python3-lupa
+  become: true
+  ansible.builtin.apt:
+    name: python3-lupa
+
+- name: Install luasec
+  become: true
+  ansible.builtin.shell: |
+    set -o pipefail
+    if ! luarocks list luasec | grep --quiet "(installed)"; then
+      luarocks install luasec
+    fi
+  args:
+    executable: bash
+  register: installed
+  changed_when: installed.stdout != ""
+
+- name: Install luafilesystem
+  become: true
+  ansible.builtin.shell: |
+    set -o pipefail
+    if ! luarocks list luafilesystem | grep --quiet "(installed)"; then
+      luarocks install luafilesystem
+    fi
+  args:
+    executable: bash
+  register: installed
+  changed_when: installed.stdout != ""
+
+- name: Install json4Lua
+  become: true
+  ansible.builtin.shell: |
+    set -o pipefail
+    if ! luarocks list json4Lua | grep --quiet "(installed)"; then
+      luarocks install --server=http://rocks.moonscript.org/manifests/amrhassan json4Lua
+    fi
+  args:
+    executable: bash
+  register: installed
+  changed_when: installed.stdout != ""

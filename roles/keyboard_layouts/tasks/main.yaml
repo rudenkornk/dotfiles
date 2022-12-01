@@ -1,0 +1,31 @@
+- name: Install xkb-data
+  become: true
+  ansible.builtin.apt:
+    name: xkb-data
+
+- name: Copy rnk keyboard
+  become: true
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: /usr/share/X11/xkb/symbols/{{ item }}
+    owner: root
+    group: root
+    mode: '0644'
+  register: rnk_status
+  loop:
+    - en_rnk
+    - ru_rnk
+
+- name: Insert layout entry to evdev.xml
+  become: true
+  ansible.builtin.blockinfile:
+    path: /usr/share/X11/xkb/rules/evdev.xml
+    block: "{{ lookup('ansible.builtin.file', '{{ role_path }}/files/evdev.xml') }}"
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK FOR {{ role_name }} -->"
+    insertbefore: '\</layoutList\>'
+  register: evdev_status
+
+- name: Reconfigure xkb-data
+  become: true
+  changed_when: rnk_status is changed or evdev_status is changed
+  ansible.builtin.command: dpkg-reconfigure xkb-data

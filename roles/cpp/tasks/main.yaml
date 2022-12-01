@@ -1,0 +1,23 @@
+- name: Include gcc tasks
+  ansible.builtin.include_tasks:
+    file: gcc.yaml
+
+- name: Include llvm tasks
+  ansible.builtin.include_tasks:
+    file: llvm.yaml
+
+- name: Include cmake tasks
+  ansible.builtin.include_tasks:
+    file: cmake.yaml
+
+- name: Install common C++ tools
+  become: true
+  ansible.builtin.apt:
+    name:
+      - bison
+      - ccache
+      - flex
+      - gdb
+      - make
+      - ninja-build
+      - valgrind

@@ -1,0 +1,7 @@
+# Required by neovim
+- name: Install ansible
+  become: true
+  ansible.builtin.apt:
+    name:
+      - ansible-core
+      - ansible-lint

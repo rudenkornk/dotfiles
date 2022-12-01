@@ -1,0 +1,33 @@
+- name: Install perl
+  become: true
+  ansible.builtin.apt:
+    name: perl
+
+- name: Install cpanm
+  become: true
+  ansible.builtin.get_url:
+    url: https://cpanmin.us/
+    dest: /usr/bin/cpanm
+    mode: '0755'
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: downloaded
+  until: downloaded is not failed
+
+- name: Configure cpan
+  become: true
+  ansible.builtin.shell: |
+    set -o pipefail
+    echo y | cpan
+  args:
+    executable: bash
+  register: log
+  changed_when: ("configure as much as possible automatically" in log)
+
+- name: Install common perl packages
+  become: true
+  community.general.cpanm:
+    name: "{{ item }}"
+  loop:
+    - Archive::Tar
+    - Log::Log4perl

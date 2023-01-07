@@ -9,6 +9,7 @@
       - ca-certificates
       - dos2unix
       - file
+      - graphviz
       - gzip
       - htop
       - iptables

@@ -54,7 +54,7 @@ jobs:
     - name: Lint
       run: make lint
 
-  updater:
+  scripts:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout repository
@@ -63,3 +63,5 @@ jobs:
       run: make update
     - name: Show diff
       run: git diff
+    - name: Generate roles graph
+      run: make graph

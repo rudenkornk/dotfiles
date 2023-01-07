@@ -22,6 +22,11 @@ In neovim after it installs all the stuff run:
 make update
 ```
 
+## Show role dependency graph
+```bash
+make graph
+```
+
 ## Test
 ```bash
 make lint

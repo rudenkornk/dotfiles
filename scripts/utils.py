@@ -146,12 +146,12 @@ def update_github_release(url: str):
         return response
 
     try:
-        response = try_run(requests_get)
+        response = try_run(requests_get, try_run_delay=10)
     except _requests.exceptions.HTTPError as e:
         if e.response.status_code == 403:
             logger.warning(f"{2 * tab}GitHub API rate limit exceeded. Skipping this repo.")
             logger.warning(str(e))
-            return
+            return url
         raise
     releases = response.json()
     for release in releases:

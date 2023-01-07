@@ -22,16 +22,19 @@ def get_logger():
     return _logging.getLogger("support")
 
 
-def __stringify_paths(paths=[]):
-    s = list(map(lambda x: str(x), paths))
-    return ":".join(s)  # hopefully no one is that crazy to use colon in the path...
+def get_build_dir():
+    return "__build__"
+
+
+def get_build_path():
+    return get_repo_path() / get_build_dir()
 
 
 def run_shell(cmd, extra_env={}, extra_paths=[], capture_output=False):
     logger = get_logger()
     env = _os.environ.copy()
     env.update(extra_env)
-    extra_paths_str = __stringify_paths(extra_paths)
+    extra_paths_str = ":".join(list(map(lambda x: str(x), extra_paths)))
     env["PATH"] = extra_paths_str + (":" + env["PATH"]) if "PATH" in env else ""
 
     if not capture_output:

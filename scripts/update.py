@@ -68,9 +68,9 @@ def update_python_modules(dry_run: bool):
     tab = "  "
     logger = _utils.get_logger()
     requirements_path = _utils.get_repo_path() / "requirements.txt"
-    venv = _utils.get_repo_path() / "__build__/venv"
+    venv = _utils.get_build_path() / "venv"
     activate = f". {venv}/bin/activate && "
-    new_venv = _utils.get_repo_path() / "__build__/new_venv"
+    new_venv = _utils.get_build_path() / "new_venv"
     new_activate = f". {new_venv}/bin/activate && "
     new_requirements_path = new_venv / "requirements.txt"
     if new_venv.exists():

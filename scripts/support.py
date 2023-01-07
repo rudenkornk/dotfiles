@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
-from pathlib import Path as _Path
 import argparse as _argparse
 import logging as _logging
-import os as _os
 import sys as _sys
 
 import update as _update
@@ -76,7 +74,6 @@ def _process_shell_args(shell_args: list):
 
 
 if __name__ == "__main__":
-    _os.chdir(_Path(_sys.path[0]) / "..")
     _logging.basicConfig(format="%(message)s")
     logger = _utils.get_logger()
     logger.setLevel(_logging.INFO)

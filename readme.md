@@ -25,8 +25,8 @@ make update
 ## Test
 ```bash
 make lint
-make check UBUNTU_TAG=22.04;
-make check UBUNTU_TAG=22.10;
+make check UBUNTU_TAG=22.04
+make check UBUNTU_TAG=22.10
 ```
 
 

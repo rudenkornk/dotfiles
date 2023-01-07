@@ -30,12 +30,14 @@
     ansible.builtin.apt:
       name: rsync
 
-  - name: Install git (for updating dependencies)
-    become: true
-    ansible.builtin.apt:
-      name: git
-
   - name: Install podman (for checking config in containers)
     become: true
     ansible.builtin.apt:
       name: podman
+
+  - name: Install tools for support.py
+    become: true
+    ansible.builtin.apt:
+      name:
+        - git
+        - graphviz

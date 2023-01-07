@@ -31,6 +31,10 @@ config: $(BUILD_DIR)/bootstrap_control_node
 update: $(BUILD_DIR)/bootstrap_control_node
 	$(VENV) && ./scripts/support.py update
 
+.PHONY: graph
+graph: $(BUILD_DIR)/bootstrap_control_node
+	$(VENV) && ./scripts/support.py graph
+
 
 ############################## Checks ##############################
 UBUNTU_TAG ?= 22.04

@@ -4,6 +4,7 @@ import argparse as _argparse
 import logging as _logging
 import sys as _sys
 
+import roles_graph as _roles_graph
 import update as _update
 import utils as _utils
 
@@ -37,12 +38,20 @@ def _add_update_parser(subparsers):
     )
 
 
+def _add_roles_graph_parser(subparsers):
+    graph_parser = subparsers.add_parser("graph", help="Generate roles dependency graph.")
+    graph_parser.add_argument(
+        "-s", "--silent", dest="silent", action="store_false", help="Do not open graph in image viewer."
+    )
+
+
 def _get_parser():
     parser = _argparse.ArgumentParser(
         description="Support scripts for dotfiles repo.", formatter_class=_argparse.ArgumentDefaultsHelpFormatter
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
     _add_update_parser(subparsers)
+    _add_roles_graph_parser(subparsers)
     return parser
 
 
@@ -51,11 +60,17 @@ def _parse_update_args_hook(args):
         args.components = _get_components()
 
 
+def _parse_roles_graph_args_hook(args):
+    pass
+
+
 def _parse_shell_args(shell_args: list):
     parser = _get_parser()
     args = parser.parse_args(shell_args[1:])
     if args.command == "update":
         _parse_update_args_hook(args)
+    if args.command == "graph":
+        _parse_roles_graph_args_hook(args)
     return args
 
 
@@ -67,10 +82,16 @@ def _process_update(args):
         logger.info("")
 
 
+def _process_roles_graph(args):
+    _roles_graph.generate_png(args.silent)
+
+
 def _process_shell_args(shell_args: list):
     args = _parse_shell_args(shell_args)
     if args.command == "update":
         _process_update(args)
+    if args.command == "graph":
+        _process_roles_graph(args)
 
 
 if __name__ == "__main__":

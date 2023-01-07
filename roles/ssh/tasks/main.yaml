@@ -16,7 +16,7 @@
 - name: Check if private keys are decrypted
   ansible.builtin.find:
     paths: "{{ remote_role_path }}/files/"
-    patterns: '*.rsa'
+    patterns: '*rsa'
   register: rsa_keys
 
 - name: Create symlinks to ssh private keys

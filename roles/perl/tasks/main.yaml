@@ -30,7 +30,10 @@
     name: "{{ item }}"
   loop:
     - Archive::Tar
+    - File::Basename
+    - File::Find
     - File::HomeDir
+    - Graph::Easy
     - Log::Dispatch::File
     - Log::Log4perl
     - Unicode::GCString

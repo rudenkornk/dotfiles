@@ -6,16 +6,6 @@
   register: texlive_installed
   until: texlive_installed is not failed
 
-- name: Install perl packages
-  become: true
-  community.general.cpanm:
-    name: "{{ item }}"
-  loop:
-    - File::HomeDir
-    - Log::Dispatch::File
-    - Unicode::GCString
-    - YAML::Tiny
-
 - name: Install support packages
   become: true
   ansible.builtin.apt:

@@ -21,7 +21,6 @@ return {
       "jedi_language_server",
       "jsonls",
       "opencl_ls",
-      "perlnavigator",
       "powershell_es",
       "sumneko_lua",
       "texlab",

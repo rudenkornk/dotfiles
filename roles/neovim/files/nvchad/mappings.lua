@@ -49,6 +49,7 @@ M.disabled = {
     ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
     ["<leader>h"] = "", -- Unmap horizontal terminal (use <A-h>)
     ["<leader>v"] = "", -- Unmap vertical terminal (use <A-v>)
+    ["<leader>x"] = "", -- Unmap closing buffer (map <leader>q instead)
   },
 }
 
@@ -160,6 +161,14 @@ M.tabufline = {
   n = {
     ["<leader>tp"] = { "<CMD> Tbufnext <CR>", "  goto next buffer" },
     ["<leader>tn"] = { "<CMD> Tbufprev <CR>", "  goto prev buffer" },
+
+    -- close buffer + hide terminal buffer
+    ["<leader>d"] = {
+      function()
+        require("nvchad_ui.tabufline").close_buffer()
+      end,
+      "close buffer",
+    },
   },
 }
 

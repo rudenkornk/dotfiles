@@ -1,5 +1,5 @@
 ansible-core==2.14.1
-ansible-lint==5.4.0
+ansible-lint==5.4.0 # lock
 black==22.12.0
 graphviz==0.20.1
 luadata==1.0.5

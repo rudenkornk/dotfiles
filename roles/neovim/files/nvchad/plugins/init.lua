@@ -50,6 +50,7 @@ return {
   ["kylechui/nvim-surround"] = {
     commit = manifest["kylechui/nvim-surround"].commit,
     keys = { "c", "d", "y" },
+    after = "vim-tmux-clipboard",
     config = function()
       require("nvim-surround").setup()
     end,

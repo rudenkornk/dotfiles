@@ -75,8 +75,12 @@ def _parse_shell_args(shell_args: list):
 
 
 def _process_update(args):
+    logger = _utils.get_logger()
     for component in args.components:
-        _utils.update_title(component, args.dry_run)
+        title = component.replace("_", " ")
+        suffix = " (dry run)" if args.dry_run else ""
+        logger.info(f"Updating {title}{suffix}:")
+
         update_func = getattr(_update, "update_" + component)
         update_func(dry_run=args.dry_run)
         logger.info("")

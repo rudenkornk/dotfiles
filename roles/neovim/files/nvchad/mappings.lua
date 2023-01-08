@@ -1,3 +1,31 @@
+-- NcChad free leader keys:
+-- <leader>a <leader>A
+-- <leader>B
+-- <leader>C
+-- <leader>d
+-- <leader>E
+-- <leader>F
+-- <leader>G
+-- <leader>h <leader>H
+-- <leader>i <leader>I
+-- <leader>j <leader>J
+-- <leader>k <leader>K
+-- <leader>L
+-- <leader>m <leader>M
+-- <leader>N
+-- <leader>o <leader>O
+-- <leader>P
+-- <leader>q <leader>Q
+-- <leader>R
+-- <leader>s <leader>S
+-- <leader>T
+-- <leader>U
+-- <leader>V
+-- <leader>W
+-- <leader>X
+-- <leader>y <leader>Y
+-- <leader>z <leader>Z
+
 local M = {}
 
 local function termcodes(str)

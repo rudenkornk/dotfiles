@@ -150,7 +150,7 @@ def update_github_release(url: str):
     except _requests.exceptions.HTTPError as e:
         if e.response.status_code == 403:
             logger.warning(f"{2 * tab}GitHub API rate limit exceeded. Skipping this repo.")
-            logger.warning(str(e))
+            logger.warning(2 * tab + str(e))
             return url
         raise
     releases = response.json()
@@ -187,4 +187,4 @@ def update_github_release(url: str):
 
     chosen_binary = parsed["binary"].replace(parsed["version"], chosen_version)
     new_url = f"{prefix}/{repo}/{dir}/{chosen_tag}/{chosen_binary}"
-    return parse_github_release_url(new_url)
+    return new_url

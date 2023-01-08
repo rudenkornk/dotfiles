@@ -64,6 +64,7 @@ return {
   },
   ["lukas-reineke/indent-blankline.nvim"] = {
     commit = manifest["lukas-reineke/indent-blankline.nvim"].commit,
+    after = "nvim-treesitter",
     override_options = {
       show_current_context_start = false,
     },

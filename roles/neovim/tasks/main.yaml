@@ -81,6 +81,12 @@
     state: link
     force: true
 
+- name: Set up clipboard for neovim
+  ansible.builtin.template:
+    src: clipboard.lua
+    dest: "{{ remote_role_path }}/files/nvchad/clipboard.lua"
+    mode: 0644
+
 - name: Create symlink to NvChad config
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/nvchad"

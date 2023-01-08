@@ -1,3 +1,26 @@
+diff --git a/lua/core/lazy_load.lua b/lua/core/lazy_load.lua
+index 29973d4..d8f7910 100644
+--- a/lua/core/lazy_load.lua
++++ b/lua/core/lazy_load.lua
+@@ -11,18 +11,12 @@ M.lazy_load = function(tb)
+       if tb.condition() then
+         vim.api.nvim_del_augroup_by_name(tb.augroup_name)
+ 
+-        -- dont defer for treesitter as it will show slow highlighting
+-        -- This deferring only happens only when we do "nvim filename"
+-        if tb.plugin ~= "nvim-treesitter" then
+           vim.defer_fn(function()
+             require("packer").loader(tb.plugin)
+             if tb.plugin == "nvim-lspconfig" then
+               vim.cmd "silent! do FileType"
+             end
+           end, 0)
+-        else
+-          require("packer").loader(tb.plugin)
+-        end
+       end
+     end,
+   })
 diff --git a/lua/plugins/init.lua b/lua/plugins/init.lua
 index 778efd5..f60e951 100644
 --- a/lua/plugins/init.lua

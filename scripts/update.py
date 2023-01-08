@@ -9,7 +9,7 @@ import utils as _utils
 def update_clipboard(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/clipboard/vars/main.yaml"
     vars = _utils.yaml_read(vars_path)
-    vars["win32yank_url"] = _utils.update_github_release(vars["win32yank_url"])["url"]
+    vars["win32yank_url"] = _utils.update_github_release(vars["win32yank_url"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
 
@@ -17,7 +17,7 @@ def update_clipboard(dry_run: bool):
 def update_cmake(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/cpp/vars/main.yaml"
     vars = _utils.yaml_read(vars_path)
-    vars["cmake_url"] = _utils.update_github_release(vars["cmake_url"])["url"]
+    vars["cmake_url"] = _utils.update_github_release(vars["cmake_url"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
 
@@ -25,7 +25,7 @@ def update_cmake(dry_run: bool):
 def update_drawio(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/latex/vars/main.yaml"
     vars = _utils.yaml_read(vars_path)
-    vars["drawio_url"] = _utils.update_github_release(vars["drawio_url"])["url"]
+    vars["drawio_url"] = _utils.update_github_release(vars["drawio_url"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
 
@@ -33,7 +33,7 @@ def update_drawio(dry_run: bool):
 def update_fonts(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/fonts/vars/main.yaml"
     vars = _utils.yaml_read(vars_path)
-    vars["fira_code_url"] = _utils.update_github_release(vars["fira_code_url"])["url"]
+    vars["fira_code_url"] = _utils.update_github_release(vars["fira_code_url"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
 
@@ -41,7 +41,7 @@ def update_fonts(dry_run: bool):
 def update_neovim(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/neovim/vars/main.yaml"
     vars = _utils.yaml_read(vars_path)
-    vars["neovim_url"] = _utils.update_github_release(vars["neovim_url"])["url"]
+    vars["neovim_url"] = _utils.update_github_release(vars["neovim_url"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
 
@@ -128,13 +128,13 @@ def update_shell_utils(dry_run: bool):
     vars["fzf_commit"] = _utils.update_repo(vars["fzf_url"], from_commit=vars["fzf_commit"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
-    vars["rg_url"] = _utils.update_github_release(vars["rg_url"])["url"]
+    vars["rg_url"] = _utils.update_github_release(vars["rg_url"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
-    vars["bat_url"] = _utils.update_github_release(vars["bat_url"])["url"]
+    vars["bat_url"] = _utils.update_github_release(vars["bat_url"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
-    vars["fd_url"] = _utils.update_github_release(vars["fd_url"])["url"]
+    vars["fd_url"] = _utils.update_github_release(vars["fd_url"])
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
 

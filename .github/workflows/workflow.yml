@@ -14,7 +14,7 @@ defaults:
 
 jobs:
 
-  config:
+  check_locahost:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout repository
@@ -26,7 +26,7 @@ jobs:
         make | tee __build__/log
         ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
 
-  check:
+  check_container:
     strategy:
       matrix:
         ubuntu_tag: ["22.04", "22.10"]

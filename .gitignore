@@ -1,6 +1,8 @@
 /__build*
 __pycache__
 
+nvchad/clipboard.lua
+
 .gitsecret/keys/random_seed
 !*.secret
 roles/ssh/files/*id_rsa

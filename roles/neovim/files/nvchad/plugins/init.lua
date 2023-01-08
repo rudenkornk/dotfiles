@@ -115,6 +115,7 @@ return {
   ["nvim-treesitter/nvim-treesitter"] = require("custom.plugins.treesitter"),
   ["pearofducks/ansible-vim"] = {
     commit = manifest["pearofducks/ansible-vim"].commit,
+    after = "nvim-cmp",
   },
   ["petertriho/cmp-git"] = {
     commit = manifest["petertriho/cmp-git"].commit,
@@ -141,6 +142,7 @@ return {
   },
   ["roxma/vim-tmux-clipboard"] = {
     commit = manifest["roxma/vim-tmux-clipboard"].commit,
+    keys = { "c", "d", "y" },
   },
   ["RRethy/vim-illuminate"] = {
     commit = manifest["RRethy/vim-illuminate"].commit,

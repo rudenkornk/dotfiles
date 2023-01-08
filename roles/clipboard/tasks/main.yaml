@@ -1,4 +1,4 @@
-- name: Set WSL clipboard and path
+- name: Set WSL clipboard
   when: in_wsl
   block:
     - name: Create symlink to clip.exe
@@ -54,8 +54,18 @@
         name: xsel
         state: absent
 
-- name: Set clipboard when not in WSL
-  become: true
-  ansible.builtin.apt:
-    name: xsel
+    - name: Set clipboard fact to win32yank
+      ansible.builtin.set_fact:
+        clipboard: win32yank
+
+- name: Set xsel clipboard
   when: not in_wsl
+  block:
+    - name: Set clipboard when not in WSL
+      become: true
+      ansible.builtin.apt:
+        name: xsel
+
+    - name: Set clipboard fact to xsel
+      ansible.builtin.set_fact:
+        clipboard: xsel

@@ -1,0 +1,1 @@
+return "win32yank"

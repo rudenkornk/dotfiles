@@ -37,7 +37,7 @@
     state: link
     force: true
     mode: 0644
-  loop: "{{ lookup('fileglob', '{{ role_path }}/files/kesy/*rsa.pub', wantlist=True) }}"
+  loop: "{{ lookup('fileglob', '{{ role_path }}/files/keys/*rsa.pub', wantlist=True) }}"
 
 - name: Create symlink to {{ role_name }}.fish
   ansible.builtin.file:

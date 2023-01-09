@@ -1,3 +1,8 @@
+- name: Install git
+  become: true
+  ansible.builtin.apt:
+    name: git
+
 - name: Add git-secret gpg key
   become: true
   ansible.builtin.get_url:
@@ -8,11 +13,6 @@
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/git_secret.asc] {{ git_secret_repo }} git-secret main
-
-- name: Install git
-  become: true
-  ansible.builtin.apt:
-    name: git
 
 - name: Install git secret
   become: true

@@ -6,3 +6,4 @@ roles/neovim/files/nvchad/clipboard.lua
 .gitsecret/keys/random_seed
 !*.secret
 roles/ssh/files/*id_rsa
+roles/ssh/files/keys/*id_rsa

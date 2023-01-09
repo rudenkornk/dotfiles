@@ -1,8 +1,12 @@
 - name: Configure control node
   hosts: localhost
   tasks:
+  - name: Load ansible collections versions
+    ansible.builtin.include_vars:
+      file: roles/ansible/vars/main.yaml
+
   - name: Install community.general
-    ansible.builtin.command: ansible-galaxy collection install community.general
+    ansible.builtin.command: "ansible-galaxy collection install community.general:{{ community_general.version }}"
     changed_when: '"Nothing to do" not in collection_installed.stdout'
     delay: 300
     register: collection_installed
@@ -10,7 +14,7 @@
     until: collection_installed is not failed
 
   - name: Install ansible.posix
-    ansible.builtin.command: ansible-galaxy collection install ansible.posix
+    ansible.builtin.command: "ansible-galaxy collection install ansible.posix:{{ ansible_posix.version }}"
     changed_when: '"Nothing to do" not in collection_installed.stdout'
     delay: 300
     register: collection_installed
@@ -18,7 +22,7 @@
     until: collection_installed is not failed
 
   - name: Install containers.podman
-    ansible.builtin.command: ansible-galaxy collection install containers.podman
+    ansible.builtin.command: "ansible-galaxy collection install containers.podman:{{ containers_podman.version }}"
     changed_when: '"Nothing to do" not in collection_installed.stdout'
     delay: 300
     register: collection_installed

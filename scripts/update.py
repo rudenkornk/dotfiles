@@ -10,7 +10,7 @@ import shutil as _shutil
 import utils as _utils
 
 
-def _update_repo(repo: str, from_commit: str, locked: bool):
+def _update_commit(repo: str, from_commit: str, locked: bool):
     counter = 0
     max_log = 5
     hash_len = 7
@@ -157,12 +157,12 @@ def _update_github_release_in_yaml(vars_path: _Path, url_var: str, lock_var: str
         _utils.yaml_write(vars_path, vars)
 
 
-def _update_repo_in_yaml(vars_path: _Path, repo_var: str, commit_var: str, lock_var: str, dry_run: bool):
+def _update_commit_in_yaml(vars_path: _Path, repo_var: str, commit_var: str, lock_var: str, dry_run: bool):
     vars = _utils.yaml_read(vars_path)
     locked = False
     if lock_var in vars:
         locked = vars[lock_var]
-    vars[commit_var] = _update_repo(vars[repo_var], from_commit=vars[commit_var], locked=locked)
+    vars[commit_var] = _update_commit(vars[repo_var], from_commit=vars[commit_var], locked=locked)
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
 
@@ -200,14 +200,14 @@ def update_neovim_plugins(dry_run: bool):
         locked = False
         if "lock" in info:
             locked = info["lock"]
-        info["commit"] = _update_repo(repo, from_commit=info["commit"], locked=locked)
+        info["commit"] = _update_commit(repo, from_commit=info["commit"], locked=locked)
         if not dry_run:
             _utils.lua_write(manifest_path, manifest)
 
 
 def update_nvchad(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/neovim/vars/main.yaml"
-    _update_repo_in_yaml(vars_path, "nvchad_url", "nvchad_version", "nvchad_lock", dry_run)
+    _update_commit_in_yaml(vars_path, "nvchad_url", "nvchad_version", "nvchad_lock", dry_run)
 
 
 def update_python_modules(dry_run: bool):
@@ -282,7 +282,7 @@ def update_python_modules(dry_run: bool):
 
 def update_shell_utils(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/shell_utils/vars/main.yaml"
-    _update_repo_in_yaml(vars_path, "fzf_url", "fzf_commit", "fzf_lock", dry_run)
+    _update_commit_in_yaml(vars_path, "fzf_url", "fzf_commit", "fzf_lock", dry_run)
     _update_github_release_in_yaml(vars_path, "bat_url", "bat_lock", dry_run)
     _update_github_release_in_yaml(vars_path, "fd_url", "fd_lock", dry_run)
     _update_github_release_in_yaml(vars_path, "rg_url", "rg_lock", dry_run)
@@ -290,4 +290,4 @@ def update_shell_utils(dry_run: bool):
 
 def update_tpm(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/tmux/vars/main.yaml"
-    _update_repo_in_yaml(vars_path, "tpm_url", "tpm_commit", "tpm_lock", dry_run)
+    _update_commit_in_yaml(vars_path, "tpm_url", "tpm_commit", "tpm_lock", dry_run)

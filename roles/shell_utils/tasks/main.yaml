@@ -47,6 +47,7 @@
   ansible.builtin.apt:
     name:
       - exa
+      - hexyl
       - jq
       - moreutils
 

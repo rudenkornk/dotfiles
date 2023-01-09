@@ -46,6 +46,13 @@
     state: directory
     mode: 0755
 
+- name: Install jq and sponge
+  become: true
+  ansible.builtin.apt:
+    name:
+      - jq
+      - moreutils
+
 - name: Create ~/.docker/config.json
   ansible.builtin.shell: |
     set -o pipefail

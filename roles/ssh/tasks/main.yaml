@@ -15,7 +15,7 @@
 
 - name: Check if private keys are decrypted
   ansible.builtin.find:
-    paths: "{{ remote_role_path }}/files/"
+    paths: "{{ remote_role_path }}/files/keys"
     patterns: '*rsa'
   register: rsa_keys
 
@@ -32,12 +32,12 @@
 
 - name: Create symlinks to ssh public keys
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/{{ item | basename }}"
+    src: "{{ remote_role_path }}/files/keys/{{ item | basename }}"
     dest: "{{ home }}/.ssh/{{ item | basename }}"
     state: link
     force: true
     mode: 0644
-  loop: "{{ lookup('fileglob', '{{ role_path }}/files/*rsa.pub', wantlist=True) }}"
+  loop: "{{ lookup('fileglob', '{{ role_path }}/files/kesy/*rsa.pub', wantlist=True) }}"
 
 - name: Create symlink to {{ role_name }}.fish
   ansible.builtin.file:

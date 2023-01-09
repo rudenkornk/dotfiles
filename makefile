@@ -55,6 +55,11 @@ lint: $(BUILD_DIR)/bootstrap_control_node
 			exit 1; \
 		fi; \
 	done
+	
+	if (git log --name-only --oneline | grep --quiet --perl-regex "(rsa|ovpn|auth)\$$"); then \
+		echo "Looks like rsa key, ovpn config or auth data leaked!!!"; \
+		exit 1; \
+	fi
 
 .PHONY: check
 check: $(BUILD_DIR)/bootstrap_control_node

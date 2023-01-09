@@ -1,4 +1,4 @@
-name: Workflow
+name: dotfiles workflow
 
 on:
   push:
@@ -11,6 +11,10 @@ on:
 defaults:
   run:
     shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
 
 jobs:
 

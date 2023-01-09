@@ -7,3 +7,5 @@ roles/neovim/files/nvchad/clipboard.lua
 !*.secret
 roles/ssh/files/*id_rsa
 roles/ssh/files/keys/*id_rsa
+roles/openvpn/files/configs/*.auth
+roles/openvpn/files/configs/*.ovpn

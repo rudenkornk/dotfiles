@@ -63,9 +63,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Generate roles graph
+      run: make graph
     - name: Check update works
       run: make update
     - name: Show diff
       run: git diff
-    - name: Generate roles graph
-      run: make graph

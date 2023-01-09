@@ -1,7 +1,7 @@
 /__build*
 __pycache__
 
-nvchad/clipboard.lua
+roles/neovim/files/nvchad/clipboard.lua
 
 .gitsecret/keys/random_seed
 !*.secret

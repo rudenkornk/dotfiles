@@ -5,6 +5,19 @@ import utils as _utils
 import update_utils as _update_utils
 
 
+def update_ansible_collections(dry_run: bool):
+    vars_path = _utils.get_repo_path() / "roles/ansible/vars/main.yaml"
+    _update_utils.update_tag_in_yaml(
+        vars_path, "community_general.repo", "community_general.version", "community_general.lock", dry_run
+    )
+    _update_utils.update_tag_in_yaml(
+        vars_path, "ansible_posix.repo", "ansible_posix.version", "ansible_posix.lock", dry_run
+    )
+    _update_utils.update_tag_in_yaml(
+        vars_path, "containers_podman.repo", "containers_podman.version", "containers_podman.lock", dry_run
+    )
+
+
 def update_clipboard(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/clipboard/vars/main.yaml"
     _update_utils.update_github_release_in_yaml(vars_path, "win32yank_url", "win32yank_lock", dry_run)

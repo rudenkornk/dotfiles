@@ -39,9 +39,12 @@
     ansible.builtin.apt:
       name: podman
 
-  - name: Install tools for support.py
+  - name: Install git (for support.py update)
     become: true
     ansible.builtin.apt:
-      name:
-        - git
-        - graphviz
+      name: git
+
+  - name: Install graphviz (for support.py graph)
+    become: true
+    ansible.builtin.apt:
+      name: graphviz

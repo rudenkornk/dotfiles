@@ -1,11 +1,12 @@
 [alias]
     amend = commit --amend
+    bf = ! git diff --name-only --relative --diff-filter=d | xargs bat --diff
     bl = blame -s
     br = branch -vv
-    biff = ! git diff --name-only --relative --diff-filter=d | xargs bat --diff
     ck = checkout
     cm = commit
     cp = cherry-pick
+    df = diff
     fp = format-patch
     ft = fetch --all
     l = log

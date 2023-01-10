@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from dotty_dict import dotty as _dotty
 from pathlib import Path as _Path
 import logging as _logging
 import luadata as _luadata
@@ -14,16 +15,16 @@ def get_repo_path():
     return (_Path(_sys.path[0]) / "..").resolve()
 
 
+def get_build_path():
+    return get_repo_path() / "__build__"
+
+
+def get_tmp_path():
+    return get_build_path() / "tmp"
+
+
 def get_logger():
     return _logging.getLogger("support")
-
-
-def get_build_dir():
-    return "__build__"
-
-
-def get_build_path():
-    return get_repo_path() / get_build_dir()
 
 
 def run_shell(cmd, extra_env={}, extra_paths=[], capture_output=False):
@@ -62,9 +63,9 @@ def lua_write(path: _Path, data):
 
 def yaml_read(path: _Path):
     with open(path, "r") as stream:
-        return _yaml.safe_load(stream)
+        return _dotty(_yaml.safe_load(stream))
 
 
 def yaml_write(path: _Path, data):
     with open(path, "w") as stream:
-        return _yaml.safe_dump(data, stream=stream)
+        return _yaml.safe_dump(dict(data), stream=stream)

@@ -191,7 +191,10 @@ return {
     commit = manifest["zbirenbaum/copilot.lua"].commit,
     after = "nvim-cmp",
     config = function()
-      require("copilot").setup()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
     end,
   },
 }

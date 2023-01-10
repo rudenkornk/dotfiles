@@ -42,6 +42,56 @@ def update_commit(origin: str, from_commit: str, locked: bool):
     return last_hash
 
 
+def update_tag(origin: str, from_tag: str, locked: bool):
+    tab = "  "
+    logger = _utils.get_logger()
+    locked_msg = " (version is locked)" if locked else ""
+    logger.info(tab + f"Updating {origin}{locked_msg}")
+    if locked:
+        return from_tag
+
+    repo_normalized = _re.sub(r"[^0-9a-zA-Z_\.]+", "_", origin)
+    repo_path = _utils.get_build_path() / "tmp" / repo_normalized
+    repo = _git.Repo.init(repo_path)
+    for remote in repo.remotes:
+        remote.remove(repo, remote.name)
+    remote = repo.create_remote("origin", origin)
+    remote.fetch()
+
+    current_semver = _semver.VersionInfo.parse(from_tag)
+
+    for tag_obj in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
+        tag = tag_obj.name
+        try:
+            semver = _semver.VersionInfo.parse(tag)
+        except ValueError:
+            logger.info(f"{2 * tab}{tag} -- skipping (could not parse as semver)")
+            continue
+        if semver == current_semver:
+            logger.info(f"{2 * tab}{tag} == {from_tag} -- return (reached current version)")
+            chosen_tag = from_tag
+            break
+        if semver.prerelease is not None:
+            logger.info(f"{2 * tab}{tag} -- skipping (marked as prerelease)")
+            continue
+        if semver.build is not None:
+            logger.info(f"{2 * tab}{tag} -- skipping (marked as intermediate build)")
+            continue
+        if semver < current_semver:
+            logger.warning(f"{2 * tab}{tag} < {from_tag} -- skipping and returning current (missed current version)")
+            chosen_tag = from_tag
+            break
+        if semver > current_semver:
+            breaking_note = ""
+            if semver.major > current_semver.major:
+                breaking_note = " [POSSIBLY BREAKING]"
+            logger.info(f"{2 * tab}{tag} > {from_tag}{breaking_note} -- return (found latest version)")
+            chosen_tag = tag
+            break
+        assert False
+    return chosen_tag
+
+
 def parse_github_release_url(url: str):
     parsed_url = _re.search(r"(^.*?github.com)/([^/]+/[^/]+)/releases/download/([^/]+)/(.*)", url)
     prefix = parsed_url.group(1)
@@ -167,6 +217,16 @@ def update_commit_in_yaml(vars_path: _Path, repo_var: str, commit_var: str, lock
     if lock_var in vars:
         locked = vars[lock_var]
     vars[commit_var] = update_commit(vars[repo_var], from_commit=vars[commit_var], locked=locked)
+    if not dry_run:
+        _utils.yaml_write(vars_path, vars)
+
+
+def update_tag_in_yaml(vars_path: _Path, repo_var: str, tag_var: str, lock_var: str, dry_run: bool):
+    vars = _utils.yaml_read(vars_path)
+    locked = False
+    if lock_var in vars:
+        locked = vars[lock_var]
+    vars[tag_var] = update_tag(vars[repo_var], from_tag=vars[tag_var], locked=locked)
     if not dry_run:
         _utils.yaml_write(vars_path, vars)
 

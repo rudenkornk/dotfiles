@@ -148,13 +148,14 @@ def update_github_release(url: str, locked: bool):
         logger.info(f"{2 * tab}{current_tag} -- return (version is locked)")
         return url
 
+    @_utils.retry(delay=10)
     def requests_get():
         response = _requests.get(request_url)
         response.raise_for_status()
         return response
 
     try:
-        response = _utils.try_run(requests_get, try_run_delay=10)
+        response = requests_get()
     except _requests.exceptions.HTTPError as e:
         if e.response.status_code == 403:
             logger.warning(f"{2 * tab}GitHub API rate limit exceeded. Skipping this repo.")

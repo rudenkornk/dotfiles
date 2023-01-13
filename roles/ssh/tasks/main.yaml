@@ -32,12 +32,14 @@
 
 - name: Create symlinks to ssh public keys
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/keys/{{ item | basename }}"
-    dest: "{{ home }}/.ssh/{{ item | basename }}"
+    src: "{{ item.path }}.pub"
+    dest: "{{ home }}/.ssh/{{ item.path | basename }}.pub"
     state: link
     force: true
     mode: 0644
-  loop: "{{ lookup('fileglob', '{{ role_path }}/files/keys/*rsa.pub', wantlist=True) }}"
+  loop: "{{ rsa_keys.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
 
 - name: Create symlink to {{ role_name }}.fish
   ansible.builtin.file:

@@ -13,7 +13,6 @@
       - gpg-agent
       - locales
       - rsync
-      - snapd
       - software-properties-common
       - tzdata
       - xz-utils

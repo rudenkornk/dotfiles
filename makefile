@@ -20,7 +20,8 @@ config: $(BUILD_DIR)/bootstrap_control_node
 		sudo bash -c ''; \
 	fi
 	if [[ "$(HOSTS)" =~ ^dotfiles_ ]]; then \
-		$(VENV) && ansible-playbook --extra-vars "ubuntu_tag=$(UBUNTU_TAG)" --inventory localhost, --connection local playbook_dotfiles_container.yaml; \
+		$(VENV) && ansible-playbook --extra-vars "ubuntu_tag=$(UBUNTU_TAG)" \
+			--inventory inventory.yaml playbook_dotfiles_container.yaml; \
 	fi
 	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS) user=$(USER)" \
 		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
@@ -83,7 +84,7 @@ $(BUILD_DIR)/$(UBUNTU_TAG)/bootstrap_control_node: $(BUILD_DIR)/bootstrap_contro
 
 $(BUILD_DIR)/bootstrap_control_node: $(BUILD_DIR)/ansible playbook_bootstrap_control_node.yaml
 	sudo bash -c ''
-	$(VENV) && ansible-playbook --inventory localhost, --connection=local playbook_bootstrap_control_node.yaml
+	$(VENV) && ansible-playbook --inventory inventory.yaml playbook_bootstrap_control_node.yaml
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 ANSIBLE_INSTALLED != ($(VENV) &> /dev/null && command -v ansible &> /dev/null) || echo "$(BUILD_DIR)/not_ready"

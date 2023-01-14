@@ -1,5 +1,7 @@
 all:
   hosts:
+    localhost:
+      ansible_connection: local
     dotfiles_22.04:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent

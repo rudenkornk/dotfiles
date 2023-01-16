@@ -16,7 +16,6 @@ vim.g.nowritebackup = true
 vim.g.notimeout = true
 vim.g.nottimeout = true
 vim.opt.timeoutlen = 10000000
-vim.opt.number = false
 
 -- see https://www.reddit.com/r/neovim/comments/ab01n8/improve_neovim_startup_by_60ms_for_free_on_macos/
 -- and https://www.reddit.com/r/neovim/comments/wb2obw/how_to_setup_gclipboard_using_lua/

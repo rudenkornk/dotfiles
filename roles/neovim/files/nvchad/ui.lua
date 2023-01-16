@@ -1,13 +1,4 @@
-local themes = {
-  dark = "chadracula",
-  light = "catppuccin_latte",
-}
-local kind = "dark"
-local theme_name = themes[kind]
-
 return {
-  theme = theme_name,
-  theme_toggle = { themes.dark, themes.light },
   hl_override = {
     LspReferenceRead = { fg = "cyan", bg = "one_bg2" },
     LspReferenceText = { fg = "cyan", bg = "one_bg2" },

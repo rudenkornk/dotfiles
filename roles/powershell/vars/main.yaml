@@ -1,0 +1,2 @@
+microsoft_gpg_deb: https://packages.microsoft.com/config/ubuntu/{{ ansible_distribution_version }}/packages-microsoft-prod.deb
+powershell_version: 7.2.8-1.deb

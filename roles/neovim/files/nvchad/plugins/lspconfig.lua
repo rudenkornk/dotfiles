@@ -9,6 +9,8 @@ return {
     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
     local servers = {
       "ansiblels",
+      "arduino_language_server",
+      "awk_ls",
       "bashls",
       "clangd",
       "cmake",
@@ -22,10 +24,16 @@ return {
       "jsonls",
       "opencl_ls",
       "powershell_es",
+      "ruby_ls",
+      "rust_analyzer",
+      "salt_ls",
+      "sqlls",
       "sumneko_lua",
       "texlab",
       "vimls",
       "yamlls",
+      -- "asm_lsp", -- not working
+      -- "perlnavigator", -- not working
     }
     nvchad.capabilities.offsetEncoding = { "utf-16" }
 

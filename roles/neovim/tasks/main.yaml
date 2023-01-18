@@ -21,7 +21,6 @@
   become: true
   ansible.builtin.apt:
     name:
-      - python3-autopep8
       - python3-pynvim
       - python3-sympy
 
@@ -31,14 +30,8 @@
     name: "{{ item }}"
     global: true
   loop:
-    - alex
     - neovim
     - npm-groovy-lint
-
-- name: Install go packages
-  ansible.builtin.command: go install {{ actionlint_url }}@latest
-  register: go_status
-  changed_when: go_status.stdout != ""
 
 - name: Install tree-sitter-cli
   ansible.builtin.shell: |

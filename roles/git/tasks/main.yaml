@@ -31,6 +31,13 @@
     state: link
     force: true
 
+- name: Set up .mrconfig
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/mrconfig"
+    dest: "{{ home }}/.mrconfig"
+    state: link
+    force: true
+
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"

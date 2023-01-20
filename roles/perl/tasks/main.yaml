@@ -3,6 +3,11 @@
   ansible.builtin.apt:
     name: perl
 
+- name: Install perl-doc
+  become: true
+  ansible.builtin.apt:
+    name: perl-doc
+
 - name: Install cpanm
   become: true
   ansible.builtin.get_url:

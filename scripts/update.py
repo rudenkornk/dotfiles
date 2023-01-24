@@ -38,6 +38,11 @@ def update_fonts(dry_run: bool):
     _update_utils.update_github_release_in_yaml(vars_path, "fira_code_url", "fira_code_lock", dry_run)
 
 
+def update_github_cli(dry_run: bool):
+    vars_path = _utils.get_repo_path() / "roles/git/vars/main.yaml"
+    _update_utils.update_github_release_in_yaml(vars_path, "githubcli_url", "githubcli_lock", dry_run)
+
+
 def update_neovim(dry_run: bool):
     vars_path = _utils.get_repo_path() / "roles/neovim/vars/main.yaml"
     _update_utils.update_github_release_in_yaml(vars_path, "neovim_url", "neovim_lock", dry_run)

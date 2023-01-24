@@ -20,19 +20,20 @@
   register: downloaded
   until: downloaded is not failed
 
-- name: Find *.otf fonts
+- name: Find fonts
   ansible.builtin.find:
     paths: "{{ dotfiles_tmp }}/FiraCode/"
-    patterns: '*.otf'
-  register: otf_fonts
+    patterns: '*Mono.ttf'
+  register: fonts
+  failed_when: fonts.files | length < 1
 
-- name: Copy *otf fonts to ~/.local/share/fonts
+- name: Copy ttf fonts to ~/.local/share/fonts
   ansible.builtin.copy:
     src: "{{ item.path }}"
     dest: "{{ home }}/.local/share/fonts/{{ item.path | basename }}"
     remote_src: true
     mode: 0644
-  loop: "{{ otf_fonts.files }}"
+  loop: "{{ fonts.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
 

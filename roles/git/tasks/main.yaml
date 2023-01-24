@@ -42,6 +42,11 @@
     state: link
     force: true
 
+- name: Install GitHub cli
+  become: true
+  ansible.builtin.apt:
+    deb: "{{ githubcli_url }}"
+
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"

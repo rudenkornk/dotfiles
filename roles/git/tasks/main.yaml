@@ -8,6 +8,10 @@
   ansible.builtin.get_url:
     url: "{{ git_secret_gpg }}"
     dest: /etc/apt/trusted.gpg.d/git_secret.asc
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: installed
+  until: installed is not failed
 
 - name: Add git-secret repository
   become: true

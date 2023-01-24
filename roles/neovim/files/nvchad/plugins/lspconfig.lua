@@ -23,7 +23,6 @@ return {
       "jedi_language_server",
       "jsonls",
       "opencl_ls",
-      "powershell_es",
       "ruby_ls",
       "rust_analyzer",
       "salt_ls",
@@ -34,6 +33,7 @@ return {
       "yamlls",
       -- "asm_lsp", -- not working
       -- "perlnavigator", -- not working
+      -- "powershell_es", -- not working
     }
     nvchad.capabilities.offsetEncoding = { "utf-16" }
 

@@ -34,7 +34,7 @@ M.override_options = {
     "markdownlint",
     "opencl-language-server",
     "perlnavigator",
-    "powershell-editor-services",
+    -- "powershell-editor-services", -- not working
     "puppet-editor-services",
     "python-lsp-server",
     "rubocop",

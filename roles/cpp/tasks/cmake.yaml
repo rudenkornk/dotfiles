@@ -16,7 +16,7 @@
     current_version=$(cmake --version 2>&1 | grep --perl-regexp --only-matching "\d+\.\d+\.\d+" || true)
     cmake_version=$(echo {{ cmake_url }} | grep --perl-regexp --only-matching "download/v\K\d+\.\d+\.\d+")
     if [[ "$cmake_version" != "$current_version" ]]; then
-      "{{ dotfiles_tmp }}/cmake.sh" --skip-license --exclude-subdir --prefix=/usr
+      "{{ dotfiles_tmp }}/cmake.sh" --skip-license --exclude-subdir --prefix=/usr/local
       echo false
     else
       echo true

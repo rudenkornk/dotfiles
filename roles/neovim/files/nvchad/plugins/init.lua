@@ -36,17 +36,6 @@ return {
   ["hrsh7th/cmp-path"] = { commit = manifest["hrsh7th/cmp-path"].commit },
   ["hrsh7th/nvim-cmp"] = require("custom.plugins.cmp"),
   ["jose-elias-alvarez/null-ls.nvim"] = require("custom.plugins.null-ls"),
-  ["kyazdani42/nvim-tree.lua"] = {
-    commit = manifest["kyazdani42/nvim-tree.lua"].commit,
-    override_options = {
-      renderer = {
-        symlink_destination = false,
-      },
-    },
-  },
-  ["kyazdani42/nvim-web-devicons"] = {
-    commit = manifest["kyazdani42/nvim-web-devicons"].commit,
-  },
   ["kylechui/nvim-surround"] = {
     commit = manifest["kylechui/nvim-surround"].commit,
     keys = { "c", "d", "y" },
@@ -113,6 +102,17 @@ return {
         scroll_strategy = "limit",
       },
     },
+  },
+  ["nvim-tree/nvim-tree.lua"] = {
+    commit = manifest["nvim-tree/nvim-tree.lua"].commit,
+    override_options = {
+      renderer = {
+        symlink_destination = false,
+      },
+    },
+  },
+  ["nvim-tree/nvim-web-devicons"] = {
+    commit = manifest["nvim-tree/nvim-web-devicons"].commit,
   },
   ["nvim-treesitter/nvim-treesitter"] = require("custom.plugins.treesitter"),
   ["pearofducks/ansible-vim"] = {

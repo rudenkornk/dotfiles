@@ -1,7 +1,7 @@
 ansible_posix:
   name: ansible.posix
   repo: https://github.com/ansible-collections/ansible.posix
-  version: 1.4.0
+  version: 1.5.1
 community_general:
   name: community.general
   repo: https://github.com/ansible-collections/community.general

@@ -17,3 +17,6 @@ checkout = git clone 'git@github.com:rudenkornk/docker_cpp.git' 'cpp_image'
 
 [projects/cpp_windows_image]
 checkout = git clone 'git@github.com:rudenkornk/docker_cpp_windows.git' 'cpp_windows_image'
+
+[projects/cpp_contests]
+checkout = git clone 'git@github.com:rudenkornk/cpp_contests.git' 'cpp_contests'

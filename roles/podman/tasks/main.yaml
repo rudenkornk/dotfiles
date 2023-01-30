@@ -11,6 +11,12 @@
     executable: bash
   changed_when: false
 
+- name: Set up bash
+  ansible.builtin.lineinfile:
+    path: "{{ home }}/.bashrc"
+    regexp: 'source .*/{{ role_name }}/files'
+    line: source {{ remote_role_path }}/files/bash.sh
+
 - name: Create symlinks to fish functions
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"

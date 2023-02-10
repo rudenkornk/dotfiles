@@ -3,7 +3,7 @@ return {
     commit = "984772716f66d8ee88535a6bf3f94c4b4e1301f5",
   },
   ["folke/trouble.nvim"] = {
-    commit = "490f7fe6d227f4f7a64f00be8c7dcd7a508ed271",
+    commit = "fc003424b02109f1453af6b40dadff6019b97187",
   },
   ["folke/which-key.nvim"] = {
     commit = "684e96c5e8477f1ee9b3f2e9a12d802fd12c5531",
@@ -12,7 +12,7 @@ return {
     commit = "339091ac4dd1f17e225fe7d57b48aff55f99b23a",
   },
   ["goolord/alpha-nvim"] = {
-    commit = "21a0f2520ad3a7c32c0822f943368dc063a569fb",
+    commit = "0349fc0aa0c1d940ec3be395cb110483b416bc84",
   },
   ["hrsh7th/cmp-buffer"] = {
     commit = "3022dbc9166796b644a841a02de8dd1cc1d311fa",
@@ -21,7 +21,7 @@ return {
     commit = "23c51b2a3c00f6abc4e922dbd7c3b9aca6992063",
   },
   ["hrsh7th/cmp-nvim-lsp"] = {
-    commit = "59224771f91b86d1de12570b4070fe4ad7cd1eeb",
+    commit = "0e6b2ed705ddcff9738ec4ea838141654f12eeef",
   },
   ["hrsh7th/cmp-nvim-lua"] = {
     commit = "f3491638d123cfd2c8048aefaf66d246ff250ca6",
@@ -30,19 +30,19 @@ return {
     commit = "91ff86cd9c29299a64f968ebb45846c485725f23",
   },
   ["hrsh7th/nvim-cmp"] = {
-    commit = "e7e2ef7031db8e0cfad7ad9916ec766ddd9dbb3b",
+    commit = "cfafe0a1ca8933f7b7968a287d39904156f2c57d",
   },
   ["jose-elias-alvarez/null-ls.nvim"] = {
-    commit = "c3e678110d5f31854c6575cf4bda3b82f3d4a884",
+    commit = "60b4a7167c79c7d04d1ff48b55f2235bf58158a7",
   },
   ["kylechui/nvim-surround"] = {
-    commit = "ad56e6234bf42fb7f7e4dccc7752e25abd5ec80e",
+    commit = "90821ad682aac189cd0a38fd83fc96f0cbcc5d29",
   },
   ["L3MON4D3/LuaSnip"] = {
-    commit = "d404ec306bfa4cdb0c3605dbb17e8a93a9597337",
+    commit = "9bff06b570df29434a88f9c6a9cea3b21ca17208",
   },
   ["lewis6991/gitsigns.nvim"] = {
-    commit = "0d4fe37ba5285171f3729da955955205f3fa945b",
+    commit = "f29f0b22fd66c910b892aae3bc18a4872c002738",
   },
   ["lewis6991/impatient.nvim"] = {
     commit = "c90e273f7b8c50a02f956c24ce4804a47f18162e",
@@ -57,7 +57,7 @@ return {
     commit = "6fed33809cde3b416087fc540ad9eb17ec470193",
   },
   ["neovim/nvim-lspconfig"] = {
-    commit = "902d6aa31450d26e11bedcbef8af5b6fe2e1ffe8",
+    commit = "b5bb6e3d7c775c241726d1ef564902263e93e2cd",
   },
   ["numToStr/Comment.nvim"] = {
     commit = "eab2c83a0207369900e92783f56990808082eac2",
@@ -78,7 +78,7 @@ return {
     commit = "29a70ef608a8cc5db3a5fc300d39a39d1a44a863",
   },
   ["NvChad/ui"] = {
-    commit = "eaf9d087594cc8cc6cf8355ebcc1568edb817f66",
+    commit = "135df4e801c15898cc606b7c16d106855bb9543c",
   },
   ["nvim-lua/plenary.nvim"] = {
     commit = "9a0d3bf7b832818c042aaf30f692b081ddd58bd9",
@@ -87,22 +87,22 @@ return {
     commit = "203bf5609137600d73e8ed82703d6b0e320a5f36",
   },
   ["nvim-tree/nvim-tree.lua"] = {
-    commit = "215b29bfad74518442621b9d0483a621483b066b",
+    commit = "02fdc262eba188198a7deb2117b3b996e6763d65",
   },
   ["nvim-tree/nvim-web-devicons"] = {
-    commit = "a421d183ef37dfa13f51a5805bed2381aebf9080",
+    commit = "ade34ca7d19543904b28b903e606be8930fb9ee3",
   },
   ["nvim-treesitter/nvim-treesitter"] = {
-    commit = "69867ffe7e05559fdb055f6b5a2589fc6bee1070",
+    commit = "f6df07be122de665fb363476cc3680c90f5bdf05",
   },
   ["pearofducks/ansible-vim"] = {
     commit = "93798e8c89c441d29d4678da0c0d5e1429eb43b0",
   },
   ["petertriho/cmp-git"] = {
-    commit = "6bcb61c0a5ec2e0d522ece7c8fb3e009f1c79261",
+    commit = "414e6aefbc0f416ad1c83e5417455a861159e3b8",
   },
   ["rafamadriz/friendly-snippets"] = {
-    commit = "a6f7a1609addb4e57daa6bedc300f77f8d225ab7",
+    commit = "80597f3ea824946c87fd29f82b5ed4f24ef473f3",
   },
   ["rmagatti/goto-preview"] = {
     commit = "54a5e18f6a42b39021b7aef62aae4dda8680d666",
@@ -111,7 +111,7 @@ return {
     commit = "e1be6608410c260479dc4807ad8c103faf5460d8",
   },
   ["RRethy/vim-illuminate"] = {
-    commit = "d6ca7f77eeaf61b3e6ce9f0e5a978d606df44298",
+    commit = "49062ab1dd8fec91833a69f0a1344223dd59d643",
   },
   ["saadparwaiz1/cmp_luasnip"] = {
     commit = "18095520391186d634a0045dacaa346291096566",
@@ -120,7 +120,7 @@ return {
     commit = "512791925d57a61c545bc303356e8a8f7869763c",
   },
   ["stevearc/aerial.nvim"] = {
-    commit = "30a64f8590482dcd461123cb66464ff371aeeb84",
+    commit = "9921808e0d8ad376a73e0e21e8ffdb8f8d471420",
   },
   ["wbthomason/packer.nvim"] = {
     commit = "1d0cf98a561f7fd654c970c49f917d74fafe1530",
@@ -129,10 +129,10 @@ return {
     commit = "e4399dbaf6eabff998d3d5f1cbcd8d9933710027",
   },
   ["williamboman/mason.nvim"] = {
-    commit = "24846a00941ec020c8addc7f52040a1b2fc12174",
+    commit = "14ae1ca58440b158a0a35cf90773013caddf788a",
   },
   ["windwp/nvim-autopairs"] = {
-    commit = "5a3523ddb573804752de6c021c5cb82e267b79ca",
+    commit = "45ae3122a4c7744db41298b41f9f5a3f092123e6",
   },
   ["zbirenbaum/copilot-cmp"] = {
     commit = "b732a58ac8b7287b981cd9f0d9c0f61e5e9d5760",

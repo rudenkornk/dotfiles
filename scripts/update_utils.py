@@ -188,7 +188,7 @@ def update_github_release(url: str, locked: bool):
             chosen_version = current_version
             break
         if semver.prerelease is not None:
-            logger.warning(f"{2 * tab}{tag} -- skipping (marked as prerelease)")
+            logger.info(f"{2 * tab}{tag} -- skipping (marked as prerelease)")
             continue
         if semver > current_semver:
             breaking_note = ""

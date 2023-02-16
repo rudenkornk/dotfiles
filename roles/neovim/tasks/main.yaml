@@ -39,6 +39,9 @@
   args:
     executable: bash
   register: status
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  until: status is not failed
   changed_when: "'already installed' not in status.stdout"
 
 - name: Install NvChad

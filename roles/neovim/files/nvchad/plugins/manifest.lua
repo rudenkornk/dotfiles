@@ -3,16 +3,16 @@ return {
     commit = "984772716f66d8ee88535a6bf3f94c4b4e1301f5",
   },
   ["folke/trouble.nvim"] = {
-    commit = "fc003424b02109f1453af6b40dadff6019b97187",
+    commit = "556ef3089709a6e253df1e500381fec5eb48e48a",
   },
   ["folke/which-key.nvim"] = {
-    commit = "684e96c5e8477f1ee9b3f2e9a12d802fd12c5531",
+    commit = "5224c261825263f46f6771f1b644cae33cd06995",
   },
   ["godlygeek/tabular"] = {
     commit = "339091ac4dd1f17e225fe7d57b48aff55f99b23a",
   },
   ["goolord/alpha-nvim"] = {
-    commit = "0349fc0aa0c1d940ec3be395cb110483b416bc84",
+    commit = "d35b99e36e32040ba06c48a25b5bd3e75be2a566",
   },
   ["hrsh7th/cmp-buffer"] = {
     commit = "3022dbc9166796b644a841a02de8dd1cc1d311fa",
@@ -30,19 +30,19 @@ return {
     commit = "91ff86cd9c29299a64f968ebb45846c485725f23",
   },
   ["hrsh7th/nvim-cmp"] = {
-    commit = "cfafe0a1ca8933f7b7968a287d39904156f2c57d",
+    commit = "208d69f233d65526a22c6497ed57d0c80d99fa5f",
   },
   ["jose-elias-alvarez/null-ls.nvim"] = {
-    commit = "60b4a7167c79c7d04d1ff48b55f2235bf58158a7",
+    commit = "a75bba0ae5e89df03f01c17a1d913884eeebcc2e",
   },
   ["kylechui/nvim-surround"] = {
     commit = "90821ad682aac189cd0a38fd83fc96f0cbcc5d29",
   },
   ["L3MON4D3/LuaSnip"] = {
-    commit = "9bff06b570df29434a88f9c6a9cea3b21ca17208",
+    commit = "58fbfc627a93281a77f7d161d4ff702e639677b1",
   },
   ["lewis6991/gitsigns.nvim"] = {
-    commit = "f29f0b22fd66c910b892aae3bc18a4872c002738",
+    commit = "5f1451ea7d9a9005b3f0bedeab20cef7a4c65993",
   },
   ["lewis6991/impatient.nvim"] = {
     commit = "c90e273f7b8c50a02f956c24ce4804a47f18162e",
@@ -54,13 +54,13 @@ return {
     commit = "8299fe7703dfff4b1752aeed271c3b95281a952d",
   },
   ["max397574/better-escape.nvim"] = {
-    commit = "6fed33809cde3b416087fc540ad9eb17ec470193",
+    commit = "5cd64c0afb82688748d415710d0187df5bdb96f9",
   },
   ["neovim/nvim-lspconfig"] = {
-    commit = "b5bb6e3d7c775c241726d1ef564902263e93e2cd",
+    commit = "649137cbc53a044bffde36294ce3160cb18f32c7",
   },
   ["numToStr/Comment.nvim"] = {
-    commit = "eab2c83a0207369900e92783f56990808082eac2",
+    commit = "6821b3ae27a57f1f3cf8ed030e4a55d70d0c4e43",
   },
   ["numToStr/Navigator.nvim"] = {
     commit = "91d86506ac2a039504d5205d32a1d4bc7aa57072",
@@ -87,22 +87,22 @@ return {
     commit = "203bf5609137600d73e8ed82703d6b0e320a5f36",
   },
   ["nvim-tree/nvim-tree.lua"] = {
-    commit = "02fdc262eba188198a7deb2117b3b996e6763d65",
+    commit = "08a0aa1a3b7411ee0a7887c8818528b1558cef96",
   },
   ["nvim-tree/nvim-web-devicons"] = {
-    commit = "ade34ca7d19543904b28b903e606be8930fb9ee3",
+    commit = "bb6d4fd1e010300510172b173ab5205d37af084f",
   },
   ["nvim-treesitter/nvim-treesitter"] = {
-    commit = "f6df07be122de665fb363476cc3680c90f5bdf05",
+    commit = "b44871afb59e456bbff4113e416405c06c991cf5",
   },
   ["pearofducks/ansible-vim"] = {
     commit = "93798e8c89c441d29d4678da0c0d5e1429eb43b0",
   },
   ["petertriho/cmp-git"] = {
-    commit = "414e6aefbc0f416ad1c83e5417455a861159e3b8",
+    commit = "191ec4788656c3d1ad59c9edc3d96e132f93e039",
   },
   ["rafamadriz/friendly-snippets"] = {
-    commit = "80597f3ea824946c87fd29f82b5ed4f24ef473f3",
+    commit = "1645e7cd98ed99e766c84ab3cf13a1612c77dcee",
   },
   ["rmagatti/goto-preview"] = {
     commit = "54a5e18f6a42b39021b7aef62aae4dda8680d666",
@@ -120,7 +120,7 @@ return {
     commit = "512791925d57a61c545bc303356e8a8f7869763c",
   },
   ["stevearc/aerial.nvim"] = {
-    commit = "9921808e0d8ad376a73e0e21e8ffdb8f8d471420",
+    commit = "89031be806abded509a7bafd99bd9944eb5108a5",
   },
   ["wbthomason/packer.nvim"] = {
     commit = "1d0cf98a561f7fd654c970c49f917d74fafe1530",
@@ -129,7 +129,7 @@ return {
     commit = "e4399dbaf6eabff998d3d5f1cbcd8d9933710027",
   },
   ["williamboman/mason.nvim"] = {
-    commit = "14ae1ca58440b158a0a35cf90773013caddf788a",
+    commit = "fecabaff94c34bf8ed9c3b2a45d42a5906ea251c",
   },
   ["windwp/nvim-autopairs"] = {
     commit = "45ae3122a4c7744db41298b41f9f5a3f092123e6",
@@ -138,6 +138,6 @@ return {
     commit = "b732a58ac8b7287b981cd9f0d9c0f61e5e9d5760",
   },
   ["zbirenbaum/copilot.lua"] = {
-    commit = "a54e7b11a2c6efc9ddd3f42e56cf7d9eed1a9683",
+    commit = "f1b330351d755e905cffe1dea2f6e0a6f273c9fe",
   },
 }

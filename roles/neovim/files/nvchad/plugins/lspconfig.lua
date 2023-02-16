@@ -22,12 +22,12 @@ return {
       "html",
       "jedi_language_server",
       "jsonls",
+      "lua_ls",
       "opencl_ls",
       "ruby_ls",
       "rust_analyzer",
       "salt_ls",
       "sqlls",
-      "sumneko_lua",
       "texlab",
       "vimls",
       "yamlls",
@@ -44,7 +44,7 @@ return {
       end
       local capabilities = nvchad.capabilities
       local settings = {}
-      if lsp == "sumneko_lua" then
+      if lsp == "lua_ls" then
         settings = {
           Lua = {
             diagnostics = {

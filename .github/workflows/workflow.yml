@@ -55,6 +55,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Format
+      run: make format
     - name: Lint
       run: make lint
 

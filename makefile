@@ -40,13 +40,16 @@ graph: $(BUILD_DIR)/bootstrap_control_node
 ############################## Checks ##############################
 UBUNTU_TAG ?= 22.04
 
+.PHONY: format
+format: $(BUILD_DIR)/bootstrap_control_node
+	$(VENV) && python3 -m black --line-length 120 --check .
+
 .PHONY: lint
 lint: $(BUILD_DIR)/bootstrap_control_node
 	$(VENV) && ansible-lint playbook.yaml
 	$(VENV) && ansible-lint playbook_bootstrap_control_node.yaml
 	$(VENV) && ansible-lint playbook_bootstrap_hosts.yaml
 	$(VENV) && ansible-lint playbook_dotfiles_container.yaml
-	$(VENV) && python3 -m black --line-length 120 --check .
 	
 	dirs=($$(ls roles)); \
 	roles=($$(grep --perl-regex --only-matching "\- role\: \K\w+" playbook.yaml | sort)); \

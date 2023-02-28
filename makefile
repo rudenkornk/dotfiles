@@ -30,11 +30,11 @@ config: $(BUILD_DIR)/bootstrap_control_node
 
 .PHONY: update
 update: $(BUILD_DIR)/bootstrap_control_node
-	$(VENV) && ./scripts/support.py update
+	$(VENV) && ./support.py update
 
 .PHONY: graph
 graph: $(BUILD_DIR)/bootstrap_control_node
-	$(VENV) && ./scripts/support.py graph
+	$(VENV) && ./support.py graph
 
 
 ############################## Checks ##############################

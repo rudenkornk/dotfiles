@@ -2,11 +2,11 @@
 
 import argparse as _argparse
 import logging as _logging
-import sys as _sys
 
-import roles_graph as _roles_graph
-import update as _update
-import utils as _utils
+from . import roles_graph as _roles_graph
+from . import update as _update
+
+_logger = _logging.getLogger(__name__)
 
 
 def _get_components():
@@ -75,35 +75,23 @@ def _parse_shell_args(shell_args: list):
 
 
 def _process_update(args):
-    logger = _utils.get_logger()
     for component in args.components:
         title = component.replace("_", " ")
         suffix = " (dry run)" if args.dry_run else ""
-        logger.info(f"Updating {title}{suffix}:")
+        _logger.info(f"Updating {title}{suffix}:")
 
         update_func = getattr(_update, "update_" + component)
         update_func(dry_run=args.dry_run)
-        logger.info("")
+        _logger.info("")
 
 
 def _process_roles_graph(args):
     _roles_graph.generate_png(args.silent)
 
 
-def _process_shell_args(shell_args: list):
+def process_shell_args(shell_args: list):
     args = _parse_shell_args(shell_args)
     if args.command == "update":
         _process_update(args)
     if args.command == "graph":
         _process_roles_graph(args)
-
-
-if __name__ == "__main__":
-    _logging.basicConfig(format="%(message)s")
-    logger = _utils.get_logger()
-    logger.setLevel(_logging.INFO)
-    try:
-        _process_shell_args(_sys.argv)
-    except KeyboardInterrupt:
-        logger.error("Interrupted by user.")
-        _sys.exit(1)

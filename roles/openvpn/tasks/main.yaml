@@ -3,3 +3,6 @@
   ansible.builtin.apt:
     name:
       - openvpn
+
+# crontab -e
+# @reboot sudo openvpn --config /home/rudenkornk/.config/openvpn/ee-tll.prod.surfshark.com_udp.ovpn --auth-user-pass /home/rudenkornk/projects/dotfiles/roles/openvpn/files/configs/surfshark.auth

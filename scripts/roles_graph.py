@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import graphviz as _graphviz
-import utils as _utils
+
+from . import utils as _utils
 
 
 def generate_png(view: bool = False):

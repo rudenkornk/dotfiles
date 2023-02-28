@@ -5,7 +5,7 @@ ansible_posix:
 community_general:
   name: community.general
   repo: https://github.com/ansible-collections/community.general
-  version: 6.3.0
+  version: 6.4.0
 containers_podman:
   name: containers.podman
   repo: https://github.com/containers/ansible-podman-collections

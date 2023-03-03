@@ -53,8 +53,13 @@ jobs:
   lint:
     runs-on: ubuntu-22.04
     steps:
+      # Checkout must be onto the original commit, not a single PR
+      # Otherwise lint will not see full history and diagnose secrets leakage
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+        fetch-depth: 0
     - name: Format
       run: make format
     - name: Lint

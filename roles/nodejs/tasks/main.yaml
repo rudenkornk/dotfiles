@@ -7,7 +7,8 @@
 - name: Add nodejs repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/nodejs.asc] {{ nodejs_repo }} {{ ansible_distribution_release }} main
+    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/nodejs.asc] {{ nodejs_repo }} {{ ansible_distribution_release
+      }} main
 
 - name: Install nodejs
   become: true

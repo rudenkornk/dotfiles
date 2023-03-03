@@ -7,7 +7,8 @@
 - name: Add LLVM repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/llvm.asc] {{ llvm_repo }} llvm-toolchain-{{ ansible_distribution_release }}-{{ llvm_version }} main
+    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/llvm.asc] {{ llvm_repo }} llvm-toolchain-{{
+      ansible_distribution_release }}-{{ llvm_version }} main
 
 - name: Install LLVM
   become: true

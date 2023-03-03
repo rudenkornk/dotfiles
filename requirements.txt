@@ -9,6 +9,8 @@ PyDriller==2.4.1
 PyYAML==6.0
 requests==2.28.2
 semver==2.13.0
+yamlfmt==1.1.1
+yamllint==1.29.0
 ## The following requirements were added by pip freeze:
 bracex==2.3.post1
 certifi==2022.12.7

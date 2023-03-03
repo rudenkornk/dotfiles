@@ -10,6 +10,7 @@
     fp = format-patch
     ft = fetch --all
     l = log
+    lg = log --graph
     ll = log --oneline
     llg = log --oneline --graph
     mb = merge-base

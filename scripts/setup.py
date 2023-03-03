@@ -2,6 +2,8 @@
 
 import argparse as _argparse
 import logging as _logging
+from argparse import Namespace as _Namespace
+from argparse import _SubParsersAction as _SubParsersAction
 
 from . import roles_graph as _roles_graph
 from . import update as _update
@@ -9,7 +11,7 @@ from . import update as _update
 _logger = _logging.getLogger(__name__)
 
 
-def _get_components():
+def _get_components() -> list[str]:
     prefix = "update_"
     prefix_len = len(prefix)
     components = [x[prefix_len:] for x in dir(_update) if x.startswith("update_")]
@@ -17,7 +19,7 @@ def _get_components():
     return components
 
 
-def _add_update_parser(subparsers):
+def _add_update_parser(subparsers: _SubParsersAction) -> None:  # type: ignore
     update_parser = subparsers.add_parser("update", help="Update components versions.")
     update_parser.add_argument(
         "-c",
@@ -38,14 +40,14 @@ def _add_update_parser(subparsers):
     )
 
 
-def _add_roles_graph_parser(subparsers):
+def _add_roles_graph_parser(subparsers: _SubParsersAction) -> None:  # type: ignore
     graph_parser = subparsers.add_parser("graph", help="Generate roles dependency graph.")
     graph_parser.add_argument(
         "-s", "--silent", dest="silent", action="store_false", help="Do not open graph in image viewer."
     )
 
 
-def _get_parser():
+def _get_parser() -> _argparse.ArgumentParser:
     parser = _argparse.ArgumentParser(
         description="Support scripts for dotfiles repo.", formatter_class=_argparse.ArgumentDefaultsHelpFormatter
     )
@@ -55,16 +57,16 @@ def _get_parser():
     return parser
 
 
-def _parse_update_args_hook(args):
+def _parse_update_args_hook(args: _Namespace) -> None:
     if "all" in args.components:
         args.components = _get_components()
 
 
-def _parse_roles_graph_args_hook(args):
-    pass
+def _parse_roles_graph_args_hook(args: _Namespace) -> None:
+    assert args
 
 
-def _parse_shell_args(shell_args: list):
+def _parse_shell_args(shell_args: list[str]) -> _Namespace:
     parser = _get_parser()
     args = parser.parse_args(shell_args[1:])
     if args.command == "update":
@@ -74,7 +76,7 @@ def _parse_shell_args(shell_args: list):
     return args
 
 
-def _process_update(args):
+def _process_update(args: _Namespace) -> None:
     for component in args.components:
         title = component.replace("_", " ")
         suffix = " (dry run)" if args.dry_run else ""
@@ -85,11 +87,11 @@ def _process_update(args):
         _logger.info("")
 
 
-def _process_roles_graph(args):
+def _process_roles_graph(args: _Namespace) -> None:
     _roles_graph.generate_png(args.silent)
 
 
-def process_shell_args(shell_args: list):
+def process_shell_args(shell_args: list[str]) -> None:
     args = _parse_shell_args(shell_args)
     if args.command == "update":
         _process_update(args)

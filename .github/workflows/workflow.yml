@@ -60,8 +60,6 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.sha }}
         fetch-depth: 0
-    - name: Format
-      run: make format
     - name: Lint
       run: make lint
 

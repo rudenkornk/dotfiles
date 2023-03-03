@@ -8,7 +8,9 @@ return {
 
     local sources = {
       -- generic
+      null_ls.builtins.diagnostics.codespell,
       null_ls.builtins.diagnostics.write_good,
+      null_ls.builtins.formatting.codespell,
 
       -- Ansible
       null_ls.builtins.diagnostics.ansiblelint,
@@ -17,8 +19,9 @@ return {
       null_ls.builtins.formatting.clang_format,
 
       -- CMake
-      null_ls.builtins.formatting.cmake_format,
       null_ls.builtins.diagnostics.cmake_lint,
+      null_ls.builtins.formatting.cmake_format,
+      null_ls.builtins.formatting.gersemi,
 
       -- dockerfile
       null_ls.builtins.diagnostics.hadolint,
@@ -32,7 +35,13 @@ return {
 
       -- git
       null_ls.builtins.code_actions.gitsigns,
+      null_ls.builtins.diagnostics.commitlint,
       null_ls.builtins.diagnostics.gitlint,
+
+      -- go
+      null_ls.builtins.formatting.gofumpt,
+      null_ls.builtins.formatting.goimports,
+      null_ls.builtins.formatting.goimports_reviser,
 
       -- groovy
       null_ls.builtins.formatting.npm_groovy_lint,
@@ -45,6 +54,8 @@ return {
       null_ls.builtins.diagnostics.eslint_d,
       null_ls.builtins.formatting.eslint_d,
 
+      -- json
+      null_ls.builtins.diagnostics.jsonlint,
       null_ls.builtins.formatting.jq,
 
       -- latex
@@ -54,25 +65,26 @@ return {
       }),
 
       -- lua
+      null_ls.builtins.diagnostics.luacheck,
       null_ls.builtins.formatting.stylua,
+      -- null_ls.builtins.formatting.lua_format, -- using stylua instead
 
       -- markdown
       null_ls.builtins.diagnostics.alex,
       null_ls.builtins.diagnostics.markdownlint,
 
-      -- ocaml
-      null_ls.builtins.formatting.ocamlformat,
-
       -- python
-      null_ls.builtins.diagnostics.flake8,
       null_ls.builtins.diagnostics.mypy,
+      null_ls.builtins.diagnostics.pydocstyle,
       null_ls.builtins.diagnostics.pylint,
       null_ls.builtins.formatting.autopep8,
       null_ls.builtins.formatting.black,
       null_ls.builtins.formatting.isort,
+      -- null_ls.builtins.diagnostics.flake8, -- using black instead
 
       -- ruby
       null_ls.builtins.diagnostics.rubocop,
+      null_ls.builtins.formatting.rubocop,
 
       -- rust
       null_ls.builtins.formatting.rustfmt,
@@ -87,6 +99,8 @@ return {
       null_ls.builtins.diagnostics.yamllint,
       null_ls.builtins.formatting.yamlfmt,
 
+      -- verilog
+      null_ls.builtins.formatting.verible_verilog_format,
     }
     null_ls.setup({
       sources = sources,

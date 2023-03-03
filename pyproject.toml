@@ -1,0 +1,24 @@
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.mypy]
+strict = "True"
+implicit_reexport = "True"
+
+[tool.pylint]
+max-line-length = 120
+disable = [
+  "logging-fstring-interpolation",
+  "logging-not-lazy",
+  "missing-docstring",
+  "all",
+]
+[tool.pydocstyle]
+ignore = [
+  "D100",
+  "D103",
+]

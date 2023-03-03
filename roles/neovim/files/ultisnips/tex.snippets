@@ -26,6 +26,7 @@
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
 global !p
 import px.snippets
+
 default_option_regex = re.compile("1\.(.*?)\|2\.")
 endglobal
 
@@ -69,6 +70,7 @@ priority 10000
 snippet 'sympy(.*)sympy' "evaluate sympy" wr
 `!p
 from sympy import *
+
 x, y, z, t = symbols('x y z t')
 k, m, n = symbols('k m n', integer=True)
 f, g, h = symbols('f g h', cls=Function)

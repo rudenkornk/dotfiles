@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-from pathlib import Path as _Path
-from pydriller import Repository as _Repository
 import copy as _copy
-import git as _git
 import logging as _logging
 import re as _re
-import requests as _requests
-import semver as _semver
 import shutil as _shutil
+from pathlib import Path as _Path
+
+import git as _git
+import requests as _requests
+import semver as _semver  # type: ignore
+from pydriller import Repository as _Repository  # type: ignore
 
 from . import utils as _utils
 
@@ -26,7 +27,7 @@ def update_commit(origin: str, from_commit: str, locked: bool) -> str:
         return from_commit
     for commit in _Repository(origin, from_commit=from_commit, order="reverse").traverse_commits():
         if num_new_commits == 0:
-            last_hash = commit.hash
+            last_hash: str = commit.hash
         if from_commit is not None and from_commit == commit.hash:
             continue
         num_new_commits += 1
@@ -96,15 +97,18 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
 
 def parse_github_release_url(url: str) -> dict[str, str]:
     parsed_url = _re.search(r"(^.*?github.com)/([^/]+/[^/]+)/releases/download/([^/]+)/(.*)", url)
+    assert parsed_url is not None
     prefix = parsed_url.group(1)
     repo = parsed_url.group(2)
     tag = parsed_url.group(3)
     binary = parsed_url.group(4)
-    version = _re.search(r"v?(.*)", tag).group(1)
+    tag_parsed = _re.search(r"v?(.*)", tag)
+    assert tag_parsed is not None
+    version = tag_parsed.group(1)
     return {
         "prefix": prefix,
         "repo": repo,
-        "dir": "releases/download",
+        "path": "releases/download",
         "tag": tag,
         "binary": binary,
         "version": version,
@@ -112,7 +116,7 @@ def parse_github_release_url(url: str) -> dict[str, str]:
     }
 
 
-def parse_pip_entry(entry: str) -> dict[str, str]:
+def parse_pip_entry(entry: str) -> dict[str, str | None]:
     entry = entry.strip()
     if entry.startswith("#"):
         return {
@@ -138,7 +142,7 @@ def update_github_release(url: str, locked: bool) -> str:
     parsed = parse_github_release_url(url)
     prefix = parsed["prefix"]
     repo = parsed["repo"]
-    dir = parsed["dir"]
+    path = parsed["path"]
     current_tag = parsed["tag"]
     current_version = parsed["version"]
     current_semver = _semver.VersionInfo.parse(current_version)
@@ -150,8 +154,8 @@ def update_github_release(url: str, locked: bool) -> str:
         return url
 
     @_utils.retry(delay=10)
-    def requests_get():
-        response = _requests.get(request_url)
+    def requests_get() -> _requests.Response:
+        response = _requests.get(request_url, timeout=15)
         response.raise_for_status()
         return response
 
@@ -166,7 +170,9 @@ def update_github_release(url: str, locked: bool) -> str:
     releases = response.json()
     for release in releases:
         tag = release["tag_name"]
-        version = _re.search(r"v?(.*)", tag).group(1)
+        version_match = _re.search(r"v?(.*)", tag)
+        assert version_match is not None
+        version = version_match.group(1)
         if release["prerelease"]:
             _logger.info(f"{2 * tab}{tag} -- skipping (marked as prerelease)")
             continue
@@ -204,7 +210,7 @@ def update_github_release(url: str, locked: bool) -> str:
         assert False
 
     chosen_binary = parsed["binary"].replace(current_version, chosen_version)
-    new_url = f"{prefix}/{repo}/{dir}/{chosen_tag}/{chosen_binary}"
+    new_url = f"{prefix}/{repo}/{path}/{chosen_tag}/{chosen_binary}"
     return new_url
 
 
@@ -256,6 +262,9 @@ def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool
         if "added by pip freeze" in requirement:
             break
         entry = parse_pip_entry(requirement)
+        if entry["version"] is None or entry["package"] is None:
+            continue
+        assert entry["comment"] is not None
         core_packages.append(entry["package"])
         core_versions.append(entry["version"])
         core_comments.append(entry["comment"])
@@ -266,6 +275,7 @@ def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool
     outdated_lines = outdated.stdout.splitlines()[2:]
     for line in outdated_lines:
         match = _re.match(r"(\S+)\s+(\S+)\s+(\S+)", line)
+        assert match is not None
         package = match.group(1)
         new_version = match.group(3)
         if package in core_packages:

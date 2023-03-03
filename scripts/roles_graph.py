@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 
-import graphviz as _graphviz
+import graphviz as _graphviz  # type: ignore
 
 from . import utils as _utils
 
 
-def generate_png(view: bool = False):
-    g = _graphviz.Digraph(name="roles")
+def generate_png(view: bool = False) -> None:
+    graph = _graphviz.Digraph(name="roles")
 
     roles_path = _utils.get_repo_path() / "roles"
     for role_path in roles_path.iterdir():
         if not role_path.is_dir():
             continue
         role = role_path.stem
-        g.node(role)
+        graph.node(role)
 
         meta_path = role_path / "meta"
         if (meta_path / "main.yml").exists():
@@ -25,8 +25,8 @@ def generate_png(view: bool = False):
 
         yaml = _utils.yaml_read(dependencies_path)
         for dep in yaml["dependencies"]:
-            g.edge(role, dep["role"])
+            graph.edge(role, dep["role"])
 
     output_path = _utils.get_build_path() / "roles_graph"
-    g.format = "png"
-    g.render(output_path, view=view, quiet_view=view)
+    graph.format = "png"
+    graph.render(output_path, view=view, quiet_view=view)

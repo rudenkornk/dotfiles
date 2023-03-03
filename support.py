@@ -14,7 +14,7 @@ if __name__ == "__main__":
     _logger.setLevel(_logging.INFO)
     try:
         _setup.process_shell_args(_sys.argv)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         _logger.error(f"{type(e).__name__}: {e}")
         _sys.exit(1)
     except KeyboardInterrupt:

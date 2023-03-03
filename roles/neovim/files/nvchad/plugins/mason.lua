@@ -8,6 +8,7 @@ M.override_options = {
     "actionlint",
     "alex",
     "ansible-language-server",
+    "ansible-lint",
     "arduino-language-server",
     "autopep8",
     "awk-language-server",
@@ -28,14 +29,19 @@ M.override_options = {
     "groovy-language-server",
     "hadolint",
     "html-lsp",
+    "isort",
     "jedi-language-server",
+    "jq",
     "json-lsp",
+    "latexindent",
     "lua-language-server",
     "markdownlint",
+    "mypy",
+    "ocamlformat",
     "opencl-language-server",
     "perlnavigator",
-    -- "powershell-editor-services", -- not working
     "puppet-editor-services",
+    "pylint",
     "python-lsp-server",
     "rubocop",
     "ruby-lsp",
@@ -53,6 +59,7 @@ M.override_options = {
     "yamlfmt",
     "yamllint",
     -- "asm-lsp", -- not working
+    -- "powershell-editor-services", -- not working
   },
 }
 

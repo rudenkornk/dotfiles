@@ -1,85 +1,40 @@
 #!/usr/bin/env python3
 
+import logging as _logging
 
 from . import update_utils as _update_utils
 from . import utils as _utils
 
+_logger = _logging.getLogger(__name__)
 
-def update_ansible_collections(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/ansible/vars/main.yaml"
-    _update_utils.update_tag_in_yaml(
-        vars_path, "community_general.repo", "community_general.version", "community_general.lock", dry_run
-    )
-    _update_utils.update_tag_in_yaml(
-        vars_path, "ansible_posix.repo", "ansible_posix.version", "ansible_posix.lock", dry_run
-    )
-    _update_utils.update_tag_in_yaml(
-        vars_path, "containers_podman.repo", "containers_podman.version", "containers_podman.lock", dry_run
-    )
+_ansible_manifest_path = _utils.get_repo_path() / "roles" / "basic_utils" / "vars" / "main.yaml"
+_neovim_manifest_path = _utils.get_repo_path() / "roles" / "neovim" / "files" / "nvchad" / "plugins" / "manifest.lua"
+_requirements_path = _utils.get_repo_path() / "requirements.txt"
 
 
-def update_clipboard(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/clipboard/vars/main.yaml"
-    _update_utils.update_github_release_in_yaml(vars_path, "win32yank_url", "win32yank_lock", dry_run)
+def get_ansible_choices() -> list[str]:
+    return list(_utils.yaml_read(_ansible_manifest_path)["manifest"].keys())
 
 
-def update_cmake(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/cpp/vars/main.yaml"
-    _update_utils.update_github_release_in_yaml(vars_path, "cmake_url", "cmake_lock", dry_run)
+def get_neovim_plugins_choices() -> list[str]:
+    return list(_utils.lua_read(_neovim_manifest_path).keys())
 
 
-def update_drawio(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/latex/vars/main.yaml"
-    _update_utils.update_github_release_in_yaml(vars_path, "drawio_url", "drawio_lock", dry_run)
+def get_update_choices() -> list[str]:
+    ansible_choices = get_ansible_choices()
+    choices = ansible_choices + ["requirements"] + ["neovim_plugins"]
+    choices.sort()
+    return choices
 
 
-def update_fonts(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/fonts/vars/main.yaml"
-    _update_utils.update_github_release_in_yaml(vars_path, "fira_code_url", "fira_code_lock", dry_run)
-
-
-def update_github_cli(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/git/vars/main.yaml"
-    _update_utils.update_github_release_in_yaml(vars_path, "githubcli_url", "githubcli_lock", dry_run)
-
-
-def update_neovim(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/neovim/vars/main.yaml"
-    _update_utils.update_github_release_in_yaml(vars_path, "neovim_url", "neovim_lock", dry_run)
-
-
-def update_neovim_plugins(dry_run: bool) -> None:
-    manifest_path = _utils.get_repo_path() / "roles/neovim/files/nvchad/plugins/manifest.lua"
-    manifest = _utils.lua_read(manifest_path)
-    for plugin, info in manifest.items():
-        repo = "https://github.com/" + plugin
-        locked = False
-        if "lock" in info:
-            locked = info["lock"]
-        info["commit"] = _update_utils.update_commit(repo, from_commit=info["commit"], locked=locked)
-        if not dry_run:
-            _utils.lua_write(manifest_path, manifest)
-
-
-def update_nvchad(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/neovim/vars/main.yaml"
-    _update_utils.update_commit_in_yaml(vars_path, "nvchad_url", "nvchad_version", "nvchad_lock", dry_run)
-
-
-def update_python_modules(dry_run: bool) -> None:
-    requirements_path = _utils.get_repo_path() / "requirements.txt"
-    venv = _utils.get_build_path() / "venv"
-    _update_utils.update_requirements_txt(requirements_path, venv, dry_run)
-
-
-def update_shell_utils(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/shell_utils/vars/main.yaml"
-    _update_utils.update_commit_in_yaml(vars_path, "fzf_url", "fzf_commit", "fzf_lock", dry_run)
-    _update_utils.update_github_release_in_yaml(vars_path, "bat_url", "bat_lock", dry_run)
-    _update_utils.update_github_release_in_yaml(vars_path, "fd_url", "fd_lock", dry_run)
-    _update_utils.update_github_release_in_yaml(vars_path, "rg_url", "rg_lock", dry_run)
-
-
-def update_tpm(dry_run: bool) -> None:
-    vars_path = _utils.get_repo_path() / "roles/tmux/vars/main.yaml"
-    _update_utils.update_commit_in_yaml(vars_path, "tpm_url", "tpm_commit", "tpm_lock", dry_run)
+def update(choice: str, dry_run: bool) -> None:
+    if choice == "requirements":
+        venv = _utils.get_build_path() / "venv"
+        _update_utils.update_requirements_txt(_requirements_path, venv=venv, dry_run=dry_run)
+    elif choice == "neovim_plugins":
+        for plugin in get_neovim_plugins_choices():
+            _update_utils.update_neovim_plugin(_neovim_manifest_path, plugin, dry_run=dry_run)
+    elif choice in get_ansible_choices():
+        _update_utils.update_ansible_entry(_ansible_manifest_path, choice, dry_run=dry_run)
+    else:
+        assert False, f"Invalid choice: {choice}"

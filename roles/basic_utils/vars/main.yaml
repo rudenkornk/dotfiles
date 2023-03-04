@@ -1,3 +1,40 @@
 home: '{{ ansible_env.HOME }}'
 web_delay: 30
 web_retries: 5
+manifest:
+  ansible_community_general:
+    url: https://github.com/ansible-collections/community.general
+    version: 6.4.0
+  ansible_containers_podman:
+    url: https://github.com/containers/ansible-podman-collections
+    version: 1.10.1
+  ansible_posix:
+    url: https://github.com/ansible-collections/ansible.posix
+    version: 1.5.1
+  bat:
+    url: https://github.com/sharkdp/bat/releases/download/v0.22.1/bat-musl_0.22.1_amd64.deb
+  clipboard:
+    url: https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
+  cmake:
+    url: https://github.com/Kitware/CMake/releases/download/v3.25.2/cmake-3.25.2-linux-x86_64.sh
+  drawio:
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v20.8.16/drawio-amd64-20.8.16.deb
+  fd:
+    url: https://github.com/sharkdp/fd/releases/download/v8.7.0/fd-musl_8.7.0_amd64.deb
+  firacode:
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
+  fzf:
+    url: https://github.com/junegunn/fzf.git
+    version: 3364d4d147ade148d8e5dd67609e46f0ef6c50fc
+  github_cli:
+    url: https://github.com/cli/cli/releases/download/v2.23.0/gh_2.23.0_linux_amd64.deb
+  neovim:
+    url: https://github.com/neovim/neovim/releases/download/v0.8.3/nvim-linux64.deb
+  nvchad:
+    url: https://github.com/NvChad/NvChad
+    version: 03711011210f5177286f69783d8732a6e0564424
+  rg:
+    url: https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+  tpm:
+    url: https://github.com/tmux-plugins/tpm
+    version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946

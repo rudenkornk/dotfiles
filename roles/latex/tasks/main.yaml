@@ -21,7 +21,7 @@
 - name: Install draw.io
   become: true
   ansible.builtin.apt:
-    deb: "{{ drawio_url }}"
+    deb: "{{ manifest.drawio.url }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: installed

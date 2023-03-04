@@ -16,7 +16,6 @@ from typing import TypeVar as _TypeVar
 
 import luadata as _luadata  # type: ignore
 import yaml as _yaml
-from dotty_dict import dotty as _dotty  # type: ignore
 
 _logger = _logging.getLogger(__name__)
 
@@ -132,14 +131,14 @@ def lua_write(path: _Path, data: dict[str, _Any]) -> None:
     _luadata.write(path, data, encoding="utf-8", indent="  ", prefix="return ")
 
 
-def yaml_read(path: _Path) -> _dotty:
+def yaml_read(path: _Path) -> dict[str, _Any]:
     with open(path, "r") as stream:
-        return _dotty(_yaml.safe_load(stream))
+        return dict(_yaml.safe_load(stream))
 
 
-def yaml_write(path: _Path, data: dict[str, _Any] | _dotty) -> None:
+def yaml_write(path: _Path, data: dict[str, _Any]) -> None:
     with open(path, "w") as stream:
-        return _yaml.safe_dump(dict(data), stream=stream)
+        _yaml.safe_dump(data, stream=stream)
 
 
 class _LoggerFormatter(_logging.Formatter):

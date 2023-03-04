@@ -8,9 +8,9 @@
 
 - name: Install tmux-plugin-manager
   ansible.builtin.git:
-    repo: "{{ tpm_url }}"
+    repo: "{{ manifest.tpm.url }}"
     dest: "{{ home }}/.tmux/plugins/tpm"
-    version: "{{ tpm_commit }}"
+    version: "{{ manifest.tpm.version }}"
   register: downloaded
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"

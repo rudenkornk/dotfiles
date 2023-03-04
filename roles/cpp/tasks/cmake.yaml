@@ -1,6 +1,6 @@
 - name: Download cmake installation script
   ansible.builtin.get_url:
-    url: "{{ cmake_url }}"
+    url: "{{ manifest.cmake.url }}"
     dest: "{{ dotfiles_tmp }}/cmake.sh"
     mode: 0755
     force: true
@@ -14,7 +14,7 @@
   ansible.builtin.shell: |
     set -o pipefail
     current_version=$(cmake --version 2>&1 | grep --perl-regexp --only-matching "\d+\.\d+\.\d+" || true)
-    cmake_version=$(echo {{ cmake_url }} | grep --perl-regexp --only-matching "download/v\K\d+\.\d+\.\d+")
+    cmake_version=$(echo {{ manifest.cmake.url }} | grep --perl-regexp --only-matching "download/v\K\d+\.\d+\.\d+")
     if [[ "$cmake_version" != "$current_version" ]]; then
       "{{ dotfiles_tmp }}/cmake.sh" --skip-license --exclude-subdir --prefix=/usr/local
       echo false

@@ -4,19 +4,13 @@ import argparse as _argparse
 import logging as _logging
 from argparse import Namespace as _Namespace
 from argparse import _SubParsersAction as _SubParsersAction
+from pathlib import Path as _Path
 
 from . import roles_graph as _roles_graph
 from . import update as _update
+from . import utils as _utils
 
 _logger = _logging.getLogger(__name__)
-
-
-def _get_components() -> list[str]:
-    prefix = "update_"
-    prefix_len = len(prefix)
-    components = [x[prefix_len:] for x in dir(_update) if x.startswith("update_")]
-    components.sort()
-    return components
 
 
 def _add_update_parser(subparsers: _SubParsersAction) -> None:  # type: ignore
@@ -24,7 +18,7 @@ def _add_update_parser(subparsers: _SubParsersAction) -> None:  # type: ignore
     update_parser.add_argument(
         "-c",
         "--components",
-        choices=["all"] + _get_components(),
+        choices=["all"] + _update.get_update_choices(),
         default=["all"],
         dest="components",
         help="Component to update.",
@@ -59,7 +53,7 @@ def _get_parser() -> _argparse.ArgumentParser:
 
 def _parse_update_args_hook(args: _Namespace) -> None:
     if "all" in args.components:
-        args.components = _get_components()
+        args.components = _update.get_update_choices()
 
 
 def _parse_roles_graph_args_hook(args: _Namespace) -> None:
@@ -82,8 +76,7 @@ def _process_update(args: _Namespace) -> None:
         suffix = " (dry run)" if args.dry_run else ""
         _logger.info(f"Updating {title}{suffix}:")
 
-        update_func = getattr(_update, "update_" + component)
-        update_func(dry_run=args.dry_run)
+        _update.update(component, args.dry_run)
         _logger.info("")
 
 

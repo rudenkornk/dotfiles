@@ -1,7 +1,7 @@
 - name: Install fd
   become: true
   ansible.builtin.apt:
-    deb: "{{ fd_url }}"
+    deb: "{{ manifest.fd.url }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: installed
@@ -10,7 +10,7 @@
 - name: Install bat
   become: true
   ansible.builtin.apt:
-    deb: "{{ bat_url }}"
+    deb: "{{ manifest.bat.url }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: installed
@@ -19,7 +19,7 @@
 - name: Install ripgrep
   become: true
   ansible.builtin.apt:
-    deb: "{{ rg_url }}"
+    deb: "{{ manifest.rg.url }}"
     allow_downgrade: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
@@ -28,9 +28,9 @@
 
 - name: Download fzf
   ansible.builtin.git:
-    repo: "{{ fzf_url }}"
+    repo: "{{ manifest.fzf.url }}"
     dest: "{{ home }}/.fzf"
-    version: "{{ fzf_commit }}"
+    version: "{{ manifest.fzf.version }}"
   register: fzf_download
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"

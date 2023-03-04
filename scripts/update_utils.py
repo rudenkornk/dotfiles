@@ -5,6 +5,7 @@ import logging as _logging
 import re as _re
 import shutil as _shutil
 from pathlib import Path as _Path
+from typing import Any as _Any
 
 import git as _git
 import requests as _requests
@@ -214,36 +215,6 @@ def update_github_release(url: str, locked: bool) -> str:
     return new_url
 
 
-def update_github_release_in_yaml(vars_path: _Path, url_var: str, lock_var: str, dry_run: bool) -> None:
-    vars = _utils.yaml_read(vars_path)
-    locked = False
-    if lock_var in vars:
-        locked = vars[lock_var]
-    vars[url_var] = update_github_release(vars[url_var], locked)
-    if not dry_run:
-        _utils.yaml_write(vars_path, vars)
-
-
-def update_commit_in_yaml(vars_path: _Path, repo_var: str, commit_var: str, lock_var: str, dry_run: bool) -> None:
-    vars = _utils.yaml_read(vars_path)
-    locked = False
-    if lock_var in vars:
-        locked = vars[lock_var]
-    vars[commit_var] = update_commit(vars[repo_var], from_commit=vars[commit_var], locked=locked)
-    if not dry_run:
-        _utils.yaml_write(vars_path, vars)
-
-
-def update_tag_in_yaml(vars_path: _Path, repo_var: str, tag_var: str, lock_var: str, dry_run: bool) -> None:
-    vars = _utils.yaml_read(vars_path)
-    locked = False
-    if lock_var in vars:
-        locked = vars[lock_var]
-    vars[tag_var] = update_tag(vars[repo_var], from_tag=vars[tag_var], locked=locked)
-    if not dry_run:
-        _utils.yaml_write(vars_path, vars)
-
-
 def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool) -> None:
     tab = "  "
     activate = f". {venv}/bin/activate && "
@@ -314,3 +285,42 @@ def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool
         with open(requirements_path, "w") as f:
             f.writelines(new_requirements)
     _logger.info(f"{tab}Done")
+
+
+def update_neovim_plugin(neovim_manifest_path: _Path, plugin: str, dry_run: bool) -> None:
+    manifest = _utils.lua_read(neovim_manifest_path)
+    info = manifest[plugin]
+    repo = "https://github.com/" + plugin
+    locked = info.get("lock", False)
+    info["commit"] = update_commit(repo, from_commit=info["commit"], locked=locked)
+    if not dry_run:
+        _utils.lua_write(neovim_manifest_path, manifest)
+
+
+def get_ansible_entry_type(info: dict[str, _Any]) -> str:
+    if "version" not in info:
+        return "github_release"
+    version = info["version"]
+    try:
+        _semver.VersionInfo.parse(version)
+        return "git_tag"
+    except ValueError:
+        return "git_commit"
+    assert False
+
+
+def update_ansible_entry(manifest_path: _Path, entry: str, dry_run: bool) -> None:
+    main_vars = _utils.yaml_read(manifest_path)
+    manifest = main_vars["manifest"]
+    info = manifest[entry]
+    url = info["url"]
+    locked = info.get("lock", False)
+    entry_type = get_ansible_entry_type(info)
+    if entry_type == "git_tag":
+        info["version"] = update_tag(url, from_tag=info["version"], locked=locked)
+    if entry_type == "git_commit":
+        info["version"] = update_commit(url, from_commit=info["version"], locked=locked)
+    if entry_type == "github_release":
+        info["url"] = update_github_release(url, locked=locked)
+    if not dry_run:
+        _utils.yaml_write(manifest_path, main_vars)

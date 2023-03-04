@@ -1,3 +1,2 @@
 git_secret_gpg: https://gitsecret.jfrog.io/artifactory/api/gpg/key/public
 git_secret_repo: https://gitsecret.jfrog.io/artifactory/git-secret-deb
-githubcli_url: https://github.com/cli/cli/releases/download/v2.23.0/gh_2.23.0_linux_amd64.deb

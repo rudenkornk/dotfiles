@@ -12,7 +12,7 @@
 
 - name: Download FiraCode font
   ansible.builtin.unarchive:
-    src: "{{ fira_code_url }}"
+    src: "{{ manifest.firacode.url }}"
     dest: "{{ dotfiles_tmp }}/FiraCode"
     remote_src: true
   retries: "{{ web_retries }}"

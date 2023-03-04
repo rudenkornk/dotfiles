@@ -1,7 +1,7 @@
 - name: Install neovim
   become: true
   ansible.builtin.apt:
-    deb: "{{ neovim_url }}"
+    deb: "{{ manifest.neovim.url }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: installed
@@ -46,9 +46,9 @@
 
 - name: Install NvChad
   ansible.builtin.git:
-    repo: "{{ nvchad_url }}"
+    repo: "{{ manifest.nvchad.url }}"
     dest: "{{ home }}/.config/nvim"
-    version: "{{ nvchad_version }}"
+    version: "{{ manifest.nvchad.version }}"
     force: true
   register: nvchad_installed
   retries: "{{ web_retries }}"

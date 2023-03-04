@@ -45,7 +45,7 @@
 - name: Install GitHub cli
   become: true
   ansible.builtin.apt:
-    deb: "{{ githubcli_url }}"
+    deb: "{{ manifest.github_cli.url }}"
 
 - name: Set up bash
   ansible.builtin.lineinfile:

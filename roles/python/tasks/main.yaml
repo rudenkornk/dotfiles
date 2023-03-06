@@ -4,3 +4,58 @@
     name:
       - python3-pip
       - python3-venv
+
+# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#where-black-looks-for-the-file
+- name: Create symlink to global black config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/black.toml"
+    dest: "{{ home }}/.config/black"
+    state: link
+    force: true
+
+# https://pycqa.github.io/isort/docs/configuration/config_files.html
+# https://github.com/PyCQA/isort/issues/1414
+- name: Create symlink to global isort config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/isort.cfg"
+    dest: "{{ home }}/.isort.cfg"
+    state: link
+    force: true
+
+- name: Create ~/.config/mypy directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/mypy"
+    state: directory
+    mode: 0755
+
+# https://mypy.readthedocs.io/en/stable/config_file.html#the-mypy-configuration-file
+- name: Create symlink to global mypy config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/mypy.ini"
+    dest: "{{ home }}/.config/mypy/config"
+    state: link
+    force: true
+
+# https://www.pydocstyle.org/en/6.3.0/usage.html?highlight=config#configuration-files
+- name: Create symlink to global pylint config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/pylint.toml"
+    dest: "{{ home }}/.config/pylintrc"
+    state: link
+    force: true
+
+# https://www.pydocstyle.org/en/6.3.0/usage.html?highlight=config#configuration-files
+- name: Create symlink to global pydocstyle config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/pydocstyle.toml"
+    dest: "{{ home }}/.pydocstyle"
+    state: link
+    force: true
+
+# https://www.pydocstyle.org/en/6.3.0/usage.html?highlight=config#configuration-files
+- name: Create symlink to global pycodestyle config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/pycodestyle"
+    dest: "{{ home }}/.config/pycodestyle"
+    state: link
+    force: true

@@ -29,3 +29,31 @@
       - unzip
       - wget
       - zip
+
+- name: Create ~/.config/yamlfmt directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/yamlfmt"
+    state: directory
+    mode: 0755
+
+# https://github.com/google/yamlfmt#configuration-file
+- name: Create symlink to global yamlfmt config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/yamlfmt.yaml"
+    dest: "{{ home }}/.config/yamlfmt/.yamlfmt"
+    state: link
+    force: true
+
+- name: Create ~/.config/yamllint directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/yamllint"
+    state: directory
+    mode: 0755
+
+# https://yamllint.readthedocs.io/en/stable/configuration.html#configuration
+- name: Create symlink to global yamllint config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/yamllint.yaml"
+    dest: "{{ home }}/.config/yamlfmt/config"
+    state: link
+    force: true

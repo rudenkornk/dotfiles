@@ -7,7 +7,7 @@ from . import utils as _utils
 
 _logger = _logging.getLogger(__name__)
 
-_ansible_manifest_path = _utils.get_repo_path() / "roles" / "basic_utils" / "vars" / "main.yaml"
+_ansible_manifest_path = _utils.get_repo_path() / "roles" / "manifest" / "vars" / "main.yaml"
 _neovim_manifest_path = _utils.get_repo_path() / "roles" / "neovim" / "files" / "nvchad" / "plugins" / "manifest.lua"
 _requirements_path = _utils.get_repo_path() / "requirements.txt"
 

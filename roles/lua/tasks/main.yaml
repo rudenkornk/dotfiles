@@ -99,3 +99,17 @@
     executable: bash
   register: installed
   changed_when: installed.stdout != ""
+
+- name: Create ~/.config/luacheck directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/luacheck"
+    state: directory
+    mode: 0755
+
+# https://luacheck.readthedocs.io/en/stable/config.html#configuration-file
+- name: Create symlink to global luacheck config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/luacheckrc"
+    dest: "{{ home }}/.config/luacheck/.luacheckrc"
+    state: link
+    force: true

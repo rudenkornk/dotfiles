@@ -85,7 +85,7 @@ $(BUILD_DIR)/$(UBUNTU_TAG)/bootstrap_control_node: $(BUILD_DIR)/bootstrap_contro
 ###################### Bootstrap control node ######################
 .PHONY: $(BUILD_DIR)/not_ready
 
-$(BUILD_DIR)/bootstrap_control_node: $(BUILD_DIR)/ansible playbook_bootstrap_control_node.yaml
+$(BUILD_DIR)/bootstrap_control_node: $(BUILD_DIR)/ansible playbook_bootstrap_control_node.yaml roles/manifest/vars/main.yaml
 	sudo bash -c ''
 	$(VENV) && ansible-playbook --inventory inventory.yaml playbook_bootstrap_control_node.yaml
 	mkdir --parents $(BUILD_DIR) && touch $@

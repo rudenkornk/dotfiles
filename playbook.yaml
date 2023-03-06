@@ -1,6 +1,7 @@
 - name: Configure hosts
   hosts: "{{ __hosts__ }}"
   roles:
+    - role: manifest
     - role: basic_utils
     - role: clipboard
     - role: dotfiles

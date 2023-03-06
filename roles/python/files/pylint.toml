@@ -1,0 +1,7 @@
+[tool.pylint]
+max-line-length = 120
+disable = [
+  "logging-fstring-interpolation",
+  "logging-not-lazy",
+  "missing-docstring",
+]

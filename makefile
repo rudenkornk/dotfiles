@@ -36,9 +36,20 @@ update: $(BUILD_DIR)/bootstrap_control_node
 graph: $(BUILD_DIR)/bootstrap_control_node
 	$(VENV) && ./support.py graph
 
+.PHONY: format
+format: $(BUILD_DIR)/bootstrap_control_node
+	$(VENV) && python3 -m black .
+	$(VENV) && python3 -m isort --gitignore .
+
 
 ############################## Checks ##############################
 UBUNTU_TAG ?= 22.04
+
+.PHONY: check
+check: \
+	check_bootstrap_control_node \
+	check_host \
+	lint \
 
 .PHONY: lint
 lint: $(BUILD_DIR)/bootstrap_control_node
@@ -65,8 +76,8 @@ lint: $(BUILD_DIR)/bootstrap_control_node
 		exit 1; \
 	fi
 
-.PHONY: check
-check: $(BUILD_DIR)/bootstrap_control_node
+.PHONY: check_host
+check_host: $(BUILD_DIR)/bootstrap_control_node
 	make HOSTS=dotfiles_$(UBUNTU_TAG) config
 
 .PHONY: check_bootstrap_control_node

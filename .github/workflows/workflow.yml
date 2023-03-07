@@ -44,10 +44,10 @@ jobs:
     - name: Check bootstrap control node
       run: make check_bootstrap_control_node
     - name: Check config
-      run: make check
+      run: make check_host
     - name: Check idempotence
       run: |
-        make check | tee __build__/log
+        make check_host | tee __build__/log
         ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
 
   lint:

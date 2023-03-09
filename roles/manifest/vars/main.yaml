@@ -13,7 +13,7 @@ manifest:
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v3.25.2/cmake-3.25.2-linux-x86_64.sh
+    url: https://github.com/Kitware/CMake/releases/download/v3.25.3/cmake-3.25.3-linux-x86_64.sh
   drawio:
     url: https://github.com/jgraph/drawio-desktop/releases/download/v20.8.16/drawio-amd64-20.8.16.deb
   fd:
@@ -22,14 +22,14 @@ manifest:
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: 3364d4d147ade148d8e5dd67609e46f0ef6c50fc
+    version: 63cf9d04deab832a3a472b6e4de2db837932d957
   github_cli:
-    url: https://github.com/cli/cli/releases/download/v2.23.0/gh_2.23.0_linux_amd64.deb
+    url: https://github.com/cli/cli/releases/download/v2.24.3/gh_2.24.3_linux_amd64.deb
   neovim:
     url: https://github.com/neovim/neovim/releases/download/v0.8.3/nvim-linux64.deb
   nvchad:
     url: https://github.com/NvChad/NvChad
-    version: 03711011210f5177286f69783d8732a6e0564424
+    version: 8cf7ca4002ca0944aae58e22c060ff314a706d83
   rg:
     url: https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
   tpm:

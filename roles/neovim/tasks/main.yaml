@@ -14,8 +14,8 @@
 
 - name: Install neovim gem
   become: true
-  community.general.gem:
-    name: neovim
+  ansible.builtin.apt:
+    name: ruby-neovim
 
 - name: Install python packages
   become: true

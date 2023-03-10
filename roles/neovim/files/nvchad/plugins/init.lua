@@ -65,6 +65,7 @@ return {
       require("better_escape").setup()
     end,
   },
+  ["mfussenegger/nvim-dap"] = { commit = manifest["mfussenegger/nvim-dap"].commit },
   ["neovim/nvim-lspconfig"] = require("custom.plugins.lspconfig"),
   ["numToStr/Comment.nvim"] = { commit = manifest["numToStr/Comment.nvim"].commit },
   ["numToStr/Navigator.nvim"] = {
@@ -171,6 +172,12 @@ return {
     },
     config = function()
       require("aerial").setup()
+    end,
+  },
+  ["theHamsta/nvim-dap-virtual-text"] = {
+    commit = manifest["theHamsta/nvim-dap-virtual-text"].commit,
+    config = function()
+      require("nvim-dap-virtual-text").setup()
     end,
   },
   ["wbthomason/packer.nvim"] = { commit = manifest["wbthomason/packer.nvim"].commit },

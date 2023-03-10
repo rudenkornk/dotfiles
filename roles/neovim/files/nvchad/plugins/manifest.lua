@@ -56,6 +56,9 @@ return {
   ["max397574/better-escape.nvim"] = {
     commit = "426d29708064d5b1bfbb040424651c92af1f3f64",
   },
+  ["mfussenegger/nvim-dap"] = {
+    commit = "73196075627a4f079c62b0dd4aff8ce0a1b7cf57",
+  },
   ["neovim/nvim-lspconfig"] = {
     commit = "2ba6e268d92934e14fe561fe446a49540803e57f",
   },
@@ -121,6 +124,9 @@ return {
   },
   ["stevearc/aerial.nvim"] = {
     commit = "5b788392ec571621891e1b73887af5ac12056610",
+  },
+  ["theHamsta/nvim-dap-virtual-text"] = {
+    commit = "8db23ea51203b5f00ad107a0cef7e0b2d7a0476c",
   },
   ["wbthomason/packer.nvim"] = {
     commit = "1d0cf98a561f7fd654c970c49f917d74fafe1530",

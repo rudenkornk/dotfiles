@@ -16,6 +16,7 @@ M.override_options = {
     "bash-language-server",
     "beautysh",
     "black",
+    "cbfmt",
     "clang-format",
     "clangd",
     "cmake-language-server",

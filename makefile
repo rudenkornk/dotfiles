@@ -61,6 +61,7 @@ lint: $(BUILD_DIR)/bootstrap_control_node
 	$(VENV) && python3 -m pylint --jobs 0 .
 	$(VENV) && python3 -m black --diff --check .
 	$(VENV) && python3 -m isort --gitignore --diff --check .
+	$(VENV) && python3 -m yamllint --strict .github
 	
 	dirs=($$(ls roles)); \
 	roles=($$(grep --perl-regex --only-matching "\- role\: \K\w+" playbook.yaml | sort)); \

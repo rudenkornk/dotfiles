@@ -65,7 +65,17 @@ return {
       require("better_escape").setup()
     end,
   },
-  ["mfussenegger/nvim-dap"] = { commit = manifest["mfussenegger/nvim-dap"].commit },
+  ["mfussenegger/nvim-dap"] = {
+    commit = manifest["mfussenegger/nvim-dap"].commit,
+    module = "dap",
+  },
+  ["mfussenegger/nvim-dap-python"] = {
+    commit = manifest["mfussenegger/nvim-dap-python"].commit,
+    after = "nvim-dap",
+    config = function()
+      require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3")
+    end,
+  },
   ["neovim/nvim-lspconfig"] = require("custom.plugins.lspconfig"),
   ["numToStr/Comment.nvim"] = { commit = manifest["numToStr/Comment.nvim"].commit },
   ["numToStr/Navigator.nvim"] = {
@@ -176,6 +186,7 @@ return {
   },
   ["theHamsta/nvim-dap-virtual-text"] = {
     commit = manifest["theHamsta/nvim-dap-virtual-text"].commit,
+    after = "nvim-dap",
     config = function()
       require("nvim-dap-virtual-text").setup()
     end,

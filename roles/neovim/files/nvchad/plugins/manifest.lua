@@ -59,6 +59,9 @@ return {
   ["mfussenegger/nvim-dap"] = {
     commit = "73196075627a4f079c62b0dd4aff8ce0a1b7cf57",
   },
+  ["mfussenegger/nvim-dap-python"] = {
+    commit = "65ccab83fb3d0b29ead6c765c1c52a1ed49592e8",
+  },
   ["neovim/nvim-lspconfig"] = {
     commit = "2ba6e268d92934e14fe561fe446a49540803e57f",
   },

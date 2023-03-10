@@ -54,6 +54,6 @@
 - name: Create symlink to global yamllint config
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/yamllint.yaml"
-    dest: "{{ home }}/.config/yamlfmt/config"
+    dest: "{{ home }}/.config/yamllint/config"
     state: link
     force: true

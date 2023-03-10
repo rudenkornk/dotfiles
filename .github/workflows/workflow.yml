@@ -1,76 +1,76 @@
-name: dotfiles workflow
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
 
 defaults:
   run:
     shell: bash
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
-  cancel-in-progress: true
-
 jobs:
+
+  check_container:
+    env:
+      UBUNTU_TAG: ${{ matrix.ubuntu_tag }}
+      USER: random_user
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Check bootstrap control node
+        run: make check_bootstrap_control_node
+      - name: Check config
+        run: make check_host
+      - name: Check idempotence
+        run: |
+          make check_host | tee __build__/log
+          ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
+    strategy:
+      matrix:
+        ubuntu_tag: ["22.04", "22.10"]
 
   check_locahost:
     runs-on: ubuntu-22.04
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Config
-      run: make
-    - name: Check idempotence
-      run: |
-        make | tee __build__/log
-        ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
-
-  check_container:
-    strategy:
-      matrix:
-        ubuntu_tag: ["22.04", "22.10"]
-    runs-on: ubuntu-22.04
-    env:
-      UBUNTU_TAG: ${{ matrix.ubuntu_tag }}
-      USER: random_user
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Check bootstrap control node
-      run: make check_bootstrap_control_node
-    - name: Check config
-      run: make check_host
-    - name: Check idempotence
-      run: |
-        make check_host | tee __build__/log
-        ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Config
+        run: make
+      - name: Check idempotence
+        run: |
+          make | tee __build__/log
+          ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
 
   lint:
     runs-on: ubuntu-22.04
     steps:
       # Checkout must be onto the original commit, not a single PR
       # Otherwise lint will not see full history and diagnose secrets leakage
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-        fetch-depth: 0
-    - name: Lint
-      run: make lint
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Lint
+        run: make lint
 
   scripts:
     runs-on: ubuntu-22.04
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Generate roles graph
-      run: make graph
-    - name: Check update works
-      run: make update
-    - name: Show diff
-      run: git diff
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Generate roles graph
+        run: make graph
+      - name: Check update works
+        run: make update
+      - name: Show diff
+        run: git diff
+
+name: dotfiles workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main

@@ -229,6 +229,10 @@ return {
       require("nvim-dap-virtual-text").setup()
     end,
   },
+  ["tpope/vim-repeat"] = {
+    commit = manifest["tpope/vim-repeat"].commit,
+    keys = { "." },
+  },
   ["wbthomason/packer.nvim"] = { commit = manifest["wbthomason/packer.nvim"].commit },
   ["weilbith/nvim-code-action-menu"] = {
     commit = manifest["weilbith/nvim-code-action-menu"].commit,

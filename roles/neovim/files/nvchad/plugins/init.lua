@@ -26,7 +26,7 @@ return {
   },
   ["folke/which-key.nvim"] = {
     commit = manifest["folke/which-key.nvim"].commit,
-    disabled = true,
+    disable = true,
   },
   ["godlygeek/tabular"] = {
     commit = manifest["godlygeek/tabular"].commit,

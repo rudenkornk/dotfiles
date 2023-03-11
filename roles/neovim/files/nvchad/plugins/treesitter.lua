@@ -1,8 +1,4 @@
-local M = {}
-local manifest = require("custom.plugins.manifest")
-
-M.commit = manifest["nvim-treesitter/nvim-treesitter"].commit
-M.override_options = {
+local override_options = {
   ensure_installed = {
     "ada",
     "agda",
@@ -135,8 +131,8 @@ M.override_options = {
   rainbow = {
     enable = true,
     extended_mode = true,
-    disable = { },
+    disable = {},
   },
 }
 
-return M
+return override_options

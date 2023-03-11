@@ -1,7 +1,3 @@
-local M = {}
-
-local manifest = require("custom.plugins.manifest")
-
 local pythonic_dunder_cmp = function(entry1, entry2)
   -- Thanks to https://github.com/lukas-reineke/cmp-under-comparator
   local _, entry1_under = entry1.completion_item.label:find("^_+")
@@ -15,8 +11,7 @@ local pythonic_dunder_cmp = function(entry1, entry2)
   end
 end
 
-M.commit = manifest["hrsh7th/nvim-cmp"].commit
-M.override_options = function()
+local override_options = function()
   local cmp = require("cmp")
 
   -- format
@@ -129,4 +124,4 @@ M.override_options = function()
   }
 end
 
-return M
+return override_options

@@ -123,6 +123,9 @@ return {
   ["rafamadriz/friendly-snippets"] = {
     commit = "009887b76f15d16f69ae1341f86a7862f61cf2a1",
   },
+  ["rcarriga/nvim-notify"] = {
+    commit = "281e4d793c550c866bea3fb85d39de1f0188fb50",
+  },
   ["rmagatti/goto-preview"] = {
     commit = "390a8bf9f83cc0e31a5154357bc4bfad8e79b889",
   },

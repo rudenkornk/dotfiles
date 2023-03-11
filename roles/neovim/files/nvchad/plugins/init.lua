@@ -184,6 +184,19 @@ return {
       "CmdlineEnter",
     },
   },
+  ["rcarriga/nvim-notify"] = {
+    commit = manifest["rcarriga/nvim-notify"].commit,
+    after = "nvim-cmp",
+    module = "notify",
+    config = function()
+      require("notify").setup({
+        stages = "fade",
+        timeout = 1000,
+        render = "compact",
+      })
+      vim.notify = require("notify")
+    end,
+  },
   ["rmagatti/goto-preview"] = {
     commit = manifest["rmagatti/goto-preview"].commit,
     module = "goto-preview",

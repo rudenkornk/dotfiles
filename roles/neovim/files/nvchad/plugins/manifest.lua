@@ -107,6 +107,9 @@ return {
   ["petertriho/cmp-git"] = {
     commit = "a798a25b21e7204597f56029af2e8a17d65e2518",
   },
+  ["phaazon/hop.nvim"] = {
+    commit = "90db1b2c61b820e230599a04fedcd2679e64bd07",
+  },
   ["rafamadriz/friendly-snippets"] = {
     commit = "009887b76f15d16f69ae1341f86a7862f61cf2a1",
   },

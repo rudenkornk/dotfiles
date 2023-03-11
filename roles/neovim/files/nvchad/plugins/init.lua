@@ -36,6 +36,12 @@ return {
   ["hrsh7th/cmp-path"] = { commit = manifest["hrsh7th/cmp-path"].commit },
   ["hrsh7th/nvim-cmp"] = require("custom.plugins.cmp"),
   ["jose-elias-alvarez/null-ls.nvim"] = require("custom.plugins.null-ls"),
+  ["karb94/neoscroll.nvim"] = {
+    commit = manifest["karb94/neoscroll.nvim"].commit,
+    disable = true, -- too laggy on my machine
+    event = "WinScrolled",
+    config = require("custom.plugins.neoscroll"),
+  },
   ["kylechui/nvim-surround"] = {
     commit = manifest["kylechui/nvim-surround"].commit,
     keys = { "c", "d", "y" },

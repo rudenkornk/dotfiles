@@ -35,6 +35,10 @@ return {
   ["jose-elias-alvarez/null-ls.nvim"] = {
     commit = "b359a0a1da2fcda0b5cd84fdf1a4efa508b39a4c",
   },
+  ["karb94/neoscroll.nvim"] = {
+    commit = "d7601c26c8a183fa8994ed339e70c2d841253e93",
+    lock = true,
+  },
   ["kylechui/nvim-surround"] = {
     commit = "e3d0cd0c70b7e96fd2f62c4979f1997d96c86673",
   },

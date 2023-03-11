@@ -144,6 +144,9 @@ return {
   ["theHamsta/nvim-dap-virtual-text"] = {
     commit = "8db23ea51203b5f00ad107a0cef7e0b2d7a0476c",
   },
+  ["tpope/vim-repeat"] = {
+    commit = "24afe922e6a05891756ecf331f39a1f6743d3d5a",
+  },
   ["wbthomason/packer.nvim"] = {
     commit = "1d0cf98a561f7fd654c970c49f917d74fafe1530",
   },

@@ -76,6 +76,10 @@ return {
       require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3")
     end,
   },
+  ["mrjones2014/nvim-ts-rainbow"] = {
+    commit = manifest["mrjones2014/nvim-ts-rainbow"].commit,
+    after = "nvim-treesitter",
+  },
   ["neovim/nvim-lspconfig"] = require("custom.plugins.lspconfig"),
   ["numToStr/Comment.nvim"] = { commit = manifest["numToStr/Comment.nvim"].commit },
   ["numToStr/Navigator.nvim"] = {

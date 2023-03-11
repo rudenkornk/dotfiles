@@ -132,6 +132,11 @@ M.override_options = {
     "yang",
     "zig",
   },
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    disable = { },
+  },
 }
 
 return M

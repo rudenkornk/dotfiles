@@ -34,7 +34,10 @@ return {
   ["hrsh7th/cmp-nvim-lsp"] = { commit = manifest["hrsh7th/cmp-nvim-lsp"].commit },
   ["hrsh7th/cmp-nvim-lua"] = { commit = manifest["hrsh7th/cmp-nvim-lua"].commit },
   ["hrsh7th/cmp-path"] = { commit = manifest["hrsh7th/cmp-path"].commit },
-  ["hrsh7th/nvim-cmp"] = require("custom.plugins.cmp"),
+  ["hrsh7th/nvim-cmp"] = {
+    commit = manifest["hrsh7th/nvim-cmp"].commit,
+    override_options = require("custom.plugins.cmp"),
+  },
   ["jose-elias-alvarez/null-ls.nvim"] = require("custom.plugins.null-ls"),
   ["karb94/neoscroll.nvim"] = {
     commit = manifest["karb94/neoscroll.nvim"].commit,
@@ -86,7 +89,10 @@ return {
     commit = manifest["mrjones2014/nvim-ts-rainbow"].commit,
     after = "nvim-treesitter",
   },
-  ["neovim/nvim-lspconfig"] = require("custom.plugins.lspconfig"),
+  ["neovim/nvim-lspconfig"] = {
+    commit = manifest["neovim/nvim-lspconfig"].commit,
+    config = require("custom.plugins.lspconfig"),
+  },
   ["numToStr/Comment.nvim"] = { commit = manifest["numToStr/Comment.nvim"].commit },
   ["numToStr/Navigator.nvim"] = {
     commit = manifest["numToStr/Navigator.nvim"].commit,
@@ -108,7 +114,10 @@ return {
   ["NvChad/extensions"] = { commit = manifest["NvChad/extensions"].commit },
   ["NvChad/nvim-colorizer.lua"] = { commit = manifest["NvChad/nvim-colorizer.lua"].commit },
   ["NvChad/nvterm"] = { commit = manifest["NvChad/nvterm"].commit },
-  ["NvChad/ui"] = require("custom.plugins.ui"),
+  ["NvChad/ui"] = {
+    commit = manifest["NvChad/ui"].commit,
+    override_options = require("custom.plugins.ui"),
+  },
   ["nvim-lua/plenary.nvim"] = { commit = manifest["nvim-lua/plenary.nvim"].commit },
   ["nvim-telescope/telescope.nvim"] = {
     commit = manifest["nvim-telescope/telescope.nvim"].commit,
@@ -136,7 +145,10 @@ return {
   ["nvim-tree/nvim-web-devicons"] = {
     commit = manifest["nvim-tree/nvim-web-devicons"].commit,
   },
-  ["nvim-treesitter/nvim-treesitter"] = require("custom.plugins.treesitter"),
+  ["nvim-treesitter/nvim-treesitter"] = {
+    commit = manifest["nvim-treesitter/nvim-treesitter"].commit,
+    override_options = require("custom.plugins.treesitter"),
+  },
   ["pearofducks/ansible-vim"] = {
     commit = manifest["pearofducks/ansible-vim"].commit,
     after = "nvim-cmp",

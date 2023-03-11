@@ -207,6 +207,13 @@ return {
       require("cmp_git").setup()
     end,
   },
+  ["petertriho/nvim-scrollbar"] = {
+    commit = manifest["petertriho/nvim-scrollbar"].commit,
+    after = "nvim-treesitter",
+    config = function()
+      require("scrollbar").setup()
+    end,
+  },
   ["rafamadriz/friendly-snippets"] = {
     commit = manifest["rafamadriz/friendly-snippets"].commit,
     event = {

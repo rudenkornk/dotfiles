@@ -2,6 +2,9 @@ return {
   ["andersevenrud/cmp-tmux"] = {
     commit = "984772716f66d8ee88535a6bf3f94c4b4e1301f5",
   },
+  ["ethanholz/nvim-lastplace"] = {
+    commit = "65c5d6e2501a3af9c2cd15c6548e67fa035bf640",
+  },
   ["folke/trouble.nvim"] = {
     commit = "67337644e38144b444d026b0df2dc5fa0038930f",
   },

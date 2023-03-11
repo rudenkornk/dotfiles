@@ -52,6 +52,17 @@ return {
     commit = manifest["folke/which-key.nvim"].commit,
     disable = true,
   },
+  ["ggandor/flit.nvim"] = {
+    commit = manifest["ggandor/flit.nvim"].commit,
+    keys = { "f", "F", "t", "T" },
+    config = function()
+      require("flit").setup({ labeled_modes = "nx" })
+    end,
+  },
+  ["ggandor/leap.nvim"] = {
+    commit = manifest["ggandor/leap.nvim"].commit,
+    module = "leap",
+  },
   ["godlygeek/tabular"] = {
     commit = manifest["godlygeek/tabular"].commit,
     cmd = "Tabularize",
@@ -194,15 +205,6 @@ return {
     requires = "nvim-lua/plenary.nvim",
     config = function()
       require("cmp_git").setup()
-    end,
-  },
-  ["phaazon/hop.nvim"] = {
-    -- Alternative is ggandor/leap.nvim, which has nice "auto-jump to the first match" feature,
-    -- but I did not manage to get it work
-    commit = manifest["phaazon/hop.nvim"].commit,
-    module = "hop",
-    config = function()
-      require("hop").setup()
     end,
   },
   ["rafamadriz/friendly-snippets"] = {

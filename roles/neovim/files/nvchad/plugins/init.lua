@@ -93,6 +93,7 @@ return {
       "NavigatorRight",
       "NavigatorPrevious",
     },
+    module = "Navigator",
     config = function()
       require("Navigator").setup()
     end,

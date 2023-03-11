@@ -5,6 +5,13 @@ return {
     commit = manifest["andersevenrud/cmp-tmux"].commit,
     after = "nvim-cmp",
   },
+  ["ethanholz/nvim-lastplace"] = {
+    commit = manifest["ethanholz/nvim-lastplace"].commit,
+    event = "VimEnter",
+    config = function()
+      require("nvim-lastplace").setup()
+    end,
+  },
   ["folke/trouble.nvim"] = {
     commit = manifest["folke/trouble.nvim"].commit,
     cmd = {

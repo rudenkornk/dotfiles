@@ -138,6 +138,15 @@ return {
       require("cmp_git").setup()
     end,
   },
+  ["phaazon/hop.nvim"] = {
+    -- Alternative is ggandor/leap.nvim, which has nice "auto-jump to the first match" feature,
+    -- but I did not manage to get it work
+    commit = manifest["phaazon/hop.nvim"].commit,
+    module = "hop",
+    config = function()
+      require("hop").setup()
+    end,
+  },
   ["rafamadriz/friendly-snippets"] = {
     commit = manifest["rafamadriz/friendly-snippets"].commit,
     event = {

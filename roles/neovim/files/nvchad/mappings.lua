@@ -45,41 +45,87 @@ M.code_action_menu = {
 }
 
 M.disabled = {
+  t = {
+    ["<A-v>"] = "", -- Unmap terminals (use tmux)
+    ["<A-i>"] = "", -- Unmap terminals (use tmux)
+  },
   n = {
     ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
-    ["<leader>h"] = "", -- Unmap horizontal terminal (use <A-h>)
-    ["<leader>v"] = "", -- Unmap vertical terminal (use <A-v>)
-    ["<leader>x"] = "", -- Unmap closing buffer (map <leader>q instead)
+    ["<A-v>"] = "", -- Unmap terminals (use tmux)
+    ["<A-i>"] = "", -- Unmap terminals (use tmux)
+    ["<C-h>"] = "", -- Unmap navigation (overriding with Navigator)
+    ["<C-j>"] = "", -- Unmap navigation (overriding with Navigator)
+    ["<C-k>"] = "", -- Unmap navigation (overriding with Navigator)
+    ["<C-l>"] = "", -- Unmap navigation (overriding with Navigator)
+    ["<leader>h"] = "", -- Unmap terminals (use tmux)
+    ["<leader>v"] = "", -- Unmap terminals (use tmux)
+    ["<leader>x"] = "", -- Unmap closing buffer (map <leader>d instead)
   },
 }
 
 M.goto_preview = {
   n = {
-    ["gpd"] = { "<CMD>lua require('goto-preview').goto_preview_definition()<CR>", "  preview definition" },
+    ["gpd"] = {
+      function()
+        require("goto-preview").goto_preview_definition()
+      end,
+      "  preview definition",
+    },
     ["gpt"] = {
-      "<CMD>lua require('goto-preview').goto_preview_type_definition()<CR>",
+      function()
+        require("goto-preview").goto_preview_type_definition()
+      end,
       "  preview type definition",
     },
-    ["gpi"] = { "<CMD>lua require('goto-preview').goto_preview_implementation()<CR>", "  preview implementation" },
-    ["gq"] = { "<CMD>lua require('goto-preview').close_all_win()<CR>", "  close previews" },
+    ["gpi"] = {
+      function()
+        require("goto-preview").goto_preview_implementation()
+      end,
+      "  preview implementation",
+    },
+    ["gq"] = {
+      function()
+        require("goto-preview").close_all_win()
+      end,
+      "  close previews",
+    },
     -- does not work
-    ["gpr"] = { "<CMD>lua require('goto-preview').goto_preview_references()<CR>", "  preview references" },
+    ["gpr"] = {
+      function()
+        require("goto-preview").goto_preview_references()
+      end,
+      "  preview references",
+    },
   },
 }
 
 M.illuminate = {
   i = {
-    ["<A-n>"] = { "<cmd>lua require('illuminate').next_reference{wrap=true}<CR>", "  Next reference" },
+    ["<A-n>"] = {
+      function()
+        require("illuminate").next_reference({ wrap = true })
+      end,
+      "  next reference",
+    },
     ["<A-p>"] = {
-      "<cmd>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>",
-      "  Previous reference",
+      function()
+        require("illuminate").next_reference({ reverse = true, wrap = true })
+      end,
+      "  previous reference",
     },
   },
   n = {
-    ["<A-n>"] = { "<CMD>lua require('illuminate').next_reference{wrap=true}<CR>", "  Next reference" },
+    ["<A-n>"] = {
+      function()
+        require("illuminate").next_reference({ wrap = true })
+      end,
+      "  next reference",
+    },
     ["<A-p>"] = {
-      "<CMD>lua require('illuminate').next_reference{reverse=true,wrap=true}<CR>",
-      "  Previous reference",
+      function()
+        require("illuminate").next_reference({ reverse = true, wrap = true })
+      end,
+      "  previous reference",
     },
   },
 }
@@ -159,8 +205,18 @@ M.symbols_outline = {
 
 M.tabufline = {
   n = {
-    ["<leader>tp"] = { "<CMD> Tbufnext <CR>", "  goto next buffer" },
-    ["<leader>tn"] = { "<CMD> Tbufprev <CR>", "  goto prev buffer" },
+    ["<leader>tp"] = {
+      function()
+        require("nvchad_ui.tabufline").tabuflineNext()
+      end,
+      "  goto next buffer",
+    },
+    ["<leader>tn"] = {
+      function()
+        require("nvchad_ui.tabufline").tabuflinePrev()
+      end,
+      "  goto prev buffer",
+    },
 
     -- close buffer + hide terminal buffer
     ["<leader>d"] = {

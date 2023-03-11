@@ -15,7 +15,7 @@
     llg = log --oneline --graph
     mb = merge-base
     rb = rebase
-    rbi = rebase --rebase-merges --interactive HEAD~28
+    rbi = rebase --rebase-merges --interactive HEAD~26
     rv = remote -v
     sg = diff --staged
     sh = show

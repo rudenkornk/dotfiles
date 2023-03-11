@@ -239,22 +239,82 @@ M.lspconfig = {
 
 M.navigator = {
   c = {
-    ["<C-h>"] = { "<CMD>NavigatorLeft<CR>", "  Left pane" },
-    ["<C-j>"] = { "<CMD>NavigatorDown<CR>", "  Lower pane" },
-    ["<C-k>"] = { "<CMD>NavigatorUp<CR>", "  Upper pane" },
-    ["<C-l>"] = { "<CMD>NavigatorRight<CR>", "  Right pane" },
+    ["<C-h>"] = {
+      function()
+        require("Navigator").left()
+      end,
+      "  Left pane",
+    },
+    ["<C-j>"] = {
+      function()
+        require("Navigator").down()
+      end,
+      "  Lower pane",
+    },
+    ["<C-k>"] = {
+      function()
+        require("Navigator").up()
+      end,
+      "  Upper pane",
+    },
+    ["<C-l>"] = {
+      function()
+        require("Navigator").right()
+      end,
+      "  Right pane",
+    },
   },
   n = {
-    ["<C-h>"] = { "<CMD>NavigatorLeft<CR>", "  Left pane" },
-    ["<C-j>"] = { "<CMD>NavigatorDown<CR>", "  Lower pane" },
-    ["<C-k>"] = { "<CMD>NavigatorUp<CR>", "  Upper pane" },
-    ["<C-l>"] = { "<CMD>NavigatorRight<CR>", "  Right pane" },
+    ["<C-h>"] = {
+      function()
+        require("Navigator").left()
+      end,
+      "  Left pane",
+    },
+    ["<C-j>"] = {
+      function()
+        require("Navigator").down()
+      end,
+      "  Lower pane",
+    },
+    ["<C-k>"] = {
+      function()
+        require("Navigator").up()
+      end,
+      "  Upper pane",
+    },
+    ["<C-l>"] = {
+      function()
+        require("Navigator").right()
+      end,
+      "  Right pane",
+    },
   },
   t = {
-    ["<C-h>"] = { "<CMD>NavigatorLeft<CR>", "  Left pane" },
-    ["<C-j>"] = { "<CMD>NavigatorDown<CR>", "  Lower pane" },
-    ["<C-k>"] = { "<CMD>NavigatorUp<CR>", "  Upper pane" },
-    ["<C-l>"] = { "<CMD>NavigatorRight<CR>", "  Right pane" },
+    ["<C-h>"] = {
+      function()
+        require("Navigator").left()
+      end,
+      "  Left pane",
+    },
+    ["<C-j>"] = {
+      function()
+        require("Navigator").down()
+      end,
+      "  Lower pane",
+    },
+    ["<C-k>"] = {
+      function()
+        require("Navigator").up()
+      end,
+      "  Upper pane",
+    },
+    ["<C-l>"] = {
+      function()
+        require("Navigator").right()
+      end,
+      "  Right pane",
+    },
   },
 }
 

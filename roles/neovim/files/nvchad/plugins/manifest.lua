@@ -5,6 +5,9 @@ return {
   ["ethanholz/nvim-lastplace"] = {
     commit = "65c5d6e2501a3af9c2cd15c6548e67fa035bf640",
   },
+  ["folke/noice.nvim"] = {
+    commit = "c22651651da01239fc4afac4cdb7261797d5f02e",
+  },
   ["folke/trouble.nvim"] = {
     commit = "67337644e38144b444d026b0df2dc5fa0038930f",
   },
@@ -71,6 +74,9 @@ return {
   },
   ["mrjones2014/nvim-ts-rainbow"] = {
     commit = "840039440e012ad798ef31349b93a5d4365023ff",
+  },
+  ["MunifTanjim/nui.nvim"] = {
+    commit = "0dc148c6ec06577fcf06cbab3b7dac96d48ba6be",
   },
   ["neovim/nvim-lspconfig"] = {
     commit = "2ba6e268d92934e14fe561fe446a49540803e57f",

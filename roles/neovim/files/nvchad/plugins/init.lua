@@ -12,6 +12,30 @@ return {
       require("nvim-lastplace").setup()
     end,
   },
+  ["folke/noice.nvim"] = {
+    commit = manifest["folke/noice.nvim"].commit,
+    event = "VimEnter",
+    config = function()
+      require("noice").setup({
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true,
+          },
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = true, -- use a classic bottom cmdline for search
+          command_palette = true, -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false, -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false, -- add a border to hover docs and signature help
+        },
+      })
+    end,
+  },
   ["folke/trouble.nvim"] = {
     commit = manifest["folke/trouble.nvim"].commit,
     cmd = {
@@ -95,6 +119,10 @@ return {
   ["mrjones2014/nvim-ts-rainbow"] = {
     commit = manifest["mrjones2014/nvim-ts-rainbow"].commit,
     after = "nvim-treesitter",
+  },
+  ["MunifTanjim/nui.nvim"] = {
+    commit = manifest["MunifTanjim/nui.nvim"].commit,
+    module = "nui",
   },
   ["neovim/nvim-lspconfig"] = {
     commit = manifest["neovim/nvim-lspconfig"].commit,
@@ -186,7 +214,6 @@ return {
   },
   ["rcarriga/nvim-notify"] = {
     commit = manifest["rcarriga/nvim-notify"].commit,
-    after = "nvim-cmp",
     module = "notify",
     config = function()
       require("notify").setup({

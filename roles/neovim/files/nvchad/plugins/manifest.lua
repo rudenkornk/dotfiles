@@ -78,6 +78,9 @@ return {
   ["mfussenegger/nvim-dap-python"] = {
     commit = "65ccab83fb3d0b29ead6c765c1c52a1ed49592e8",
   },
+  ["monaqa/dial.nvim"] = {
+    commit = "5020da900cc5dfd7067f181ee2ebd872ca7c84e8",
+  },
   ["mrjones2014/nvim-ts-rainbow"] = {
     commit = "840039440e012ad798ef31349b93a5d4365023ff",
   },

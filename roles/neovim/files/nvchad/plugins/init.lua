@@ -52,20 +52,6 @@ return {
     commit = manifest["folke/which-key.nvim"].commit,
     disable = true,
   },
-  ["ggandor/flit.nvim"] = {
-    commit = manifest["ggandor/flit.nvim"].commit,
-    keys = { "f", "t", "T" },
-    config = function()
-      require("flit").setup({
-        labeled_modes = "nx",
-        keys = { f = "f", F = "<leader>xsomegibberish", t = "t", T = "T" },
-      })
-    end,
-  },
-  ["ggandor/leap.nvim"] = {
-    commit = manifest["ggandor/leap.nvim"].commit,
-    module = "leap",
-  },
   ["godlygeek/tabular"] = {
     commit = manifest["godlygeek/tabular"].commit,
     cmd = "Tabularize",
@@ -224,6 +210,18 @@ return {
     after = "nvim-treesitter",
     config = function()
       require("scrollbar").setup()
+    end,
+  },
+  ["phaazon/hop.nvim"] = {
+    -- Alternative is ggandor/leap.nvim, which has nice "auto-jump to the first match" feature.
+    -- There is some bug, which makes the first "surround" action (with 'ysf<char>') fail.
+    -- Consecutive "surround" actions work fine.
+    -- As a tradeof, disabling auto-jump allows unidirectional search, which includes the whole screen.
+    -- (Auto-jump is limited to anchors, which cannot be used as some meaningful actions like 'y', 'c' or 'd')
+    commit = manifest["phaazon/hop.nvim"].commit,
+    module = "hop",
+    config = function()
+      require("hop").setup()
     end,
   },
   ["rafamadriz/friendly-snippets"] = {

@@ -115,6 +115,69 @@ M.goto_preview = {
   },
 }
 
+M.hop = {
+  n = {
+    ["f"] = {
+      function()
+        require("hop").hint_char1({ direction = nil })
+      end,
+      "hop char",
+    },
+    ["t"] = {
+      function()
+        require("hop").hint_char1({ direction = nil, hint_offset = -1 })
+      end,
+      "hop char",
+    },
+    ["T"] = {
+      function()
+        require("hop").hint_words({ direction = nil, hint_offset = -1 })
+      end,
+      "hop word",
+    },
+  },
+  o = {
+    ["f"] = {
+      function()
+        require("hop").hint_char1({ direction = nil })
+      end,
+      "hop char",
+    },
+    ["t"] = {
+      function()
+        require("hop").hint_char1({ direction = nil, hint_offset = -1 })
+      end,
+      "hop char",
+    },
+    ["T"] = {
+      function()
+        require("hop").hint_words({ direction = nil, hint_offset = -1 })
+      end,
+      "hop word",
+    },
+  },
+  v = {
+    ["f"] = {
+      function()
+        require("hop").hint_char1({ direction = nil })
+      end,
+      "hop char",
+    },
+    ["t"] = {
+      function()
+        require("hop").hint_char1({ direction = nil, hint_offset = -1 })
+      end,
+      "hop char",
+    },
+    ["T"] = {
+      function()
+        require("hop").hint_words({ direction = nil, hint_offset = -1 })
+      end,
+      "hop word",
+    },
+  },
+}
+
 M.illuminate = {
   i = {
     ["<A-n>"] = {

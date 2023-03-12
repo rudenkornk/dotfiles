@@ -14,12 +14,6 @@ return {
   ["folke/which-key.nvim"] = {
     commit = "fb027738340502b556c3f43051f113bcaa7e8e63",
   },
-  ["ggandor/flit.nvim"] = {
-    commit = "4c1739137acd3e7f03e2065a7be8a4dc41c7e461",
-  },
-  ["ggandor/leap.nvim"] = {
-    commit = "dd4cabf7699ae8e2e17cfc29910ec605da32226d",
-  },
   ["godlygeek/tabular"] = {
     commit = "339091ac4dd1f17e225fe7d57b48aff55f99b23a",
   },
@@ -137,6 +131,9 @@ return {
   },
   ["petertriho/nvim-scrollbar"] = {
     commit = "75210c554e935740448cfb532d8a671ae544bb1b",
+  },
+  ["phaazon/hop.nvim"] = {
+    commit = "90db1b2c61b820e230599a04fedcd2679e64bd07",
   },
   ["rafamadriz/friendly-snippets"] = {
     commit = "009887b76f15d16f69ae1341f86a7862f61cf2a1",

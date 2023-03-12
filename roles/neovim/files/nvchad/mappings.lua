@@ -61,20 +61,21 @@ M.dial = {
 
 M.disabled = {
   t = {
-    ["<A-v>"] = "", -- Unmap terminals (use tmux)
+    ["<A-f>"] = "", -- Unmap terminals (use tmux)
     ["<A-i>"] = "", -- Unmap terminals (use tmux)
+    ["<A-v>"] = "", -- Unmap terminals (use tmux)
   },
   n = {
-    ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
-    ["<A-v>"] = "", -- Unmap terminals (use tmux)
+    ["<A-f>"] = "", -- Unmap terminals (use tmux)
     ["<A-i>"] = "", -- Unmap terminals (use tmux)
+    ["<A-v>"] = "", -- Unmap terminals (use tmux)
     ["<C-h>"] = "", -- Unmap navigation (overriding with Navigator)
     ["<C-j>"] = "", -- Unmap navigation (overriding with Navigator)
     ["<C-k>"] = "", -- Unmap navigation (overriding with Navigator)
     ["<C-l>"] = "", -- Unmap navigation (overriding with Navigator)
-    ["<leader>h"] = "", -- Unmap terminals (use tmux)
     ["<leader>v"] = "", -- Unmap terminals (use tmux)
     ["<leader>x"] = "", -- Unmap closing buffer (map <leader>d instead)
+    ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
   },
 }
 
@@ -280,7 +281,7 @@ M.navigator = {
 
 M.nvterm = {
   t = {
-    ["<A-f>"] = {
+    ["<A-v>"] = {
       function()
         require("nvterm.terminal").toggle("float")
       end,
@@ -289,7 +290,7 @@ M.nvterm = {
   },
 
   n = {
-    ["<A-f>"] = {
+    ["<A-v>"] = {
       function()
         require("nvterm.terminal").toggle("float")
       end,
@@ -334,7 +335,7 @@ M.termdebug = {
     ["<A-g>"] = { "<CMD>Termdebug<CR>i", "ﴫ  Run gdb" },
     ["<A-r>"] = { "<CMD>call TermDebugSendCommand('run')<CR>", "  Run" },
     ["<A-b>"] = { "<CMD>Break<CR>", "  Set breakpoint" },
-    ["<A-j>"] = { "<CMD>call TermDebugSendCommand('next')<CR>", "  Step over" },
+    ["<A-f>"] = { "<CMD>call TermDebugSendCommand('next')<CR>", "  Step over" },
     ["<A-i>"] = { "<CMD>call TermDebugSendCommand('step')<CR>", "  Step into" },
     ["<A-o>"] = { "<CMD>call TermDebugSendCommand('finish')<CR>", "  Step out" },
     ["<A-c>"] = { "<CMD>call TermDebugSendCommand('continue')<CR>", "懶  Continue" },
@@ -343,7 +344,7 @@ M.termdebug = {
   },
   t = {
     ["<A-r>"] = { "<CMD>call TermDebugSendCommand('run')<CR>", "  Run" },
-    ["<A-j>"] = { "<CMD>call TermDebugSendCommand('next')<CR>", "  Step over" },
+    ["<A-f>"] = { "<CMD>call TermDebugSendCommand('next')<CR>", "  Step over" },
     ["<A-i>"] = { "<CMD>call TermDebugSendCommand('step')<CR>", "  Step into" },
     ["<A-o>"] = { "<CMD>call TermDebugSendCommand('finish')<CR>", "  Step out" },
     ["<A-c>"] = { "<CMD>call TermDebugSendCommand('continue')<CR>", "懶  Continue" },

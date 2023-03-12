@@ -305,6 +305,98 @@ M.symbols_outline = {
   },
 }
 
+M.syntax_tree_surfer = {
+  n = {
+    ["<A-k>"] = {
+      function()
+        require("syntax-tree-surfer")
+        vim.opt.opfunc = "v:lua.STSSwapUpNormal_Dot"
+        return "g@l"
+      end,
+      opts = { expr = true },
+    },
+    ["<A-j>"] = {
+      function()
+        require("syntax-tree-surfer")
+        vim.opt.opfunc = "v:lua.STSSwapDownNormal_Dot"
+        return "g@l"
+      end,
+      opts = { expr = true },
+    },
+    ["<A-l>"] = {
+      function()
+        require("syntax-tree-surfer")
+        vim.opt.opfunc = "v:lua.STSSwapCurrentNodeNextNormal_Dot"
+        return "g@l"
+      end,
+      opts = { expr = true },
+    },
+    ["<A-h>"] = {
+      function()
+        require("syntax-tree-surfer")
+        vim.opt.opfunc = "v:lua.STSSwapCurrentNodePrevNormal_Dot"
+        return "g@l"
+      end,
+      opts = { expr = true },
+    },
+    ["F"] = {
+      function()
+        require("syntax-tree-surfer").targeted_jump({
+          "if_statement",
+          "else_clause",
+          "else_statement",
+          "elseif_statement",
+          "for_statement",
+          "while_statement",
+          "switch_statement",
+          "function_definition",
+          "variable_declaration",
+        })
+      end,
+    },
+  },
+  v = {
+    ["<A-j>"] = { "<CMD>STSSwapNextVisual<CR>" },
+    ["<A-k>"] = { "<CMD>STSSwapPrevVisual<CR>" },
+    ["F"] = {
+      function()
+        require("syntax-tree-surfer").targeted_jump({
+          "if_statement",
+          "else_clause",
+          "else_statement",
+          "elseif_statement",
+          "for_statement",
+          "while_statement",
+          "switch_statement",
+          "function_definition",
+          "variable_declaration",
+        })
+      end,
+    },
+    [";"] = { "<CMD>STSSelectParentNode<CR>" },
+    ["i;"] = { "<CMD>STSSelectChildNode<CR>" },
+  },
+  o = {
+    ["<A-k>"] = { "<CMD>STSSwapPrevVisual<CR>" },
+    ["<A-j>"] = { "<CMD>STSSwapNextVisual<CR>" },
+    ["F"] = {
+      function()
+        require("syntax-tree-surfer").targeted_jump({
+          "if_statement",
+          "else_clause",
+          "else_statement",
+          "elseif_statement",
+          "for_statement",
+          "while_statement",
+          "switch_statement",
+          "function_definition",
+          "variable_declaration",
+        })
+      end,
+    },
+  },
+}
+
 M.tabufline = {
   n = {
     ["<leader>tp"] = {

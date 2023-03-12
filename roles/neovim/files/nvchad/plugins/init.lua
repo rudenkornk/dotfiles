@@ -54,9 +54,12 @@ return {
   },
   ["ggandor/flit.nvim"] = {
     commit = manifest["ggandor/flit.nvim"].commit,
-    keys = { "f", "F", "t", "T" },
+    keys = { "f", "t", "T" },
     config = function()
-      require("flit").setup({ labeled_modes = "nx" })
+      require("flit").setup({
+        labeled_modes = "nx",
+        keys = { f = "f", F = "<leader>xsomegibberish", t = "t", T = "T" },
+      })
     end,
   },
   ["ggandor/leap.nvim"] = {
@@ -316,6 +319,14 @@ return {
         suggestion = { enabled = false },
         panel = { enabled = false },
       })
+    end,
+  },
+  ["ziontee113/syntax-tree-surfer"] = {
+    commit = manifest["ziontee113/syntax-tree-surfer"].commit,
+    module = "syntax-tree-surfer",
+    cmd = "STS*",
+    config = function()
+      require("syntax-tree-surfer").setup()
     end,
   },
 }

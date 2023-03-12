@@ -186,4 +186,7 @@ return {
   ["zbirenbaum/copilot.lua"] = {
     commit = "b41d4c9c7d4f5e0272bcf94061b88e244904c56f",
   },
+  ["ziontee113/syntax-tree-surfer"] = {
+    commit = "9dc6657d76e3f8886a0b120e6a315c511f53bae7",
+  },
 }

@@ -5,6 +5,24 @@ return {
     commit = manifest["andersevenrud/cmp-tmux"].commit,
     after = "nvim-cmp",
   },
+  ["aserowy/tmux.nvim"] = {
+    commit = manifest["aserowy/tmux.nvim"].commit,
+    after = "nvim-treesitter",
+    keys = { "c", "d", "y" },
+    module = "tmux",
+    config = function()
+      return require("tmux").setup({
+        navigation = {
+          enable_default_keybindings = false,
+        },
+        resize = {
+          enable_default_keybindings = false,
+          resize_step_x = 5,
+          resize_step_y = 5,
+        },
+      })
+    end,
+  },
   ["ethanholz/nvim-lastplace"] = {
     commit = manifest["ethanholz/nvim-lastplace"].commit,
     event = "VimEnter",
@@ -79,7 +97,7 @@ return {
   ["kylechui/nvim-surround"] = {
     commit = manifest["kylechui/nvim-surround"].commit,
     keys = { "c", "d", "y" },
-    after = "vim-tmux-clipboard",
+    after = "tmux.nvim",
     config = function()
       require("nvim-surround").setup()
     end,
@@ -134,22 +152,6 @@ return {
     config = require("custom.plugins.lspconfig"),
   },
   ["numToStr/Comment.nvim"] = { commit = manifest["numToStr/Comment.nvim"].commit },
-  ["numToStr/Navigator.nvim"] = {
-    commit = manifest["numToStr/Navigator.nvim"].commit,
-    -- Alternative to Navigator.nvim + vim-tmux-clipboard is aserowy/tmux.nvim, but
-    -- copy sync does not work in it
-    cmd = {
-      "NavigatorLeft",
-      "NavigatorDown",
-      "NavigatorUp",
-      "NavigatorRight",
-      "NavigatorPrevious",
-    },
-    module = "Navigator",
-    config = function()
-      require("Navigator").setup()
-    end,
-  },
   ["NvChad/base46"] = { commit = manifest["NvChad/base46"].commit },
   ["NvChad/extensions"] = { commit = manifest["NvChad/extensions"].commit },
   ["NvChad/nvim-colorizer.lua"] = { commit = manifest["NvChad/nvim-colorizer.lua"].commit },
@@ -249,10 +251,6 @@ return {
     config = function()
       require("goto-preview").setup()
     end,
-  },
-  ["roxma/vim-tmux-clipboard"] = {
-    commit = manifest["roxma/vim-tmux-clipboard"].commit,
-    keys = { "c", "d", "y" },
   },
   ["RRethy/vim-illuminate"] = {
     commit = manifest["RRethy/vim-illuminate"].commit,

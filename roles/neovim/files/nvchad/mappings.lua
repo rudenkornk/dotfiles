@@ -69,10 +69,10 @@ M.disabled = {
     ["<A-f>"] = "", -- Unmap terminals (use tmux)
     ["<A-i>"] = "", -- Unmap terminals (use tmux)
     ["<A-v>"] = "", -- Unmap terminals (use tmux)
-    ["<C-h>"] = "", -- Unmap navigation (overriding with Navigator)
-    ["<C-j>"] = "", -- Unmap navigation (overriding with Navigator)
-    ["<C-k>"] = "", -- Unmap navigation (overriding with Navigator)
-    ["<C-l>"] = "", -- Unmap navigation (overriding with Navigator)
+    ["<C-h>"] = "", -- Unmap navigation (overriding with tmux)
+    ["<C-j>"] = "", -- Unmap navigation (overriding with tmux)
+    ["<C-k>"] = "", -- Unmap navigation (overriding with tmux)
+    ["<C-l>"] = "", -- Unmap navigation (overriding with tmux)
     ["<leader>v"] = "", -- Unmap terminals (use tmux)
     ["<leader>x"] = "", -- Unmap closing buffer (map <leader>d instead)
     ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
@@ -231,113 +231,6 @@ M.lspconfig = {
         vim.lsp.buf.type_definition()
       end,
       "  type definition",
-    },
-  },
-}
-
-M.navigator = {
-  c = {
-    ["<C-h>"] = {
-      function()
-        require("Navigator").left()
-      end,
-      "  Left pane",
-    },
-    ["<C-j>"] = {
-      function()
-        require("Navigator").down()
-      end,
-      "  Lower pane",
-    },
-    ["<C-k>"] = {
-      function()
-        require("Navigator").up()
-      end,
-      "  Upper pane",
-    },
-    ["<C-l>"] = {
-      function()
-        require("Navigator").right()
-      end,
-      "  Right pane",
-    },
-  },
-  n = {
-    ["<C-h>"] = {
-      function()
-        require("Navigator").left()
-      end,
-      "  Left pane",
-    },
-    ["<C-j>"] = {
-      function()
-        require("Navigator").down()
-      end,
-      "  Lower pane",
-    },
-    ["<C-k>"] = {
-      function()
-        require("Navigator").up()
-      end,
-      "  Upper pane",
-    },
-    ["<C-l>"] = {
-      function()
-        require("Navigator").right()
-      end,
-      "  Right pane",
-    },
-  },
-  t = {
-    ["<C-h>"] = {
-      function()
-        require("Navigator").left()
-      end,
-      "  Left pane",
-    },
-    ["<C-j>"] = {
-      function()
-        require("Navigator").down()
-      end,
-      "  Lower pane",
-    },
-    ["<C-k>"] = {
-      function()
-        require("Navigator").up()
-      end,
-      "  Upper pane",
-    },
-    ["<C-l>"] = {
-      function()
-        require("Navigator").right()
-      end,
-      "  Right pane",
-    },
-  },
-  v = {
-    ["<C-h>"] = {
-      function()
-        require("Navigator").left()
-      end,
-      "  Left pane",
-    },
-    ["<C-j>"] = {
-      function()
-        require("Navigator").down()
-      end,
-      "  Lower pane",
-    },
-    ["<C-k>"] = {
-      function()
-        require("Navigator").up()
-      end,
-      "  Upper pane",
-    },
-    ["<C-l>"] = {
-      function()
-        require("Navigator").right()
-      end,
-      "  Right pane",
     },
   },
 }
@@ -509,14 +402,197 @@ M.termdebug = {
   },
 }
 
+M.tmux = {
+  c = {
+    ["<C-h>"] = {
+      function()
+        require("tmux").move_left()
+      end,
+      "  Left pane",
+    },
+    ["<C-j>"] = {
+      function()
+        require("tmux").move_bottom()
+      end,
+      "  Lower pane",
+    },
+    ["<C-k>"] = {
+      function()
+        require("tmux").move_top()
+      end,
+      "  Upper pane",
+    },
+    ["<C-l>"] = {
+      function()
+        require("tmux").move_right()
+      end,
+      "  Right pane",
+    },
+    ["<A-x>h"] = {
+      function()
+        require("tmux").resize_left()
+      end,
+    },
+    ["<A-x>j"] = {
+      function()
+        require("tmux").resize_bottom()
+      end,
+    },
+    ["<A-x>k"] = {
+      function()
+        require("tmux").resize_top()
+      end,
+    },
+    ["<A-x>l"] = {
+      function()
+        require("tmux").resize_right()
+      end,
+    },
+  },
+  n = {
+    ["<C-h>"] = {
+      function()
+        require("tmux").move_left()
+      end,
+      "  Left pane",
+    },
+    ["<C-j>"] = {
+      function()
+        require("tmux").move_bottom()
+      end,
+      "  Lower pane",
+    },
+    ["<C-k>"] = {
+      function()
+        require("tmux").move_top()
+      end,
+      "  Upper pane",
+    },
+    ["<C-l>"] = {
+      function()
+        require("tmux").move_right()
+      end,
+      "  Right pane",
+    },
+    ["<A-x>h"] = {
+      function()
+        require("tmux").resize_left()
+      end,
+    },
+    ["<A-x>j"] = {
+      function()
+        require("tmux").resize_bottom()
+      end,
+    },
+    ["<A-x>k"] = {
+      function()
+        require("tmux").resize_top()
+      end,
+    },
+    ["<A-x>l"] = {
+      function()
+        require("tmux").resize_right()
+      end,
+    },
+  },
+  t = {
+    ["<C-h>"] = {
+      function()
+        require("tmux").move_left()
+      end,
+      "  Left pane",
+    },
+    ["<C-j>"] = {
+      function()
+        require("tmux").move_bottom()
+      end,
+      "  Lower pane",
+    },
+    ["<C-k>"] = {
+      function()
+        require("tmux").move_top()
+      end,
+      "  Upper pane",
+    },
+    ["<C-l>"] = {
+      function()
+        require("tmux").move_right()
+      end,
+      "  Right pane",
+    },
+    ["<A-x>h"] = {
+      function()
+        require("tmux").resize_left()
+      end,
+    },
+    ["<A-x>j"] = {
+      function()
+        require("tmux").resize_bottom()
+      end,
+    },
+    ["<A-x>k"] = {
+      function()
+        require("tmux").resize_top()
+      end,
+    },
+    ["<A-x>l"] = {
+      function()
+        require("tmux").resize_right()
+      end,
+    },
+  },
+  v = {
+    ["<C-h>"] = {
+      function()
+        require("tmux").move_left()
+      end,
+      "  Left pane",
+    },
+    ["<C-j>"] = {
+      function()
+        require("tmux").move_bottom()
+      end,
+      "  Lower pane",
+    },
+    ["<C-k>"] = {
+      function()
+        require("tmux").move_top()
+      end,
+      "  Upper pane",
+    },
+    ["<C-l>"] = {
+      function()
+        require("tmux").move_right()
+      end,
+      "  Right pane",
+    },
+    ["<A-x>h"] = {
+      function()
+        require("tmux").resize_left()
+      end,
+    },
+    ["<A-x>j"] = {
+      function()
+        require("tmux").resize_bottom()
+      end,
+    },
+    ["<A-x>k"] = {
+      function()
+        require("tmux").resize_top()
+      end,
+    },
+    ["<A-x>l"] = {
+      function()
+        require("tmux").resize_right()
+      end,
+    },
+  },
+}
+
 M.trouble = {
   n = {
     ["<leader>q"] = { "<CMD>TroubleToggle<CR>", "  diagnostic list" },
     ["gr"] = { "<CMD>TroubleToggle lsp_references<CR>", "  lsp references" },
-    ["<leader>xw"] = { "<CMD>TroubleToggle workspace_diagnostics<CR>", "  workspace diagnostic list" },
-    ["<leader>xd"] = { "<CMD>TroubleToggle document_diagnostics<CR>", "  document diagnostic list" },
-    ["<leader>xq"] = { "<CMD>TroubleToggle quickfix<CR>", "  quickfix list" },
-    ["<leader>xl"] = { "<CMD>TroubleToggle loclist<CR>", "  location list" },
   },
 }
 

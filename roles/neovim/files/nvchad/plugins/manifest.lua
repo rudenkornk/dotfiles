@@ -2,6 +2,9 @@ return {
   ["andersevenrud/cmp-tmux"] = {
     commit = "984772716f66d8ee88535a6bf3f94c4b4e1301f5",
   },
+  ["aserowy/tmux.nvim"] = {
+    commit = "9ba03cc5dfb30f1dc9eb50d0796dfdd52c5f454e",
+  },
   ["ethanholz/nvim-lastplace"] = {
     commit = "65c5d6e2501a3af9c2cd15c6548e67fa035bf640",
   },
@@ -87,9 +90,6 @@ return {
   ["numToStr/Comment.nvim"] = {
     commit = "6821b3ae27a57f1f3cf8ed030e4a55d70d0c4e43",
   },
-  ["numToStr/Navigator.nvim"] = {
-    commit = "91d86506ac2a039504d5205d32a1d4bc7aa57072",
-  },
   ["NvChad/base46"] = {
     commit = "be301b2cd309394dfa62e8c569250e4fb58dd763",
   },
@@ -143,9 +143,6 @@ return {
   },
   ["rmagatti/goto-preview"] = {
     commit = "390a8bf9f83cc0e31a5154357bc4bfad8e79b889",
-  },
-  ["roxma/vim-tmux-clipboard"] = {
-    commit = "e1be6608410c260479dc4807ad8c103faf5460d8",
   },
   ["RRethy/vim-illuminate"] = {
     commit = "49062ab1dd8fec91833a69f0a1344223dd59d643",

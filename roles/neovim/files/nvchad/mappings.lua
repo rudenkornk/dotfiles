@@ -278,6 +278,32 @@ M.navigator = {
       "  Right pane",
     },
   },
+  v = {
+    ["<C-h>"] = {
+      function()
+        require("Navigator").left()
+      end,
+      "  Left pane",
+    },
+    ["<C-j>"] = {
+      function()
+        require("Navigator").down()
+      end,
+      "  Lower pane",
+    },
+    ["<C-k>"] = {
+      function()
+        require("Navigator").up()
+      end,
+      "  Upper pane",
+    },
+    ["<C-l>"] = {
+      function()
+        require("Navigator").right()
+      end,
+      "  Right pane",
+    },
+  },
 }
 
 M.nvterm = {

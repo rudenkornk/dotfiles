@@ -44,6 +44,49 @@ M.code_action_menu = {
   },
 }
 
+M.dial = {
+  n = {
+    ["<C-a>"] = {
+      function()
+        return require("dial.map").inc_normal()
+      end,
+      opts = { expr = true },
+    },
+    ["<C-x>"] = {
+      function()
+        return require("dial.map").dec_normal()
+      end,
+      opts = { expr = true },
+    },
+  },
+  v = {
+    ["<C-a>"] = {
+      function()
+        return require("dial.map").inc_visual()
+      end,
+      opts = { expr = true },
+    },
+    ["<C-x>"] = {
+      function()
+        return require("dial.map").dec_visual()
+      end,
+      opts = { expr = true },
+    },
+    ["g<C-a>"] = {
+      function()
+        return require("dial.map").inc_gvisual()
+      end,
+      opts = { expr = true },
+    },
+    ["g<C-x>"] = {
+      function()
+        return require("dial.map").dec_gvisual()
+      end,
+      opts = { expr = true },
+    },
+  },
+}
+
 M.disabled = {
   t = {
     ["<A-v>"] = "", -- Unmap terminals (use tmux)

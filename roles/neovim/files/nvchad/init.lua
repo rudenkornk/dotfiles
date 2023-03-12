@@ -53,5 +53,4 @@ vim.g.clipboard = clipboards[clipboard]
 vim.cmd([[ packadd termdebug ]])
 vim.g.termdebug_wide = 163
 
-vim.cmd([[ set nrformats+=alpha ]])
 vim.cmd([[ match RedundantSpacesAndTabs /\(\s\+$\|\t\+\)/ ]])

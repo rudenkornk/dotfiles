@@ -127,6 +127,11 @@ return {
       require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3")
     end,
   },
+  ["monaqa/dial.nvim"] = {
+    commit = manifest["monaqa/dial.nvim"].commit,
+    module = "dial",
+    config = require("custom.plugins.dial"),
+  },
   ["mrjones2014/nvim-ts-rainbow"] = {
     commit = manifest["mrjones2014/nvim-ts-rainbow"].commit,
     after = "nvim-treesitter",

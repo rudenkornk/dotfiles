@@ -1,9 +1,4 @@
-local M = {}
-local manifest = require("custom.plugins.manifest")
-
-M.commit = manifest["williamboman/mason.nvim"].commit
-
-M.override_options = {
+local override_options = {
   ensure_installed = {
     "actionlint",
     "alex",
@@ -99,4 +94,4 @@ M.override_options = {
   },
 }
 
-return M
+return override_options

@@ -287,7 +287,10 @@ return {
     commit = manifest["weilbith/nvim-code-action-menu"].commit,
     cmd = "CodeActionMenu",
   },
-  ["williamboman/mason.nvim"] = require("custom.plugins.mason"),
+  ["williamboman/mason.nvim"] = {
+    commit = manifest["williamboman/mason.nvim"].commit,
+    override_options = require("custom.plugins.mason"),
+  },
   ["windwp/nvim-autopairs"] = { commit = manifest["windwp/nvim-autopairs"].commit },
   ["zbirenbaum/copilot-cmp"] = {
     commit = manifest["zbirenbaum/copilot-cmp"].commit,

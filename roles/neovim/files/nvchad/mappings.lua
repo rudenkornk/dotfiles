@@ -397,6 +397,11 @@ M.utils = {
     ["<leader>vc"] = { "<CMD>%s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", "  Clear extra spaces" },
     ["<C-e>"] = { "4<C-e>", "scroll several lines" },
     ["<C-y>"] = { "4<C-y>", "scroll several lines" },
+    ["<C-z>"] = {
+      function()
+        -- do nothing
+      end,
+    },
   },
   x = {
     ["<leader>vc"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", "  Clear extra spaces" },

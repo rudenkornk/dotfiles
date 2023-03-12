@@ -2,6 +2,7 @@
 vim.o.keymap = "rnk-qwerty-jcuken"
 vim.o.iminsert = 0
 vim.o.imsearch = -1
+vim.o.scrolloff = 2
 
 vim.g.fileignorecase = true
 

@@ -126,6 +126,9 @@ return {
   ["nvim-treesitter/nvim-treesitter"] = {
     commit = "fc1ca10bfbdee17e29374d0d1bac8ea030539dc3",
   },
+  ["nvim-treesitter/nvim-treesitter-context"] = {
+    commit = "f35bc5473117771b3b95125eea1bf1d13a550139",
+  },
   ["pearofducks/ansible-vim"] = {
     commit = "93798e8c89c441d29d4678da0c0d5e1429eb43b0",
   },

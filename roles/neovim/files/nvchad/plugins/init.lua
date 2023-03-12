@@ -200,6 +200,10 @@ return {
     commit = manifest["nvim-treesitter/nvim-treesitter"].commit,
     override_options = require("custom.plugins.treesitter"),
   },
+  ["nvim-treesitter/nvim-treesitter-context"] = {
+    commit = manifest["nvim-treesitter/nvim-treesitter-context"].commit,
+    after = "nvim-treesitter",
+  },
   ["pearofducks/ansible-vim"] = {
     commit = manifest["pearofducks/ansible-vim"].commit,
     after = "nvim-cmp",

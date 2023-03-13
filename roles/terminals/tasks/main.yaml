@@ -1,3 +1,21 @@
+- name: Install WezTerm
+  # Actually is laggy on my machine
+  become: true
+  ansible.builtin.apt:
+    deb: "{{ manifest.wezterm.url }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: installed
+  until: installed is not failed
+  when: not in_wsl
+
+- name: Create symlink to wezterm config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/wezterm.lua"
+    dest: "{{ home }}/.wezterm.lua"
+    state: link
+    force: true
+
 - name: Create ~/.config/tilda/ directory
   ansible.builtin.file:
     dest: "{{ home }}/.config/tilda"

@@ -1,7 +1,5 @@
 # dotfiles
 
-[![GitHub Actions Status](https://github.com/rudenkornk/dotfiles/actions/workflows/workflow.yml/badge.svg)](https://github.com/rudenkornk/dotfiles/actions)
-
 Ansible playbooks, which set up dotfiles on the new system.
 
 ## Bootstrap

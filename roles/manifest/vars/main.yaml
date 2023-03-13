@@ -25,6 +25,8 @@ manifest:
     version: 63cf9d04deab832a3a472b6e4de2db837932d957
   github_cli:
     url: https://github.com/cli/cli/releases/download/v2.24.3/gh_2.24.3_linux_amd64.deb
+  kitty:
+    url: https://github.com/kovidgoyal/kitty/releases/download/v0.27.1/kitty-0.27.1-x86_64.txz
   neovim:
     url: https://github.com/neovim/neovim/releases/download/v0.8.3/nvim-linux64.deb
   nvchad:

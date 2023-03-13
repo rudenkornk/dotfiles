@@ -87,7 +87,11 @@ return {
     commit = manifest["hrsh7th/nvim-cmp"].commit,
     override_options = require("custom.plugins.cmp"),
   },
-  ["jose-elias-alvarez/null-ls.nvim"] = require("custom.plugins.null-ls"),
+  ["jose-elias-alvarez/null-ls.nvim"] = {
+    after = "nvim-lspconfig",
+    commit = manifest["jose-elias-alvarez/null-ls.nvim"].commit,
+    config = require("custom.plugins.null-ls"),
+  },
   ["karb94/neoscroll.nvim"] = {
     commit = manifest["karb94/neoscroll.nvim"].commit,
     disable = true, -- too laggy on my machine

@@ -137,27 +137,6 @@ class GitHubReleaseInfo:
         self.url = url
 
 
-def parse_pip_entry(entry: str) -> dict[str, str | None]:
-    entry = entry.strip()
-    if entry.startswith("#"):
-        return {
-            "comment": entry,
-            "entry": entry,
-            "package": None,
-            "version": None,
-        }
-    package = entry.split("==")[0].strip()
-    version_comment = entry.split("==")[1].strip()
-    version = version_comment.split("#")[0].strip()
-    comment = " # " + version_comment.split("#")[1].strip() if "#" in version_comment else ""
-    return {
-        "comment": comment,
-        "entry": entry,
-        "package": package,
-        "version": version,
-    }
-
-
 def update_github_release(url: str, locked: bool) -> str:
     tab = "  "
     cri = GitHubReleaseInfo(url)
@@ -238,6 +217,27 @@ def update_github_release(url: str, locked: bool) -> str:
     chosen_binary = cri.binary.replace(cri.ti.version, chosen_version)
     new_url = f"{cri.prefix}/{cri.repo}/{cri.path}/{chosen_tag}/{chosen_binary}"
     return new_url
+
+
+def parse_pip_entry(entry: str) -> dict[str, str | None]:
+    entry = entry.strip()
+    if entry.startswith("#"):
+        return {
+            "comment": entry,
+            "entry": entry,
+            "package": None,
+            "version": None,
+        }
+    package = entry.split("==")[0].strip()
+    version_comment = entry.split("==")[1].strip()
+    version = version_comment.split("#")[0].strip()
+    comment = " # " + version_comment.split("#")[1].strip() if "#" in version_comment else ""
+    return {
+        "comment": comment,
+        "entry": entry,
+        "package": package,
+        "version": version,
+    }
 
 
 def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool) -> None:

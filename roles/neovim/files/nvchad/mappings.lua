@@ -608,6 +608,8 @@ M.utils = {
     },
   },
   x = {
+    ["<C-e>"] = { "4<C-e>", "scroll several lines" },
+    ["<C-y>"] = { "4<C-y>", "scroll several lines" },
     ["<leader>vc"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", "  Clear extra spaces" },
     ["<leader>vt"] = { "<CMD>s/\\([^ ]\\)\\s\\+/\\1 /g | noh | '<,'>Tabularize /\\s\\+/l0<CR>", "璘  Tabularize" },
     ["<leader>vs"] = { ":sort i<CR>", "  Sort" },

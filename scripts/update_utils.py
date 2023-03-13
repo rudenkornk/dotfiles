@@ -4,6 +4,7 @@ import copy as _copy
 import logging as _logging
 import re as _re
 import shutil as _shutil
+from dataclasses import dataclass as _dataclass
 from pathlib import Path as _Path
 from typing import Any as _Any
 
@@ -96,25 +97,44 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
     return chosen_tag
 
 
-def parse_github_release_url(url: str) -> dict[str, str]:
-    parsed_url = _re.search(r"(^.*?github.com)/([^/]+/[^/]+)/releases/download/([^/]+)/(.*)", url)
-    assert parsed_url is not None
-    prefix = parsed_url.group(1)
-    repo = parsed_url.group(2)
-    tag = parsed_url.group(3)
-    binary = parsed_url.group(4)
-    tag_parsed = _re.search(r"v?(.*)", tag)
-    assert tag_parsed is not None
-    version = tag_parsed.group(1)
-    return {
-        "prefix": prefix,
-        "repo": repo,
-        "path": "releases/download",
-        "tag": tag,
-        "binary": binary,
-        "version": version,
-        "url": url,
-    }
+@_dataclass
+class GitHubTagInfo:
+    tag: str
+    version: str
+    semver: _semver.VersionInfo | None
+
+    def __init__(self, tag: str):
+        self.tag = tag
+        self.version = tag
+        self.semver = None
+        tag_parsed = _re.search(r"v?(.*)", tag)
+        if tag_parsed:
+            version = tag_parsed.group(1)
+        try:
+            semver = _semver.VersionInfo.parse(version)
+            self.semver = semver
+        except ValueError:
+            pass
+
+
+@_dataclass
+class GitHubReleaseInfo:
+    prefix: str
+    repo: str
+    path: str
+    ti: GitHubTagInfo
+    binary: str
+    url: str
+
+    def __init__(self, url: str):
+        parsed_url = _re.search(r"(^.*?github.com)/([^/]+/[^/]+)/releases/download/([^/]+)/(.*)", url)
+        assert parsed_url is not None
+        self.prefix = parsed_url.group(1)
+        self.repo = parsed_url.group(2)
+        self.path = "releases/download"
+        self.ti = GitHubTagInfo(parsed_url.group(3))
+        self.binary = parsed_url.group(4)
+        self.url = url
 
 
 def parse_pip_entry(entry: str) -> dict[str, str | None]:
@@ -140,19 +160,15 @@ def parse_pip_entry(entry: str) -> dict[str, str | None]:
 
 def update_github_release(url: str, locked: bool) -> str:
     tab = "  "
-    parsed = parse_github_release_url(url)
-    prefix = parsed["prefix"]
-    repo = parsed["repo"]
-    path = parsed["path"]
-    current_tag = parsed["tag"]
-    current_version = parsed["version"]
-    current_semver = _semver.VersionInfo.parse(current_version)
-    releases_url = f"https://github.com/{repo}/releases"
-    request_url = f"https://api.github.com/repos/{repo}/releases"
+    cri = GitHubReleaseInfo(url)
+    releases_url = f"https://github.com/{cri.repo}/releases"
+    request_url = f"https://api.github.com/repos/{cri.repo}/releases"
     _logger.info(tab + f"Updating {releases_url}")
     if locked:
-        _logger.info(f"{2 * tab}{current_tag} -- return (version is locked)")
+        _logger.info(f"{2 * tab}{cri.ti.tag} -- return (version is locked)")
         return url
+
+    cmp_semver = cri.ti.semver is not None
 
     @_utils.retry(delay=10)
     def requests_get() -> _requests.Response:
@@ -170,48 +186,57 @@ def update_github_release(url: str, locked: bool) -> str:
         raise
     releases = response.json()
     for release in releases:
-        tag = release["tag_name"]
-        version_match = _re.search(r"v?(.*)", tag)
-        assert version_match is not None
-        version = version_match.group(1)
+        ti = GitHubTagInfo(release["tag_name"])
         if release["prerelease"]:
-            _logger.info(f"{2 * tab}{tag} -- skipping (marked as prerelease)")
+            _logger.info(f"{2 * tab}{ti.tag} -- skipping (marked as prerelease)")
             continue
         if release["draft"]:
-            _logger.info(f"{2 * tab}{tag} -- skipping (marked as draft)")
+            _logger.info(f"{2 * tab}{ti.tag} -- skipping (marked as draft)")
             continue
-        try:
-            semver = _semver.VersionInfo.parse(version)
-        except ValueError:
-            _logger.info(f"{2 * tab}{tag} -- skipping (could not parse as semver)")
+        if cmp_semver and not ti.semver:
+            _logger.info(f"{2 * tab}{ti.tag} -- skipping (could not parse as semver)")
             continue
-        if semver == current_semver:
-            _logger.info(f"{2 * tab}{tag} == {current_tag} -- return (reached current version)")
-            chosen_tag = current_tag
-            chosen_version = current_version
+        if not cmp_semver:
+            if ti.tag != cri.ti.tag:
+                _logger.info(f"{2 * tab}{ti.tag} != {cri.ti.tag} -- return (found latest version)")
+                chosen_tag = ti.tag
+                chosen_version = ti.version
+                break
+            else:
+                _logger.info(f"{2 * tab}{ti.tag} == {cri.ti.tag} -- return (reached current version)")
+                chosen_tag = cri.ti.tag
+                chosen_version = cri.ti.version
+                break
+
+        assert ti.semver is not None
+        assert cri.ti.semver is not None
+        if ti.semver == cri.ti.semver:
+            _logger.info(f"{2 * tab}{ti.tag} == {cri.ti.tag} -- return (reached current version)")
+            chosen_tag = cri.ti.tag
+            chosen_version = cri.ti.version
             break
-        if semver < current_semver:
+        if ti.semver < cri.ti.semver:
             _logger.warning(
-                f"{2 * tab}{tag} < {current_tag} -- skipping and returning current (missed current version)"
+                f"{2 * tab}{ti.tag} < {cri.ti.tag} -- skipping and returning current (missed current version)"
             )
-            chosen_tag = current_tag
-            chosen_version = current_version
+            chosen_tag = cri.ti.tag
+            chosen_version = cri.ti.version
             break
-        if semver.prerelease is not None:
-            _logger.info(f"{2 * tab}{tag} -- skipping (marked as prerelease)")
+        if ti.semver.prerelease is not None:
+            _logger.info(f"{2 * tab}{ti.tag} -- skipping (marked as prerelease)")
             continue
-        if semver > current_semver:
+        if ti.semver > cri.ti.semver:
             breaking_note = ""
-            if semver.major > current_semver.major:
+            if ti.semver.major > cri.ti.semver.major:
                 breaking_note = " [POSSIBLY BREAKING]"
-            _logger.info(f"{2 * tab}{tag} > {current_tag}{breaking_note} -- return (found latest version)")
-            chosen_tag = tag
-            chosen_version = version
+            _logger.info(f"{2 * tab}{ti.tag} > {cri.ti.tag}{breaking_note} -- return (found latest version)")
+            chosen_tag = ti.tag
+            chosen_version = ti.version
             break
         assert False
 
-    chosen_binary = parsed["binary"].replace(current_version, chosen_version)
-    new_url = f"{prefix}/{repo}/{path}/{chosen_tag}/{chosen_binary}"
+    chosen_binary = cri.binary.replace(cri.ti.version, chosen_version)
+    new_url = f"{cri.prefix}/{cri.repo}/{cri.path}/{chosen_tag}/{chosen_binary}"
     return new_url
 
 

@@ -35,3 +35,6 @@ manifest:
   tpm:
     url: https://github.com/tmux-plugins/tpm
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
+  wezterm:
+    # yamllint disable-line rule:line-length
+    url: https://github.com/wez/wezterm/releases/download/20221119-145034-49b9839f/wezterm-20221119-145034-49b9839f.Ubuntu22.04.deb

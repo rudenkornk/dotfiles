@@ -87,7 +87,47 @@
     - name: Set up clipboard for neovim
       ansible.builtin.template:
         src: clipboard.lua
-        dest: "{{ remote_role_path }}/files/nvchad/clipboard.lua"
+        dest: "{{ nvim_base }}_1/config/lua/custom/clipboard.lua"
+        mode: 0644
+
+- name: Install NvChad 2
+  block:
+    - name: Install NvChad 2
+      ansible.builtin.git:
+        repo: "{{ manifest.nvchad2.url }}"
+        dest: "{{ nvim_base }}_2/config"
+        version: "{{ manifest.nvchad2.version }}"
+        force: true
+      register: nvchad_installed
+      retries: "{{ web_retries }}"
+      delay: "{{ web_delay }}"
+      until: nvchad_installed is not failed
+      changed_when: nvchad_installed.before != nvchad_installed.after
+
+    - name: Create symlink to NvChad config
+      ansible.builtin.file:
+        src: "{{ remote_role_path }}/files/nvchad2"
+        dest: "{{ nvim_base }}_2/config/lua/custom"
+        state: link
+        force: true
+
+    - name: Create neovim keymap directory
+      ansible.builtin.file:
+        path: "{{ nvim_base }}_2/config/keymap"
+        state: directory
+        mode: 0755
+
+    - name: Create symlink to rnk keymap
+      ansible.builtin.file:
+        src: "{{ dotfiles_path }}/roles/keyboard_layouts/files/rnk-qwerty-jcuken.vim"
+        dest: "{{ nvim_base }}_2/config/keymap/rnk-qwerty-jcuken.vim"
+        state: link
+        force: true
+
+    - name: Set up clipboard for neovim
+      ansible.builtin.template:
+        src: clipboard.lua
+        dest: "{{ nvim_base }}_2/config/lua/custom/clipboard.lua"
         mode: 0644
 
 - name: Simple configuration version management

@@ -33,6 +33,9 @@ manifest:
   nvchad:
     url: https://github.com/NvChad/NvChad
     version: 8cf7ca4002ca0944aae58e22c060ff314a706d83
+  nvchad2:
+    url: https://github.com/NvChad/NvChad
+    version: 609000db5b03aa26d2c1d69dc726b9879539200d
   rg:
     url: https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
   tpm:

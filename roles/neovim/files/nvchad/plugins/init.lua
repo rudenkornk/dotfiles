@@ -94,7 +94,7 @@ return {
   },
   ["karb94/neoscroll.nvim"] = {
     commit = manifest["karb94/neoscroll.nvim"].commit,
-    disable = true, -- too laggy on my machine
+    disable = false,
     event = "WinScrolled",
     config = require("custom.plugins.neoscroll"),
   },

@@ -1,61 +1,33 @@
 - name: Configure terminals
   when: not in_wsl
   block:
-    # TODO: Change it to normal apt when at least 0.23 is available
     - name: Install kitty
-      ansible.builtin.unarchive:
-        src: "{{ manifest.kitty.url }}"
-        dest: "{{ home }}/.local/kitty.app"
-        remote_src: true
+      become: true
+      ansible.builtin.apt:
+        name: kitty
+
+    - name: Download kitty themes
+      ansible.builtin.git:
+        repo: "{{ manifest.kitty_themes.url }}"
+        dest: "{{ home }}/.config/kitty/kitty-themes"
+        version: "{{ manifest.kitty_themes.version }}"
+      register: downloaded
       retries: "{{ web_retries }}"
       delay: "{{ web_delay }}"
-      register: kitty
-      until: kitty is not failed
-    - name: Create kitty symlinks
-      ansible.builtin.file:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        state: link
-        force: true
-      loop:
-        - {src: "{{ home }}/.local/kitty.app/bin/kitty", dest: "{{ home }}/.local/bin/kitty"}
-        - {src: "{{ home }}/.local/kitty.app/bin/kitten", dest: "{{ home }}/.local/bin/kitten"}
-    - name: Copy kitty desktop files
-      ansible.builtin.copy:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        remote_src: true
-        mode: 0644
-      changed_when: kitty is changed
-      loop:
-        # yamllint disable-line rule:line-length
-        - {src: "{{ home }}/.local/kitty.app/share/applications/kitty.desktop", dest: "{{ home }}/.local/share/applications/kitty.desktop"}
-        # yamllint disable-line rule:line-length
-        - {src: "{{ home }}/.local/kitty.app/share/applications/kitty-open.desktop", dest: "{{ home }}/.local/share/applications/kitty-open.desktop"}
-    - name: Update icon paths in kitty desktop files
-      ansible.builtin.lineinfile:
-        path: "{{ item }}"
-        regexp: '^Icon='
-        line: Icon={{ home }}/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png
-      changed_when: kitty is changed
-      loop:
-        - "{{ home }}/.local/share/applications/kitty.desktop"
-        - "{{ home }}/.local/share/applications/kitty-open.desktop"
-    - name: Update exec paths in kitty desktop files
-      ansible.builtin.lineinfile:
-        path: "{{ item }}"
-        regexp: '^Exec='
-        line: Exec={{ home }}/.local/kitty.app/bin/kitty
-      changed_when: kitty is changed
-      loop:
-        - "{{ home }}/.local/share/applications/kitty.desktop"
-        - "{{ home }}/.local/share/applications/kitty-open.desktop"
+      until: downloaded is not failed
 
     - name: Create ~/.config/kitty/ directory
       ansible.builtin.file:
         dest: "{{ home }}/.config/kitty"
         state: directory
         mode: 0755
+
+    - name: Create symlink to kitty theme
+      ansible.builtin.file:
+        src: "{{ home }}/.config/kitty/kitty-themes/themes/Dracula.conf"
+        dest: "{{ home }}/.config/kitty/theme.conf"
+        state: link
+        force: true
 
     - name: Create symlink to kitty config
       ansible.builtin.file:

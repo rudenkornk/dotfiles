@@ -100,6 +100,18 @@
   register: installed
   changed_when: installed.stdout != ""
 
+- name: Install jsregexp
+  become: true
+  ansible.builtin.shell: |
+    set -o pipefail
+    if ! luarocks list jsre  | grep --quiet "(installed)"; then
+      luarocks install jsregexp
+    fi
+  args:
+    executable: bash
+  register: installed
+  changed_when: installed.stdout != ""
+
 - name: Create ~/.config/luacheck directory
   ansible.builtin.file:
     path: "{{ home }}/.config/luacheck"

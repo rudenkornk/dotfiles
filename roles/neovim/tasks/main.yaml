@@ -130,6 +130,47 @@
         dest: "{{ nvim_base }}_2/config/lua/custom/clipboard.lua"
         mode: 0644
 
+- name: Install LazyVim
+  block:
+    - name: Install lazy.nvim
+      ansible.builtin.git:
+        repo: "https://github.com/folke/lazy.nvim"
+        dest: "{{ nvim_base }}_3/share/lazy/lazy.nvim"
+        version: "{{ lazy_lock['lazy.nvim'].commit }}"
+        force: true
+      vars:
+        lazy_lock: "{{ lookup('file','lazy/lazy-lock.json') | from_json }}"
+      register: nvchad_installed
+      retries: "{{ web_retries }}"
+      delay: "{{ web_delay }}"
+      until: nvchad_installed is not failed
+      changed_when: nvchad_installed.before != nvchad_installed.after
+
+    - name: Create config directory for lazy
+      ansible.builtin.file:
+        path: "{{ nvim_base }}_3/config"
+        state: directory
+        mode: 0755
+
+    - name: Create symlink to LazyVim config
+      ansible.builtin.file:
+        src: "{{ remote_role_path }}/files/lazy"
+        dest: "{{ nvim_base }}_3/config"
+        state: link
+        force: true
+
+    - name: Create neovim keymap directory
+      ansible.builtin.file:
+        path: "{{ nvim_base }}_3/config/keymap"
+        state: directory
+        mode: 0755
+
+    - name: Set up clipboard for neovim
+      ansible.builtin.template:
+        src: clipboard.lua
+        dest: "{{ nvim_base }}_3/config/lua/config/clipboard.lua"
+        mode: 0644
+
 - name: Simple configuration version management
   block:
     - name: Create neovim configuration directories

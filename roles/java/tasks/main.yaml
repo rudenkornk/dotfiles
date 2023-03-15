@@ -3,7 +3,3 @@
   ansible.builtin.apt:
     name:
       - openjdk-18-jdk
-
-- name: dbg
-  ansible.builtin.debug:
-    var: web_delay

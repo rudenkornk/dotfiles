@@ -26,7 +26,7 @@ local config = function()
     "sqlls",
     "texlab",
     "vimls",
-    "yamlls",
+    -- "yamlls",
     -- "asm_lsp", -- not working
     -- "perlnavigator", -- not working
     -- "powershell_es", -- not working

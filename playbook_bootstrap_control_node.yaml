@@ -3,7 +3,7 @@
   tasks:
     - name: Load ansible collections versions
       ansible.builtin.include_vars:
-        file: roles/manifest/vars/main.yaml
+        file: "{{ playbook_dir }}/roles/manifest/vars/main.yaml"
 
     - name: Install community.general
       ansible.builtin.command: "ansible-galaxy collection install
@@ -31,22 +31,11 @@
       retries: 10
       until: collection_installed is not failed
 
-    - name: Install rsync (for ansible synchronize tasks)
+    - name: Install tools
       become: true
       ansible.builtin.apt:
-        name: rsync
-
-    - name: Install podman (for checking config in containers)
-      become: true
-      ansible.builtin.apt:
-        name: podman
-
-    - name: Install git (for support.py update)
-      become: true
-      ansible.builtin.apt:
-        name: git
-
-    - name: Install graphviz (for support.py graph)
-      become: true
-      ansible.builtin.apt:
-        name: graphviz
+        name:
+          - git # for support.py update
+          - graphviz # for support.py graph
+          - podman # for checking config in containers
+          - rsync # for ansible synchronize tasks

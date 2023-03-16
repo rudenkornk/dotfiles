@@ -2,10 +2,9 @@
 __pycache__
 
 clipboard.lua
+*id_rsa
+*.auth
+*.ovpn
 
 .gitsecret/keys/random_seed
 !*.secret
-roles/ssh/files/*id_rsa
-roles/ssh/files/keys/*id_rsa
-roles/openvpn/files/configs/*.auth
-roles/openvpn/files/configs/*.ovpn

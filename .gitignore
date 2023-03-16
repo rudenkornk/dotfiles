@@ -2,6 +2,7 @@
 __pycache__
 
 clipboard.lua
+credentials.json
 *id_rsa
 *.auth
 *.ovpn

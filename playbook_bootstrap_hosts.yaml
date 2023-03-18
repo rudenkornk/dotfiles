@@ -38,4 +38,4 @@
     - name: Add authorized_key for {{ user }}
       ansible.posix.authorized_key:
         user: "{{ user }}"
-        key: "{{ lookup('file', '{{ playbook_dir }}/roles/ssh/files/keys/id_rsa.pub') }}"
+        key: "{{ lookup('file', '{{ playbook_dir }}/{{ ssh_dir }}/id_rsa.pub') }}"

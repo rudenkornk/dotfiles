@@ -67,5 +67,5 @@
 [rebase]
     autoStash = true
 [user]
-    email = rudenkornk@gmail.com
-    name = Nikita Rudenko
+    email = {{ profile.email }}
+    name = {{ profile.name }}

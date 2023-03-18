@@ -1,3 +1,2 @@
-home: "{{ ansible_env.HOME }}"
 web_delay: 30
 web_retries: 5

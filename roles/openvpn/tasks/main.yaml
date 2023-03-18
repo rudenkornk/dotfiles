@@ -6,5 +6,5 @@
 
 # crontab -e
 # @reboot sudo openvpn --config
-# /home/rudenkornk/projects/dotfiles/roles/openvpn/files/configs/ee-tll.prod.surfshark.comsurfshark_openvpn_udp.ovpn
-# --auth-user-pass /home/rudenkornk/projects/dotfiles/roles/openvpn/files/configs/surfshark.auth
+# /home/rudenkornk/projects/dotfiles/roles/profile/files/vpn/ee-tll.prod.surfshark.comsurfshark_openvpn_udp.ovpn
+# --auth-user-pass /home/rudenkornk/projects/dotfiles/roles/profile/files/vpn/surfshark.auth

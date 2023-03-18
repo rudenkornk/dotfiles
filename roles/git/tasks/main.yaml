@@ -4,11 +4,10 @@
     name: git
 
 - name: Set up global .gitconfig
-  ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/gitconfig"
+  ansible.builtin.template:
+    src: gitconfig
     dest: "{{ home }}/.gitconfig"
-    state: link
-    force: true
+    mode: 0644
 
 - name: Add git-secret gpg key
   become: true
@@ -37,7 +36,7 @@
 
 - name: Set up .mrconfig
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/mrconfig"
+    src: "{{ mrconfig_path }}"
     dest: "{{ home }}/.mrconfig"
     state: link
     force: true

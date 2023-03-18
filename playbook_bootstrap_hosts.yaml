@@ -4,10 +4,6 @@
     ansible_user: root
   gather_facts: false
   tasks:
-    - name: Load basic info
-      ansible.builtin.include_vars:
-        file: "{{ playbook_dir }}/roles/profile/vars/main.yaml"
-
     - name: Install python
       become: true
       ansible.builtin.raw: |
@@ -23,46 +19,3 @@
         executable: bash
       register: bootstrap
       changed_when: ("bootstrapped" in bootstrap.stdout)
-
-    - name: Install sudo
-      become: true
-      ansible.builtin.apt:
-        name: sudo
-
-    - name: Check if credentials were decrypted
-      ansible.builtin.stat:
-        path: "{{ credentials_path }}"
-      register: creds_status
-
-    - name: Read credentials
-      ansible.builtin.slurp:
-        src: "{{ credentials_path }}"
-      register: encoded_creds
-      when: creds_status.stat.exists
-
-    - name: Set credentials
-      ansible.builtin.set_fact:
-        password: "{{ creds.password | password_hash(salt=creds.salt) }}"
-      vars:
-        creds: "{{ encoded_creds['content'] | b64decode | from_json }}"
-      when: creds_status.stat.exists
-
-    - name: Set default credentials
-      ansible.builtin.set_fact:
-        password: ""
-      when: not creds_status.stat.exists
-
-    - name: Add user "{{ user }}"
-      become: true
-      ansible.builtin.user:
-        name: "{{ user }}"
-        password: "{{ password }}"
-        groups:
-          - adm
-          - sudo
-        append: true
-
-    - name: Add authorized_key for {{ user }}
-      ansible.posix.authorized_key:
-        user: "{{ user }}"
-        key: "{{ lookup('file', '{{ playbook_dir }}/{{ ssh_dir }}/id_rsa.pub') }}"

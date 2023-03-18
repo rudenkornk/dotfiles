@@ -24,10 +24,10 @@ config: $(BUILD_DIR)/bootstrap_control_node
 		$(VENV) && ansible-playbook --extra-vars "ubuntu_tag=$(UBUNTU_TAG)" \
 			--inventory inventory.yaml playbook_dotfiles_container.yaml; \
 	fi
-	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS)         user=$(USER)" \
+	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS)" \
 		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
-	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS) ansible_user=$(USER)" \
-		--extra-vars "gpg_key=$(GPG)" \
+	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS)" \
+		--extra-vars "user=$(USER) gpg_key=$(GPG)" \
 		--inventory inventory.yaml playbook.yaml
 
 .PHONY: update

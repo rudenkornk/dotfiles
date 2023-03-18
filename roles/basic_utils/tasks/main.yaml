@@ -1,21 +1,8 @@
-- name: Check if credentials were decrypted
-  ansible.builtin.stat:
-    path: "{{ credentials_path }}"
-  register: creds_status
-
-- name: Read credentials
-  ansible.builtin.slurp:
-    src: "{{ credentials_path }}"
-  register: encoded_creds
-  when: creds_status.stat.exists
-
-- name: Set ansible_sudo_pass
-  ansible.builtin.set_fact:
-    ansible_sudo_pass: "{{ creds.password }}"
-  vars:
-    creds: "{{ encoded_creds['content'] | b64decode | from_json }}"
-  no_log: true
-  when: creds_status.stat.exists
+- name: Check sanity
+  ansible.builtin.assert:
+    that:
+      - user == ansible_user
+      - ansible_os_family == "Debian"
 
 - name: Install aptitude
   become: true

@@ -3,7 +3,7 @@ profile:
   gpg_email: rudenkornk@gmail.com
   name: Nikita Rudenko
 
-home: "/home/{{ user if user is defined else ansible_user }}"
+home: "/home/{{ user }}"
 projects_path: "{{ home }}/projects"
 dotfiles_parent_path: "{{ projects_path }}"
 dotfiles_path: "{{ projects_path }}/dotfiles"

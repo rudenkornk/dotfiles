@@ -17,15 +17,17 @@ VENV := source $(BUILD_DIR)/venv/bin/activate
 .PHONY: config
 config: $(BUILD_DIR)/bootstrap_control_node
 	if [[ "$(HOSTS)" =~ "localhost" || "$(HOSTS)" =~ "127.0.0.1" ]]; then \
+		# Before we set up a new password, we need to ask user for the existing one \
 		sudo bash -c ''; \
 	fi
 	if [[ "$(HOSTS)" =~ ^dotfiles_ ]]; then \
 		$(VENV) && ansible-playbook --extra-vars "ubuntu_tag=$(UBUNTU_TAG)" \
 			--inventory inventory.yaml playbook_dotfiles_container.yaml; \
 	fi
-	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS) user=$(USER)" \
+	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS)         user=$(USER)" \
 		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
-	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS) ansible_user=$(USER) gpg_key=$(GPG)" \
+	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS) ansible_user=$(USER)" \
+		--extra-vars "gpg_key=$(GPG)" \
 		--inventory inventory.yaml playbook.yaml
 
 .PHONY: update

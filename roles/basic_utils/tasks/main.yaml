@@ -62,6 +62,7 @@
 - name: Print detected facts
   ansible.builtin.debug:
     msg:
+      - "home: {{ home }}"
       - "in_container: {{ in_container }}"
       - "in_wsl: {{ in_wsl }}"
 

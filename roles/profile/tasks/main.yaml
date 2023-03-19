@@ -3,6 +3,14 @@
   ansible.builtin.apt:
     name: sudo
 
+- name: Load dotfiles vars
+  ansible.builtin.include_vars:
+    file: "{{ playbook_dir }}/roles/dotfiles/vars/main.yaml"
+
+- name: Set credentials_path var
+  ansible.builtin.set_fact:
+    credentials_path: "{{ dotfiles_path }}/{{ credentials_dir }}"
+
 - name: Check if credentials were decrypted
   ansible.builtin.stat:
     path: "{{ credentials_path }}"

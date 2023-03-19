@@ -3,14 +3,7 @@ profile:
   gpg_email: rudenkornk@gmail.com
   name: Nikita Rudenko
 
-home: "/home/{{ user }}"
-projects_path: "{{ home }}/projects"
-dotfiles_parent_path: "{{ projects_path }}"
-dotfiles_path: "{{ projects_path }}/dotfiles"
-
-remote_role_path: "{{ dotfiles_path }}/roles/{{ role_name }}"
-credentials_path: "{{ dotfiles_path }}/roles/profile/files/configs/credentials.json"
-mrconfig_path: "{{ dotfiles_path }}/roles/profile/files/configs/mrconfig"
+credentials_dir: roles/profile/files/configs/credentials.json
+mrconfig_dir: roles/profile/files/configs/mrconfig
 ssh_dir: roles/profile/files/ssh
-ssh_path: "{{ dotfiles_path }}/{{ ssh_dir }}"
-vpn_path: "{{ dotfiles_path }}/roles/profile/files/vpn"
+vpn_dir: roles/profile/files/vpn

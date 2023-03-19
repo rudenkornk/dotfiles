@@ -29,14 +29,12 @@
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link
-    force: true
 
 - name: Create symlink to tmux.conf
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/tmux.conf"
     dest: "{{ home }}/.tmux.conf"
     state: link
-    force: true
 
 - name: Reload tmux config
   ansible.builtin.shell: |

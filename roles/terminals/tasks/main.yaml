@@ -27,11 +27,9 @@
         src: "{{ home }}/.config/kitty/kitty-themes/themes/Dracula.conf"
         dest: "{{ home }}/.config/kitty/theme.conf"
         state: link
-        force: true
 
     - name: Create symlink to kitty config
       ansible.builtin.file:
         src: "{{ remote_role_path }}/files/kitty.conf"
         dest: "{{ home }}/.config/kitty/kitty.conf"
         state: link
-        force: true

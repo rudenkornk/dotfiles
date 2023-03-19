@@ -11,7 +11,6 @@
     src: "{{ remote_role_path }}/files/black.toml"
     dest: "{{ home }}/.config/black"
     state: link
-    force: true
 
 # https://pycqa.github.io/isort/docs/configuration/config_files.html
 # https://github.com/PyCQA/isort/issues/1414
@@ -20,7 +19,6 @@
     src: "{{ remote_role_path }}/files/isort.cfg"
     dest: "{{ home }}/.isort.cfg"
     state: link
-    force: true
 
 - name: Create ~/.config/mypy directory
   ansible.builtin.file:
@@ -34,7 +32,6 @@
     src: "{{ remote_role_path }}/files/mypy.ini"
     dest: "{{ home }}/.config/mypy/config"
     state: link
-    force: true
 
 # https://www.pydocstyle.org/en/6.3.0/usage.html?highlight=config#configuration-files
 - name: Create symlink to global pylint config
@@ -42,7 +39,6 @@
     src: "{{ remote_role_path }}/files/pylint.toml"
     dest: "{{ home }}/.config/pylintrc"
     state: link
-    force: true
 
 # https://www.pydocstyle.org/en/6.3.0/usage.html?highlight=config#configuration-files
 - name: Create symlink to global pydocstyle config
@@ -50,7 +46,6 @@
     src: "{{ remote_role_path }}/files/pydocstyle.toml"
     dest: "{{ home }}/.pydocstyle"
     state: link
-    force: true
 
 # https://www.pydocstyle.org/en/6.3.0/usage.html?highlight=config#configuration-files
 - name: Create symlink to global pycodestyle config
@@ -58,4 +53,3 @@
     src: "{{ remote_role_path }}/files/pycodestyle"
     dest: "{{ home }}/.config/pycodestyle"
     state: link
-    force: true

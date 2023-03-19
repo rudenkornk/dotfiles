@@ -124,4 +124,3 @@
     src: "{{ remote_role_path }}/files/luacheckrc"
     dest: "{{ home }}/.config/luacheck/.luacheckrc"
     state: link
-    force: true

@@ -13,7 +13,7 @@
     state: directory
     mode: 0755
 
-- name: Check if private keys are decrypted
+- name: List decrypted private keys
   ansible.builtin.find:
     paths: "{{ ssh_path }}"
     patterns: '*rsa'
@@ -30,14 +30,20 @@
   loop_control:
     label: "{{ item.path | basename }}"
 
+- name: List public keys
+  ansible.builtin.find:
+    paths: "{{ ssh_path }}"
+    patterns: '*rsa.pub'
+  register: rsa_pub_keys
+
 - name: Create symlinks to ssh public keys
   ansible.builtin.file:
-    src: "{{ item.path }}.pub"
-    dest: "{{ home }}/.ssh/{{ item.path | basename }}.pub"
+    src: "{{ item.path }}"
+    dest: "{{ home }}/.ssh/{{ item.path | basename }}"
     state: link
     force: true
     mode: 0644
-  loop: "{{ rsa_keys.files }}"
+  loop: "{{ rsa_pub_keys.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
 

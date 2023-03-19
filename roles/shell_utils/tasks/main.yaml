@@ -67,7 +67,6 @@
     src: "{{ remote_role_path }}/files/fish_plugins"
     dest: "{{ home }}/.config/fish/fish_plugins"
     state: link
-    force: true
 
 - name: Install fisher plugins
   ansible.builtin.shell: |
@@ -90,14 +89,12 @@
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link
-    force: true
 
 - name: Create symlinks to fish functions
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
-    force: true
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"
   register: functions
 

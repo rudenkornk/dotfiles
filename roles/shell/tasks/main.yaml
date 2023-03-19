@@ -31,7 +31,6 @@
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link
-    force: true
 
 - name: Change user shell to fish
   become: true
@@ -63,7 +62,6 @@
     src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
-    force: true
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"
 
 - name: Fix path in WSL
@@ -72,5 +70,4 @@
     src: "{{ remote_role_path }}/files/wsl.conf"
     dest: /etc/wsl.conf
     state: link
-    force: true
   when: in_wsl

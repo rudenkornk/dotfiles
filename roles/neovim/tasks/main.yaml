@@ -71,7 +71,6 @@
         src: "{{ remote_role_path }}/files/nvchad"
         dest: "{{ nvim_base }}_1/config/lua/custom"
         state: link
-        force: true
 
     - name: Create neovim keymap directory
       ansible.builtin.file:
@@ -84,7 +83,6 @@
         src: "{{ dotfiles_path }}/roles/keyboard_layouts/files/rnk-qwerty-jcuken.vim"
         dest: "{{ nvim_base }}_1/config/keymap/rnk-qwerty-jcuken.vim"
         state: link
-        force: true
 
     - name: Set up clipboard for neovim
       ansible.builtin.template:
@@ -109,7 +107,6 @@
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
         state: link
-        force: true
       loop:
         - {src: "{{ nvim_base }}_{{ nvim_version }}/cache", dest: "{{ home }}/.cache/nvim"}
         - {src: "{{ nvim_base }}_{{ nvim_version }}/config", dest: "{{ home }}/.config/nvim"}
@@ -126,12 +123,10 @@
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link
-    force: true
 
 - name: Create symlinks to fish functions
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
-    force: true
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"

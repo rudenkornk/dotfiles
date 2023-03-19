@@ -42,7 +42,6 @@
     src: "{{ remote_role_path }}/files/yamlfmt.yaml"
     dest: "{{ home }}/.config/yamlfmt/.yamlfmt"
     state: link
-    force: true
 
 - name: Create ~/.config/yamllint directory
   ansible.builtin.file:
@@ -56,4 +55,3 @@
     src: "{{ remote_role_path }}/files/yamllint.yaml"
     dest: "{{ home }}/.config/yamllint/config"
     state: link
-    force: true

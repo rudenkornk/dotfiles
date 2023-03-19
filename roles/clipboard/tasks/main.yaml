@@ -7,7 +7,6 @@
         src: /mnt/c/Windows/System32/clip.exe
         dest: /usr/bin/clip.exe
         state: link
-        force: true
 
     - name: Create tmp dir for win32yank
       ansible.builtin.file:
@@ -46,7 +45,6 @@
         src: "{{ windows_home }}/AppData/Local/win32yank/win32yank.exe"
         dest: /usr/bin/win32yank.exe
         state: link
-        force: true
 
     - name: Remove xsel package if in WSL
       become: true

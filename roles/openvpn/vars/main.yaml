@@ -1,0 +1,1 @@
+vpn_path: "{{ dotfiles_path }}/{{ vpn_dir }}"

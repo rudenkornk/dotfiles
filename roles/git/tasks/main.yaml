@@ -3,11 +3,17 @@
   ansible.builtin.apt:
     name: git
 
-- name: Set up global .gitconfig
+- name: Set up user.gitconfig
   ansible.builtin.template:
-    src: gitconfig
-    dest: "{{ home }}/.gitconfig"
+    src: gitconfig.user
+    dest: "{{ home }}/.gitconfig.user"
     mode: 0644
+
+- name: Set up global .gitconfig
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/gitconfig"
+    dest: "{{ home }}/.gitconfig"
+    state: link
 
 - name: Add git-secret gpg key
   become: true

@@ -66,6 +66,5 @@
     default = current
 [rebase]
     autoStash = true
-[user]
-    email = {{ profile.email }}
-    name = {{ profile.name }}
+[include]
+    path = ~/.gitconfig.user

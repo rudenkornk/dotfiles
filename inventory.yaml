@@ -2,12 +2,16 @@ all:
   hosts:
     localhost:
       ansible_connection: local
+      trusted: true
     dotfiles_22.04:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      trusted: true
     dotfiles_22.10:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      trusted: true
     dotfiles_23.04:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      trusted: true

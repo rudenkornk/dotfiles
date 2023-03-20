@@ -69,6 +69,7 @@
   ansible.builtin.debug:
     msg:
       - "home: {{ home }}"
+      - "trusted: {{ trusted }}"
       - "in_container: {{ in_container }}"
       - "in_wsl: {{ in_wsl }}"
 

@@ -1,2 +1,3 @@
+trusted: "{{ hostvars[inventory_hostname]['trusted'] }}"
 web_delay: 30
 web_retries: 5

@@ -27,7 +27,7 @@ config: $(BUILD_DIR)/bootstrap_control_node
 	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS)" \
 		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
 	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS)" \
-		--extra-vars "user=$(USER) gpg_key=$(GPG)" \
+		--extra-vars "user=$(USER)" \
 		--inventory inventory.yaml playbook.yaml
 
 .PHONY: update
@@ -74,7 +74,7 @@ lint: $(BUILD_DIR)/bootstrap_control_node
 		fi; \
 	done
 	
-	if (git log --name-only --oneline | grep --quiet --perl-regex "(rsa|ovpn|auth|credentials.json)\$$"); then \
+	if (git log --name-only --oneline | grep --quiet --perl-regex "(rsa|ovpn|auth|credentials.json|private.gpg)\$$"); then \
 		echo "Looks like rsa key, ovpn config or auth data leaked!!!"; \
 		exit 1; \
 	fi

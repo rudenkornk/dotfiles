@@ -42,7 +42,7 @@
 
 - name: Set up .mrconfig
   ansible.builtin.file:
-    src: "{{ mrconfig_path }}"
+    src: "{{ remote_role_path }}/files/mrconfig"
     dest: "{{ home }}/.mrconfig"
     state: link
 

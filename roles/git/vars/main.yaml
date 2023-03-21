@@ -1,3 +1,2 @@
 git_secret_gpg: https://gitsecret.jfrog.io/artifactory/api/gpg/key/public
 git_secret_repo: https://gitsecret.jfrog.io/artifactory/git-secret-deb
-mrconfig_path: "{{ dotfiles_path }}/{{ mrconfig_dir }}"

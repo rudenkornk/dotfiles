@@ -7,9 +7,9 @@
   ansible.builtin.include_vars:
     file: "{{ playbook_dir }}/roles/dotfiles/vars/main.yaml"
 
-- name: Set credentials_path var
-  ansible.builtin.set_fact:
-    credentials_path: "{{ dotfiles_path }}/{{ credentials_dir }}"
+- name: Load secrets vars
+  ansible.builtin.include_vars:
+    file: "{{ playbook_dir }}/roles/secrets/vars/main.yaml"
 
 - name: Check if credentials were decrypted
   ansible.builtin.stat:
@@ -49,7 +49,7 @@
   become: true
   ansible.posix.authorized_key:
     user: "{{ user }}"
-    key: "{{ lookup('file', '{{ playbook_dir }}/{{ ssh_dir }}/id_rsa.pub') }}"
+    key: "{{ lookup('file', '{{ ssh_local_path }}/id_rsa.pub') }}"
 
 - name: Switch ansible_user
   ansible.builtin.set_fact:

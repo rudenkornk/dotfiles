@@ -2,8 +2,3 @@ profile:
   email: rudenkornk@gmail.com
   gpg_email: rudenkornk@gmail.com
   name: Nikita Rudenko
-
-credentials_dir: roles/profile/files/configs/credentials.json
-mrconfig_dir: roles/profile/files/configs/mrconfig
-ssh_dir: roles/profile/files/ssh
-vpn_dir: roles/profile/files/vpn

@@ -3,7 +3,7 @@ __pycache__
 
 clipboard.lua
 credentials.json
-private.gpg
+*private.gpg
 *id_rsa
 *.auth
 *.ovpn

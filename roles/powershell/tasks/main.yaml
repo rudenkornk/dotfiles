@@ -31,4 +31,4 @@
     src: "{{ role_path }}/files/Profile.ps1"
     dest: "{{ windows_home }}/Documents/Powershell/Profile.ps1"
     mode: 0777
-  when: in_wsl
+  when: false # Fails

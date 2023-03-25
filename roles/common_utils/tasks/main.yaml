@@ -26,7 +26,6 @@
       - pkg-config
       - tar
       - tcl
-      - unzip
       - wget
       - zip
 

@@ -21,6 +21,7 @@
       - rsync
       - software-properties-common
       - tzdata
+      - unzip
       - xz-utils
 
 - name: Set locale

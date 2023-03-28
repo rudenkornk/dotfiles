@@ -51,6 +51,7 @@ return {
         end,
       }
     end,
+    separator_style = "round"
   },
   tabufline = {
     enabled = true,

@@ -149,8 +149,16 @@ return {
     end,
   },
   {
+    -- Alternative: https://github.com/nvim-treesitter/nvim-treesitter-textobjects#text-objects-swap
+    -- But it works only for moving nodes up/down, not for left/right.
     "ziontee113/syntax-tree-surfer",
     config = true,
+    cmd = {
+      "STSSelectChildNode",
+      "STSSelectNextSiblingNode",
+      "STSSelectParentNode",
+      "STSSelectPrevSiblingNode",
+    },
   },
   { "godlygeek/tabular", cmd = "Tabularize" },
   {

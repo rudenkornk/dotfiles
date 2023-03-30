@@ -50,6 +50,7 @@
   become: true
   ansible.builtin.apt:
     deb: "{{ manifest.github_cli.url }}"
+    allow_downgrade: true
 
 - name: Set up bash
   ansible.builtin.lineinfile:

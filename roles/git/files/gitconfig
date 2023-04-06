@@ -13,6 +13,7 @@
     lg = log --graph
     ll = log --oneline
     llg = log --oneline --graph
+    ls = log --stat
     mb = merge-base
     rb = rebase
     rbi = rebase --rebase-merges --interactive HEAD~26

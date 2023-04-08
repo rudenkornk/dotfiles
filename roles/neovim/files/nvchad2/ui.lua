@@ -47,7 +47,8 @@ return {
           col = string.format("%3s", col)
           local line = row .. "/" .. total .. " " .. col .. ""
           local nvchad_fmt = st_modules.cursor_position()
-          return nvchad_fmt .. line
+          local nvchad_no_percent = string.sub(nvchad_fmt, 1, string.len(nvchad_fmt) - 5)
+          return nvchad_no_percent .. line
         end,
       }
     end,

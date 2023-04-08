@@ -158,6 +158,53 @@ M.hop = {
   },
 }
 
+M.spider = {
+  n = {
+    ["w"] = {
+      function()
+        require("spider").motion("w")
+      end,
+    },
+    ["e"] = {
+      function()
+        require("spider").motion("e")
+      end,
+    },
+    ["b"] = {
+      function()
+        require("spider").motion("b")
+      end,
+    },
+    ["ge"] = {
+      function()
+        require("spider").motion("ge")
+      end,
+    },
+  },
+  x = {
+    ["w"] = {
+      function()
+        require("spider").motion("w")
+      end,
+    },
+    ["e"] = {
+      function()
+        require("spider").motion("e")
+      end,
+    },
+    ["b"] = {
+      function()
+        require("spider").motion("b")
+      end,
+    },
+    ["ge"] = {
+      function()
+        require("spider").motion("ge")
+      end,
+    },
+  },
+}
+
 M.illuminate = {
   i = {
     ["<A-n>"] = {

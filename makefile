@@ -1,7 +1,6 @@
 SHELL = /usr/bin/env bash
 
 ############################# Arguments ############################
-GPG ?=
 HOSTS ?= localhost
 USER ?= $(shell id --user --name)
 

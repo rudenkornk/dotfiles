@@ -339,8 +339,6 @@ M.syntax_tree_surfer = {
     },
   },
   v = {
-    ["<A-j>"] = { "<CMD>STSSwapNextVisual<CR>" },
-    ["<A-k>"] = { "<CMD>STSSwapPrevVisual<CR>" },
     ["T"] = {
       function()
         require("syntax-tree-surfer").targeted_jump({
@@ -356,13 +354,13 @@ M.syntax_tree_surfer = {
         })
       end,
     },
-    [";"] = { "<CMD>STSSelectParentNode<CR>" },
-    ["i;"] = { "<CMD>STSSelectChildNode<CR>" },
+    ["H"] = { "<CMD>STSSelectParentNode<CR>" },
+    ["J"] = { "<CMD>STSSelectNextSiblingNode<CR>" },
+    ["K"] = { "<CMD>STSSelectPrevSiblingNode<CR>" },
+    ["L"] = { "<CMD>STSSelectChildNode<CR>" },
   },
   o = {
-    ["<A-k>"] = { "<CMD>STSSwapPrevVisual<CR>" },
-    ["<A-j>"] = { "<CMD>STSSwapNextVisual<CR>" },
-    ["F"] = {
+    ["T"] = {
       function()
         require("syntax-tree-surfer").targeted_jump({
           "if_statement",

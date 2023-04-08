@@ -1,2 +1,2 @@
-nvim_version: 1
+nvim_version: 2
 nvim_base: "{{ home }}/.local/share/nvim_versions/nvim"

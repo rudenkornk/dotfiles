@@ -22,7 +22,7 @@ def get_neovim_plugins_choices() -> list[str]:
 
 def get_update_choices() -> list[str]:
     ansible_choices = get_ansible_choices()
-    choices = ansible_choices + ["requirements"] + ["neovim_plugins"]
+    choices = ansible_choices + ["requirements"]
     choices.sort()
     return choices
 

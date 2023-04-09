@@ -66,7 +66,7 @@ return function()
 
     -- markdown
     null_ls.builtins.diagnostics.alex,
-    null_ls.builtins.diagnostics.markdownlint,
+    -- null_ls.builtins.diagnostics.markdownlint,
     null_ls.builtins.formatting.cbfmt,
     null_ls.builtins.formatting.markdownlint,
 

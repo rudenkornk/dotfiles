@@ -25,7 +25,7 @@ Versions are stored in manifests and can be easily updated with a single command
 1. **Supports & tested under `Ubuntu 20.04`, `Ubuntu 22.04` and also includes WSL support**.
 On Windows it integrates with the system clipboard.
 1. **Secrets inside the repo**.
-All the credentials, ssh keys, VPN configs can be stored directly in the repo with support of the [git secret](http://git-secret.io/).
+All the credentials, ssh keys, VPN configs can be stored directly in the repo with support of the [git secret](https://github.com/sobolevn/git-secret).
 `gpg key` is optional: config works fine if it is not provided and secrets are not decrypted.
 1. **Bootstrap with a single command.**
 Aside from `OS` limitations, there are zero requirements.

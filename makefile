@@ -42,6 +42,12 @@ format: $(BUILD_DIR)/bootstrap_control_node
 	$(VENV) && python3 -m black .
 	$(VENV) && python3 -m isort --gitignore .
 
+.PHONY: hooks
+hooks: .git/hooks/pre-commit
+
+.git/hooks/pre-commit:
+	ln --symbolic --force ../../scripts/hooks/pre-commit .git/hooks/pre-commit
+
 
 ############################## Checks ##############################
 UBUNTU_TAG ?= 22.04

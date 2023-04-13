@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+changed=$(git diff --cached --name-only)
+secrets=$(echo "$changed" | grep --perl-regex "(rsa|ovpn|auth|credentials.json|private.gpg)\$")
+if [[ -n "$secrets" ]]; then
+  echo "Refusing to commit potentially sensitive info. Detected files:"
+  echo "$secrets"
+  exit 1
+fi

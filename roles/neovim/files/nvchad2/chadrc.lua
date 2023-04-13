@@ -8,7 +8,7 @@ M.lazy_nvim = {
 }
 
 -- Keep themes here instead of "ui" module in order to support NvChad's interactive theme picker
-M.ui.theme = "chadracula"
+M.ui.theme = "bearded-arc"
 M.ui.theme_toggle = { M.ui.theme, "catppuccin_latte" }
 
 return M

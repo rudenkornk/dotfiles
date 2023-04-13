@@ -71,3 +71,17 @@
     path: "/etc/ssh/sshd_config"
     regexp: '[ #]{0,10}KbdInteractiveAuthentication \w*\s*$'
     line: KbdInteractiveAuthentication no
+
+- name: Disable challenge response authentication
+  become: true
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: '[ #]{0,10}ChallengeResponseAuthentication \w*\s*$'
+    line: ChallengeResponseAuthentication no
+
+- name: Disable challenge response authentication
+  become: true
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: '[ #]{0,10}UsePAM \w*\s*$'
+    line: UsePAM no

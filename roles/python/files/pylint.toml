@@ -4,4 +4,8 @@ disable = [
   "logging-fstring-interpolation",
   "logging-not-lazy",
   "missing-docstring",
+  "too-few-public-methods",
+  "too-many-arguments",
+  "too-many-branches",
+  "too-many-instance-attributes",
 ]

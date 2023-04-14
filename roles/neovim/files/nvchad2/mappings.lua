@@ -117,18 +117,6 @@ M.goto_preview = {
 
 M.hop = {
   n = {
-    ["f"] = {
-      function()
-        require("hop").hint_char1({ direction = nil })
-      end,
-      "hop char",
-    },
-    ["t"] = {
-      function()
-        require("hop").hint_char1({ direction = nil, hint_offset = -1 })
-      end,
-      "hop char",
-    },
     ["F"] = {
       function()
         require("hop").hint_words({ direction = nil, hint_offset = -1 })
@@ -137,18 +125,6 @@ M.hop = {
     },
   },
   v = {
-    ["f"] = {
-      function()
-        require("hop").hint_char1({ direction = nil })
-      end,
-      "hop char",
-    },
-    ["t"] = {
-      function()
-        require("hop").hint_char1({ direction = nil, hint_offset = -1 })
-      end,
-      "hop char",
-    },
     ["F"] = {
       function()
         require("hop").hint_words({ direction = nil, hint_offset = -1 })

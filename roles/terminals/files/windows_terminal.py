@@ -104,9 +104,9 @@ def _get_settings() -> dict[str, _Any]:
                 "altGrAliasing": False,
                 "font": {"face": "FiraCode Nerd Font Mono Retina", "size": 12},
                 "historySize": 100000,
-                "opacity": 99,
+                "opacity": 100,
                 "padding": "0",
-                "useAcrylic": True,
+                "useAcrylic": False,
                 "useAtlasEngine": True,
             }
         },

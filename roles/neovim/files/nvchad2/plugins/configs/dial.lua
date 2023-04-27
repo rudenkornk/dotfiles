@@ -8,6 +8,7 @@ local config = function()
       augend.constant.new({ elements = { "&&", "||" }, word = false }),
       augend.constant.new({ elements = { "and", "or" } }),
       augend.constant.new({ elements = { "AND", "OR" } }),
+      augend.constant.new({ elements = { "ON", "OFF" } }),
       augend.constant.new({ elements = { "True", "False" } }),
       augend.constant.new({ elements = { "TRUE", "FALSE" } }),
       augend.integer.alias.binary,

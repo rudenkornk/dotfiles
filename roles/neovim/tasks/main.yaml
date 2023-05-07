@@ -1,11 +1,12 @@
-- name: Install neovim
-  become: true
-  ansible.builtin.apt:
-    deb: "{{ manifest.neovim.url }}"
+- name: Download neovim
+  ansible.builtin.unarchive:
+    src: "{{ manifest.neovim.url }}"
+    dest: "{{ home }}/.local"
+    remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: installed
-  until: installed is not failed
+  register: downloaded
+  until: downloaded is not failed
 
 - name: Install vim as a backup
   become: true

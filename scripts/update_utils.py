@@ -10,7 +10,7 @@ from typing import Any as _Any
 
 import git as _git
 import requests as _requests
-import semver as _semver  # type: ignore
+import semver as _semver
 from pydriller import Repository as _Repository  # type: ignore
 
 from . import utils as _utils

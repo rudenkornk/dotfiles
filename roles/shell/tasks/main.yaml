@@ -64,6 +64,13 @@
     state: link
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"
 
+
+- name: Create ~/.local/bin directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/bin"
+    state: directory
+    mode: 0755
+
 - name: Fix path in WSL
   become: true
   ansible.builtin.file:

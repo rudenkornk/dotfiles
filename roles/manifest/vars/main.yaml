@@ -1,43 +1,43 @@
 manifest:
   ansible_community_general:
     url: https://github.com/ansible-collections/community.general
-    version: 6.4.0
+    version: 6.6.0
   ansible_containers_podman:
     url: https://github.com/containers/ansible-podman-collections
     version: 1.10.1
   ansible_posix:
     url: https://github.com/ansible-collections/ansible.posix
-    version: 1.5.1
+    version: 1.5.2
   bat:
-    url: https://github.com/sharkdp/bat/releases/download/v0.22.1/bat-musl_0.22.1_amd64.deb
+    url: https://github.com/sharkdp/bat/releases/download/v0.23.0/bat-musl_0.23.0_amd64.deb
   clipboard:
-    url: https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
+    url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v3.25.3/cmake-3.25.3-linux-x86_64.sh
+    url: https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.sh
   drawio:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v20.8.16/drawio-amd64-20.8.16.deb
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v21.2.8/drawio-amd64-21.2.8.deb
   fd:
     url: https://github.com/sharkdp/fd/releases/download/v8.7.0/fd-musl_8.7.0_amd64.deb
   firacode:
-    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.0/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: 63cf9d04deab832a3a472b6e4de2db837932d957
+    version: 94999101e358385f3ca67a6ec9512f549196b802
   github_cli:
-    url: https://github.com/cli/cli/releases/download/v2.24.3/gh_2.24.3_linux_amd64.deb
+    url: https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_amd64.deb
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
-    version: c01fcbd694353507c3cc7f657179bad1f32140a7
+    version: 8ab617fa7b5d226fc447aa83fe11d3f48c0c35b9
   neovim:
-    url: https://github.com/neovim/neovim/releases/download/v0.8.3/nvim-linux64.deb
+    url: https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.gz
   nvchad2:
     url: https://github.com/NvChad/NvChad
-    version: 609000db5b03aa26d2c1d69dc726b9879539200d
+    version: 3dd0fa6c5b0933d9a395e2492de69c151831c66e
   rg:
     url: https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
   tpm:
     url: https://github.com/tmux-plugins/tpm
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
   wezterm:
-    # yamllint disable-line rule:line-length
-    url: https://github.com/wez/wezterm/releases/download/20221119-145034-49b9839f/wezterm-20221119-145034-49b9839f.Ubuntu22.04.deb
+    url: >
+      https://github.com/wez/wezterm/releases/download/20230408-112425-69ae8472/wezterm-20230408-112425-69ae8472.Ubuntu22.04.deb

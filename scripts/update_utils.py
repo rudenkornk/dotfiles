@@ -109,9 +109,9 @@ class GitHubTagInfo:
         self.semver = None
         tag_parsed = _re.search(r"v?(.*)", tag)
         if tag_parsed:
-            version = tag_parsed.group(1)
+            self.version = tag_parsed.group(1)
         try:
-            semver = _semver.VersionInfo.parse(version)
+            semver = _semver.VersionInfo.parse(self.version)
             self.semver = semver
         except ValueError:
             pass

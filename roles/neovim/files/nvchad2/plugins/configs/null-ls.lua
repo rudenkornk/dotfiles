@@ -4,7 +4,7 @@ return function()
   local sources = {
     -- generic
     null_ls.builtins.diagnostics.codespell,
-    null_ls.builtins.diagnostics.write_good,
+    -- null_ls.builtins.diagnostics.write_good,
     null_ls.builtins.formatting.codespell,
 
     -- Ansible

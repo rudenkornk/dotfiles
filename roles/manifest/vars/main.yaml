@@ -38,6 +38,9 @@ manifest:
   tpm:
     url: https://github.com/tmux-plugins/tpm
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
+  vcpkg:
+    url: https://github.com/microsoft/vcpkg
+    version: 7f52deab66689f912da6d04de105c457d8ba671e
   wezterm:
     url: >
       https://github.com/wez/wezterm/releases/download/20230408-112425-69ae8472/wezterm-20230408-112425-69ae8472.Ubuntu22.04.deb

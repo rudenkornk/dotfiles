@@ -1,0 +1,9 @@
+- name: Download vcpkg
+  ansible.builtin.git:
+    repo: "{{ manifest.vcpkg.url }}"
+    dest: "{{ home }}/.local/vcpkg"
+    version: "{{ manifest.vcpkg.version }}"
+  register: downloaded
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  until: downloaded is not failed

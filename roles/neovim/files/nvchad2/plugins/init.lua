@@ -115,7 +115,6 @@ return {
     end,
   },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
-  { "chrisgrieser/nvim-spider", opts = { skipInsignificantPunctuation = true } },
   { "kylechui/nvim-surround", keys = { "c", "d", "y" }, config = true },
   {
     "nvim-tree/nvim-tree.lua",

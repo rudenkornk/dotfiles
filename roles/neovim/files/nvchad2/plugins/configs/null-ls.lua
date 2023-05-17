@@ -14,9 +14,9 @@ return function()
     null_ls.builtins.formatting.clang_format,
 
     -- CMake
-    -- null_ls.builtins.diagnostics.cmake_lint,
-    null_ls.builtins.formatting.cmake_format,
-    null_ls.builtins.formatting.gersemi,
+    null_ls.builtins.diagnostics.cmake_lint,
+    -- null_ls.builtins.formatting.cmake_format, -- already included in cmake lsp
+    -- null_ls.builtins.formatting.gersemi, -- alternative (do not forget do disable formatting in lsp)
 
     -- dockerfile
     null_ls.builtins.diagnostics.hadolint,

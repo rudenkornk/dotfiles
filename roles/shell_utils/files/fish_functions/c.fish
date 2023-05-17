@@ -1,3 +1,7 @@
 function c --wraps cd
-  cd $argv && exa --classify
+  if test "$argv" = "-"
+    popd && exa --classify
+  else
+    pushd $argv && exa --classify
+  end
 end

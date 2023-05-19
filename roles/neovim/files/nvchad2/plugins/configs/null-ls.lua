@@ -1,103 +1,106 @@
 return function()
   local null_ls = require("null-ls")
+  local code_actions = null_ls.builtins.code_actions
+  local diagnostics = null_ls.builtins.diagnostics
+  local formatting = null_ls.builtins.formatting
 
   local sources = {
     -- generic
-    null_ls.builtins.diagnostics.codespell,
-    -- null_ls.builtins.diagnostics.write_good,
-    null_ls.builtins.formatting.codespell,
+    diagnostics.codespell,
+    -- diagnostics.write_good,
+    formatting.codespell,
 
     -- Ansible
-    null_ls.builtins.diagnostics.ansiblelint,
+    diagnostics.ansiblelint,
 
     -- C++
-    null_ls.builtins.formatting.clang_format,
+    formatting.clang_format,
 
     -- CMake
-    null_ls.builtins.diagnostics.cmake_lint,
-    -- null_ls.builtins.formatting.cmake_format, -- already included in cmake lsp
-    -- null_ls.builtins.formatting.gersemi, -- alternative (do not forget do disable formatting in lsp)
+    diagnostics.cmake_lint,
+    -- formatting.cmake_format, -- already included in cmake lsp
+    -- formatting.gersemi, -- alternative (do not forget do disable formatting in lsp)
 
     -- dockerfile
-    null_ls.builtins.diagnostics.hadolint,
+    diagnostics.hadolint,
 
     -- .editorconfig
-    null_ls.builtins.diagnostics.editorconfig_checker,
+    diagnostics.editorconfig_checker,
 
     -- fish
-    null_ls.builtins.diagnostics.fish,
-    null_ls.builtins.formatting.fish_indent,
+    diagnostics.fish,
+    formatting.fish_indent,
 
     -- git
-    null_ls.builtins.code_actions.gitsigns,
-    null_ls.builtins.diagnostics.gitlint,
-    -- null_ls.builtins.diagnostics.commitlint,
+    code_actions.gitsigns,
+    diagnostics.gitlint,
+    -- diagnostics.commitlint,
 
     -- go
-    null_ls.builtins.formatting.gofumpt,
-    null_ls.builtins.formatting.goimports,
-    null_ls.builtins.formatting.goimports_reviser,
+    formatting.gofumpt,
+    formatting.goimports,
+    formatting.goimports_reviser,
 
     -- groovy
-    null_ls.builtins.formatting.npm_groovy_lint,
+    formatting.npm_groovy_lint,
 
     -- GitHub Actions
-    null_ls.builtins.diagnostics.actionlint,
+    diagnostics.actionlint,
 
     -- javascript
-    null_ls.builtins.code_actions.eslint_d,
-    null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.formatting.eslint_d,
+    code_actions.eslint_d,
+    diagnostics.eslint_d,
+    formatting.eslint_d,
 
     -- json
-    null_ls.builtins.diagnostics.jsonlint,
-    null_ls.builtins.formatting.jq,
+    diagnostics.jsonlint,
+    formatting.jq,
 
     -- latex
-    null_ls.builtins.formatting.bibclean,
-    null_ls.builtins.formatting.latexindent.with({
+    formatting.bibclean,
+    formatting.latexindent.with({
       args = { "--logfile=build/latexindent.log", "--local", "--lines '.a:firstline.'-'.a:lastline.'" },
     }),
 
     -- lua
-    null_ls.builtins.diagnostics.luacheck,
-    null_ls.builtins.formatting.stylua,
-    -- null_ls.builtins.formatting.lua_format, -- using stylua instead
+    diagnostics.luacheck,
+    formatting.stylua,
+    -- formatting.lua_format, -- using stylua instead
 
     -- markdown
-    null_ls.builtins.diagnostics.alex,
-    -- null_ls.builtins.diagnostics.markdownlint,
-    null_ls.builtins.formatting.cbfmt,
-    null_ls.builtins.formatting.markdownlint,
+    diagnostics.alex,
+    -- diagnostics.markdownlint,
+    formatting.cbfmt,
+    formatting.markdownlint,
 
     -- python
-    null_ls.builtins.diagnostics.mypy,
-    null_ls.builtins.diagnostics.pydocstyle,
-    null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.formatting.autopep8,
-    null_ls.builtins.formatting.black,
-    null_ls.builtins.formatting.isort,
-    -- null_ls.builtins.diagnostics.flake8, -- using black instead
+    diagnostics.mypy,
+    diagnostics.pydocstyle,
+    diagnostics.pylint,
+    formatting.autopep8,
+    formatting.black,
+    formatting.isort,
+    -- diagnostics.flake8, -- using black instead
 
     -- ruby
-    null_ls.builtins.diagnostics.rubocop,
-    null_ls.builtins.formatting.rubocop,
+    diagnostics.rubocop,
+    formatting.rubocop,
 
     -- rust
-    null_ls.builtins.formatting.rustfmt,
+    formatting.rustfmt,
 
     -- shell
-    null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.diagnostics.shellcheck.with({ diagnostics_format = "#{m} [#{c}]" }),
-    null_ls.builtins.formatting.beautysh,
-    null_ls.builtins.formatting.shfmt,
+    code_actions.shellcheck,
+    diagnostics.shellcheck.with({ diagnostics_format = "#{m} [#{c}]" }),
+    formatting.beautysh,
+    formatting.shfmt,
 
     -- yaml
-    null_ls.builtins.diagnostics.yamllint,
-    null_ls.builtins.formatting.yamlfmt,
+    diagnostics.yamllint,
+    formatting.yamlfmt,
 
     -- verilog
-    null_ls.builtins.formatting.verible_verilog_format,
+    formatting.verible_verilog_format,
   }
   return {
     sources = sources,

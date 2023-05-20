@@ -123,6 +123,12 @@ M.hop = {
       end,
       "hop word",
     },
+    ["T"] = {
+      function()
+        require("hop").hint_lines()
+      end,
+      "hop line",
+    },
   },
   v = {
     ["F"] = {
@@ -130,6 +136,12 @@ M.hop = {
         require("hop").hint_words({ direction = nil, hint_offset = -1 })
       end,
       "hop word",
+    },
+    ["T"] = {
+      function()
+        require("hop").hint_lines()
+      end,
+      "hop line",
     },
   },
 }
@@ -251,59 +263,12 @@ M.syntax_tree_surfer = {
       end,
       opts = { expr = true },
     },
-    ["T"] = {
-      function()
-        require("syntax-tree-surfer").targeted_jump({
-          "if_statement",
-          "else_clause",
-          "else_statement",
-          "elseif_statement",
-          "for_statement",
-          "while_statement",
-          "switch_statement",
-          "function_definition",
-          "variable_declaration",
-        })
-      end,
-    },
   },
   v = {
-    ["T"] = {
-      function()
-        require("syntax-tree-surfer").targeted_jump({
-          "if_statement",
-          "else_clause",
-          "else_statement",
-          "elseif_statement",
-          "for_statement",
-          "while_statement",
-          "switch_statement",
-          "function_definition",
-          "variable_declaration",
-        })
-      end,
-    },
     ["H"] = { "<CMD>STSSelectParentNode<CR>" },
     ["J"] = { "<CMD>STSSelectNextSiblingNode<CR>" },
     ["K"] = { "<CMD>STSSelectPrevSiblingNode<CR>" },
     ["L"] = { "<CMD>STSSelectChildNode<CR>" },
-  },
-  o = {
-    ["T"] = {
-      function()
-        require("syntax-tree-surfer").targeted_jump({
-          "if_statement",
-          "else_clause",
-          "else_statement",
-          "elseif_statement",
-          "for_statement",
-          "while_statement",
-          "switch_statement",
-          "function_definition",
-          "variable_declaration",
-        })
-      end,
-    },
   },
 }
 

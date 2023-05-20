@@ -1,5 +1,4 @@
 - name: Configure terminals
-  when: not in_wsl
   block:
     - name: Install kitty
       become: true

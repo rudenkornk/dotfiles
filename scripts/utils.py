@@ -43,6 +43,10 @@ def shell_command(
     cmd: _Sequence[str | _Path] | str,
     extra_env: dict[str, str] | None = None,
     extra_paths: _Sequence[_Path] | None = None,
+    capture_output: bool = False,
+    inputs: None | str | bytes = None,
+    stdout: None | int | _IO[_Any] = None,
+    stderr: None | int | _IO[_Any] = None,
     suppress_env_log: bool = False,
     cwd: _Path | None = None,
 ) -> str:
@@ -54,8 +58,12 @@ def shell_command(
 
     extra_paths_str = _paths2shell(extra_paths)
     print_cmd = ""
+
     if cwd is not None:
         print_cmd += f"cd {_shlex.quote(str(cwd))} && "
+
+    if inputs is not None:
+        print_cmd += "echo $CAPTURE | "
 
     if not suppress_env_log:
         for k, val in extra_env.items():
@@ -65,41 +73,22 @@ def shell_command(
         print_cmd += f'PATH="{extra_paths_str}:${{PATH}}" '
 
     if isinstance(cmd, list):
-        for arg in cmd:
-            print_cmd += _shlex.quote(str(arg)) + " "
+        print_cmd += " ".join([_shlex.quote(str(arg)) for arg in cmd])
     else:
         assert isinstance(cmd, str)
         print_cmd += cmd
-    print_cmd = print_cmd.strip()
-    return print_cmd
 
-
-def _shell_output_type(
-    capture_output: bool, stdout: None | int | _IO[_Any], stderr: None | int | _IO[_Any], suppress_env_log: bool
-) -> str:
-    def _append(message: str, chunk: str) -> str:
-        if message:
-            message += ", "
-        message += chunk
-        return message
-
-    output_mods = ""
     suppress_stdout = capture_output or stdout is not None
     suppress_stderr = capture_output or stderr is not None
     if suppress_stdout and suppress_stderr:
-        output_mods = _append(output_mods, "output is suppressed")
+        print_cmd += " &> $CAPTURE"
     elif suppress_stdout:
-        output_mods = _append(output_mods, "stdout is suppressed")
+        print_cmd += " 1> $CAPTURE"
     elif suppress_stderr:
-        output_mods = _append(output_mods, "stderr is suppressed")
+        print_cmd += " 2> $CAPTURE"
 
-    if suppress_env_log:
-        output_mods = _append(output_mods, "extra env is hidden")
-
-    if output_mods:
-        output_mods = f" ({output_mods})"
-    output_type = f"[RUNNING IN SHELL]{output_mods}"
-    return output_type
+    print_cmd = print_cmd.strip()
+    return print_cmd
 
 
 def run_shell(
@@ -107,10 +96,12 @@ def run_shell(
     extra_env: dict[str, str] | None = None,
     extra_paths: _Sequence[_Path] | None = None,
     capture_output: bool = False,
+    inputs: None | str | bytes = None,
     stdout: None | int | _IO[_Any] = None,
     stderr: None | int | _IO[_Any] = None,
     suppress_env_log: bool = False,
     cwd: _Path | None = None,
+    check: bool = True,
 ) -> _subprocess.CompletedProcess[str]:
     extra_env = extra_env or {}
     extra_paths = extra_paths or []
@@ -125,19 +116,25 @@ def run_shell(
         env["PATH"] = new_path
 
     print_cmd = shell_command(
-        cmd, extra_env=extra_env, extra_paths=extra_paths, suppress_env_log=suppress_env_log, cwd=cwd
+        cmd,
+        extra_env=extra_env,
+        extra_paths=extra_paths,
+        capture_output=capture_output,
+        inputs=inputs,
+        stdout=stdout,
+        stderr=stderr,
+        suppress_env_log=suppress_env_log,
+        cwd=cwd,
     )
-    output_type = _shell_output_type(
-        capture_output=capture_output, stdout=stdout, stderr=stderr, suppress_env_log=suppress_env_log
-    )
-    _logger.info(f"{output_type}: {print_cmd}")
+    _logger.info(f"[RUNNING IN SHELL]: {print_cmd}")
 
     if isinstance(cmd, list):
         return _subprocess.run(
             cmd,
             env=env,
-            check=True,
+            check=check,
             capture_output=capture_output,
+            input=inputs,
             stdout=stdout,
             stderr=stderr,
             text=True,
@@ -148,8 +145,9 @@ def run_shell(
     return _subprocess.run(
         cmd,
         env=env,
-        check=True,
+        check=check,
         capture_output=capture_output,
+        input=inputs,
         stdout=stdout,
         stderr=stderr,
         text=True,
@@ -206,7 +204,7 @@ def yaml_read(path: _Path) -> dict[str, _Any]:
 
 def yaml_write(path: _Path, data: dict[str, _Any]) -> None:
     with open(path, "w") as stream:
-        _yaml.safe_dump(data, stream=stream)
+        _yaml.safe_dump(data, stream=stream, width=120)
 
 
 class _LoggerFormatter(_logging.Formatter):

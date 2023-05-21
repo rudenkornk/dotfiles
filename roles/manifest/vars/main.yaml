@@ -1,30 +1,30 @@
 manifest:
   ansible_community_general:
     url: https://github.com/ansible-collections/community.general
-    version: 6.6.0
+    version: 7.0.0
   ansible_containers_podman:
     url: https://github.com/containers/ansible-podman-collections
     version: 1.10.1
   ansible_posix:
     url: https://github.com/ansible-collections/ansible.posix
-    version: 1.5.2
+    version: 1.5.4
   bat:
     url: https://github.com/sharkdp/bat/releases/download/v0.23.0/bat-musl_0.23.0_amd64.deb
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.sh
+    url: https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-x86_64.sh
   drawio:
     url: https://github.com/jgraph/drawio-desktop/releases/download/v21.2.8/drawio-amd64-21.2.8.deb
   fd:
     url: https://github.com/sharkdp/fd/releases/download/v8.7.0/fd-musl_8.7.0_amd64.deb
   firacode:
-    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.0/FiraCode.zip
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.1/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: 94999101e358385f3ca67a6ec9512f549196b802
+    version: 37f258b1bf863633205548e7b8194776daab463b
   github_cli:
-    url: https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_amd64.deb
+    url: https://github.com/cli/cli/releases/download/v2.29.0/gh_2.29.0_linux_amd64.deb
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
     version: 8ab617fa7b5d226fc447aa83fe11d3f48c0c35b9
@@ -32,7 +32,7 @@ manifest:
     url: https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.gz
   nvchad2:
     url: https://github.com/NvChad/NvChad
-    version: 3dd0fa6c5b0933d9a395e2492de69c151831c66e
+    version: 262a06776aa731ad89369394f73320461d4a7e63
   rg:
     url: https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
   tpm:
@@ -40,7 +40,7 @@ manifest:
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
   vcpkg:
     url: https://github.com/microsoft/vcpkg
-    version: 7f52deab66689f912da6d04de105c457d8ba671e
+    version: 40619a55c3e76dc4005c8d1b7395071471bb8b96
   wezterm:
     url: >
       https://github.com/wez/wezterm/releases/download/20230408-112425-69ae8472/wezterm-20230408-112425-69ae8472.Ubuntu22.04.deb

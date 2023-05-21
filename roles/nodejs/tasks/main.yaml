@@ -3,6 +3,7 @@
   ansible.builtin.get_url:
     url: "{{ nodejs_gpg }}"
     dest: /etc/apt/trusted.gpg.d/nodejs.asc
+    mode: "0o644"
 
 - name: Add nodejs repository
   become: true

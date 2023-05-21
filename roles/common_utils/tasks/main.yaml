@@ -33,7 +33,7 @@
   ansible.builtin.file:
     path: "{{ home }}/.config/yamlfmt"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 # https://github.com/google/yamlfmt#configuration-file
 - name: Create symlink to global yamlfmt config
@@ -46,7 +46,7 @@
   ansible.builtin.file:
     path: "{{ home }}/.config/yamllint"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 # https://yamllint.readthedocs.io/en/stable/configuration.html#configuration
 - name: Create symlink to global yamllint config

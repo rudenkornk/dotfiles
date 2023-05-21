@@ -1,5 +1,5 @@
 - name: Configure hosts
-  hosts: "{{ __hosts__ }}"
+  hosts: "{{ hosts_var }}"
   roles:
     - role: profile
     - role: manifest

@@ -9,7 +9,7 @@
     regexp: 'source .*/{{ role_name }}/files'
     line: source {{ remote_role_path }}/files/bash.sh
 
-- name: Create symlink to {{ role_name }}.fish
+- name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"

@@ -11,10 +11,10 @@
     repo: "{{ manifest.tpm.url }}"
     dest: "{{ home }}/.tmux/plugins/tpm"
     version: "{{ manifest.tpm.version }}"
-  register: downloaded
+  register: tmux_downloaded
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  until: downloaded is not failed
+  until: tmux_downloaded is not failed
 
 - name: Set up bash
   ansible.builtin.lineinfile:
@@ -24,7 +24,7 @@
   # Disable automatic tmux open for bash
   when: false
 
-- name: Create symlink to {{ role_name }}.fish
+- name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"

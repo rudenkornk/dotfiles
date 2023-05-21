@@ -23,9 +23,9 @@ config: $(BUILD_DIR)/bootstrap_control_node
 		$(VENV) && ansible-playbook --extra-vars "ubuntu_tag=$(UBUNTU_TAG)" \
 			--inventory inventory.yaml playbook_dotfiles_container.yaml; \
 	fi
-	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS)" \
+	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
 		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
-	$(VENV) && ansible-playbook --extra-vars "__hosts__=$(HOSTS)" \
+	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
 		--extra-vars "user=$(USER)" \
 		--inventory inventory.yaml playbook.yaml
 

@@ -52,19 +52,21 @@
   args:
     executable: bash
   changed_when: false
-  register: wsl_check
+  register: basic_utils_wsl
 
 - name: Check if inside container
   ansible.builtin.shell: ([[ -f /.dockerenv || -f /run/.containerenv ]]) && echo true || echo false
   args:
     executable: bash
   changed_when: false
-  register: container_check
+  register: basic_utils_container
 
 - name: Set common facts
   ansible.builtin.set_fact:
-    in_container: "{{ container_check.stdout }}"
-    in_wsl: "{{ wsl_check.stdout }}"
+    in_container: "{{ basic_utils_container.stdout }}"
+    in_wsl: "{{ basic_utils_wsl.stdout }}"
+  tags:
+    - skip_ansible_lint
 
 - name: Print detected facts
   ansible.builtin.debug:
@@ -86,10 +88,12 @@
   args:
     executable: bash
   changed_when: false
-  register: windows_home_out
+  register: basic_utils_win_home
   when: in_wsl
 
 - name: Set WSL facts
   ansible.builtin.set_fact:
-    windows_home: "{{ windows_home_out.stdout }}"
+    windows_home: "{{ basic_utils_win_home.stdout }}"
   when: in_wsl
+  tags:
+    - skip_ansible_lint

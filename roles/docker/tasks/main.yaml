@@ -3,6 +3,7 @@
   ansible.builtin.get_url:
     url: "{{ docker_gpg }}"
     dest: /etc/apt/trusted.gpg.d/docker.asc
+    mode: "0o644"
 
 - name: Add docker repository
   become: true
@@ -24,16 +25,16 @@
   ansible.builtin.file:
     path: "/etc/docker"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: Copy daemon.json
   become: true
   ansible.builtin.copy:
     src: "{{ role_path }}/files/daemon.json"
     dest: "/etc/docker/daemon.json"
-    mode: 0644
+    mode: "0o644"
 
-- name: Add {{ ansible_user }} to docker group
+- name: Add to docker group {{ ansible_user }}
   become: true
   ansible.builtin.user:
     name: "{{ ansible_user }}"
@@ -45,7 +46,7 @@
   ansible.builtin.file:
     path: "{{ home }}/.docker"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: Install jq and sponge
   become: true
@@ -71,12 +72,12 @@
   ansible.builtin.get_url:
     url: "{{ docker_fish_url }}"
     dest: "{{ home }}/.config/fish/completions/docker.fish"
-    mode: 0755
+    mode: "0o755"
     force: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: downloaded
-  until: downloaded is not failed
+  register: docker_downloaded
+  until: docker_downloaded is not failed
 
 - name: Set up bash
   ansible.builtin.lineinfile:

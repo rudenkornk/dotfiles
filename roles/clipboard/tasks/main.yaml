@@ -12,7 +12,7 @@
       ansible.builtin.file:
         dest: "{{ dotfiles_tmp }}/win32yank"
         state: directory
-        mode: 0777
+        mode: "0o777"
 
     - name: Download win32yank.exe
       ansible.builtin.unarchive:
@@ -21,15 +21,15 @@
         remote_src: true
       retries: "{{ web_retries }}"
       delay: "{{ web_delay }}"
-      register: downloaded
-      until: downloaded is not failed
+      register: clipboard_downloaded
+      until: clipboard_downloaded is not failed
 
     - name: Create dir for win32yank
       become: true
       ansible.builtin.file:
         dest: "{{ windows_home }}/AppData/Local/win32yank"
         state: directory
-        mode: 0777
+        mode: "0o777"
 
     - name: Copy win32yank.exe to Windows dir
       become: true
@@ -37,7 +37,7 @@
         src: "{{ dotfiles_tmp }}/win32yank/win32yank.exe"
         dest: "{{ windows_home }}/AppData/Local/win32yank/win32yank.exe"
         remote_src: true
-        mode: 0777
+        mode: "0o777"
 
     - name: Create symlink to win32yank.exe
       become: true
@@ -55,6 +55,8 @@
     - name: Set clipboard fact to win32yank
       ansible.builtin.set_fact:
         clipboard: win32yank
+      tags:
+        - skip_ansible_lint
 
 - name: Set xsel clipboard
   when: not in_wsl
@@ -67,3 +69,5 @@
     - name: Set clipboard fact to xsel
       ansible.builtin.set_fact:
         clipboard: xsel
+      tags:
+        - skip_ansible_lint

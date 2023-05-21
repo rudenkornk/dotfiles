@@ -13,8 +13,8 @@
     echo y | cpan
   args:
     executable: bash
-  register: log
-  changed_when: ("configure as much as possible automatically" in log)
+  register: perl_log
+  changed_when: ("configure as much as possible automatically" in perl_log)
 
 - name: Install common perl packages
   become: true

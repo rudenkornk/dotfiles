@@ -3,7 +3,7 @@
     repo: "{{ manifest.vcpkg.url }}"
     dest: "{{ home }}/.local/vcpkg"
     version: "{{ manifest.vcpkg.version }}"
-  register: downloaded
+  register: cpp_downloaded
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  until: downloaded is not failed
+  until: cpp_downloaded is not failed

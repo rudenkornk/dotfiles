@@ -11,16 +11,16 @@
         repo: "{{ manifest.kitty_themes.url }}"
         dest: "{{ home }}/.config/kitty/kitty-themes"
         version: "{{ manifest.kitty_themes.version }}"
-      register: downloaded
+      register: terminals_downloaded
       retries: "{{ web_retries }}"
       delay: "{{ web_delay }}"
-      until: downloaded is not failed
+      until: terminals_downloaded is not failed
 
     - name: Create ~/.config/kitty/ directory
       ansible.builtin.file:
         dest: "{{ home }}/.config/kitty"
         state: directory
-        mode: 0755
+        mode: "0o755"
 
     - name: Create symlink to kitty theme
       ansible.builtin.file:

@@ -61,8 +61,8 @@
     fi
   args:
     executable: bash
-  register: output
-  changed_when: '"changed" in output.stdout'
+  register: cpp_output
+  changed_when: '"changed" in cpp_output.stdout'
 
 - name: Update cpp alternative
   become: true

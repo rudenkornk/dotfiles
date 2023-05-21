@@ -5,8 +5,8 @@
     remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: downloaded
-  until: downloaded is not failed
+  register: neovim_downloaded
+  until: neovim_downloaded is not failed
 
 - name: Install vim as a backup
   become: true
@@ -39,11 +39,11 @@
     {{ home }}/.cargo/bin/cargo install tree-sitter-cli 2>&1
   args:
     executable: bash
-  register: status
+  register: neovim_status
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  until: status is not failed
-  changed_when: "'already installed' not in status.stdout"
+  until: neovim_status is not failed
+  changed_when: "'already installed' not in neovim_status.stdout"
 
 - name: Install NvChad 2
   block:
@@ -53,11 +53,11 @@
         dest: "{{ nvim_base }}_2/config"
         version: "{{ manifest.nvchad2.version }}"
         force: true
-      register: nvchad_installed
+      register: neovim_nvchad_installed
       retries: "{{ web_retries }}"
       delay: "{{ web_delay }}"
-      until: nvchad_installed is not failed
-      changed_when: nvchad_installed.before != nvchad_installed.after
+      until: neovim_nvchad_installed is not failed
+      changed_when: neovim_nvchad_installed.before != neovim_nvchad_installed.after
 
     - name: Create symlink to NvChad config
       ansible.builtin.file:
@@ -70,7 +70,7 @@
       ansible.builtin.file:
         path: "{{ nvim_base }}_2/config/keymap"
         state: directory
-        mode: 0755
+        mode: "0o755"
 
     - name: Create symlink to rnk keymap
       ansible.builtin.file:
@@ -83,7 +83,7 @@
       ansible.builtin.template:
         src: clipboard.lua
         dest: "{{ nvim_base }}_2/config/lua/custom/clipboard.lua"
-        mode: 0644
+        mode: "0o644"
 
 - name: Install LazyVim
   block:
@@ -91,21 +91,24 @@
       ansible.builtin.git:
         repo: "https://github.com/folke/lazy.nvim"
         dest: "{{ nvim_base }}_3/share/lazy/lazy.nvim"
-        version: "{{ lazy_lock['lazy.nvim'].commit }}"
+        version: "{{ neovim_lazy_lock['lazy.nvim'].commit }}"
         force: true
       vars:
-        lazy_lock: "{{ lookup('file','lazy/lazy-lock.json') | from_json }}"
-      register: nvchad_installed
+        neovim_lazy_lock: "{{ lookup('file', 'lazy/lazy-lock.json') | from_json }}"
+      register: neovim_lazy
       retries: "{{ web_retries }}"
       delay: "{{ web_delay }}"
-      until: nvchad_installed is not failed
-      changed_when: nvchad_installed.before != nvchad_installed.after
+      until: neovim_lazy is not failed
+      changed_when: neovim_lazy.before != neovim_lazy.after
+      tags:
+        # TODO: see https://github.com/ansible/ansible-lint/issues/3453
+        - skip_ansible_lint
 
     - name: Create config directory for lazy
       ansible.builtin.file:
         path: "{{ nvim_base }}_3/config"
         state: directory
-        mode: 0755
+        mode: "0o755"
 
     - name: Create symlink to LazyVim config
       ansible.builtin.file:
@@ -118,13 +121,13 @@
       ansible.builtin.file:
         path: "{{ nvim_base }}_3/config/keymap"
         state: directory
-        mode: 0755
+        mode: "0o755"
 
     - name: Set up clipboard for neovim
       ansible.builtin.template:
         src: clipboard.lua
         dest: "{{ nvim_base }}_3/config/lua/config/clipboard.lua"
-        mode: 0644
+        mode: "0o644"
 
 - name: Simple configuration version management
   block:
@@ -132,7 +135,7 @@
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        mode: 0755
+        mode: "0o755"
       loop:
         - "{{ nvim_base }}_{{ nvim_version }}/cache"
         - "{{ nvim_base }}_{{ nvim_version }}/config"
@@ -154,7 +157,7 @@
     regexp: 'source .*/{{ role_name }}/files'
     line: source {{ remote_role_path }}/files/bash.sh
 
-- name: Create symlink to {{ role_name }}.fish
+- name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"

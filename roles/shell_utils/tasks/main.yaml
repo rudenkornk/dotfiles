@@ -4,8 +4,8 @@
     deb: "{{ manifest.fd.url }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: installed
-  until: installed is not failed
+  register: shell_utils_installed
+  until: shell_utils_installed is not failed
 
 - name: Install bat
   become: true
@@ -13,8 +13,8 @@
     deb: "{{ manifest.bat.url }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: installed
-  until: installed is not failed
+  register: shell_utils_installed
+  until: shell_utils_installed is not failed
 
 - name: Install ripgrep
   become: true
@@ -23,25 +23,25 @@
     allow_downgrade: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: installed
-  until: installed is not failed
+  register: shell_utils_installed
+  until: shell_utils_installed is not failed
 
 - name: Download fzf
   ansible.builtin.git:
     repo: "{{ manifest.fzf.url }}"
     dest: "{{ home }}/.fzf"
     version: "{{ manifest.fzf.version }}"
-  register: fzf_download
+  register: shell_utils_fzf_download
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  until: fzf_download is not failed
+  until: shell_utils_fzf_download is not failed
 
 - name: Install fzf
   ansible.builtin.shell: |
     # Installing fish completion here will break custom settings
     # of the patrickf1/fzf.fish plugin
     "{{ home }}"/.fzf/install --all --no-fish
-  changed_when: fzf_download is changed
+  changed_when: shell_utils_fzf_download is changed
 
 - name: Install more utils
   become: true
@@ -56,11 +56,11 @@
   ansible.builtin.get_url:
     url: https://git.io/fisher
     dest: "{{ home }}/.config/fish/functions/fisher.fish"
-    mode: "0755"
+    mode: "0o755"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: downloaded
-  until: downloaded is not failed
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
 
 - name: Create symlink to fish_plugins
   ansible.builtin.file:
@@ -84,7 +84,7 @@
     regexp: 'source .*/{{ role_name }}/files'
     line: source {{ remote_role_path }}/files/bash.sh
 
-- name: Create symlink to {{ role_name }}.fish
+- name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
@@ -96,14 +96,14 @@
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"
-  register: functions
+  register: shell_utils_functions
 
 - name: Patch fzf - fix focus events and add ripgrep support
   ansible.posix.patch:
     src: "{{ role_path }}/files/fzf.fish.patch"
     basedir: "{{ home }}/.config/fish"
     strip: 1
-  changed_when: functions is changed
+  changed_when: shell_utils_functions is changed
 
 - name: Configure fzf key bindings
   # C-a beginning of the line
@@ -146,4 +146,4 @@
       --variables=\cv
       --files=\cy
     create: true
-    mode: 0644
+    mode: "0o644"

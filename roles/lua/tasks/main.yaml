@@ -13,8 +13,8 @@
     remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: downloaded
-  until: downloaded is not failed
+  register: lua_downloaded
+  until: lua_downloaded is not failed
 
 - name: Compile luarocks
   ansible.builtin.shell: |
@@ -29,8 +29,8 @@
   args:
     executable: bash
     chdir: "{{ dotfiles_tmp }}/luarocks-{{ luarocks_version }}"
-  changed_when: luarocks_matches.stdout != "true"
-  register: luarocks_matches
+  changed_when: lua_rocks_matches.stdout != "true"
+  register: lua_rocks_matches
 
 - name: Install luarocks
   become: true
@@ -43,7 +43,7 @@
   args:
     executable: bash
     chdir: "{{ dotfiles_tmp }}/luarocks-{{ luarocks_version }}"
-  changed_when: luarocks_matches.stdout != "true"
+  changed_when: lua_rocks_matches.stdout != "true"
 
 - name: Install luarocks completions
   ansible.builtin.shell: |
@@ -57,7 +57,7 @@
   ansible.builtin.template:
     src: lua.fish
     dest: "{{ home }}/.config/fish/conf.d/lua.fish"
-    mode: 0644
+    mode: "0o644"
 
 - name: Install python3-lupa
   become: true
@@ -73,8 +73,8 @@
     fi
   args:
     executable: bash
-  register: installed
-  changed_when: installed.stdout != ""
+  register: lua_installed
+  changed_when: lua_installed.stdout != ""
 
 - name: Install luafilesystem
   become: true
@@ -85,8 +85,8 @@
     fi
   args:
     executable: bash
-  register: installed
-  changed_when: installed.stdout != ""
+  register: lua_installed
+  changed_when: lua_installed.stdout != ""
 
 - name: Install json4Lua
   become: true
@@ -97,8 +97,8 @@
     fi
   args:
     executable: bash
-  register: installed
-  changed_when: installed.stdout != ""
+  register: lua_installed
+  changed_when: lua_installed.stdout != ""
 
 - name: Install jsregexp
   become: true
@@ -109,14 +109,14 @@
     fi
   args:
     executable: bash
-  register: installed
-  changed_when: installed.stdout != ""
+  register: lua_installed
+  changed_when: lua_installed.stdout != ""
 
 - name: Create ~/.config/luacheck directory
   ansible.builtin.file:
     path: "{{ home }}/.config/luacheck"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 # https://luacheck.readthedocs.io/en/stable/config.html#configuration-file
 - name: Create symlink to global luacheck config

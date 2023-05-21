@@ -4,8 +4,8 @@
     deb: "{{ microsoft_gpg_deb }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: installed
-  until: installed is not failed
+  register: powershell_installed
+  until: powershell_installed is not failed
   when: false # Fails
 
 - name: Install powershell
@@ -14,15 +14,15 @@
     name: "powershell-lts={{ powershell_version }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: installed
-  until: installed is not failed
+  register: powershell_installed
+  until: powershell_installed is not failed
   when: false # Fails
 
 - name: Create Powershell config dir in Windows
   ansible.builtin.file:
     dest: "{{ windows_home }}/Documents/Powershell"
     state: directory
-    mode: 0777
+    mode: "0o777"
   when: in_wsl
 
 # Powershell on Windows does not recognize symlinks
@@ -30,5 +30,5 @@
   ansible.builtin.copy:
     src: "{{ role_path }}/files/Profile.ps1"
     dest: "{{ windows_home }}/Documents/Powershell/Profile.ps1"
-    mode: 0777
+    mode: "0o777"
   when: false # Fails

@@ -2,12 +2,12 @@
   ansible.builtin.get_url:
     url: "{{ manifest.cmake.url }}"
     dest: "{{ dotfiles_tmp }}/cmake.sh"
-    mode: 0755
+    mode: "0o755"
     force: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: downloaded
-  until: downloaded is not failed
+  register: cpp_downloaded
+  until: cpp_downloaded is not failed
 
 - name: Install cmake
   become: true
@@ -23,5 +23,5 @@
     fi
   args:
     executable: bash
-  changed_when: cmake_matches.stdout != "true"
-  register: cmake_matches
+  changed_when: cpp_cmake_matches.stdout != "true"
+  register: cpp_cmake_matches

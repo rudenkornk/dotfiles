@@ -3,6 +3,7 @@
   ansible.builtin.get_url:
     url: "{{ llvm_gpg }}"
     dest: /etc/apt/trusted.gpg.d/llvm.asc
+    mode: "0o644"
 
 - name: Add LLVM repository
   become: true

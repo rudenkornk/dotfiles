@@ -10,8 +10,8 @@
     dest: /usr/share/X11/xkb/symbols/{{ item }}
     owner: root
     group: root
-    mode: '0644'
-  register: rnk_status
+    mode: "0o644"
+  register: keyboard_layouts_rnk
   loop:
     - en_rnk
     - ru_rnk
@@ -23,9 +23,9 @@
     block: "{{ lookup('ansible.builtin.file', '{{ role_path }}/files/evdev.xml') }}"
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK FOR {{ role_name }} -->"
     insertbefore: '\</layoutList\>'
-  register: evdev_status
+  register: keyboard_layouts_evdev
 
 - name: Reconfigure xkb-data
   become: true
-  changed_when: rnk_status is changed or evdev_status is changed
+  changed_when: keyboard_layouts_rnk is changed or keyboard_layouts_evdev is changed
   ansible.builtin.command: dpkg-reconfigure xkb-data

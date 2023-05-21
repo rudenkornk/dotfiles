@@ -1,4 +1,4 @@
 extra_vars:
-  __hosts__: localhost
+  hosts_var: localhost
   ubuntu_tag: 22.04
   user: root

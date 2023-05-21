@@ -12,21 +12,21 @@
   ansible.builtin.file:
     path: "{{ home }}/.config/fish/functions"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: Create fish conf.d directory
   ansible.builtin.file:
     path: "{{ home }}/.config/fish/conf.d"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: Create fish completions directory
   ansible.builtin.file:
     path: "{{ home }}/.config/fish/completions"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
-- name: Create symlink to {{ role_name }}.fish
+- name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
@@ -47,7 +47,7 @@
   ansible.builtin.file:
     path: "{{ home }}/.local/share/bash-completion/completions"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: Set up bash
   ansible.builtin.lineinfile:
@@ -55,7 +55,7 @@
     regexp: 'source .*/{{ role_name }}/files'
     line: source {{ remote_role_path }}/files/bash.sh
     create: true
-    mode: 0644
+    mode: "0o644"
 
 - name: Create symlinks to fish functions
   ansible.builtin.file:
@@ -69,7 +69,7 @@
   ansible.builtin.file:
     path: "{{ home }}/.local/bin"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: Fix path in WSL
   become: true

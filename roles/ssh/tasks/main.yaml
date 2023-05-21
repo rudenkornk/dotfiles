@@ -11,21 +11,21 @@
   ansible.builtin.file:
     path: "{{ home }}/.ssh"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: List decrypted private keys
   ansible.builtin.find:
     paths: "{{ ssh_path }}"
     patterns: '*rsa'
-  register: rsa_keys
+  register: ssh_rsa_keys
 
 - name: Create symlinks to ssh private keys
   ansible.builtin.file:
     src: "{{ item.path }}"
     dest: "{{ home }}/.ssh/{{ item.path | basename }}"
     state: link
-    mode: 0600
-  loop: "{{ rsa_keys.files }}"
+    mode: "0o600"
+  loop: "{{ ssh_rsa_keys.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
 
@@ -33,19 +33,19 @@
   ansible.builtin.find:
     paths: "{{ ssh_path }}"
     patterns: '*rsa.pub'
-  register: rsa_pub_keys
+  register: ssh_rsa_pub_keys
 
 - name: Create symlinks to ssh public keys
   ansible.builtin.file:
     src: "{{ item.path }}"
     dest: "{{ home }}/.ssh/{{ item.path | basename }}"
     state: link
-    mode: 0644
-  loop: "{{ rsa_pub_keys.files }}"
+    mode: "0o644"
+  loop: "{{ ssh_rsa_pub_keys.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
 
-- name: Create symlink to {{ role_name }}.fish
+- name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"

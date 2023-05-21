@@ -2,12 +2,12 @@
   ansible.builtin.get_url:
     url: https://sh.rustup.rs
     dest: "{{ dotfiles_tmp }}/sh.rustup.rs"
-    mode: 0755
+    mode: "0o755"
     force: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: downloaded
-  until: downloaded is not failed
+  register: rust_downloaded
+  until: rust_downloaded is not failed
 
 - name: Install rust
   ansible.builtin.shell: |
@@ -28,7 +28,7 @@
     executable: bash
   changed_when: false
 
-- name: Create symlink to {{ role_name }}.fish
+- name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"

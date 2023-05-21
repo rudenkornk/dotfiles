@@ -24,7 +24,7 @@
   ansible.builtin.file:
     path: "{{ home }}/.config/mypy"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 # https://mypy.readthedocs.io/en/stable/config_file.html#the-mypy-configuration-file
 - name: Create symlink to global mypy config

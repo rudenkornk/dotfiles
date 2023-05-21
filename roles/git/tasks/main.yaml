@@ -7,7 +7,7 @@
   ansible.builtin.template:
     src: gitconfig.user
     dest: "{{ home }}/.gitconfig.user"
-    mode: 0644
+    mode: "0o644"
 
 - name: Set up global .gitconfig
   ansible.builtin.file:
@@ -20,10 +20,11 @@
   ansible.builtin.get_url:
     url: "{{ git_secret_gpg }}"
     dest: /etc/apt/trusted.gpg.d/git_secret.asc
+    mode: "0o644"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: installed
-  until: installed is not failed
+  register: git_installed
+  until: git_installed is not failed
 
 - name: Add git-secret repository
   become: true

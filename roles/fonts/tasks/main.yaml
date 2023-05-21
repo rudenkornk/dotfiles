@@ -1,14 +1,14 @@
-- name: Create {{ dotfiles_tmp }}/FiraCode directory
+- name: Create directory for FiraCode in {{ dotfiles_tmp }}
   ansible.builtin.file:
     dest: "{{ dotfiles_tmp }}/FiraCode"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: Create ~/.local/share/fonts directory
   ansible.builtin.file:
     dest: "{{ home }}/.local/share/fonts"
     state: directory
-    mode: 0755
+    mode: "0o755"
 
 - name: Download FiraCode font
   ansible.builtin.unarchive:
@@ -17,23 +17,23 @@
     remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: downloaded
-  until: downloaded is not failed
+  register: fonts_downloaded
+  until: fonts_downloaded is not failed
 
 - name: Find fonts
   ansible.builtin.find:
     paths: "{{ dotfiles_tmp }}/FiraCode/"
     patterns: '*Mono*.ttf'
-  register: fonts
-  failed_when: fonts.files | length < 1
+  register: fonts_found
+  failed_when: fonts_found.files | length < 1
 
 - name: Copy ttf fonts to ~/.local/share/fonts
   ansible.builtin.copy:
     src: "{{ item.path }}"
     dest: "{{ home }}/.local/share/fonts/{{ item.path | basename }}"
     remote_src: true
-    mode: 0644
-  loop: "{{ fonts.files }}"
+    mode: "0o644"
+  loop: "{{ fonts_found.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
 

@@ -1,5 +1,5 @@
 ansible-core==2.15.0
-ansible-lint==6.16.1
+ansible-lint==6.16.2
 black==23.3.0
 GitPython==3.1.30 # Temporarily lock this due to a version conflict
 graphviz==0.20.1

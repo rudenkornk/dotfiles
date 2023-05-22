@@ -23,7 +23,7 @@ _logger = _logging.getLogger(__name__)
 
 
 def get_repo_path() -> _Path:
-    return _Path(_sys.path[0])
+    return _Path(__file__).parent.parent.parent
 
 
 def get_build_path() -> _Path:

@@ -3,10 +3,10 @@
 import logging as _logging
 import sys as _sys
 
-import scripts.setup as _setup
-import scripts.utils as _utils
+import _support.setup as _setup
+import _support.utils as _utils
 
-_logger = _logging.getLogger("scripts")
+_logger = _logging.getLogger("_support")
 
 
 @_utils.main(_logger)

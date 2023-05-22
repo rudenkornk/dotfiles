@@ -100,9 +100,6 @@
       delay: "{{ web_delay }}"
       until: neovim_lazy is not failed
       changed_when: neovim_lazy.before != neovim_lazy.after
-      tags:
-        # TODO: see https://github.com/ansible/ansible-lint/issues/3453
-        - skip_ansible_lint
 
     - name: Create config directory for lazy
       ansible.builtin.file:

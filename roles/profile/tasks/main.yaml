@@ -31,7 +31,6 @@
   when: profile_creds_status.stat.exists
   tags:
     # TODO: see https://github.com/ansible/ansible-lint/issues/3456
-    # TODO: see https://github.com/ansible/ansible-lint/issues/3453
     - skip_ansible_lint
 
 - name: Set default credentials

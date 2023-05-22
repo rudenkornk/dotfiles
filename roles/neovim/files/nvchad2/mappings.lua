@@ -125,7 +125,7 @@ M.hop = {
     },
     ["T"] = {
       function()
-        require("hop").hint_lines()
+        require("hop").hint_vertical()
       end,
       "hop line",
     },
@@ -139,7 +139,7 @@ M.hop = {
     },
     ["T"] = {
       function()
-        require("hop").hint_lines()
+        require("hop").hint_vertical()
       end,
       "hop line",
     },

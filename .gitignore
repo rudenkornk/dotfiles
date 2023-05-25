@@ -13,3 +13,4 @@ credentials.json
 
 .gitsecret/keys/random_seed
 !*.secret
+roles/python/files/pip.conf

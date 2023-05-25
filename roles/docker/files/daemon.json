@@ -1,1 +1,12 @@
-{}
+{
+  "default-address-pools":
+  [
+    {"base":"10.75.0.0/16","size":24}
+  ],
+  "insecure-registries": [
+    "192.168.1.20:8091",
+    "nexus.dev.syntacore.com:8091",
+    "10.0.0.10:57899"
+  ],
+"dns": ["10.76.4.222", "10.76.254.222"]
+}

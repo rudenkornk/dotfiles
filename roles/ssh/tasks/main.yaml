@@ -45,6 +45,25 @@
   loop_control:
     label: "{{ item.path | basename }}"
 
+- name: Check if syntacore credentials were decrypted
+  ansible.builtin.stat:
+    path: "{{ secrets_makepy_creds_path }}"
+  register: ssh_makepy_creds_status
+
+- name: Create syntacore credentials directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/syntacore/"
+    state: directory
+    mode: "0o755"
+
+- name: Create symlink to syntacore credentials
+  ansible.builtin.file:
+    src: "{{ secrets_makepy_creds_path }}"
+    dest: "{{ home }}/.config/syntacore/credentials.json"
+    state: link
+    mode: "0o600"
+  when: secrets_creds_status.stat.exists
+
 - name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/{{ role_name }}.fish"

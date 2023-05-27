@@ -19,7 +19,7 @@
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
-    regexp: 'source .*/{{ role_name }}/files'
+    regexp: "source .*/{{ role_name }}/files"
     line: source {{ remote_role_path }}/files/bash.sh
   # Disable automatic tmux open for bash
   when: false

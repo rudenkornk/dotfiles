@@ -144,14 +144,14 @@
         dest: "{{ item.dest }}"
         state: link
       loop:
-        - {src: "{{ nvim_base }}_{{ nvim_version }}/cache", dest: "{{ home }}/.cache/nvim"}
-        - {src: "{{ nvim_base }}_{{ nvim_version }}/config", dest: "{{ home }}/.config/nvim"}
-        - {src: "{{ nvim_base }}_{{ nvim_version }}/share", dest: "{{ home }}/.local/share/nvim"}
+        - { src: "{{ nvim_base }}_{{ nvim_version }}/cache", dest: "{{ home }}/.cache/nvim" }
+        - { src: "{{ nvim_base }}_{{ nvim_version }}/config", dest: "{{ home }}/.config/nvim" }
+        - { src: "{{ nvim_base }}_{{ nvim_version }}/share", dest: "{{ home }}/.local/share/nvim" }
 
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
-    regexp: 'source .*/{{ role_name }}/files'
+    regexp: "source .*/{{ role_name }}/files"
     line: source {{ remote_role_path }}/files/bash.sh
 
 - name: Create symlink to fish config of {{ role_name }}

@@ -16,7 +16,7 @@
 - name: List decrypted private keys
   ansible.builtin.find:
     paths: "{{ ssh_path }}"
-    patterns: '*rsa'
+    patterns: "*rsa"
   register: ssh_rsa_keys
 
 - name: Create symlinks to ssh private keys
@@ -32,7 +32,7 @@
 - name: List public keys
   ansible.builtin.find:
     paths: "{{ ssh_path }}"
-    patterns: '*rsa.pub'
+    patterns: "*rsa.pub"
   register: ssh_rsa_pub_keys
 
 - name: Create symlinks to ssh public keys

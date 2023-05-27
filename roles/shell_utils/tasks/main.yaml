@@ -81,7 +81,7 @@
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
-    regexp: 'source .*/{{ role_name }}/files'
+    regexp: "source .*/{{ role_name }}/files"
     line: source {{ remote_role_path }}/files/bash.sh
 
 - name: Create symlink to fish config of {{ role_name }}
@@ -134,7 +134,7 @@
   # C-z undo
   ansible.builtin.lineinfile:
     path: "{{ home }}/.config/fish/functions/fish_user_key_bindings.fish"
-    regexp: 'fzf_configure_bindings'
+    regexp: "fzf_configure_bindings"
     # Be aware that single-line yaml must not contain additional indents, otherwise it will be treated as newline.
     line: >
       fzf_configure_bindings

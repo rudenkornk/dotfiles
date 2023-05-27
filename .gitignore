@@ -1,6 +1,8 @@
 /__build*
 __pycache__
 
+/node_modules
+.mypy_cache
 clipboard.lua
 credentials.json
 *private.gpg

@@ -50,8 +50,17 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
+      - name: Format
+        run: make format
       - name: Lint
         run: make lint
+      - name: Check format
+        run: |
+          if [[ -n "$(git diff)" ]]; then
+            echo "Code is not formatted."
+            git diff
+            exit 1
+          fi
 
   scripts:
     runs-on: ubuntu-22.04

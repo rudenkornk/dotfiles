@@ -7,7 +7,6 @@ defaults:
     shell: bash
 
 jobs:
-
   check_container:
     env:
       UBUNTU_TAG: ${{ matrix.ubuntu_tag }}

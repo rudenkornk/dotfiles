@@ -23,7 +23,7 @@
 - name: Find fonts
   ansible.builtin.find:
     paths: "{{ dotfiles_tmp }}/FiraCode/"
-    patterns: '*Mono*.ttf'
+    patterns: "*Mono*.ttf"
   register: fonts_found
   failed_when: fonts_found.files | length < 1
 

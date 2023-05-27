@@ -52,7 +52,7 @@
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
-    regexp: 'source .*/{{ role_name }}/files'
+    regexp: "source .*/{{ role_name }}/files"
     line: source {{ remote_role_path }}/files/bash.sh
     create: true
     mode: "0o644"
@@ -63,7 +63,6 @@
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"
-
 
 - name: Create ~/.local/bin directory
   ansible.builtin.file:

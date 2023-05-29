@@ -9,6 +9,7 @@ return function()
     diagnostics.codespell,
     -- diagnostics.write_good,
     formatting.codespell,
+    formatting.prettier,
 
     -- Ansible
     diagnostics.ansiblelint,
@@ -50,11 +51,11 @@ return function()
     -- javascript
     code_actions.eslint_d,
     diagnostics.eslint_d,
-    formatting.eslint_d,
+    -- formatting.eslint_d, -- using prettier instead
 
     -- json
     diagnostics.jsonlint,
-    formatting.jq,
+    -- formatting.jq, -- using prettier instead
 
     -- latex
     formatting.bibclean,
@@ -97,7 +98,7 @@ return function()
 
     -- yaml
     diagnostics.yamllint,
-    formatting.yamlfmt,
+    -- formatting.yamlfmt, --using prettier instead
 
     -- verilog
     formatting.verible_verilog_format,

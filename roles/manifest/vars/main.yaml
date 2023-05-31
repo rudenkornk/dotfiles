@@ -19,7 +19,8 @@ manifest:
   fd:
     url: https://github.com/sharkdp/fd/releases/download/v8.7.0/fd-musl_8.7.0_amd64.deb
   firacode:
-    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
+    lock: true
   fzf:
     url: https://github.com/junegunn/fzf.git
     version: eb4bbf32948303e326a2791c6a875f32d7b5c97f

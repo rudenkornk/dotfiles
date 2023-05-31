@@ -76,8 +76,12 @@ return function()
 
     -- python
     diagnostics.mypy,
-    diagnostics.pydocstyle,
-    diagnostics.pylint,
+    diagnostics.pydocstyle.with({
+      method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+    }),
+    diagnostics.pylint.with({
+      method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+    }),
     formatting.autopep8,
     formatting.black,
     formatting.isort,

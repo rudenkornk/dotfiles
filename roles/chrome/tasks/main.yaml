@@ -1,0 +1,5 @@
+- name: Install chrome
+  become: true
+  ansible.builtin.apt:
+    deb: "{{ chrome_deb }}"
+  when: use_gui

@@ -31,4 +31,6 @@
     - role: lua
     - role: tmux
     - role: neovim
+    - role: chrome
+    - role: telegram
     - role: common_utils

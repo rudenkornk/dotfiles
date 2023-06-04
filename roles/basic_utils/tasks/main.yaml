@@ -61,10 +61,16 @@
   changed_when: false
   register: basic_utils_container
 
+- name: Check if gui installed
+  ansible.builtin.find:
+    paths: /usr/share/xsessions/
+  register: basic_utils_x_list
+
 - name: Set common facts
   ansible.builtin.set_fact:
     in_container: "{{ basic_utils_container.stdout }}"
     in_wsl: "{{ basic_utils_wsl.stdout }}"
+    use_gui: "{{ basic_utils_x_list.files | length > 0 }}"
   tags:
     - skip_ansible_lint
 
@@ -75,6 +81,7 @@
       - "trusted: {{ trusted }}"
       - "in_container: {{ in_container }}"
       - "in_wsl: {{ in_wsl }}"
+      - "use_gui: {{ use_gui }}"
 
 - name: Install WSL utils
   become: true

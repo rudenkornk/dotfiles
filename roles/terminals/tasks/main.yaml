@@ -1,4 +1,5 @@
 - name: Configure terminals
+  when: use_gui
   block:
     - name: Install kitty
       become: true

@@ -1,4 +1,5 @@
 local override_options = {
+  ignore_install = { "help" },
   ensure_installed = {
     "ada",
     "agda",

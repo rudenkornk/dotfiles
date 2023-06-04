@@ -1,0 +1,5 @@
+- name: Install chrome
+  become: true
+  ansible.builtin.apt:
+    name: telegram-desktop
+  when: use_gui

@@ -1,10 +1,10 @@
 manifest:
   ansible_community_general:
     url: https://github.com/ansible-collections/community.general
-    version: 7.0.0
+    version: 7.1.0
   ansible_containers_podman:
     url: https://github.com/containers/ansible-podman-collections
-    version: 1.10.1
+    version: 1.10.2
   ansible_posix:
     url: https://github.com/ansible-collections/ansible.posix
     version: 1.5.4
@@ -15,7 +15,7 @@ manifest:
   cmake:
     url: https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-x86_64.sh
   drawio:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v21.2.8/drawio-amd64-21.2.8.deb
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v21.5.0/drawio-amd64-21.5.0.deb
   fd:
     url: https://github.com/sharkdp/fd/releases/download/v8.7.0/fd-musl_8.7.0_amd64.deb
   firacode:
@@ -23,17 +23,17 @@ manifest:
     lock: true
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: 37f258b1bf863633205548e7b8194776daab463b
+    version: 01302d097c39c3429de65424c6adb75fcac82187
   github_cli:
-    url: https://github.com/cli/cli/releases/download/v2.29.0/gh_2.29.0_linux_amd64.deb
+    url: https://github.com/cli/cli/releases/download/v2.31.0/gh_2.31.0_linux_amd64.deb
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
-    version: 8ab617fa7b5d226fc447aa83fe11d3f48c0c35b9
+    version: 9a30b1b123c6d076aedcb1b6f1dbc55c35b4e5d1
   neovim:
-    url: https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.gz
+    url: https://github.com/neovim/neovim/releases/download/v0.9.1/nvim-linux64.tar.gz
   nvchad2:
     url: https://github.com/NvChad/NvChad
-    version: 262a06776aa731ad89369394f73320461d4a7e63
+    version: 286c951d7b1f4531c8f40873a3846f40a3503e33
   rg:
     url: https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
   tpm:
@@ -41,7 +41,7 @@ manifest:
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
   vcpkg:
     url: https://github.com/microsoft/vcpkg
-    version: 40619a55c3e76dc4005c8d1b7395071471bb8b96
+    version: 288e8bebf4ca67c1f8ebd49366b03650cfd9eb7d
   wezterm:
     url: >
       https://github.com/wez/wezterm/releases/download/20230408-112425-69ae8472/wezterm-20230408-112425-69ae8472.Ubuntu22.04.deb

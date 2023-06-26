@@ -117,13 +117,13 @@ M.goto_preview = {
 
 M.hop = {
   n = {
-    ["F"] = {
+    ["T"] = {
       function()
         require("hop").hint_words({ direction = nil, hint_offset = -1 })
       end,
       "hop word",
     },
-    ["T"] = {
+    ["F"] = {
       function()
         require("hop").hint_vertical()
       end,
@@ -131,13 +131,13 @@ M.hop = {
     },
   },
   v = {
-    ["F"] = {
+    ["T"] = {
       function()
         require("hop").hint_words({ direction = nil, hint_offset = -1 })
       end,
       "hop word",
     },
-    ["T"] = {
+    ["F"] = {
       function()
         require("hop").hint_vertical()
       end,

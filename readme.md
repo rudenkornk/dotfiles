@@ -22,7 +22,7 @@ cd ~/projects/dotfiles && make
    Packages, managed by `apt` cannot be pinned, so I rely on stability of `Canonical` packages update front.
 1. **Easily updatable**.
    Versions are stored in manifests and can be easily updated with a single command. `neovim`'s `lazy-lock.json` however is managed separately by [lazy](https://github.com/folke/lazy.nvim).
-1. **Supports & tested under `Ubuntu 20.04`, `Ubuntu 22.04` and also includes WSL support**.
+1. **Supports & tested under `Ubuntu 22.04`, `Ubuntu 22.10` and also includes WSL support**.
    On Windows it integrates with the system clipboard.
 1. **Secrets inside the repo**.
    All the credentials, ssh keys, VPN configs can be stored directly in the repo with support of the [git secret](https://github.com/sobolevn/git-secret).

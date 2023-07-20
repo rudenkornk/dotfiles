@@ -75,11 +75,14 @@ return function()
     formatting.markdownlint,
 
     -- python
-    diagnostics.mypy,
+    diagnostics.mypy.with({
+      command = { "python3", "-m", "mypy" },
+    }),
     diagnostics.pydocstyle.with({
       method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
     }),
     diagnostics.pylint.with({
+      command = { "python3", "-m", "pylint" },
       method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
     }),
     formatting.autopep8,

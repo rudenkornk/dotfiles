@@ -99,6 +99,7 @@ def run_shell(
     inputs: None | str | bytes = None,
     stdout: None | int | _IO[_Any] = None,
     stderr: None | int | _IO[_Any] = None,
+    suppress_cmd_log: bool = False,
     suppress_env_log: bool = False,
     cwd: _Path | None = None,
     check: bool = True,
@@ -115,18 +116,19 @@ def run_shell(
             new_path += ":" + env["PATH"]
         env["PATH"] = new_path
 
-    print_cmd = shell_command(
-        cmd,
-        extra_env=extra_env,
-        extra_paths=extra_paths,
-        capture_output=capture_output,
-        inputs=inputs,
-        stdout=stdout,
-        stderr=stderr,
-        suppress_env_log=suppress_env_log,
-        cwd=cwd,
-    )
-    _logger.info(f"[RUNNING IN SHELL]: {print_cmd}")
+    if not suppress_cmd_log:
+        print_cmd = shell_command(
+            cmd,
+            extra_env=extra_env,
+            extra_paths=extra_paths,
+            capture_output=capture_output,
+            inputs=inputs,
+            stdout=stdout,
+            stderr=stderr,
+            suppress_env_log=suppress_env_log,
+            cwd=cwd,
+        )
+        _logger.info(f"[RUNNING IN SHELL]: {print_cmd}")
 
     if isinstance(cmd, list):
         return _subprocess.run(

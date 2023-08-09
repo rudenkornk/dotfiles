@@ -4,6 +4,7 @@ import copy as _copy
 import logging as _logging
 import re as _re
 import shutil as _shutil
+import subprocess as _subprocess
 from dataclasses import dataclass as _dataclass
 from pathlib import Path as _Path
 from typing import Any as _Any
@@ -267,7 +268,15 @@ def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool
 
     _logger.info(f"{tab}Fetching new versions of core modules")
     new_core_versions = _copy.deepcopy(core_versions)
-    outdated = _utils.run_shell(activate + "python3 -m pip list --outdated", capture_output=True)
+    outdated = _subprocess.run(
+        activate + "python3 -m pip list --outdated",
+        capture_output=True,
+        text=True,
+        shell=True,
+        executable="bash",
+        check=True,
+    )
+    outdated = _utils.run_shell(activate + "python3 -m pip list --outdated", capture_output=True, suppress_cmd_log=True)
     outdated_lines = outdated.stdout.splitlines()[2:]
     for line in outdated_lines:
         match = _re.match(r"(\S+)\s+(\S+)\s+(\S+)", line)
@@ -284,16 +293,20 @@ def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool
             _logger.info(f"{tab * 2}{package}=={core_versions[index]} -> {new_version} {msg}")
 
     _logger.info(f"{tab}Creating temporary venv")
-    _utils.run_shell(f"python3 -m venv {new_venv}", capture_output=True)
+    _utils.run_shell(f"python3 -m venv {new_venv}", capture_output=True, suppress_cmd_log=True)
     with open(new_requirements_path, "w") as f:
         for i, package in enumerate(core_packages):
             f.write(f"{package}=={new_core_versions[i]}{core_comments[i]}\n")
 
     _logger.info(f"{tab}Installing new requirements")
-    _utils.run_shell(new_activate + f"python3 -m pip install -r {new_requirements_path}", capture_output=True)
+    _utils.run_shell(
+        new_activate + f"python3 -m pip install -r {new_requirements_path}", capture_output=True, suppress_cmd_log=True
+    )
 
     _logger.info(f"{tab}Capturing full requirements list")
-    updated = _utils.run_shell(new_activate + f"python3 -m pip freeze -r {new_requirements_path}", capture_output=True)
+    updated = _utils.run_shell(
+        new_activate + f"python3 -m pip freeze -r {new_requirements_path}", capture_output=True, suppress_cmd_log=True
+    )
     new_requirements = updated.stdout.splitlines()
     for i, new_requirement in enumerate(new_requirements):
         parsed_new_req = parse_pip_entry(new_requirement)

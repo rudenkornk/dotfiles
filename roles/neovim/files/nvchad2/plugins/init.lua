@@ -94,7 +94,6 @@ return {
   { "mfussenegger/nvim-dap-python" },
   { "mfussenegger/nvim-dap-ui" },
   { "theHamsta/nvim-dap-virtual-text", config = true },
-  { "ethanholz/nvim-lastplace", event = "VimEnter", config = true },
   {
     "neovim/nvim-lspconfig",
     config = require("custom.plugins.configs.lspconfig"),

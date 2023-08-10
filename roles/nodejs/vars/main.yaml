@@ -1,2 +1,2 @@
 nodejs_gpg: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-nodejs_repo: https://deb.nodesource.com/node_19.x
+nodejs_repo: https://deb.nodesource.com/node_20.x

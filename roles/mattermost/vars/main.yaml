@@ -1,0 +1,2 @@
+mattermost_gpg: https://deb.packages.mattermost.com/pubkey.gpg
+mattermost_repo: https://deb.packages.mattermost.com

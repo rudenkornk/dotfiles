@@ -33,4 +33,5 @@
     - role: neovim
     - role: chrome
     - role: telegram
+    - role: mattermost
     - role: common_utils

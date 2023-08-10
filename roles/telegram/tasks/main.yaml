@@ -1,5 +1,27 @@
-- name: Install chrome
-  become: true
-  ansible.builtin.apt:
-    name: telegram-desktop
-  when: use_gui
+- name: Check if telegram is downloaded
+  ansible.builtin.stat:
+    path: "{{ home }}/.local/Telegram"
+  register: telegram_path
+
+- name: Download telegram
+  ansible.builtin.unarchive:
+    src: "{{ telegram_url }}"
+    dest: "{{ home }}/.local"
+    remote_src: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: telegram_dowloaded
+  until: telegram_dowloaded is not failed
+  when: not telegram_path.stat.exists
+
+- name: Set up bash
+  ansible.builtin.lineinfile:
+    path: "{{ home }}/.bashrc"
+    regexp: "source .*/{{ role_name }}/files"
+    line: source {{ remote_role_path }}/files/bash.sh
+
+- name: Create symlink to fish config of {{ role_name }}
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
+    state: link

@@ -43,6 +43,7 @@ return function()
     formatting.goimports_reviser,
 
     -- groovy
+    diagnostics.npm_groovy_lint,
     formatting.npm_groovy_lint,
 
     -- GitHub Actions
@@ -69,7 +70,7 @@ return function()
     -- formatting.lua_format, -- using stylua instead
 
     -- markdown
-    diagnostics.alex,
+    -- diagnostics.alex, -- too annoying
     -- diagnostics.markdownlint,
     formatting.cbfmt,
     formatting.markdownlint,

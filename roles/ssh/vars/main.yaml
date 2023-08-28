@@ -1,1 +1,0 @@
-ssh_path: "{{ dotfiles_path }}/{{ ssh_dir }}"

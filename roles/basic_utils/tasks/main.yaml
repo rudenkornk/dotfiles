@@ -18,6 +18,7 @@
       - gnupg
       - gpg-agent
       - locales
+      - ntpdate
       - rsync
       - software-properties-common
       - tzdata
@@ -104,3 +105,9 @@
   when: in_wsl
   tags:
     - skip_ansible_lint
+
+- name: Sync time
+  become: true
+  ansible.builtin.command: ntpdate ntp.ubuntu.com
+  changed_when: false
+  when: in_wsl

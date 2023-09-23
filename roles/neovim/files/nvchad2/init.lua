@@ -25,3 +25,12 @@ vim.cmd([[ packadd termdebug ]])
 vim.g.termdebug_wide = 163
 
 vim.cmd([[ match RedundantSpacesAndTabs /\(\s\+$\|\t\+\)/ ]])
+
+-- Setup ansible filetype
+vim.filetype.add({
+  pattern = {
+    [".*/roles/.*.yaml"] = "yaml.ansible",
+    ["inventory.yaml"] = "yaml.ansible",
+    ["playbook.*.yaml"] = "yaml.ansible",
+  },
+})

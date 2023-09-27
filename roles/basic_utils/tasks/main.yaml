@@ -84,30 +84,29 @@
       - "in_wsl: {{ in_wsl }}"
       - "use_gui: {{ use_gui }}"
 
-- name: Install WSL utils
-  become: true
-  ansible.builtin.apt:
-    name: wslu
+- name: WSL stuff
   when: in_wsl
+  block:
+    - name: Install WSL utils
+      become: true
+      ansible.builtin.apt:
+        name: wslu
 
-- name: Gather WSL facts
-  ansible.builtin.shell: |
-    wslpath $(wslvar USERPROFILE)
-  args:
-    executable: bash
-  changed_when: false
-  register: basic_utils_win_home
-  when: in_wsl
+    - name: Gather WSL facts
+      ansible.builtin.shell: |
+        wslpath $(wslvar USERPROFILE)
+      args:
+        executable: bash
+      changed_when: false
+      register: basic_utils_win_home
 
-- name: Set WSL facts
-  ansible.builtin.set_fact:
-    windows_home: "{{ basic_utils_win_home.stdout }}"
-  when: in_wsl
-  tags:
-    - skip_ansible_lint
+    - name: Set WSL facts
+      ansible.builtin.set_fact:
+        windows_home: "{{ basic_utils_win_home.stdout }}"
+      tags:
+        - skip_ansible_lint
 
-- name: Sync time
-  become: true
-  ansible.builtin.command: ntpdate ntp.ubuntu.com
-  changed_when: false
-  when: in_wsl
+    - name: Sync time
+      become: true
+      ansible.builtin.command: ntpdate ntp.ubuntu.com
+      changed_when: false

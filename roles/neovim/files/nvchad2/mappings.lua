@@ -75,7 +75,7 @@ M.disabled = {
     ["<C-l>"] = "", -- Unmap navigation (overriding with tmux)
     ["<leader>v"] = "", -- Unmap terminals (use tmux)
     ["<leader>x"] = "", -- Unmap closing buffer (map <leader>d instead)
-    ["<TAB>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
+    ["<tab>"] = "", -- Unmap buffer cycling. This interferes with <C-i> behaviour.
   },
 }
 
@@ -274,23 +274,10 @@ M.syntax_tree_surfer = {
 
 M.tabufline = {
   n = {
-    ["<leader>tp"] = {
-      function()
-        require("nvchad_ui.tabufline").tabuflineNext()
-      end,
-      "  goto next buffer",
-    },
-    ["<leader>tn"] = {
-      function()
-        require("nvchad_ui.tabufline").tabuflinePrev()
-      end,
-      "  goto prev buffer",
-    },
-
     -- close buffer + hide terminal buffer
     ["<leader>d"] = {
       function()
-        require("nvchad_ui.tabufline").close_buffer()
+        require("nvchad.tabufline").close_buffer()
       end,
       "close buffer",
     },

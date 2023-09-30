@@ -502,6 +502,12 @@ M.trouble = {
   },
 }
 
+M.undo = {
+  n = {
+    ["<leader>fu"] = { "<cmd> Telescope undo <CR>", "Undo tree" },
+  },
+}
+
 M.utils = {
   n = {
     ["<leader>vc"] = { "<CMD>%s/\\([^ ]\\)\\s\\+/\\1 /g | noh <CR>", "  Clear extra spaces" },

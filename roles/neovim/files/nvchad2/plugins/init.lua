@@ -172,8 +172,10 @@ return {
         },
         scroll_strategy = "limit",
       },
+      extensions_list = { "undo" },
     },
   },
+  { "debugloop/telescope-undo.nvim" },
   {
     "aserowy/tmux.nvim",
     event = "VeryLazy",

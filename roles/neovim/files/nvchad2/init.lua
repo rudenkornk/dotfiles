@@ -34,3 +34,13 @@ vim.filetype.add({
     ["playbook.*.yaml"] = "yaml.ansible",
   },
 })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  desc = "Open Neotree automatically if opening directory",
+  callback = function()
+    local buf = vim.fn.expand("%")
+    if vim.fn.isdirectory(buf) > 0 then
+      vim.cmd("NvimTreeToggle")
+    end
+  end,
+})

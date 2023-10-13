@@ -268,14 +268,6 @@ def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool
 
     _logger.info(f"{tab}Fetching new versions of core modules")
     new_core_versions = _copy.deepcopy(core_versions)
-    outdated = _subprocess.run(
-        activate + "python3 -m pip list --outdated",
-        capture_output=True,
-        text=True,
-        shell=True,
-        executable="bash",
-        check=True,
-    )
     outdated = _utils.run_shell(activate + "python3 -m pip list --outdated", capture_output=True, suppress_cmd_log=True)
     outdated_lines = outdated.stdout.splitlines()[2:]
     for line in outdated_lines:

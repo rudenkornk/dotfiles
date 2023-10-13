@@ -121,6 +121,9 @@ return {
       renderer = {
         symlink_destination = false,
       },
+      filters = {
+        dotfiles = false,
+      },
     },
   },
   {

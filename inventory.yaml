@@ -15,3 +15,7 @@ all:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
       trusted: true
+    dotfiles_23.10:
+      ansible_connection: podman
+      ansible_python_interpreter: auto_silent
+      trusted: true

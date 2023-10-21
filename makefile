@@ -128,12 +128,23 @@ $(BUILD_DIR)/venv: $(BUILD_DIR)/python
 	python3 -m venv $(BUILD_DIR)/venv
 
 PYTHON_INSTALLED != (command -v python3 &> /dev/null && command -v pip3 &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
-$(BUILD_DIR)/python: $(BUILD_DIR)/sudo $(PYTHON_INSTALLED)
+$(BUILD_DIR)/python: $(BUILD_DIR)/sudo $(BUILD_DIR)/tzdata $(PYTHON_INSTALLED)
 	if [[ -n "$(PYTHON_INSTALLED)" ]]; then \
 		sudo apt-get update && \
 		DEBIAN_FRONTEND=noninteractive sudo apt-get install --yes --no-install-recommends \
 			python3-venv \
 			python3-pip \
+			; \
+	fi
+	mkdir --parents $(BUILD_DIR) && touch $@
+
+TZDATA_INSTALLED != (command -v tzconfig &> /dev/null && command -v pip3 &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
+$(BUILD_DIR)/tzdata: $(BUILD_DIR)/sudo $(TZDATA_INSTALLED)
+	if [[ -n "$(TZDATA_INSTALLED)" ]]; then \
+		sudo ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime && \
+		sudo apt-get update && \
+		DEBIAN_FRONTEND=noninteractive sudo apt-get install --yes --no-install-recommends \
+			tzdata \
 			; \
 	fi
 	mkdir --parents $(BUILD_DIR) && touch $@

@@ -11,6 +11,12 @@ git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
 cd ~/projects/dotfiles && make
 ```
 
+## Showcase
+
+<img width="1916" alt="neovim_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/5af2a3fb-a84f-40f3-b6f0-70f6a36eadef">
+<img width="1918" alt="tmux_fish_fzf_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/64b8f3cf-98ee-41d3-b081-40fe380d16a3">
+<img width="1192" alt="deps_graph_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/b0dfe406-d44f-44cc-b6f7-9f469ee017e5">
+
 ## Features
 
 1. **Ansible!**

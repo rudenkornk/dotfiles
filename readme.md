@@ -13,9 +13,11 @@ cd ~/projects/dotfiles && make
 
 ## Showcase
 
+<!-- markdownlint-disable no-inline-html -->
 <img width="1916" alt="neovim_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/5af2a3fb-a84f-40f3-b6f0-70f6a36eadef">
 <img width="1918" alt="tmux_fish_fzf_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/64b8f3cf-98ee-41d3-b081-40fe380d16a3">
 <img width="1192" alt="deps_graph_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/b0dfe406-d44f-44cc-b6f7-9f469ee017e5">
+<!-- markdownlint-enable no-inline-html -->
 
 ## Features
 
@@ -27,7 +29,8 @@ cd ~/projects/dotfiles && make
    Amongst other tools, that includes `ansible` itself, `neovim` and all its plugins.
    Packages, managed by `apt` cannot be pinned, so I rely on stability of `Canonical` packages update front.
 1. **Easily updatable**.
-   Versions are stored in manifests and can be easily updated with a single command. `neovim`'s `lazy-lock.json` however is managed separately by [lazy](https://github.com/folke/lazy.nvim).
+   Versions are stored in manifests and can be easily updated with a single command.
+   `neovim`'s `lazy-lock.json` however is managed separately by [lazy](https://github.com/folke/lazy.nvim).
 1. **Supports & tested under `Ubuntu 22.04`, `Ubuntu 23.04` and also includes WSL support**.
    On Windows it integrates with the system clipboard.
 1. **Secrets inside the repo**.
@@ -41,8 +44,9 @@ cd ~/projects/dotfiles && make
 While being decently generic, this config focuses more on some tools rather than others:
 
 1. **Neovim**.
-   `Neovim` config is based on [NvChad](https://github.com/NvChad/NvChad).
-   It follows all its guidelines and documentation adding tons of useful plugins on top, while still being "blazingly fast", thanks to lazy-loading.
+   `Neovim` config is based on [LazyVim](https://github.com/LazyVim/LazyVim).
+   It follows all its guidelines and documentation adding tons of useful plugins on top,
+   while still being "blazingly fast", thanks to lazy-loading.
 1. **tmux**.
    `tmux` integrates with `Neovim`, which allows to seamlessly use keys for moving around and resizing windows.
 1. **fish**.

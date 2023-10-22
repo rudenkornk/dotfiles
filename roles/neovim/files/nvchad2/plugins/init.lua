@@ -35,7 +35,7 @@ return {
   { "williamboman/mason.nvim", opts = require("custom.plugins.configs.mason") },
   {
     "karb94/neoscroll.nvim",
-    enabled = true,
+    enabled = false,
     event = "WinScrolled",
     config = require("custom.plugins.configs.neoscroll"),
   },

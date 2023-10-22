@@ -50,7 +50,7 @@
     - name: Install NvChad 2
       ansible.builtin.git:
         repo: "{{ manifest.nvchad2.url }}"
-        dest: "{{ nvim_base }}_2/config"
+        dest: "{{ neovim_base }}_2/config"
         version: "{{ manifest.nvchad2.version }}"
         force: true
       register: neovim_nvchad_installed
@@ -62,27 +62,27 @@
     - name: Create symlink to NvChad config
       ansible.builtin.file:
         src: "{{ remote_role_path }}/files/nvchad2"
-        dest: "{{ nvim_base }}_2/config/lua/custom"
+        dest: "{{ neovim_base }}_2/config/lua/custom"
         state: link
         force: true
 
     - name: Create neovim keymap directory
       ansible.builtin.file:
-        path: "{{ nvim_base }}_2/config/keymap"
+        path: "{{ neovim_base }}_2/config/keymap"
         state: directory
         mode: "0o755"
 
     - name: Create symlink to rnk keymap
       ansible.builtin.file:
         src: "{{ dotfiles_path }}/roles/keyboard_layouts/files/rnk-qwerty-jcuken.vim"
-        dest: "{{ nvim_base }}_2/config/keymap/rnk-qwerty-jcuken.vim"
+        dest: "{{ neovim_base }}_2/config/keymap/rnk-qwerty-jcuken.vim"
         state: link
         force: true
 
     - name: Set up clipboard for neovim
       ansible.builtin.template:
         src: clipboard.lua
-        dest: "{{ nvim_base }}_2/config/lua/custom/clipboard.lua"
+        dest: "{{ neovim_base }}_2/config/lua/custom/clipboard.lua"
         mode: "0o644"
 
 - name: Install LazyVim
@@ -90,7 +90,7 @@
     - name: Install lazy.nvim
       ansible.builtin.git:
         repo: "https://github.com/folke/lazy.nvim"
-        dest: "{{ nvim_base }}_3/share/lazy/lazy.nvim"
+        dest: "{{ neovim_base }}_3/share/lazy/lazy.nvim"
         version: "{{ neovim_lazy_lock['lazy.nvim'].commit }}"
         force: true
       vars:
@@ -103,27 +103,27 @@
 
     - name: Create config directory for lazy
       ansible.builtin.file:
-        path: "{{ nvim_base }}_3/config"
+        path: "{{ neovim_base }}_3/config"
         state: directory
         mode: "0o755"
 
     - name: Create symlink to LazyVim config
       ansible.builtin.file:
         src: "{{ remote_role_path }}/files/lazy"
-        dest: "{{ nvim_base }}_3/config"
+        dest: "{{ neovim_base }}_3/config"
         state: link
         force: true
 
     - name: Create neovim keymap directory
       ansible.builtin.file:
-        path: "{{ nvim_base }}_3/config/keymap"
+        path: "{{ neovim_base }}_3/config/keymap"
         state: directory
         mode: "0o755"
 
     - name: Set up clipboard for neovim
       ansible.builtin.template:
         src: clipboard.lua
-        dest: "{{ nvim_base }}_3/config/lua/config/clipboard.lua"
+        dest: "{{ neovim_base }}_3/config/lua/config/clipboard.lua"
         mode: "0o644"
 
 - name: Simple configuration version management
@@ -134,9 +134,9 @@
         state: directory
         mode: "0o755"
       loop:
-        - "{{ nvim_base }}_{{ nvim_version }}/cache"
-        - "{{ nvim_base }}_{{ nvim_version }}/config"
-        - "{{ nvim_base }}_{{ nvim_version }}/share"
+        - "{{ neovim_base }}_{{ neovim_version }}/cache"
+        - "{{ neovim_base }}_{{ neovim_version }}/config"
+        - "{{ neovim_base }}_{{ neovim_version }}/share"
 
     - name: Create neovim configuration symlinks
       ansible.builtin.file:
@@ -144,9 +144,9 @@
         dest: "{{ item.dest }}"
         state: link
       loop:
-        - { src: "{{ nvim_base }}_{{ nvim_version }}/cache", dest: "{{ home }}/.cache/nvim" }
-        - { src: "{{ nvim_base }}_{{ nvim_version }}/config", dest: "{{ home }}/.config/nvim" }
-        - { src: "{{ nvim_base }}_{{ nvim_version }}/share", dest: "{{ home }}/.local/share/nvim" }
+        - { src: "{{ neovim_base }}_{{ neovim_version }}/cache", dest: "{{ home }}/.cache/nvim" }
+        - { src: "{{ neovim_base }}_{{ neovim_version }}/config", dest: "{{ home }}/.config/nvim" }
+        - { src: "{{ neovim_base }}_{{ neovim_version }}/share", dest: "{{ home }}/.local/share/nvim" }
 
 - name: Set up bash
   ansible.builtin.lineinfile:

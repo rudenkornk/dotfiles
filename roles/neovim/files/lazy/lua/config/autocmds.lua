@@ -6,3 +6,5 @@ vim.api.nvim_create_autocmd("VimLeave", {
   pattern = "*",
   command = "set guicursor=a:ver10",
 })
+
+vim.api.nvim_del_augroup_by_name("lazyvim_highlight_yank")

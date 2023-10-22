@@ -53,6 +53,16 @@
     deb: "{{ manifest.github_cli.url }}"
     allow_downgrade: true
 
+- name: Install lazygit
+  ansible.builtin.unarchive:
+    src: "{{ manifest.lazygit.url }}"
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: git_downloaded
+  until: git_downloaded is not failed
+
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"

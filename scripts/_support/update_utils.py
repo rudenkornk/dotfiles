@@ -336,7 +336,6 @@ def get_ansible_entry_type(info: dict[str, _Any]) -> str:
         return "git_tag"
     except ValueError:
         return "git_commit"
-    assert False
 
 
 def update_ansible_entry(manifest_path: _Path, entry: str, dry_run: bool) -> None:

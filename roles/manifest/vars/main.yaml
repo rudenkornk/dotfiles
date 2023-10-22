@@ -28,6 +28,8 @@ manifest:
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
     version: d734f0babc18e0b9318caf6c48125ebdedd95c45
+  lazygit:
+    url: https://github.com/jesseduffield/lazygit/releases/download/v0.40.2/lazygit_0.40.2_Linux_x86_64.tar.gz
   neovim:
     url: https://github.com/neovim/neovim/releases/download/v0.9.1/nvim-linux64.tar.gz
   nvchad2:

@@ -17,6 +17,7 @@ return {
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
+      "andersevenrud/cmp-tmux",
       "hrsh7th/cmp-emoji",
     },
     opts = require("plugins.configs.cmp").opts,

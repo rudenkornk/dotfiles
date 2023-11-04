@@ -78,6 +78,13 @@
     executable: fish
   changed_when: false
 
+- name: Create symlink to cmd.exe
+  ansible.builtin.file:
+    src: "/mnt/c/Windows/System32/cmd.exe"
+    dest: "{{ home }}/.local/bin/cmd.exe"
+    state: link
+  when: in_wsl
+
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"

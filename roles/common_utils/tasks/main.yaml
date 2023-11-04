@@ -56,6 +56,19 @@
     dest: "{{ home }}/.config/yamllint/config"
     state: link
 
+# https://github.com/DavidAnson/markdownlint
+- name: Create symlink to global markdownlint config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/markdownlint.yaml"
+    dest: "{{ home }}/.markdownlint.yaml"
+    state: link
+
+- name: Create symlink to global yamllint config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/yamllint.yaml"
+    dest: "{{ home }}/.config/yamllint/config"
+    state: link
+
 - name: Create ~/.config/flameshot directory
   ansible.builtin.file:
     path: "{{ home }}/.config/flameshot"

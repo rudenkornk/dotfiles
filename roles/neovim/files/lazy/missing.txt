@@ -1,11 +1,3 @@
-11. conform.nvim
-12. nvim-lint
-
-14. cmp-emoji
-15. cmp-tmux
-
-13. themes
-
+1. python linting
 4. Enable debuggers
-7. goto-preview?
 8. Animations

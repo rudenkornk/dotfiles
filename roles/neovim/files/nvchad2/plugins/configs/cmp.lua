@@ -73,7 +73,7 @@ M.opts = function(_, opts)
     ["<C-u>"] = map_funcs.scroll_docs(-4),
   }
 
-  opts.formatting = { format=format }
+  opts.formatting = { format = format }
   opts.mapping = vim.tbl_deep_extend("force", opts.mapping, mapping)
   table.insert(opts.sources, { name = "buffer" })
   table.insert(opts.sources, { name = "copilot" })

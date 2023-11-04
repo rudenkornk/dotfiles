@@ -22,7 +22,7 @@ return {
     RedundantSpacesAndTabs = { bg = "grey" },
   },
   statusline = {
-    separator_style = "round"
+    separator_style = "round",
   },
   tabufline = {
     enabled = true,

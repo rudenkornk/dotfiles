@@ -38,6 +38,15 @@ jobs:
         run: |
           make | tee __build__/log
           ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
+      # All format checks only available after complete machine setup
+      - name: Check format
+        run: |
+          make format
+          if [[ -n "$(git diff)" ]]; then
+            echo "Code is not formatted."
+            git diff
+            exit 1
+          fi
 
   lint:
     runs-on: ubuntu-22.04
@@ -49,17 +58,8 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: Format
-        run: make format
       - name: Lint
         run: make lint
-      - name: Check format
-        run: |
-          if [[ -n "$(git diff)" ]]; then
-            echo "Code is not formatted."
-            git diff
-            exit 1
-          fi
 
   scripts:
     runs-on: ubuntu-22.04

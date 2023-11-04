@@ -41,9 +41,7 @@ return {
   },
   {
     "gbprod/yanky.nvim",
-    opts = {
-      highlight = { on_put = false, on_yank = false, timer = 0 },
-    },
+    opts = { highlight = { on_put = false, on_yank = false, timer = 0 } },
   },
   {
     "echasnovski/mini.surround",

@@ -35,6 +35,9 @@ M.opts = function(_, opts)
       end
     end, { "i", "s" }),
   })
+
+  table.insert(opts.sources, { name = "emoji" })
+  table.insert(opts.sources, { name = "tmux" })
 end
 
 return M

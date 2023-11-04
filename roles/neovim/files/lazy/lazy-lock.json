@@ -12,6 +12,7 @@
   "cmp-nvim-lsp": { "branch": "main", "commit": "44b16d11215dce86f253ce0c30949813c0a90765" },
   "cmp-path": { "branch": "main", "commit": "91ff86cd9c29299a64f968ebb45846c485725f23" },
   "cmp-tabnine": { "branch": "main", "commit": "b93f82ef5150e578677fc2e2b4b328b19eed77e1" },
+  "cmp-tmux": { "branch": "main", "commit": "97ec06b8030b8bf6d1fd83d49bdd16c98e04c845" },
   "cmp_luasnip": { "branch": "master", "commit": "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
   "codeium.nvim": { "branch": "main", "commit": "822e762567a0bf50b1a4e733c8c93691934d7606" },
   "conform.nvim": { "branch": "master", "commit": "7f5ff6d253ae3543f186787bccafdc411d3f4b0a" },

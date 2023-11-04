@@ -25,6 +25,13 @@
       - unzip
       - xz-utils
 
+- name: Install hwclock for Ubuntu >= 23.10
+  become: true
+  ansible.builtin.apt:
+    name:
+      - util-linux-extra
+  when: ansible_distribution_version is version('23.10', '>=')
+
 - name: Set locale
   become: true
   community.general.locale_gen:

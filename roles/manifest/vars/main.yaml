@@ -37,6 +37,8 @@ manifest:
     version: 215aa2bb2ff702014132c629d9c995246234fe0e
   rg:
     url: https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+  stylua:
+    url: https://github.com/JohnnyMorganz/StyLua/releases/download/v0.18.2/stylua-linux-x86_64.zip
   tpm:
     url: https://github.com/tmux-plugins/tpm
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946

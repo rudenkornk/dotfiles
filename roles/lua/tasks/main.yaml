@@ -112,6 +112,16 @@
   register: lua_installed
   changed_when: lua_installed.stdout != ""
 
+- name: Install stylua
+  ansible.builtin.unarchive:
+    src: "{{ manifest.stylua.url }}"
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: lua_downloaded
+  until: lua_downloaded is not failed
+
 - name: Create ~/.config/luacheck directory
   ansible.builtin.file:
     path: "{{ home }}/.config/luacheck"

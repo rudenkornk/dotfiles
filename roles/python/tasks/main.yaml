@@ -4,6 +4,7 @@
     name:
       - python3-pip
       - python3-venv
+      - virtualenv
 
 # https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#where-black-looks-for-the-file
 - name: Create symlink to global black config
@@ -52,4 +53,15 @@
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/pycodestyle"
     dest: "{{ home }}/.config/pycodestyle"
+    state: link
+
+- name: Setup global python virtualenv
+  ansible.builtin.pip:
+    requirements: "{{ remote_role_path }}/files/global_requirements.txt"
+    virtualenv: "{{ home }}/.venv"
+
+- name: Create symlink to fish config of {{ role_name }}
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link

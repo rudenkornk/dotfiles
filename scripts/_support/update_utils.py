@@ -241,16 +241,18 @@ def parse_pip_entry(entry: str) -> dict[str, str | None]:
     }
 
 
-def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool) -> None:
+def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
     tab = "  "
+    venv = _utils.get_tmp_path() / "old_venv"
     activate = f". {venv}/bin/activate && "
     new_venv = _utils.get_tmp_path() / "new_venv"
     new_activate = f". {new_venv}/bin/activate && "
     new_requirements_path = new_venv / "requirements.txt"
+    if venv.exists():
+        _shutil.rmtree(new_venv)
     if new_venv.exists():
         _shutil.rmtree(new_venv)
-    with open(requirements_path, "r") as f:
-        requirements = f.readlines()
+    requirements = requirements_path.read_text().splitlines()
 
     core_packages = []
     core_versions = []
@@ -265,6 +267,12 @@ def update_requirements_txt(requirements_path: _Path, venv: _Path, dry_run: bool
         core_packages.append(entry["package"])
         core_versions.append(entry["version"])
         core_comments.append(entry["comment"])
+
+    _logger.info(f"{tab}Fetching current versions of modules")
+    _utils.run_shell(f"python3 -m venv {venv}", capture_output=True, suppress_cmd_log=True)
+    _utils.run_shell(
+        activate + f"python3 -m pip install -r {requirements_path}", capture_output=True, suppress_cmd_log=True
+    )
 
     _logger.info(f"{tab}Fetching new versions of core modules")
     new_core_versions = _copy.deepcopy(core_versions)

@@ -10,6 +10,7 @@ _logger = _logging.getLogger(__name__)
 _ansible_manifest_path = _utils.get_repo_path() / "roles" / "manifest" / "vars" / "main.yaml"
 _neovim_manifest_path = _utils.get_repo_path() / "roles" / "neovim" / "files" / "nvchad" / "plugins" / "manifest.lua"
 _requirements_path = _utils.get_repo_path() / "requirements.txt"
+_global_requirements_path = _utils.get_repo_path() / "roles" / "python" / "files" / "global_requirements.txt"
 
 
 def get_ansible_choices() -> list[str]:
@@ -29,8 +30,12 @@ def get_update_choices() -> list[str]:
 
 def update(choice: str, dry_run: bool) -> None:
     if choice == "requirements":
-        venv = _utils.get_build_path() / "venv"
-        _update_utils.update_requirements_txt(_requirements_path, venv=venv, dry_run=dry_run)
+        _logger.info("  Updating requirements.txt")
+        _update_utils.update_requirements_txt(_requirements_path, dry_run=dry_run)
+
+        _logger.info("")
+        _logger.info("  Updating global_requirements.txt")
+        _update_utils.update_requirements_txt(_global_requirements_path, dry_run=dry_run)
     elif choice == "neovim_plugins":
         for plugin in get_neovim_plugins_choices():
             _update_utils.update_neovim_plugin(_neovim_manifest_path, plugin, dry_run=dry_run)

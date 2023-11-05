@@ -1,7 +1,27 @@
-- name: Add ppa:ubuntu-toolchain-r/test repository
+- name: Add toolchain-r gpg key
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ cpp_toolchain_r_key_url }}"
+    dest: /etc/apt/trusted.gpg.d/toolchain-r.asc
+    mode: "0o644"
+
+- name: Remove default toolchain-r repository
+  become: true
+  ansible.builtin.file:
+    dest: "{{ cpp_toolchain_r_default_path }}"
+    state: absent
+
+- name: Add toolchain-r repository
   become: true
   ansible.builtin.apt_repository:
-    repo: ppa:ubuntu-toolchain-r/test
+    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/toolchain-r.asc] {{ cpp_toolchain_r_repo }}
+      {{ ansible_distribution_release }} main
+
+- name: Add toolchain-r src repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb-src [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/toolchain-r.asc] {{ cpp_toolchain_r_repo }}
+      {{ ansible_distribution_release }} main
 
 - name: Install GCC
   become: true

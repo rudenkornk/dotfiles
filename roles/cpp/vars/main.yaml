@@ -1,4 +1,4 @@
-gcc_version: 13
-llvm_gpg: https://apt.llvm.org/llvm-snapshot.gpg.key
-llvm_repo: http://apt.llvm.org/{{ ansible_distribution_release }}/
-llvm_version: 17
+cpp_gcc_version: 13
+cpp_llvm_gpg: https://apt.llvm.org/llvm-snapshot.gpg.key
+cpp_llvm_repo: http://apt.llvm.org/{{ ansible_distribution_release }}/
+cpp_llvm_version: 17

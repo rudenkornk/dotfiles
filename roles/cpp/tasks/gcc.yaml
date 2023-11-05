@@ -7,49 +7,49 @@
   become: true
   ansible.builtin.apt:
     name:
-      - gcc-{{ gcc_version }}
-      - g++-{{ gcc_version }}
+      - gcc-{{ cpp_gcc_version }}
+      - g++-{{ cpp_gcc_version }}
 
 - name: Update GCC alternatives
   become: true
   community.general.alternatives:
     name: gcc
     link: /usr/bin/gcc
-    path: /usr/bin/gcc-{{ gcc_version }}
-    priority: "{{ gcc_version }}0"
+    path: /usr/bin/gcc-{{ cpp_gcc_version }}
+    priority: "{{ cpp_gcc_version }}0"
     subcommands:
       - name: g++
         link: /usr/bin/g++
-        path: /usr/bin/g++-{{ gcc_version }}
+        path: /usr/bin/g++-{{ cpp_gcc_version }}
       - name: gcc-ar
         link: /usr/bin/gcc-ar
-        path: /usr/bin/gcc-ar-{{ gcc_version }}
+        path: /usr/bin/gcc-ar-{{ cpp_gcc_version }}
       - name: gcc-nm
         link: /usr/bin/gcc-nm
-        path: /usr/bin/gcc-nm-{{ gcc_version }}
+        path: /usr/bin/gcc-nm-{{ cpp_gcc_version }}
       - name: gcc-ranlib
         link: /usr/bin/gcc-ranlib
-        path: /usr/bin/gcc-ranlib-{{ gcc_version }}
+        path: /usr/bin/gcc-ranlib-{{ cpp_gcc_version }}
       - name: gcov
         link: /usr/bin/gcov
-        path: /usr/bin/gcov-{{ gcc_version }}
+        path: /usr/bin/gcov-{{ cpp_gcc_version }}
       - name: gcov-dump
         link: /usr/bin/gcov-dump
-        path: /usr/bin/gcov-dump-{{ gcc_version }}
+        path: /usr/bin/gcov-dump-{{ cpp_gcc_version }}
       - name: gcov-tool
         link: /usr/bin/gcov-tool
-        path: /usr/bin/gcov-tool-{{ gcc_version }}
+        path: /usr/bin/gcov-tool-{{ cpp_gcc_version }}
       - name: lto-dump
         link: /usr/bin/lto-dump
-        path: /usr/bin/lto-dump-{{ gcc_version }}
+        path: /usr/bin/lto-dump-{{ cpp_gcc_version }}
 
 - name: Update cc alternative
   become: true
   community.general.alternatives:
     name: cc
     link: /usr/bin/cc
-    path: /usr/bin/gcc-{{ gcc_version }}
-    priority: "{{ gcc_version }}0"
+    path: /usr/bin/gcc-{{ cpp_gcc_version }}
+    priority: "{{ cpp_gcc_version }}0"
 
 - name: Fix cyclic cpp symlinks
   become: true
@@ -69,5 +69,5 @@
   community.general.alternatives:
     name: cpp
     link: /usr/bin/cpp
-    path: /usr/bin/cpp-{{ gcc_version }}
-    priority: "{{ gcc_version }}0"
+    path: /usr/bin/cpp-{{ cpp_gcc_version }}
+    priority: "{{ cpp_gcc_version }}0"

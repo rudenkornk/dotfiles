@@ -2,13 +2,13 @@
   become: true
   ansible.builtin.get_url:
     url: "{{ nodejs_gpg }}"
-    dest: /etc/apt/trusted.gpg.d/nodejs.gpg.key
+    dest: "{{ apt_keys }}/nodejs.gpg.key"
     mode: "0o644"
 
 - name: Add nodejs repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/nodejs.gpg.key] {{ nodejs_repo }} nodistro main
+    repo: deb [arch=amd64 signed-by={{ apt_keys }}/nodejs.gpg.key] {{ nodejs_repo }} nodistro main
 
 - name: Install nodejs
   become: true

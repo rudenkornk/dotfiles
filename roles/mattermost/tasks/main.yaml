@@ -2,13 +2,13 @@
   become: true
   ansible.builtin.get_url:
     url: "{{ mattermost_gpg }}"
-    dest: /etc/apt/trusted.gpg.d/mattermost.asc
+    dest: "{{ apt_keys }}/mattermost.asc"
     mode: "0o644"
 
 - name: Add mattermost repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/mattermost.asc] {{ mattermost_repo }} stable main
+    repo: deb [arch=amd64 signed-by={{ apt_keys }}/mattermost.asc] {{ mattermost_repo }} stable main
 
 - name: Install mattermost
   become: true

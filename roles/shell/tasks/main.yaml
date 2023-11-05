@@ -83,11 +83,3 @@
     path: "{{ home }}/.local/bin"
     state: directory
     mode: "0o755"
-
-- name: Fix path in WSL
-  become: true
-  ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/wsl.conf"
-    dest: /etc/wsl.conf
-    state: link
-  when: in_wsl

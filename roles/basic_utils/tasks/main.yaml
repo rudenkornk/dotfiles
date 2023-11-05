@@ -120,7 +120,7 @@
 
     - name: Setup wsl.conf
       become: true
-      ansible.builtin.file:
+      ansible.builtin.copy:
         src: "{{ role_path }}/files/wsl.conf"
         dest: /etc/wsl.conf
         mode: "0o644"

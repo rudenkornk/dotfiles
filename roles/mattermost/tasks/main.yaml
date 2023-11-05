@@ -10,8 +10,18 @@
   ansible.builtin.apt_repository:
     repo: deb [arch=amd64 signed-by={{ apt_keys }}/mattermost.asc] {{ mattermost_repo }} stable main
 
+# Using apt is preffered way, because it can be tested inside containers
 - name: Install mattermost
   become: true
   ansible.builtin.apt:
     name:
       - mattermost-desktop
+  when: ansible_distribution_version is version('23.04', '<=')
+
+# However, mattermost-desktop is not installable via apt on Ubuntu 23.10
+# because it uses deprecated gconf2 lib
+# So we are using snap, which non-testable inside containers
+- name: Install snap mattermost
+  community.general.snap:
+    name: mattermost-desktop
+  when: false

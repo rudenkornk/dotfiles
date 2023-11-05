@@ -1,7 +1,21 @@
+- name: Add fish gpg key
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ shell_fish_key_url }}"
+    dest: /etc/apt/trusted.gpg.d/fish.asc
+    mode: "0o644"
+
 - name: Add fish repository
   become: true
   ansible.builtin.apt_repository:
-    repo: ppa:fish-shell/release-3
+    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/fish.asc] {{ shell_fish_repo }}
+      {{ ansible_distribution_release }} main
+
+- name: Add fish src repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb-src [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/fish.asc] {{ shell_fish_repo }}
+      {{ ansible_distribution_release }} main
 
 - name: Install fish
   become: true

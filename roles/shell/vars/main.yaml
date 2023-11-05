@@ -1,0 +1,3 @@
+shell_fish_search_key: "0x59FDA1CE1B84B3FAD89366C027557F056DC33CA5"
+shell_fish_key_url: "{{ ubuntu_keyserver }}{{ shell_fish_search_key }}"
+shell_fish_repo: https://ppa.launchpadcontent.net/fish-shell/release-3/ubuntu

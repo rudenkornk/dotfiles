@@ -2,13 +2,13 @@
   become: true
   ansible.builtin.get_url:
     url: "{{ cpp_llvm_gpg }}"
-    dest: /etc/apt/trusted.gpg.d/llvm.asc
+    dest: "{{ apt_keys }}/llvm.asc"
     mode: "0o644"
 
 - name: Add LLVM repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/llvm.asc] {{ cpp_llvm_repo }} llvm-toolchain-{{
+    repo: deb [arch=amd64 signed-by={{ apt_keys }}/llvm.asc] {{ cpp_llvm_repo }} llvm-toolchain-{{
       ansible_distribution_release }}-{{ cpp_llvm_version }} main
 
 - name: Install LLVM

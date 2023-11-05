@@ -2,7 +2,7 @@
   become: true
   ansible.builtin.get_url:
     url: "{{ cpp_toolchain_r_key_url }}"
-    dest: /etc/apt/trusted.gpg.d/toolchain-r.asc
+    dest: "{{ apt_keys }}/toolchain-r.asc"
     mode: "0o644"
 
 - name: Remove default toolchain-r repository
@@ -14,13 +14,13 @@
 - name: Add toolchain-r repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/toolchain-r.asc] {{ cpp_toolchain_r_repo }}
+    repo: deb [arch=amd64 signed-by={{ apt_keys }}/toolchain-r.asc] {{ cpp_toolchain_r_repo }}
       {{ ansible_distribution_release }} main
 
 - name: Add toolchain-r src repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb-src [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/toolchain-r.asc] {{ cpp_toolchain_r_repo }}
+    repo: deb-src [arch=amd64 signed-by={{ apt_keys }}/toolchain-r.asc] {{ cpp_toolchain_r_repo }}
       {{ ansible_distribution_release }} main
 
 - name: Install GCC

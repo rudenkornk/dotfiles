@@ -19,7 +19,7 @@
   become: true
   ansible.builtin.get_url:
     url: "{{ git_secret_gpg }}"
-    dest: /etc/apt/trusted.gpg.d/git_secret.asc
+    dest: "{{ apt_keys }}/git_secret.asc"
     mode: "0o644"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
@@ -29,7 +29,7 @@
 - name: Add git-secret repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/git_secret.asc] {{ git_secret_repo }} git-secret main
+    repo: deb [arch=amd64 signed-by={{ apt_keys }}/git_secret.asc] {{ git_secret_repo }} git-secret main
 
 - name: Install git secret
   become: true

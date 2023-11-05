@@ -110,3 +110,11 @@
       become: true
       ansible.builtin.command: ntpdate ntp.ubuntu.com
       changed_when: false
+
+    - name: Setup wsl.conf
+      become: true
+      ansible.builtin.file:
+        src: "{{ role_path }}/files/wsl.conf"
+        dest: /etc/wsl.conf
+        mode: "0o644"
+      when: in_wsl

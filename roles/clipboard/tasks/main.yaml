@@ -8,6 +8,31 @@
         dest: "{{ home }}/.local/bin/clip.exe"
         state: link
 
+    # Here we create a temporary directory for win32yank.exe, to workaround the following issue:
+    # The problem is that when we download files inside Windows FS,
+    # `unarchive` task always reports `changed`.
+    # We can workaround this issue by either first downloading inside WSL FS,
+    # and then copying to Windows FS or using `creates` attribute.
+    #
+    # The latter one is faulty, because in case we update win32yank url, it
+    # will not download the new version.
+    # Thus we use approach with temporary directory.
+    - name: Create tmp dir for win32yank
+      ansible.builtin.file:
+        dest: "{{ dotfiles_tmp }}/win32yank"
+        state: directory
+        mode: "0o777"
+
+    - name: Download win32yank.exe
+      ansible.builtin.unarchive:
+        src: "{{ manifest.clipboard.url }}"
+        dest: "{{ dotfiles_tmp }}/win32yank"
+        remote_src: true
+      retries: "{{ web_retries }}"
+      delay: "{{ web_delay }}"
+      register: clipboard_downloaded
+      until: clipboard_downloaded is not failed
+
     - name: Create dir for win32yank
       become: true
       ansible.builtin.file:
@@ -15,16 +40,13 @@
         state: directory
         mode: "0o777"
 
-    - name: Download win32yank.exe
-      ansible.builtin.unarchive:
-        src: "{{ manifest.clipboard.url }}"
+    - name: Copy win32yank to Windows dir
+      become: true
+      ansible.builtin.copy:
+        src: "{{ dotfiles_tmp }}/win32yank"
         dest: "{{ clipboard_win32yank_dir }}"
         remote_src: true
-        creates: "{{ clipboard_win32yank_dir }}/win32yank.exe"
-      retries: "{{ web_retries }}"
-      delay: "{{ web_delay }}"
-      register: clipboard_downloaded
-      until: clipboard_downloaded is not failed
+        mode: "0o777"
 
     - name: Create symlink to win32yank.exe
       become: true

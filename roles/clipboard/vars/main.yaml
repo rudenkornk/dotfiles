@@ -1,0 +1,1 @@
+clipboard_win32yank_dir: "{{ windows_home }}/AppData/Local/win32yank"

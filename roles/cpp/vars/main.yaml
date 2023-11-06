@@ -1,6 +1,7 @@
 cpp_gcc_version: 13
 cpp_toolchain_r_search_key: "0x60C317803A41BA51845E371A1E9377A2BA9EF27F"
 cpp_toolchain_r_key_url: "{{ ubuntu_keyserver }}{{ cpp_toolchain_r_search_key }}"
+cpp_toolchain_r_key_checksum: "sha256:5a145e8f9c4d1590764838d366aa6ae30fb7165a9118c017ebe376b15d375915"
 cpp_toolchain_r_repo: https://ppa.launchpadcontent.net/ubuntu-toolchain-r/test/ubuntu
 cpp_toolchain_r_default_path: /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list
 cpp_llvm_gpg: https://apt.llvm.org/llvm-snapshot.gpg.key

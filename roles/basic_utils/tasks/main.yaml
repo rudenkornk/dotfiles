@@ -113,11 +113,6 @@
       tags:
         - skip_ansible_lint
 
-    - name: Sync time
-      become: true
-      ansible.builtin.command: ntpdate ntp.ubuntu.com
-      changed_when: false
-
     - name: Setup wsl.conf
       become: true
       ansible.builtin.copy:

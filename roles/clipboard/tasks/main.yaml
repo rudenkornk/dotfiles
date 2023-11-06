@@ -5,45 +5,32 @@
       become: true
       ansible.builtin.file:
         src: /mnt/c/Windows/System32/clip.exe
-        dest: /usr/bin/clip.exe
+        dest: "{{ home }}/.local/bin/clip.exe"
         state: link
 
-    - name: Create tmp dir for win32yank
+    - name: Create dir for win32yank
+      become: true
       ansible.builtin.file:
-        dest: "{{ dotfiles_tmp }}/win32yank"
+        dest: "{{ clipboard_win32yank_dir }}"
         state: directory
         mode: "0o777"
 
     - name: Download win32yank.exe
       ansible.builtin.unarchive:
         src: "{{ manifest.clipboard.url }}"
-        dest: "{{ dotfiles_tmp }}/win32yank"
+        dest: "{{ clipboard_win32yank_dir }}"
         remote_src: true
+        creates: "{{ clipboard_win32yank_dir }}/win32yank.exe"
       retries: "{{ web_retries }}"
       delay: "{{ web_delay }}"
       register: clipboard_downloaded
       until: clipboard_downloaded is not failed
 
-    - name: Create dir for win32yank
-      become: true
-      ansible.builtin.file:
-        dest: "{{ windows_home }}/AppData/Local/win32yank"
-        state: directory
-        mode: "0o777"
-
-    - name: Copy win32yank.exe to Windows dir
-      become: true
-      ansible.builtin.copy:
-        src: "{{ dotfiles_tmp }}/win32yank/win32yank.exe"
-        dest: "{{ windows_home }}/AppData/Local/win32yank/win32yank.exe"
-        remote_src: true
-        mode: "0o777"
-
     - name: Create symlink to win32yank.exe
       become: true
       ansible.builtin.file:
-        src: "{{ windows_home }}/AppData/Local/win32yank/win32yank.exe"
-        dest: /usr/bin/win32yank.exe
+        src: "{{ clipboard_win32yank_dir }}/win32yank.exe"
+        dest: "{{ home }}/.local/bin/win32yank.exe"
         state: link
 
     - name: Remove xsel package if in WSL

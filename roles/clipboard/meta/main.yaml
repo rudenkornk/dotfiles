@@ -1,2 +1,2 @@
 dependencies:
-  - role: basic_utils
+  - role: shell

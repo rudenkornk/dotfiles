@@ -63,6 +63,13 @@
     dest: "{{ home }}/.markdownlint.yaml"
     state: link
 
+# https://github.com/nvuillam/npm-groovy-lint/blob/main/lib/.groovylintrc-recommended.json
+- name: Create symlink to global groovylintrc config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/groovylintrc.json"
+    dest: "{{ home }}/.groovylintrc.json"
+    state: link
+
 - name: Create symlink to global yamllint config
   ansible.builtin.file:
     src: "{{ remote_role_path }}/files/yamllint.yaml"

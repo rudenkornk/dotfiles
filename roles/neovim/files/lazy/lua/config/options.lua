@@ -7,7 +7,6 @@ vim.opt.keymap = "rnk-qwerty-jcuken"
 vim.opt.iminsert = 0
 vim.opt.imsearch = -1
 
-vim.g.clipboard = require("config.clipboard")
 vim.g.autoformat = false
 
 -- Setup ansible filetype
@@ -18,3 +17,5 @@ vim.filetype.add({
     ["playbook.*.yaml"] = "yaml.ansible",
   },
 })
+
+vim.g.python3_host_prog = vim.fn.expand("$HOME/.venv/bin/python3")

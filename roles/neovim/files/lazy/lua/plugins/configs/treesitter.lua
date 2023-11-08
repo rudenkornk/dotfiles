@@ -177,7 +177,7 @@ local override_options = {
     "soql",
     "sosl",
     "sparql",
-    "sql",
+    -- "sql", -- some missing libs
     "squirrel",
     "ssh_config",
     "starlark",

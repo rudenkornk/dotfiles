@@ -8,3 +8,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
 })
 
 vim.api.nvim_del_augroup_by_name("lazyvim_highlight_yank")
+
+-- This should be inside options.lua, but for some reason it doesn't work there
+-- Probably some plugin overwrites it later
+vim.g.clipboard = require("config.clipboard")

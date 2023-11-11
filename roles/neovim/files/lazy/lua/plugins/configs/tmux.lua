@@ -17,56 +17,56 @@ M.keys = {
     function()
       require("tmux").move_left()
     end,
-    mode = { "c", "n", "t", "v", "i" },
+    mode = { "c", "n", "t" },
   },
   {
     "<C-j>",
     function()
       require("tmux").move_bottom()
     end,
-    mode = { "c", "n", "t", "v", "i" },
+    mode = { "c", "n", "t" },
   },
   {
     "<C-k>",
     function()
       require("tmux").move_top()
     end,
-    mode = { "c", "n", "t", "v", "i" },
+    mode = { "c", "n", "t" },
   },
   {
     "<C-l>",
     function()
       require("tmux").move_right()
     end,
-    mode = { "c", "n", "t", "v", "i" },
+    mode = { "c", "n", "t" },
   },
   {
     "<A-x>h",
     function()
       require("tmux").resize_left()
     end,
-    mode = { "c", "n", "t", "v", "i" },
+    mode = { "c", "n", "t" },
   },
   {
     "<A-x>j",
     function()
       require("tmux").resize_bottom()
     end,
-    mode = { "c", "n", "t", "v", "i" },
+    mode = { "c", "n", "t" },
   },
   {
     "<A-x>k",
     function()
       require("tmux").resize_top()
     end,
-    mode = { "c", "n", "t", "v", "i" },
+    mode = { "c", "n", "t" },
   },
   {
     "<A-x>l",
     function()
       require("tmux").resize_right()
     end,
-    mode = { "c", "n", "t", "v", "i" },
+    mode = { "c", "n", "t" },
   },
 }
 

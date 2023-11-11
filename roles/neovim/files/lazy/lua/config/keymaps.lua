@@ -8,3 +8,7 @@ vim.keymap.set({ "n", "x" }, "<C-y>", "4<C-y>", { silent = true })
 vim.keymap.set({ "x" }, "<leader>vs", ":sort i<CR>")
 vim.keymap.set({ "n" }, "<C-q>", "a<C-^><ESC>") -- toggle layout
 vim.keymap.set({ "i" }, "<C-q>", "<C-^>") -- toggle layout
+vim.keymap.set({ "i", "v" }, "<C-h>", "<LEFT>")
+vim.keymap.set({ "i", "v" }, "<C-j>", "<DOWN>")
+vim.keymap.set({ "i", "v" }, "<C-k>", "<UP>")
+vim.keymap.set({ "i", "v" }, "<C-l>", "<RIGHT>")

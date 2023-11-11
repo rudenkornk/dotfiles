@@ -1,10 +1,7 @@
-#!/usr/bin/env python3
-
 import copy as _copy
 import logging as _logging
 import re as _re
 import shutil as _shutil
-import subprocess as _subprocess
 from dataclasses import dataclass as _dataclass
 from pathlib import Path as _Path
 from typing import Any as _Any

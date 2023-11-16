@@ -9,6 +9,8 @@ vim.opt.imsearch = -1
 
 vim.g.autoformat = false
 
+vim.opt.relativenumber = false
+
 -- Setup ansible filetype
 vim.filetype.add({
   pattern = {

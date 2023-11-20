@@ -13,12 +13,12 @@
 
 - name: Check if credentials were decrypted
   ansible.builtin.stat:
-    path: "{{ credentials_path }}"
+    path: "{{ secrets_credentials_path }}"
   register: profile_creds_status
 
 - name: Read credentials
   ansible.builtin.slurp:
-    src: "{{ credentials_path }}"
+    src: "{{ secrets_credentials_path }}"
   register: profile_encoded_creds
   when: profile_creds_status.stat.exists
 
@@ -52,7 +52,7 @@
   become: true
   ansible.posix.authorized_key:
     user: "{{ user }}"
-    key: "{{ lookup('file', '{{ ssh_local_path }}/id_rsa.pub') }}"
+    key: "{{ lookup('file', '{{ secrets_ssh_local_path }}/id_rsa.pub') }}"
   when: ansible_connection == "ssh"
 
 - name: Switch ansible_user

@@ -7,6 +7,7 @@ clipboard.lua
 credentials.json
 *private.gpg
 *id_rsa
+*id_rsa.pub
 *.auth
 *.ovpn
 

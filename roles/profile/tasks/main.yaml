@@ -53,6 +53,7 @@
   ansible.posix.authorized_key:
     user: "{{ user }}"
     key: "{{ lookup('file', '{{ ssh_local_path }}/id_rsa.pub') }}"
+  when: ansible_connection == "ssh"
 
 - name: Switch ansible_user
   ansible.builtin.set_fact:

@@ -12,3 +12,7 @@ vim.keymap.set({ "i", "v" }, "<C-h>", "<LEFT>")
 vim.keymap.set({ "i", "v" }, "<C-j>", "<DOWN>")
 vim.keymap.set({ "i", "v" }, "<C-k>", "<UP>")
 vim.keymap.set({ "i", "v" }, "<C-l>", "<RIGHT>")
+
+-- This should be inside options.lua, but for some reason it doesn't work there
+-- Probably some plugin overwrites it later
+vim.g.clipboard = require("config.clipboard")

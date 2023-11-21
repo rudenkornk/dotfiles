@@ -75,6 +75,12 @@ return {
     "mfussenegger/nvim-lint",
     opts = require("plugins.configs.lint").opts,
   },
+  {
+    "folke/trouble.nvim",
+    keys = {
+      { "<leader>r", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+    },
+  },
 
   {
     "debugloop/telescope-undo.nvim",

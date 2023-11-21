@@ -1,5 +1,5 @@
 return {
-  { "LazyVim/LazyVim", opts = { colorscheme = "onedark" } },
+  { "LazyVim/LazyVim", opts = { colorscheme = "catppuccin" } },
 
   { "catppuccin/nvim", name = "catppuccin", opts = { flavour = "macchiato" } }, -- latte, frappe, macchiato, mocha
   { "ellisonleao/gruvbox.nvim" },

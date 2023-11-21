@@ -114,12 +114,13 @@ $(BUILD_DIR)/bootstrap_control_node: \
 	mkdir --parents $(BUILD_DIR) && touch $@
 
 ANSIBLE_INSTALLED != ($(VENV) &> /dev/null && command -v ansible &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
-$(BUILD_DIR)/ansible: $(BUILD_DIR)/venv requirements.txt $(ANSIBLE_INSTALLED)
+$(BUILD_DIR)/ansible: $(BUILD_DIR)/venv/venv requirements.txt $(ANSIBLE_INSTALLED)
 	$(VENV) && pip3 install -r requirements.txt
 	mkdir --parents $(BUILD_DIR) && touch $@
 
-$(BUILD_DIR)/venv: $(BUILD_DIR)/python
+$(BUILD_DIR)/venv/venv: $(BUILD_DIR)/python
 	python3 -m venv $(BUILD_DIR)/venv
+	touch $@
 
 PYTHON_INSTALLED != (command -v python3 &> /dev/null && command -v pip3 &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
 $(BUILD_DIR)/python: $(BUILD_DIR)/sudo $(BUILD_DIR)/tzdata $(PYTHON_INSTALLED)
@@ -132,7 +133,7 @@ $(BUILD_DIR)/python: $(BUILD_DIR)/sudo $(BUILD_DIR)/tzdata $(PYTHON_INSTALLED)
 	fi
 	mkdir --parents $(BUILD_DIR) && touch $@
 
-TZDATA_INSTALLED != (command -v tzconfig &> /dev/null && command -v pip3 &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
+TZDATA_INSTALLED != (dpkg --get-selections | grep --quiet tzdata) || echo "$(BUILD_DIR)/not_ready"
 $(BUILD_DIR)/tzdata: $(BUILD_DIR)/sudo $(TZDATA_INSTALLED)
 	if [[ -n "$(TZDATA_INSTALLED)" ]]; then \
 		sudo ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime && \

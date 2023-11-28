@@ -6,6 +6,7 @@ disable = [
   "missing-docstring",
   "too-few-public-methods",
   "too-many-arguments",
+  "too-many-locals",
   "too-many-branches",
   "too-many-instance-attributes",
 ]

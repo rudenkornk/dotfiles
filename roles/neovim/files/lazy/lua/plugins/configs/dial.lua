@@ -28,6 +28,7 @@ M.keys = {
     function()
       return require("dial.map").inc_normal()
     end,
+    desc = "Increment under the cursor",
     mode = { "n" },
     expr = true,
   },
@@ -36,6 +37,7 @@ M.keys = {
     function()
       return require("dial.map").dec_normal()
     end,
+    desc = "Decrement under the cursor",
     mode = { "n" },
     expr = true,
   },
@@ -44,6 +46,7 @@ M.keys = {
     function()
       return require("dial.map").inc_visual()
     end,
+    desc = "Increment under the cursor",
     mode = { "v" },
     expr = true,
   },
@@ -52,6 +55,7 @@ M.keys = {
     function()
       return require("dial.map").dec_visual()
     end,
+    desc = "Decrement under the cursor",
     mode = { "v" },
     expr = true,
   },
@@ -60,6 +64,7 @@ M.keys = {
     function()
       return require("dial.map").inc_visual()
     end,
+    desc = "Increment under the cursor",
     mode = { "v" },
     expr = true,
   },
@@ -68,6 +73,7 @@ M.keys = {
     function()
       return require("dial.map").dec_visual()
     end,
+    desc = "Decrement under the cursor",
     mode = { "v" },
     expr = true,
   },

@@ -24,6 +24,7 @@
   "dial.nvim": { "branch": "master", "commit": "019bbe9daea397c93a99adc747f8f071379fee5c" },
   "dracula.nvim": { "branch": "main", "commit": "7200e64c589f899d29f8963aad7543856d1c2545" },
   "dressing.nvim": { "branch": "master", "commit": "1f2d1206a03bd3add8aedf6251e4534611de577f" },
+  "duck.nvim": { "branch": "main", "commit": "977b4aa4004726ed3d87b2437f543cef2153b8ea" },
   "flit.nvim": { "branch": "main", "commit": "f4e9af572a62c808c8de214da672f2a115a98c35" },
   "friendly-snippets": { "branch": "main", "commit": "43727c2ff84240e55d4069ec3e6158d74cb534b6" },
   "gitsigns.nvim": { "branch": "main", "commit": "5a9a6ac29a7805c4783cda21b80a1e361964b3f2" },

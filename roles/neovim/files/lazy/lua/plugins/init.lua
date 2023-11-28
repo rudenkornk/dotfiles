@@ -108,4 +108,8 @@ return {
   },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   { "max397574/better-escape.nvim", event = "InsertEnter", config = true },
+  {
+    "tamton-aquib/duck.nvim",
+    keys = require("plugins.configs.duck").keys,
+  },
 }

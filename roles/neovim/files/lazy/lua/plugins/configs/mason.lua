@@ -5,6 +5,7 @@ local override_options = {
     "awk-language-server",
     "bash-language-server",
     "codespell",
+    "codelldb",
     "css-lsp",
     "dot-language-server",
     "editorconfig-checker",

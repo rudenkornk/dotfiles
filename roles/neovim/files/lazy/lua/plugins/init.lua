@@ -81,6 +81,10 @@ return {
       { "<leader>r", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
     },
   },
+  {
+    "mfussenegger/nvim-dap",
+    keys = require("plugins.configs.dap").keys,
+  },
 
   {
     "debugloop/telescope-undo.nvim",

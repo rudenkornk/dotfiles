@@ -17,6 +17,7 @@
     mb = merge-base
     rb = rebase
     rbi = rebase --rebase-merges --interactive HEAD~26
+    rh = ! git rev-parse HEAD && git reset --hard $2
     rv = remote -v
     sg = diff --staged
     sh = show

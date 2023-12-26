@@ -6,8 +6,8 @@ M.opts = {
   },
   resize = {
     enable_default_keybindings = false,
-    resize_step_x = 5,
-    resize_step_y = 5,
+    resize_step_x = 8,
+    resize_step_y = 8,
   },
 }
 

@@ -3,7 +3,7 @@
 import argparse as _argparse
 import logging as _logging
 from argparse import Namespace as _Namespace
-from argparse import _SubParsersAction as _SubParsersAction
+from argparse import _SubParsersAction
 
 from . import roles_graph as _roles_graph
 from . import update as _update
@@ -39,11 +39,34 @@ def _add_roles_graph_parser(subparsers: _SubParsersAction) -> None:  # type: ign
     )
 
 
+def _log_level_choices() -> list[str]:
+    return ["debug", "info", "warning", "error", "critical", "d", "i", "w", "e", "c"]
+
+
+def _log_level(choice: str) -> int:
+    choice = choice.lower()
+    level_map = {
+        "debug": _logging.DEBUG,
+        "info": _logging.INFO,
+        "warning": _logging.WARNING,
+        "error": _logging.ERROR,
+        "d": _logging.DEBUG,
+        "i": _logging.INFO,
+        "w": _logging.WARNING,
+        "e": _logging.ERROR,
+        "c": _logging.CRITICAL,
+    }
+    return level_map[choice]
+
+
 def _get_parser() -> _argparse.ArgumentParser:
     parser = _argparse.ArgumentParser(
         description="Support scripts for dotfiles repo.", formatter_class=_argparse.ArgumentDefaultsHelpFormatter
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+    parser.add_argument(
+        "-l", "--log-level", dest="log_level", default="info", choices=_log_level_choices(), help="Logging level."
+    )
     _add_update_parser(subparsers)
     _add_roles_graph_parser(subparsers)
     return parser
@@ -84,6 +107,8 @@ def _process_roles_graph(args: _Namespace) -> None:
 
 def process_shell_args(shell_args: list[str]) -> None:
     args = _parse_shell_args(shell_args)
+    log_level = _log_level(args.log_level)
+    _logging.getLogger().setLevel(log_level)
     if args.command == "update":
         _process_update(args)
     if args.command == "graph":

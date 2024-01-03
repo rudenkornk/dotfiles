@@ -135,6 +135,7 @@ class GitHubReleaseInfo:
         self.url = url
 
 
+# pylint: disable-next=too-many-statements
 def update_github_release(url: str, locked: bool) -> str:
     tab = "  "
     cri = GitHubReleaseInfo(url)
@@ -174,6 +175,7 @@ def update_github_release(url: str, locked: bool) -> str:
             _logger.info(f"{2 * tab}{ti.tag} -- skipping (could not parse as semver)")
             continue
         if not cmp_semver:
+            # pylint: disable-next=no-else-break
             if ti.tag != cri.ti.tag:
                 _logger.info(f"{2 * tab}{ti.tag} != {cri.ti.tag} -- return (found latest version)")
                 chosen_tag = ti.tag
@@ -238,6 +240,7 @@ def parse_pip_entry(entry: str) -> dict[str, str | None]:
     }
 
 
+# pylint: disable-next=too-many-statements
 def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
     tab = "  "
     venv = _utils.get_tmp_path() / "old_venv"
@@ -245,10 +248,8 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
     new_venv = _utils.get_tmp_path() / "new_venv"
     new_activate = f". {new_venv}/bin/activate && "
     new_requirements_path = new_venv / "requirements.txt"
-    if venv.exists():
-        _shutil.rmtree(new_venv)
-    if new_venv.exists():
-        _shutil.rmtree(new_venv)
+    _shutil.rmtree(new_venv, ignore_errors=True)
+    _shutil.rmtree(new_venv, ignore_errors=True)
     requirements = requirements_path.read_text().splitlines()
 
     core_packages = []
@@ -291,7 +292,7 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
 
     _logger.info(f"{tab}Creating temporary venv")
     _utils.run_shell(f"python3 -m venv {new_venv}", capture_output=True, suppress_cmd_log=True)
-    with open(new_requirements_path, "w") as f:
+    with open(new_requirements_path, "w", encoding="utf-8") as f:
         for i, package in enumerate(core_packages):
             f.write(f"{package}=={new_core_versions[i]}{core_comments[i]}\n")
 
@@ -314,10 +315,10 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
             comment = core_comments[index]
         new_requirements[i] = f"{new_requirement}{comment}\n"
 
-    with open(new_requirements_path, "w") as f:
+    with open(new_requirements_path, "w", encoding="utf-8") as f:
         f.writelines(new_requirements)
     if not dry_run:
-        with open(requirements_path, "w") as f:
+        with open(requirements_path, "w", encoding="utf-8") as f:
             f.writelines(new_requirements)
     _logger.info(f"{tab}Done")
 

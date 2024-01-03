@@ -6,8 +6,8 @@ profile = "black"
 line_length = 120
 
 [tool.mypy]
-strict = "True"
-implicit_reexport = "True"
+strict = true
+implicit_reexport = true
 
 [tool.pylint]
 max-line-length = 120
@@ -15,10 +15,11 @@ disable = [
   "logging-fstring-interpolation",
   "logging-not-lazy",
   "missing-docstring",
-  "all",
+  "too-few-public-methods",
+  "too-many-arguments",
+  "too-many-locals",
+  "too-many-branches",
+  "too-many-instance-attributes",
 ]
 [tool.pydocstyle]
-ignore = [
-  "D100",
-  "D103",
-]
+ignore = ["D100", "D103"]

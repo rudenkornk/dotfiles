@@ -8,6 +8,7 @@ import shlex as _shlex
 import subprocess as _subprocess
 import sys as _sys
 import time as _time
+import traceback as _traceback
 from pathlib import Path as _Path
 from typing import IO as _IO
 from typing import Any as _Any
@@ -103,9 +104,15 @@ def run_shell(
     suppress_env_log: bool = False,
     cwd: _Path | None = None,
     check: bool = True,
+    loglevel: int = _logging.INFO,
 ) -> _subprocess.CompletedProcess[str]:
     extra_env = extra_env or {}
     extra_paths = extra_paths or []
+    current_loglevel = _logger.getEffectiveLevel()
+    if current_loglevel > loglevel and not capture_output and stdout is None:
+        stdout = _subprocess.DEVNULL
+    if current_loglevel > _logging.ERROR and not capture_output and stderr is None:
+        stderr = _subprocess.DEVNULL
 
     env = _os.environ.copy()
     env.update(extra_env)
@@ -128,7 +135,7 @@ def run_shell(
             suppress_env_log=suppress_env_log,
             cwd=cwd,
         )
-        _logger.info(f"[RUNNING IN SHELL]: {print_cmd}")
+        _logger.log(loglevel, f"[RUNNING IN SHELL]: {print_cmd}")
 
     if isinstance(cmd, list):
         return _subprocess.run(
@@ -174,6 +181,7 @@ def retry(
             for i in range(max_tries):
                 try:
                     return func(*args, **kwargs)
+                # pylint: disable-next=broad-except
                 except Exception as e:
                     if i + 1 >= max_tries:
                         raise
@@ -200,12 +208,12 @@ def lua_write(path: _Path, data: dict[str, _Any]) -> None:
 
 
 def yaml_read(path: _Path) -> dict[str, _Any]:
-    with open(path, "r") as stream:
+    with open(path, "r", encoding="utf-8") as stream:
         return dict(_yaml.safe_load(stream))
 
 
 def yaml_write(path: _Path, data: dict[str, _Any]) -> None:
-    with open(path, "w") as stream:
+    with open(path, "w", encoding="utf-8") as stream:
         _yaml.safe_dump(data, stream=stream, width=120)
 
 
@@ -215,7 +223,25 @@ class _LoggerFormatter(_logging.Formatter):
     yellow = "\x1b[33;20m"
     red = "\x1b[38;5;196m"
     bold_red = "\x1b[31;1m"
+    bg_palette = [
+        "\x1b[41m",
+        "\x1b[42m",
+        "\x1b[43m",
+        "\x1b[44m",
+        "\x1b[45m",
+        "\x1b[46m",
+        "\x1b[47m",
+        "\x1b[100m",
+        "\x1b[101m",
+        "\x1b[102m",
+        "\x1b[103m",
+        "\x1b[104m",
+        "\x1b[105m",
+        "\x1b[106m",
+        "\x1b[107m",
+    ]
     reset = "\x1b[0m"
+    bg_reset = "\x1b[49m"
     ok_format = "%(message)s"
     warning_format = "[WARNING]: %(message)s"
     error_format = "[ERROR]: %(message)s"
@@ -227,39 +253,127 @@ class _LoggerFormatter(_logging.Formatter):
         _logging.CRITICAL: (error_format, bold_red),
     }
 
+    def __init__(self, stream: _IO[_Any]) -> None:
+        self._stream = stream
+        self.indent = ""
+        self.stack_based_indent = False
+        self.stack_based_color = False
+        self._formatters = self._get_formatters(stream)
+        super().__init__()
+
+    @staticmethod
+    def _get_formatters(stream: _IO[_Any]) -> dict[int, _logging.Formatter]:
+        formatters = {}
+        for level, (fmt, color) in _LoggerFormatter.formats_info.items():
+            if stream.isatty():
+                fmt = color + fmt + _LoggerFormatter.reset
+            formatter = _logging.Formatter(fmt)
+            formatters[level] = formatter
+        return formatters
+
+    @staticmethod
+    def _stack_based_indent(stream: _IO[_Any], indented: bool, colored: bool) -> str:
+        indent = ""
+        stacklen = len(_inspect.stack())
+        home = str(_Path.home())
+        interesting_index: int | None = None
+        stack = _inspect.stack()
+        skip_asyncio = False
+        # pylint: disable-next=consider-using-enumerate
+        for index in range(len(stack)):
+            filename = stack[index].filename
+            # print(stack[index].filename, stack[index].function)
+            if "asyncio" in filename.split(_os.sep):
+                skip_asyncio = True
+            if filename.startswith(home) and interesting_index is None and not filename == __file__:
+                interesting_index = index
+
+        skip = 7
+        if skip_asyncio:
+            skip += 6
+        if interesting_index is not None:
+            skip += interesting_index
+        indent_len = max(0, stacklen - skip)
+        if indented:
+            indent += "  " * indent_len
+
+        if stream.isatty() and colored:
+            bg_color_index = 0
+            if interesting_index is not None:
+                interesting = _inspect.stack()[interesting_index]
+                frame_hash = hash(str(id(interesting.frame)))
+                bg_color_index = frame_hash % len(_LoggerFormatter.bg_palette)
+            bg_color = _LoggerFormatter.bg_palette[bg_color_index]
+            indent = indent + bg_color + " " + _LoggerFormatter.bg_reset
+
+        return indent
+
+    def _format(self, msg: str) -> str:
+        indent = self.indent
+        indent += self._stack_based_indent(self._stream, self.stack_based_indent, self.stack_based_color)
+
+        return indent + msg
+
     def format(self, record: _Any) -> str:
-        fmt, color = self.formats_info[record.levelno]
-        if _sys.stdout.isatty():
-            fmt = color + fmt + self.reset
-        formatter = _logging.Formatter(fmt)
-        return formatter.format(record)
+        formatter = self._formatters[record.levelno]
+        raw_result = formatter.format(record)
+        result = self._format(raw_result)
+        return result
 
 
-def format_logging(logger: _logging.Logger = _logging.getLogger()) -> None:
-    # Keep here stdout instead of default of stderr,
-    # because container will print to the host stdout anyway.
-    handler = _logging.StreamHandler(_sys.stdout)
-    handler.setFormatter(_LoggerFormatter())
-    logger.addHandler(handler)
-    logger.setLevel(_logging.INFO)
+class _LoggerFilter(_logging.Filter):
+    def __init__(self, min_level: int, max_level: int) -> None:
+        self._min = min_level
+        self._max = max_level
+        super().__init__()
+
+    def filter(self, record: _Any) -> bool:
+        check = self._min <= record.levelno < self._max
+        assert isinstance(check, bool)
+        return check
 
 
-def main(logger: _logging.Logger = _logging.getLogger()) -> _Callable[[_Callable[_P, _R]], _Callable[_P, _R]]:
+def format_logging(logger: _logging.Logger = _logging.getLogger(), stack_based: bool = False) -> None:
+    stdout_handler = _logging.StreamHandler(_sys.stdout)
+    formatter = _LoggerFormatter(_sys.stdout)
+    formatter.stack_based_indent = stack_based
+    formatter.stack_based_color = False
+    stdout_handler.setFormatter(formatter)
+    stdout_handler.addFilter(_LoggerFilter(_logging.DEBUG, _logging.WARNING))
+    logger.addHandler(stdout_handler)
+
+    warn_formatter = _LoggerFormatter(_sys.stdout)
+    warn_formatter.stack_based_indent = stack_based
+    warn_formatter.stack_based_color = False
+    stderr_handler = _logging.StreamHandler(_sys.stderr)
+    stdout_handler.setFormatter(warn_formatter)
+    stderr_handler.addFilter(_LoggerFilter(_logging.WARNING, _logging.CRITICAL + 1000))
+    logger.addHandler(stderr_handler)
+
+
+def main(stack_based: bool = False) -> _Callable[[_Callable[_P, _R]], _Callable[_P, _R]]:
     def main_decorator(func: _Callable[_P, _R]) -> _Callable[_P, _R]:
         @_functools.wraps(func)
         def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
-            format_logging(logger)
+            format_logging(stack_based=stack_based)
             try:
                 return func(*args, **kwargs)
             # pylint: disable-next=broad-exception-caught
             except Exception as exception:
+                loglevel = _logger.getEffectiveLevel()
+                if loglevel <= _logging.DEBUG:
+                    _traceback.print_exc()
+
                 file = _Path(_inspect.trace()[-1][1])
                 line = _inspect.trace()[-1][2]
                 _logger.error(f"{type(exception).__name__}: {exception} ({file.name}:{line})")
-                _sys.exit(1)
+                exit_code = 1
+                if isinstance(exception, _subprocess.CalledProcessError):
+                    exit_code = exception.returncode
+                _sys.exit(exit_code)
             except KeyboardInterrupt:
                 _logger.error("==== Keyboard Interrupt ====")
-                _sys.exit(1)
+                _sys.exit(2)
 
         return wrapper
 

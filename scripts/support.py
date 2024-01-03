@@ -9,7 +9,7 @@ import _support.utils as _utils
 _logger = _logging.getLogger("_support")
 
 
-@_utils.main(_logger)
+@_utils.main()
 def _main() -> None:
     _setup.process_shell_args(_sys.argv)
 

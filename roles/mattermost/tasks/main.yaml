@@ -16,12 +16,3 @@
   ansible.builtin.apt:
     name:
       - mattermost-desktop
-  when: ansible_distribution_version is version('23.04', '<=')
-
-# However, mattermost-desktop is not installable via apt on Ubuntu 23.10
-# because it uses deprecated gconf2 lib
-# So we are using snap, which non-testable inside containers
-- name: Install snap mattermost
-  community.general.snap:
-    name: mattermost-desktop
-  when: false

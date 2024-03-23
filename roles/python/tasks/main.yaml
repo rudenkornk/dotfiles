@@ -6,6 +6,24 @@
       - python3-venv
       - virtualenv
 
+- name: Check if pip.conf file exists
+  ansible.builtin.stat:
+    path: "{{ remote_role_path }}/files/pip.conf"
+  register: python_pip_conf
+
+- name: Create ~/.config/pip directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/pip"
+    state: directory
+    mode: "0o755"
+
+- name: Create symlink to pip.conf
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/pip.conf"
+    dest: "{{ home }}/.config/pip/pip.conf"
+    state: link
+  when: python_pip_conf.stat.exists
+
 # https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#where-black-looks-for-the-file
 - name: Create symlink to global black config
   ansible.builtin.file:

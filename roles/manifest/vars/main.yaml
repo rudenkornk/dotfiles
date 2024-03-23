@@ -1,7 +1,7 @@
 manifest:
   ansible_community_general:
     url: https://github.com/ansible-collections/community.general
-    version: 8.3.0
+    version: 8.4.0
   ansible_containers_podman:
     url: https://github.com/containers/ansible-podman-collections
     version: 1.12.0
@@ -13,9 +13,9 @@ manifest:
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v3.28.3/cmake-3.28.3-linux-x86_64.sh
+    url: https://github.com/Kitware/CMake/releases/download/v3.29.0/cmake-3.29.0-linux-x86_64.sh
   drawio:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v23.0.2/drawio-amd64-23.0.2.deb
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.0.4/drawio-amd64-24.0.4.deb
   fd:
     url: https://github.com/sharkdp/fd/releases/download/v9.0.0/fd-musl_9.0.0_amd64.deb
   firacode:
@@ -23,19 +23,19 @@ manifest:
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: 7a72f1a2531d728d14faf5f61909f9ffa63c8dd3
+    version: db6db49ed642caf9cbe716f80d4fa40052118068
   github_cli:
-    url: https://github.com/cli/cli/releases/download/v2.44.0/gh_2.44.0_linux_amd64.deb
+    url: https://github.com/cli/cli/releases/download/v2.46.0/gh_2.46.0_linux_amd64.deb
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
     version: 46d9dfe230f315a6a0c62f4687f6b3da20fd05e4
   lazygit:
-    url: https://github.com/jesseduffield/lazygit/releases/download/v0.40.2/lazygit_0.40.2_Linux_x86_64.tar.gz
+    url: https://github.com/jesseduffield/lazygit/releases/download/v0.41.0/lazygit_0.41.0_Linux_x86_64.tar.gz
   neovim:
     url: https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
   nvchad2:
     url: https://github.com/NvChad/NvChad
-    version: f17e83010f25784b58dea175c6480b3a8225a3e9
+    version: e5f8a38ae3d6b3bedf68f29b0e96dad7a4ca2da5
   rg:
     url: https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
   stylua:
@@ -45,4 +45,4 @@ manifest:
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
   vcpkg:
     url: https://github.com/microsoft/vcpkg
-    version: 6978381401d33a5ad6a3385895d12e383083712a
+    version: a34c873a9717a888f58dc05268dea15592c2f0ff

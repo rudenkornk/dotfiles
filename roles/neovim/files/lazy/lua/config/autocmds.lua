@@ -7,6 +7,11 @@ vim.api.nvim_create_autocmd("VimLeave", {
   command = "set guicursor=a:ver10",
 })
 
+vim.api.nvim_create_autocmd("SwapExists", {
+  pattern = "*",
+  command = "let v:swapchoice = 'o'",
+})
+
 vim.api.nvim_del_augroup_by_name("lazyvim_highlight_yank")
 
 -- This should be inside options.lua, but for some reason it doesn't work there

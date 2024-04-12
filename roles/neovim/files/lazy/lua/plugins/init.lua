@@ -54,6 +54,10 @@ return {
     },
   },
   {
+    "echasnovski/mini.pairs",
+    enabled = false,
+  },
+  {
     "nvim-lualine/lualine.nvim",
     opts = require("plugins.configs.lualine").opts,
   },

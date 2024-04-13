@@ -1,7 +1,6 @@
 local override_options = {
   ensure_installed = {
     "actionlint",
-    "ansible-language-server",
     "awk-language-server",
     "bash-language-server",
     "codespell",

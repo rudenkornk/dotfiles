@@ -42,7 +42,7 @@ set --export fzf_ps_opts \
 
 set --export fzf_processes_opts \
     --bind='ctrl-x:reload(ps $fzf_ps_opts)' \
-    --header-lines=2 \
+    --header-lines=1 \
     --header='Press CTRL-X to reload\n\n' \
 
 

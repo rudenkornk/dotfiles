@@ -42,6 +42,11 @@
   community.general.timezone:
     name: Europe/Moscow
 
+- name: Get user id
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ ansible_user }}"
+
 - name: Check if inside WSL
   ansible.builtin.shell: |
     set -o pipefail
@@ -79,6 +84,7 @@
     in_container: "{{ basic_utils_container.stdout }}"
     in_wsl: "{{ basic_utils_wsl.stdout }}"
     use_gui: "{{ basic_utils_x_list.files | length > 0 }}"
+    user_id: "{{ getent_passwd[ansible_user].1 }}"
   tags:
     - skip_ansible_lint
 
@@ -90,6 +96,17 @@
       - "in_container: {{ in_container }}"
       - "in_wsl: {{ in_wsl }}"
       - "use_gui: {{ use_gui }}"
+      - "user: {{ ansible_user }}"
+      - "user_id: {{ user_id }}"
+
+- name: Set correct state for directory /run/user/{{ user_id }}
+  become: true
+  ansible.builtin.file:
+    path: "/run/user/{{ user_id }}/"
+    state: directory
+    mode: "0o700"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
 
 - name: WSL stuff
   when: in_wsl

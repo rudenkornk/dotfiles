@@ -8,7 +8,7 @@
 
 - name: Download luarocks
   ansible.builtin.unarchive:
-    src: "{{ luarocks_url }}"
+    src: "{{ lua_rocks_url }}"
     dest: "{{ dotfiles_tmp }}"
     remote_src: true
   retries: "{{ web_retries }}"
@@ -20,7 +20,7 @@
   ansible.builtin.shell: |
     set -o pipefail
     current_version=$(luarocks --version 2>&1 | grep --perl-regexp --only-matching "\d+\.\d+\.\d+" || true)
-    if [[ "{{ luarocks_version }}" != "$current_version" ]]; then
+    if [[ "{{ lua_rocks_version }}" != "$current_version" ]]; then
       ./configure
       make
     else
@@ -28,7 +28,7 @@
     fi
   args:
     executable: bash
-    chdir: "{{ dotfiles_tmp }}/luarocks-{{ luarocks_version }}"
+    chdir: "{{ dotfiles_tmp }}/luarocks-{{ lua_rocks_version }}"
   changed_when: lua_rocks_matches.stdout != "true"
   register: lua_rocks_matches
 
@@ -37,12 +37,12 @@
   ansible.builtin.shell: |
     set -o pipefail
     current_version=$(luarocks --version 2>&1 | grep --perl-regexp --only-matching "\d+\.\d+\.\d+" || true)
-    if [[ "{{ luarocks_version }}" != "$current_version" ]]; then
+    if [[ "{{ lua_rocks_version }}" != "$current_version" ]]; then
       make install
     fi
   args:
     executable: bash
-    chdir: "{{ dotfiles_tmp }}/luarocks-{{ luarocks_version }}"
+    chdir: "{{ dotfiles_tmp }}/luarocks-{{ lua_rocks_version }}"
   changed_when: lua_rocks_matches.stdout != "true"
 
 - name: Install luarocks completions

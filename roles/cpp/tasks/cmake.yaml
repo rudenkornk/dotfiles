@@ -1,4 +1,4 @@
-- name: Download cmake installation script
+- name: cmake | Download installation script
   ansible.builtin.get_url:
     url: "{{ manifest.cmake.url }}"
     dest: "{{ dotfiles_tmp }}/cmake.sh"
@@ -9,7 +9,7 @@
   register: cpp_downloaded
   until: cpp_downloaded is not failed
 
-- name: Install cmake
+- name: cmake | Install cmake
   become: true
   ansible.builtin.shell: |
     set -o pipefail

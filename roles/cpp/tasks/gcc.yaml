@@ -1,4 +1,4 @@
-- name: Add toolchain-r gpg key
+- name: gcc | Add toolchain-r gpg key
   become: true
   ansible.builtin.get_url:
     url: "{{ cpp_toolchain_r_key_url }}"
@@ -11,32 +11,32 @@
   # As a workaround we set `changed_when` to false
   changed_when: false
 
-- name: Remove default toolchain-r repository
+- name: gcc | Remove default toolchain-r repository
   become: true
   ansible.builtin.file:
     dest: "{{ cpp_toolchain_r_default_path }}"
     state: absent
 
-- name: Add toolchain-r repository
+- name: gcc | Add toolchain-r repository
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch=amd64 signed-by={{ apt_keys }}/toolchain-r.asc] {{ cpp_toolchain_r_repo }}
       {{ ansible_distribution_release }} main
 
-- name: Add toolchain-r src repository
+- name: gcc | Add toolchain-r src repository
   become: true
   ansible.builtin.apt_repository:
     repo: deb-src [arch=amd64 signed-by={{ apt_keys }}/toolchain-r.asc] {{ cpp_toolchain_r_repo }}
       {{ ansible_distribution_release }} main
 
-- name: Install GCC
+- name: gcc | Install GCC
   become: true
   ansible.builtin.apt:
     name:
       - gcc-{{ cpp_gcc_version }}
       - g++-{{ cpp_gcc_version }}
 
-- name: Update GCC alternatives
+- name: gcc | Update GCC alternatives
   become: true
   community.general.alternatives:
     name: gcc
@@ -69,7 +69,7 @@
         link: /usr/bin/lto-dump
         path: /usr/bin/lto-dump-{{ cpp_gcc_version }}
 
-- name: Update cc alternative
+- name: gcc | Update cc alternative
   become: true
   community.general.alternatives:
     name: cc
@@ -77,7 +77,7 @@
     path: /usr/bin/gcc-{{ cpp_gcc_version }}
     priority: "{{ cpp_gcc_version }}0"
 
-- name: Fix cyclic cpp symlinks
+- name: gcc | Fix cyclic cpp symlinks
   become: true
   ansible.builtin.shell: |
     set -o pipefail
@@ -90,7 +90,7 @@
   register: cpp_output
   changed_when: '"changed" in cpp_output.stdout'
 
-- name: Update cpp alternative
+- name: gcc | Update cpp alternative
   become: true
   community.general.alternatives:
     name: cpp

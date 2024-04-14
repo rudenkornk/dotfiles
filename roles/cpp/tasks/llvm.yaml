@@ -1,17 +1,17 @@
-- name: Add LLVM gpg key
+- name: llvm | Add LLVM gpg key
   become: true
   ansible.builtin.get_url:
     url: "{{ cpp_llvm_gpg }}"
     dest: "{{ apt_keys }}/llvm.asc"
     mode: "0o644"
 
-- name: Add LLVM repository
+- name: llvm | Add LLVM repository
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch=amd64 signed-by={{ apt_keys }}/llvm.asc] {{ cpp_llvm_repo }} llvm-toolchain-{{
       ansible_distribution_release }}-{{ cpp_llvm_version }} main
 
-- name: Install LLVM
+- name: llvm | Install LLVM
   become: true
   ansible.builtin.apt:
     name:
@@ -34,7 +34,7 @@
       - llvm-{{ cpp_llvm_version }}-dev
       - llvm-{{ cpp_llvm_version }}-tools
 
-- name: Update LLVM alternatives
+- name: llvm | Update LLVM alternatives
   become: true
   community.general.alternatives:
     name: clang
@@ -421,7 +421,7 @@
         link: /usr/bin/yaml2obj
         path: /usr/bin/yaml2obj-{{ cpp_llvm_version }}
 
-- name: Update clang++ alternatives
+- name: llvm | Update clang++ alternatives
   become: true
   community.general.alternatives:
     name: clang++
@@ -429,7 +429,7 @@
     path: /usr/bin/clang++-{{ cpp_llvm_version }}
     priority: "{{ cpp_llvm_version }}0"
 
-- name: Update clang-format alternatives
+- name: llvm | Update clang-format alternatives
   become: true
   community.general.alternatives:
     name: clang-format
@@ -441,7 +441,7 @@
         link: /usr/bin/clang-format-diff
         path: /usr/bin/clang-format-diff-{{ cpp_llvm_version }}
 
-- name: Update clang-tidy alternatives
+- name: llvm | Update clang-tidy alternatives
   become: true
   community.general.alternatives:
     name: clang-tidy
@@ -453,7 +453,7 @@
         link: /usr/bin/clang-tidy-diff.py
         path: /usr/bin/clang-tidy-diff-{{ cpp_llvm_version }}.py
 
-- name: Update run-clang-tidy alternatives
+- name: llvm | Update run-clang-tidy alternatives
   become: true
   community.general.alternatives:
     name: run-clang-tidy

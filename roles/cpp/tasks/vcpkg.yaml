@@ -1,4 +1,4 @@
-- name: Download vcpkg
+- name: vcpkg | Download vcpkg
   ansible.builtin.git:
     repo: "{{ manifest.vcpkg.url }}"
     dest: "{{ home }}/.local/vcpkg"

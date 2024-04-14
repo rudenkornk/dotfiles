@@ -1,5 +1,0 @@
-apt_keys: /etc/apt/trusted.gpg.d
-trusted: "{{ hostvars[inventory_hostname]['trusted'] }}"
-ubuntu_keyserver: https://keyserver.ubuntu.com/pks/lookup?op=get&search=
-web_delay: 30
-web_retries: 5

@@ -2,3 +2,9 @@ extra_vars:
   hosts_var: localhost
   ubuntu_tag: 22.04
   user: root
+
+enable_list:
+  - empty-string-compare
+  - no-log-password
+  - no-same-owner
+  - name[prefix]

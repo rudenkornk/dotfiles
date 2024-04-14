@@ -9,6 +9,8 @@
     src: "{{ playbook_dir }}"
     dest: "{{ dotfiles_parent_path }}"
     rsync_opts: "--filter=':- .gitignore'"
+    owner: false
+    group: false
   register: dotfiles_changed
   changed_when: dotfiles_changed.stdout_lines | length >= 10
 

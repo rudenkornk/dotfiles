@@ -1,4 +1,4 @@
-profile:
+profile: # noqa: var-naming[no-role-prefix]
   email: rudenkornk@gmail.com
   gpg_email: rudenkornk@gmail.com
   name: Nikita Rudenko

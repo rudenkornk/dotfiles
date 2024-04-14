@@ -1,3 +1,3 @@
 lua_version: 5.4
-luarocks_version: 3.9.2
-luarocks_url: https://luarocks.org/releases/luarocks-{{ luarocks_version }}.tar.gz
+lua_rocks_version: 3.9.2
+lua_rocks_url: https://luarocks.org/releases/luarocks-{{ lua_rocks_version }}.tar.gz

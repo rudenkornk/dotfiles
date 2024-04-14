@@ -1,4 +1,4 @@
-manifest:
+manifest: # noqa: var-naming[no-role-prefix]
   ansible_community_general:
     url: https://github.com/ansible-collections/community.general
     version: 8.4.0

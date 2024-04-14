@@ -1,7 +1,7 @@
 - name: Install Microsoft GPG keys
   become: true
   ansible.builtin.apt:
-    deb: "{{ microsoft_gpg_deb }}"
+    deb: "{{ powershell_microsoft_gpg_deb }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: powershell_installed

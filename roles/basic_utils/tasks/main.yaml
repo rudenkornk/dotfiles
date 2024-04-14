@@ -81,10 +81,16 @@
 
 - name: Set common facts
   ansible.builtin.set_fact:
+    trusted: "{{ hostvars[inventory_hostname]['trusted'] }}"
     in_container: "{{ basic_utils_container.stdout }}"
     in_wsl: "{{ basic_utils_wsl.stdout }}"
     use_gui: "{{ basic_utils_x_list.files | length > 0 }}"
     user_id: "{{ getent_passwd[ansible_user].1 }}"
+
+    apt_keys: /etc/apt/trusted.gpg.d
+    ubuntu_keyserver: https://keyserver.ubuntu.com/pks/lookup?op=get&search=
+    web_delay: 30
+    web_retries: 5
   tags:
     - skip_ansible_lint
 

@@ -10,6 +10,14 @@
   ansible.builtin.apt_repository:
     repo: deb [arch=amd64 signed-by={{ apt_keys }}/llvm.asc] {{ cpp_llvm_repo }} llvm-toolchain-{{
       ansible_distribution_release }}-{{ cpp_llvm_version }} main
+  when: ansible_distribution_version is version('24.04', '<')
+
+- name: llvm | Add mantic LLVM repository (for Ubuntu 24.04 until LLVM adds suport for it)
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by={{ apt_keys }}/llvm.asc]
+      http://apt.llvm.org/mantic/ llvm-toolchain-mantic-{{ cpp_llvm_version }} main
+  when: ansible_distribution_version is version('24.04', '>=')
 
 - name: llvm | Install LLVM
   become: true

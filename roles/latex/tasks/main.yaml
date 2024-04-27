@@ -11,12 +11,25 @@
   ansible.builtin.apt:
     name:
       - bibclean
-      - libasound2
       - msttcorefonts
       - poppler-utils
       - python3-pygments
       - ttf-mscorefonts-installer
       - xvfb
+
+- name: Install libasound2 (for Ubuntu < 24.04)
+  become: true
+  ansible.builtin.apt:
+    name:
+      - libasound2
+  when: ansible_distribution_version is version('24.04', '<')
+
+- name: Install liboss4-salsa-asound2 (for Ubuntu >= 24.04)
+  become: true
+  ansible.builtin.apt:
+    name:
+      - liboss4-salsa-asound2
+  when: ansible_distribution_version is version('24.04', '>=')
 
 - name: Install draw.io
   become: true

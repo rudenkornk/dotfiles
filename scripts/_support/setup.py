@@ -2,13 +2,17 @@
 
 import argparse as _argparse
 import logging as _logging
+import string as _string
 from argparse import Namespace as _Namespace
 from argparse import _SubParsersAction
+from pathlib import Path as _Path
 
+from . import password as _password
 from . import roles_graph as _roles_graph
 from . import update as _update
 
 _logger = _logging.getLogger(__name__)
+_repo_path = _Path(__file__).parent.parent.parent
 
 
 def _add_update_parser(subparsers: _SubParsersAction) -> None:  # type: ignore
@@ -36,6 +40,15 @@ def _add_roles_graph_parser(subparsers: _SubParsersAction) -> None:  # type: ign
     graph_parser = subparsers.add_parser("graph", help="Generate roles dependency graph.")
     graph_parser.add_argument(
         "-s", "--silent", dest="silent", action="store_false", help="Do not open graph in image viewer."
+    )
+
+
+def _add_password_parser(subparsers: _SubParsersAction) -> None:  # type: ignore
+    graph_parser = subparsers.add_parser("password", help="Generate new password.")
+    graph_parser.add_argument("-a", "--alphabet", type=str, default=_string.ascii_lowercase, help="Password alphabet.")
+    graph_parser.add_argument("-l", "--length", type=int, default=24, help="Password length.")
+    graph_parser.add_argument(
+        "-o", "--output", type=_Path, default=_repo_path / "__build__" / "password.txt", help="Where to store password."
     )
 
 
@@ -69,6 +82,7 @@ def _get_parser() -> _argparse.ArgumentParser:
     )
     _add_update_parser(subparsers)
     _add_roles_graph_parser(subparsers)
+    _add_password_parser(subparsers)
     return parser
 
 
@@ -105,6 +119,13 @@ def _process_roles_graph(args: _Namespace) -> None:
     _roles_graph.generate_png(args.silent)
 
 
+def _process_password(args: _Namespace) -> None:
+    password = _password.generate_password(args.alphabet, args.length)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(password, encoding="utf-8")
+    _logger.info(f"Password saved to {args.output}")
+
+
 def process_shell_args(shell_args: list[str]) -> None:
     args = _parse_shell_args(shell_args)
     log_level = _log_level(args.log_level)
@@ -113,3 +134,5 @@ def process_shell_args(shell_args: list[str]) -> None:
         _process_update(args)
     if args.command == "graph":
         _process_roles_graph(args)
+    if args.command == "password":
+        _process_password(args)

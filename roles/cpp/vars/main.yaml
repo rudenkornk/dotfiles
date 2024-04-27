@@ -5,4 +5,4 @@ cpp_toolchain_r_repo: https://ppa.launchpadcontent.net/ubuntu-toolchain-r/test/u
 cpp_toolchain_r_default_path: /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list
 cpp_llvm_gpg: https://apt.llvm.org/llvm-snapshot.gpg.key
 cpp_llvm_repo: http://apt.llvm.org/{{ ansible_distribution_release }}/
-cpp_llvm_version: 17
+cpp_llvm_version: 18

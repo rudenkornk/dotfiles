@@ -1,3 +1,22 @@
+- name: Add eza gpg key (for Ubuntu < 24.04)
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ shell_utils_eza_gpg }}"
+    dest: "{{ apt_keys }}/eza.asc"
+    mode: "0o644"
+  when: ansible_distribution_version is version('24.04', '<')
+
+- name: Add gierens repo (for Ubuntu < 24.04)
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by={{ apt_keys }}/eza.asc] {{ shell_utils_gierens_repo }} stable main
+  when: ansible_distribution_version is version('24.04', '<')
+
+- name: Install eza
+  become: true
+  ansible.builtin.apt:
+    name: eza
+
 - name: Install fd
   become: true
   ansible.builtin.apt:
@@ -47,7 +66,6 @@
   become: true
   ansible.builtin.apt:
     name:
-      - exa
       - hexyl
       - jq
       - moreutils

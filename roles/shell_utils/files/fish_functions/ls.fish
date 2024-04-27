@@ -1,3 +1,3 @@
-function ls --wraps exa
-  exa --classify $argv
+function ls --wraps eza
+  eza --classify $argv
 end

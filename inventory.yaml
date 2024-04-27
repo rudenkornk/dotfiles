@@ -19,3 +19,7 @@ all:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
       trusted: true
+    dotfiles_24.04:
+      ansible_connection: podman
+      ansible_python_interpreter: auto_silent
+      trusted: true

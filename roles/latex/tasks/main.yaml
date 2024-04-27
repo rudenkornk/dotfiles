@@ -24,11 +24,13 @@
       - libasound2
   when: ansible_distribution_version is version('24.04', '<')
 
-- name: Install liboss4-salsa-asound2 (for Ubuntu >= 24.04)
+# Weirdly, liboss4-salsa-asound2 alternative is automatically uninstall by
+# java openjdk-21-jdk package, thus choosing libasound2t64 instead
+- name: Install libasound2t64 (for Ubuntu >= 24.04)
   become: true
   ansible.builtin.apt:
     name:
-      - liboss4-salsa-asound2
+      - libasound2t64
   when: ansible_distribution_version is version('24.04', '>=')
 
 - name: Install draw.io

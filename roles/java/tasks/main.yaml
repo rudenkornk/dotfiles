@@ -2,4 +2,4 @@
   become: true
   ansible.builtin.apt:
     name:
-      - openjdk-19-jdk
+      - openjdk-21-jdk

@@ -89,5 +89,5 @@ make graph
 ## Test
 
 ```bash
-make check UBUNTU_TAG=22.04
+make check IMAGE=ubuntu:22.04
 ```

@@ -1,10 +1,10 @@
 - name: Create test linux container
   hosts: localhost
   tasks:
-    - name: Spin up dotfiles_{{ ubuntu_tag }}
+    - name: Spin up {{ container }}
       containers.podman.podman_container:
-        name: dotfiles_{{ ubuntu_tag }}
-        image: ubuntu:{{ ubuntu_tag }}
+        name: "{{ container }}"
+        image: "{{ image }}"
         interactive: true
         privileged: true
         tty: true

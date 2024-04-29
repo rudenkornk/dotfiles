@@ -20,7 +20,7 @@ config: $(BUILD_DIR)/bootstrap_control_node
 		sudo bash -c ''; \
 	fi
 	if [[ "$(HOSTS)" =~ ^dotfiles_ ]]; then \
-		$(VENV) && ansible-playbook --extra-vars "ubuntu_tag=$(UBUNTU_TAG)" \
+		$(VENV) && ansible-playbook --extra-vars "container=$(HOSTS) image=$(IMAGE)" \
 			--inventory inventory.yaml playbook_dotfiles_container.yaml; \
 	fi
 	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
@@ -52,7 +52,8 @@ hooks: .git/hooks/pre-commit
 
 
 ############################## Checks ##############################
-UBUNTU_TAG ?= 22.04
+IMAGE ?= ubuntu:22.04
+CONTAINER := dotfiles_$(subst :,_,$(IMAGE))
 
 .PHONY: check
 check: \
@@ -86,18 +87,18 @@ lint: $(BUILD_DIR)/bootstrap_control_node
 
 .PHONY: check_host
 check_host: $(BUILD_DIR)/bootstrap_control_node
-	make HOSTS=dotfiles_$(UBUNTU_TAG) config
+	make HOSTS=$(CONTAINER) config
 
 .PHONY: check_bootstrap_control_node
-check_bootstrap_control_node: $(BUILD_DIR)/$(UBUNTU_TAG)/bootstrap_control_node
+check_bootstrap_control_node: $(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node
 
-$(BUILD_DIR)/$(UBUNTU_TAG)/bootstrap_control_node: $(BUILD_DIR)/bootstrap_control_node
+$(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node: $(BUILD_DIR)/bootstrap_control_node
 	podman run --rm --interactive --tty \
 		--mount=type=bind,source=$$(pwd),target=$$(pwd) \
-		--workdir $$(pwd) ubuntu:$(UBUNTU_TAG) bash -c \
+		--workdir $$(pwd) $(IMAGE) bash -c \
 			' \
 			apt-get update && apt-get install make --yes --no-install-recommends && \
-			make BUILD_DIR=$(BUILD_DIR)/$(UBUNTU_TAG) $(BUILD_DIR)/$(UBUNTU_TAG)/bootstrap_control_node \
+			make BUILD_DIR=$(BUILD_DIR)/$(CONTAINER) $(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node \
 			'
 
 

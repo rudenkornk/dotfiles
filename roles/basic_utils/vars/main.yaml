@@ -1,0 +1,22 @@
+basic_utils_packages_dict:
+  Ubuntu:
+    - curl
+    - gnupg
+    - gpg-agent
+    - locales
+    - ntpdate
+    - rsync
+    - software-properties-common
+    - tzdata
+    - unzip
+    - xz-utils
+  Fedora:
+    - curl
+    - gnupg
+    - rsync
+    - tzdata
+    - unzip
+    - xz
+    - util-linux
+
+basic_utils_packages: "{{ basic_utils_packages_dict[ansible_distribution] }}"

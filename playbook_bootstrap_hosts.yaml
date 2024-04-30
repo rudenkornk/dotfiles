@@ -7,12 +7,16 @@
     - name: Install python
       become: true
       ansible.builtin.raw: |
-        if ! command -v python3 &> /dev/null; then
-          apt-get update && \
-          DEBIAN_FRONTEND=noninteractive apt-get \
-            install --yes --no-install-recommends \
-            python3-venv \
-            && \
+        if ! command -v python3 &> /dev/null; then \
+          if command -v apt-get &> /dev/null; then \
+            apt-get update && \
+            DEBIAN_FRONTEND=noninteractive \
+            apt-get install -y python3; \
+          elif command -v dnf &> /dev/null; then \
+            dnf install -y python3; \
+          else \
+            exit 1; \
+          fi && \
           echo "bootstrapped";
         fi
       args:

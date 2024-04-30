@@ -35,12 +35,12 @@
 - name: Set locale
   become: true
   community.general.locale_gen:
-    name: en_US.UTF-8
+    name: "{{ profile.locale }}"
 
 - name: Set timezone
   become: true
   community.general.timezone:
-    name: Europe/Moscow
+    name: "{{ profile.timezone }}"
 
 - name: Get user id
   ansible.builtin.getent:

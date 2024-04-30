@@ -1,6 +1,6 @@
 - name: Install sudo
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: sudo
 
 - name: Set correct credentials for the user {{ user }}

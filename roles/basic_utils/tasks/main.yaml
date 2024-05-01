@@ -74,11 +74,12 @@
 
 - name: Set common facts
   ansible.builtin.set_fact:
+    home: "{{ getent_passwd[ansible_user].4 }}"
+    user_id: "{{ getent_passwd[ansible_user].1 }}"
     trusted: "{{ hostvars[inventory_hostname]['trusted'] }}"
     in_container: "{{ in_container }}"
     in_wsl: "{{ basic_utils_wsl.stdout }}"
     use_gui: "{{ basic_utils_x_list.files | length > 0 }}"
-    user_id: "{{ getent_passwd[ansible_user].1 }}"
 
     apt_keys: /etc/apt/trusted.gpg.d
     ubuntu_keyserver: https://keyserver.ubuntu.com/pks/lookup?op=get&search=

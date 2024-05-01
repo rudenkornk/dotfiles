@@ -1,4 +1,3 @@
-home: "/home/{{ user }}" # noqa: var-naming[no-role-prefix]
 projects_path: "{{ home }}/projects" # noqa: var-naming[no-role-prefix]
 dotfiles_parent_path: "{{ projects_path }}"
 dotfiles_path: "{{ projects_path }}/dotfiles"

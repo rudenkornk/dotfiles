@@ -5,10 +5,9 @@ Ansible playbooks, which idempotently configure new system with a single bootstr
 ## Bootstrap
 
 ```bash
-sudo apt-get update && \
-sudo apt-get install git make --yes --no-install-recommends && \
 git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
-cd ~/projects/dotfiles && make
+cd ~/projects/dotfiles && ./bootstrap.sh && \
+make
 ```
 
 ## Showcase

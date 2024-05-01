@@ -67,13 +67,6 @@
   changed_when: false
   register: basic_utils_wsl
 
-- name: Check if inside container
-  ansible.builtin.shell: ([[ -f /.dockerenv || -f /run/.containerenv ]]) && echo true || echo false
-  args:
-    executable: bash
-  changed_when: false
-  register: basic_utils_container
-
 - name: Check if gui installed
   ansible.builtin.find:
     paths: /usr/share/xsessions/
@@ -82,7 +75,7 @@
 - name: Set common facts
   ansible.builtin.set_fact:
     trusted: "{{ hostvars[inventory_hostname]['trusted'] }}"
-    in_container: "{{ basic_utils_container.stdout }}"
+    in_container: "{{ in_container }}"
     in_wsl: "{{ basic_utils_wsl.stdout }}"
     use_gui: "{{ basic_utils_x_list.files | length > 0 }}"
     user_id: "{{ getent_passwd[ansible_user].1 }}"

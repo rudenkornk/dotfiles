@@ -10,11 +10,12 @@ USER ?= $(shell id --user --name)
 # This parameter is used for in-container checks
 BUILD_DIR ?= __build__
 VENV := source $(BUILD_DIR)/venv/bin/activate
+BOOTSTRAP := $(BUILD_DIR)/bootstrap_control_node
 
 
 ########################### Main targets ###########################
 .PHONY: config
-config: $(BUILD_DIR)/bootstrap_control_node
+config: $(BOOTSTRAP)
 	if [[ "$(HOSTS)" =~ "localhost" || "$(HOSTS)" =~ "127.0.0.1" ]]; then \
 		# Before we set up a new password, we need to ask user for the existing one \
 		sudo bash -c ''; \
@@ -30,15 +31,15 @@ config: $(BUILD_DIR)/bootstrap_control_node
 		--inventory inventory.yaml playbook.yaml
 
 .PHONY: update
-update: $(BUILD_DIR)/bootstrap_control_node
+update: $(BOOTSTRAP)
 	$(VENV) && ./scripts/support.py update
 
 .PHONY: graph
-graph: $(BUILD_DIR)/bootstrap_control_node
+graph: $(BOOTSTRAP)
 	$(VENV) && ./scripts/support.py graph
 
 .PHONY: format
-format: $(BUILD_DIR)/bootstrap_control_node
+format: $(BOOTSTRAP)
 	$(VENV) && python3 -m black .
 	$(VENV) && python3 -m isort --gitignore .
 	(npm install --save-exact && npx prettier --ignore-path <(cat .gitignore .prettierignore) . -w) || true # ignore if not installed
@@ -62,7 +63,7 @@ check: \
 	lint \
 
 .PHONY: lint
-lint: $(BUILD_DIR)/bootstrap_control_node
+lint: $(BOOTSTRAP)
 	$(VENV) && ansible-lint playbook.yaml
 	$(VENV) && ansible-lint playbook_bootstrap_control_node.yaml
 	$(VENV) && ansible-lint playbook_bootstrap_hosts.yaml
@@ -86,70 +87,24 @@ lint: $(BUILD_DIR)/bootstrap_control_node
 	fi
 
 .PHONY: check_host
-check_host: $(BUILD_DIR)/bootstrap_control_node
+check_host: $(BOOTSTRAP)
 	make HOSTS=$(CONTAINER) config
 
 .PHONY: check_bootstrap_control_node
 check_bootstrap_control_node: $(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node
 
-$(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node: $(BUILD_DIR)/bootstrap_control_node
+$(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node: $(BOOTSTRAP)
 	podman run --rm --interactive --tty \
 		--mount=type=bind,source=$$(pwd),target=$$(pwd) \
-		--workdir $$(pwd) $(IMAGE) bash -c \
-			' \
-			apt-get update && apt-get install make --yes --no-install-recommends && \
-			make BUILD_DIR=$(BUILD_DIR)/$(CONTAINER) $(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node \
-			'
+		--workdir $$(pwd) $(IMAGE) \
+		bash -c 'BUILD_DIR=$(BUILD_DIR)/$(CONTAINER) ./bootstrap.sh'
 
 
 ###################### Bootstrap control node ######################
-.PHONY: $(BUILD_DIR)/not_ready
+$(BOOTSTRAP): \
+	bootstrap.sh \
+	playbook_bootstrap_control_node.yaml \
+	requirements.txt \
+	roles/manifest/vars/main.yaml \
 
-$(BUILD_DIR)/bootstrap_control_node: \
-						$(BUILD_DIR)/ansible \
-						playbook_bootstrap_control_node.yaml \
-						roles/manifest/vars/main.yaml \
-
-	sudo bash -c ''
-	$(VENV) && ansible-playbook --inventory inventory.yaml playbook_bootstrap_control_node.yaml
-	mkdir --parents $(BUILD_DIR) && touch $@
-
-ANSIBLE_INSTALLED != ($(VENV) &> /dev/null && command -v ansible &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
-$(BUILD_DIR)/ansible: $(BUILD_DIR)/venv/venv requirements.txt $(ANSIBLE_INSTALLED)
-	$(VENV) && pip3 install -r requirements.txt
-	mkdir --parents $(BUILD_DIR) && touch $@
-
-$(BUILD_DIR)/venv/venv: $(BUILD_DIR)/python
-	python3 -m venv $(BUILD_DIR)/venv
-	touch $@
-
-PYTHON_INSTALLED != (command -v python3 &> /dev/null && command -v pip3 &> /dev/null) || echo "$(BUILD_DIR)/not_ready"
-$(BUILD_DIR)/python: $(BUILD_DIR)/sudo $(BUILD_DIR)/tzdata $(PYTHON_INSTALLED)
-	if [[ -n "$(PYTHON_INSTALLED)" ]]; then \
-		sudo apt-get update && \
-		DEBIAN_FRONTEND=noninteractive sudo apt-get install --yes --no-install-recommends \
-			python3-venv \
-			python3-pip \
-			; \
-	fi
-	mkdir --parents $(BUILD_DIR) && touch $@
-
-TZDATA_INSTALLED != (dpkg --get-selections | grep --quiet tzdata) || echo "$(BUILD_DIR)/not_ready"
-$(BUILD_DIR)/tzdata: $(BUILD_DIR)/sudo $(TZDATA_INSTALLED)
-	if [[ -n "$(TZDATA_INSTALLED)" ]]; then \
-		sudo ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime && \
-		sudo apt-get update && \
-		DEBIAN_FRONTEND=noninteractive sudo apt-get install --yes --no-install-recommends \
-			tzdata \
-			; \
-	fi
-	mkdir --parents $(BUILD_DIR) && touch $@
-
-SUDO_INSTALLED != command -v sudo &> /dev/null || echo "$(BUILD_DIR)/not_ready"
-$(BUILD_DIR)/sudo: $(SUDO_INSTALLED)
-	if [[ -n "$(SUDO_INSTALLED)" ]]; then \
-		apt-get update && \
-		DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-			sudo; \
-	fi
-	mkdir --parents $(BUILD_DIR) && touch $@
+	./bootstrap.sh

@@ -33,7 +33,7 @@
 
     - name: Install tools
       become: true
-      ansible.builtin.apt:
+      ansible.builtin.package:
         name:
           - git # for support.py update
           - graphviz # for support.py graph

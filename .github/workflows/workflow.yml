@@ -20,9 +20,7 @@ jobs:
       - name: Check config
         run: make check_host
       - name: Check idempotence
-        run: |
-          make check_host | tee __build__/log
-          ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
+        run: make check_host VERIFY_UNCHANGED=true
     strategy:
       matrix:
         image: ["ubuntu:22.04", "ubuntu:23.04", "ubuntu:23.10", "ubuntu:24.04"]
@@ -35,9 +33,7 @@ jobs:
       - name: Config
         run: make
       - name: Check idempotence
-        run: |
-          make | tee __build__/log
-          ! (grep -oP "changed=\d+" __build__/log | grep -oPq "changed=[1-9]")
+        run: make VERIFY_UNCHANGED=true
       # All format checks only available after complete machine setup
       - name: Check format
         run: |

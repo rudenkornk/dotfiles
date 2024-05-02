@@ -3,6 +3,7 @@ SHELL = /usr/bin/env bash
 ############################# Arguments ############################
 HOSTS ?= localhost
 REMOTE_USER ?= $(shell id --user --name)
+VERIFY_UNCHANGED ?= false
 
 
 ############################## Setup ###############################
@@ -14,7 +15,13 @@ BOOTSTRAP := $(BUILD_DIR)/bootstrap_control_node
 ########################### Main targets ###########################
 .PHONY: config
 config: $(BOOTSTRAP)
-	$(VENV) && HOSTS=$(HOSTS) REMOTE_USER=$(REMOTE_USER) IMAGE=$(IMAGE) ./config.sh
+	$(VENV) && \
+		HOSTS=$(HOSTS) \
+		REMOTE_USER=$(REMOTE_USER) \
+		VERIFY_UNCHANGED=$(VERIFY_UNCHANGED) \
+		BUILD_DIR=$(BUILD_DIR) \
+		IMAGE=$(IMAGE) \
+		./config.sh
 
 .PHONY: update
 update: $(BOOTSTRAP)

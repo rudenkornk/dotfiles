@@ -8,6 +8,7 @@ set -o xtrace
 # Script parameters
 # HOSTS
 # IMAGE
+# BUILD_DIR
 # REMOTE_USER
 
 PROJECT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
@@ -18,18 +19,28 @@ else
   LOCAL=false
 fi
 
+logs_path="$(realpath "$BUILD_DIR")/ansible_logs"
+mkdir -p "$logs_path"
+
 if [[ $LOCAL == true ]]; then
   # In case of local execution, privileges escalation is equvalent of calling sudo
   # We must call it beforehand, so Ansible will not ask for password
   sudo bash -c ''
 fi
 
+if [[ "$VERIFY_UNCHANGED" == true ]]; then
+  # Clear logs from previous runs
+  rm "$logs_path"/*
+fi
+
 if [[ "$HOSTS" =~ ^dotfiles_ ]]; then
-  ansible-playbook --extra-vars "container=$HOSTS image=$IMAGE" \
+  ANSIBLE_LOG_PATH="$logs_path/container.log" \
+    ansible-playbook --extra-vars "container=$HOSTS image=$IMAGE" \
     --inventory "$PROJECT_DIR/inventory.yaml" "$PROJECT_DIR/playbook_dotfiles_container.yaml"
 fi
 
-ansible-playbook --extra-vars "hosts_var=$HOSTS" \
+ANSIBLE_LOG_PATH="$logs_path/bootstrap_hosts.log" \
+  ansible-playbook --extra-vars "hosts_var=$HOSTS" \
   --extra-vars "user=$REMOTE_USER" \
   --inventory "$PROJECT_DIR/inventory.yaml" "$PROJECT_DIR/playbook_bootstrap_hosts.yaml"
 
@@ -47,17 +58,29 @@ if [[ $LOCAL == true ]] && [[ "$REMOTE_USER" != $(id --user --name) ]]; then
   # One more problem is that nested shell disguises parent's python virtual environment,
   # which results in picking wrong Ansible binary.
   # We have to set $PATH and $VIRTUAL_ENV manually back to their original values
+  chmod 777 "$logs_path"
   sudo --user "$REMOTE_USER" \
     bash -c " \
     sudo bash -c '' && \
     PATH=$PATH \
     VIRTUAL_ENV=$VIRTUAL_ENV \
+    ANSIBLE_LOG_PATH=\"$logs_path/main.log\" \
     ansible-playbook --extra-vars \"hosts_var=$HOSTS\" \
     --user \"$REMOTE_USER\" \
     --inventory \"$PROJECT_DIR/inventory.yaml\" \"$PROJECT_DIR/playbook.yaml\" \
     "
 else
-  ansible-playbook --extra-vars "hosts_var=$HOSTS" \
+  ANSIBLE_LOG_PATH="$logs_path/main.log" \
+    ansible-playbook --extra-vars "hosts_var=$HOSTS" \
     --user "$REMOTE_USER" \
     --inventory "$PROJECT_DIR/inventory.yaml" "$PROJECT_DIR/playbook.yaml"
+fi
+
+if [[ "$VERIFY_UNCHANGED" == true ]]; then
+  for log in "$logs_path"/*; do
+    if (grep -oP "changed=\d+" "$log" | grep -oPq "changed=[1-9]"); then
+      echo "IDEMPOTENCY CHECK FAILED"
+      exit 1
+    fi
+  done
 fi

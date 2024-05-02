@@ -10,7 +10,7 @@ jobs:
   check_container:
     env:
       IMAGE: ${{ matrix.image }}
-      USER: random_user
+      REMOTE_USER: random_user
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository

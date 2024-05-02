@@ -25,9 +25,10 @@ config: $(BOOTSTRAP)
 			--inventory inventory.yaml playbook_dotfiles_container.yaml; \
 	fi
 	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
+		--extra-vars "user=$(USER)" \
 		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
 	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
-		--extra-vars "user=$(USER)" \
+		--user $(USER) \
 		--inventory inventory.yaml playbook.yaml
 
 .PHONY: update

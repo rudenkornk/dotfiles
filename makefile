@@ -2,7 +2,7 @@ SHELL = /usr/bin/env bash
 
 ############################# Arguments ############################
 HOSTS ?= localhost
-USER ?= $(shell id --user --name)
+REMOTE_USER ?= $(shell id --user --name)
 
 
 ############################## Setup ###############################
@@ -25,10 +25,10 @@ config: $(BOOTSTRAP)
 			--inventory inventory.yaml playbook_dotfiles_container.yaml; \
 	fi
 	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
-		--extra-vars "user=$(USER)" \
+		--extra-vars "user=$(REMOTE_USER)" \
 		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
 	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
-		--user $(USER) \
+		--user $(REMOTE_USER) \
 		--inventory inventory.yaml playbook.yaml
 
 .PHONY: update

@@ -6,9 +6,7 @@ REMOTE_USER ?= $(shell id --user --name)
 
 
 ############################## Setup ###############################
-# DO NOT MANUALLY CHANGE BUILD_DIR
-# This parameter is used for in-container checks
-BUILD_DIR ?= __build__
+BUILD_DIR := __build__
 VENV := source $(BUILD_DIR)/venv/bin/activate
 BOOTSTRAP := $(BUILD_DIR)/bootstrap_control_node
 

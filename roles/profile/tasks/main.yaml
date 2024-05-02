@@ -26,6 +26,3 @@
 - name: Switch ansible_user
   ansible.builtin.set_fact:
     ansible_user: "{{ user }}"
-  tags:
-    # TODO: see https://github.com/ansible/ansible-lint/issues/3456
-    - skip_ansible_lint

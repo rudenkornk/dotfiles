@@ -3,11 +3,11 @@
   ansible.builtin.package:
     name: sudo
 
-- name: Set correct credentials for the user {{ user }}
+- name: Set correct credentials for {{ user }}
   ansible.builtin.include_tasks:
     file: "roles/secrets/tasks/credentials.yaml"
 
-- name: Append admin groups for user "{{ user }}"
+- name: Append admin groups for {{ user }}
   become: true
   ansible.builtin.user:
     name: "{{ user }}"

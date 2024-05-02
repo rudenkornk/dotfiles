@@ -51,6 +51,15 @@ if ! command -v make &>/dev/null; then
   fi
 fi
 
+if ! command -v git &>/dev/null; then
+  if [[ $distro == ubuntu ]]; then
+    sudo apt-get update
+    sudo apt-get install --yes --no-install-recommends git
+  elif [[ $distro == fedora ]]; then
+    sudo dnf install --assumeyes git
+  fi
+fi
+
 if [[ "$BUILD_DIR/venv" -ot "$PROJECT_DIR/requirements.txt" ]]; then
   python3 -m venv "$BUILD_DIR/venv"
   source "$BUILD_DIR/venv/bin/activate"

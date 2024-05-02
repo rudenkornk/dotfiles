@@ -5,7 +5,6 @@
   gather_facts: false
   tasks:
     - name: Install python
-      become: true
       ansible.builtin.raw: |
         if ! command -v python3 &> /dev/null; then \
           if command -v apt-get &> /dev/null; then \
@@ -23,3 +22,29 @@
         executable: bash
       register: bootstrap
       changed_when: ("bootstrapped" in bootstrap.stdout)
+
+    - name: Install sudo
+      ansible.builtin.package:
+        name: sudo
+
+    - name: Set correct credentials for {{ user }}
+      ansible.builtin.include_tasks:
+        file: "roles/secrets/tasks/credentials.yaml"
+      vars:
+        secrets_user: "{{ user }}"
+
+    - name: Append admin groups for {{ user }}
+      become: true
+      ansible.builtin.user:
+        name: "{{ user }}"
+        groups:
+          - adm
+          - sudo
+        append: true
+
+    - name: Add authorized_key for {{ user }}
+      become: true
+      ansible.posix.authorized_key:
+        user: "{{ user }}"
+        key: "{{ lookup('file', '{{ secrets_ssh_local_path }}/id_rsa.pub') }}"
+      when: ansible_connection == "ssh"

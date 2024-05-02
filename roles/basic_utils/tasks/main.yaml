@@ -1,7 +1,6 @@
 - name: Check sanity
   ansible.builtin.assert:
     that:
-      - user == ansible_user
       - ansible_distribution in "Ubuntu|Fedora"
 
 - name: Install common utils for other Ansible tasks
@@ -33,6 +32,13 @@
     database: passwd
     key: "{{ ansible_user }}"
 
+- name: Check if inside container
+  ansible.builtin.shell: ([[ -f /.dockerenv || -f /run/.containerenv ]]) && echo true || echo false
+  args:
+    executable: bash
+  changed_when: false
+  register: basic_utils_container_out
+
 - name: Check if inside WSL
   ansible.builtin.shell: |
     set -o pipefail
@@ -63,7 +69,7 @@
     home: "{{ getent_passwd[ansible_user].4 }}"
     user_id: "{{ getent_passwd[ansible_user].1 }}"
     trusted: "{{ hostvars[inventory_hostname]['trusted'] }}"
-    in_container: "{{ in_container }}"
+    in_container: "{{ basic_utils_container_out.stdout }}"
     in_wsl: "{{ basic_utils_wsl.stdout }}"
     use_gui: "{{ basic_utils_x_list.files | length > 0 }}"
 

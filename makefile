@@ -16,20 +16,7 @@ BOOTSTRAP := $(BUILD_DIR)/bootstrap_control_node
 ########################### Main targets ###########################
 .PHONY: config
 config: $(BOOTSTRAP)
-	if [[ "$(HOSTS)" =~ "localhost" || "$(HOSTS)" =~ "127.0.0.1" ]]; then \
-		# Before we set up a new password, we need to ask user for the existing one \
-		sudo bash -c ''; \
-	fi
-	if [[ "$(HOSTS)" =~ ^dotfiles_ ]]; then \
-		$(VENV) && ansible-playbook --extra-vars "container=$(HOSTS) image=$(IMAGE)" \
-			--inventory inventory.yaml playbook_dotfiles_container.yaml; \
-	fi
-	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
-		--extra-vars "user=$(REMOTE_USER)" \
-		--inventory inventory.yaml playbook_bootstrap_hosts.yaml
-	$(VENV) && ansible-playbook --extra-vars "hosts_var=$(HOSTS)" \
-		--user $(REMOTE_USER) \
-		--inventory inventory.yaml playbook.yaml
+	$(VENV) && HOSTS=$(HOSTS) REMOTE_USER=$(REMOTE_USER) IMAGE=$(IMAGE) ./config.sh
 
 .PHONY: update
 update: $(BOOTSTRAP)

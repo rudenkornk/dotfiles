@@ -69,6 +69,8 @@ fi
 
 source "$BUILD_DIR/venv/bin/activate"
 
+export ANSIBLE_LOG_PATH="$BUILD_DIR/ansible_logs/bootstrap_control_node.log"
+
 if [[ 
   ("$BUILD_DIR/bootstrap_control_node" -ot "$BUILD_DIR/venv") ||
   ("$BUILD_DIR/bootstrap_control_node" -ot "$PROJECT_DIR/playbook_bootstrap_control_node.yaml") ||

@@ -108,4 +108,4 @@ $(BOOTSTRAP): \
 	requirements.txt \
 	roles/manifest/vars/main.yaml \
 
-	./bootstrap.sh
+	BUILD_DIR=$(BUILD_DIR) ./bootstrap.sh

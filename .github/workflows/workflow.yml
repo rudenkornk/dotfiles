@@ -7,34 +7,25 @@ defaults:
     shell: bash
 
 jobs:
-  check_container:
+  # Check that the project is able to configure the current user
+  # This is the main use case, except for the fact that the current user is root due to GitHub Actions defaults
+  # This might not be representative, so here we just check that configuring the current user works
+  check_current_user:
     env:
-      IMAGE: ${{ matrix.image }}
-      REMOTE_USER: random_user
+      HOME: /root
     runs-on: ubuntu-22.04
+    container: ubuntu:22.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Check bootstrap control node
-        run: make check_bootstrap_control_node
-      - name: Check config
-        run: make check_host
-      - name: Check idempotence
-        run: make check_host VERIFY_UNCHANGED=true
-    strategy:
-      matrix:
-        image: ["ubuntu:22.04", "ubuntu:23.04", "ubuntu:23.10", "ubuntu:24.04"]
-
-  check_locahost:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Bootstrap control node
+        run: ./bootstrap.sh
       - name: Config
         run: make
       - name: Check idempotence
         run: make VERIFY_UNCHANGED=true
       # All format checks only available after complete machine setup
+      # So, we need to do them in one of the check jobs
       - name: Check format
         run: |
           make format
@@ -43,6 +34,39 @@ jobs:
             git diff
             exit 1
           fi
+
+  # As mentioned, previous check for the root user might not be representative
+  # Thus, all the main checks are done by root for the "random_user"
+  check:
+    runs-on: ubuntu-22.04
+    container: ${{ matrix.image }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Bootstrap control node
+        run: ./bootstrap.sh
+      - name: Bootstrap localhost
+        run: make bootstrap_hosts REMOTE_USER=random_user
+      - name: Set permissions
+        run: chown -R random_user:random_user .
+      - name: Config
+        run: sudo -u random_user make
+      - name: Check idempotence
+        run: sudo -u random_user make VERIFY_UNCHANGED=true
+    strategy:
+      matrix:
+        image: ["ubuntu:22.04", "ubuntu:23.04", "ubuntu:23.10", "ubuntu:24.04"]
+
+  # Check that the project is able to configure remote host
+  check_remote:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Check remote config
+        run: make check_host IMAGE=ubuntu:22.04 REMOTE_USER=random_user
+      - name: Check remote idempotence
+        run: make check_host IMAGE=ubuntu:22.04 REMOTE_USER=random_user VERIFY_UNCHANGED=true
 
   lint:
     runs-on: ubuntu-22.04

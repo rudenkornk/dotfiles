@@ -17,11 +17,23 @@ BOOTSTRAP := $(BUILD_DIR)/bootstrap_control_node
 config: $(BOOTSTRAP)
 	$(VENV) && \
 		HOSTS=$(HOSTS) \
+		IMAGE=$(IMAGE) \
 		REMOTE_USER=$(REMOTE_USER) \
 		VERIFY_UNCHANGED=$(VERIFY_UNCHANGED) \
-		BUILD_DIR=$(BUILD_DIR) \
-		IMAGE=$(IMAGE) \
 		./config.sh
+
+.PHONY: bootstrap_hosts
+bootstrap_hosts: $(BOOTSTRAP)
+	$(VENV) && \
+		HOSTS=$(HOSTS) \
+		IMAGE=$(IMAGE) \
+		REMOTE_USER=$(REMOTE_USER) \
+		VERIFY_UNCHANGED=$(VERIFY_UNCHANGED) \
+		BOOTSTRAP_ONLY=true \
+		./config.sh
+
+.PHONY: bootstrap_control_node
+bootstrap_control_node: $(BOOTSTRAP)
 
 .PHONY: update
 update: $(BOOTSTRAP)

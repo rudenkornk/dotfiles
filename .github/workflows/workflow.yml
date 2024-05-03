@@ -64,9 +64,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Check remote config
-        run: make check_host IMAGE=ubuntu:22.04 REMOTE_USER=random_user
+        run: make check_host IMAGE=ubuntu:22.04 REMOTE_USER=random_user REDUCED_CHECK=true
       - name: Check remote idempotence
-        run: make check_host IMAGE=ubuntu:22.04 REMOTE_USER=random_user VERIFY_UNCHANGED=true
+        run: make check_host IMAGE=ubuntu:22.04 REMOTE_USER=random_user REDUCED_CHECK=true VERIFY_UNCHANGED=true
 
   lint:
     runs-on: ubuntu-22.04

@@ -103,7 +103,7 @@
 
     - name: Create config directory for lazy
       ansible.builtin.file:
-        path: "{{ neovim_base }}_3/config"
+        path: "{{ neovim_base }}_3"
         state: directory
         mode: "0o755"
 
@@ -113,12 +113,6 @@
         dest: "{{ neovim_base }}_3/config"
         state: link
         force: true
-
-    - name: Create neovim keymap directory
-      ansible.builtin.file:
-        path: "{{ neovim_base }}_3/config/keymap"
-        state: directory
-        mode: "0o755"
 
     - name: Set up clipboard for neovim
       ansible.builtin.template:
@@ -135,7 +129,6 @@
         mode: "0o755"
       loop:
         - "{{ neovim_base }}_{{ neovim_version }}/cache"
-        - "{{ neovim_base }}_{{ neovim_version }}/config"
         - "{{ neovim_base }}_{{ neovim_version }}/share"
 
     - name: Create neovim configuration symlinks

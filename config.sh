@@ -9,6 +9,7 @@ HOSTS=${HOSTS:-localhost}
 IMAGE=${IMAGE:-}
 REMOTE_USER=${REMOTE_USER:-$(id --user --name)}
 VERIFY_UNCHANGED=${VERIFY_UNCHANGED:-false}
+REDUCED_CHECK=${REDUCED_CHECK:-false}
 BOOTSTRAP_ONLY=${BOOTSTRAP_ONLY:-false}
 
 PROJECT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
@@ -73,7 +74,9 @@ main() {
       "
   else
     ANSIBLE_LOG_PATH="$logs_path/main.log" \
-      ansible-playbook --extra-vars "hosts_var=$HOSTS" \
+      ansible-playbook \
+      --extra-vars "hosts_var=$HOSTS" \
+      --extra-vars "{ reduced_check: $REDUCED_CHECK }" \
       --user "$REMOTE_USER" \
       --inventory "$PROJECT_DIR/inventory.yaml" "$PROJECT_DIR/playbook.yaml"
   fi

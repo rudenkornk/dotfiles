@@ -4,6 +4,7 @@ SHELL = /usr/bin/env bash
 HOSTS ?= localhost
 REMOTE_USER ?= $(shell id --user --name)
 VERIFY_UNCHANGED ?= false
+REDUCED_CHECK ?= false
 
 
 ############################## Setup ###############################
@@ -20,6 +21,7 @@ config: $(BOOTSTRAP)
 		IMAGE=$(IMAGE) \
 		REMOTE_USER=$(REMOTE_USER) \
 		VERIFY_UNCHANGED=$(VERIFY_UNCHANGED) \
+		REDUCED_CHECK=$(REDUCED_CHECK) \
 		./config.sh
 
 .PHONY: bootstrap_hosts
@@ -29,6 +31,7 @@ bootstrap_hosts: $(BOOTSTRAP)
 		IMAGE=$(IMAGE) \
 		REMOTE_USER=$(REMOTE_USER) \
 		VERIFY_UNCHANGED=$(VERIFY_UNCHANGED) \
+		REDUCED_CHECK=$(REDUCED_CHECK) \
 		BOOTSTRAP_ONLY=true \
 		./config.sh
 

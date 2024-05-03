@@ -28,9 +28,11 @@
     - role: java
     - role: ansible
     - role: latex
+      when: not reduced_check
     - role: lua
     - role: tmux
     - role: neovim
+      when: not reduced_check
     - role: chrome
     - role: telegram
     - role: mattermost

@@ -5,13 +5,14 @@ set -o pipefail
 set -o nounset
 set -o xtrace
 
-# Script parameters
-# HOSTS
-# IMAGE
-# BUILD_DIR
-# REMOTE_USER
+HOSTS=${HOSTS:-localhost}
+IMAGE=${IMAGE:-}
+REMOTE_USER=${REMOTE_USER:-$(id --user --name)}
+VERIFY_UNCHANGED=${VERIFY_UNCHANGED:-false}
+BOOTSTRAP_ONLY=${BOOTSTRAP_ONLY:-false}
 
 PROJECT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
+BUILD_DIR="$PROJECT_DIR/__build__"
 
 if [[ "$HOSTS" =~ localhost || "$HOSTS" =~ 127.0.0.1 ]]; then
   LOCAL=true
@@ -44,36 +45,42 @@ ANSIBLE_LOG_PATH="$logs_path/bootstrap_hosts.log" \
   --extra-vars "user=$REMOTE_USER" \
   --inventory "$PROJECT_DIR/inventory.yaml" "$PROJECT_DIR/playbook_bootstrap_hosts.yaml"
 
-if [[ $LOCAL == true ]] && [[ "$REMOTE_USER" != $(id --user --name) ]]; then
-  # A special case with local execution from a different user
-  # In such case Ansible does not change any environment variables, including $HOME or $USER
-  # Effectively Ansible executes playbook as a current user instead or $REMOTE_USER
-  # Thus, we must manually change user beforehand with a sudo call
-  #
-  # This, however, introduces another problem:
-  # After user change, privileges escalation from Ansible playbooks no longer works,
-  # since we have opened another shell
-  # To fix this, we have to call nested sudo alongside ansible call
-  #
-  # One more problem is that nested shell disguises parent's python virtual environment,
-  # which results in picking wrong Ansible binary.
-  # We have to set $PATH and $VIRTUAL_ENV manually back to their original values
-  chmod 777 "$logs_path"
-  sudo --user "$REMOTE_USER" \
-    bash -c " \
-    sudo bash -c '' && \
-    PATH=$PATH \
-    VIRTUAL_ENV=$VIRTUAL_ENV \
-    ANSIBLE_LOG_PATH=\"$logs_path/main.log\" \
-    ansible-playbook --extra-vars \"hosts_var=$HOSTS\" \
-    --user \"$REMOTE_USER\" \
-    --inventory \"$PROJECT_DIR/inventory.yaml\" \"$PROJECT_DIR/playbook.yaml\" \
-    "
-else
-  ANSIBLE_LOG_PATH="$logs_path/main.log" \
-    ansible-playbook --extra-vars "hosts_var=$HOSTS" \
-    --user "$REMOTE_USER" \
-    --inventory "$PROJECT_DIR/inventory.yaml" "$PROJECT_DIR/playbook.yaml"
+main() {
+  if [[ $LOCAL == true ]] && [[ "$REMOTE_USER" != $(id --user --name) ]]; then
+    # A special case with local execution from a different user
+    # In such case Ansible does not change any environment variables, including $HOME or $USER
+    # Effectively Ansible executes playbook as a current user instead or $REMOTE_USER
+    # Thus, we must manually change user beforehand with a sudo call
+    #
+    # This, however, introduces another problem:
+    # After user change, privileges escalation from Ansible playbooks no longer works,
+    # since we have opened another shell
+    # To fix this, we have to call nested sudo alongside ansible call
+    #
+    # One more problem is that nested shell disguises parent's python virtual environment,
+    # which results in picking wrong Ansible binary.
+    # We have to set $PATH and $VIRTUAL_ENV manually back to their original values
+    chmod a=u "$logs_path"
+    sudo --user "$REMOTE_USER" \
+      bash -c " \
+        sudo bash -c '' && \
+        PATH=\"$PATH\" \
+        VIRTUAL_ENV=\"$VIRTUAL_ENV\" \
+        ANSIBLE_LOG_PATH=\"$logs_path/main.log\" \
+        ansible-playbook --extra-vars \"hosts_var=$HOSTS\" \
+        --user \"$REMOTE_USER\" \
+        --inventory \"$PROJECT_DIR/inventory.yaml\" \"$PROJECT_DIR/playbook.yaml\" \
+      "
+  else
+    ANSIBLE_LOG_PATH="$logs_path/main.log" \
+      ansible-playbook --extra-vars "hosts_var=$HOSTS" \
+      --user "$REMOTE_USER" \
+      --inventory "$PROJECT_DIR/inventory.yaml" "$PROJECT_DIR/playbook.yaml"
+  fi
+}
+
+if [[ "$BOOTSTRAP_ONLY" != true ]]; then
+  main
 fi
 
 if [[ "$VERIFY_UNCHANGED" == true ]]; then

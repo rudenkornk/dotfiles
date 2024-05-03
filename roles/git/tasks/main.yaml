@@ -53,10 +53,19 @@
     deb: "{{ manifest.github_cli.url }}"
     allow_downgrade: true
 
+# unarchive usually sets owner and group to a current user
+# except for the case when the user is root
+# In such case it can even set different groups in sequential runs,
+# which leads to idempotency check failures
+# For a weird reason this happens only on this exact unarchive usage.
+# Thus, we force owner and group to the current user here
+# See https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#parameter-owner
 - name: Install lazygit
   ansible.builtin.unarchive:
     src: "{{ manifest.lazygit.url }}"
     dest: "{{ home }}/.local/bin"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"

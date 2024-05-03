@@ -9,7 +9,7 @@ VERIFY_UNCHANGED ?= false
 ############################## Setup ###############################
 BUILD_DIR := __build__
 VENV := source $(BUILD_DIR)/venv/bin/activate
-BOOTSTRAP := $(BUILD_DIR)/bootstrap_control_node
+BOOTSTRAP := $(BUILD_DIR)/bootstrap_control_node_$(shell id --user --name)
 
 
 ########################### Main targets ###########################
@@ -70,7 +70,7 @@ check: \
 .PHONY: lint
 lint: $(BOOTSTRAP)
 	$(VENV) && ansible-lint playbook.yaml
-	$(VENV) && ansible-lint playbook_bootstrap_control_node.yaml
+	$(VENV) && ansible-lint playbook_ansible_collections.yaml
 	$(VENV) && ansible-lint playbook_bootstrap_hosts.yaml
 	$(VENV) && ansible-lint playbook_dotfiles_container.yaml
 	$(VENV) && python3 -m mypy .
@@ -108,7 +108,7 @@ $(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node: $(BOOTSTRAP)
 ###################### Bootstrap control node ######################
 $(BOOTSTRAP): \
 	bootstrap.sh \
-	playbook_bootstrap_control_node.yaml \
+	playbook_ansible_collections.yaml \
 	requirements.txt \
 	roles/manifest/vars/main.yaml \
 

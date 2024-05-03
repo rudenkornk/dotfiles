@@ -1,5 +1,5 @@
 [alias]
-    amend = commit --amend
+    amend = commit --amend --reuse-message @
     bf = ! git diff --name-only --relative --diff-filter=d | xargs bat --diff
     bl = blame -s
     br = branch -vv

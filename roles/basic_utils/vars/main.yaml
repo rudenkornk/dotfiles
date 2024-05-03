@@ -5,6 +5,7 @@ basic_utils_packages_dict:
     - gpg-agent
     - locales
     - ntpdate
+    - patch
     - rsync
     - software-properties-common
     - tzdata
@@ -13,10 +14,11 @@ basic_utils_packages_dict:
   Fedora:
     - curl
     - gnupg
+    - patch
     - rsync
     - tzdata
     - unzip
-    - xz
     - util-linux
+    - xz
 
 basic_utils_packages: "{{ basic_utils_packages_dict[ansible_distribution] }}"

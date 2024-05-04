@@ -57,7 +57,7 @@
 
     - name: Remove xsel package if in WSL
       become: true
-      ansible.builtin.apt:
+      ansible.builtin.package:
         name: xsel
         state: absent
 
@@ -72,7 +72,7 @@
   block:
     - name: Set clipboard when not in WSL
       become: true
-      ansible.builtin.apt:
+      ansible.builtin.package:
         name: xsel
 
     - name: Set clipboard fact to xsel

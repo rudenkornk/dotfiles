@@ -1,3 +1,6 @@
+apt_keys: /etc/apt/trusted.gpg.d # noqa: var-naming[no-role-prefix]
+ubuntu_keyserver: https://keyserver.ubuntu.com/pks/lookup?op=get&search= # noqa: var-naming[no-role-prefix]
+
 basic_utils_packages_dict:
   Ubuntu:
     - curl

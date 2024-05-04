@@ -10,22 +10,25 @@
   # and idempotence checks fail
   # As a workaround we set `changed_when` to false
   changed_when: false
+  when: ansible_distribution == "Ubuntu"
 
 - name: Add fish repository
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch=amd64 signed-by={{ apt_keys }}/fish.asc] {{ shell_fish_repo }}
       {{ ansible_distribution_release }} main
+  when: ansible_distribution == "Ubuntu"
 
 - name: Add fish src repository
   become: true
   ansible.builtin.apt_repository:
     repo: deb-src [arch=amd64 signed-by={{ apt_keys }}/fish.asc] {{ shell_fish_repo }}
       {{ ansible_distribution_release }} main
+  when: ansible_distribution == "Ubuntu"
 
 - name: Install fish
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: fish
 
 - name: Create fish functions directory
@@ -60,7 +63,7 @@
 
 - name: Install bash-completion
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: bash-completion
 
 - name: Create bash completions directory

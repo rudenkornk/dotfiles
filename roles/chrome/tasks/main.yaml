@@ -2,4 +2,4 @@
   become: true
   ansible.builtin.apt:
     deb: "{{ chrome_deb }}"
-  when: use_gui
+  when: use_gui and ansible_distribution == 'Ubuntu'

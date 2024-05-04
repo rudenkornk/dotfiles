@@ -1,6 +1,6 @@
 - name: Install git
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: git
 
 - name: Set up user.gitconfig
@@ -25,20 +25,22 @@
   delay: "{{ web_delay }}"
   register: git_installed
   until: git_installed is not failed
+  when: ansible_distribution == "Ubuntu"
 
 - name: Add git-secret repository
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch=amd64 signed-by={{ apt_keys }}/git_secret.asc] {{ git_secret_repo }} git-secret main
+  when: ansible_disribution == "Ubuntu"
 
 - name: Install git secret
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: git-secret
 
 - name: Install mr
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: mr
 
 - name: Set up .mrconfig

@@ -8,7 +8,7 @@
 - name: Add mattermost repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by={{ apt_keys }}/mattermost.asc] {{ mattermost_repo }} stable main
+    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/mattermost.asc] {{ mattermost_repo }} stable main
 
 # Using apt is preffered way, because it can be tested inside containers
 - name: Install mattermost

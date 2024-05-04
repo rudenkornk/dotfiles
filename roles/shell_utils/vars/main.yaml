@@ -1,2 +1,2 @@
 shell_utils_eza_gpg: https://raw.githubusercontent.com/eza-community/eza/main/deb.asc
-shell_utils_gierens_repo: http://deb.gierens.de
+shell_utils_gierens_repo: http://deb.gierens.de stable main

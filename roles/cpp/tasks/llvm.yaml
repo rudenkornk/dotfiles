@@ -1,3 +1,7 @@
+- name: llvm | Check tasks included for Ubuntu
+  ansible.builtin.assert:
+    that: ansible_distribution == "Ubuntu"
+
 - name: llvm | Add LLVM gpg key
   become: true
   ansible.builtin.get_url:
@@ -14,7 +18,7 @@
 - name: llvm | Add mantic LLVM repository (for Ubuntu 24.04 until LLVM adds suport for it)
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/llvm.asc] {{ cpp_llvm_mantic_repo }}
+    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/llvm.asc] {{ cpp_llvm_repo_mantic }}
   when: ansible_distribution_version is version('24.04', '>=')
 
 - name: llvm | Install LLVM

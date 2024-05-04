@@ -1,9 +1,11 @@
 - name: Install python
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
+      - "{{ {'Ubuntu': 'python3-dev', 'Fedora': 'python3-devel'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'python3-venv', 'Fedora': 'python3-virtualenv'}[ansible_distribution] }}"
+      - python3-packaging
       - python3-pip
-      - python3-venv
       - virtualenv
 
 - name: Check if pip.conf file exists

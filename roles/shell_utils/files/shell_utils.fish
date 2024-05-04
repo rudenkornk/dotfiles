@@ -30,9 +30,13 @@ set --export fzf_fd_opts \
     --exclude .git \
     --exclude .gnupg \
     --exclude .gradle \
-    --exclude .npm\
+    --exclude .mypy_cache \
+    --exclude .npm \
     --exclude .rustup \
+    --exclude __pycache__ \
+    --exclude site-packages \
     --follow \
+    --no-ignore \
     --hidden \
 
 set --export fzf_ps_opts \

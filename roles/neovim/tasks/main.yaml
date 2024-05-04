@@ -10,20 +10,15 @@
 
 - name: Install vim as a backup
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: vim
 
 - name: Install neovim gem
   become: true
-  ansible.builtin.apt:
-    name: ruby-neovim
-
-- name: Install python packages
-  become: true
-  ansible.builtin.apt:
-    name:
-      - python3-pynvim
-      - python3-sympy
+  community.general.gem:
+    name: neovim
+  when: ansible_distribution == "Ubuntu" or
+    (ansible_distribution == "Fedora" and ansible_distribution_version is version('40', '>='))
 
 - name: Install node.js packages
   become: true
@@ -33,6 +28,13 @@
   loop:
     - neovim
     - npm-groovy-lint
+
+- name: Install perl neovim package
+  become: true
+  community.general.cpanm:
+    name: Neovim::Ext
+  # TODO: enable this
+  when: false
 
 - name: Install tree-sitter-cli
   ansible.builtin.shell: |

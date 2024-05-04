@@ -1,31 +1,6 @@
 apt_keys: /etc/apt/trusted.gpg.d # noqa: var-naming[no-role-prefix]
 ubuntu_keyserver: https://keyserver.ubuntu.com/pks/lookup?op=get&search= # noqa: var-naming[no-role-prefix]
-basic_utils_deb_arch_map:
-  aarch64: arm64
-  x86_64: amd64
-deb_arch: "{{ basic_utils_deb_arch_map[ansible_architecture] }}" # noqa: var-naming[no-role-prefix]
-
-basic_utils_packages_dict:
-  Ubuntu:
-    - curl
-    - gnupg
-    - gpg-agent
-    - locales
-    - ntpdate
-    - patch
-    - rsync
-    - software-properties-common
-    - tzdata
-    - unzip
-    - xz-utils
-  Fedora:
-    - curl
-    - gnupg
-    - patch
-    - rsync
-    - tzdata
-    - unzip
-    - util-linux
-    - xz
-
-basic_utils_packages: "{{ basic_utils_packages_dict[ansible_distribution] }}"
+deb_arch: "{{ {'aarch64': 'arm64', 'x86_64': 'amd64'}[ansible_architecture] }}" # noqa: var-naming[no-role-prefix]
+pack: "{{ {'Ubuntu': 'deb', 'Fedora': 'rpm'}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix]
+pack_arch: # noqa: var-naming[no-role-prefix]
+  "{{ {'Ubuntu': deb_arch, 'Fedora': ansible_architecture}[ansible_distribution] }}"

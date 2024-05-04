@@ -1,35 +1,32 @@
-- name: Configure terminals
-  when: use_gui
-  block:
-    - name: Install kitty
-      become: true
-      ansible.builtin.apt:
-        name: kitty
+- name: Install kitty
+  become: true
+  ansible.builtin.package:
+    name: kitty
 
-    - name: Download kitty themes
-      ansible.builtin.git:
-        repo: "{{ manifest.kitty_themes.url }}"
-        dest: "{{ home }}/.config/kitty/kitty-themes"
-        version: "{{ manifest.kitty_themes.version }}"
-      register: terminals_downloaded
-      retries: "{{ web_retries }}"
-      delay: "{{ web_delay }}"
-      until: terminals_downloaded is not failed
+- name: Download kitty themes
+  ansible.builtin.git:
+    repo: "{{ manifest.kitty_themes.url }}"
+    dest: "{{ home }}/.config/kitty/kitty-themes"
+    version: "{{ manifest.kitty_themes.version }}"
+  register: terminals_downloaded
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  until: terminals_downloaded is not failed
 
-    - name: Create ~/.config/kitty/ directory
-      ansible.builtin.file:
-        dest: "{{ home }}/.config/kitty"
-        state: directory
-        mode: "0o755"
+- name: Create ~/.config/kitty/ directory
+  ansible.builtin.file:
+    dest: "{{ home }}/.config/kitty"
+    state: directory
+    mode: "0o755"
 
-    - name: Create symlink to kitty theme
-      ansible.builtin.file:
-        src: "{{ home }}/.config/kitty/kitty-themes/themes/Dracula.conf"
-        dest: "{{ home }}/.config/kitty/theme.conf"
-        state: link
+- name: Create symlink to kitty theme
+  ansible.builtin.file:
+    src: "{{ home }}/.config/kitty/kitty-themes/themes/Dracula.conf"
+    dest: "{{ home }}/.config/kitty/theme.conf"
+    state: link
 
-    - name: Create symlink to kitty config
-      ansible.builtin.file:
-        src: "{{ remote_role_path }}/files/kitty.conf"
-        dest: "{{ home }}/.config/kitty/kitty.conf"
-        state: link
+- name: Create symlink to kitty config
+  ansible.builtin.file:
+    src: "{{ remote_role_path }}/files/kitty.conf"
+    dest: "{{ home }}/.config/kitty/kitty.conf"
+    state: link

@@ -39,7 +39,7 @@
 
 - name: Install fontconfig
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: fontconfig
 
 - name: Update fonts cache

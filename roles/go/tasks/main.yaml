@@ -1,7 +1,7 @@
 - name: Install go
   become: true
-  ansible.builtin.apt:
-    name: golang-go
+  ansible.builtin.package:
+    name: "{{ {'Ubuntu': 'golang-go', 'Fedora': 'golang'}[ansible_distribution] }}"
 
 - name: Set up bash
   ansible.builtin.lineinfile:

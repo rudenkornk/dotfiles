@@ -1,6 +1,6 @@
 - name: Install tmux packages
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
       - tmux
       - python3-libtmux

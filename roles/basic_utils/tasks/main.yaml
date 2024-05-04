@@ -6,7 +6,24 @@
 - name: Install common utils for other Ansible tasks
   become: true
   ansible.builtin.package:
-    name: "{{ basic_utils_packages }}"
+    name:
+      - curl
+      - gnupg
+      - patch
+      - rsync
+      - tzdata
+      - unzip
+      - "{{ {'Ubuntu': 'xz-utils', 'Fedora': 'xz'}[ansible_distribution] }}"
+
+- name: Install Ubuntu-specific common utils for other Ansible tasks
+  become: true
+  ansible.builtin.apt:
+    name:
+      - gpg-agent
+      - locales
+      - ntpdate
+      - software-properties-common
+  when: ansible_distribution == "Ubuntu"
 
 - name: Install hwclock for Ubuntu >= 23.10
   become: true
@@ -14,6 +31,15 @@
     name:
       - util-linux-extra
   when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('23.10', '>=')
+
+- name: Install Fedora-specific common utils for other Ansible tasks
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - dnf-command(config-manager)
+      - dnf-plugins-core
+      - util-linux
+  when: ansible_distribution == "Fedora"
 
 - name: Set locale
   become: true

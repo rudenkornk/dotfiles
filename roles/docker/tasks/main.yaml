@@ -1,20 +1,65 @@
-- name: Add docker gpg key
+# See https://docs.docker.com/engine/install/ubuntu/
+- name: Uninstall legacy packages on Ubuntu
+  become: true
+  ansible.builtin.apt:
+    name:
+      - containerd
+      - docker-compose
+      - docker-compose-v2
+      - docker-doc
+      - docker.io
+      - podman-docker
+      - runc
+    state: absent
+  when: ansible_distribution == "Ubuntu"
+
+# See https://docs.docker.com/engine/install/fedora/
+- name: Uninstall legacy packages on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-engine-selinux
+      - docker-engine
+    state: absent
+  when: ansible_distribution == "Fedora"
+
+- name: Add docker gpg key on Ubuntu
   become: true
   ansible.builtin.get_url:
     url: "{{ docker_gpg }}"
     dest: "{{ apt_keys }}/docker.asc"
     mode: "0o644"
+  when: ansible_distribution == "Ubuntu"
 
-- name: Add docker repository
+- name: Add docker repository on Ubuntu
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/docker.asc] {{ docker_repo }}
+  when: ansible_distribution == "Ubuntu"
+
+- name: Add docker repository on Fedora
+  become: true
+  ansible.builtin.yum_repository:
+    name: docker-ce-stable
+    description: "Docker CE Stable - $basearch"
+    baseurl: "{{ docker_fedora_repo }}"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "{{ docker_fedora_gpg }}"
+  when: ansible_distribution == "Fedora"
 
 - name: Install docker
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
       - containerd.io
+      - docker-buildx-plugin
       - docker-ce
       - docker-ce-cli
       - docker-compose-plugin
@@ -37,8 +82,7 @@
   become: true
   ansible.builtin.user:
     name: "{{ ansible_user }}"
-    groups:
-      - docker
+    groups: docker
     append: true
 
 - name: Create ~/.docker dir
@@ -49,7 +93,7 @@
 
 - name: Install jq and sponge
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
       - jq
       - moreutils

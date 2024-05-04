@@ -5,14 +5,7 @@
   gather_facts: false
   tasks:
     - name: Detect disribution
-      ansible.builtin.raw: |
-        if command -v apt-get &> /dev/null; then \
-          echo "Ubuntu"; \
-        elif command -v dnf &> /dev/null; then \
-          echo "Fedora"; \
-        else \
-          exit 1; \
-        fi
+      ansible.builtin.raw: grep -oP '^ID=\K.*' /etc/os-release | sed -e 's/\(.*\)/\L\1/' | sed 's/\([[:alpha:]]\)/\U\1/'
       args:
         executable: bash
       register: distro
@@ -23,6 +16,7 @@
         ansible_distribution: "{{ distro.stdout_lines[0] }}"
 
     - name: Install python
+      become: true
       ansible.builtin.raw: |
         if ! command -v python3 &> /dev/null; then \
           if [[ {{ ansible_distribution }} == "Ubuntu" ]]; then \
@@ -42,6 +36,7 @@
       changed_when: ("bootstrapped" in bootstrap.stdout)
 
     - name: Install sudo
+      become: true
       ansible.builtin.package:
         name: sudo
 
@@ -51,28 +46,14 @@
       vars:
         secrets_user: "{{ user }}"
 
-    - name: Append adm group for {{ user }}
+    - name: Append admin groups for {{ user }}
       become: true
       ansible.builtin.user:
         name: "{{ user }}"
-        groups: adm
+        groups:
+          - adm
+          - "{{ {'Ubuntu': 'sudo', 'Fedora': 'wheel'}[ansible_distribution] }}"
         append: true
-
-    - name: Append sudo group on Ubuntu for {{ user }}
-      become: true
-      ansible.builtin.user:
-        name: "{{ user }}"
-        groups: sudo
-        append: true
-      when: ansible_distribution == "Ubuntu"
-
-    - name: Append wheel group on Fedora for {{ user }}
-      become: true
-      ansible.builtin.user:
-        name: "{{ user }}"
-        groups: wheel
-        append: true
-      when: ansible_distribution == "Fedora"
 
     - name: Add authorized_key for {{ user }}
       become: true

@@ -15,14 +15,14 @@
 - name: Add fish repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by={{ apt_keys }}/fish.asc] {{ shell_fish_repo }}
+    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/fish.asc] {{ shell_fish_repo }}
       {{ ansible_distribution_release }} main
   when: ansible_distribution == "Ubuntu"
 
 - name: Add fish src repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb-src [arch=amd64 signed-by={{ apt_keys }}/fish.asc] {{ shell_fish_repo }}
+    repo: deb-src [arch={{ deb_arch }} signed-by={{ apt_keys }}/fish.asc] {{ shell_fish_repo }}
       {{ ansible_distribution_release }} main
   when: ansible_distribution == "Ubuntu"
 

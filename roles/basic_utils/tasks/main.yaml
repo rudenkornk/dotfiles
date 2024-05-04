@@ -83,6 +83,8 @@
     msg:
       - "home: {{ home }}"
       - "trusted: {{ trusted }}"
+      - "ansible_architecture: {{ ansible_architecture }}"
+      - "deb_arch: {{ deb_arch }}"
       - "in_container: {{ in_container }}"
       - "in_wsl: {{ in_wsl }}"
       - "use_gui: {{ use_gui }}"

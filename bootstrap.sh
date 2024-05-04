@@ -122,6 +122,9 @@ if [[
 fi
 
 final_target="$BUILD_DIR/bootstrap_control_node_$(id --user --name)"
-if [[ ( "$final_target" -ot "$collections_target") ]]; then
+if [[ 
+  ("$final_target" -ot "$collections_target") ||
+  ("$final_target" -ot "${BASH_SOURCE[0]}") ]] \
+  ; then
   touch "$final_target"
 fi

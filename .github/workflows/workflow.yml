@@ -57,7 +57,7 @@ jobs:
       matrix:
         image: ["ubuntu:22.04", "ubuntu:23.04", "ubuntu:23.10", "ubuntu:24.04"]
 
-  # Check that the project is able to configure remote host
+  # Check that the project is able to configure remote host, with a user different from the current one
   check_remote:
     runs-on: ubuntu-22.04
     steps:

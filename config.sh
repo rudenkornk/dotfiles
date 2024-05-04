@@ -61,12 +61,20 @@ main() {
     # One more problem is that nested shell disguises parent's python virtual environment,
     # which results in picking wrong Ansible binary.
     # We have to set $PATH and $VIRTUAL_ENV manually back to their original values
+    #
+    # Finally, we have to additionally install ansible collections for the REMOTE_USER,
+    # since they are installed on per-user basis by default
     chmod a=u "$logs_path"
+    chmod a=u "$logs_path/"*
     sudo --user "$REMOTE_USER" \
       bash -c " \
         sudo bash -c '' && \
-        PATH=\"$PATH\" \
-        VIRTUAL_ENV=\"$VIRTUAL_ENV\" \
+        export PATH=\"$PATH\" && \
+        export VIRTUAL_ENV=\"$VIRTUAL_ENV\" && \
+
+        ANSIBLE_LOG_PATH=\"$logs_path/ansible_collections.log\" \
+          ansible-playbook --inventory inventory.yaml playbook_ansible_collections.yaml && \
+
         ANSIBLE_LOG_PATH=\"$logs_path/main.log\" \
         ansible-playbook \
         --extra-vars \"hosts_var=$HOSTS\" \

@@ -1,10 +1,14 @@
 - name: Install common utils
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
+      - "{{ {'Ubuntu': 'iputils-ping', 'Fedora': 'iputils'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'libevent-dev', 'Fedora': 'libevent-devel'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'ncurses-dev', 'Fedora': 'ncurses-devel'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'p7zip-full', 'Fedora': 'p7zip'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'p7zip-rar', 'Fedora': 'p7zip-plugins'}[ansible_distribution] }}"
       - acpi
       - apt-transport-https
-      - build-essential
       - bzip2
       - ca-certificates
       - dos2unix
@@ -14,19 +18,13 @@
       - gzip
       - htop
       - iptables
-      - iputils-ping
       - lftp
-      - libevent-dev
-      - linux-tools-common
-      - locales
       - lsb-release
-      - ncurses-dev
       - net-tools
-      - p7zip-full
-      - p7zip-rar
       - pkg-config
       - tar
       - tcl
+      - unrar
       - wget
       - zip
 

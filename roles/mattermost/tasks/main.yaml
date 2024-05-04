@@ -4,15 +4,28 @@
     url: "{{ mattermost_gpg }}"
     dest: "{{ apt_keys }}/mattermost.asc"
     mode: "0o644"
+  when: ansible_distribution == "Ubuntu"
 
 - name: Add mattermost repository
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/mattermost.asc] {{ mattermost_repo }}
+  when: ansible_distribution == "Ubuntu"
 
-# Using apt is preffered way, because it can be tested inside containers
-- name: Install mattermost
+- name: Install mattermost on Ubuntu
   become: true
   ansible.builtin.apt:
     name:
       - mattermost-desktop
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install mattermost on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ mattermost_rpm }}"
+    disable_gpg_check: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: mattermost_installed
+  until: mattermost_installed is not failed
+  when: ansible_distribution == 'Fedora'

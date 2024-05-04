@@ -4,46 +4,47 @@
     url: "{{ shell_utils_eza_gpg }}"
     dest: "{{ apt_keys }}/eza.asc"
     mode: "0o644"
-  when: ansible_distribution_version is version('24.04', '<')
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('24.04', '<')
 
 - name: Add gierens repo (for Ubuntu < 24.04)
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/eza.asc] {{ shell_utils_gierens_repo }}
-  when: ansible_distribution_version is version('24.04', '<')
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('24.04', '<')
 
 - name: Install eza
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: eza
 
 - name: Install fd
   become: true
-  ansible.builtin.apt:
-    deb: "{{ manifest.fd.url }}"
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: shell_utils_installed
-  until: shell_utils_installed is not failed
+  ansible.builtin.package:
+    name: fd-find
+
+- name: Create symlink to fd on Ubuntu
+  ansible.builtin.file:
+    src: "/usr/bin/fdfind"
+    dest: "{{ home }}/.local/bin/fd"
+    state: link
+  when: ansible_distribution == "Ubuntu"
 
 - name: Install bat
   become: true
-  ansible.builtin.apt:
-    deb: "{{ manifest.bat.url }}"
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: shell_utils_installed
-  until: shell_utils_installed is not failed
+  ansible.builtin.package:
+    name: bat
+
+- name: Create symlink to bat on Ubuntu
+  ansible.builtin.file:
+    src: "/usr/bin/batcat"
+    dest: "{{ home }}/.local/bin/bat"
+    state: link
+  when: ansible_distribution == "Ubuntu"
 
 - name: Install ripgrep
   become: true
-  ansible.builtin.apt:
-    deb: "{{ manifest.rg.url }}"
-    allow_downgrade: true
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: shell_utils_installed
-  until: shell_utils_installed is not failed
+  ansible.builtin.package:
+    name: ripgrep
 
 - name: Download fzf
   ansible.builtin.git:
@@ -64,7 +65,7 @@
 
 - name: Install more utils
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
       - hexyl
       - jq

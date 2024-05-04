@@ -4,14 +4,15 @@
     url: "{{ nodejs_gpg }}"
     dest: "{{ apt_keys }}/nodejs.gpg.key"
     mode: "0o644"
+  when: ansible_distribution == "Ubuntu"
 
 - name: Add nodejs repository
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/nodejs.gpg.key] {{ nodejs_repo }}
+  when: ansible_distribution == "Ubuntu"
 
 - name: Install nodejs
   become: true
-  ansible.builtin.apt:
-    name:
-      - nodejs
+  ansible.builtin.package:
+    name: nodejs

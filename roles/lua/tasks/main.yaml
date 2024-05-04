@@ -1,9 +1,9 @@
 - name: Install lua
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
-      - liblua{{ lua_version }}-dev
-      - lua{{ lua_version }}
+      - "{{ {'Ubuntu': 'liblua' + lua_version + '-dev', 'Fedora': 'lua-libs'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'lua' + lua_version, 'Fedora': 'lua-devel'}[ansible_distribution] }}"
       - lua-filesystem
 
 - name: Download luarocks
@@ -61,7 +61,7 @@
 
 - name: Install python3-lupa
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: python3-lupa
 
 - name: Install luasec

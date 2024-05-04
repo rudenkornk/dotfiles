@@ -1,5 +1,20 @@
-- name: Install chrome
+- name: Install chrome on Ubuntu
   become: true
   ansible.builtin.apt:
     deb: "{{ chrome_deb }}"
-  when: use_gui and ansible_distribution == 'Ubuntu'
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: chrome_installed
+  until: chrome_installed is not failed
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install chrome on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ chrome_rpm }}"
+    disable_gpg_check: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: chrome_installed
+  until: chrome_installed is not failed
+  when: ansible_distribution == 'Fedora'

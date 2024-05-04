@@ -1,6 +1,6 @@
 - name: Install perl
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
       - perl
       - perl-doc
@@ -21,6 +21,7 @@
   community.general.cpanm:
     name: "{{ item }}"
   loop:
+    - App::cpanminus
     - Archive::Tar
     - File::Basename
     - File::Find

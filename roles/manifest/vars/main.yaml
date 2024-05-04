@@ -8,24 +8,20 @@ manifest: # noqa: var-naming[no-role-prefix]
   ansible_posix:
     url: https://github.com/ansible-collections/ansible.posix
     version: 1.5.4
-  bat:
-    url: https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-musl_0.24.0_amd64.deb
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
     url: https://github.com/Kitware/CMake/releases/download/v3.29.0/cmake-3.29.0-linux-x86_64.sh
-  drawio:
+  drawio_deb:
     url: https://github.com/jgraph/drawio-desktop/releases/download/v24.0.4/drawio-amd64-24.0.4.deb
-  fd:
-    url: https://github.com/sharkdp/fd/releases/download/v9.0.0/fd-musl_9.0.0_amd64.deb
+  drawio_rpm:
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.0.4/drawio-x86_64-24.0.4.rpm
   firacode:
     lock: true
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
     version: db6db49ed642caf9cbe716f80d4fa40052118068
-  github_cli:
-    url: https://github.com/cli/cli/releases/download/v2.46.0/gh_2.46.0_linux_amd64.deb
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
     version: 46d9dfe230f315a6a0c62f4687f6b3da20fd05e4
@@ -36,8 +32,6 @@ manifest: # noqa: var-naming[no-role-prefix]
   nvchad2:
     url: https://github.com/NvChad/NvChad
     version: e5f8a38ae3d6b3bedf68f29b0e96dad7a4ca2da5
-  rg:
-    url: https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
   stylua:
     url: https://github.com/JohnnyMorganz/StyLua/releases/download/v0.20.0/stylua-linux-x86_64.zip
   tpm:

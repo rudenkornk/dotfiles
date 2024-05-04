@@ -1,3 +1,5 @@
 docker_gpg: https://download.docker.com/linux/ubuntu/gpg
 docker_repo: https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
 docker_fish_url: https://raw.githubusercontent.com/docker/cli/master/contrib/completion/fish/docker.fish
+docker_fedora_repo: https://download.docker.com/linux/fedora/$releasever/$basearch/stable
+docker_fedora_gpg: https://download.docker.com/linux/fedora/gpg

@@ -1,10 +1,33 @@
-- name: Include gcc tasks
+- name: Include Ubuntu gcc tasks
   ansible.builtin.include_tasks:
     file: gcc.yaml
+  when: ansible_distribution == 'Ubuntu'
 
-- name: Include llvm tasks
+- name: Include Ubuntu llvm tasks
   ansible.builtin.include_tasks:
     file: llvm.yaml
+  when: ansible_distribution == 'Ubuntu'
+
+# Did not find a way to install custom compilers versions
+- name: Install gcc on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - gcc
+      - g++
+  when: ansible_distribution == 'Fedora'
+
+- name: Install llvm on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - clang-devel
+      - libomp-devel
+      - libunwind-devel
+      - lld-devel
+      - lldb-devel
+      - llvm-devel
+  when: ansible_distribution == 'Fedora'
 
 - name: Include cmake tasks
   ansible.builtin.include_tasks:
@@ -16,8 +39,10 @@
 
 - name: Install common C++ tools
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
+      - "{{ {'Ubuntu': 'build-essential', 'Fedora': 'kernel-devel'}[ansible_distribution] }}"
+      - automake
       - bison
       - ccache
       - flex

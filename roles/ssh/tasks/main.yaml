@@ -1,9 +1,9 @@
 - name: Install ssh tools
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
-      - libssl-dev
-      - openssh-client
+      - "{{ {'Ubuntu': 'libssl-dev', 'Fedora': 'openssl-devel'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'openssh-client', 'Fedora': 'openssh'}[ansible_distribution] }}"
       - openssh-server
       - sshpass
 
@@ -24,7 +24,6 @@
     src: "{{ item.path }}"
     dest: "{{ home }}/.ssh/{{ item.path | basename }}"
     state: link
-    mode: "0o600"
   loop: "{{ ssh_rsa_keys.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
@@ -40,7 +39,6 @@
     src: "{{ item.path }}"
     dest: "{{ home }}/.ssh/{{ item.path | basename }}"
     state: link
-    mode: "0o644"
   loop: "{{ ssh_rsa_pub_keys.files }}"
   loop_control:
     label: "{{ item.path | basename }}"

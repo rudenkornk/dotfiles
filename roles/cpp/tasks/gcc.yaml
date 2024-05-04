@@ -1,3 +1,7 @@
+- name: gcc | Check tasks included for Ubuntu
+  ansible.builtin.assert:
+    that: ansible_distribution == "Ubuntu"
+
 - name: gcc | Add toolchain-r gpg key
   become: true
   ansible.builtin.get_url:

@@ -1,7 +1,7 @@
 - name: Install xkb-data
   become: true
-  ansible.builtin.apt:
-    name: xkb-data
+  ansible.builtin.package:
+    name: "{{ {'Ubuntu': 'xkb-data', 'Fedora': 'xkeyboard-config'}[ansible_distribution] }}"
 
 - name: Copy rnk keyboard
   become: true
@@ -29,3 +29,4 @@
   become: true
   changed_when: keyboard_layouts_rnk is changed or keyboard_layouts_evdev is changed
   ansible.builtin.command: dpkg-reconfigure xkb-data
+  when: ansible_distribution == 'Ubuntu'

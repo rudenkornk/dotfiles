@@ -30,8 +30,8 @@
 - name: Add git-secret repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64 signed-by={{ apt_keys }}/git_secret.asc] {{ git_secret_repo }} git-secret main
-  when: ansible_disribution == "Ubuntu"
+    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/git_secret.asc] {{ git_secret_repo }} git-secret main
+  when: ansible_distribution == "Ubuntu"
 
 - name: Install git secret
   become: true

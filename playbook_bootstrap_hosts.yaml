@@ -4,14 +4,32 @@
     ansible_user: root
   gather_facts: false
   tasks:
+    - name: Detect disribution
+      ansible.builtin.raw: |
+        if command -v apt-get &> /dev/null; then \
+          echo "Ubuntu"; \
+        elif command -v dnf &> /dev/null; then \
+          echo "Fedora"; \
+        else \
+          exit 1; \
+        fi
+      args:
+        executable: bash
+      register: distro
+      changed_when: false
+
+    - name: Set ansible_distribution fact
+      ansible.builtin.set_fact:
+        ansible_distribution: "{{ distro.stdout_lines[0] }}"
+
     - name: Install python
       ansible.builtin.raw: |
         if ! command -v python3 &> /dev/null; then \
-          if command -v apt-get &> /dev/null; then \
+          if [[ {{ ansible_distribution }} == "Ubuntu" ]]; then \
             apt-get update && \
             DEBIAN_FRONTEND=noninteractive \
             apt-get install -y python3; \
-          elif command -v dnf &> /dev/null; then \
+          elif [[ {{ ansible_distribution }} == "Fedora" ]]; then \
             dnf install -y python3; \
           else \
             exit 1; \
@@ -33,14 +51,28 @@
       vars:
         secrets_user: "{{ user }}"
 
-    - name: Append admin groups for {{ user }}
+    - name: Append adm group for {{ user }}
       become: true
       ansible.builtin.user:
         name: "{{ user }}"
-        groups:
-          - adm
-          - sudo
+        groups: adm
         append: true
+
+    - name: Append sudo group on Ubuntu for {{ user }}
+      become: true
+      ansible.builtin.user:
+        name: "{{ user }}"
+        groups: sudo
+        append: true
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Append wheel group on Fedora for {{ user }}
+      become: true
+      ansible.builtin.user:
+        name: "{{ user }}"
+        groups: wheel
+        append: true
+      when: ansible_distribution == "Fedora"
 
     - name: Add authorized_key for {{ user }}
       become: true

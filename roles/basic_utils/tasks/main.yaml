@@ -73,8 +73,6 @@
     in_wsl: "{{ basic_utils_wsl.stdout }}"
     use_gui: "{{ basic_utils_x_list.files | length > 0 }}"
 
-    apt_keys: /etc/apt/trusted.gpg.d
-    ubuntu_keyserver: https://keyserver.ubuntu.com/pks/lookup?op=get&search=
     web_delay: 30
     web_retries: 5
   tags:
@@ -105,7 +103,7 @@
   block:
     - name: Install WSL utils
       become: true
-      ansible.builtin.apt:
+      ansible.builtin.package:
         name: wslu
 
     - name: Gather WSL facts

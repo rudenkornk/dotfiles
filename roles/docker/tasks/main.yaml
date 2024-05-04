@@ -8,8 +8,7 @@
 - name: Add docker repository
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/docker.asc] {{ docker_repo }} {{ ansible_distribution_release
-      }} stable
+    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/docker.asc] {{ docker_repo }}
 
 - name: Install docker
   become: true

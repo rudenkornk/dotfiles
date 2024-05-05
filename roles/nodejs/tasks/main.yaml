@@ -4,6 +4,10 @@
     url: "{{ nodejs_gpg }}"
     dest: "{{ apt_keys }}/nodejs.gpg.key"
     mode: "0o644"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: nodejs_installed
+  until: nodejs_installed is not failed
   when: ansible_distribution == "Ubuntu"
 
 - name: Add nodejs repository

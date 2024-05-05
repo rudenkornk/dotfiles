@@ -8,6 +8,10 @@
     url: "{{ cpp_llvm_gpg }}"
     dest: "{{ apt_keys }}/llvm.asc"
     mode: "0o644"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: llvm_installed
+  until: llvm_installed is not failed
 
 - name: llvm | Add LLVM repository
   become: true

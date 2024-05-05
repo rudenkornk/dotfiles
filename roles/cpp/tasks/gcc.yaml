@@ -8,6 +8,10 @@
     url: "{{ cpp_toolchain_r_key_url }}"
     dest: "{{ apt_keys }}/toolchain-r.asc"
     mode: "0o644"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: gcc_installed
+  until: gcc_installed is not failed
   # It looks like Ubuntu keyserver stores several different gpg keys
   # Their actual key part is the same, but some metadata differs,
   # thus ansible reports that this task has changed state

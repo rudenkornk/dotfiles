@@ -35,6 +35,10 @@
     url: "{{ docker_gpg }}"
     dest: "{{ apt_keys }}/docker.asc"
     mode: "0o644"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: docker_installed
+  until: docker_installed is not failed
   when: ansible_distribution == "Ubuntu"
 
 - name: Add docker repository on Ubuntu

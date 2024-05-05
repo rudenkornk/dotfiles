@@ -4,6 +4,10 @@
     url: "{{ mattermost_gpg }}"
     dest: "{{ apt_keys }}/mattermost.asc"
     mode: "0o644"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: mattermost_installed
+  until: mattermost_installed is not failed
   when: ansible_distribution == "Ubuntu"
 
 - name: Add mattermost repository

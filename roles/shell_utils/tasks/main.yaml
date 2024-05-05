@@ -4,6 +4,10 @@
     url: "{{ shell_utils_eza_gpg }}"
     dest: "{{ apt_keys }}/eza.asc"
     mode: "0o644"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: shell_utils_installed
+  until: shell_utils_installed is not failed
   when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('24.04', '<')
 
 - name: Add gierens repo (for Ubuntu < 24.04)

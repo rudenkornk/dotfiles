@@ -18,7 +18,7 @@ from typing import Sequence as _Sequence
 from typing import TypeVar as _TypeVar
 
 import luadata as _luadata  # type: ignore
-import yaml as _yaml
+from ruamel.yaml import YAML as _YAML
 
 _logger = _logging.getLogger(__name__)
 
@@ -208,13 +208,15 @@ def lua_write(path: _Path, data: dict[str, _Any]) -> None:
 
 
 def yaml_read(path: _Path) -> dict[str, _Any]:
-    with open(path, "r", encoding="utf-8") as stream:
-        return dict(_yaml.safe_load(stream))
+    val = _YAML().load(path)
+    assert isinstance(val, dict)
+    return val
 
 
 def yaml_write(path: _Path, data: dict[str, _Any]) -> None:
-    with open(path, "w", encoding="utf-8") as stream:
-        _yaml.safe_dump(data, stream=stream, width=120)
+    yaml = _YAML()
+    yaml.width = 120
+    _YAML().dump(data, path)
 
 
 class _LoggerFormatter(_logging.Formatter):

@@ -1,3 +1,7 @@
+deb_arch: "{{ {'aarch64': 'arm64', 'x86_64': 'amd64'}[ansible_architecture] }}" # noqa: var-naming[no-role-prefix]
+pack: "{{ {'Ubuntu': 'deb', 'Fedora': 'rpm'}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix]
+pack_arch: "{{ {'Ubuntu': deb_arch, 'Fedora': ansible_architecture}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix] yaml[line-length]
+
 manifest: # noqa: var-naming[no-role-prefix]
   ansible_community_general:
     url: https://github.com/ansible-collections/community.general
@@ -11,11 +15,9 @@ manifest: # noqa: var-naming[no-role-prefix]
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v3.29.0/cmake-3.29.0-linux-x86_64.sh
-  drawio_deb:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.0.4/drawio-amd64-24.0.4.deb
-  drawio_rpm:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.0.4/drawio-x86_64-24.0.4.rpm
+    url: https://github.com/Kitware/CMake/releases/download/v3.29.0/cmake-3.29.0-linux-{{ ansible_architecture }}.sh
+  drawio:
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.0.4/drawio-{{ pack_arch }}-24.0.4.{{ pack }}
   firacode:
     lock: true
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
@@ -26,14 +28,14 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/kovidgoyal/kitty-themes.git
     version: 46d9dfe230f315a6a0c62f4687f6b3da20fd05e4
   lazygit:
-    url: https://github.com/jesseduffield/lazygit/releases/download/v0.41.0/lazygit_0.41.0_Linux_x86_64.tar.gz
+    url: https://github.com/jesseduffield/lazygit/releases/download/v0.41.0/lazygit_0.41.0_Linux_{{ ansible_architecture }}.tar.gz # noqa: yaml[line-length]
   neovim:
     url: https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
   nvchad2:
     url: https://github.com/NvChad/NvChad
     version: e5f8a38ae3d6b3bedf68f29b0e96dad7a4ca2da5
   stylua:
-    url: https://github.com/JohnnyMorganz/StyLua/releases/download/v0.20.0/stylua-linux-x86_64.zip
+    url: https://github.com/JohnnyMorganz/StyLua/releases/download/v0.20.0/stylua-linux-{{ ansible_architecture }}.zip
   tpm:
     url: https://github.com/tmux-plugins/tpm
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946

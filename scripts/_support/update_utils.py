@@ -25,6 +25,9 @@ def update_commit(origin: str, from_commit: str, locked: bool) -> str:
     _logger.info(tab + f"Updating {origin}{locked_msg}")
     if locked:
         return from_commit
+
+    _logging.getLogger("pydriller").setLevel(_logging.WARNING)
+
     for commit in _Repository(origin, from_commit=from_commit, order="reverse").traverse_commits():
         if num_new_commits == 0:
             last_hash: str = commit.hash

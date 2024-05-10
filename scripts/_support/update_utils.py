@@ -10,6 +10,7 @@ import git as _git
 import requests as _requests
 import semver as _semver
 from pydriller import Repository as _Repository  # type: ignore
+from ruamel.yaml import YAML as _YAML
 
 from . import utils as _utils
 
@@ -347,11 +348,46 @@ def get_ansible_entry_type(info: dict[str, _Any]) -> str:
         return "git_commit"
 
 
+def _materialize_ansible_entry(entry: str) -> str:
+    dummy_map = {
+        "{{ ansible_architecture }}": "x86_64",
+        "{{ ansible_distribution }}": "Ubuntu",
+        "{{ deb_arch }}": "amd64",
+        "{{ pack_arch }}": "amd64",
+        "{{ pack }}": "deb",
+    }
+    for key, value in dummy_map.items():
+        entry = entry.replace(key, value)
+    return entry
+
+
+def _ephemerize_ansible_entry(entry: str) -> str:
+    dummy_map = {
+        "x86_64": "{{ ansible_architecture }}",
+        "Ubuntu": "{{ ansible_distribution }}",
+        "amd64": "{{ pack_arch }}" if entry.endswith(".deb") else "{{ deb_arch }}",
+    }
+
+    if entry.endswith(".deb"):
+        entry = entry[:-3] + "{{ pack }}"
+
+    for key, value in dummy_map.items():
+        entry = entry.replace(key, value)
+    return entry
+
+
 def update_ansible_entry(manifest_path: _Path, entry: str, dry_run: bool) -> None:
-    main_vars = _utils.yaml_read(manifest_path)
+    yaml = _YAML()
+    yaml.preserve_quotes = True
+    yaml.width = 120
+
+    main_vars = yaml.load(manifest_path)
     manifest = main_vars["manifest"]
     info = manifest[entry]
-    url = info["url"]
+    raw_url = info["url"]
+
+    url = _materialize_ansible_entry(raw_url)
+
     locked = info.get("lock", False)
     entry_type = get_ansible_entry_type(info)
     if entry_type == "git_tag":
@@ -359,6 +395,8 @@ def update_ansible_entry(manifest_path: _Path, entry: str, dry_run: bool) -> Non
     if entry_type == "git_commit":
         info["version"] = update_commit(url, from_commit=info["version"], locked=locked)
     if entry_type == "github_release":
-        info["url"] = update_github_release(url, locked=locked)
+        url = update_github_release(url, locked=locked)
+        info["url"] = _ephemerize_ansible_entry(url)
+
     if not dry_run:
-        _utils.yaml_write(manifest_path, main_vars)
+        yaml.dump(main_vars, manifest_path)

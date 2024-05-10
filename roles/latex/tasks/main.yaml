@@ -34,7 +34,7 @@
 - name: Install draw.io on Ubuntu
   become: true
   ansible.builtin.apt:
-    deb: "{{ manifest.drawio_deb.url }}"
+    deb: "{{ manifest.drawio.url }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: latex_installed
@@ -44,7 +44,7 @@
 - name: Install draw.io on Fedora
   become: true
   ansible.builtin.dnf:
-    name: "{{ manifest.drawio_rpm.url }}"
+    name: "{{ manifest.drawio.url }}"
     disable_gpg_check: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"

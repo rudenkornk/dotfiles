@@ -9,10 +9,9 @@ lupa==2.1
 mypy==1.9.0
 PyDriller==2.6
 pylint==3.1.0
-PyYAML==6.0.1
 requests==2.31.0
+ruamel.yaml==0.18.6
 semver==3.0.2
-types-PyYAML==6.0.12.20240311
 types-requests==2.31.0.20240406
 types-urllib3==1.26.25.14
 yamllint==1.35.1
@@ -49,7 +48,6 @@ referencing==0.34.0
 resolvelib==1.0.1
 rich==13.7.1
 rpds-py==0.18.0
-ruamel.yaml==0.18.6
 ruamel.yaml.clib==0.2.8
 smmap==5.0.1
 subprocess-tee==0.4.1

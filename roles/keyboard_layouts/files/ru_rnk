@@ -58,8 +58,13 @@ xkb_symbols "jcuken_rnk" {
 
     key <SPCE> { [            space,              space,           space,            space ] };
 
+    // Map CapsLock to Ctrl, Ctrl to Super, Super to Alt, Alt to AltGr
+    // Also map Super to right Alt
+    include "capslock(ctrl_modifier)"
+    key <LCTL> {[  Super_L  ]};
+    key <RCTL> {[  Super_R  ]};
+    modifier_map Mod4 { <LCTL>, <RCTL> };
     include "altwin(alt_win)"
     include "level3(lalt_switch)"
-    include "capslock(ctrl_modifier)"
 };
 

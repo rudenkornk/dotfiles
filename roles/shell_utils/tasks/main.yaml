@@ -16,7 +16,7 @@
     repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/eza.asc] {{ shell_utils_gierens_repo }}
   when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('24.04', '<')
 
-- name: Install eza, fd, bat, hexyl, jq and moreutils
+- name: Install eza, fd, bat, zoxide, hexyl, jq and moreutils
   become: true
   ansible.builtin.package:
     name:
@@ -27,6 +27,7 @@
       - jq
       - moreutils
       - ripgrep
+      - zoxide
 
 - name: Create symlink to fd on Ubuntu
   ansible.builtin.file:

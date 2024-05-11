@@ -10,6 +10,7 @@
   become: true
   ansible.builtin.package:
     name:
+      - poppler-data
       - poppler-utils
       - python3-pygments
       - python3-sympy

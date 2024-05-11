@@ -42,3 +42,5 @@ manifest: # noqa: var-naming[no-role-prefix]
   vcpkg:
     url: https://github.com/microsoft/vcpkg
     version: a34c873a9717a888f58dc05268dea15592c2f0ff
+  yazi:
+    url: https://github.com/sxyazi/yazi/releases/download/v0.2.5/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip

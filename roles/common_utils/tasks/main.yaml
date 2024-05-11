@@ -24,6 +24,7 @@
       - pkg-config
       - tar
       - tcl
+      - unar
       - unrar
       - wget
       - zip

@@ -16,15 +16,17 @@
     repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/eza.asc] {{ shell_utils_gierens_repo }}
   when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('24.04', '<')
 
-- name: Install eza
+- name: Install eza, fd, bat, hexyl, jq and moreutils
   become: true
   ansible.builtin.package:
-    name: eza
-
-- name: Install fd
-  become: true
-  ansible.builtin.package:
-    name: fd-find
+    name:
+      - bat
+      - eza
+      - fd-find
+      - hexyl
+      - jq
+      - moreutils
+      - ripgrep
 
 - name: Create symlink to fd on Ubuntu
   ansible.builtin.file:
@@ -33,22 +35,12 @@
     state: link
   when: ansible_distribution == "Ubuntu"
 
-- name: Install bat
-  become: true
-  ansible.builtin.package:
-    name: bat
-
 - name: Create symlink to bat on Ubuntu
   ansible.builtin.file:
     src: "/usr/bin/batcat"
     dest: "{{ home }}/.local/bin/bat"
     state: link
   when: ansible_distribution == "Ubuntu"
-
-- name: Install ripgrep
-  become: true
-  ansible.builtin.package:
-    name: ripgrep
 
 - name: Download fzf
   ansible.builtin.git:
@@ -66,14 +58,6 @@
     # of the patrickf1/fzf.fish plugin
     "{{ home }}"/.fzf/install --all --no-fish
   changed_when: shell_utils_fzf_download is changed
-
-- name: Install more utils
-  become: true
-  ansible.builtin.package:
-    name:
-      - hexyl
-      - jq
-      - moreutils
 
 - name: Download fisher
   ansible.builtin.get_url:

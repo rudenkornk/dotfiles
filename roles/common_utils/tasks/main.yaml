@@ -29,6 +29,30 @@
       - wget
       - zip
 
+- name: Setup printscreen shutter sound
+  vars:
+    common_utils_shutter: /usr/share/sounds/freedesktop/stereo/camera-shutter.oga
+    common_utils_shutter_bak: /usr/share/sounds/freedesktop/stereo/camera-shutter.oga.bak
+  block:
+    - name: Check if shutter sound file exists
+      ansible.builtin.stat:
+        path: "{{ common_utils_shutter }}"
+      register: common_utils_shutter_file
+
+    - name: Copy shutter sound file to backup location
+      become: true
+      ansible.builtin.copy:
+        src: "{{ common_utils_shutter }}"
+        dest: "{{ common_utils_shutter_bak }}"
+        mode: "0o644"
+      when: common_utils_shutter_file.stat.exists
+
+    - name: Delete shutter sound file
+      become: true
+      ansible.builtin.file:
+        path: "{{ common_utils_shutter }}"
+        state: absent
+
 - name: Create ~/.config/yamlfmt directory
   ansible.builtin.file:
     path: "{{ home }}/.config/yamlfmt"

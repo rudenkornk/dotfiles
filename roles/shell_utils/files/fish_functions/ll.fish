@@ -1,3 +1,3 @@
 function ll --wraps eza
-  eza --all --long --classify --icons --octal-permissions $argv
+  eza --classify --icons --all --long --octal-permissions $argv
 end

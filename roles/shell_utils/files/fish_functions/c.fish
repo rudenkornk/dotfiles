@@ -1,8 +1,8 @@
 function c --wraps cd
   if test "$argv" = "-"
      or test "$argv" = ""
-    popd && exa --classify
+    popd && exa --classify --icons
   else
-    pushd $argv && exa --classify
+    pushd $argv && exa --classify --icons
   end
 end

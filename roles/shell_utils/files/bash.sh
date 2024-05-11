@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 function c() {
-  cd "$@" && ls -a;
+  cd "$@" && eza --classify --icons;
 }
 alias b="bat --paging=never"
-alias l="exa --classify"
-alias ll="exa --long --classify --icons --octal-permissions"
-alias la="exa --classify --all"
+alias l="eza --classify --icons"
+alias ls="eza --classify --icons"
+alias ll="eza --classify --icons --long --octal-permissions"
+alias la="eza --classify --icons --all"

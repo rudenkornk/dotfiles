@@ -1,3 +1,3 @@
 function la --wraps eza
-  eza --classify --all $argv
+  eza --classify --icons --all $argv
 end

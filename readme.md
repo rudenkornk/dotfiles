@@ -26,7 +26,7 @@ make
 1. **Stable and reproducible**.
    All the program versions that _can_ be pinned _are_ pinned.
    Amongst other tools, that includes `ansible` itself, `neovim` and all its plugins.
-   Packages, managed by `apt` cannot be pinned, so I rely on stability of `Canonical` packages update front.
+   Packages, managed by `apt` and `dnf` cannot be pinned, so I rely on stability of `Canonical` and `RedHat` packages update front.
 1. **Easily updatable**.
    Versions are stored in manifests and can be easily updated with a single command.
    `neovim`'s `lazy-lock.json` however is managed separately by [lazy](https://github.com/folke/lazy.nvim).

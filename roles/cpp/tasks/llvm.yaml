@@ -42,8 +42,6 @@
       - libomp-{{ cpp_llvm_version }}-dev
       - libunwind-{{ cpp_llvm_version }}-dev
       - lld-{{ cpp_llvm_version }}
-      - lld-{{ cpp_llvm_version }}
-      - lldb-{{ cpp_llvm_version }}
       - lldb-{{ cpp_llvm_version }}
       - llvm-{{ cpp_llvm_version }}-dev
       - llvm-{{ cpp_llvm_version }}-tools

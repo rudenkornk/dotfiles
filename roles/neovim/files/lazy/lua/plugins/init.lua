@@ -63,9 +63,7 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
-    opts = {
-      extensions_list = { "undo" },
-    },
+    opts = require("plugins.configs.telescope").opts,
   },
   {
     "stevearc/conform.nvim",

@@ -67,6 +67,18 @@
         state: link
       loop: [ya, yazi]
 
+    - name: Create ~/.config/yazi directory
+      ansible.builtin.file:
+        dest: "{{ home }}/.config/yazi"
+        state: directory
+        mode: "0o755"
+
+    - name: Create symlink to yazi keymap
+      ansible.builtin.file:
+        src: "{{ remote_role_path }}/files/yazi_keymap.toml"
+        dest: "{{ home }}/.config/yazi/keymap.toml"
+        state: link
+
 - name: Create symlink to fd on Ubuntu
   ansible.builtin.file:
     src: "/usr/bin/fdfind"

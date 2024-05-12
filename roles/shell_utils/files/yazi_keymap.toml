@@ -1,0 +1,24 @@
+[[manager.prepend_keymap]]
+on   = [ "?" ]
+run  = "help"
+desc = "Show help"
+
+[[manager.prepend_keymap]]
+on   = [ "<C-n>" ]
+run  = "arrow 1"
+desc = "Next item"
+
+[[manager.prepend_keymap]]
+on   = [ "<C-p>" ]
+run  = "arrow -1"
+desc = "Prev item"
+
+[[manager.prepend_keymap]]
+on   = [ "<C-d>" ]
+run  = "seek 10"
+desc = "Scroll content down"
+
+[[manager.prepend_keymap]]
+on   = [ "<C-u>" ]
+run  = "seek -10"
+desc = "Scroll content up"

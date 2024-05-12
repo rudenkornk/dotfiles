@@ -1,3 +1,0 @@
-1. python linting
-4. Enable debuggers
-8. Animations

@@ -39,12 +39,18 @@
       - libclang-common-{{ cpp_llvm_version }}-dev
       - libclang-cpp{{ cpp_llvm_version }}-dev
       - libclang-{{ cpp_llvm_version }}-dev
-      - libomp-{{ cpp_llvm_version }}-dev
       - libunwind-{{ cpp_llvm_version }}-dev
       - lld-{{ cpp_llvm_version }}
-      - lldb-{{ cpp_llvm_version }}
       - llvm-{{ cpp_llvm_version }}-dev
       - llvm-{{ cpp_llvm_version }}-tools
+
+- name: llvm | Temporarily install lldb and libomp on Ubuntu < 24.04 only
+  become: true
+  ansible.builtin.apt:
+    name:
+      - libomp-{{ cpp_llvm_version }}-dev
+      - lldb-{{ cpp_llvm_version }}
+  when: ansible_distribution_version is version('24.04', '<')
 
 - name: llvm | Update LLVM alternatives
   become: true

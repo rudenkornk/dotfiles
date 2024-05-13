@@ -29,15 +29,6 @@
       - ripgrep
       - zoxide
 
-- name: Install more utils for yazi
-  become: true
-  ansible.builtin.package:
-    name:
-      - file
-      - poppler-utils
-      - poppler-data
-      - unar
-
 - name: Setup yazi
   vars:
     shell_utils_yazi_fullname: "{{ manifest.yazi.url | split('/') | last | split('.') | first }}"
@@ -78,6 +69,15 @@
         src: "{{ remote_role_path }}/files/yazi_keymap.toml"
         dest: "{{ home }}/.config/yazi/keymap.toml"
         state: link
+
+    - name: Install more utils for yazi
+      become: true
+      ansible.builtin.package:
+        name:
+          - file
+          - poppler-utils
+          - poppler-data
+          - unar
 
 - name: Create symlink to fd on Ubuntu
   ansible.builtin.file:

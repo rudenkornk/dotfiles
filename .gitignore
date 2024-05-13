@@ -10,6 +10,7 @@ credentials.json
 *id_rsa.pub
 *.auth
 *.ovpn
+*pip.conf
 
 .gitsecret/keys/random_seed
 !*.secret

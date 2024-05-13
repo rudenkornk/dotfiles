@@ -18,7 +18,7 @@ function c() {
     popd && eza --classify --icons
   else
     pushd .
-    __zoxide_z "$argv" && exa --classify --icons
+    __zoxide_z "$argv" && eza --classify --icons
   fi
 }
 
@@ -28,7 +28,7 @@ function yy() {
   tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
   yazi "$@" --cwd-file="$tmp"
   if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-    pushd "$cwd" && exa --classify --icons
+    pushd "$cwd" && eza --classify --icons
   fi
   rm -f -- "$tmp"
 }

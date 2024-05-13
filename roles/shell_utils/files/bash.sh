@@ -18,7 +18,7 @@ function c() {
     popd && eza --classify --icons
   else
     pushd .
-    __zoxide_z "$argv" && eza --classify --icons
+    z "$argv" && eza --classify --icons
   fi
 }
 

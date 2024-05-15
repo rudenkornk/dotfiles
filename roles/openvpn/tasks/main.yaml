@@ -2,7 +2,6 @@
   become: true
   ansible.builtin.package:
     name: openvpn
-# crontab -e
-# @reboot sudo openvpn --config
-# /home/rudenkornk/projects/dotfiles/roles/profile/files/vpn/ee-tll.prod.surfshark.comsurfshark_openvpn_udp.ovpn
-# --auth-user-pass /home/rudenkornk/projects/dotfiles/roles/profile/files/vpn/surfshark.auth
+# sudo openvpn --config ~/projects/dotfiles/roles/secrets/files/vpn/surfshark_common_estonia_udp.ovpn
+#  --auth-user-pass ~/projects/dotfiles/roles/secrets/files/vpn/surfshark.auth
+# sudo nmcli c import type openvpn file ~/projects/dotfiles/roles/secrets/files/vpn/surfshark_common_estonia_udp.ovpn

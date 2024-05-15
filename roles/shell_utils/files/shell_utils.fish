@@ -50,6 +50,7 @@ set --export fzf_processes_opts \
     --header='Press CTRL-X to reload\n\n' \
 
 
+set --export MANROFFOPT "-c"
 set --export MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 zoxide init fish | source

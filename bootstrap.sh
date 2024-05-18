@@ -6,7 +6,7 @@ set -o nounset
 # set -o xtrace
 
 PROJECT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
-BUILD_DIR=${BUILD_DIR:-$PROJECT_DIR/__artifacts__}
+ARTIFACTS_DIR=${ARTIFACTS_DIR:-$PROJECT_DIR/__artifacts__}
 
 ansible_distribution=$(grep -oP '^ID=\K.*' /etc/os-release | sed -e 's/\(.*\)/\L\1/' | sed 's/\([[:alpha:]]\)/\U\1/')
 
@@ -99,7 +99,7 @@ if ! command -v dot &>/dev/null; then
   fi
 fi
 
-VENV="$BUILD_DIR/$(hostname)/venv"
+VENV="$ARTIFACTS_DIR/$(hostname)/venv"
 
 if [[ "$VENV" -ot "$PROJECT_DIR/requirements.txt" ]]; then
   python3 -m venv "$VENV"
@@ -113,19 +113,19 @@ source "$VENV/bin/activate"
 # Target is user-specific since Ansible collections are installed for a specific user by default
 # In some cases we need to perform a bootstrap twice from different users.
 # This tweak ensures that the collections are installed for the user who runs the bootstrap
-collections_target="$BUILD_DIR/$(hostname)/ansible_collections_$(id --user --name)"
+collections_target="$ARTIFACTS_DIR/$(hostname)/ansible_collections_$(id --user --name)"
 if [[ 
   ("$collections_target" -ot "$VENV") ||
   ("$collections_target" -ot "$PROJECT_DIR/playbook_ansible_collections.yaml") ||
   ("$collections_target" -ot "$PROJECT_DIR/roles/manifest/vars/main.yaml") ]] \
   ; then
   sudo bash -c ""
-  ANSIBLE_LOG_PATH="$BUILD_DIR/ansible_logs/ansible_collections.log" \
+  ANSIBLE_LOG_PATH="$ARTIFACTS_DIR/ansible_logs/ansible_collections.log" \
     ansible-playbook --inventory inventory.yaml playbook_ansible_collections.yaml
   touch "$collections_target"
 fi
 
-final_target="$BUILD_DIR/$(hostname)/bootstrap_control_node_$(id --user --name)"
+final_target="$ARTIFACTS_DIR/$(hostname)/bootstrap_control_node_$(id --user --name)"
 if [[ 
   ("$final_target" -ot "$collections_target") ||
   ("$final_target" -ot "${BASH_SOURCE[0]}") ]] \

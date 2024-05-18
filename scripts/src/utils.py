@@ -24,16 +24,9 @@ from ruamel.yaml import YAML as _YAML
 _logger = _logging.getLogger(__name__)
 
 
-def repo_path() -> _Path:
-    return _Path(__file__).parent.parent.parent
-
-
-def artifacts_path() -> _Path:
-    return repo_path() / "__artifacts__"
-
-
-def tmp_path() -> _Path:
-    return artifacts_path() / "tmp"
+REPO_PATH = _Path(__file__).parent.parent.parent
+ARTIFACTS_PATH = REPO_PATH / "__artifacts__"
+TMP_PATH = ARTIFACTS_PATH / "tmp"
 
 
 def _paths2shell(paths: _Sequence[_Path]) -> str:
@@ -95,7 +88,7 @@ def shell_command(
 
 def get_venv(requirements_path: _Path) -> _Path:
     requirements_hash = _hashlib.md5(requirements_path.read_bytes()).hexdigest()[:12]
-    venv_path = tmp_path() / "venv" / requirements_hash
+    venv_path = TMP_PATH / "venv" / requirements_hash
     bin_path = venv_path / "bin"
     venv_executable = bin_path / "python"
 

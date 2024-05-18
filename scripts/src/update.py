@@ -5,10 +5,10 @@ from . import utils as _utils
 
 _logger = _logging.getLogger(__name__)
 
-_ansible_manifest_path = _utils.repo_path() / "roles" / "manifest" / "vars" / "main.yaml"
-_neovim_manifest_path = _utils.repo_path() / "roles" / "neovim" / "files" / "nvchad" / "plugins" / "manifest.lua"
-_requirements_path = _utils.repo_path() / "requirements.txt"
-_global_requirements_path = _utils.repo_path() / "roles" / "python" / "files" / "global_requirements.txt"
+_ansible_manifest_path = _utils.REPO_PATH / "roles" / "manifest" / "vars" / "main.yaml"
+_neovim_manifest_path = _utils.REPO_PATH / "roles" / "neovim" / "files" / "nvchad" / "plugins" / "manifest.lua"
+_requirements_path = _utils.REPO_PATH / "requirements.txt"
+_global_requirements_path = _utils.REPO_PATH / "roles" / "python" / "files" / "global_requirements.txt"
 
 
 def get_ansible_choices() -> list[str]:

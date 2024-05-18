@@ -75,7 +75,7 @@ def graph(silent: bool) -> None:
     "-o",
     "--output",
     type=_click.Path(dir_okay=False, writable=True, executable=False, path_type=_Path),
-    default=_utils.artifacts_path() / "password.txt",
+    default=_utils.ARTIFACTS_PATH / "password.txt",
     help="Where to store generated password.",
 )
 @_click.option("-f", "--force", is_flag=True, help="Overwrite output file if it exists.")

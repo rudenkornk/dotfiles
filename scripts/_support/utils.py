@@ -171,7 +171,7 @@ _R = _TypeVar("_R")
 
 
 def retry(
-    delay: int = 5, max_tries: int = 5, suppress_logger: bool = False
+    delay: int | float = 5, max_tries: int = 5, suppress_logger: bool = False
 ) -> _Callable[[_Callable[_P, _R]], _Callable[_P, _R]]:
     assert max_tries > 0
 
@@ -179,15 +179,16 @@ def retry(
         @_functools.wraps(func)
         def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
             for i in range(max_tries):
+                setattr(wrapper, "current_try", i)
                 try:
                     return func(*args, **kwargs)
                 # pylint: disable-next=broad-except
-                except Exception as e:
+                except Exception as exc:
                     if i + 1 >= max_tries:
                         raise
                     if not suppress_logger:
                         _logger.warning(f"Function '{func.__name__}' failed with error:")
-                        _logger.warning(f"  {type(e).__name__}: {e}")
+                        _logger.warning(f"  {type(exc).__name__}: {exc}")
                         _logger.warning(f"  Retry {i + 2} of {max_tries}...")
                     _time.sleep(delay)
             assert False, "Unreachable."
@@ -337,18 +338,18 @@ class _LoggerFilter(_logging.Filter):
 
 def format_logging(logger: _logging.Logger = _logging.getLogger(), stack_based: bool = False) -> None:
     stdout_handler = _logging.StreamHandler(_sys.stdout)
-    formatter = _LoggerFormatter(_sys.stdout)
-    formatter.stack_based_indent = stack_based
-    formatter.stack_based_color = False
-    stdout_handler.setFormatter(formatter)
+    stdout_formatter = _LoggerFormatter(_sys.stdout)
+    stdout_formatter.stack_based_indent = stack_based
+    stdout_formatter.stack_based_color = False
+    stdout_handler.setFormatter(stdout_formatter)
     stdout_handler.addFilter(_LoggerFilter(_logging.DEBUG, _logging.WARNING))
     logger.addHandler(stdout_handler)
 
-    warn_formatter = _LoggerFormatter(_sys.stdout)
-    warn_formatter.stack_based_indent = stack_based
-    warn_formatter.stack_based_color = False
     stderr_handler = _logging.StreamHandler(_sys.stderr)
-    stdout_handler.setFormatter(warn_formatter)
+    stderr_formatter = _LoggerFormatter(_sys.stderr)
+    stderr_formatter.stack_based_indent = stack_based
+    stderr_formatter.stack_based_color = False
+    stderr_handler.setFormatter(stderr_formatter)
     stderr_handler.addFilter(_LoggerFilter(_logging.WARNING, _logging.CRITICAL + 1000))
     logger.addHandler(stderr_handler)
 

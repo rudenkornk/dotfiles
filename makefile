@@ -40,11 +40,11 @@ bootstrap_control_node: $(BOOTSTRAP)
 
 .PHONY: update
 update: $(BOOTSTRAP)
-	$(VENV) && ./scripts/support.py update
+	$(VENV) && ./scripts/main.py update
 
 .PHONY: graph
 graph: $(BOOTSTRAP)
-	$(VENV) && ./scripts/support.py graph
+	$(VENV) && ./scripts/main.py graph
 
 .PHONY: format
 format: $(BOOTSTRAP)

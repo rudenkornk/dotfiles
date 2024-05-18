@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import functools as _functools
 import inspect as _inspect
 import logging as _logging

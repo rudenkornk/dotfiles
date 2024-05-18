@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-import sys as _sys
+import shutil as _shutil
 
-import src.setup as _setup
 import src.utils as _utils
+from src.cli import cli as _cli
 
 
 @_utils.main()
 def _main() -> None:
-    _setup.process_shell_args(_sys.argv)
+    _cli(max_content_width=_shutil.get_terminal_size(fallback=(120, 24)).columns)
 
 
 if __name__ == "__main__":

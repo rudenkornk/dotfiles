@@ -13,6 +13,7 @@ from pathlib import Path as _Path
 from typing import IO as _IO
 from typing import Any as _Any
 from typing import Callable as _Callable
+from typing import Concatenate as _Concatenate
 from typing import ParamSpec as _ParamSpec
 from typing import Sequence as _Sequence
 from typing import TypeVar as _TypeVar
@@ -212,6 +213,62 @@ def retry(
         return wrapper
 
     return retry_decorator
+
+
+def makelike(
+    artifact: _Path, *sources: _Path | _Callable[[], _Path], auto_create: bool = False
+) -> _Callable[[_Callable[_Concatenate[_Path, list[_Path], _P], None]], _Callable[_P, _Path]]:
+    def makelike_decorator(func: _Callable[_Concatenate[_Path, list[_Path], _P], None]) -> _Callable[_P, _Path]:
+        @_functools.wraps(func)
+        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _Path:
+            forward_sources: list[_Path] = []
+
+            uptodate = True
+            artifact_mtime = None
+            reason = f"Target {func.__name__} with artifact {artifact} is "
+            if not artifact.exists():
+                uptodate = False
+                reason += f"not up-to-date, because its artifact {artifact} does not exist"
+            else:
+                artifact_mtime = artifact.stat().st_mtime
+
+            for source in sources:
+                if callable(source):
+                    source_path = source()
+                elif isinstance(source, _Path):
+                    source_path = source
+                else:
+                    assert False
+
+                assert (
+                    source_path.exists()
+                ), f"Source file {source_path} does not exist for a makelike function {func.__name__}!"
+                forward_sources.append(source_path)
+                if not uptodate:
+                    continue
+
+                assert artifact_mtime is not None
+                if source_path.stat().st_mtime > artifact_mtime:
+                    reason += f"not up-to-date, because source {source_path} is newer than artifact {artifact}"
+                    uptodate = False
+
+            if uptodate:
+                reason += "up-to-date"
+                _logger.debug(reason)
+                return artifact
+
+            _logger.debug(reason)
+            func(artifact, forward_sources, *args, **kwargs)
+            if auto_create:
+                artifact.parent.mkdir(parents=True, exist_ok=True)
+                artifact.touch()
+
+            assert artifact.exists(), f"Artifact {artifact} was not created in makelike function {func.__name__}!"
+            return artifact
+
+        return wrapper
+
+    return makelike_decorator
 
 
 def lua_read(path: _Path) -> dict[str, _Any]:

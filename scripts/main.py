@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 
-import logging as _logging
 import sys as _sys
 
-import _support.setup as _setup
-import _support.utils as _utils
-
-_logger = _logging.getLogger("_support")
+import src.setup as _setup
+import src.utils as _utils
 
 
 @_utils.main()

@@ -1,8 +1,10 @@
 import functools as _functools
+import hashlib as _hashlib
 import inspect as _inspect
 import logging as _logging
 import os as _os
 import shlex as _shlex
+import shutil as _shutil
 import subprocess as _subprocess
 import sys as _sys
 import time as _time
@@ -90,9 +92,34 @@ def shell_command(
     return print_cmd
 
 
+def get_venv(requirements_path: _Path) -> _Path:
+    requirements_hash = _hashlib.md5(requirements_path.read_bytes()).hexdigest()[:12]
+    venv_path = tmp_path() / "venv" / requirements_hash
+    bin_path = venv_path / "bin"
+    venv_executable = bin_path / "python"
+
+    if venv_executable.exists():
+        return venv_path
+
+    _logger.debug(f"Creating virtual environment in {venv_path} with {requirements_path})")
+    _shutil.rmtree(venv_path, ignore_errors=True)
+    run_shell([_sys.executable, "-m", "venv", venv_path], capture_output=True, suppress_cmd_log=True)
+    if not venv_executable.exists():
+        raise RuntimeError("Failed to create virtual environment. Did you install pip?")
+    run_shell(
+        [venv_executable, "-m", "pip", "install", "-r", requirements_path],
+        requirements_txt=requirements_path,
+        capture_output=True,
+        suppress_cmd_log=True,
+    )
+
+    return venv_path
+
+
 def run_shell(
     cmd: _Sequence[str | _Path] | str,
     extra_env: dict[str, str] | None = None,
+    requirements_txt: _Path | None = None,
     extra_paths: _Sequence[_Path] | None = None,
     capture_output: bool = False,
     inputs: None | str | bytes = None,
@@ -104,13 +131,19 @@ def run_shell(
     check: bool = True,
     loglevel: int = _logging.INFO,
 ) -> _subprocess.CompletedProcess[str]:
-    extra_env = extra_env or {}
-    extra_paths = extra_paths or []
+    extra_env = extra_env.copy() if extra_env is not None else {}
+    extra_paths = list(extra_paths) if extra_paths is not None else []
+
     current_loglevel = _logger.getEffectiveLevel()
     if current_loglevel > loglevel and not capture_output and stdout is None:
         stdout = _subprocess.DEVNULL
     if current_loglevel > _logging.ERROR and not capture_output and stderr is None:
         stderr = _subprocess.DEVNULL
+
+    if requirements_txt is not None:
+        venv_path = get_venv(requirements_txt)
+        extra_paths.append(venv_path / "bin")
+        extra_env["VIRTUAL_ENV"] = str(venv_path)
 
     env = _os.environ.copy()
     env.update(extra_env)

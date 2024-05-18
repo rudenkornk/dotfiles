@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import graphviz as _graphviz  # type: ignore
 
 from . import utils as _utils

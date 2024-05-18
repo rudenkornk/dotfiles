@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import logging as _logging
 
 from . import update_utils as _update_utils
@@ -29,6 +27,10 @@ def get_update_choices() -> list[str]:
 
 
 def update(choice: str, dry_run: bool) -> None:
+    title = choice.replace("_", " ")
+    suffix = " (dry run)" if dry_run else ""
+    _logger.info(f"Updating {title}{suffix}:")
+
     if choice == "requirements":
         _logger.info("  Updating requirements.txt")
         _update_utils.update_requirements_txt(_requirements_path, dry_run=dry_run)
@@ -43,3 +45,5 @@ def update(choice: str, dry_run: bool) -> None:
         _update_utils.update_ansible_entry(_ansible_manifest_path, choice, dry_run=dry_run)
     else:
         assert False, f"Invalid choice: {choice}"
+
+    _logger.info("")

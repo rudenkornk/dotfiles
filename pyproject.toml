@@ -21,5 +21,17 @@ disable = [
   "too-many-branches",
   "too-many-instance-attributes",
 ]
+
+# https://stackoverflow.com/a/78218489/8099151
+[tool.pylint.typecheck]
+signature-mutators = [
+  'click.decorators.option',
+  'click.decorators.argument',
+  'click.decorators.version_option',
+  'click.decorators.help_option',
+  'click.decorators.pass_context',
+  'click.decorators.confirmation_option',
+]
+
 [tool.pydocstyle]
 ignore = ["D100", "D103"]

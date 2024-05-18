@@ -58,7 +58,7 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
         return from_tag
 
     repo_normalized = _re.sub(r"[^0-9a-zA-Z_\.]+", "_", origin)
-    repo_path = _utils.get_build_path() / "tmp" / repo_normalized
+    repo_path = _utils.artifacts_path() / "tmp" / repo_normalized
     repo = _git.Repo.init(repo_path)
     for remote in repo.remotes:
         remote.remove(repo, remote.name)
@@ -247,9 +247,9 @@ def parse_pip_entry(entry: str) -> dict[str, str | None]:
 # pylint: disable-next=too-many-statements
 def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
     tab = "  "
-    venv = _utils.get_tmp_path() / "old_venv"
+    venv = _utils.tmp_path() / "old_venv"
     activate = f". {venv}/bin/activate && "
-    new_venv = _utils.get_tmp_path() / "new_venv"
+    new_venv = _utils.tmp_path() / "new_venv"
     new_activate = f". {new_venv}/bin/activate && "
     new_requirements_path = new_venv / "requirements.txt"
     _shutil.rmtree(new_venv, ignore_errors=True)

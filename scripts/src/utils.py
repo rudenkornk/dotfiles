@@ -23,16 +23,16 @@ from ruamel.yaml import YAML as _YAML
 _logger = _logging.getLogger(__name__)
 
 
-def get_repo_path() -> _Path:
+def repo_path() -> _Path:
     return _Path(__file__).parent.parent.parent
 
 
-def get_build_path() -> _Path:
-    return get_repo_path() / "__artifacts__"
+def artifacts_path() -> _Path:
+    return repo_path() / "__artifacts__"
 
 
-def get_tmp_path() -> _Path:
-    return get_build_path() / "tmp"
+def tmp_path() -> _Path:
+    return artifacts_path() / "tmp"
 
 
 def _paths2shell(paths: _Sequence[_Path]) -> str:

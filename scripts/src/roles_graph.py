@@ -8,7 +8,7 @@ from . import utils as _utils
 def generate_png(view: bool = False) -> None:
     graph = _graphviz.Digraph(name="roles")
 
-    roles_path = _utils.get_repo_path() / "roles"
+    roles_path = _utils.repo_path() / "roles"
     for role_path in roles_path.iterdir():
         if not role_path.is_dir():
             continue
@@ -27,6 +27,6 @@ def generate_png(view: bool = False) -> None:
         for dep in yaml["dependencies"]:
             graph.edge(role, dep["role"])
 
-    output_path = _utils.get_build_path() / "roles_graph"
+    output_path = _utils.artifacts_path() / "roles_graph"
     graph.format = "png"
     graph.render(output_path, view=view, quiet_view=view)

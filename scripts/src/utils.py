@@ -117,7 +117,8 @@ def get_venv(requirements_path: _Path) -> _Path:
 
 
 def run_shell(
-    cmd: _Sequence[str | _Path] | str,
+    cmd: _Sequence[str | _Path],
+    *,
     extra_env: dict[str, str] | None = None,
     requirements_txt: _Path | None = None,
     extra_paths: _Sequence[_Path] | None = None,
@@ -168,20 +169,6 @@ def run_shell(
         )
         _logger.log(loglevel, f"[RUNNING IN SHELL]: {print_cmd}")
 
-    if isinstance(cmd, list):
-        return _subprocess.run(
-            cmd,
-            env=env,
-            check=check,
-            capture_output=capture_output,
-            input=inputs,
-            stdout=stdout,
-            stderr=stderr,
-            text=True,
-            cwd=cwd,
-        )
-
-    assert isinstance(cmd, str)
     return _subprocess.run(
         cmd,
         env=env,
@@ -191,8 +178,6 @@ def run_shell(
         stdout=stdout,
         stderr=stderr,
         text=True,
-        shell=True,
-        executable="bash",
         cwd=cwd,
     )
 

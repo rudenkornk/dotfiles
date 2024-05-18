@@ -18,6 +18,7 @@ _logger = _logging.getLogger(__name__)
 
 def update_commit(origin: str, from_commit: str, locked: bool) -> str:
     num_new_commits = 0
+    last_hash = ""
     max_log = 5
     hash_len = 7
     tab = "  "
@@ -30,9 +31,11 @@ def update_commit(origin: str, from_commit: str, locked: bool) -> str:
 
     for commit in _Repository(origin, from_commit=from_commit, order="reverse").traverse_commits():
         if num_new_commits == 0:
-            last_hash: str = commit.hash
-        if from_commit is not None and from_commit == commit.hash:
-            continue
+            last_hash = commit.hash
+
+        if commit.hash == from_commit:
+            break
+
         num_new_commits += 1
         header = commit.msg.splitlines()[0]
         info = 2 * tab + commit.hash[:hash_len]
@@ -42,10 +45,13 @@ def update_commit(origin: str, from_commit: str, locked: bool) -> str:
         info += " " + header
         if num_new_commits <= max_log or breaking:
             _logger.info(info)
+
     if num_new_commits > max_log:
         _logger.info(f"{tab * 2}...")
     if num_new_commits > 0:
         _logger.info(f"{tab * 2}Total {num_new_commits} new commits.")
+
+    assert last_hash
     return last_hash
 
 
@@ -65,6 +71,7 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
     remote.fetch()
 
     current_semver = _semver.VersionInfo.parse(from_tag)
+    chosen_tag = from_tag
 
     for tag_obj in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
         tag = tag_obj.name
@@ -166,6 +173,9 @@ def update_github_release(url: str, locked: bool) -> str:
             return url
         raise
     releases = response.json()
+    chosen_tag = cri.ti.tag
+    chosen_version = cri.ti.version
+
     for release in releases:
         ti = GitHubTagInfo(release["tag_name"])
         if release["prerelease"]:

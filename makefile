@@ -8,9 +8,9 @@ REDUCED_CHECK ?= false
 
 
 ############################## Setup ###############################
-BUILD_DIR := __artifacts__
-VENV := source $(BUILD_DIR)/$(shell hostname)/venv/bin/activate
-BOOTSTRAP := $(BUILD_DIR)/$(shell hostname)/bootstrap_control_node_$(shell id --user --name)
+ARTIFACTS_DIR := __artifacts__
+VENV := source $(ARTIFACTS_DIR)/$(shell hostname)/venv/bin/activate
+BOOTSTRAP := $(ARTIFACTS_DIR)/$(shell hostname)/bootstrap_control_node_$(shell id --user --name)
 
 
 ########################### Main targets ###########################
@@ -99,13 +99,13 @@ check_host: $(BOOTSTRAP)
 	make HOSTS=$(CONTAINER) config
 
 .PHONY: check_bootstrap_control_node
-check_bootstrap_control_node: $(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node
+check_bootstrap_control_node: $(ARTIFACTS_DIR)/$(CONTAINER)/bootstrap_control_node
 
-$(BUILD_DIR)/$(CONTAINER)/bootstrap_control_node: $(BOOTSTRAP)
+$(ARTIFACTS_DIR)/$(CONTAINER)/bootstrap_control_node: $(BOOTSTRAP)
 	podman run --rm --interactive --tty \
 		--mount=type=bind,source=$$(pwd),target=$$(pwd) \
 		--workdir $$(pwd) $(IMAGE) \
-		bash -c 'BUILD_DIR=$(BUILD_DIR)/$(CONTAINER) ./bootstrap.sh'
+		bash -c 'ARTIFACTS_DIR=$(ARTIFACTS_DIR)/$(CONTAINER) ./bootstrap.sh'
 
 
 ###################### Bootstrap control node ######################
@@ -115,4 +115,4 @@ $(BOOTSTRAP): \
 	requirements.txt \
 	roles/manifest/vars/main.yaml \
 
-	BUILD_DIR=$(BUILD_DIR) ./bootstrap.sh
+	ARTIFACTS_DIR=$(ARTIFACTS_DIR) ./bootstrap.sh

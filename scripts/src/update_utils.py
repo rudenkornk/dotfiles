@@ -1,7 +1,6 @@
 import copy as _copy
 import logging as _logging
 import re as _re
-import shutil as _shutil
 from dataclasses import dataclass as _dataclass
 from pathlib import Path as _Path
 from typing import Any as _Any
@@ -247,13 +246,7 @@ def parse_pip_entry(entry: str) -> dict[str, str | None]:
 # pylint: disable-next=too-many-statements
 def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
     tab = "  "
-    venv = _utils.tmp_path() / "old_venv"
-    activate = f". {venv}/bin/activate && "
-    new_venv = _utils.tmp_path() / "new_venv"
-    new_activate = f". {new_venv}/bin/activate && "
-    new_requirements_path = new_venv / "requirements.txt"
-    _shutil.rmtree(new_venv, ignore_errors=True)
-    _shutil.rmtree(new_venv, ignore_errors=True)
+    new_requirements_path = _utils.tmp_path() / "new_venv" / "requirements.txt"
     requirements = requirements_path.read_text().splitlines()
 
     core_packages = []
@@ -270,15 +263,15 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
         core_versions.append(entry["version"])
         core_comments.append(entry["comment"])
 
-    _logger.info(f"{tab}Fetching current versions of modules")
-    _utils.run_shell(f"python3 -m venv {venv}", capture_output=True, suppress_cmd_log=True)
-    _utils.run_shell(
-        activate + f"python3 -m pip install -r {requirements_path}", capture_output=True, suppress_cmd_log=True
-    )
-
     _logger.info(f"{tab}Fetching new versions of core modules")
     new_core_versions = _copy.deepcopy(core_versions)
-    outdated = _utils.run_shell(activate + "python3 -m pip list --outdated", capture_output=True, suppress_cmd_log=True)
+    outdated = _utils.run_shell(
+        ["python3", "-m", "pip", "list", "--outdated"],
+        requirements_txt=requirements_path,
+        capture_output=True,
+        suppress_cmd_log=True,
+    )
+
     outdated_lines = outdated.stdout.splitlines()[2:]
     for line in outdated_lines:
         match = _re.match(r"(\S+)\s+(\S+)\s+(\S+)", line)
@@ -294,20 +287,17 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
                 new_core_versions[index] = new_version
             _logger.info(f"{tab * 2}{package}=={core_versions[index]} -> {new_version} {msg}")
 
-    _logger.info(f"{tab}Creating temporary venv")
-    _utils.run_shell(f"python3 -m venv {new_venv}", capture_output=True, suppress_cmd_log=True)
+    new_requirements_path.parent.mkdir(parents=True, exist_ok=True)
     with open(new_requirements_path, "w", encoding="utf-8") as f:
         for i, package in enumerate(core_packages):
             f.write(f"{package}=={new_core_versions[i]}{core_comments[i]}\n")
 
-    _logger.info(f"{tab}Installing new requirements")
-    _utils.run_shell(
-        new_activate + f"python3 -m pip install -r {new_requirements_path}", capture_output=True, suppress_cmd_log=True
-    )
-
-    _logger.info(f"{tab}Capturing full requirements list")
+    _logger.info(f"{tab}Capturing new full requirements list")
     updated = _utils.run_shell(
-        new_activate + f"python3 -m pip freeze -r {new_requirements_path}", capture_output=True, suppress_cmd_log=True
+        ["python3", "-m", "pip", "freeze", "-r", new_requirements_path],
+        requirements_txt=new_requirements_path,
+        capture_output=True,
+        suppress_cmd_log=True,
     )
     new_requirements = updated.stdout.splitlines()
     for i, new_requirement in enumerate(new_requirements):
@@ -319,11 +309,9 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
             comment = core_comments[index]
         new_requirements[i] = f"{new_requirement}{comment}\n"
 
-    with open(new_requirements_path, "w", encoding="utf-8") as f:
-        f.writelines(new_requirements)
+    new_requirements_path.write_text("".join(new_requirements), encoding="utf-8")
     if not dry_run:
-        with open(requirements_path, "w", encoding="utf-8") as f:
-            f.writelines(new_requirements)
+        requirements_path.write_text("".join(new_requirements), encoding="utf-8")
     _logger.info(f"{tab}Done")
 
 

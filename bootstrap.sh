@@ -110,6 +110,8 @@ fi
 
 source "$VENV/bin/activate"
 
+mkdir -p "$ARTIFACTS_DIR/ansible_logs"
+
 # Target is user-specific since Ansible collections are installed for a specific user by default
 # In some cases we need to perform a bootstrap twice from different users.
 # This tweak ensures that the collections are installed for the user who runs the bootstrap

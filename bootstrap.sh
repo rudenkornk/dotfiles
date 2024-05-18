@@ -6,7 +6,7 @@ set -o nounset
 # set -o xtrace
 
 PROJECT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
-BUILD_DIR=${BUILD_DIR:-$PROJECT_DIR/__build__}
+BUILD_DIR=${BUILD_DIR:-$PROJECT_DIR/__artifacts__}
 
 ansible_distribution=$(grep -oP '^ID=\K.*' /etc/os-release | sed -e 's/\(.*\)/\L\1/' | sed 's/\([[:alpha:]]\)/\U\1/')
 

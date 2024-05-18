@@ -82,7 +82,7 @@ def run_venv(requirements_path: _Path, artifacts_path: _Path, args: list[str | _
 def _main() -> None:
     root = _Path(__file__).parent
     requirements_path = root / "requirements.txt"
-    artifacts_path = root / "__build__"
+    artifacts_path = root / "__artifacts__"
     setup_path = root / "scripts" / "main.py"
     args: list[str | _Path] = list(_sys.argv)
     args[0] = setup_path

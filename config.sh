@@ -13,7 +13,7 @@ REDUCED_CHECK=${REDUCED_CHECK:-false}
 BOOTSTRAP_ONLY=${BOOTSTRAP_ONLY:-false}
 
 PROJECT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
-BUILD_DIR="$PROJECT_DIR/__build__"
+BUILD_DIR="$PROJECT_DIR/__artifacts__"
 
 if [[ "$HOSTS" =~ localhost || "$HOSTS" =~ 127.0.0.1 ]]; then
   LOCAL=true

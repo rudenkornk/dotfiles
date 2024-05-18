@@ -1,4 +1,5 @@
 /__build*
+/__artifacts*
 __pycache__
 
 /node_modules

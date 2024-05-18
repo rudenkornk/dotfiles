@@ -48,7 +48,7 @@ def _add_password_parser(subparsers: _SubParsersAction) -> None:  # type: ignore
     graph_parser.add_argument("-a", "--alphabet", type=str, default=_string.ascii_lowercase, help="Password alphabet.")
     graph_parser.add_argument("-l", "--length", type=int, default=24, help="Password length.")
     graph_parser.add_argument(
-        "-o", "--output", type=_Path, default=_repo_path / "__build__" / "password.txt", help="Where to store password."
+        "-o", "--output", type=_Path, default=_repo_path / "__artifacts__" / "password.txt", help="Where to store password."
     )
 
 

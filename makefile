@@ -8,7 +8,7 @@ REDUCED_CHECK ?= false
 
 
 ############################## Setup ###############################
-BUILD_DIR := __build__
+BUILD_DIR := __artifacts__
 VENV := source $(BUILD_DIR)/$(shell hostname)/venv/bin/activate
 BOOTSTRAP := $(BUILD_DIR)/$(shell hostname)/bootstrap_control_node_$(shell id --user --name)
 

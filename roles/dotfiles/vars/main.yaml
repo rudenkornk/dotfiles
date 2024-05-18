@@ -1,6 +1,6 @@
 projects_path: "{{ home }}/projects" # noqa: var-naming[no-role-prefix]
 dotfiles_parent_path: "{{ projects_path }}"
 dotfiles_path: "{{ projects_path }}/dotfiles"
-dotfiles_tmp_dir: "__build__/tmp"
+dotfiles_tmp_dir: "__artifacts__/tmp"
 dotfiles_tmp: "{{ dotfiles_path }}/{{ dotfiles_tmp_dir }}"
 remote_role_path: "{{ dotfiles_path }}/roles/{{ role_name }}" # noqa: var-naming[no-role-prefix]

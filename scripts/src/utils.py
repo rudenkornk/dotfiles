@@ -28,7 +28,7 @@ def get_repo_path() -> _Path:
 
 
 def get_build_path() -> _Path:
-    return get_repo_path() / "__build__"
+    return get_repo_path() / "__artifacts__"
 
 
 def get_tmp_path() -> _Path:

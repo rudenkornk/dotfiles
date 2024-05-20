@@ -1,8 +1,8 @@
 import logging as _logging
 from pathlib import Path as _Path
 
+from .. import utils as _utils
 from . import update_utils as _update_utils
-from . import utils as _utils
 
 _logger = _logging.getLogger(__name__)
 

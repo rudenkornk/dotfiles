@@ -6,9 +6,9 @@ from pathlib import Path as _Path
 import click as _click
 from click_help_colors import HelpColorsGroup as _HelpColorsGroup
 
-from . import roles_graph as _roles_graph
-from . import update as _update
 from . import utils as _utils
+from .targets import roles_graph as _roles_graph
+from .targets import update as _update
 
 _logger = _logging.getLogger(__name__)
 

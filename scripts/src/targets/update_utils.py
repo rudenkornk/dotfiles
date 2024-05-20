@@ -11,7 +11,7 @@ import semver as _semver
 from pydriller import Repository as _Repository  # type: ignore
 from ruamel.yaml import YAML as _YAML
 
-from . import utils as _utils
+from .. import utils as _utils
 
 _logger = _logging.getLogger(__name__)
 

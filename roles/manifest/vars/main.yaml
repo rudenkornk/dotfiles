@@ -3,15 +3,6 @@ pack: "{{ {'Ubuntu': 'deb', 'Fedora': 'rpm'}[ansible_distribution] }}" # noqa: v
 pack_arch: "{{ {'Ubuntu': deb_arch, 'Fedora': ansible_architecture}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix] yaml[line-length]
 
 manifest: # noqa: var-naming[no-role-prefix]
-  ansible_community_general:
-    url: https://github.com/ansible-collections/community.general
-    version: 8.4.0
-  ansible_containers_podman:
-    url: https://github.com/containers/ansible-podman-collections
-    version: 1.12.0
-  ansible_posix:
-    url: https://github.com/ansible-collections/ansible.posix
-    version: 1.5.4
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:

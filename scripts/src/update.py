@@ -1,4 +1,5 @@
 import logging as _logging
+from pathlib import Path as _Path
 
 from . import update_utils as _update_utils
 from . import utils as _utils
@@ -6,13 +7,14 @@ from . import utils as _utils
 _logger = _logging.getLogger(__name__)
 
 _ansible_manifest_path = _utils.REPO_PATH / "roles" / "manifest" / "vars" / "main.yaml"
+_ansible_collections_path = _utils.REPO_PATH / "roles" / "manifest" / "vars" / "ansible.yaml"
 _neovim_manifest_path = _utils.REPO_PATH / "roles" / "neovim" / "files" / "nvchad" / "plugins" / "manifest.lua"
 _requirements_path = _utils.REPO_PATH / "requirements.txt"
 _global_requirements_path = _utils.REPO_PATH / "roles" / "python" / "files" / "global_requirements.txt"
 
 
-def get_ansible_choices() -> list[str]:
-    return list(_utils.yaml_read(_ansible_manifest_path)["manifest"].keys())
+def get_ansible_choices(manifest_path: _Path) -> list[str]:
+    return list(_utils.yaml_read(manifest_path)["manifest"].keys())
 
 
 def get_neovim_plugins_choices() -> list[str]:
@@ -20,8 +22,9 @@ def get_neovim_plugins_choices() -> list[str]:
 
 
 def get_update_choices() -> list[str]:
-    ansible_choices = get_ansible_choices()
-    choices = ansible_choices + ["requirements"]
+    ansible_choices = get_ansible_choices(_ansible_manifest_path)
+    ansible_collections_choices = get_ansible_choices(_ansible_collections_path)
+    choices = ansible_choices + ansible_collections_choices + ["requirements"]
     choices.sort()
     return choices
 
@@ -38,11 +41,14 @@ def update(choice: str, dry_run: bool) -> None:
         _logger.info("")
         _logger.info("  Updating global_requirements.txt")
         _update_utils.update_requirements_txt(_global_requirements_path, dry_run=dry_run)
-    elif choice == "neovim_plugins":
-        for plugin in get_neovim_plugins_choices():
-            _update_utils.update_neovim_plugin(_neovim_manifest_path, plugin, dry_run=dry_run)
-    elif choice in get_ansible_choices():
+    # Deprecate nvchad
+    # elif choice == "neovim_plugins":
+    #    for plugin in get_neovim_plugins_choices():
+    #        _update_utils.update_neovim_plugin(_neovim_manifest_path, plugin, dry_run=dry_run)
+    elif choice in get_ansible_choices(_ansible_manifest_path):
         _update_utils.update_ansible_entry(_ansible_manifest_path, choice, dry_run=dry_run)
+    elif choice in get_ansible_choices(_ansible_collections_path):
+        _update_utils.update_ansible_entry(_ansible_collections_path, choice, dry_run=dry_run)
     else:
         assert False, f"Invalid choice: {choice}"
 

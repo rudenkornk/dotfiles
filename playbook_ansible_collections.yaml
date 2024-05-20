@@ -3,7 +3,7 @@
   tasks:
     - name: Load ansible collections versions
       ansible.builtin.include_vars:
-        file: "{{ playbook_dir }}/roles/manifest/vars/main.yaml"
+        file: "{{ playbook_dir }}/roles/manifest/vars/ansible.yaml"
 
     - name: Install community.general
       ansible.builtin.command: "ansible-galaxy collection install

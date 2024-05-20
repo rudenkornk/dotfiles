@@ -119,7 +119,7 @@ collections_target="$ARTIFACTS_DIR/$(hostname)/ansible_collections_$(id --user -
 if [[ 
   ("$collections_target" -ot "$VENV") ||
   ("$collections_target" -ot "$PROJECT_DIR/playbook_ansible_collections.yaml") ||
-  ("$collections_target" -ot "$PROJECT_DIR/roles/manifest/vars/main.yaml") ]] \
+  ("$collections_target" -ot "$PROJECT_DIR/roles/manifest/vars/ansible.yaml") ]] \
   ; then
   sudo bash -c ""
   ANSIBLE_LOG_PATH="$ARTIFACTS_DIR/ansible_logs/ansible_collections.log" \

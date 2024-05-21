@@ -49,7 +49,7 @@ graph: $(BOOTSTRAP)
 .PHONY: format
 format: $(BOOTSTRAP)
 	$(VENV) && python3 -m black .
-	$(VENV) && python3 -m isort --gitignore .
+	$(VENV) && python3 -m isort .
 	(npm install --save-exact && npx prettier --ignore-path <(cat .gitignore .prettierignore) . -w) || true # ignore if not installed
 	stylua . || true # ignore if not installed
 

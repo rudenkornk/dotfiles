@@ -97,7 +97,7 @@ if __name__ == "__main__":
     # pylint: disable=broad-except
     except Exception as exception:
         _logger.error(f"{type(exception).__name__}: {exception}")
-        exit_code = 1
+        exit_code = 1  # pylint: disable=invalid-name
         if isinstance(exception, _subprocess.CalledProcessError):
             assert exception.returncode != 0
             exit_code = exception.returncode

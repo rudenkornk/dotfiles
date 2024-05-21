@@ -9,6 +9,7 @@ import subprocess as _subprocess
 import sys as _sys
 import time as _time
 import traceback as _traceback
+from multiprocessing import cpu_count as _cpu_count
 from pathlib import Path as _Path
 from typing import IO as _IO
 from typing import Any as _Any
@@ -27,6 +28,32 @@ _logger = _logging.getLogger(__name__)
 REPO_PATH = _Path(__file__).parent.parent.parent
 ARTIFACTS_PATH = REPO_PATH / "__artifacts__"
 TMP_PATH = ARTIFACTS_PATH / "tmp"
+
+
+def _cgroup_cpu_count() -> int | None:
+    cgroup_info = _Path("/sys/fs/cgroup/cpu.max")
+    if not cgroup_info.exists():
+        return None
+    # Wrap with try-except in case we encounter a weird system
+    try:
+        cpu_micros_str = cgroup_info.read_text(encoding="utf-8").strip().split()[0]
+        if cpu_micros_str == "max":
+            return None
+        cpu_micros = int(cpu_micros_str)
+        # more like milli * centi
+        return int(cpu_micros / 100000)
+    # pylint: disable-next=broad-except
+    except Exception:
+        pass
+    return None
+
+
+def cpu_count() -> int:
+    container_cpus = _cgroup_cpu_count()
+    if container_cpus is not None:
+        return container_cpus
+
+    return _cpu_count()
 
 
 def _paths2shell(paths: _Sequence[_Path]) -> str:

@@ -14,7 +14,9 @@ _global_requirements_path = _utils.REPO_PATH / "roles" / "python" / "files" / "g
 
 
 def get_ansible_choices(manifest_path: _Path) -> list[str]:
-    return list(_utils.yaml_read(manifest_path)["manifest"].keys())
+    yaml = _utils.yaml_read(manifest_path)
+    assert isinstance(yaml, dict)
+    return list(yaml["manifest"].keys())
 
 
 def get_neovim_plugins_choices() -> list[str]:

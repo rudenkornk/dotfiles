@@ -301,9 +301,9 @@ def lua_write(path: _Path, data: dict[str, _Any]) -> None:
     _luadata.write(path, data, encoding="utf-8", indent="  ", prefix="return ")
 
 
-def yaml_read(path: _Path) -> dict[str, _Any]:
+def yaml_read(path: _Path) -> dict[str, _Any] | list[_Any]:
     val = _YAML().load(path)
-    assert isinstance(val, dict)
+    assert isinstance(val, (dict, list))
     return val
 
 

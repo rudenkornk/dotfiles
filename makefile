@@ -57,7 +57,7 @@ format: $(BOOTSTRAP)
 hooks: .git/hooks/pre-commit
 
 .git/hooks/pre-commit:
-	ln --symbolic --force ../../scripts/hooks/pre-commit .git/hooks/pre-commit
+	ln --symbolic --force ../../scripts/src/data/hooks/pre-commit .git/hooks/pre-commit
 
 
 ############################## Checks ##############################

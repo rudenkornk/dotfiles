@@ -1,5 +1,8 @@
 local M = {}
 
+-- Please do not reserve <A-b> and <A-f>
+-- These keys are used by the floating terminal
+
 M.keys = {
   {
     "<A-i>",
@@ -10,7 +13,7 @@ M.keys = {
     mode = { "n", "t" },
   },
   {
-    "<A-f>",
+    "<A-l>",
     function()
       require("dap").step_over()
     end,
@@ -18,7 +21,7 @@ M.keys = {
     mode = { "n", "t" },
   },
   {
-    "<A-b>",
+    "<A-h>",
     function()
       require("dap").step_back()
     end,

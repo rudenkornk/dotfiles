@@ -21,26 +21,6 @@ M.keys = {
     expr = true,
     mode = { "n" },
   },
-  {
-    "<A-l>",
-    function()
-      vim.opt.opfunc = "v:lua.STSSwapCurrentNodeNextNormal_Dot"
-      return "g@l"
-    end,
-    desc = "Move syntax node right",
-    expr = true,
-    mode = { "n" },
-  },
-  {
-    "<A-h>",
-    function()
-      vim.opt.opfunc = "v:lua.STSSwapCurrentNodePrevNormal_Dot"
-      return "g@l"
-    end,
-    desc = "Move syntax node left",
-    expr = true,
-    mode = { "n" },
-  },
 }
 
 return M

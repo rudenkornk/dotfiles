@@ -3,7 +3,7 @@
 ## fzf
 
 ```bash
-podman exec -it -u $(id -u) dotfiles_22.04 fish
+podman exec -it -u $(id -u) dotfiles_ubuntu_22.04 fish
 ctrl-t # opens fzf search directory panels with list of files and syntax highlighted file contnent
 ctrl-y # opens fzf ripgrep search
 ctrl-g # in git repo opens fzf git history

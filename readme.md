@@ -7,7 +7,7 @@ Ansible playbooks, which idempotently configure new system with a single bootstr
 ```bash
 git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
 cd ~/projects/dotfiles && ./bootstrap.sh && \
-make
+./main.py config
 ```
 
 ## Showcase
@@ -26,7 +26,8 @@ make
 1. **Stable and reproducible**.
    All the program versions that _can_ be pinned _are_ pinned.
    Amongst other tools, that includes `ansible` itself, `neovim` and all its plugins.
-   Packages, managed by `apt` and `dnf` cannot be pinned, so I rely on stability of `Canonical` and `RedHat` packages update front.
+   Packages, managed by `apt` and `dnf` cannot be pinned,
+   so we rely on stability of `Canonical` and `RedHat` packages update front.
 1. **Easily updatable**.
    Versions are stored in manifests and can be easily updated with a single command.
    `neovim`'s `lazy-lock.json` however is managed separately by [lazy](https://github.com/folke/lazy.nvim).
@@ -62,8 +63,8 @@ Note, that this will install some tools (like `python` and `podman`) on your sys
 This will not install any specific configs though.
 
 ```bash
-make check_host
-podman exec --interactive --tty --workdir $(pwd) --user $(id --user) dotfiles_22.04 fish
+./main.py config --target dotfiles_ubuntu_22.04
+podman exec --interactive --tty --workdir $(pwd) --user $(id --user) dotfiles_ubuntu_22.04 fish
 ```
 
 ## Fork
@@ -76,17 +77,18 @@ The first things you would want to customize if forking this repo are:
 ## Update components versions
 
 ```bash
-make update
+./main.py update
 ```
 
 ## Show role dependency graph
 
 ```bash
-make graph
+./main.py graph
 ```
 
 ## Test
 
 ```bash
-make check IMAGE=ubuntu:22.04
+./main.py
+./main.py config --target dotfiles_ubuntu_22.04
 ```

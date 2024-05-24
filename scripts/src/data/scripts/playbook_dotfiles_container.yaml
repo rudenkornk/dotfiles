@@ -14,4 +14,4 @@
         # 2. Test configuration directly inside container as a local machine, which is much faster
         #    Note, that we need specifically a mount, not a copy, because in case of local debugging we
         #    need to introduce lots of changes. Copying the project each time would be too tedious.
-        volume: "{{ playbook_dir }}:/dotfiles_debug"
+        volume: "{{ playbook_dir | dirname | dirname | dirname | dirname }}:/dotfiles_debug"

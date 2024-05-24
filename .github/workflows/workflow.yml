@@ -10,25 +10,38 @@ jobs:
   # Check that the project is able to configure the current user
   # This is the main use case, except for the fact that the current user is root due to GitHub Actions defaults
   # This might not be representative, so here we just check that configuring the current user works
+  # Also, this job also checks formatting
   check_current_user:
     env:
       HOME: /root
     runs-on: ubuntu-22.04
     container: ubuntu:22.04
     steps:
+      # checkout action falls back to REST API if it does not find 'git',
+      # which is a case in our virgin container
+      # This leads to a missing .git directory and complaining
+      # format check step
+      # As an exception, let's install git.
+      # More precise checks will be done in another jobs
+      - name: Install git
+        run: apt update && apt-get install --yes --no-install-recommends git ca-certificates
       - name: Checkout repository
         uses: actions/checkout@v3
+      # Checkout action sets repo as safe, but this does not look like to work inside container
+      - name: Mark repo as safe
+        run: git config --system --add safe.directory $(pwd)
       - name: Bootstrap control node
         run: ./bootstrap.sh
       - name: Config
-        run: make
+        run: ./main.py config
       - name: Check idempotence
-        run: make VERIFY_UNCHANGED=true
+        run: ./main.py config --verify-unchanged
       # All format checks only available after complete machine setup
       # So, we need to do them in one of the check jobs
       - name: Check format
         run: |
-          make format
+          export PATH="$HOME/.local/bin/:$PATH"
+          ./main.py format
           if [[ -n "$(git diff)" ]]; then
             echo "Code is not formatted."
             git diff
@@ -45,14 +58,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Bootstrap control node
         run: ./bootstrap.sh
-      - name: Bootstrap localhost
-        run: make bootstrap_hosts REMOTE_USER=random_user
-      - name: Set permissions
-        run: chown -R random_user:random_user .
       - name: Config
-        run: sudo -u random_user make
+        run: ./main.py config --user random_user
       - name: Check idempotence
-        run: sudo -u random_user make VERIFY_UNCHANGED=true
+        run: ./main.py config --user random_user --verify-unchanged
     strategy:
       matrix:
         image:
@@ -71,9 +80,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Check remote config
-        run: make check_host IMAGE=ubuntu:22.04 REMOTE_USER=random_user REDUCED_CHECK=true
+        run: ./main.py config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced
       - name: Check remote idempotence
-        run: make check_host IMAGE=ubuntu:22.04 REMOTE_USER=random_user REDUCED_CHECK=true VERIFY_UNCHANGED=true
+        run: ./main.py config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced --verify-unchanged
 
   lint:
     runs-on: ubuntu-22.04
@@ -86,7 +95,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Lint
-        run: make lint
+        run: ./main.py lint
 
   scripts:
     runs-on: ubuntu-22.04
@@ -94,9 +103,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Generate roles graph
-        run: make graph
+        run: ./main.py graph
       - name: Check update works
-        run: make update
+        run: ./main.py update
       - name: Show diff
         run: git diff
 

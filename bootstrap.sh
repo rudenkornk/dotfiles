@@ -5,9 +5,6 @@ set -o pipefail
 set -o nounset
 # set -o xtrace
 
-PROJECT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
-ARTIFACTS_DIR=${ARTIFACTS_DIR:-$PROJECT_DIR/__artifacts__}
-
 ansible_distribution=$(grep -oP '^ID=\K.*' /etc/os-release | sed -e 's/\(.*\)/\L\1/' | sed 's/\([[:alpha:]]\)/\U\1/')
 
 # sudo is required for all of the other package management operations
@@ -59,7 +56,7 @@ if ! command -v make &>/dev/null; then
   fi
 fi
 
-# rsync is required for Ansibly synchronization tasks
+# rsync is required for Ansible synchronization tasks
 if ! command -v rsync &>/dev/null; then
   if [[ $ansible_distribution == Ubuntu ]]; then
     sudo apt-get update
@@ -97,40 +94,4 @@ if ! command -v dot &>/dev/null; then
   elif [[ $ansible_distribution == Fedora ]]; then
     sudo dnf install --assumeyes graphviz
   fi
-fi
-
-VENV="$ARTIFACTS_DIR/$(hostname)/venv"
-
-if [[ "$VENV" -ot "$PROJECT_DIR/requirements.txt" ]]; then
-  python3 -m venv "$VENV"
-  source "$VENV/bin/activate"
-  pip3 install -r "$PROJECT_DIR/requirements.txt"
-  touch "$VENV"
-fi
-
-source "$VENV/bin/activate"
-
-mkdir -p "$ARTIFACTS_DIR/ansible_logs"
-
-# Target is user-specific since Ansible collections are installed for a specific user by default
-# In some cases we need to perform a bootstrap twice from different users.
-# This tweak ensures that the collections are installed for the user who runs the bootstrap
-collections_target="$ARTIFACTS_DIR/$(hostname)/ansible_collections_$(id --user --name)"
-if [[ 
-  ("$collections_target" -ot "$VENV") ||
-  ("$collections_target" -ot "$PROJECT_DIR/playbook_ansible_collections.yaml") ||
-  ("$collections_target" -ot "$PROJECT_DIR/roles/manifest/vars/ansible.yaml") ]] \
-  ; then
-  sudo bash -c ""
-  ANSIBLE_LOG_PATH="$ARTIFACTS_DIR/ansible_logs/ansible_collections.log" \
-    ansible-playbook --inventory inventory.yaml playbook_ansible_collections.yaml
-  touch "$collections_target"
-fi
-
-final_target="$ARTIFACTS_DIR/$(hostname)/bootstrap_control_node_$(id --user --name)"
-if [[ 
-  ("$final_target" -ot "$collections_target") ||
-  ("$final_target" -ot "${BASH_SOURCE[0]}") ]] \
-  ; then
-  touch "$final_target"
 fi

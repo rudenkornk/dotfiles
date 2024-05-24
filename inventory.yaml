@@ -6,32 +6,40 @@ all:
     dotfiles_ubuntu_22.04:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      image: ubuntu:22.04
       trusted: true
     dotfiles_ubuntu_22.10:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      image: ubuntu:22.10
       trusted: true
     dotfiles_ubuntu_23.04:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      image: ubuntu:23.04
       trusted: true
     dotfiles_ubuntu_23.10:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      image: ubuntu:23.10
       trusted: true
     dotfiles_ubuntu_24.04:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      image: ubuntu:24.04
       trusted: true
     dotfiles_fedora_38:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      image: fedora:38
       trusted: true
     dotfiles_fedora_39:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      image: fedora:39
       trusted: true
     dotfiles_fedora_40:
       ansible_connection: podman
       ansible_python_interpreter: auto_silent
+      image: fedora:40
       trusted: true

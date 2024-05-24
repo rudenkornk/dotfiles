@@ -15,6 +15,7 @@ from typing import IO as _IO
 from typing import Any as _Any
 from typing import Callable as _Callable
 from typing import Concatenate as _Concatenate
+from typing import Mapping as _Mapping
 from typing import ParamSpec as _ParamSpec
 from typing import Sequence as _Sequence
 from typing import TypeVar as _TypeVar
@@ -65,7 +66,7 @@ def _paths2shell(paths: _Sequence[_Path]) -> str:
 
 def shell_command(
     cmd: _Sequence[str | _Path] | str,
-    extra_env: dict[str, str] | None = None,
+    extra_env: _Mapping[str, str | _Path] | None = None,
     extra_paths: _Sequence[_Path] | None = None,
     capture_output: bool = False,
     inputs: None | str | bytes = None,
@@ -142,7 +143,7 @@ def get_venv(requirements_path: _Path) -> _Path:
 def run_shell(
     cmd: _Sequence[str | _Path] | str,
     *,
-    extra_env: dict[str, str] | None = None,
+    extra_env: _Mapping[str, str | _Path] | None = None,
     requirements_txt: _Path | None = None,
     extra_paths: _Sequence[_Path] | None = None,
     capture_output: bool = False,
@@ -155,7 +156,7 @@ def run_shell(
     check: bool = True,
     loglevel: int = _logging.INFO,
 ) -> _subprocess.CompletedProcess[str]:
-    extra_env = extra_env.copy() if extra_env is not None else {}
+    extra_env = dict(extra_env) if extra_env is not None else {}
     extra_paths = list(extra_paths) if extra_paths is not None else []
 
     current_loglevel = _logger.getEffectiveLevel()
@@ -167,10 +168,11 @@ def run_shell(
     if requirements_txt is not None:
         venv_path = get_venv(requirements_txt)
         extra_paths.append(venv_path / "bin")
-        extra_env["VIRTUAL_ENV"] = str(venv_path)
+        extra_env["VIRTUAL_ENV"] = venv_path
 
     env = _os.environ.copy()
-    env.update(extra_env)
+    env.update({k: str(v) for k, v in extra_env.items()})
+
     if extra_paths:
         new_path = _paths2shell(extra_paths)
         assert new_path.strip()
@@ -203,6 +205,8 @@ def run_shell(
             stderr=stderr,
             text=True,
             cwd=cwd,
+            shell=True,
+            executable="bash",
         )
     if isinstance(cmd, _Sequence):
         return _subprocess.run(
@@ -215,8 +219,6 @@ def run_shell(
             stderr=stderr,
             text=True,
             cwd=cwd,
-            shell=True,
-            executable="bash",
         )
 
     assert False, f"Unexpected command type for run_shell util: {type(cmd)}"

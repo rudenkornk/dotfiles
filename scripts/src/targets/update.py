@@ -3,6 +3,7 @@ from pathlib import Path as _Path
 
 from .. import utils as _utils
 from . import update_utils as _update_utils
+from .bootstrap import bootstrap as _bootstrap
 
 _logger = _logging.getLogger(__name__)
 
@@ -32,6 +33,8 @@ def get_update_choices() -> list[str]:
 
 
 def update(choice: str, dry_run: bool) -> None:
+    _bootstrap()
+
     title = choice.replace("_", " ")
     suffix = " (dry run)" if dry_run else ""
     _logger.info(f"Updating {title}{suffix}:")

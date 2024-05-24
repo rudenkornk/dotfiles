@@ -1,9 +1,12 @@
 import graphviz as _graphviz  # type: ignore
 
 from .. import utils as _utils
+from .bootstrap import bootstrap as _bootstrap
 
 
 def generate_png(view: bool = False) -> None:
+    _bootstrap()
+
     graph = _graphviz.Digraph(name="roles")
 
     roles_path = _utils.REPO_PATH / "roles"

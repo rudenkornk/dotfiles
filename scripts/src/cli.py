@@ -1,3 +1,4 @@
+import getpass as _getpass
 import logging as _logging
 import secrets as _secrets
 import string as _string
@@ -7,6 +8,10 @@ import click as _click
 from click_help_colors import HelpColorsGroup as _HelpColorsGroup
 
 from . import utils as _utils
+from .targets import bootstrap as _bootstrap
+from .targets import config as _config
+from .targets import hooks as _hooks
+from .targets import lint as _lint
 from .targets import roles_graph as _roles_graph
 from .targets import update as _update
 
@@ -42,6 +47,70 @@ def cli(log_level: str) -> None:
         "c": _logging.CRITICAL,
     }
     _logging.getLogger().setLevel(level_map[log_level])
+
+
+@cli.command(help="Configure systems.")
+@_click.option(
+    "-t",
+    "--host",
+    type=_click.Choice(list(_config.hosts().keys())),
+    default=["localhost"],
+    help="Hosts to configure. Note, that 'dotfiles_*' hostnames have a special meaning: "
+    "they are actually a podman containers, which are automatically started and used for testing purposes.",
+    multiple=True,
+)
+@_click.option(
+    "-u",
+    "--user",
+    type=str,
+    default=_getpass.getuser(),
+    help="Target user to configure.",
+)
+@_click.option(
+    "-v", "--verify-unchanged", is_flag=True, help="This is an idempotency check. If anything was changed, fail."
+)
+@_click.option(
+    "-m",
+    "--mode",
+    type=_click.Choice(_config.ConfigMode.values()),
+    default="full",
+    help="Configuration mode. "
+    "'bootstrap' will only install python and create target user on the host. "
+    "'reduced' will some most heavy configuration steps. "
+    "'full' will do full configuration.",
+)
+def config(host: list[str], user: str, verify_unchanged: bool, mode: str) -> None:
+    mode_enum = _config.ConfigMode[mode.upper()]
+    _config.config(hostnames=host, user=user, verify_unchanged=verify_unchanged, mode=mode_enum)
+
+
+@cli.command(help="Check that bootstrap.sh script works correctly on different systems.")
+@_click.option(
+    "-i",
+    "--image",
+    type=_click.Choice(_config.images()),
+    default=[_config.images()[0]],
+    help="Target container image, where to check bootstrap.sh script.",
+    multiple=True,
+)
+def check_bootstrap(image: list[str]) -> None:
+    for image_ in image:
+        _bootstrap.check_bootstrap(image_)
+
+
+@cli.command(help="Lint code.")
+def lint() -> None:
+    _lint.lint_code()
+
+
+@cli.command(name="format", help="Format code.")
+def format_code() -> None:
+    _lint.format_code()
+
+
+@cli.command(help="Setup repo git hooks.")
+def hooks() -> None:
+    _hooks.hooks()
 
 
 @cli.command(help="Update components versions.")

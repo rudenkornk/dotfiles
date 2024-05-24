@@ -28,6 +28,8 @@ _logger = _logging.getLogger(__name__)
 REPO_PATH = _Path(__file__).parent.parent.parent
 ARTIFACTS_PATH = REPO_PATH / "__artifacts__"
 TMP_PATH = ARTIFACTS_PATH / "tmp"
+DATA_PATH = _Path(__file__).parent / "data"
+SCRIPTS_PATH = DATA_PATH / "scripts"
 
 
 def _cgroup_cpu_count() -> int | None:
@@ -138,7 +140,7 @@ def get_venv(requirements_path: _Path) -> _Path:
 
 
 def run_shell(
-    cmd: _Sequence[str | _Path],
+    cmd: _Sequence[str | _Path] | str,
     *,
     extra_env: dict[str, str] | None = None,
     requirements_txt: _Path | None = None,
@@ -190,17 +192,34 @@ def run_shell(
         )
         _logger.log(loglevel, f"[RUNNING IN SHELL]: {print_cmd}")
 
-    return _subprocess.run(
-        cmd,
-        env=env,
-        check=check,
-        capture_output=capture_output,
-        input=inputs,
-        stdout=stdout,
-        stderr=stderr,
-        text=True,
-        cwd=cwd,
-    )
+    if isinstance(cmd, str):
+        return _subprocess.run(
+            cmd,
+            env=env,
+            check=check,
+            capture_output=capture_output,
+            input=inputs,
+            stdout=stdout,
+            stderr=stderr,
+            text=True,
+            cwd=cwd,
+        )
+    if isinstance(cmd, _Sequence):
+        return _subprocess.run(
+            cmd,
+            env=env,
+            check=check,
+            capture_output=capture_output,
+            input=inputs,
+            stdout=stdout,
+            stderr=stderr,
+            text=True,
+            cwd=cwd,
+            shell=True,
+            executable="bash",
+        )
+
+    assert False, f"Unexpected command type for run_shell util: {type(cmd)}"
 
 
 _P = _ParamSpec("_P")

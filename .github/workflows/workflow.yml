@@ -26,7 +26,7 @@ jobs:
       - name: Install git
         run: apt update && apt-get install --yes --no-install-recommends git ca-certificates
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       # Checkout action sets repo as safe, but this does not look like to work inside container
       - name: Mark repo as safe
         run: git config --system --add safe.directory $(pwd)
@@ -55,7 +55,7 @@ jobs:
     container: ${{ matrix.image }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bootstrap control node
         run: ./bootstrap.sh
       - name: Config
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Check remote config
         run: ./main.py config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced
       - name: Check remote idempotence
@@ -90,7 +90,7 @@ jobs:
       # Checkout must be onto the original commit, not a single PR
       # Otherwise lint will not see full history and diagnose secrets leakage
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
@@ -101,7 +101,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Generate roles graph
         run: ./main.py graph
       - name: Check update works

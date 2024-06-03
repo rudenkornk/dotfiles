@@ -25,7 +25,7 @@ return {
   {
     "folke/trouble.nvim",
     keys = {
-      { "<leader>r", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+      { "<leader>r", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
     },
   },
   {
@@ -64,6 +64,10 @@ return {
     opts = require("plugins.configs.lint").opts,
   },
   {
+    "monaqa/dial.nvim",
+    config = require("plugins.configs.dial").config,
+  },
+  {
     "nvim-lualine/lualine.nvim",
     opts = require("plugins.configs.lualine").opts,
   },
@@ -87,11 +91,11 @@ return {
       },
     },
   },
+
   {
     "williamboman/mason.nvim",
     opts = require("plugins.configs.mason"),
   },
-
   {
     "aserowy/tmux.nvim",
     event = "VeryLazy",
@@ -105,11 +109,6 @@ return {
     },
   },
   { "max397574/better-escape.nvim", event = "InsertEnter", config = true },
-  {
-    "monaqa/dial.nvim",
-    config = require("plugins.configs.dial").config,
-    keys = require("plugins.configs.dial").keys,
-  },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {
     "tamton-aquib/duck.nvim",

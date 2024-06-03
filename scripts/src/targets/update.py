@@ -32,9 +32,7 @@ def get_update_choices() -> list[str]:
     return choices
 
 
-def update(choice: str, dry_run: bool) -> None:
-    _bootstrap()
-
+def _update(choice: str, dry_run: bool) -> None:
     title = choice.replace("_", " ")
     suffix = " (dry run)" if dry_run else ""
     _logger.info(f"Updating {title}{suffix}:")
@@ -58,3 +56,10 @@ def update(choice: str, dry_run: bool) -> None:
         assert False, f"Invalid choice: {choice}"
 
     _logger.info("")
+
+
+def update(choices: list[str], dry_run: bool) -> None:
+    _bootstrap()
+
+    for choice in choices:
+        _update(choice, dry_run=dry_run)

@@ -127,8 +127,7 @@ def update(components: list[str], dry_run: bool) -> None:
     if "all" in components:
         components = _update.get_update_choices()
 
-    for component in components:
-        _update.update(component, dry_run)
+    _update.update(components, dry_run)
 
 
 @cli.command(help="Generate ansible roles dependency graph.")

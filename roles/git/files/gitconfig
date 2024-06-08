@@ -1,74 +1,73 @@
 [alias]
-    amend = commit --amend --reuse-message @
-    bf = ! git diff --name-only --relative --diff-filter=d | xargs bat --diff
-    bl = blame -s
-    br = branch -vv
-    ck = checkout
-    cm = commit
-    cp = cherry-pick
-    df = diff
-    fp = format-patch
-    ft = fetch --all
-    l = log
-    lg = log --graph
-    ll = log --oneline
-    llg = log --oneline --graph
-    ls = log --stat
-    mb = merge-base
-    rb = rebase
-    rbi = rebase --rebase-merges --interactive HEAD~26
-    rh = reset --hard
-    rv = remote -v
-    sg = diff --staged
-    sh = show
-    st = status
+  amend = commit --amend --reuse-message @
+  bl = blame -s
+  br = branch -vv
+  ck = checkout
+  cm = commit
+  cp = cherry-pick
+  df = diff
+  fp = format-patch
+  ft = fetch --all
+  l = log
+  lg = log --graph
+  ll = log --oneline
+  llg = log --oneline --graph
+  ls = log --stat
+  mb = merge-base
+  rb = rebase
+  rbi = rebase --rebase-merges --interactive HEAD~26
+  rh = reset --hard
+  rv = remote -v
+  sg = diff --staged
+  sh = show
+  st = status
 [blame]
-    coloring = highlightRecent
-    date = short
+  coloring = highlightRecent
+  date = short
 [color "blame"]
-    # round((alpha.^range - 1)/(alpha - 1))
-    # where alpha = 1.3
-    # Credits: https://stackoverflow.com/a/66250482/8099151
-    highlightRecent = \
-                    237, \
-      1388 day ago, 238, \
-      1067 day ago, 239, \
-       820 day ago, 240, \
-       630 day ago, 241, \
-       484 day ago, 242, \
-       372 day ago, 243, \
-       285 day ago, 244, \
-       218 day ago, 245, \
-       167 day ago, 246, \
-       128 day ago, 247, \
-        98 day ago, 248, \
-        74 day ago, 249, \
-        56 day ago, 250, \
-        43 day ago, 251, \
-        32 day ago, 252, \
-        24 day ago, 253, \
-        18 day ago, 254, \
-        13 day ago, 231, \
-         9 day ago, 230, \
-         6 day ago, 229, \
-         4 day ago, 228, \
-         2 day ago, 227, \
-         1 day ago, 226
+  # round((alpha.^range - 1)/(alpha - 1))
+  # where alpha = 1.3
+  # Credits: https://stackoverflow.com/a/66250482/8099151
+  highlightRecent = \
+                  237, \
+    1388 day ago, 238, \
+    1067 day ago, 239, \
+     820 day ago, 240, \
+     630 day ago, 241, \
+     484 day ago, 242, \
+     372 day ago, 243, \
+     285 day ago, 244, \
+     218 day ago, 245, \
+     167 day ago, 246, \
+     128 day ago, 247, \
+      98 day ago, 248, \
+      74 day ago, 249, \
+      56 day ago, 250, \
+      43 day ago, 251, \
+      32 day ago, 252, \
+      24 day ago, 253, \
+      18 day ago, 254, \
+      13 day ago, 231, \
+       9 day ago, 230, \
+       6 day ago, 229, \
+       4 day ago, 228, \
+       2 day ago, 227, \
+       1 day ago, 226
 
 [core]
-    editor = nvim
-    pager = bat --plain
+  editor = nvim
+  pager = bat --plain
 [credentials]
-    helper = store
+  helper = store
 [init]
-    defaultBranch = main
+  defaultBranch = main
 [pull]
-    rebase = true
+  rebase = true
 [push]
-    default = current
+  default = current
 [rebase]
-    autoStash = true
+  autoStash = true
 [rerere]
-	enabled = true
+enabled = true
 [include]
-    path = ~/.gitconfig.user
+  path = ~/.gitconfig.user

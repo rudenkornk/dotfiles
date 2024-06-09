@@ -1,5 +1,7 @@
 import enum as _enum
 import logging as _logging
+import math as _math
+import os as _os
 import re as _re
 import shutil as _shutil
 from functools import cache as _cache
@@ -67,6 +69,18 @@ def _verify_unchanged() -> None:
         raise RuntimeError("IDEMPOTENCY CHECK FAILED!")
 
 
+def _ansible_verbosity() -> str:
+    if env_verbosity := _os.getenv("ANSIBLE_VERBOSITY"):
+        return env_verbosity
+
+    current_level = _logger.getEffectiveLevel()
+    if current_level >= _logging.INFO:
+        return "0"
+
+    verbosity = _math.ceil((_logging.INFO - current_level) / 10) + 1
+    return str(verbosity)
+
+
 class ConfigMode(_enum.Enum):
     BOOTSTRAP = _enum.auto()
     REDUCED = _enum.auto()
@@ -98,6 +112,7 @@ def config(hostnames: list[str], user: str, verify_unchanged: bool, mode: Config
         ["bash", _SCRIPTS_PATH / "config.sh"],
         extra_env={
             "ANSIBLE_COLLECTIONS_PATH": _ANSIBLE_COLLECTIONS_PATH,
+            "ANSIBLE_VERBOSITY": _ansible_verbosity(),
             "CONFIG_MODE": mode.name.lower(),
             "HOSTS": hosts_var,
             "INVENTORY": _REPO_PATH / "inventory.yaml",

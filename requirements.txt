@@ -10,6 +10,7 @@ luadata==1.0.5
 lupa==2.2
 mypy==1.10.0
 passlib==1.7.4
+psutil==5.9.8
 PyDriller==2.6
 pylint==3.2.3
 requests==2.32.3

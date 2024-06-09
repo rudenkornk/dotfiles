@@ -10,6 +10,7 @@ from click_help_colors import HelpColorsGroup as _HelpColorsGroup
 from . import utils as _utils
 from .targets import bootstrap as _bootstrap
 from .targets import config as _config
+from .targets import gnome as _gnome
 from .targets import hooks as _hooks
 from .targets import lint as _lint
 from .targets import roles_graph as _roles_graph
@@ -128,6 +129,11 @@ def update(components: list[str], dry_run: bool) -> None:
         components = _update.get_update_choices()
 
     _update.update(components, dry_run)
+
+
+@cli.command(help="Regenerate gnome settings")
+def gnome() -> None:
+    _gnome.gnome_config()
 
 
 @cli.command(help="Generate ansible roles dependency graph.")

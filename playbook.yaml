@@ -36,4 +36,5 @@
     - role: chrome
     - role: telegram
     - role: mattermost
+    - role: gnome
     - role: common_utils

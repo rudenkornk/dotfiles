@@ -1,0 +1,118 @@
+# Disable line-length warning to simplify script auto-generation
+# yamllint disable rule:line-length
+
+- name: Install dconf packages
+  become: true
+  ansible.builtin.package:
+    name:
+      - "{{ {'Ubuntu': 'dconf-cli', 'Fedora': 'dconf'}[ansible_distribution] }}"
+      - dconf-editor
+      - dbus
+      - "{{ {'Ubuntu': 'dbus', 'Fedora': 'dbus-daemon'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'dbus', 'Fedora': 'dbus-tools'}[ansible_distribution] }}"
+
+- name: Install python support packages
+  become: true
+  ansible.builtin.package:
+    name:
+      - python3-psutil
+      - "{{ {'Ubuntu': 'python3-gi', 'Fedora': 'python3-gobject'}[ansible_distribution] }}"
+
+- name: Configure gnome
+  community.general.dconf:
+    key: "{{ item.key }}"
+    # string filter is important here, see notes for the dconf module:
+    # https://docs.ansible.com/ansible/latest/collections/community/general/dconf_module.html
+    value: "{{ item.value | string }}"
+  loop: "{{ gnome_settings | dict2items }}"
+  vars:
+    gnome_settings:
+      # GNOME_SETTINGS_BEGIN
+      "/org/gnome/calculator/button-mode": "'advanced'"
+      "/org/gnome/calculator/show-thousands": "true"
+      "/org/gnome/calculator/source-currency": "'DZD'"
+      "/org/gnome/calculator/source-units": "'radian'"
+      "/org/gnome/calculator/target-currency": "'DZD'"
+      "/org/gnome/calculator/target-units": "'degree'"
+      "/org/gnome/calculator/window-size": "(680, 666)"
+      "/org/gnome/desktop/input-sources/mru-sources": "[('xkb', 'en_rnk+qwerty_rnk'), ('xkb', 'ru_rnk+jcuken_rnk')]"
+      "/org/gnome/desktop/input-sources/per-window": "true"
+      "/org/gnome/desktop/input-sources/sources": "[('xkb', 'en_rnk+qwerty_rnk'), ('xkb', 'ru_rnk+jcuken_rnk')]"
+      "/org/gnome/desktop/input-sources/xkb-options": "['lv3:ralt_switch']"
+      "/org/gnome/desktop/interface/color-scheme": "'prefer-dark'"
+      "/org/gnome/desktop/peripherals/mouse/speed": "0.33082706766917291"
+      "/org/gnome/desktop/privacy/report-technical-problems": "true"
+      "/org/gnome/desktop/search-providers/disabled": "['org.mozilla.firefox.desktop']"
+      "/org/gnome/desktop/session/idle-delay": "uint32 900"
+      "/org/gnome/desktop/sound/theme-name": "'__custom'"
+      "/org/gnome/desktop/wm/keybindings/cycle-windows": "@as []"
+      "/org/gnome/desktop/wm/keybindings/cycle-windows-backward": "@as []"
+      "/org/gnome/desktop/wm/keybindings/maximize": "['<Control><Alt>e']"
+      "/org/gnome/desktop/wm/keybindings/minimize": "['<Control><Alt>r']"
+      "/org/gnome/desktop/wm/keybindings/move-to-monitor-down": "['<Control><Alt>s']"
+      "/org/gnome/desktop/wm/keybindings/move-to-monitor-left": "['<Control><Alt>a']"
+      "/org/gnome/desktop/wm/keybindings/move-to-monitor-right": "['<Control><Alt>d']"
+      "/org/gnome/desktop/wm/keybindings/move-to-monitor-up": "['<Control><Alt>w']"
+      "/org/gnome/desktop/wm/keybindings/move-to-workspace-1": "['<Shift><Alt>w']"
+      "/org/gnome/desktop/wm/keybindings/move-to-workspace-last": "['<Shift><Alt>s']"
+      "/org/gnome/desktop/wm/keybindings/move-to-workspace-left": "['<Shift><Alt>a']"
+      "/org/gnome/desktop/wm/keybindings/move-to-workspace-right": "['<Shift><Alt>d']"
+      "/org/gnome/desktop/wm/keybindings/switch-applications": "@as []"
+      "/org/gnome/desktop/wm/keybindings/switch-applications-backward": "@as []"
+      "/org/gnome/desktop/wm/keybindings/switch-input-source": "['<Control>space']"
+      "/org/gnome/desktop/wm/keybindings/switch-input-source-backward": "['<Shift><Control>space']"
+      "/org/gnome/desktop/wm/keybindings/switch-windows": "['<Alt>Tab']"
+      "/org/gnome/desktop/wm/keybindings/switch-windows-backward": "['<Shift><Alt>Tab']"
+      "/org/gnome/desktop/wm/keybindings/unmaximize": "['<Control><Alt>q']"
+      "/org/gnome/gnome-system-monitor/disktreenew/col-6-width": "0"
+      "/org/gnome/gnome-system-monitor/proctree/columns-order": "[0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]"
+      "/org/gnome/gnome-system-monitor/proctree/sort-col": "8"
+      "/org/gnome/gnome-system-monitor/window-height": "840"
+      "/org/gnome/gnome-system-monitor/window-width": "1186"
+      "/org/gnome/mutter/workspaces-only-on-primary": "false"
+      "/org/gnome/settings-daemon/plugins/media-keys/calculator": "['<Alt>2']"
+      "/org/gnome/settings-daemon/plugins/media-keys/control-center": "['<Alt>1']"
+      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings": "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding": "'Print'"
+      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command": '''script --command "flameshot gui" /dev/null'''
+      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name": "'Flameshot'"
+      "/org/gnome/settings-daemon/plugins/media-keys/www": "@as []"
+      "/org/gnome/settings-daemon/plugins/power/ambient-enabled": "false"
+      "/org/gnome/settings-daemon/plugins/power/idle-dim": "false"
+      "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-timeout": "259200"
+      "/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-timeout": "1800"
+      "/org/gnome/shell/favorite-apps": "['google-chrome.desktop', 'kitty.desktop', 'org.telegram.desktop._7399481fa1d082f7017ffa71affc89b7.desktop', 'org.gnome.Settings.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'org.gnome.SystemMonitor.desktop', 'AmneziaVPN.desktop']"
+      "/org/gnome/shell/keybindings/show-screenshot-ui": "@as []"
+      "/org/gnome/shell/keybindings/toggle-application-view": "['<Alt>Escape']"
+      "/org/gnome/system/locale/region": "'en_GB.UTF-8'"
+      "/org/gtk/Settings/FileChooser/sidebar-width": "157"
+      "/org/gtk/Settings/FileChooser/window-position": "(26, 23)"
+      "/org/gtk/Settings/FileChooser/window-size": "(1203, 902)"
+      "/org/gtk/gtk4/Settings/FileChooser/sidebar-width": "140"
+      "/org/gtk/gtk4/Settings/FileChooser/sort-directories-first": "false"
+      "/org/gtk/gtk4/Settings/FileChooser/view-type": "'grid'"
+      "/org/gtk/gtk4/Settings/FileChooser/window-size": "(1323, 683)"
+      "/org/gtk/gtk4/settings/file-chooser/date-format": "'regular'"
+      "/org/gtk/gtk4/settings/file-chooser/location-mode": "'path-bar'"
+      "/org/gtk/gtk4/settings/file-chooser/show-hidden": "false"
+      "/org/gtk/gtk4/settings/file-chooser/sidebar-width": "140"
+      "/org/gtk/gtk4/settings/file-chooser/sort-column": "'name'"
+      "/org/gtk/gtk4/settings/file-chooser/sort-directories-first": "false"
+      "/org/gtk/gtk4/settings/file-chooser/sort-order": "'ascending'"
+      "/org/gtk/gtk4/settings/file-chooser/type-format": "'category'"
+      "/org/gtk/gtk4/settings/file-chooser/view-type": "'grid'"
+      "/org/gtk/gtk4/settings/file-chooser/window-size": "(1323, 683)"
+      "/org/gtk/settings/file-chooser/date-format": "'regular'"
+      "/org/gtk/settings/file-chooser/location-mode": "'path-bar'"
+      "/org/gtk/settings/file-chooser/show-hidden": "false"
+      "/org/gtk/settings/file-chooser/show-size-column": "true"
+      "/org/gtk/settings/file-chooser/show-type-column": "true"
+      "/org/gtk/settings/file-chooser/sidebar-width": "157"
+      "/org/gtk/settings/file-chooser/sort-column": "'name'"
+      "/org/gtk/settings/file-chooser/sort-directories-first": "false"
+      "/org/gtk/settings/file-chooser/sort-order": "'ascending'"
+      "/org/gtk/settings/file-chooser/type-format": "'category'"
+      "/org/gtk/settings/file-chooser/window-position": "(26, 23)"
+      "/org/gtk/settings/file-chooser/window-size": "(1203, 902)"
+      "/system/locale/region": "'en_GB.UTF-8'"
+      # GNOME_SETTINGS_END

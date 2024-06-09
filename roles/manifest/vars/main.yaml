@@ -1,6 +1,8 @@
+# yamllint disable rule:line-length
+
 deb_arch: "{{ {'aarch64': 'arm64', 'x86_64': 'amd64'}[ansible_architecture] }}" # noqa: var-naming[no-role-prefix]
 pack: "{{ {'Ubuntu': 'deb', 'Fedora': 'rpm'}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix]
-pack_arch: "{{ {'Ubuntu': deb_arch, 'Fedora': ansible_architecture}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix] yaml[line-length]
+pack_arch: "{{ {'Ubuntu': deb_arch, 'Fedora': ansible_architecture}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix]
 
 manifest: # noqa: var-naming[no-role-prefix]
   clipboard:
@@ -19,7 +21,7 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/kovidgoyal/kitty-themes.git
     version: 891ca835de3112e69f1dfc87fd6cfab354a30f25
   lazygit:
-    url: https://github.com/jesseduffield/lazygit/releases/download/v0.42.0/lazygit_0.42.0_Linux_{{ ansible_architecture }}.tar.gz # noqa: yaml[line-length]
+    url: https://github.com/jesseduffield/lazygit/releases/download/v0.42.0/lazygit_0.42.0_Linux_{{ ansible_architecture }}.tar.gz
   neovim:
     url: https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz
   nvchad2:

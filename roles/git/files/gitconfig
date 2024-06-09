@@ -1,10 +1,11 @@
 [alias]
-  amd = commit --amend --reuse-message @
-  amm = commit --amend
   bl = blame -s
   br = branch -vv
   ck = checkout
   cm = commit
+  cmd = commit --amend --reuse-message @
+  cmm = commit --amend
+  cma = commit --message TMP
   cp = cherry-pick
   df = diff
   fp = format-patch

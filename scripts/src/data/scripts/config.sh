@@ -8,6 +8,7 @@ set -o nounset
 # ARGS LIST:
 #
 # ANSIBLE_COLLECTIONS_PATH
+# ANSIBLE_VERBOSITY
 # CONFIG_MODE
 # HOSTS
 # INVENTORY
@@ -88,6 +89,7 @@ else
         export PATH=\"$PATH\" && \
         export VIRTUAL_ENV=\"$VIRTUAL_ENV\" && \
         export ANSIBLE_COLLECTIONS_PATH=\"$ANSIBLE_COLLECTIONS_PATH\" && \
+        export ANSIBLE_VERBOSITY=\"$ANSIBLE_VERBOSITY\" && \
 
         ANSIBLE_LOG_PATH=\"$LOGS_PATH/main.log\" \
         ansible-playbook \

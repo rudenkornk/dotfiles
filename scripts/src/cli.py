@@ -76,7 +76,7 @@ def cli(log_level: str) -> None:
     default="full",
     help="Configuration mode. "
     "'bootstrap' will only install python and create target user on the host. "
-    "'reduced' will some most heavy configuration steps. "
+    "'reduced' will skip some most heavy configuration steps. "
     "'full' will do full configuration.",
 )
 def config(host: list[str], user: str, verify_unchanged: bool, mode: str) -> None:

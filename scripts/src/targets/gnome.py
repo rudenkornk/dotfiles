@@ -37,6 +37,7 @@ def excluded_domains() -> set[str]:
 def included_domains() -> set[str]:
     return {
         "/org/gnome/calculator",
+        "/org/gnome/desktop/calendar",
         "/org/gnome/desktop/input-sources",
         "/org/gnome/desktop/interface",
         "/org/gnome/desktop/peripherals",

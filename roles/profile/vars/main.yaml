@@ -2,5 +2,5 @@ profile: # noqa: var-naming[no-role-prefix]
   email: rudenkornk@gmail.com
   gpg_email: rudenkornk@gmail.com
   name: Nikita Rudenko
-  locale: en_US.UTF-8
+  locale: en_GB.UTF-8
   timezone: Europe/Moscow

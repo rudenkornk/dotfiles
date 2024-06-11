@@ -9,6 +9,11 @@ skip_gitignore = true
 [tool.mypy]
 strict = true
 implicit_reexport = true
+# W/A for errors like this one:
+# error: Skipping analyzing "ruamel": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+# https://github.com/python/mypy/issues/12664
+# https://github.com/python/mypy/issues/7276
+incremental = false
 
 [tool.pylint]
 max-line-length = 120

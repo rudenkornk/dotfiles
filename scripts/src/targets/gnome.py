@@ -155,18 +155,18 @@ class DConf(dict[DConfKey, str]):
         return result
 
 
-def generate_ansible_task(entries: DConf, task_path: _Path) -> str:
-    task = task_path.read_text(encoding="utf-8")
-    begin_match = _re.search(r"^(\s+)# GNOME_SETTINGS_BEGIN", task, flags=_re.MULTILINE)
-    end_match = _re.search(r"^(\s+)# GNOME_SETTINGS_END", task, flags=_re.MULTILINE)
+def generate_ansible_vars(entries: DConf, vars_path: _Path) -> str:
+    ansible_vars = vars_path.read_text(encoding="utf-8")
+    begin_match = _re.search(r"^(\s+)# GNOME_SETTINGS_BEGIN", ansible_vars, flags=_re.MULTILINE)
+    end_match = _re.search(r"^(\s+)# GNOME_SETTINGS_END", ansible_vars, flags=_re.MULTILINE)
     assert begin_match is not None
     assert end_match is not None
 
     spaces = begin_match.group(1)
     entries_str = entries.dump(spaces)
 
-    task = task[: begin_match.end() + 1] + entries_str + task[end_match.start() - 1 :]
-    return task
+    ansible_vars = ansible_vars[: begin_match.end() + 1] + entries_str + ansible_vars[end_match.start() - 1 :]
+    return ansible_vars
 
 
 def gnome_config() -> None:
@@ -194,9 +194,9 @@ def gnome_config() -> None:
 
     unknown = diff
 
-    task_path = _utils.REPO_PATH / "roles" / "gnome" / "tasks" / "main.yaml"
-    script = generate_ansible_task(included, task_path)
-    task_path.write_text(script, encoding="utf-8")
+    vars_path = _utils.REPO_PATH / "roles" / "gnome" / "vars" / "main.yaml"
+    script = generate_ansible_vars(included, vars_path)
+    vars_path.write_text(script, encoding="utf-8")
 
     if excluded:
         _logger.info(f"Explicitly excluded domains:\n{excluded.dump()}")

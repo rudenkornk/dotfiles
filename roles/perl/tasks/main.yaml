@@ -31,3 +31,5 @@
     - Log::Log4perl
     - Unicode::GCString
     - YAML::Tiny
+  # Returns false positives for some reason
+  changed_when: false

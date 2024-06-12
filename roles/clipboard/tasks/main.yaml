@@ -19,14 +19,14 @@
     # Thus we use approach with temporary directory.
     - name: Create tmp dir for win32yank
       ansible.builtin.file:
-        dest: "{{ dotfiles_tmp }}/win32yank"
+        dest: "{{ dotfiles_host_tmp }}/win32yank"
         state: directory
         mode: "0o777"
 
     - name: Download win32yank.exe
       ansible.builtin.unarchive:
         src: "{{ manifest.clipboard.url }}"
-        dest: "{{ dotfiles_tmp }}/win32yank"
+        dest: "{{ dotfiles_host_tmp }}/win32yank"
         remote_src: true
       retries: "{{ web_retries }}"
       delay: "{{ web_delay }}"
@@ -43,7 +43,7 @@
     - name: Copy win32yank to Windows dir
       become: true
       ansible.builtin.copy:
-        src: "{{ dotfiles_tmp }}/win32yank"
+        src: "{{ dotfiles_host_tmp }}/win32yank"
         dest: "{{ clipboard_win32yank_dir }}"
         remote_src: true
         mode: "0o777"

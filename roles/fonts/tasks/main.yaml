@@ -1,6 +1,6 @@
-- name: Create directory for FiraCode in {{ dotfiles_tmp }}
+- name: Create directory for FiraCode in {{ dotfiles_host_tmp }}
   ansible.builtin.file:
-    dest: "{{ dotfiles_tmp }}/FiraCode"
+    dest: "{{ dotfiles_host_tmp }}/FiraCode"
     state: directory
     mode: "0o755"
 
@@ -13,7 +13,7 @@
 - name: Download FiraCode font
   ansible.builtin.unarchive:
     src: "{{ manifest.firacode.url }}"
-    dest: "{{ dotfiles_tmp }}/FiraCode"
+    dest: "{{ dotfiles_host_tmp }}/FiraCode"
     remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
@@ -22,7 +22,7 @@
 
 - name: Find fonts
   ansible.builtin.find:
-    paths: "{{ dotfiles_tmp }}/FiraCode/"
+    paths: "{{ dotfiles_host_tmp }}/FiraCode/"
     patterns: "*Mono*.ttf"
   register: fonts_found
   failed_when: fonts_found.files | length < 1

@@ -1,7 +1,6 @@
 import enum as _enum
 import json as _json
 import logging as _logging
-import re as _re
 from pathlib import Path as _Path
 
 from typing_extensions import Self as _Self
@@ -155,18 +154,11 @@ class DConf(dict[DConfKey, str]):
         return result
 
 
-def generate_ansible_vars(entries: DConf, vars_path: _Path) -> str:
-    ansible_vars = vars_path.read_text(encoding="utf-8")
-    begin_match = _re.search(r"^(\s+)# GNOME_SETTINGS_BEGIN", ansible_vars, flags=_re.MULTILINE)
-    end_match = _re.search(r"^(\s+)# GNOME_SETTINGS_END", ansible_vars, flags=_re.MULTILINE)
-    assert begin_match is not None
-    assert end_match is not None
-
-    spaces = begin_match.group(1)
-    entries_str = entries.dump(spaces)
-
-    ansible_vars = ansible_vars[: begin_match.end() + 1] + entries_str + ansible_vars[end_match.start() - 1 :]
-    return ansible_vars
+def generate_ansible_vars(entries: DConf, vars_path: _Path) -> None:
+    ansible_vars, yaml = _utils.yaml_read(vars_path)
+    assert isinstance(ansible_vars, dict)
+    ansible_vars["gnome_settings"] = {str(key): val for key, val in sorted(entries.items())}
+    _utils.yaml_write(vars_path, ansible_vars, yaml)
 
 
 def gnome_config() -> None:
@@ -195,8 +187,7 @@ def gnome_config() -> None:
     unknown = diff
 
     vars_path = _utils.REPO_PATH / "roles" / "gnome" / "vars" / "main.yaml"
-    script = generate_ansible_vars(included, vars_path)
-    vars_path.write_text(script, encoding="utf-8")
+    generate_ansible_vars(included, vars_path)
 
     if excluded:
         _logger.info(f"Explicitly excluded domains:\n{excluded.dump()}")

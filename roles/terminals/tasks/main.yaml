@@ -27,6 +27,6 @@
 
 - name: Create symlink to kitty config
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/kitty.conf"
+    src: "{{ role_host_path }}/files/kitty.conf"
     dest: "{{ home }}/.config/kitty/kitty.conf"
     state: link

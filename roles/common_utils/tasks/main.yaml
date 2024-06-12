@@ -62,7 +62,7 @@
 # https://github.com/google/yamlfmt#configuration-file
 - name: Create symlink to global yamlfmt config
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/yamlfmt.yaml"
+    src: "{{ role_host_path }}/files/yamlfmt.yaml"
     dest: "{{ home }}/.config/yamlfmt/.yamlfmt"
     state: link
 
@@ -75,27 +75,27 @@
 # https://yamllint.readthedocs.io/en/stable/configuration.html#configuration
 - name: Create symlink to global yamllint config
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/yamllint.yaml"
+    src: "{{ role_host_path }}/files/yamllint.yaml"
     dest: "{{ home }}/.config/yamllint/config"
     state: link
 
 # https://github.com/DavidAnson/markdownlint
 - name: Create symlink to global markdownlint config
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/markdownlint.yaml"
+    src: "{{ role_host_path }}/files/markdownlint.yaml"
     dest: "{{ home }}/.markdownlint.yaml"
     state: link
 
 # https://github.com/nvuillam/npm-groovy-lint/blob/main/lib/.groovylintrc-recommended.json
 - name: Create symlink to global groovylintrc config
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/groovylintrc.json"
+    src: "{{ role_host_path }}/files/groovylintrc.json"
     dest: "{{ home }}/.groovylintrc.json"
     state: link
 
 - name: Create symlink to global yamllint config
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/yamllint.yaml"
+    src: "{{ role_host_path }}/files/yamllint.yaml"
     dest: "{{ home }}/.config/yamllint/config"
     state: link
 
@@ -107,7 +107,7 @@
 
 - name: Create symlink to flameshot config
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/flameshot.ini"
+    src: "{{ role_host_path }}/files/flameshot.ini"
     dest: "{{ home }}/.config/flameshot/flameshot.ini"
     state: link
     force: true

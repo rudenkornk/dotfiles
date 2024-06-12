@@ -66,7 +66,7 @@
 
     - name: Create symlink to yazi keymap
       ansible.builtin.file:
-        src: "{{ remote_role_path }}/files/yazi_keymap.toml"
+        src: "{{ role_host_path }}/files/yazi_keymap.toml"
         dest: "{{ home }}/.config/yazi/keymap.toml"
         state: link
 
@@ -122,7 +122,7 @@
 
 - name: Create symlink to fish_plugins
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/fish_plugins"
+    src: "{{ role_host_path }}/files/fish_plugins"
     dest: "{{ home }}/.config/fish/fish_plugins"
     state: link
 
@@ -147,17 +147,17 @@
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
     regexp: "source .*/{{ role_name }}/files"
-    line: source {{ remote_role_path }}/files/bash.sh
+    line: source {{ role_host_path }}/files/bash.sh
 
 - name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    src: "{{ role_host_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link
 
 - name: Create symlinks to fish functions
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"
+    src: "{{ role_host_path }}/files/fish_functions/{{ item | basename }}"
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"

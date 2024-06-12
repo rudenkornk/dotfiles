@@ -63,7 +63,7 @@
 
     - name: Create symlink to NvChad config
       ansible.builtin.file:
-        src: "{{ remote_role_path }}/files/nvchad2"
+        src: "{{ role_host_path }}/files/nvchad2"
         dest: "{{ neovim_base }}_2/config/lua/custom"
         state: link
         force: true
@@ -76,7 +76,7 @@
 
     - name: Create symlink to rnk keymap
       ansible.builtin.file:
-        src: "{{ dotfiles_path }}/roles/keyboard_layouts/files/rnk-qwerty-jcuken.vim"
+        src: "{{ dotfiles_host_path }}/roles/keyboard_layouts/files/rnk-qwerty-jcuken.vim"
         dest: "{{ neovim_base }}_2/config/keymap/rnk-qwerty-jcuken.vim"
         state: link
         force: true
@@ -111,7 +111,7 @@
 
     - name: Create symlink to LazyVim config
       ansible.builtin.file:
-        src: "{{ remote_role_path }}/files/lazy"
+        src: "{{ role_host_path }}/files/lazy"
         dest: "{{ neovim_base }}_3/config"
         state: link
         force: true
@@ -147,17 +147,17 @@
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
     regexp: "source .*/{{ role_name }}/files"
-    line: source {{ remote_role_path }}/files/bash.sh
+    line: source {{ role_host_path }}/files/bash.sh
 
 - name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    src: "{{ role_host_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link
 
 - name: Create symlinks to fish functions
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"
+    src: "{{ role_host_path }}/files/fish_functions/{{ item | basename }}"
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"

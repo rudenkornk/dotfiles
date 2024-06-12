@@ -1,13 +1,13 @@
 - name: Create projects directory
   ansible.builtin.file:
-    path: "{{ dotfiles_parent_path }}"
+    path: "{{ dotfiles_host_parent_path }}"
     state: directory
     mode: "0o755"
 
 - name: Copy dotfiles repository
   ansible.posix.synchronize:
     src: "{{ playbook_dir }}"
-    dest: "{{ dotfiles_parent_path }}"
+    dest: "{{ dotfiles_host_parent_path }}"
     rsync_opts: "--filter=':- .gitignore'"
     owner: false
     group: false
@@ -23,6 +23,6 @@
 
 - name: Create tmp dir in dotfiles repo
   ansible.builtin.file:
-    path: "{{ dotfiles_tmp }}"
+    path: "{{ dotfiles_host_tmp }}"
     state: directory
     mode: "0o755"

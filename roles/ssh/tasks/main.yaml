@@ -15,7 +15,7 @@
 
 - name: List decrypted private keys
   ansible.builtin.find:
-    paths: "{{ ssh_path }}"
+    paths: "{{ ssh_host_path }}"
     patterns: "*rsa"
   register: ssh_rsa_keys
 
@@ -30,7 +30,7 @@
 
 - name: List public keys
   ansible.builtin.find:
-    paths: "{{ ssh_path }}"
+    paths: "{{ ssh_host_path }}"
     patterns: "*rsa.pub"
   register: ssh_rsa_pub_keys
 
@@ -45,7 +45,7 @@
 
 - name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    src: "{{ role_host_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link
 

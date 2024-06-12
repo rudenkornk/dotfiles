@@ -7,10 +7,10 @@
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
     regexp: "source .*/{{ role_name }}/files"
-    line: source {{ remote_role_path }}/files/bash.sh
+    line: source {{ role_host_path }}/files/bash.sh
 
 - name: Create symlink to fish config of {{ role_name }}
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/{{ role_name }}.fish"
+    src: "{{ role_host_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link

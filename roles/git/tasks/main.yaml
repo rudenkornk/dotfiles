@@ -11,7 +11,7 @@
 
 - name: Set up global .gitconfig
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/gitconfig"
+    src: "{{ role_host_path }}/files/gitconfig"
     dest: "{{ home }}/.gitconfig"
     state: link
 
@@ -45,7 +45,7 @@
 
 - name: Set up .mrconfig
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/mrconfig"
+    src: "{{ role_host_path }}/files/mrconfig"
     dest: "{{ home }}/.mrconfig"
     state: link
 
@@ -105,11 +105,11 @@
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
     regexp: "source .*/{{ role_name }}/files"
-    line: source {{ remote_role_path }}/files/bash.sh
+    line: source {{ role_host_path }}/files/bash.sh
 
 - name: Create symlinks to fish functions
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/fish_functions/{{ item | basename }}"
+    src: "{{ role_host_path }}/files/fish_functions/{{ item | basename }}"
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"

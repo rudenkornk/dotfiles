@@ -9,7 +9,7 @@
 - name: Download luarocks
   ansible.builtin.unarchive:
     src: "{{ lua_rocks_url }}"
-    dest: "{{ dotfiles_tmp }}"
+    dest: "{{ dotfiles_host_tmp }}"
     remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
@@ -28,7 +28,7 @@
     fi
   args:
     executable: bash
-    chdir: "{{ dotfiles_tmp }}/luarocks-{{ lua_rocks_version }}"
+    chdir: "{{ dotfiles_host_tmp }}/luarocks-{{ lua_rocks_version }}"
   changed_when: lua_rocks_matches.stdout != "true"
   register: lua_rocks_matches
 
@@ -42,7 +42,7 @@
     fi
   args:
     executable: bash
-    chdir: "{{ dotfiles_tmp }}/luarocks-{{ lua_rocks_version }}"
+    chdir: "{{ dotfiles_host_tmp }}/luarocks-{{ lua_rocks_version }}"
   changed_when: lua_rocks_matches.stdout != "true"
 
 - name: Install luarocks completions
@@ -131,6 +131,6 @@
 # https://luacheck.readthedocs.io/en/stable/config.html#configuration-file
 - name: Create symlink to global luacheck config
   ansible.builtin.file:
-    src: "{{ remote_role_path }}/files/luacheckrc"
+    src: "{{ role_host_path }}/files/luacheckrc"
     dest: "{{ home }}/.config/luacheck/.luacheckrc"
     state: link

@@ -12,11 +12,13 @@ from ..utils import yaml_read as _yaml_read
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH as _ANSIBLE_COLLECTIONS_PATH
 from .ansible_collections import ansible_collections as _ansible_collections
 from .bootstrap import bootstrap as _bootstrap
+from .roles_graph import roles_graph as _roles_graph
 
 _logger = _logging.getLogger(__name__)
 
 
 def _check_registered_roles() -> None:
+    _logger.info("Checking if all roles are registered in playbook.yaml...")
     playbook, _ = _yaml_read(_REPO_PATH / "playbook.yaml")
     assert isinstance(playbook, list)
     roles = {entry["role"] for entry in playbook[0]["roles"]}
@@ -25,10 +27,43 @@ def _check_registered_roles() -> None:
         if (role_name := role_path.name) not in roles:
             missing.add(role_name)
 
-    if not missing:
-        return
+    if missing:
+        raise RuntimeError(f"Missing roles: {', '.join(missing)} in playbook.yaml")
 
-    raise RuntimeError(f"Missing roles: {', '.join(missing)} in playbook.yaml")
+    _logger.info("All roles are registered!")
+
+
+def _check_secrets_deps() -> None:
+    _logger.info("Checking if all secrets are properly used by roles...")
+
+    secrets_index = _REPO_PATH / ".gitsecret" / "paths" / "mapping.cfg"
+    secrets_raw = secrets_index.read_text(encoding="utf-8").splitlines()
+    secrets = {line.split(":", maxsplit=1)[0] for line in secrets_raw}
+    graph = _roles_graph()
+
+    for secret in secrets:
+        if not secret.startswith("roles/"):
+            continue
+
+        if secret.startswith("roles/secrets/"):
+            continue
+
+        role = secret.split("/")[1]
+
+        if role not in graph:
+            raise RuntimeError(f"Secret {secret} is not used by any role!")
+
+        if "secrets" in graph[role]:
+            continue
+
+        msg = (
+            f"Looks like {role} role uses {secret} secret,\n"
+            "but the role does not have 'secrets' role in its dependencies!\n"
+            "This is likely a configuration error and can lead to unexpected behavior.\n"
+        )
+        raise RuntimeError(msg)
+
+    _logger.info("All secrets are properly used!")
 
 
 def _check_leaked_credentials() -> None:
@@ -49,9 +84,10 @@ def _check_leaked_credentials() -> None:
         "d65d287dd22d85254169d4c02014675891f21f85",
     ]
 
-    repo = _Repo(_REPO_PATH)
     _logging.getLogger("git").setLevel(_logging.WARNING)
     _logger.info("Analyzing repository history for leaked credentials...")
+
+    repo = _Repo(_REPO_PATH)
     for commit in repo.iter_commits(f"{first_commit}..HEAD"):
         if commit.hexsha in ignored:
             continue
@@ -86,6 +122,11 @@ def _check_leaked_credentials() -> None:
 def lint_code() -> None:
     _bootstrap()
     _ansible_collections()
+
+    _check_leaked_credentials()
+    _check_registered_roles()
+    _check_secrets_deps()
+
     _run_shell(
         ["ansible-lint", _REPO_PATH / "playbook.yaml"],
         extra_env={"ANSIBLE_COLLECTIONS_PATH": _ANSIBLE_COLLECTIONS_PATH},
@@ -103,8 +144,6 @@ def lint_code() -> None:
     _run_shell(["python3", "-m", "pylint", "--jobs", str(_cpu_count()), _REPO_PATH / "main.py"])
     _run_shell(["python3", "-m", "pylint", "--jobs", str(_cpu_count()), _REPO_PATH / "scripts"])
     _run_shell(["python3", "-m", "yamllint", "--strict", _REPO_PATH / ".github"])
-    _check_leaked_credentials()
-    _check_registered_roles()
 
 
 def format_code() -> None:

@@ -72,7 +72,7 @@ podman exec --interactive --tty --workdir $(pwd) --user $(id --user) dotfiles_ub
 The first things you would want to customize if forking this repo are:
 
 1. Personal information in `roles/profile/vars/main.yaml`.
-1. Credentials, ssh keys and vpn configs in `roles/secrets/files`.
+1. Credentials, ssh keys and vpn configs shown in `git secret list`.
 
 ## Update components versions
 

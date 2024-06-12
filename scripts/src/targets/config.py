@@ -22,7 +22,7 @@ _ANSIBLE_LOGS_PATH = _ARTIFACTS_PATH / "ansible_logs"
 
 @_cache
 def hosts() -> dict[str, dict[str, str]]:
-    inventory = _yaml_read(_REPO_PATH / "inventory.yaml")
+    inventory, _ = _yaml_read(_REPO_PATH / "inventory.yaml")
     assert isinstance(inventory, dict)
     return dict(inventory["all"]["hosts"])
 

@@ -24,7 +24,7 @@ def generate_png(view: bool = False) -> None:
         else:
             continue
 
-        yaml = _utils.yaml_read(dependencies_path)
+        yaml, _ = _utils.yaml_read(dependencies_path)
         assert isinstance(yaml, dict)
         for dep in yaml["dependencies"]:
             graph.edge(role, dep["role"])

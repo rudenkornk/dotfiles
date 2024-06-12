@@ -322,16 +322,22 @@ def lua_write(path: _Path, data: dict[str, _Any]) -> None:
     _luadata.write(path, data, encoding="utf-8", indent="  ", prefix="return ")
 
 
-def yaml_read(path: _Path) -> dict[str, _Any] | list[_Any]:
-    val = _YAML().load(path)
-    assert isinstance(val, (dict, list))
-    return val
-
-
-def yaml_write(path: _Path, data: dict[str, _Any]) -> None:
+def yaml_read(path: _Path) -> tuple[dict[str, _Any] | list[_Any], _YAML]:
     yaml = _YAML()
-    yaml.width = 120
-    _YAML().dump(data, path)
+    yaml.preserve_quotes = True
+    val = yaml.load(path)
+    assert isinstance(val, (dict, list))
+    return val, yaml
+
+
+def yaml_write(path: _Path, data: dict[str, _Any], yaml: _YAML | None = None, *, width: int = 120) -> None:
+    if yaml is None:
+        yaml = _YAML()
+
+    if width is not None:
+        yaml.width = width
+
+    yaml.dump(data, path)
 
 
 class _LoggerFormatter(_logging.Formatter):

@@ -52,7 +52,7 @@ gnome_settings:
   /org/gnome/mutter/keybindings/toggle-tiled-left: "['<Control><Alt>q']"
   /org/gnome/mutter/keybindings/toggle-tiled-right: "['<Control><Alt>e']"
   /org/gnome/mutter/workspaces-only-on-primary: "false"
-  /org/gnome/settings-daemon/plugins/media-keys/calculator: "['<Alt>3']"
+  /org/gnome/settings-daemon/plugins/media-keys/calculator: "['<Alt>4']"
   /org/gnome/settings-daemon/plugins/media-keys/control-center: "['<Alt>1']"
   /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings:
     "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/',
@@ -63,6 +63,7 @@ gnome_settings:
   /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/binding: "'<Alt>2'"
   /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command: '''script --command "flameshot gui" /dev/null'''
   /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name: "'Flameshot'"
+  /org/gnome/settings-daemon/plugins/media-keys/home: "['<Alt>3']"
   /org/gnome/settings-daemon/plugins/media-keys/screensaver: "['<Control><Alt>l']"
   /org/gnome/settings-daemon/plugins/media-keys/www: "@as []"
   /org/gnome/settings-daemon/plugins/power/ambient-enabled: "false"

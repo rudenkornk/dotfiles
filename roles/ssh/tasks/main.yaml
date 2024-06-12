@@ -15,7 +15,7 @@
 
 - name: List decrypted private keys
   ansible.builtin.find:
-    paths: "{{ secrets_ssh_path }}"
+    paths: "{{ ssh_path }}"
     patterns: "*rsa"
   register: ssh_rsa_keys
 
@@ -30,7 +30,7 @@
 
 - name: List public keys
   ansible.builtin.find:
-    paths: "{{ secrets_ssh_path }}"
+    paths: "{{ ssh_path }}"
     patterns: "*rsa.pub"
   register: ssh_rsa_pub_keys
 

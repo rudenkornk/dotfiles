@@ -17,7 +17,7 @@ _logger = _logging.getLogger(__name__)
 
 
 def _check_registered_roles() -> None:
-    playbook = _yaml_read(_REPO_PATH / "playbook.yaml")
+    playbook, _ = _yaml_read(_REPO_PATH / "playbook.yaml")
     assert isinstance(playbook, list)
     roles = {entry["role"] for entry in playbook[0]["roles"]}
     missing = set()

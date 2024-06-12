@@ -22,7 +22,7 @@ ANSIBLE_COLLECTIONS_PATH = _ARTIFACTS_PATH / _platform.node() / "ansible_collect
     auto_create=True,
 )
 def ansible_collections(artifact: _Path, sources: list[_Path]) -> None:
-    yaml = _yaml_read(sources[0])
+    yaml, _ = _yaml_read(sources[0])
     assert isinstance(yaml, dict)
     manifest = yaml["manifest"]
     _run_shell(

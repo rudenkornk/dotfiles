@@ -375,11 +375,8 @@ def _ephemerize_ansible_entry(entry: str) -> str:
 
 
 def update_ansible_entry(manifest_path: _Path, entry: str, dry_run: bool) -> None:
-    yaml = _YAML()
-    yaml.preserve_quotes = True
-    yaml.width = 120
-
-    main_vars = yaml.load(manifest_path)
+    main_vars, yaml = _utils.yaml_read(manifest_path)
+    assert isinstance(main_vars, dict)
     manifest = main_vars["manifest"]
     info = manifest[entry]
     raw_url = info["url"]
@@ -397,4 +394,4 @@ def update_ansible_entry(manifest_path: _Path, entry: str, dry_run: bool) -> Non
         info["url"] = _ephemerize_ansible_entry(url)
 
     if not dry_run:
-        yaml.dump(main_vars, manifest_path)
+        _utils.yaml_write(manifest_path, main_vars, yaml)

@@ -15,7 +15,7 @@ _global_requirements_path = _utils.REPO_PATH / "roles" / "python" / "files" / "g
 
 
 def get_ansible_choices(manifest_path: _Path) -> list[str]:
-    yaml = _utils.yaml_read(manifest_path)
+    yaml, _ = _utils.yaml_read(manifest_path)
     assert isinstance(yaml, dict)
     return list(yaml["manifest"].keys())
 

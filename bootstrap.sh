@@ -46,16 +46,6 @@ if ! command -v hostname &>/dev/null; then
   fi
 fi
 
-# make is responsible for most of the project targets, including Ansible calls
-if ! command -v make &>/dev/null; then
-  if [[ $ansible_distribution == Ubuntu ]]; then
-    sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends make
-  elif [[ $ansible_distribution == Fedora ]]; then
-    sudo dnf install --assumeyes make
-  fi
-fi
-
 # rsync is required for Ansible synchronization tasks
 if ! command -v rsync &>/dev/null; then
   if [[ $ansible_distribution == Ubuntu ]]; then

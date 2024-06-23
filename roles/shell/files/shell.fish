@@ -4,4 +4,6 @@ fish_add_path "$HOME/.local/bin"
 bind \cd delete-char
 
 # Set vertical line cursor
-printf '\033[6 q'
+# Actually, no, do not set
+# This breaks display for interactive fzf, htop and even ssh command
+# printf '\033[6 q'

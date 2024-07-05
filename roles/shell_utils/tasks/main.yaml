@@ -163,6 +163,8 @@
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"
   register: shell_utils_functions
 
+# git diff -p --no-index --no-prefix -- a/functions/ b/functions/ >
+# ~/projects/dotfiles/roles/shell_utils/files/fzf.fish.patch
 - name: Patch fzf - fix focus events and add ripgrep support
   ansible.posix.patch:
     src: "{{ role_path }}/files/fzf.fish.patch"
@@ -187,7 +189,7 @@
   # C-n next history command
   # C-o fzf git status
   # C-p previous history command
-  # C-q ???
+  # C-q fzf search files with ripgrep
   # C-r fzf command history
   # C-s tmux reserved
   # C-t fzf search files
@@ -195,7 +197,7 @@
   # C-v fzf search variables
   # C-w delete one word to the left
   # C-x fzf search processes (previously copy fish command)
-  # C-y fzf search files with ripgrep (previously paste something)
+  # C-y fzf yazi
   # C-z undo
   ansible.builtin.lineinfile:
     path: "{{ home }}/.config/fish/functions/fish_user_key_bindings.fish"
@@ -209,6 +211,7 @@
       --history=\cr
       --processes=\cx
       --variables=\cv
-      --files=\cy
+      --files=\cq
+      --yazi=\cy
     create: true
     mode: "0o644"

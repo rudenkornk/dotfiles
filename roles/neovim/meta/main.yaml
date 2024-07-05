@@ -10,6 +10,7 @@ dependencies:
   - role: python
   - role: ruby
   - role: rust
+  - role: secrets
   - role: shell
   - role: shell_utils
   - role: tmux

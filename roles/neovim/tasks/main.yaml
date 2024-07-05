@@ -8,6 +8,12 @@
   register: neovim_downloaded
   until: neovim_downloaded is not failed
 
+- name: Create symlink to proxied nvim binary
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/nvim-proxied.sh"
+    dest: "{{ home }}/.local/bin/nvim"
+    state: link
+
 - name: Install vim as a backup
   become: true
   ansible.builtin.package:

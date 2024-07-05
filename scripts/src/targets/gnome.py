@@ -11,60 +11,6 @@ from .bootstrap import bootstrap as _bootstrap
 _logger = _logging.getLogger(__name__)
 
 
-def excluded_domains() -> set[str]:
-    return {
-        "/ca/desrt",
-        "/com/github/wwmm/easyeffects",
-        "/org/gnome/boxes",
-        "/org/gnome/calculator/window-size",
-        "/org/gnome/control-center",
-        "/org/gnome/desktop/app-folders",
-        "/org/gnome/desktop/background",
-        "/org/gnome/desktop/notifications",
-        "/org/gnome/desktop/screensaver",
-        "/org/gnome/Evince/Default",
-        "/org/gnome/evince/default",
-        "/org/gnome/evolution-data-server",
-        "/org/gnome/gnome-system-monitor/current-tab",
-        "/org/gnome/nautilus",
-        "/org/gnome/nm-applet/eap",
-        "/org/gnome/portal/filechooser",
-        "/org/gnome/Settings",
-        "/org/gnome/shell/command-history",
-        "/org/gnome/shell/welcome-dialog-last-shown-version",
-        "/org/gnome/software",
-        "/org/virt-manager",
-    }
-
-
-def included_domains() -> set[str]:
-    return {
-        "/org/gnome/calculator",
-        "/org/gnome/desktop/calendar",
-        "/org/gnome/desktop/input-sources",
-        "/org/gnome/desktop/interface",
-        "/org/gnome/desktop/peripherals",
-        "/org/gnome/desktop/privacy",
-        "/org/gnome/desktop/search-providers",
-        "/org/gnome/desktop/session",
-        "/org/gnome/desktop/sound",
-        "/org/gnome/desktop/wm",
-        "/org/gnome/gnome-system-monitor",
-        "/org/gnome/mutter",
-        "/org/gnome/settings-daemon/plugins/media-keys",
-        "/org/gnome/settings-daemon/plugins/power",
-        "/org/gnome/shell/app-picker-layout",
-        "/org/gnome/shell/favorite-apps",
-        "/org/gnome/shell/keybindings",
-        "/org/gnome/system/locale",
-        "/org/gtk/gtk4/settings/file-chooser",
-        "/org/gtk/gtk4/Settings/FileChooser",
-        "/org/gtk/settings/file-chooser",
-        "/org/gtk/Settings/FileChooser",
-        "/system/locale",
-    }
-
-
 class _Style(_enum.Enum):
     GSETTINGS = _enum.auto()
     DCONF = _enum.auto()
@@ -159,6 +105,43 @@ class DConf(dict[DConfKey, str]):
         return result
 
 
+class _DomainKind(_enum.Enum):
+    INCLUDED = _enum.auto()
+    EXCLUDED = _enum.auto()
+    UNKNOWN = _enum.auto()
+
+    def serialize(self) -> str:
+        return self.name.lower()
+
+    @classmethod
+    def deserialize(cls, value: str) -> _Self:
+        return cls[value.upper()]
+
+
+class _Domains:
+    def __init__(self, domains: dict[str, _DomainKind] | None = None):
+        self.domains = domains or {}
+
+    def serialize(self) -> dict[str, str]:
+        return {key: val.serialize() for key, val in self.domains.items()}
+
+    @classmethod
+    def deserialize(cls, value: dict[str, str]) -> _Self:
+        result = cls()
+        for key, val in value.items():
+            result.domains[key] = _DomainKind.deserialize(val)
+        return result
+
+    def __getitem__(self, domain: DConfKey) -> _DomainKind:
+        return self.get(domain)
+
+    def get(self, domain: DConfKey) -> _DomainKind:
+        for key, kind in self.domains.items():
+            if str(domain).startswith(key):
+                return kind
+        return _DomainKind.UNKNOWN
+
+
 def generate_ansible_vars(entries: DConf, vars_path: _Path) -> None:
     ansible_vars, yaml = _utils.yaml_read(vars_path)
     assert isinstance(ansible_vars, dict)
@@ -174,29 +157,21 @@ def gnome_config() -> None:
 
     diff = DConf(set(current.items()) - set(defaults.items()))
 
-    excluded_domains_ = excluded_domains()
-    included_domains_ = included_domains()
+    domain_rules_path = _utils.REPO_PATH / "roles" / "gnome" / "vars" / "rules.yaml"
+    domain_rules, _ = _utils.yaml_read(domain_rules_path)
+    assert isinstance(domain_rules, dict)
+    domains = _Domains.deserialize(domain_rules["gnome_rules"])
 
-    included = DConf()
-    for key, val in diff.copy().items():
-        if str(key).startswith(tuple(included_domains_)):
-            included[key] = val
-            diff.pop(key)
-
-    excluded = DConf()
-    for key, val in diff.copy().items():
-        if str(key).startswith(tuple(excluded_domains_)):
-            excluded[key] = val
-            diff.pop(key)
-
-    unknown = diff
+    cats: dict[_DomainKind, DConf] = {kind: DConf() for kind in _DomainKind}
+    for key, val in diff.items():
+        cats[domains[key]][key] = val
 
     vars_path = _utils.REPO_PATH / "roles" / "gnome" / "vars" / "main.yaml"
-    generate_ansible_vars(included, vars_path)
+    generate_ansible_vars(cats[_DomainKind.INCLUDED], vars_path)
 
-    if excluded:
-        _logger.info(f"Explicitly excluded domains:\n{excluded.dump()}")
+    if cats[_DomainKind.EXCLUDED]:
+        _logger.info(f"Explicitly excluded domains:\n{cats[_DomainKind.EXCLUDED].dump()}")
         _logger.info("")
 
-    if unknown:
-        _logger.warning(f"UNKNOWN DOMAINS, IMPLICITLY EXCLUDED:\n{unknown.dump()}")
+    if cats[_DomainKind.UNKNOWN]:
+        _logger.warning(f"UNKNOWN DOMAINS, IMPLICITLY EXCLUDED:\n{cats[_DomainKind.UNKNOWN].dump()}")

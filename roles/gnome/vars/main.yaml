@@ -7,7 +7,6 @@ gnome_settings:
   /org/gnome/calculator/source-units: "'radian'"
   /org/gnome/calculator/target-currency: "'DZD'"
   /org/gnome/calculator/target-units: "'degree'"
-  /org/gnome/calculator/window-size: (680, 666)
   /org/gnome/desktop/calendar/show-weekdate: "true"
   /org/gnome/desktop/input-sources/mru-sources: "[('xkb', 'en_rnk+qwerty_rnk'), ('xkb', 'ru_rnk+jcuken_rnk')]"
   /org/gnome/desktop/input-sources/per-window: "true"
@@ -70,6 +69,22 @@ gnome_settings:
   /org/gnome/settings-daemon/plugins/power/idle-dim: "false"
   /org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-timeout: "259200"
   /org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-timeout: "1800"
+  /org/gnome/shell/app-picker-layout:
+    "[{'io.github.vectorgraphics.asymptote.desktop': <{'position': <0>}>, 'org.gnome.Contacts.desktop':
+    <{'position': <1>}>, 'org.gnome.Weather.desktop': <{'position': <2>}>, 'org.gnome.clocks.desktop': <{'position': <3>}>,
+    'org.gnome.Maps.desktop': <{'position': <4>}>, 'org.gnome.Calendar.desktop': <{'position': <5>}>, 'calf.desktop': <{'position':
+    <6>}>, 'org.gnome.Totem.desktop': <{'position': <7>}>, 'org.gnome.Calculator.desktop': <{'position': <8>}>, 'org.gnome.Snapshot.desktop':
+    <{'position': <9>}>, 'simple-scan.desktop': <{'position': <10>}>, 'cmake-gui.desktop': <{'position': <11>}>, 'ca.desrt.dconf-editor.desktop':
+    <{'position': <12>}>, 'org.gnome.Boxes.desktop': <{'position': <13>}>, 'org.gnome.Terminal.desktop': <{'position': <14>}>,
+    'Utilities': <{'position': <15>}>, 'drawio.desktop': <{'position': <16>}>, 'yelp.desktop': <{'position': <17>}>, 'com.github.wwmm.easyeffects.desktop':
+    <{'position': <18>}>, 'org.fedoraproject.MediaWriter.desktop': <{'position': <19>}>, 'org.mozilla.firefox.desktop': <{'position':
+    <20>}>, 'fish.desktop': <{'position': <21>}>, 'org.flameshot.Flameshot.desktop': <{'position': <22>}>, 'org.fontforge.FontForge.desktop':
+    <{'position': <23>}>}, {'grub-customizer.desktop': <{'position': <0>}>, 'Helix.desktop': <{'position': <1>}>, 'htop.desktop':
+    <{'position': <2>}>, 'org.inkscape.Inkscape.desktop': <{'position': <3>}>, 'lftp.desktop': <{'position': <4>}>, 'libreoffice-calc.desktop':
+    <{'position': <5>}>, 'libreoffice-impress.desktop': <{'position': <6>}>, 'libreoffice-writer.desktop': <{'position': <7>}>,
+    'mattermost-desktop.desktop': <{'position': <8>}>, 'mupdf-gl.desktop': <{'position': <9>}>, 'org.musescore.MuseScore.desktop':
+    <{'position': <10>}>, 'org.gnome.Rhythmbox3.desktop': <{'position': <11>}>, 'org.gnome.TextEditor.desktop': <{'position':
+    <12>}>, 'org.gnome.Tour.desktop': <{'position': <13>}>, 'virt-manager.desktop': <{'position': <14>}>}]"
   /org/gnome/shell/favorite-apps:
     "['google-chrome.desktop', 'kitty.desktop', 'org.telegram.desktop._7399481fa1d082f7017ffa71affc89b7.desktop',
     'org.gnome.Settings.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'org.gnome.SystemMonitor.desktop',

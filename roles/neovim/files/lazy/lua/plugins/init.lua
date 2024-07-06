@@ -1,5 +1,25 @@
 return {
   {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    opts = {
+      mappings = {
+        close = {
+          normal = "q",
+          insert = "<C-w>",
+        },
+        reset = {
+          normal = "<C-c>",
+          insert = "<C-c>",
+        },
+
+        submit_prompt = {
+          normal = "<CR>",
+          insert = "<C-m>",
+        },
+      },
+    },
+  },
+  {
     "echasnovski/mini.indentscope",
     opts = {
       draw = {

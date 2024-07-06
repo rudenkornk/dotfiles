@@ -58,16 +58,10 @@
         state: link
       loop: [ya, yazi]
 
-    - name: Create ~/.config/yazi directory
+    - name: Create symlink to yazi configs
       ansible.builtin.file:
+        src: "{{ role_host_path }}/files/yazi"
         dest: "{{ home }}/.config/yazi"
-        state: directory
-        mode: "0o755"
-
-    - name: Create symlink to yazi keymap
-      ansible.builtin.file:
-        src: "{{ role_host_path }}/files/yazi_keymap.toml"
-        dest: "{{ home }}/.config/yazi/keymap.toml"
         state: link
 
     - name: Install more utils for yazi

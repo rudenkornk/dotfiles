@@ -7,7 +7,7 @@ function _fzf_search_files --description "Search the current directory with ripg
     set unescaped_exp_token (string unescape -- $expanded_token)
 
     if not set --query fzf_rg_opts
-        set rg_opts --line-number --no-heading --color=always --smart-case
+        set rg_opts --line-number --no-heading --color=always --smart-case --follow --hidden
     else
       set rg_opts $fzf_rg_opts
     end

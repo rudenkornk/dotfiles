@@ -8,18 +8,18 @@ manifest: # noqa: var-naming[no-role-prefix]
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v3.29.4/cmake-3.29.4-linux-{{ ansible_architecture }}.sh
+    url: https://github.com/Kitware/CMake/releases/download/v3.30.0/cmake-3.30.0-linux-{{ ansible_architecture }}.sh
   drawio:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.4.13/drawio-{{ pack_arch }}-24.4.13.{{ pack }}
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.6.4/drawio-{{ pack_arch }}-24.6.4.{{ pack }}
   firacode:
     lock: true
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: 3ee1fc203406debab432dbf3cb67f37ea7cb3d30
+    version: b44ab9e33c236787bcd00b655cae4a8ef8497059
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
-    version: 891ca835de3112e69f1dfc87fd6cfab354a30f25
+    version: 522b2bc8631cfe28a1b230d1b774f911eab17cf3
   lazygit:
     url: https://github.com/jesseduffield/lazygit/releases/download/v0.42.0/lazygit_0.42.0_Linux_{{ ansible_architecture }}.tar.gz
   neovim:
@@ -35,6 +35,6 @@ manifest: # noqa: var-naming[no-role-prefix]
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
   vcpkg:
     url: https://github.com/microsoft/vcpkg
-    version: 67cc1677c3bf5c23ea14b9d2416c7422fdeac492
+    version: 576379156e82da642f8d1834220876759f13534d
   yazi:
     url: https://github.com/sxyazi/yazi/releases/download/v0.2.5/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip

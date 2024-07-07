@@ -9,7 +9,7 @@
   cp = cherry-pick
   df = diff
   fp = format-patch
-  ft = fetch --all
+  ft = fetch --all --prune
   l = log
   lg = log --graph
   ll = log --oneline

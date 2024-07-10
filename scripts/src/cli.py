@@ -152,19 +152,11 @@ def graph(silent: bool) -> None:
     default=_utils.ARTIFACTS_PATH / "password.txt",
     help="Where to store generated password.",
 )
-@_click.option("-f", "--force", is_flag=True, help="Overwrite output file if it exists.")
-def password(alphabet: str, length: int, output: _Path, force: bool) -> None:
-    password_str = "".join(_secrets.choice(alphabet) for _ in range(length))
-
-    if output.exists() and not force:
-        if output.is_relative_to(_Path.cwd()):
-            output = output.relative_to(_Path.cwd())
-
-        raise _click.BadOptionUsage(
-            option_name="output",
-            message=f"Output file already exists: {output}, not overwriting. Use --force to overwrite.",
-        )
-
+@_click.option("-n", "--number", type=int, default=1, help="Number of passwords to generate.")
+def password(alphabet: str, length: int, output: _Path, number: int) -> None:
+    passwords_str = "".join(_secrets.choice(alphabet) for _ in range(length * number))
+    passwords = [passwords_str[i : i + length] + "\n" for i in range(0, len(passwords_str), length)]
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(password_str, encoding="utf-8")
-    _logger.info(f"Password saved to {output}")
+    with output.open("a") as output_file:
+        output_file.writelines(passwords)
+    _logger.info(f"Password saved to the end of {output} file")

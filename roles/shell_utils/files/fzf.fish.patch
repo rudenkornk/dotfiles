@@ -1,13 +1,12 @@
 diff --git a/functions/_fzf_configure_bindings_help.fish b/functions/_fzf_configure_bindings_help.fish
-index ecfe68e..f17f82c 100644
+index ecfe68e..a1856b3 100644
 --- a/functions/_fzf_configure_bindings_help.fish
 +++ b/functions/_fzf_configure_bindings_help.fish
-@@ -17,6 +17,8 @@ DESCRIPTION
+@@ -17,6 +17,7 @@ DESCRIPTION
          Search History     |  Ctrl+R     (R for reverse)   |  --history
          Search Processes   |  Ctrl+Alt+P (P for process)   |  --processes
          Search Variables   |  Ctrl+V     (V for variable)  |  --variables
 +        Search Files       |  Ctrl+Q     (Q for ???...)    |  --files
-+        Open Yazi          |  Ctrl+Y     (Y for Yazi)      |  --yazi
      Override a command's binding by specifying its corresponding option with the desired key
      sequence. Disable a command's binding by specifying its corresponding option with no value.
  
@@ -57,7 +56,7 @@ index 9424aad..dda66b5 100644
                      --prompt="Search Processes> " \
                      --query (commandline --current-token) \
 diff --git a/functions/fzf_configure_bindings.fish b/functions/fzf_configure_bindings.fish
-index ec24f73..d7a9a8e 100644
+index ec24f73..bcf4e9a 100644
 --- a/functions/fzf_configure_bindings.fish
 +++ b/functions/fzf_configure_bindings.fish
 @@ -4,7 +4,7 @@ function fzf_configure_bindings --description "Installs the default key bindings
@@ -65,16 +64,16 @@ index ec24f73..d7a9a8e 100644
      status is-interactive || test "$CI" = true; or return
  
 -    set options_spec h/help 'directory=?' 'git_log=?' 'git_status=?' 'history=?' 'processes=?' 'variables=?'
-+    set options_spec h/help 'directory=?' 'git_log=?' 'git_status=?' 'history=?' 'processes=?' 'variables=?' 'files=?' 'yazi=?'
++    set options_spec h/help 'directory=?' 'git_log=?' 'git_status=?' 'history=?' 'processes=?' 'variables=?' 'files=?'
      argparse --max-args=0 --ignore-unknown $options_spec -- $argv 2>/dev/null
      if test $status -ne 0
          echo "Invalid option or a positional argument was provided." >&2
-@@ -16,13 +16,15 @@ function fzf_configure_bindings --description "Installs the default key bindings
+@@ -16,13 +16,14 @@ function fzf_configure_bindings --description "Installs the default key bindings
      else
          # Initialize with default key sequences and then override or disable them based on flags
          # index 1 = directory, 2 = git_log, 3 = git_status, 4 = history, 5 = processes, 6 = variables
 -        set key_sequences \e\cf \e\cl \e\cs \cr \e\cp \cv # \c = control, \e = escape
-+        set key_sequences \e\cf \e\cl \e\cs \cr \e\cp \cv \cq \cy # \c = control, \e = escape
++        set key_sequences \e\cf \e\cl \e\cs \cr \e\cp \cv \cq # \c = control, \e = escape
          set --query _flag_directory && set key_sequences[1] "$_flag_directory"
          set --query _flag_git_log && set key_sequences[2] "$_flag_git_log"
          set --query _flag_git_status && set key_sequences[3] "$_flag_git_status"
@@ -82,11 +81,10 @@ index ec24f73..d7a9a8e 100644
          set --query _flag_processes && set key_sequences[5] "$_flag_processes"
          set --query _flag_variables && set key_sequences[6] "$_flag_variables"
 +        set --query _flag_files && set key_sequences[7] "$_flag_files"
-+        set --query _flag_yazi && set key_sequences[8] "$_flag_yazi"
  
          # If fzf bindings already exists, uninstall it first for a clean slate
          if functions --query _fzf_uninstall_bindings
-@@ -30,12 +32,14 @@ function fzf_configure_bindings --description "Installs the default key bindings
+@@ -30,12 +31,13 @@ function fzf_configure_bindings --description "Installs the default key bindings
          end
  
          for mode in default insert
@@ -103,7 +101,6 @@ index ec24f73..d7a9a8e 100644
 +            test -n $key_sequences[5] && bind --mode $mode $key_sequences[5] __fish_disable_focus _fzf_search_processes
 +            test -n $key_sequences[6] && bind --mode $mode $key_sequences[6] __fish_disable_focus "$_fzf_search_vars_command"
 +            test -n $key_sequences[7] && bind --mode $mode $key_sequences[7] __fish_disable_focus _fzf_search_files
-+            test -n $key_sequences[8] && bind --mode $mode $key_sequences[8] __fish_disable_focus yazi
          end
  
          function _fzf_uninstall_bindings --inherit-variable key_sequences

@@ -60,13 +60,42 @@ def _start_container(name: str) -> None:
     )
 
 
+def _changes(logs: str) -> list[str]:
+    changes = []
+    current_task = ""
+    for line in logs.splitlines():
+        if match := _re.search(r"\d{4}-\d{2}-\d{2}.*?\| (.*)", line):
+            line = match.group(1)
+
+        if line.startswith("TASK"):
+            current_task = ""
+        current_task += line + "\n"
+        if line.startswith("changed:"):
+            changes.append(current_task)
+    return changes
+
+
 def _verify_unchanged() -> None:
+    file_changes = []
     for logpath in _ANSIBLE_LOGS_PATH.glob("*.log"):
         log = logpath.read_text(encoding="utf-8")
-        if not _re.search(r"changed=[1-9]", log):
-            continue
+        if changes := _changes(log):
+            file_changes.append((logpath, changes))
+        else:
+            # Double check with another log search,
+            # since our log parsing is fragile
+            if not _re.search(r"changed=[1-9]", log):
+                continue
+            file_changes.append((logpath, ["(Could not parse changes, but there are some)"]))
+
+    if not file_changes:
+        return
+
+    for logpath, changes in file_changes:
         _logger.error(f"Changes detected in {logpath.name}")
-        raise RuntimeError("IDEMPOTENCY CHECK FAILED!")
+        for change in changes:
+            _logger.error("\n" + change)
+    raise RuntimeError("\nIDEMPOTENCY CHECK FAILED!")
 
 
 def _ansible_verbosity() -> str:

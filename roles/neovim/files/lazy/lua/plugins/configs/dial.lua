@@ -73,14 +73,13 @@ M.config = function()
 
   dial_config.augends:register_group({
     default = {
-      augend.constant.alias.alpha,
-      augend.constant.alias.Alpha,
-      augend.constant.alias.bool,
       augend.constant.new({ elements = { "&&", "||" } }),
-      augend.integer.alias.binary,
-      augend.integer.alias.decimal_int,
-      augend.integer.alias.hex,
-      augend.integer.alias.octal,
+
+      augend.date.alias["%d.%m.%Y"],
+      augend.date.alias["%d/%m/%Y"],
+      augend.date.alias["%Y-%m-%d"],
+      augend.date.alias["%Y/%m/%d"],
+
       augend.semver.alias.semver,
       unpack(boolean_augend),
       unpack(boolean_ops_augend),
@@ -89,6 +88,20 @@ M.config = function()
       unpack(weekday_augend),
       unpack(month_augend),
       unpack(error_augend),
+
+      augend.integer.alias.hex,
+      augend.integer.alias.octal,
+
+      augend.misc.alias.markdown_header,
+
+      augend.hexcolor.new({ case = "lower" }),
+      augend.hexcolor.new({ case = "upper" }),
+
+      augend.constant.alias.alpha,
+      augend.constant.alias.Alpha,
+      augend.constant.alias.bool,
+      augend.integer.alias.binary,
+      augend.integer.alias.decimal_int,
     },
   })
 end

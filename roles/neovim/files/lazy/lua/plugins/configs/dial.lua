@@ -104,6 +104,8 @@ M.config = function()
       augend.integer.alias.decimal_int,
     },
   })
+
+  vim.g.dials_by_ft = {}
 end
 
 return M

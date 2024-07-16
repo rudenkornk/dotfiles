@@ -6,7 +6,7 @@ M.config = function()
   local dial_config = require("dial.config")
   local augend = require("dial.augend")
 
-  local register_constants = function(elements, word, cyclic)
+  local create_constants = function(elements, word, cyclic)
     local capitalized_first = {}
     for i, v in ipairs(elements) do
       capitalized_first[i] = v:sub(1, 1):upper() .. v:sub(2)
@@ -63,13 +63,13 @@ M.config = function()
   }
   local errors = { "error", "warning", "critical" }
 
-  local boolean_augend = register_constants(booleans, false, true)
-  local boolean_ops_augend = register_constants(boolean_ops, true, false)
-  local on_off_augend = register_constants(on_off, true, true)
-  local ordinal_augend = register_constants(ordinals, false, true)
-  local weekday_augend = register_constants(weekdays, false, true)
-  local month_augend = register_constants(months, false, true)
-  local error_augend = register_constants(errors, true, true)
+  local boolean_augend = create_constants(booleans, false, true)
+  local boolean_ops_augend = create_constants(boolean_ops, true, true)
+  local on_off_augend = create_constants(on_off, true, true)
+  local ordinal_augend = create_constants(ordinals, false, true)
+  local weekday_augend = create_constants(weekdays, false, true)
+  local month_augend = create_constants(months, false, true)
+  local error_augend = create_constants(errors, false, true)
 
   dial_config.augends:register_group({
     default = {

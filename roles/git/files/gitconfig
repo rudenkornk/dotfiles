@@ -5,7 +5,7 @@
   cm = commit
   cmd = commit --amend --reuse-message @
   cmm = commit --amend
-  cma = commit --message TMP
+  cma = commit --allow-empty --reuse-message @
   cp = cherry-pick
   df = diff
   fp = format-patch

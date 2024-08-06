@@ -24,6 +24,7 @@
   sh = show
   st = status
   sw = switch
+  wt = worktree
 [blame]
   coloring = highlightRecent
   date = short

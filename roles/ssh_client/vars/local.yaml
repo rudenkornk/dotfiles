@@ -1,0 +1,1 @@
+ssh_client_local_path: "{{ playbook_dir }}/roles/ssh_client/files/keys"

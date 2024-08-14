@@ -20,7 +20,7 @@
     - role: secrets
     - role: shell_utils
     - role: ssh
-    - role: ssh_keys
+    - role: ssh_client
     - role: vpn
     - role: terminals
     - role: keyboard_layouts

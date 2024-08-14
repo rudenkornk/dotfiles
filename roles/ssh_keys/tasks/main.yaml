@@ -1,12 +1,3 @@
-- name: Install ssh tools
-  become: true
-  ansible.builtin.package:
-    name:
-      - "{{ {'Ubuntu': 'libssl-dev', 'Fedora': 'openssl-devel'}[ansible_distribution] }}"
-      - "{{ {'Ubuntu': 'openssh-client', 'Fedora': 'openssh'}[ansible_distribution] }}"
-      - openssh-server
-      - sshpass
-
 - name: Create ~/.ssh directory
   ansible.builtin.file:
     path: "{{ home }}/.ssh"
@@ -48,38 +39,3 @@
     src: "{{ role_host_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
     state: link
-
-- name: Enable public key authentication
-  become: true
-  ansible.builtin.lineinfile:
-    path: "/etc/ssh/sshd_config"
-    regexp: '[ #]{0,10}PubkeyAuthentication \w*\s*$'
-    line: PubkeyAuthentication yes
-
-- name: Disable password authentication
-  become: true
-  ansible.builtin.lineinfile:
-    path: "/etc/ssh/sshd_config"
-    regexp: '[ #]{0,10}PasswordAuthentication \w*\s*$'
-    line: PasswordAuthentication no
-
-- name: Disable keyboard interactive authentication
-  become: true
-  ansible.builtin.lineinfile:
-    path: "/etc/ssh/sshd_config"
-    regexp: '[ #]{0,10}KbdInteractiveAuthentication \w*\s*$'
-    line: KbdInteractiveAuthentication no
-
-- name: Disable challenge response authentication
-  become: true
-  ansible.builtin.lineinfile:
-    path: "/etc/ssh/sshd_config"
-    regexp: '[ #]{0,10}ChallengeResponseAuthentication \w*\s*$'
-    line: ChallengeResponseAuthentication no
-
-- name: Disable challenge response authentication
-  become: true
-  ansible.builtin.lineinfile:
-    path: "/etc/ssh/sshd_config"
-    regexp: '[ #]{0,10}UsePAM \w*\s*$'
-    line: UsePAM no

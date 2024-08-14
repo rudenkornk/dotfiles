@@ -56,8 +56,14 @@
         append: true
 
     - name: Add authorized_key for {{ user }}
-      become: true
-      ansible.posix.authorized_key:
-        user: "{{ user }}"
-        key: "{{ lookup('file', '{{ secrets_ssh_local_path }}/id_rsa.pub') }}"
       when: ansible_connection == "ssh"
+      block:
+        - name: Load ssh keys paths
+          ansible.builtin.include_vars:
+            file: "{{ playbook_dir }}/roles/ssh_keys/vars/local.yaml"
+
+        - name: Add authorized_key for {{ user }}
+          become: true
+          ansible.posix.authorized_key:
+            user: "{{ user }}"
+            key: "{{ lookup('file', '{{ ssh_keys_local_path }}/id_rsa.pub') }}"

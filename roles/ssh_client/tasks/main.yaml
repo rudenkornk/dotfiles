@@ -1,3 +1,11 @@
+- name: Install ssh tools
+  become: true
+  ansible.builtin.package:
+    name:
+      - "{{ {'Ubuntu': 'libssl-dev', 'Fedora': 'openssl-devel'}[ansible_distribution] }}"
+      - "{{ {'Ubuntu': 'openssh-client', 'Fedora': 'openssh'}[ansible_distribution] }}"
+      - sshpass
+
 - name: Create ~/.ssh directory
   ansible.builtin.file:
     path: "{{ home }}/.ssh"

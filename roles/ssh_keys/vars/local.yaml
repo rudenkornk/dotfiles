@@ -1,1 +1,1 @@
-ssh_keys_local_path: "{{ playbook_dir }}/roles/ssh/files/keys"
+ssh_keys_local_path: "{{ playbook_dir }}/roles/ssh_keys/files/keys"

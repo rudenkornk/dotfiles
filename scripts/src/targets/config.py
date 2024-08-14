@@ -30,15 +30,13 @@ def hosts() -> dict[str, dict[str, str]]:
 @_cache
 def containers() -> list[str]:
     container_hosts = hosts().copy()
-    del container_hosts["localhost"]
-    return list(container_hosts.keys())
+    return [name for name, desc in container_hosts.items() if "container" in desc]
 
 
 @_cache
 def images() -> list[str]:
     container_hosts = hosts().copy()
-    del container_hosts["localhost"]
-    return [desc["image"] for desc in container_hosts.values()]
+    return [desc["image"] for desc in container_hosts.values() if "image" in desc]
 
 
 def _start_container(name: str) -> None:

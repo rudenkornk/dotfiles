@@ -1,4 +1,4 @@
 dependencies:
   - role: shell
-  - role: ssh
+  - role: ssh_keys
   - role: cpp

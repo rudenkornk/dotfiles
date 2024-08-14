@@ -28,17 +28,13 @@ def hosts() -> dict[str, dict[str, str]]:
 
 
 @_cache
-def containers() -> list[str]:
-    container_hosts = hosts().copy()
-    del container_hosts["localhost"]
-    return list(container_hosts.keys())
+def container_hosts() -> dict[str, dict[str, str]]:
+    return {name: desc for name, desc in hosts().items() if desc.get("ansible_connection") in ("docker", "podman")}
 
 
 @_cache
 def images() -> list[str]:
-    container_hosts = hosts().copy()
-    del container_hosts["localhost"]
-    return [desc["image"] for desc in container_hosts.values()]
+    return [desc["image"] for desc in container_hosts().values() if "image" in desc]
 
 
 def _start_container(name: str) -> None:
@@ -129,9 +125,9 @@ def config(hostnames: list[str], user: str, verify_unchanged: bool, mode: Config
 
     _ANSIBLE_LOGS_PATH.mkdir(exist_ok=True)
 
-    container_hosts = containers()
+    container_hosts_ = container_hosts()
     for host_ in hostnames:
-        if host_ in container_hosts:
+        if host_ in container_hosts_:
             _start_container(host_)
 
     has_local = "localhost" in hostnames or "127.0.0.1" in hostnames

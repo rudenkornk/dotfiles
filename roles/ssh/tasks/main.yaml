@@ -13,6 +13,7 @@
     path: "/etc/ssh/sshd_config"
     regexp: '[ #]{0,10}PubkeyAuthentication \w*\s*$'
     line: PubkeyAuthentication yes
+  register: ssh_config_1
 
 - name: Disable password authentication
   become: true
@@ -20,6 +21,7 @@
     path: "/etc/ssh/sshd_config"
     regexp: '[ #]{0,10}PasswordAuthentication \w*\s*$'
     line: PasswordAuthentication no
+  register: ssh_config_2
 
 - name: Disable keyboard interactive authentication
   become: true
@@ -27,6 +29,7 @@
     path: "/etc/ssh/sshd_config"
     regexp: '[ #]{0,10}KbdInteractiveAuthentication \w*\s*$'
     line: KbdInteractiveAuthentication no
+  register: ssh_config_3
 
 - name: Disable challenge response authentication
   become: true
@@ -34,6 +37,7 @@
     path: "/etc/ssh/sshd_config"
     regexp: '[ #]{0,10}ChallengeResponseAuthentication \w*\s*$'
     line: ChallengeResponseAuthentication no
+  register: ssh_config_4
 
 - name: Disable challenge response authentication
   become: true
@@ -41,3 +45,12 @@
     path: "/etc/ssh/sshd_config"
     regexp: '[ #]{0,10}UsePAM \w*\s*$'
     line: UsePAM no
+  register: ssh_config_4
+
+- name: Restart sshd
+  become: true
+  ansible.builtin.service:
+    name: ssh
+    state: restarted
+  when: not in_container
+    and (ssh_config_1.changed or ssh_config_2.changed or ssh_config_3.changed or ssh_config_4.changed)

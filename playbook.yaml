@@ -19,7 +19,7 @@
     - role: fonts
     - role: secrets
     - role: shell_utils
-    - role: ssh
+    - role: ssh_keys
     - role: vpn
     - role: terminals
     - role: keyboard_layouts

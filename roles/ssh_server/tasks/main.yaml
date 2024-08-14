@@ -3,9 +3,7 @@
   ansible.builtin.package:
     name:
       - "{{ {'Ubuntu': 'libssl-dev', 'Fedora': 'openssl-devel'}[ansible_distribution] }}"
-      - "{{ {'Ubuntu': 'openssh-client', 'Fedora': 'openssh'}[ansible_distribution] }}"
       - openssh-server
-      - sshpass
 
 - name: Enable public key authentication
   become: true

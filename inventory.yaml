@@ -43,3 +43,8 @@ all:
       ansible_python_interpreter: auto_silent
       image: fedora:40
       trusted: true
+    beta.tallinn.network.rudenkornk.com:
+      ansible_ssh_common_args: -o StrictHostKeyChecking=no -o 'PreferredAuthentications publickey,password'
+      ansible_port: 1234
+      ansible_become_pass: "{{ (lookup('ansible.builtin.file', '{{ playbook_dir }}/roles/secrets/files/credentials.json') | from_json).password }}"
+      trusted: false

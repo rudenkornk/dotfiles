@@ -1,1 +1,0 @@
-ssh_keys_host_path: "{{ dotfiles_host_path }}/roles/ssh_keys/files/keys"

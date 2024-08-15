@@ -48,11 +48,70 @@
       ansible.builtin.package:
         name: sudo
 
-    - name: Set correct credentials for {{ user }}
-      ansible.builtin.include_tasks:
-        file: "roles/credentials/tasks/main.yaml"
+    # This config supports three kinds of ansible_connection: ssh, docker/podman and local.
+    # In order to use them, we have to properly setup authentication methods for all of them.
+    # For ssh connection we have to setup authorized_keys to connect and password to be able to escalate privileges
+    # For docker/podman we have to setup an empty password
+    # (see https://github.com/ansible/ansible/issues/80254)
+    # Local connection is out of scope of the playbook.
+
+    - name: Add authorized_key for ssh connection
+      when: ansible_connection == "ssh"
       vars:
-        secrets_user: "{{ user }}"
+        pubkey_path: "{{ playbook_dir }}/roles/ssh_client/files/keys/id_rsa.pub"
+      block:
+        - name: Check if public SSH key is decrypted
+          delegate_to: localhost
+          ansible.builtin.stat:
+            path: "{{ pubkey_path }}"
+          register: pubkey_check
+
+        - name: Check hostname matches entry in ansible/hosts
+          ansible.builtin.fail:
+            msg: "Warning: public key not decrypted for ssh connection: {{ pubkey_path }}"
+          when: not pubkey_check.stat.exists
+          failed_when: false
+
+        - name: Add authorized_key for ssh connection
+          become: true
+          ansible.posix.authorized_key:
+            user: "{{ item }}"
+            key: "{{ lookup('file', pubkey_path) }}"
+          loop: [root, "{{ user }}"]
+          when: pubkey_check.stat.exists
+
+    # Sets up creds for SSH and container connections
+    # For some weird reason password setup must come before adding admin groups
+    - name: Include credentials setup tasks
+      vars:
+        credentials_user: "{{ user }}"
+      ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/roles/credentials/tasks/main.yaml"
+
+    - name: Add authorized_key for ssh connection
+      when: ansible_connection == "ssh"
+      vars:
+        pubkey_path: "{{ playbook_dir }}/roles/ssh_client/files/keys/id_rsa.pub"
+      block:
+        - name: Check if public SSH key is decrypted
+          delegate_to: localhost
+          ansible.builtin.stat:
+            path: "{{ pubkey_path }}"
+          register: pubkey_check
+
+        - name: Check hostname matches entry in ansible/hosts
+          ansible.builtin.fail:
+            msg: "Warning: public key not decrypted for ssh connection: {{ pubkey_path }}"
+          when: not pubkey_check.stat.exists
+          failed_when: false
+
+        - name: Add authorized_key for ssh connection
+          become: true
+          ansible.posix.authorized_key:
+            user: "{{ item }}"
+            key: "{{ lookup('file', pubkey_path) }}"
+          loop: [root, "{{ user }}"]
+          when: pubkey_check.stat.exists
 
     - name: Append admin groups for {{ user }}
       become: true
@@ -62,16 +121,3 @@
           - adm
           - "{{ {'Ubuntu': 'sudo', 'Fedora': 'wheel'}[ansible_distribution] }}"
         append: true
-
-    - name: Add authorized_key for {{ user }}
-      when: ansible_connection == "ssh"
-      block:
-        - name: Load ssh keys paths
-          ansible.builtin.include_vars:
-            file: "{{ playbook_dir }}/roles/ssh_client/vars/local.yaml"
-
-        - name: Add authorized_key for {{ user }}
-          become: true
-          ansible.posix.authorized_key:
-            user: "{{ user }}"
-            key: "{{ lookup('file', '{{ ssh_client_local_path }}/id_rsa.pub') }}"

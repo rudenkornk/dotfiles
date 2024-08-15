@@ -6,6 +6,8 @@ __pycache__
 .mypy_cache
 clipboard.lua
 credentials.json
+credentials.yaml
+credentials_map.yaml
 *private.gpg
 *id_rsa
 *id_rsa.pub

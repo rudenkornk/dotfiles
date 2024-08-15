@@ -98,7 +98,21 @@ def _check_leaked_credentials() -> None:
 
         for path in commit.stats.files.keys():
             if not re.search(
-                "(\\.rsa|\\.ovpn|\\.pub|\\.amnezia|\\.xray|\\.socks|\\.auth|credentials.json|private.gpg)$", str(path)
+                (
+                    "("
+                    "\\.rsa|"
+                    "\\.ovpn|"
+                    "\\.pub|"
+                    "\\.amnezia|"
+                    "\\.xray|"
+                    "\\.socks|"
+                    "\\.auth|"
+                    "credentials.json|"
+                    "credentials_map.yaml|"
+                    "private.gpg"
+                    ")$"
+                ),
+                str(path),
             ):
                 continue
             # Error message is taken from

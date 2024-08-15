@@ -8,6 +8,7 @@ clipboard.lua
 credentials.json
 credentials.yaml
 credentials_map.yaml
+ssh_server_config.yaml
 *private.gpg
 *id_rsa
 *id_rsa.pub

@@ -109,6 +109,7 @@ def _check_leaked_credentials() -> None:
                     "\\.auth|"
                     "credentials.json|"
                     "credentials_map.yaml|"
+                    "ssh_server_config.yaml|"
                     "private.gpg"
                     ")$"
                 ),

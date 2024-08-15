@@ -18,6 +18,7 @@
     - role: rust
     - role: fonts
     - role: secrets
+    - role: credentials
     - role: shell_utils
     - role: ssh_server
     - role: ssh_client

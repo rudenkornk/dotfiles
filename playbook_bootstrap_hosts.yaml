@@ -42,7 +42,7 @@
 
     - name: Set correct credentials for {{ user }}
       ansible.builtin.include_tasks:
-        file: "roles/secrets/tasks/credentials.yaml"
+        file: "roles/credentials/tasks/main.yaml"
       vars:
         secrets_user: "{{ user }}"
 

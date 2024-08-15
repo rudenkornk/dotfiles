@@ -10,6 +10,7 @@ amnezia|\
 xray|\
 socks|\
 credentials.json|\
+ssh_server_config.yaml|\
 private.gpg\
 )\$"
 

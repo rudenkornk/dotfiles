@@ -45,10 +45,52 @@
     line: UsePAM no
   register: ssh_config_4
 
+- name: Check if private config is decrypted locally
+  delegate_to: localhost
+  ansible.builtin.stat:
+    path: "{{ playbook_dir }}/roles/ssh_server/vars/ssh_server_config.yaml"
+  register: ssh_server_vars_status
+
+- name: Set private config options
+  when: ssh_server_vars_status.stat.exists
+  block:
+    - name: Load decrypted credentials
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/roles/ssh_server/vars/ssh_server_config.yaml"
+
+    - name: Get host config
+      ansible.builtin.set_fact:
+        ssh_server_config: "{{ ssh_server_config_map[ssh_server_config_kind] }}"
+      vars:
+        ssh_server_config_kind: "{{ hostvars[inventory_hostname].ssh_kind | default('default_kind') }}"
+      no_log: true
+
+    - name: Set sshd port
+      become: true
+      ansible.builtin.lineinfile:
+        path: "/etc/ssh/sshd_config"
+        regexp: '[ #]{0,10}Port \w*\s*$'
+        line: Port {{ ssh_server_config.port }}
+      register: ssh_port_status
+      no_log: true
+
 - name: Restart sshd
   become: true
   ansible.builtin.service:
-    name: ssh
+    name: sshd
     state: restarted
-  when: not in_container
-    and (ssh_config_1.changed or ssh_config_2.changed or ssh_config_3.changed or ssh_config_4.changed)
+  when: not in_container and (
+    ssh_config_1.changed or
+    ssh_config_2.changed or
+    ssh_config_3.changed or
+    ssh_config_4.changed or
+    ssh_port_status.changed or
+    false
+    )
+
+- name: Set ansible port
+  become: true
+  ansible.builtin.set_fact:
+    ansible_port: "{{ ssh_server_config.port }}"
+  no_log: true
+  when: ssh_server_vars_status.stat.exists

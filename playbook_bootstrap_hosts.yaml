@@ -55,31 +55,6 @@
     # (see https://github.com/ansible/ansible/issues/80254)
     # Local connection is out of scope of the playbook.
 
-    - name: Add authorized_key for ssh connection
-      when: ansible_connection == "ssh"
-      vars:
-        pubkey_path: "{{ playbook_dir }}/roles/ssh_client/files/keys/id_rsa.pub"
-      block:
-        - name: Check if public SSH key is decrypted
-          delegate_to: localhost
-          ansible.builtin.stat:
-            path: "{{ pubkey_path }}"
-          register: pubkey_check
-
-        - name: Check hostname matches entry in ansible/hosts
-          ansible.builtin.fail:
-            msg: "Warning: public key not decrypted for ssh connection: {{ pubkey_path }}"
-          when: not pubkey_check.stat.exists
-          failed_when: false
-
-        - name: Add authorized_key for ssh connection
-          become: true
-          ansible.posix.authorized_key:
-            user: "{{ item }}"
-            key: "{{ lookup('file', pubkey_path) }}"
-          loop: [root, "{{ user }}"]
-          when: pubkey_check.stat.exists
-
     # Sets up creds for SSH and container connections
     # For some weird reason password setup must come before adding admin groups
     - name: Include credentials setup tasks
@@ -89,7 +64,6 @@
         file: "{{ playbook_dir }}/roles/credentials/tasks/main.yaml"
 
     - name: Add authorized_key for ssh connection
-      when: ansible_connection == "ssh"
       vars:
         pubkey_path: "{{ playbook_dir }}/roles/ssh_client/files/keys/id_rsa.pub"
       block:
@@ -102,7 +76,11 @@
         - name: Check hostname matches entry in ansible/hosts
           ansible.builtin.fail:
             msg: "Warning: public key not decrypted for ssh connection: {{ pubkey_path }}"
-          when: not pubkey_check.stat.exists
+          # NOTE: do not move this check on the block level
+          # The way ansible "when" works leads to underlying condition to be evaluated
+          # in the delegated context, which results in "false" value when previous keycheck tasks should
+          # be executed and keycheck is skipped!
+          when: ansible_connection == "ssh" and not pubkey_check.stat.exists
           failed_when: false
 
         - name: Add authorized_key for ssh connection
@@ -111,13 +89,7 @@
             user: "{{ item }}"
             key: "{{ lookup('file', pubkey_path) }}"
           loop: [root, "{{ user }}"]
-          when: pubkey_check.stat.exists
-
-        - name: Include credentials setup tasks
-          vars:
-            credentials_user: "{{ user }}"
-          ansible.builtin.include_tasks:
-            file: "{{ playbook_dir }}/roles/credentials/tasks/main.yaml"
+          when: ansible_connection == "ssh" and pubkey_check.stat.exists
 
     - name: Append admin groups for {{ user }}
       become: true

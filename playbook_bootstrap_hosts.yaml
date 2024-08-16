@@ -113,6 +113,12 @@
           loop: [root, "{{ user }}"]
           when: pubkey_check.stat.exists
 
+        - name: Include credentials setup tasks
+          vars:
+            credentials_user: "{{ user }}"
+          ansible.builtin.include_tasks:
+            file: "{{ playbook_dir }}/roles/credentials/tasks/main.yaml"
+
     - name: Append admin groups for {{ user }}
       become: true
       ansible.builtin.user:

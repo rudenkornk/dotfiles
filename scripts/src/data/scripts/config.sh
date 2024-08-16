@@ -82,6 +82,7 @@ else
 
   chmod a=u "$LOGS_PATH"
   chmod a=u "$LOGS_PATH/"*
+  chmod a=u "$INVENTORY"
 
   sudo --user "$REMOTE_USER" \
     bash -c " \

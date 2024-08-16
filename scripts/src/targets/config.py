@@ -4,9 +4,13 @@ import math
 import os
 import re
 import shutil
+import socket
+from contextlib import closing
 from functools import cache
+from pathlib import Path
+from typing import Any, Mapping
 
-from ..utils import ARTIFACTS_PATH, REPO_PATH, SCRIPTS_PATH, run_shell, yaml_read
+from ..utils import ARTIFACTS_PATH, REPO_PATH, SCRIPTS_PATH, run_shell, yaml_read, yaml_write
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
 from .bootstrap import bootstrap
 
@@ -101,6 +105,94 @@ def _ansible_verbosity() -> str:
     return str(verbosity)
 
 
+def _check_port(address: str, port: int | None) -> bool:
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
+        port_address: tuple[str, int] | str = (address, port) if port else address
+        if sock.connect_ex(port_address) == 0:
+            return True
+        return False
+
+
+def _setup_ssh_port(hostname: str, host: dict[str, Any], ssh_config: Mapping[str, Any] | None) -> None:
+    port_candidates = [22, None]
+    if predefined_port := host.get("ansible_port"):
+        port_candidates.append(int(predefined_port))
+
+    if ssh_config is not None:
+        port_candidates.append(ssh_config["ssh_server_config_map"][host.get("ssh_kind", "default_kind")]["port"])
+
+    address = host.get("ansible_host", hostname)
+    assert isinstance(address, str)
+    for port in reversed(port_candidates):
+        if not _check_port(address, port):
+            continue
+        if port is not None:
+            host["ansible_port"] = port
+        return
+    raise RuntimeError(f"Could not connect to {address} on any of the following ports: {port_candidates}")
+
+
+def _setup_ssh(hostname: str, host: dict[str, Any]) -> None:
+    if host.get("ansible_connection", "ssh") != "ssh":
+        return
+
+    ssh_config_path = REPO_PATH / "roles" / "ssh_server" / "vars" / "ssh_server_config.yaml"
+    ssh_config: None | dict[str, Any] = None
+    if not ssh_config_path.exists():
+        _logger.warning(f"SSH config is not decrypted locally: {ssh_config_path}")
+        _logger.warning("Using default settings for SSH connection.")
+        _logger.warning("This might result in connection issues.")
+    else:
+        ssh_config, _ = yaml_read(ssh_config_path)  # type: ignore
+
+    _setup_ssh_port(hostname, host, ssh_config)
+
+
+def _setup_credentials(_: str, host: dict[str, Any], user: str) -> None:
+    # Containers have empty passwords, since docker/podman connections do not support passwords
+    # Local connections are handled in a different way by directly supplying password
+    if host.get("ansible_connection", "ssh") in ("docker", "podman", "local"):
+        return
+
+    if host.get("ansible_become_pass") is not None:
+        return
+
+    creds_config_path = REPO_PATH / "roles" / "credentials" / "vars" / "credentials_map.yaml"
+    if not creds_config_path.exists():
+        _logger.warning(f"Credentials config is not decrypted locally: {creds_config_path}")
+        _logger.warning("This might result in priviledges escalation problems.")
+        return
+    creds_config, _1 = yaml_read(creds_config_path)
+    assert isinstance(creds_config, dict)
+
+    creds_host = creds_config["credentials_map"][host.get("credentials_kind", "default_kind")]
+    creds_user = creds_host.get(user, creds_host["default_user"])
+    host["ansible_become_pass"] = creds_user["password"]
+
+
+def _setup_host(hostname: str, host: dict[str, Any]) -> dict[str, Any]:
+    host = host.copy()
+    _setup_ssh(hostname, host)
+    _setup_credentials(hostname, host, "ansible_user")
+    return host
+
+
+def _setup_inventory(hostnames: list[str]) -> Path:
+    # Dynamically set correct secret settings for the hosts
+
+    inventory, yaml = yaml_read(REPO_PATH / "inventory.yaml")
+    assert isinstance(inventory, dict)
+    for hostname in hostnames:
+        inventory["all"]["hosts"][hostname] = _setup_host(hostname, inventory["all"]["hosts"][hostname])
+
+    private_inventory_path = ARTIFACTS_PATH / "private_inventory.yaml"
+    private_inventory_path.parent.mkdir(parents=True, exist_ok=True)
+    private_inventory_path.touch(exist_ok=True)
+    private_inventory_path.chmod(0o600)
+    yaml_write(private_inventory_path, inventory, yaml)
+    return private_inventory_path
+
+
 class ConfigMode(enum.Enum):
     BOOTSTRAP = enum.auto()
     REDUCED = enum.auto()
@@ -125,6 +217,8 @@ def config(hostnames: list[str], user: str, verify_unchanged: bool, mode: Config
         if host_ in container_hosts_:
             _start_container(host_)
 
+    inventory_path = _setup_inventory(hostnames)
+
     has_local = "localhost" in hostnames or "127.0.0.1" in hostnames
     hosts_var = ",".join(hostnames)
 
@@ -135,7 +229,7 @@ def config(hostnames: list[str], user: str, verify_unchanged: bool, mode: Config
             "ANSIBLE_VERBOSITY": _ansible_verbosity(),
             "CONFIG_MODE": mode.name.lower(),
             "HOSTS": hosts_var,
-            "INVENTORY": REPO_PATH / "inventory.yaml",
+            "INVENTORY": inventory_path,
             "LOCAL": str(has_local).lower(),
             "LOGS_PATH": _ANSIBLE_LOGS_PATH,
             "PLAYBOOK": REPO_PATH / "playbook.yaml",

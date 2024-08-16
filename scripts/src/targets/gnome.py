@@ -1,22 +1,22 @@
-import enum as _enum
-import json as _json
-import logging as _logging
-from pathlib import Path as _Path
+import enum
+import json
+import logging
+from pathlib import Path
 
-from typing_extensions import Self as _Self
+from typing_extensions import Self
 
-from .. import utils as _utils
-from .bootstrap import bootstrap as _bootstrap
+from .. import utils
+from .bootstrap import bootstrap
 
-_logger = _logging.getLogger(__name__)
-
-
-class _Style(_enum.Enum):
-    GSETTINGS = _enum.auto()
-    DCONF = _enum.auto()
+_logger = logging.getLogger(__name__)
 
 
-class DConfKey(_Path):
+class _Style(enum.Enum):
+    GSETTINGS = enum.auto()
+    DCONF = enum.auto()
+
+
+class DConfKey(Path):
     def to_str(self, style: _Style = _Style.DCONF) -> str:
         if style == _Style.DCONF:
             return str(self)
@@ -30,35 +30,35 @@ class DConfKey(_Path):
         assert False
 
     @classmethod
-    def parse(cls, str_path: str, line: str, style: _Style) -> tuple[_Self, str]:
+    def parse(cls, str_path: str, line: str, style: _Style) -> tuple[Self, str]:
         if style == _Style.DCONF:
-            path = _Path(str_path)
+            path = Path(str_path)
             key, value = line.split(sep="=", maxsplit=1)
             return cls(path / key), value
 
         if style == _Style.GSETTINGS:
             str_path = str_path.replace(".", "/")
             str_path = "/" + str_path
-            path = _Path(str_path)
+            path = Path(str_path)
             key, value = line.split(maxsplit=1)
             return cls(path / key), value
 
         assert False
 
     @classmethod
-    def parse_gsettings(cls, line: str) -> tuple[_Self, str]:
+    def parse_gsettings(cls, line: str) -> tuple[Self, str]:
         str_path, line = line.split(maxsplit=1)
         return cls.parse(str_path, line, _Style.GSETTINGS)
 
     @classmethod
-    def parse_dconf(cls, path: _Path, line: str) -> tuple[_Self, str]:
+    def parse_dconf(cls, path: Path, line: str) -> tuple[Self, str]:
         return cls.parse(str(path), line, _Style.DCONF)
 
 
 class DConf(dict[DConfKey, str]):
     @classmethod
-    def _generate_dconf(cls) -> _Self:
-        result_lines = _utils.run_shell(["dconf", "dump", "/"], capture_output=True).stdout.splitlines()
+    def _generate_dconf(cls) -> Self:
+        result_lines = utils.run_shell(["dconf", "dump", "/"], capture_output=True).stdout.splitlines()
         path = None
 
         result = cls()
@@ -68,7 +68,7 @@ class DConf(dict[DConfKey, str]):
             if not line:
                 continue
             if line.startswith("["):
-                path = _Path("/" + line[1:-1])
+                path = Path("/" + line[1:-1])
                 continue
 
             assert path is not None
@@ -78,9 +78,9 @@ class DConf(dict[DConfKey, str]):
         return result
 
     @classmethod
-    def _generate_default_gsettings(cls) -> _Self:
+    def _generate_default_gsettings(cls) -> Self:
         extra_env = {"XDG_CONFIG_HOME": "/dev/null"}
-        result_lines = _utils.run_shell(
+        result_lines = utils.run_shell(
             ["gsettings", "list-recursively"], extra_env=extra_env, capture_output=True
         ).stdout.splitlines()
         result = cls()
@@ -90,7 +90,7 @@ class DConf(dict[DConfKey, str]):
         return result
 
     @classmethod
-    def generate(cls, default: bool = False) -> _Self:
+    def generate(cls, default: bool = False) -> Self:
         if default:
             return cls._generate_default_gsettings()
         return cls._generate_dconf()
@@ -98,23 +98,23 @@ class DConf(dict[DConfKey, str]):
     def dump(self, prefix: str = "") -> str:
         result_list = []
         for key, val in sorted(self.items()):
-            key_str = _json.dumps(str(key))
-            val = _json.dumps(val)
+            key_str = json.dumps(str(key))
+            val = json.dumps(val)
             result_list.append(f"{prefix}{key_str}: {val}")
         result = "\n".join(result_list)
         return result
 
 
-class _DomainKind(_enum.Enum):
-    INCLUDED = _enum.auto()
-    EXCLUDED = _enum.auto()
-    UNKNOWN = _enum.auto()
+class _DomainKind(enum.Enum):
+    INCLUDED = enum.auto()
+    EXCLUDED = enum.auto()
+    UNKNOWN = enum.auto()
 
     def serialize(self) -> str:
         return self.name.lower()
 
     @classmethod
-    def deserialize(cls, value: str) -> _Self:
+    def deserialize(cls, value: str) -> Self:
         return cls[value.upper()]
 
 
@@ -126,7 +126,7 @@ class _Domains:
         return {key: val.serialize() for key, val in self.domains.items()}
 
     @classmethod
-    def deserialize(cls, value: dict[str, str]) -> _Self:
+    def deserialize(cls, value: dict[str, str]) -> Self:
         result = cls()
         for key, val in value.items():
             result.domains[key] = _DomainKind.deserialize(val)
@@ -142,23 +142,23 @@ class _Domains:
         return _DomainKind.UNKNOWN
 
 
-def generate_ansible_vars(entries: DConf, vars_path: _Path) -> None:
-    ansible_vars, yaml = _utils.yaml_read(vars_path)
+def generate_ansible_vars(entries: DConf, vars_path: Path) -> None:
+    ansible_vars, yaml = utils.yaml_read(vars_path)
     assert isinstance(ansible_vars, dict)
     ansible_vars["gnome_settings"] = {str(key): val for key, val in sorted(entries.items())}
-    _utils.yaml_write(vars_path, ansible_vars, yaml)
+    utils.yaml_write(vars_path, ansible_vars, yaml)
 
 
 def gnome_config() -> None:
-    _bootstrap()
+    bootstrap()
 
     defaults = DConf.generate(default=True)
     current = DConf.generate()
 
     diff = DConf(set(current.items()) - set(defaults.items()))
 
-    domain_rules_path = _utils.REPO_PATH / "roles" / "gnome" / "vars" / "rules.yaml"
-    domain_rules, _ = _utils.yaml_read(domain_rules_path)
+    domain_rules_path = utils.REPO_PATH / "roles" / "gnome" / "vars" / "rules.yaml"
+    domain_rules, _ = utils.yaml_read(domain_rules_path)
     assert isinstance(domain_rules, dict)
     domains = _Domains.deserialize(domain_rules["gnome_rules"])
 
@@ -166,7 +166,7 @@ def gnome_config() -> None:
     for key, val in diff.items():
         cats[domains[key]][key] = val
 
-    vars_path = _utils.REPO_PATH / "roles" / "gnome" / "vars" / "main.yaml"
+    vars_path = utils.REPO_PATH / "roles" / "gnome" / "vars" / "main.yaml"
     generate_ansible_vars(cats[_DomainKind.INCLUDED], vars_path)
 
     if cats[_DomainKind.EXCLUDED]:

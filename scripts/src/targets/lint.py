@@ -1,29 +1,24 @@
-import logging as _logging
-import re as _re
-import tempfile as _tempfile
+import logging
+import re
+import tempfile
 
-from git import Repo as _Repo
+from git import Repo
 
-from ..utils import REPO_PATH as _REPO_PATH
-from ..utils import SCRIPTS_PATH as _SCRIPTS_PATH
-from ..utils import cpu_count as _cpu_count
-from ..utils import run_shell as _run_shell
-from ..utils import yaml_read as _yaml_read
-from .ansible_collections import ANSIBLE_COLLECTIONS_PATH as _ANSIBLE_COLLECTIONS_PATH
-from .ansible_collections import ansible_collections as _ansible_collections
-from .bootstrap import bootstrap as _bootstrap
-from .roles_graph import roles_graph as _roles_graph
+from ..utils import REPO_PATH, SCRIPTS_PATH, cpu_count, run_shell, yaml_read
+from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
+from .bootstrap import bootstrap
+from .roles_graph import roles_graph
 
-_logger = _logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 def _check_registered_roles() -> None:
     _logger.info("Checking if all roles are registered in playbook.yaml...")
-    playbook, _ = _yaml_read(_REPO_PATH / "playbook.yaml")
+    playbook, _ = yaml_read(REPO_PATH / "playbook.yaml")
     assert isinstance(playbook, list)
     roles = {entry["role"] for entry in playbook[0]["roles"]}
     missing = set()
-    for role_path in (_REPO_PATH / "roles").iterdir():
+    for role_path in (REPO_PATH / "roles").iterdir():
         if (role_name := role_path.name) not in roles:
             missing.add(role_name)
 
@@ -36,10 +31,10 @@ def _check_registered_roles() -> None:
 def _check_secrets_deps() -> None:
     _logger.info("Checking if all secrets are properly used by roles...")
 
-    secrets_index = _REPO_PATH / ".gitsecret" / "paths" / "mapping.cfg"
+    secrets_index = REPO_PATH / ".gitsecret" / "paths" / "mapping.cfg"
     secrets_raw = secrets_index.read_text(encoding="utf-8").splitlines()
     secrets = {line.split(":", maxsplit=1)[0] for line in secrets_raw}
-    graph = _roles_graph()
+    graph = roles_graph()
 
     for secret in secrets:
         if not secret.startswith("roles/"):
@@ -84,16 +79,16 @@ def _check_leaked_credentials() -> None:
         "d65d287dd22d85254169d4c02014675891f21f85",
     ]
 
-    _logging.getLogger("git").setLevel(_logging.WARNING)
+    logging.getLogger("git").setLevel(logging.WARNING)
     _logger.info("Analyzing repository history for leaked credentials...")
 
-    repo = _Repo(_REPO_PATH)
+    repo = Repo(REPO_PATH)
     for commit in repo.iter_commits(f"{first_commit}..HEAD"):
         if commit.hexsha in ignored:
             continue
 
         for path in commit.stats.files.keys():
-            if not _re.search(
+            if not re.search(
                 "(\\.rsa|\\.ovpn|\\.pub|\\.amnezia|\\.xray|\\.socks|\\.auth|credentials.json|private.gpg)$", str(path)
             ):
                 continue
@@ -120,45 +115,45 @@ def _check_leaked_credentials() -> None:
 
 
 def lint_code() -> None:
-    _bootstrap()
-    _ansible_collections()
+    bootstrap()
+    ansible_collections()
 
     _check_leaked_credentials()
     _check_registered_roles()
     _check_secrets_deps()
 
-    _run_shell(
-        ["ansible-lint", _REPO_PATH / "playbook.yaml"],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": _ANSIBLE_COLLECTIONS_PATH},
+    run_shell(
+        ["ansible-lint", REPO_PATH / "playbook.yaml"],
+        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
     )
-    _run_shell(
-        ["ansible-lint", _REPO_PATH / "playbook_bootstrap_hosts.yaml"],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": _ANSIBLE_COLLECTIONS_PATH},
+    run_shell(
+        ["ansible-lint", REPO_PATH / "playbook_bootstrap_hosts.yaml"],
+        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
     )
-    _run_shell(
-        ["ansible-lint", _SCRIPTS_PATH / "playbook_dotfiles_container.yaml"],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": _ANSIBLE_COLLECTIONS_PATH},
+    run_shell(
+        ["ansible-lint", SCRIPTS_PATH / "playbook_dotfiles_container.yaml"],
+        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
     )
-    _run_shell(["python3", "-m", "mypy", _REPO_PATH / "main.py"])
-    _run_shell(["python3", "-m", "mypy", _REPO_PATH / "scripts"])
-    _run_shell(["python3", "-m", "pylint", "--jobs", str(_cpu_count()), _REPO_PATH / "main.py"])
-    _run_shell(["python3", "-m", "pylint", "--jobs", str(_cpu_count()), _REPO_PATH / "scripts"])
-    _run_shell(["python3", "-m", "yamllint", "--strict", _REPO_PATH / ".github"])
+    run_shell(["python3", "-m", "mypy", REPO_PATH / "main.py"])
+    run_shell(["python3", "-m", "mypy", REPO_PATH / "scripts"])
+    run_shell(["python3", "-m", "pylint", "--jobs", str(cpu_count()), REPO_PATH / "main.py"])
+    run_shell(["python3", "-m", "pylint", "--jobs", str(cpu_count()), REPO_PATH / "scripts"])
+    run_shell(["python3", "-m", "yamllint", "--strict", REPO_PATH / ".github"])
 
 
 def format_code() -> None:
-    _run_shell(["python3", "-m", "black", _REPO_PATH])
-    _run_shell(["python3", "-m", "isort", _REPO_PATH])
+    run_shell(["python3", "-m", "black", REPO_PATH])
+    run_shell(["python3", "-m", "isort", REPO_PATH])
 
     # All the other formatting tools require a machine to be configured,
     # Thus we ignore errors here, making these optional
-    _run_shell(["npm", "install", "--save-exact"], check=False)
-    with _tempfile.NamedTemporaryFile(mode="w+t") as combinedignore:
-        gitignore = _REPO_PATH / ".gitignore"
-        prettierignore = _REPO_PATH / ".prettierignore"
+    run_shell(["npm", "install", "--save-exact"], check=False)
+    with tempfile.NamedTemporaryFile(mode="w+t") as combinedignore:
+        gitignore = REPO_PATH / ".gitignore"
+        prettierignore = REPO_PATH / ".prettierignore"
         combinedignore.write(gitignore.read_text(encoding="utf-8"))
         combinedignore.write(prettierignore.read_text(encoding="utf-8"))
         combinedignore.flush()
-        _run_shell(["npx", "prettier", "--ignore-path", combinedignore.name, "-w", _REPO_PATH], check=False)
+        run_shell(["npx", "prettier", "--ignore-path", combinedignore.name, "-w", REPO_PATH], check=False)
 
-    _run_shell(["stylua", _REPO_PATH], check=False)
+    run_shell(["stylua", REPO_PATH], check=False)

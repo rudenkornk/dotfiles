@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
 
-import difflib as _difflib
-import json as _json
-import logging as _logging
-import os as _os
-import shutil as _shutil
-import subprocess as _subprocess
-import tempfile as _tempfile
-from pathlib import Path as _Path
-from typing import Any as _Any
+import difflib
+import json
+import logging
+import os
+import shutil
+import subprocess
+from pathlib import Path
+from typing import Any
 
-from lupa import LuaRuntime as _LuaRuntime  # type: ignore
+from lupa import LuaRuntime  # type: ignore
 
-lua = _LuaRuntime(unpack_returned_tuples=True)
+lua = LuaRuntime(unpack_returned_tuples=True)
 
-_logger = _logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
-def _get_lua_table(theme_path: _Path) -> _Any:
+def _get_lua_table(theme_path: Path) -> Any:
     func_begin = """\
     function()
     vim = { opt = { bg = {} } }
@@ -25,15 +24,14 @@ def _get_lua_table(theme_path: _Path) -> _Any:
     func_end = """\
     end
     """
-    with open(theme_path, "r") as f:
-        theme_code = f.read()
+    theme_code = theme_path.read_text(encoding="UTF-8")
     theme_code = func_begin + theme_code + func_end
     lua_func = lua.eval(theme_code)
     lua_table = lua_func()
     return lua_table
 
 
-def _get_win_theme(theme_path: _Path) -> dict[str, str]:
+def _get_win_theme(theme_path: Path) -> dict[str, str]:
     windows_terminal_map = {
         "background": "black",
         "black": "black",
@@ -70,21 +68,21 @@ def _get_win_theme(theme_path: _Path) -> dict[str, str]:
 
 
 def _get_win_themes() -> list[dict[str, str]]:
-    themes_path = _Path.home() / ".local/share/nvim/lazy/base46/lua/base46/themes/"
-    cwd = _Path.cwd()
+    themes_path = Path.home() / ".local/share/nvim/lazy/base46/lua/base46/themes/"
+    cwd = Path.cwd()
     try:
-        _os.chdir(_Path(__file__).parent)
+        os.chdir(Path(__file__).parent)
         win_themes = []
         for theme in themes_path.glob("*.lua"):
             win_theme = _get_win_theme(theme)
             win_themes.append(win_theme)
         win_themes = sorted(win_themes, key=lambda x: x["name"])
     finally:
-        _os.chdir(cwd)
+        os.chdir(cwd)
     return win_themes
 
 
-def _get_settings() -> dict[str, _Any]:
+def _get_settings() -> dict[str, Any]:
     return {
         "actions": [
             {"command": "unbound", "keys": "ctrl+c"},
@@ -114,7 +112,7 @@ def _get_settings() -> dict[str, _Any]:
     }
 
 
-def _update_list(lst: list[dict[str, _Any]], vals: list[dict[str, _Any]], id: str) -> None:
+def _update_list(lst: list[dict[str, Any]], vals: list[dict[str, Any]], id: str) -> None:
     keys = {key[id]: i for i, key in enumerate(lst)}
     for val in vals:
         if val[id] in keys:
@@ -123,7 +121,7 @@ def _update_list(lst: list[dict[str, _Any]], vals: list[dict[str, _Any]], id: st
             lst.append(val)
 
 
-def update_settings(settings: dict[str, _Any]) -> None:
+def update_settings(settings: dict[str, Any]) -> None:
     _logger.info("Collecting new settings...")
     new_settings = _get_settings()
     _logger.info(f"Custom actions: {len(new_settings['actions'])}")
@@ -135,7 +133,7 @@ def update_settings(settings: dict[str, _Any]) -> None:
     settings["copyOnSelect"] = new_settings["copyOnSelect"]
 
 
-def _backup_path(path: _Path) -> _Path:
+def _backup_path(path: Path) -> Path:
     i = 0
     while True:
         backup_path = path.with_suffix(f".bak_{i}")
@@ -146,27 +144,25 @@ def _backup_path(path: _Path) -> _Path:
 
 def update_config() -> None:
     _logger.info("Reading WSL vars...")
-    win_profile = _subprocess.run(["wslvar", "USERPROFILE"], check=True, capture_output=True, text=True).stdout.strip()
-    win_home = _Path(
-        _subprocess.run(["wslpath", win_profile], check=True, capture_output=True, text=True).stdout.strip()
-    )
+    win_profile = subprocess.run(["wslvar", "USERPROFILE"], check=True, capture_output=True, text=True).stdout.strip()
+    win_home = Path(subprocess.run(["wslpath", win_profile], check=True, capture_output=True, text=True).stdout.strip())
     settings_path = win_home / "AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
-    settings = _json.loads(settings_path.read_text())
-    original = _json.dumps(settings, indent=2)
+    settings = json.loads(settings_path.read_text())
+    original = json.dumps(settings, indent=2)
     update_settings(settings)
-    updated = _json.dumps(settings, indent=2)
-    diff = _difflib.unified_diff(original.splitlines(), updated.splitlines(), lineterm="")
+    updated = json.dumps(settings, indent=2)
+    diff = difflib.unified_diff(original.splitlines(), updated.splitlines(), lineterm="")
     _logger.debug("Settings difference:")
     _logger.debug("\n".join(diff))
 
     backup_path = _backup_path(settings_path)
     _logger.info(f"Backing up old settings to {backup_path}...")
-    _shutil.copy(settings_path, backup_path)
+    shutil.copy(settings_path, backup_path)
     _logger.info("Writing new settings...")
     with open(settings_path, "w", encoding="UTF-8") as json_file:
         json_file.write(updated)
 
 
 if __name__ == "__main__":
-    _logging.basicConfig(format="%(message)s", level=_logging.DEBUG)
+    logging.basicConfig(format="%(message)s", level=logging.DEBUG)
     update_config()

@@ -1,19 +1,18 @@
-import copy as _copy
-import logging as _logging
-import re as _re
-from dataclasses import dataclass as _dataclass
-from pathlib import Path as _Path
-from typing import Any as _Any
+import copy
+import logging
+import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
-import git as _git
-import requests as _requests
-import semver as _semver
-from pydriller import Repository as _Repository  # type: ignore
-from ruamel.yaml import YAML as _YAML
+import git
+import requests
+import semver as semver_module
+from pydriller import Repository  # type: ignore
 
-from .. import utils as _utils
+from .. import utils
 
-_logger = _logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 def update_commit(origin: str, from_commit: str, locked: bool) -> str:
@@ -27,9 +26,9 @@ def update_commit(origin: str, from_commit: str, locked: bool) -> str:
     if locked:
         return from_commit
 
-    _logging.getLogger("pydriller").setLevel(_logging.WARNING)
+    logging.getLogger("pydriller").setLevel(logging.WARNING)
 
-    for commit in _Repository(origin, from_commit=from_commit, order="reverse").traverse_commits():
+    for commit in Repository(origin, from_commit=from_commit, order="reverse").traverse_commits():
         if num_new_commits == 0:
             last_hash = commit.hash
 
@@ -62,21 +61,21 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
     if locked:
         return from_tag
 
-    repo_normalized = _re.sub(r"[^0-9a-zA-Z_\.]+", "_", origin)
-    repo_path = _utils.ARTIFACTS_PATH / "tmp" / repo_normalized
-    repo = _git.Repo.init(repo_path)
+    repo_normalized = re.sub(r"[^0-9a-zA-Z_\.]+", "_", origin)
+    repo_path = utils.ARTIFACTS_PATH / "tmp" / repo_normalized
+    repo = git.Repo.init(repo_path)
     for remote in repo.remotes:
         remote.remove(repo, remote.name)
     remote = repo.create_remote("origin", origin)
     remote.fetch()
 
-    current_semver = _semver.VersionInfo.parse(from_tag)
+    current_semver = semver_module.VersionInfo.parse(from_tag)
     chosen_tag = from_tag
 
     for tag_obj in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
         tag = tag_obj.name
         try:
-            semver = _semver.VersionInfo.parse(tag)
+            semver = semver_module.VersionInfo.parse(tag)
         except ValueError:
             _logger.info(f"{2 * tab}{tag} -- skipping (could not parse as semver)")
             continue
@@ -105,27 +104,27 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
     return chosen_tag
 
 
-@_dataclass
+@dataclass
 class GitHubTagInfo:
     tag: str
     version: str
-    semver: _semver.VersionInfo | None
+    semver: semver_module.VersionInfo | None
 
     def __init__(self, tag: str):
         self.tag = tag
         self.version = tag
         self.semver = None
-        tag_parsed = _re.search(r"v?(.*)", tag)
+        tag_parsed = re.search(r"v?(.*)", tag)
         if tag_parsed:
             self.version = tag_parsed.group(1)
         try:
-            semver = _semver.VersionInfo.parse(self.version)
+            semver = semver_module.VersionInfo.parse(self.version)
             self.semver = semver
         except ValueError:
             pass
 
 
-@_dataclass
+@dataclass
 class GitHubReleaseInfo:
     prefix: str
     repo: str
@@ -135,7 +134,7 @@ class GitHubReleaseInfo:
     url: str
 
     def __init__(self, url: str):
-        parsed_url = _re.search(r"(^.*?github.com)/([^/]+/[^/]+)/releases/download/([^/]+)/(.*)", url)
+        parsed_url = re.search(r"(^.*?github.com)/([^/]+/[^/]+)/releases/download/([^/]+)/(.*)", url)
         assert parsed_url is not None
         self.prefix = parsed_url.group(1)
         self.repo = parsed_url.group(2)
@@ -158,15 +157,15 @@ def update_github_release(url: str, locked: bool) -> str:
 
     cmp_semver = cri.ti.semver is not None
 
-    @_utils.retry(delay=10)
-    def requests_get() -> _requests.Response:
-        response = _requests.get(request_url, timeout=15)
+    @utils.retry(delay=10)
+    def requests_get() -> requests.Response:
+        response = requests.get(request_url, timeout=15)
         response.raise_for_status()
         return response
 
     try:
         response = requests_get()
-    except _requests.exceptions.HTTPError as e:
+    except requests.exceptions.HTTPError as e:
         if e.response.status_code == 403:
             _logger.warning(f"{2 * tab}GitHub API rate limit exceeded. Skipping this repo.")
             _logger.warning(2 * tab + str(e))
@@ -254,9 +253,9 @@ def parse_pip_entry(entry: str) -> dict[str, str | None]:
 
 
 # pylint: disable-next=too-many-statements
-def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
+def update_requirements_txt(requirements_path: Path, dry_run: bool) -> None:
     tab = "  "
-    new_requirements_path = _utils.TMP_PATH / "new_venv" / "requirements.txt"
+    new_requirements_path = utils.TMP_PATH / "new_venv" / "requirements.txt"
     requirements = requirements_path.read_text().splitlines()
 
     core_packages = []
@@ -274,8 +273,8 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
         core_comments.append(entry["comment"])
 
     _logger.info(f"{tab}Fetching new versions of core modules")
-    new_core_versions = _copy.deepcopy(core_versions)
-    outdated = _utils.run_shell(
+    new_core_versions = copy.deepcopy(core_versions)
+    outdated = utils.run_shell(
         ["python3", "-m", "pip", "list", "--outdated"],
         requirements_txt=requirements_path,
         capture_output=True,
@@ -284,7 +283,7 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
 
     outdated_lines = outdated.stdout.splitlines()[2:]
     for line in outdated_lines:
-        match = _re.match(r"(\S+)\s+(\S+)\s+(\S+)", line)
+        match = re.match(r"(\S+)\s+(\S+)\s+(\S+)", line)
         assert match is not None
         package = match.group(1)
         new_version = match.group(3)
@@ -303,7 +302,7 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
             f.write(f"{package}=={new_core_versions[i]}{core_comments[i]}\n")
 
     _logger.info(f"{tab}Capturing new full requirements list")
-    updated = _utils.run_shell(
+    updated = utils.run_shell(
         ["python3", "-m", "pip", "freeze", "-r", new_requirements_path],
         requirements_txt=new_requirements_path,
         capture_output=True,
@@ -325,22 +324,22 @@ def update_requirements_txt(requirements_path: _Path, dry_run: bool) -> None:
     _logger.info(f"{tab}Done")
 
 
-def update_neovim_plugin(neovim_manifest_path: _Path, plugin: str, dry_run: bool) -> None:
-    manifest = _utils.lua_read(neovim_manifest_path)
+def update_neovim_plugin(neovim_manifest_path: Path, plugin: str, dry_run: bool) -> None:
+    manifest = utils.lua_read(neovim_manifest_path)
     info = manifest[plugin]
     repo = "https://github.com/" + plugin
     locked = info.get("lock", False)
     info["commit"] = update_commit(repo, from_commit=info["commit"], locked=locked)
     if not dry_run:
-        _utils.lua_write(neovim_manifest_path, manifest)
+        utils.lua_write(neovim_manifest_path, manifest)
 
 
-def get_ansible_entry_type(info: dict[str, _Any]) -> str:
+def get_ansible_entry_type(info: dict[str, Any]) -> str:
     if "version" not in info:
         return "github_release"
     version = info["version"]
     try:
-        _semver.VersionInfo.parse(version)
+        semver_module.VersionInfo.parse(version)
         return "git_tag"
     except ValueError:
         return "git_commit"
@@ -374,8 +373,8 @@ def _ephemerize_ansible_entry(entry: str) -> str:
     return entry
 
 
-def update_ansible_entry(manifest_path: _Path, entry: str, dry_run: bool) -> None:
-    main_vars, yaml = _utils.yaml_read(manifest_path)
+def update_ansible_entry(manifest_path: Path, entry: str, dry_run: bool) -> None:
+    main_vars, yaml = utils.yaml_read(manifest_path)
     assert isinstance(main_vars, dict)
     manifest = main_vars["manifest"]
     info = manifest[entry]
@@ -394,4 +393,4 @@ def update_ansible_entry(manifest_path: _Path, entry: str, dry_run: bool) -> Non
         info["url"] = _ephemerize_ansible_entry(url)
 
     if not dry_run:
-        _utils.yaml_write(manifest_path, main_vars, yaml)
+        utils.yaml_write(manifest_path, main_vars, yaml)

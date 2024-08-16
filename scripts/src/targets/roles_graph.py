@@ -1,11 +1,11 @@
-import graphviz as _graphviz  # type: ignore
+import graphviz  # type: ignore
 
-from .. import utils as _utils
-from .bootstrap import bootstrap as _bootstrap
+from .. import utils
+from .bootstrap import bootstrap
 
 
 def roles_graph() -> dict[str, set[str]]:
-    roles_path = _utils.REPO_PATH / "roles"
+    roles_path = utils.REPO_PATH / "roles"
     graph: dict[str, set[str]] = {}
     for role_path in roles_path.iterdir():
         if not role_path.is_dir():
@@ -21,7 +21,7 @@ def roles_graph() -> dict[str, set[str]]:
         else:
             continue
 
-        yaml, _ = _utils.yaml_read(dependencies_path)
+        yaml, _ = utils.yaml_read(dependencies_path)
         assert isinstance(yaml, dict)
         for dep in yaml["dependencies"]:
             graph[role].add(dep["role"])
@@ -30,9 +30,9 @@ def roles_graph() -> dict[str, set[str]]:
 
 
 def generate_png(view: bool = False) -> None:
-    _bootstrap()
+    bootstrap()
 
-    graph = _graphviz.Digraph(name="roles")
+    graph = graphviz.Digraph(name="roles")
 
     str_graph = roles_graph()
 
@@ -41,6 +41,6 @@ def generate_png(view: bool = False) -> None:
         for dep in dependencies:
             graph.edge(node, dep)
 
-    output_path = _utils.ARTIFACTS_PATH / "roles_graph"
+    output_path = utils.ARTIFACTS_PATH / "roles_graph"
     graph.format = "png"
     graph.render(output_path, view=view, quiet_view=view)

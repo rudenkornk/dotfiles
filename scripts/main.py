@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-import shutil as _shutil
+import shutil
 
-import src.utils as _utils
-from src.cli import cli as _cli
+from src import utils
+from src.cli import cli
 
 
-@_utils.main()
+@utils.main()
 def _main() -> None:
-    _cli(max_content_width=_shutil.get_terminal_size(fallback=(120, 24)).columns)
+    cli(max_content_width=shutil.get_terminal_size(fallback=(120, 24)).columns)
 
 
 if __name__ == "__main__":

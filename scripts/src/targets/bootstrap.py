@@ -1,20 +1,17 @@
-import platform as _platform
-from pathlib import Path as _Path
+import platform
+from pathlib import Path
 
-from ..utils import ARTIFACTS_PATH as _ARTIFACTS_PATH
-from ..utils import REPO_PATH as _REPO_PATH
-from ..utils import makelike as _makelike
-from ..utils import run_shell as _run_shell
+from ..utils import ARTIFACTS_PATH, REPO_PATH, makelike, run_shell
 
 
-@_makelike(
-    _ARTIFACTS_PATH / _platform.node() / "bootstap_control_node",
-    _REPO_PATH / "bootstrap.sh",
-    _Path(__file__),
+@makelike(
+    ARTIFACTS_PATH / platform.node() / "bootstap_control_node",
+    REPO_PATH / "bootstrap.sh",
+    Path(__file__),
     auto_create=True,
 )
-def bootstrap(_: _Path, sources: list[_Path]) -> None:
-    _run_shell(["bash", sources[0]])
+def bootstrap(_: Path, sources: list[Path]) -> None:
+    run_shell(["bash", sources[0]])
 
 
 def check_bootstrap(image: str) -> None:
@@ -22,8 +19,8 @@ def check_bootstrap(image: str) -> None:
 
     norm_image = image.replace(":", "_").replace("/", "_")
 
-    def run_check_bootstrap(_: _Path, sources: list[_Path]) -> None:
-        _run_shell(
+    def run_check_bootstrap(_: Path, sources: list[Path]) -> None:
+        run_shell(
             [
                 "podman",
                 "run",
@@ -31,9 +28,9 @@ def check_bootstrap(image: str) -> None:
                 "--interactive",
                 "--tty",
                 "--volume",
-                f"{_REPO_PATH}:{_REPO_PATH}",
+                f"{REPO_PATH}:{REPO_PATH}",
                 "--workdir",
-                _REPO_PATH,
+                REPO_PATH,
                 image,
                 "bash",
                 "-c",
@@ -41,10 +38,10 @@ def check_bootstrap(image: str) -> None:
             ]
         )
 
-    _makelike(
-        _ARTIFACTS_PATH / norm_image / "bootstap_control_node",
-        _REPO_PATH / "bootstrap.sh",
-        _Path(__file__),
+    makelike(
+        ARTIFACTS_PATH / norm_image / "bootstap_control_node",
+        REPO_PATH / "bootstrap.sh",
+        Path(__file__),
         bootstrap,
         auto_create=True,
     )(run_check_bootstrap)()

@@ -1,31 +1,27 @@
-import platform as _platform
-from pathlib import Path as _Path
+import platform
+from pathlib import Path
 
-from ..utils import ARTIFACTS_PATH as _ARTIFACTS_PATH
-from ..utils import REPO_PATH as _REPO_PATH
-from ..utils import makelike as _makelike
-from ..utils import run_shell as _run_shell
-from ..utils import yaml_read as _yaml_read
-from . import bootstrap as _bootstrap
+from ..utils import ARTIFACTS_PATH, REPO_PATH, makelike, run_shell, yaml_read
+from . import bootstrap
 
-ANSIBLE_COLLECTIONS_PATH = _ARTIFACTS_PATH / _platform.node() / "ansible_collections"
+ANSIBLE_COLLECTIONS_PATH = ARTIFACTS_PATH / platform.node() / "ansible_collections"
 
 
 # Target is user-specific since Ansible collections are installed for a specific user by default
 # In some cases we need to perform a bootstrap twice from different users.
 # This tweak ensures that the collections are installed for the user who runs the bootstrap
-@_makelike(
+@makelike(
     ANSIBLE_COLLECTIONS_PATH / "marker",
-    _REPO_PATH / "roles" / "manifest" / "vars" / "ansible.yaml",
-    _bootstrap.bootstrap,
-    _Path(__file__),
+    REPO_PATH / "roles" / "manifest" / "vars" / "ansible.yaml",
+    bootstrap.bootstrap,
+    Path(__file__),
     auto_create=True,
 )
-def ansible_collections(artifact: _Path, sources: list[_Path]) -> None:
-    yaml, _ = _yaml_read(sources[0])
+def ansible_collections(artifact: Path, sources: list[Path]) -> None:
+    yaml, _ = yaml_read(sources[0])
     assert isinstance(yaml, dict)
     manifest = yaml["manifest"]
-    _run_shell(
+    run_shell(
         [
             "ansible-galaxy",
             "collection",
@@ -34,7 +30,7 @@ def ansible_collections(artifact: _Path, sources: list[_Path]) -> None:
         ],
         extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
     )
-    _run_shell(
+    run_shell(
         [
             "ansible-galaxy",
             "collection",
@@ -43,7 +39,7 @@ def ansible_collections(artifact: _Path, sources: list[_Path]) -> None:
         ],
         extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
     )
-    _run_shell(
+    run_shell(
         [
             "ansible-galaxy",
             "collection",

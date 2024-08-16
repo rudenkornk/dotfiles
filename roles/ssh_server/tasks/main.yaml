@@ -37,7 +37,7 @@
     line: ChallengeResponseAuthentication no
   register: ssh_config_4
 
-- name: Disable challenge response authentication
+- name: Disable UsePAM
   become: true
   ansible.builtin.lineinfile:
     path: "/etc/ssh/sshd_config"

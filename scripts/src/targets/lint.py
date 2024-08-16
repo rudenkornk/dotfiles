@@ -29,6 +29,15 @@ def _check_registered_roles() -> None:
 
 
 def _check_secrets_deps() -> None:
+    # This ansible config uses secrets to fully setup hosts.
+    # Since the configuration is tested inside some untrusted CI, it should work even if secrets are not decrypted.
+    # Thus, all of the tasks, which use secrets are "optional" and skipped in case secrets are not decrypted.
+    # This creates a potential configuration mistake:
+    # one can create some role, which uses secrets, but forget to add "secrets" role as a dependency.
+    # Since all secrets tasks are optional, CI will not catch such mistake, but local scenarios might be broken.
+    # In order to prevent such case, there is a linting check, which ensures that all roles containing secrets
+    # are also depend on the "secrets" role.
+
     _logger.info("Checking if all secrets are properly used by roles...")
 
     secrets_index = REPO_PATH / ".gitsecret" / "paths" / "mapping.cfg"

@@ -105,16 +105,15 @@ def _ansible_verbosity() -> str:
     return str(verbosity)
 
 
-def _check_port(address: str, port: int | None) -> bool:
+def _check_port(address: str, port: int) -> bool:
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
-        port_address: tuple[str, int] | str = (address, port) if port else address
-        if sock.connect_ex(port_address) == 0:
+        if sock.connect_ex((address, port)) == 0:
             return True
         return False
 
 
 def _setup_ssh_port(hostname: str, host: dict[str, Any], ssh_config: Mapping[str, Any] | None) -> None:
-    port_candidates = [22, None]
+    port_candidates = [22]
     if predefined_port := host.get("ansible_port"):
         port_candidates.append(int(predefined_port))
 
@@ -123,7 +122,7 @@ def _setup_ssh_port(hostname: str, host: dict[str, Any], ssh_config: Mapping[str
 
     address = host.get("ansible_host", hostname)
     assert isinstance(address, str)
-    for port in reversed(port_candidates):
+    for port in port_candidates:
         if not _check_port(address, port):
             continue
         if port is not None:

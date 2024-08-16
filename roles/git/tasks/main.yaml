@@ -101,6 +101,19 @@
   register: git_downloaded
   until: git_downloaded is not failed
 
+- name: Create ~/.config/lazygit directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/lazygit"
+    state: directory
+    mode: "0o755"
+
+# https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+- name: Create symlink to global lazygit config
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/lazygit.yaml"
+    dest: "{{ home }}/.config/lazygit/config.yml"
+    state: link
+
 - name: Set up bash
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"

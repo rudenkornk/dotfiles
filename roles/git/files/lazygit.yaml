@@ -1,0 +1,3 @@
+gui:
+  # The number of lines you scroll by when scrolling the main window
+  scrollHeight: 20

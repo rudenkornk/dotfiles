@@ -1,10 +1,18 @@
+# This playbook is meant to be used as a very initial machine bootstrap
+# It is assumed that after this playbook is ran, the user will be able use a "normal" ansible playbook
+# with enabled gather_facts, installed python and ssh connection for the target user with admin privileges
+
 - name: Bootstrap hosts
   hosts: "{{ hosts_var }}"
   vars:
     ansible_user: root
+  # We are setting up almost vanilla machine, which does not even have python installed
+  # Thus, we must disable gather_facts
   gather_facts: false
   tasks:
-    - name: Detect disribution
+    # /etc/os-release actually has well-defined structure we can rely on
+    # See https://www.linux.org/docs/man5/os-release.html
+    - name: Detect distribution
       ansible.builtin.raw: grep -oP '^ID=\K.*' /etc/os-release | sed -e 's/\(.*\)/\L\1/' | sed 's/\([[:alpha:]]\)/\U\1/'
       args:
         executable: bash

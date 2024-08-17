@@ -26,6 +26,9 @@ pack: "{{ {'Ubuntu': 'deb', 'Fedora': 'rpm'}[ansible_distribution] }}" # noqa: v
 pack_arch: "{{ {'Ubuntu': deb_arch, 'Fedora': ansible_architecture}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix]
 
 manifest_pre:
+  hiddify:
+    rpm: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-rpm-x64.rpm
+    deb: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-Debian-x64.{{ pack }}
 
 manifest: # noqa: var-naming[no-role-prefix]
   clipboard:
@@ -40,6 +43,8 @@ manifest: # noqa: var-naming[no-role-prefix]
   fzf:
     url: https://github.com/junegunn/fzf.git
     version: b44ab9e33c236787bcd00b655cae4a8ef8497059
+  hiddify:
+    url: "{{ {'Ubuntu': manifest_pre.hiddify.deb, 'Fedora': manifest_pre.hiddify.rpm}[ansible_distribution] }}"
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
     version: 522b2bc8631cfe28a1b230d1b774f911eab17cf3

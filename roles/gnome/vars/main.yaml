@@ -1,6 +1,10 @@
 # Disable line-length warning to simplify script auto-generation
 # yamllint disable rule:line-length
 gnome_settings:
+  /org/gnome/Totem/active-plugins:
+    "['vimeo', 'variable-rate', 'skipto', 'screenshot', 'screensaver', 'save-file', 'rotation',
+    'recent', 'movie-properties', 'open-directory', 'mpris', 'autoload-subtitles', 'apple-trailers']"
+  /org/gnome/Totem/subtitle-encoding: "'UTF-8'"
   /org/gnome/calculator/button-mode: "'advanced'"
   /org/gnome/calculator/show-thousands: "true"
   /org/gnome/calculator/source-currency: "'DZD'"
@@ -15,6 +19,7 @@ gnome_settings:
   /org/gnome/desktop/interface/clock-show-weekday: "true"
   /org/gnome/desktop/interface/color-scheme: "'prefer-dark'"
   /org/gnome/desktop/peripherals/mouse/speed: "0.33082706766917291"
+  /org/gnome/desktop/peripherals/touchpad/speed: "0.21052631578947367"
   /org/gnome/desktop/privacy/report-technical-problems: "true"
   /org/gnome/desktop/search-providers/disabled: "['org.mozilla.firefox.desktop']"
   /org/gnome/desktop/session/idle-delay: uint32 900

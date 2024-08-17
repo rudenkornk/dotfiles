@@ -31,9 +31,9 @@ gnome_rules:
   /org/gnome/nautilus: excluded
   /org/gnome/nm-applet/eap: excluded
   /org/gnome/portal/filechooser: excluded
-  /org/gnome/Settings: excluded
   /org/gnome/settings-daemon/plugins/media-keys: included
   /org/gnome/settings-daemon/plugins/power: included
+  /org/gnome/Settings: excluded
   /org/gnome/shell/app-picker-layout: included
   /org/gnome/shell/command-history: excluded
   /org/gnome/shell/favorite-apps: included
@@ -41,9 +41,11 @@ gnome_rules:
   /org/gnome/shell/welcome-dialog-last-shown-version: excluded
   /org/gnome/software: excluded
   /org/gnome/system/locale: included
+  /org/gnome/Totem: included
   /org/gtk/gtk4/settings/file-chooser: included
   /org/gtk/gtk4/Settings/FileChooser: included
   /org/gtk/settings/file-chooser: included
   /org/gtk/Settings/FileChooser: included
   /org/virt-manager: excluded
   /system/locale: included
+  /system/proxy: excluded

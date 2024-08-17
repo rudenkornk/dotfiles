@@ -25,8 +25,8 @@ gnome_settings:
   /org/gnome/desktop/session/idle-delay: uint32 900
   /org/gnome/desktop/sound/theme-name: "'__custom'"
   /org/gnome/desktop/wm/keybindings/close: "['<Control><Alt>x', '<Alt>F4']"
-  /org/gnome/desktop/wm/keybindings/cycle-windows: "@as []"
-  /org/gnome/desktop/wm/keybindings/cycle-windows-backward: "@as []"
+  /org/gnome/desktop/wm/keybindings/cycle-windows: "['<Alt>Tab']"
+  /org/gnome/desktop/wm/keybindings/cycle-windows-backward: "['<Shift><Alt>Tab']"
   /org/gnome/desktop/wm/keybindings/maximize: "['<Control><Alt>f']"
   /org/gnome/desktop/wm/keybindings/minimize: "['<Control><Alt>c']"
   /org/gnome/desktop/wm/keybindings/move-to-monitor-down: "['<Control><Alt>s']"
@@ -43,8 +43,6 @@ gnome_settings:
   /org/gnome/desktop/wm/keybindings/switch-to-workspace-last: "['<Shift><Alt>w']"
   /org/gnome/desktop/wm/keybindings/switch-to-workspace-left: "['<Shift><Alt>a']"
   /org/gnome/desktop/wm/keybindings/switch-to-workspace-right: "['<Shift><Alt>d']"
-  /org/gnome/desktop/wm/keybindings/switch-windows: "['<Alt>Tab']"
-  /org/gnome/desktop/wm/keybindings/switch-windows-backward: "['<Shift><Alt>Tab']"
   /org/gnome/desktop/wm/keybindings/unmaximize: "['<Control><Alt>r']"
   /org/gnome/gnome-system-monitor/disktreenew/col-6-width: "0"
   /org/gnome/gnome-system-monitor/proctree/columns-order:

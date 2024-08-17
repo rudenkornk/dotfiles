@@ -43,59 +43,8 @@
       register: bootstrap
       changed_when: ("bootstrapped" in bootstrap.stdout)
 
-    - name: Install sudo
-      become: true
-      ansible.builtin.package:
-        name: sudo
-
-    # This config supports three kinds of ansible_connection: ssh, docker/podman and local.
-    # In order to use them, we have to properly setup authentication methods for all of them.
-    # For ssh connection we have to setup authorized_keys to connect and password to be able to escalate privileges
-    # For docker/podman we have to setup an empty password
-    # (see https://github.com/ansible/ansible/issues/80254)
-    # Local connection is out of scope of the playbook.
-
-    # Sets up creds for SSH and container connections
-    # For some weird reason password setup must come before adding admin groups
     - name: Include credentials setup tasks
       vars:
         credentials_user: "{{ user }}"
       ansible.builtin.include_tasks:
         file: "{{ playbook_dir }}/roles/credentials/tasks/main.yaml"
-
-    - name: Add authorized_key for ssh connection
-      vars:
-        pubkey_path: "{{ playbook_dir }}/roles/ssh_client/files/keys/id_rsa.pub"
-      block:
-        - name: Check if public SSH key is decrypted
-          delegate_to: localhost
-          ansible.builtin.stat:
-            path: "{{ pubkey_path }}"
-          register: pubkey_check
-
-        - name: Check hostname matches entry in ansible/hosts
-          ansible.builtin.fail:
-            msg: "Warning: public key not decrypted for ssh connection: {{ pubkey_path }}"
-          # NOTE: do not move this check on the block level
-          # The way ansible "when" works leads to underlying condition to be evaluated
-          # in the delegated context, which results in "false" value when previous keycheck tasks should
-          # be executed and keycheck is skipped!
-          when: ansible_connection == "ssh" and not pubkey_check.stat.exists
-          failed_when: false
-
-        - name: Add authorized_key for ssh connection
-          become: true
-          ansible.posix.authorized_key:
-            user: "{{ item }}"
-            key: "{{ lookup('file', pubkey_path) }}"
-          loop: [root, "{{ user }}"]
-          when: ansible_connection == "ssh" and pubkey_check.stat.exists
-
-    - name: Append admin groups for {{ user }}
-      become: true
-      ansible.builtin.user:
-        name: "{{ user }}"
-        groups:
-          - adm
-          - "{{ {'Ubuntu': 'sudo', 'Fedora': 'wheel'}[ansible_distribution] }}"
-        append: true

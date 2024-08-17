@@ -1,8 +1,31 @@
 # yamllint disable rule:line-length
 
+# This file describes links and versions for the different components,
+# which are used in this configuration.
+# It is important to pin specific versions to ensure reproducibility.
+#
+# Most of the packages follow predicable patterns with arch and package formats.
+# This is very useful, since it allows to compactly write down the url with some ansible templating.
+# An update procedure is also aware of these simple patterns.
+# Some packages, however, do not have predicable URL patterns.
+# Writing an update procedure, which would adapt for complex templating, is cumbersome.
+# To overcome this, here we use a two-staged manifest variable, which works according to the following rules:
+# 1. If the component has a predicable URL pattern, include it directly into the `manifest` variable.
+#    Essentially, we have written several different URLs with one templated entry.
+#    Update procedure is following simple patterns and is able to update such entry.
+#    Playbook tasks will be able to reference this entry directly without disambiguating different
+#    variants themselves.
+# 2. If the component does not have a predicable URL pattern, explicilty "expand" it into the several
+#    variants in the `manifest_pre` variable.
+#    These variants must follow simple patterns and will be updated one-by-one by the update procedure.
+#    The final complex-templated variable should be included in the `manifest` variable and
+#    it will not be touched by the update procedure.
+
 deb_arch: "{{ {'aarch64': 'arm64', 'x86_64': 'amd64'}[ansible_architecture] }}" # noqa: var-naming[no-role-prefix]
 pack: "{{ {'Ubuntu': 'deb', 'Fedora': 'rpm'}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix]
 pack_arch: "{{ {'Ubuntu': deb_arch, 'Fedora': ansible_architecture}[ansible_distribution] }}" # noqa: var-naming[no-role-prefix]
+
+manifest_pre:
 
 manifest: # noqa: var-naming[no-role-prefix]
   clipboard:

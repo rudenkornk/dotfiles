@@ -145,7 +145,7 @@ class GitHubReleaseInfo:
 
 
 # pylint: disable-next=too-many-statements
-def update_github_release(url: str, locked: bool) -> str:
+def _update_github_release(url: str, locked: bool) -> str:
     tab = "  "
     cri = GitHubReleaseInfo(url)
     releases_url = f"https://github.com/{cri.repo}/releases"
@@ -229,6 +229,41 @@ def update_github_release(url: str, locked: bool) -> str:
     chosen_binary = cri.binary.replace(cri.ti.version, chosen_version)
     new_url = f"{cri.prefix}/{cri.repo}/{cri.path}/{chosen_tag}/{chosen_binary}"
     return new_url
+
+
+def _materialize_templated_url(url: str) -> str:
+    dummy_map = {
+        "{{ ansible_architecture }}": "x86_64",
+        "{{ ansible_distribution }}": "Ubuntu",
+        "{{ deb_arch }}": "amd64",
+        "{{ pack_arch }}": "amd64",
+        "{{ pack }}": "deb",
+    }
+    for key, value in dummy_map.items():
+        url = url.replace(key, value)
+    return url
+
+
+def _ephemerize_url(url: str) -> str:
+    dummy_map = {
+        "x86_64": "{{ ansible_architecture }}",
+        "Ubuntu": "{{ ansible_distribution }}",
+        "amd64": "{{ pack_arch }}" if url.endswith(".deb") else "{{ deb_arch }}",
+    }
+
+    if url.endswith(".deb"):
+        url = url[:-3] + "{{ pack }}"
+
+    for key, value in dummy_map.items():
+        url = url.replace(key, value)
+    return url
+
+
+def update_github_release(url: str, locked: bool) -> str:
+    url = _materialize_templated_url(url)
+    url = _update_github_release(url, locked)
+    url = _ephemerize_url(url)
+    return url
 
 
 def parse_pip_entry(entry: str) -> dict[str, str | None]:
@@ -345,52 +380,29 @@ def get_ansible_entry_type(info: dict[str, Any]) -> str:
         return "git_commit"
 
 
-def _materialize_ansible_entry(entry: str) -> str:
-    dummy_map = {
-        "{{ ansible_architecture }}": "x86_64",
-        "{{ ansible_distribution }}": "Ubuntu",
-        "{{ deb_arch }}": "amd64",
-        "{{ pack_arch }}": "amd64",
-        "{{ pack }}": "deb",
-    }
-    for key, value in dummy_map.items():
-        entry = entry.replace(key, value)
-    return entry
-
-
-def _ephemerize_ansible_entry(entry: str) -> str:
-    dummy_map = {
-        "x86_64": "{{ ansible_architecture }}",
-        "Ubuntu": "{{ ansible_distribution }}",
-        "amd64": "{{ pack_arch }}" if entry.endswith(".deb") else "{{ deb_arch }}",
-    }
-
-    if entry.endswith(".deb"):
-        entry = entry[:-3] + "{{ pack }}"
-
-    for key, value in dummy_map.items():
-        entry = entry.replace(key, value)
-    return entry
-
-
 def update_ansible_entry(manifest_path: Path, entry: str, dry_run: bool) -> None:
     main_vars, yaml = utils.yaml_read(manifest_path)
     assert isinstance(main_vars, dict)
+
+    manifest_pre = main_vars.get("manifest_pre", {})
     manifest = main_vars["manifest"]
     info = manifest[entry]
-    raw_url = info["url"]
-
-    url = _materialize_ansible_entry(raw_url)
 
     locked = info.get("lock", False)
     entry_type = get_ansible_entry_type(info)
     if entry_type == "git_tag":
-        info["version"] = update_tag(url, from_tag=info["version"], locked=locked)
+        info["version"] = update_tag(info["url"], from_tag=info["version"], locked=locked)
     if entry_type == "git_commit":
-        info["version"] = update_commit(url, from_commit=info["version"], locked=locked)
+        info["version"] = update_commit(info["url"], from_commit=info["version"], locked=locked)
     if entry_type == "github_release":
-        url = update_github_release(url, locked=locked)
-        info["url"] = _ephemerize_ansible_entry(url)
+        if entry not in manifest_pre:
+            # URL is simple-templated
+            info["url"] = update_github_release(info["url"], locked=locked)
+        else:
+            # URL is complex-templated
+            urls = manifest_pre[entry]
+            for key, url in urls.items():
+                urls[key] = update_github_release(url, locked=locked)
 
     if not dry_run:
         utils.yaml_write(manifest_path, main_vars, yaml)

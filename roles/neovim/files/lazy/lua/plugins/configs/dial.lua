@@ -17,9 +17,9 @@ M.config = function()
     end
 
     return {
-      augend.constant.new({ elements = elements, word = word, cyclic = cyclic }),
-      augend.constant.new({ elements = capitalized_first, word = word, cyclic = cyclic }),
-      augend.constant.new({ elements = capitalized, word = word, cyclic = cyclic }),
+      augend.constant.new({ elements = capitalized_first, word = word, cyclic = cyclic, preserve_case = true }),
+      augend.constant.new({ elements = capitalized, word = word, cyclic = cyclic, preserve_case = true }),
+      augend.constant.new({ elements = elements, word = word, cyclic = cyclic, preserve_case = true }),
     }
   end
 

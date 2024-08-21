@@ -6,8 +6,6 @@ M.opts = {
   },
   resize = {
     enable_default_keybindings = false,
-    resize_step_x = 8,
-    resize_step_y = 8,
   },
 }
 
@@ -47,6 +45,8 @@ M.keys = {
   {
     "<A-x>h",
     function()
+      -- See https://github.com/aserowy/tmux.nvim/issues/125
+      require("tmux.configuration.options").resize.resize_step_x = 20
       require("tmux").resize_left()
     end,
     desc = "Resize window to the left",
@@ -55,6 +55,8 @@ M.keys = {
   {
     "<A-x>j",
     function()
+      -- See https://github.com/aserowy/tmux.nvim/issues/125
+      require("tmux.configuration.options").resize.resize_step_y = 20
       require("tmux").resize_bottom()
     end,
     desc = "Resize window to the bottom",
@@ -63,6 +65,8 @@ M.keys = {
   {
     "<A-x>k",
     function()
+      -- See https://github.com/aserowy/tmux.nvim/issues/125
+      require("tmux.configuration.options").resize.resize_step_y = 20
       require("tmux").resize_top()
     end,
     desc = "Resize window to the top",
@@ -71,6 +75,48 @@ M.keys = {
   {
     "<A-x>l",
     function()
+      -- See https://github.com/aserowy/tmux.nvim/issues/125
+      require("tmux.configuration.options").resize.resize_step_x = 20
+      require("tmux").resize_right()
+    end,
+    desc = "Resize window to the right",
+    mode = { "c", "n", "t", "v", "i" },
+  },
+  {
+    "<A-x><S-h>",
+    function()
+      -- See https://github.com/aserowy/tmux.nvim/issues/125
+      require("tmux.configuration.options").resize.resize_step_x = 1
+      require("tmux").resize_left()
+    end,
+    desc = "Resize window to the left",
+    mode = { "c", "n", "t", "v", "i" },
+  },
+  {
+    "<A-x><S-j>",
+    function()
+      -- See https://github.com/aserowy/tmux.nvim/issues/125
+      require("tmux.configuration.options").resize.resize_step_y = 1
+      require("tmux").resize_bottom()
+    end,
+    desc = "Resize window to the bottom",
+    mode = { "c", "n", "t", "v", "i" },
+  },
+  {
+    "<A-x><S-k>",
+    function()
+      -- See https://github.com/aserowy/tmux.nvim/issues/125
+      require("tmux.configuration.options").resize.resize_step_y = 1
+      require("tmux").resize_top()
+    end,
+    desc = "Resize window to the top",
+    mode = { "c", "n", "t", "v", "i" },
+  },
+  {
+    "<A-x><S-l>",
+    function()
+      -- See https://github.com/aserowy/tmux.nvim/issues/125
+      require("tmux.configuration.options").resize.resize_step_x = 1
       require("tmux").resize_right()
     end,
     desc = "Resize window to the right",

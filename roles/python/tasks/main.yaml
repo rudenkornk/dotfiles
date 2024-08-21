@@ -26,6 +26,24 @@
     state: link
   when: python_pip_conf.stat.exists
 
+- name: Check if uv.toml file exists
+  ansible.builtin.stat:
+    path: "{{ role_host_path }}/files/uv.toml"
+  register: python_uv_toml
+
+- name: Create ~/.config/uv directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/uv"
+    state: directory
+    mode: "0o755"
+
+- name: Create symlink to pip.conf
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/uv.toml"
+    dest: "{{ home }}/.config/uv/uv.toml"
+    state: link
+  when: python_uv_toml.stat.exists
+
 # https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#where-black-looks-for-the-file
 - name: Create symlink to global black config
   ansible.builtin.file:

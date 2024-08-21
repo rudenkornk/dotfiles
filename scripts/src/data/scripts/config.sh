@@ -88,7 +88,6 @@ else
     bash -c " \
         sudo bash -c '' && \
         export PATH=\"$PATH\" && \
-        export VIRTUAL_ENV=\"$VIRTUAL_ENV\" && \
         export ANSIBLE_COLLECTIONS_PATH=\"$ANSIBLE_COLLECTIONS_PATH\" && \
         export ANSIBLE_VERBOSITY=\"$ANSIBLE_VERBOSITY\" && \
 

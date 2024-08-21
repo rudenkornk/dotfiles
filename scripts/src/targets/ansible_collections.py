@@ -2,7 +2,6 @@ import platform
 from pathlib import Path
 
 from ..utils import ARTIFACTS_PATH, REPO_PATH, makelike, run_shell, yaml_read
-from . import bootstrap
 
 ANSIBLE_COLLECTIONS_PATH = ARTIFACTS_PATH / platform.node() / "ansible_collections"
 
@@ -13,7 +12,6 @@ ANSIBLE_COLLECTIONS_PATH = ARTIFACTS_PATH / platform.node() / "ansible_collectio
 @makelike(
     ANSIBLE_COLLECTIONS_PATH / "marker",
     REPO_PATH / "roles" / "manifest" / "vars" / "ansible.yaml",
-    bootstrap.bootstrap,
     Path(__file__),
     auto_create=True,
 )

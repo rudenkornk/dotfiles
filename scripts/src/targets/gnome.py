@@ -6,7 +6,6 @@ from pathlib import Path
 from typing_extensions import Self
 
 from .. import utils
-from .bootstrap import bootstrap
 
 _logger = logging.getLogger(__name__)
 
@@ -150,8 +149,6 @@ def generate_ansible_vars(entries: DConf, vars_path: Path) -> None:
 
 
 def gnome_config() -> None:
-    bootstrap()
-
     defaults = DConf.generate(default=True)
     current = DConf.generate()
 

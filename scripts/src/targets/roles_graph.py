@@ -1,7 +1,6 @@
 import graphviz  # type: ignore
 
 from .. import utils
-from .bootstrap import bootstrap
 
 
 def roles_graph() -> dict[str, set[str]]:
@@ -30,8 +29,6 @@ def roles_graph() -> dict[str, set[str]]:
 
 
 def generate_png(view: bool = False) -> None:
-    bootstrap()
-
     graph = graphviz.Digraph(name="roles")
 
     str_graph = roles_graph()

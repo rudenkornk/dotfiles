@@ -92,14 +92,3 @@
     src: "{{ role_host_path }}/files/pycodestyle"
     dest: "{{ home }}/.config/pycodestyle"
     state: link
-
-- name: Setup global python virtualenv
-  ansible.builtin.pip:
-    requirements: "{{ role_host_path }}/files/global_requirements.txt"
-    virtualenv: "{{ home }}/.venv"
-
-- name: Create symlink to fish config of {{ role_name }}
-  ansible.builtin.file:
-    src: "{{ role_host_path }}/files/{{ role_name }}.fish"
-    dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
-    state: link

@@ -83,7 +83,7 @@ def config(host: list[str], user: str, verify_unchanged: bool, mode: str) -> Non
     config_target.config(hostnames=host, user=user, verify_unchanged=verify_unchanged, mode=mode_enum)
 
 
-@cli.command(help="Check that bootstrap.sh script works correctly on different systems.")
+@cli.command(help="Check that main.sh bootstrapping script works correctly on different systems.")
 @click.option(
     "-i",
     "--image",

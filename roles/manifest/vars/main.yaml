@@ -29,6 +29,9 @@ manifest_pre:
   hiddify:
     rpm: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-rpm-x64.rpm
     deb: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-Debian-x64.{{ pack }}
+  turbovnc:
+    rpm: https://github.com/TurboVNC/turbovnc/releases/download/3.1.2/turbovnc-3.1.2.{{ ansible_architecture }}.rpm
+    deb: https://github.com/TurboVNC/turbovnc/releases/download/3.1.2/turbovnc_3.1.2_{{ pack_arch }}.{{ pack }}
 
 manifest: # noqa: var-naming[no-role-prefix]
   clipboard:
@@ -61,6 +64,8 @@ manifest: # noqa: var-naming[no-role-prefix]
   tpm:
     url: https://github.com/tmux-plugins/tpm
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
+  turbovnc:
+    url: "{{ {'Ubuntu': manifest_pre.turbovnc.deb, 'Fedora': manifest_pre.turbovnc.rpm}[ansible_distribution] }}"
   vcpkg:
     url: https://github.com/microsoft/vcpkg
     version: 576379156e82da642f8d1834220876759f13534d

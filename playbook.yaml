@@ -38,5 +38,6 @@
     - role: chrome
     - role: telegram
     - role: mattermost
+    - role: turbovnc
     - role: gnome
     - role: common_utils

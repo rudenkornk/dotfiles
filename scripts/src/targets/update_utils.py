@@ -1,4 +1,3 @@
-import copy
 import logging
 import re
 from dataclasses import dataclass
@@ -264,99 +263,6 @@ def update_github_release(url: str, locked: bool) -> str:
     url = _update_github_release(url, locked)
     url = _ephemerize_url(url)
     return url
-
-
-def parse_pip_entry(entry: str) -> dict[str, str | None]:
-    entry = entry.strip()
-    if entry.startswith("#"):
-        return {
-            "comment": entry,
-            "entry": entry,
-            "package": None,
-            "version": None,
-        }
-    package = entry.split("==")[0].strip()
-    version_comment = entry.split("==")[1].strip()
-    version = version_comment.split("#")[0].strip()
-    comment = " # " + version_comment.split("#")[1].strip() if "#" in version_comment else ""
-    return {
-        "comment": comment,
-        "entry": entry,
-        "package": package,
-        "version": version,
-    }
-
-
-# pylint: disable-next=too-many-statements
-def update_requirements_txt(requirements_path: Path, dry_run: bool) -> None:
-    tab = "  "
-    new_requirements_path = utils.TMP_PATH / "new_venv" / "requirements.txt"
-    requirements = requirements_path.read_text().splitlines()
-
-    core_packages = []
-    core_versions = []
-    core_comments = []
-    for requirement in requirements:
-        if "added by pip freeze" in requirement:
-            break
-        entry = parse_pip_entry(requirement)
-        if entry["version"] is None or entry["package"] is None:
-            continue
-        assert entry["comment"] is not None
-        core_packages.append(entry["package"])
-        core_versions.append(entry["version"])
-        core_comments.append(entry["comment"])
-
-    _logger.info(f"{tab}Fetching new versions of core modules")
-    new_core_versions = copy.deepcopy(core_versions)
-    outdated = utils.run_shell(
-        ["python3", "-m", "pip", "list", "--outdated"],
-        requirements_txt=requirements_path,
-        capture_output=True,
-        suppress_cmd_log=True,
-    )
-
-    outdated_lines = outdated.stdout.splitlines()[2:]
-    for line in outdated_lines:
-        match = re.match(r"(\S+)\s+(\S+)\s+(\S+)", line)
-        assert match is not None
-        package = match.group(1)
-        new_version = match.group(3)
-        if package in core_packages:
-            index = core_packages.index(package)
-            msg = ""
-            if "lock" in core_comments[index]:
-                msg = "-- skipping (version is locked)"
-            else:
-                new_core_versions[index] = new_version
-            _logger.info(f"{tab * 2}{package}=={core_versions[index]} -> {new_version} {msg}")
-
-    new_requirements_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(new_requirements_path, "w", encoding="utf-8") as f:
-        for i, package in enumerate(core_packages):
-            f.write(f"{package}=={new_core_versions[i]}{core_comments[i]}\n")
-
-    _logger.info(f"{tab}Capturing new full requirements list")
-    updated = utils.run_shell(
-        ["python3", "-m", "pip", "freeze", "-r", new_requirements_path],
-        requirements_txt=new_requirements_path,
-        capture_output=True,
-        suppress_cmd_log=True,
-    )
-    new_requirements = updated.stdout.splitlines()
-    for i, new_requirement in enumerate(new_requirements):
-        parsed_new_req = parse_pip_entry(new_requirement)
-        package = parsed_new_req["package"]
-        comment = ""
-        if package in core_packages:
-            index = core_packages.index(package)
-            comment = core_comments[index]
-        new_requirements[i] = f"{new_requirement}{comment}\n"
-
-    new_requirements_path.write_text("".join(new_requirements), encoding="utf-8")
-    if not dry_run:
-        requirements_path.write_text("".join(new_requirements), encoding="utf-8")
-    _logger.info(f"{tab}Done")
 
 
 def update_neovim_plugin(neovim_manifest_path: Path, plugin: str, dry_run: bool) -> None:

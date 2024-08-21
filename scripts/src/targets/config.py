@@ -12,7 +12,6 @@ from typing import Any, Mapping
 
 from ..utils import ARTIFACTS_PATH, REPO_PATH, SCRIPTS_PATH, run_shell, yaml_read, yaml_write
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
-from .bootstrap import bootstrap
 
 _logger = logging.getLogger(__name__)
 
@@ -203,7 +202,6 @@ class ConfigMode(enum.Enum):
 
 
 def config(hostnames: list[str], user: str, verify_unchanged: bool, mode: ConfigMode) -> None:
-    bootstrap()
     ansible_collections()
 
     if verify_unchanged:

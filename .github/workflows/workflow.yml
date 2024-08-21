@@ -30,18 +30,16 @@ jobs:
       # Checkout action sets repo as safe, but this does not look like to work inside container
       - name: Mark repo as safe
         run: git config --system --add safe.directory $(pwd)
-      - name: Bootstrap control node
-        run: ./bootstrap.sh
       - name: Config
-        run: ./main.py config
+        run: ./main.sh config
       - name: Check idempotence
-        run: ./main.py config --verify-unchanged
+        run: ./main.sh config --verify-unchanged
       # All format checks only available after complete machine setup
       # So, we need to do them in one of the check jobs
       - name: Check format
         run: |
           export PATH="$HOME/.local/bin/:$PATH"
-          ./main.py format
+          ./main.sh format
           if [[ -n "$(git diff)" ]]; then
             echo "Code is not formatted."
             git diff
@@ -56,12 +54,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Bootstrap control node
-        run: ./bootstrap.sh
       - name: Config
-        run: ./main.py config --user random_user
+        run: ./main.sh config --user random_user
       - name: Check idempotence
-        run: ./main.py config --user random_user --verify-unchanged
+        run: ./main.sh config --user random_user --verify-unchanged
     strategy:
       matrix:
         image:
@@ -80,9 +76,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Check remote config
-        run: ./main.py config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced
+        run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced
       - name: Check remote idempotence
-        run: ./main.py config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced --verify-unchanged
+        run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced --verify-unchanged
 
   lint:
     runs-on: ubuntu-22.04
@@ -95,7 +91,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Lint
-        run: ./main.py lint
+        run: ./main.sh lint
 
   scripts:
     runs-on: ubuntu-22.04
@@ -103,9 +99,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Generate roles graph
-        run: ./main.py graph
+        run: ./main.sh graph
       - name: Check update works
-        run: ./main.py update
+        run: ./main.sh update
       - name: Show diff
         run: git diff
 

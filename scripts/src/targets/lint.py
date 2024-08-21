@@ -4,9 +4,8 @@ import tempfile
 
 from git import Repo
 
-from ..utils import REPO_PATH, SCRIPTS_PATH, cpu_count, run_shell, yaml_read
+from ..utils import REPO_PATH, SCRIPTS_PATH, run_shell, yaml_read
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
-from .bootstrap import bootstrap
 from .roles_graph import roles_graph
 
 _logger = logging.getLogger(__name__)
@@ -139,7 +138,6 @@ def _check_leaked_credentials() -> None:
 
 
 def lint_code() -> None:
-    bootstrap()
     ansible_collections()
 
     _check_leaked_credentials()
@@ -158,10 +156,9 @@ def lint_code() -> None:
         ["ansible-lint", SCRIPTS_PATH / "playbook_dotfiles_container.yaml"],
         extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
     )
-    run_shell(["python3", "-m", "mypy", REPO_PATH / "main.py"])
     run_shell(["python3", "-m", "mypy", REPO_PATH / "scripts"])
-    run_shell(["python3", "-m", "pylint", "--jobs", str(cpu_count()), REPO_PATH / "main.py"])
-    run_shell(["python3", "-m", "pylint", "--jobs", str(cpu_count()), REPO_PATH / "scripts"])
+    # Specifying job number for pylint somehow leads to false-positive errors
+    run_shell(["python3", "-m", "pylint", REPO_PATH / "scripts"])
     run_shell(["python3", "-m", "yamllint", "--strict", REPO_PATH / ".github"])
 
 

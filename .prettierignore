@@ -1,3 +1,4 @@
 lazy-lock.json
 __build__
 __artifacts__
+.venv

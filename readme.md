@@ -6,8 +6,8 @@ Ansible playbooks, which idempotently configure new system with a single bootstr
 
 ```bash
 git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
-cd ~/projects/dotfiles && ./bootstrap.sh && \
-./main.py config
+cd ~/projects/dotfiles && \
+./main.sh config
 ```
 
 ## Showcase
@@ -63,7 +63,7 @@ Note, that this will install some tools (like `python` and `podman`) on your sys
 This will not install any specific configs though.
 
 ```bash
-./main.py config --target dotfiles_ubuntu_22.04
+./main.sh config --target dotfiles_ubuntu_22.04
 podman exec --interactive --tty --workdir $(pwd) --user $(id --user) dotfiles_ubuntu_22.04 fish
 ```
 
@@ -77,18 +77,18 @@ The first things you would want to customize if forking this repo are:
 ## Update components versions
 
 ```bash
-./main.py update
+./main.sh update
 ```
 
 ## Show role dependency graph
 
 ```bash
-./main.py graph
+./main.sh graph
 ```
 
 ## Test
 
 ```bash
-./main.py
-./main.py config --target dotfiles_ubuntu_22.04
+./main.sh
+./main.sh config --target dotfiles_ubuntu_22.04
 ```

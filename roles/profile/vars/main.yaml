@@ -1,5 +1,5 @@
 profile: # noqa: var-naming[no-role-prefix]
-  email: rudenkornk@gmail.com
+  email: nikita.rudenko@syntacore.com
   gpg_email: rudenkornk@gmail.com
   name: Nikita Rudenko
   locale: en_GB.UTF-8

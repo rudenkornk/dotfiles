@@ -22,6 +22,7 @@
     - role: shell_utils
     - role: ssh_server
     - role: ssh_client
+    - role: syntacore
     - role: vpn
     - role: terminals
     - role: keyboard_layouts

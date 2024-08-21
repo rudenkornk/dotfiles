@@ -89,8 +89,8 @@ gnome_settings:
     <{'position': <10>}>, 'org.gnome.Rhythmbox3.desktop': <{'position': <11>}>, 'org.gnome.TextEditor.desktop': <{'position':
     <12>}>, 'org.gnome.Tour.desktop': <{'position': <13>}>, 'virt-manager.desktop': <{'position': <14>}>}]"
   /org/gnome/shell/favorite-apps:
-    "['google-chrome.desktop', 'kitty.desktop', 'org.telegram.desktop._7399481fa1d082f7017ffa71affc89b7.desktop',
-    'org.gnome.Settings.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'org.gnome.SystemMonitor.desktop',
+    "['google-chrome.desktop', 'kitty.desktop', 'org.gnome.Settings.desktop', 'org.gnome.Nautilus.desktop',
+    'org.gnome.Software.desktop', 'org.gnome.SystemMonitor.desktop','mattermost-desktop.desktop',
     'hiddify.desktop']"
   /org/gnome/shell/keybindings/show-screenshot-ui: "@as []"
   /org/gnome/shell/keybindings/toggle-application-view: "['<Alt>Escape']"

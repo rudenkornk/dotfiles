@@ -1,0 +1,18 @@
+- name: Check if syntacore credentials were decrypted
+  delegate_to: localhost
+  ansible.builtin.stat:
+    path: "{{ role_path }}/templates/credentials.json"
+  register: syntacore_creds_status
+
+- name: Create syntacore credentials directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/syntacore/"
+    state: directory
+    mode: "0o755"
+
+- name: Copy templated and encrypted credentials
+  ansible.builtin.template:
+    src: credentials.json
+    dest: "{{ home }}/.config/syntacore/credentials.json"
+    mode: "0o600"
+  when: syntacore_creds_status.stat.exists and trusted

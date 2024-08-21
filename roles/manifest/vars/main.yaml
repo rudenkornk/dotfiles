@@ -37,24 +37,24 @@ manifest: # noqa: var-naming[no-role-prefix]
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v3.30.0/cmake-3.30.0-linux-{{ ansible_architecture }}.sh
+    url: https://github.com/Kitware/CMake/releases/download/v3.30.2/cmake-3.30.2-linux-{{ ansible_architecture }}.sh
   drawio:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.6.4/drawio-{{ pack_arch }}-24.6.4.{{ pack }}
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v24.7.5/drawio-{{ pack_arch }}-24.7.5.{{ pack }}
   firacode:
     lock: true
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: b44ab9e33c236787bcd00b655cae4a8ef8497059
+    version: 8cb59e6fcac3dce8dfa44b678fdc94cf81efa11b
   hiddify:
     url: "{{ {'Ubuntu': manifest_pre.hiddify.deb, 'Fedora': manifest_pre.hiddify.rpm}[ansible_distribution] }}"
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
-    version: 522b2bc8631cfe28a1b230d1b774f911eab17cf3
+    version: cdf1ed4134815f58727f8070f997552f86b58892
   lazygit:
-    url: https://github.com/jesseduffield/lazygit/releases/download/v0.42.0/lazygit_0.42.0_Linux_{{ ansible_architecture }}.tar.gz
+    url: https://github.com/jesseduffield/lazygit/releases/download/v0.43.1/lazygit_0.43.1_Linux_{{ ansible_architecture }}.tar.gz
   neovim:
-    url: https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz
+    url: https://github.com/neovim/neovim/releases/download/v0.10.1/nvim-linux64.tar.gz
   nvchad2:
     url: https://github.com/NvChad/NvChad
     version: e5f8a38ae3d6b3bedf68f29b0e96dad7a4ca2da5
@@ -68,6 +68,6 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: "{{ {'Ubuntu': manifest_pre.turbovnc.deb, 'Fedora': manifest_pre.turbovnc.rpm}[ansible_distribution] }}"
   vcpkg:
     url: https://github.com/microsoft/vcpkg
-    version: 576379156e82da642f8d1834220876759f13534d
+    version: bb002e69deb36c00e9ce21810f69eff349a833f7
   yazi:
-    url: https://github.com/sxyazi/yazi/releases/download/v0.2.5/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip
+    url: https://github.com/sxyazi/yazi/releases/download/v0.3.1/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip

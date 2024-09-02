@@ -1,6 +1,7 @@
 import enum
 import json
 import logging
+import sys
 from pathlib import Path
 
 from typing_extensions import Self
@@ -16,6 +17,10 @@ class _Style(enum.Enum):
 
 
 class DConfKey(Path):
+    if sys.version_info < (3, 12):
+        # pylint: disable-next=protected-access, no-member
+        _flavour = type(Path())._flavour  # type: ignore
+
     def to_str(self, style: _Style = _Style.DCONF) -> str:
         if style == _Style.DCONF:
             return str(self)

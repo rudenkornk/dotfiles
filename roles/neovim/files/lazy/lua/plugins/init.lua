@@ -1,36 +1,7 @@
 return {
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    opts = {
-      mappings = {
-        close = {
-          normal = "q",
-          insert = "<C-w>",
-        },
-        reset = {
-          normal = "<C-c>",
-          insert = "<C-c>",
-        },
-
-        submit_prompt = {
-          normal = "<CR>",
-          insert = "<C-m>",
-        },
-      },
-    },
-  },
-  {
     "echasnovski/mini.indentscope",
-    opts = {
-      draw = {
-        delay = 0,
-        animation = require("mini.indentscope").gen_animation.none(),
-      },
-    },
-  },
-  {
-    "echasnovski/mini.pairs",
-    enabled = false,
+    opts = { draw = { delay = 0, animation = require("mini.indentscope").gen_animation.none() } },
   },
   {
     "echasnovski/mini.surround",
@@ -45,20 +16,12 @@ return {
   {
     "folke/trouble.nvim",
     keys = {
-      { "<leader>r", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
+      { "<leader>h", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
     },
   },
   {
     "gbprod/yanky.nvim",
     opts = { highlight = { on_put = false, on_yank = false, timer = 0 } },
-  },
-  {
-    "ggandor/leap.nvim",
-    enabled = true,
-    keys = {
-      { "s", mode = { "n", "x", "o" }, false },
-      { "S", mode = { "n", "x", "o" }, false },
-    },
   },
   {
     "hrsh7th/nvim-cmp",
@@ -69,19 +32,8 @@ return {
     opts = require("plugins.configs.cmp").opts,
   },
   {
-    "L3MON4D3/LuaSnip",
-    keys = function()
-      -- Disable default <tab> and <s-tab> behavior in LuaSnip for Supertab
-      return {}
-    end,
-  },
-  {
     "mfussenegger/nvim-dap",
     keys = require("plugins.configs.dap").keys,
-  },
-  {
-    "mfussenegger/nvim-lint",
-    opts = require("plugins.configs.lint").opts,
   },
   {
     "monaqa/dial.nvim",
@@ -93,11 +45,7 @@ return {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
-    opts = { filesystem = { filtered_items = { hide_dotfiles = false } } },
-  },
-  {
-    "nvim-telescope/telescope.nvim",
-    opts = require("plugins.configs.telescope").opts,
+    opts = { filesystem = { filtered_items = { hide_dotfiles = false, hide_gitignored = false } } },
   },
   {
     "nvim-treesitter/nvim-treesitter",
@@ -111,34 +59,25 @@ return {
       },
     },
   },
-
   {
     "williamboman/mason.nvim",
     opts = require("plugins.configs.mason"),
   },
+  {
+    "linux-cultist/venv-selector.nvim",
+    opts = { settings = { options = { notify_user_on_venv_activation = false } } },
+  },
+
   {
     "aserowy/tmux.nvim",
     event = "VeryLazy",
     opts = require("plugins.configs.tmux").opts,
     keys = require("plugins.configs.tmux").keys,
   },
-  {
-    "debugloop/telescope-undo.nvim",
-    keys = {
-      { "<leader>fu", "<cmd> Telescope undo <CR>", desc = "Telescope undo" },
-    },
-  },
   { "max397574/better-escape.nvim", event = "InsertEnter", config = true },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {
     "tamton-aquib/duck.nvim",
     keys = require("plugins.configs.duck").keys,
-  },
-  {
-    -- Alternative: https://github.com/nvim-treesitter/nvim-treesitter-textobjects#text-objects-swap
-    -- But it works only for moving nodes up/down, not for left/right.
-    "ziontee113/syntax-tree-surfer",
-    config = true,
-    keys = require("plugins.configs.sts").keys,
   },
 }

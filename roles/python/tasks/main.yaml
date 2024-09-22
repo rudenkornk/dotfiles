@@ -44,6 +44,12 @@
     state: link
   when: python_uv_toml.stat.exists
 
+- name: Create symlink to fish config of {{ role_name }}
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/{{ role_name }}.fish"
+    dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
+    state: link
+
 # https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#where-black-looks-for-the-file
 - name: Create symlink to global black config
   ansible.builtin.file:

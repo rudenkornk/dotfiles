@@ -20,5 +20,3 @@ vim.filetype.add({
     ["playbook.*.yaml"] = "yaml.ansible",
   },
 })
-
-vim.g.python3_host_prog = vim.fn.expand("$HOME/.venv/bin/python3")

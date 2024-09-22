@@ -8,17 +8,17 @@ M.opts = function(_, opts)
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
   end
 
-  local luasnip = require("luasnip")
   local cmp = require("cmp")
 
   opts.mapping = vim.tbl_extend("force", opts.mapping, {
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
+        -- You could replace select_next_item() with confirm({ select = true }) to get VS Code autocompletion behavior
         cmp.select_next_item()
-        -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-        -- this way you will only jump inside the snippet region
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
+      elseif vim.snippet.active({ direction = 1 }) then
+        vim.schedule(function()
+          vim.snippet.jump(1)
+        end)
       elseif has_words_before() then
         cmp.complete()
       else
@@ -28,12 +28,21 @@ M.opts = function(_, opts)
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
+      elseif vim.snippet.active({ direction = -1 }) then
+        vim.schedule(function()
+          vim.snippet.jump(-1)
+        end)
       else
         fallback()
       end
     end, { "i", "s" }),
+
+    -- Similar to fzf selectors
+    ["<C-d>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert, count = 4 }),
+    ["<C-u>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert, count = 4 }),
+
+    ["<C-f>"] = cmp.mapping.scroll_docs(8),
+    ["<C-b>"] = cmp.mapping.scroll_docs(-8),
   })
 
   table.insert(opts.sources, { name = "emoji" })

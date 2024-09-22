@@ -19,7 +19,3 @@ end, { desc = "Terminal (Root Dir)" })
 vim.keymap.set({ "t" }, "<A-m>", "<cmd>close<cr>", { desc = "Close terminal" })
 
 vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
-
--- This should be inside options.lua, but for some reason it doesn't work there
--- Probably some plugin overwrites it later
-vim.g.clipboard = require("config.clipboard")

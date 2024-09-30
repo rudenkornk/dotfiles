@@ -61,7 +61,7 @@ M.config = function()
     "november",
     "december",
   }
-  local errors = { "error", "warning", "critical" }
+  local errors = { "debug", "info", "warning", "error", "critical" }
 
   local boolean_augend = create_constants(booleans, false, true)
   local boolean_ops_augend = create_constants(boolean_ops, true, true)

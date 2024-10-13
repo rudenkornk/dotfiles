@@ -68,6 +68,7 @@ jobs:
           - fedora:38
           - fedora:39
           - fedora:40
+          - fedora:41
 
   # Check that the project is able to configure remote host, with a user different from the current one
   check_remote:

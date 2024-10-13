@@ -43,6 +43,7 @@
       become: true
       ansible.builtin.copy:
         src: "{{ common_utils_shutter }}"
+        remote_src: true
         dest: "{{ common_utils_shutter_bak }}"
         mode: "0o644"
       when: common_utils_shutter_file.stat.exists

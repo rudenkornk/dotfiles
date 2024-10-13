@@ -26,18 +26,26 @@
     - name: Install python
       become: true
       ansible.builtin.raw: |
-        if ! command -v python3 &> /dev/null; then \
-          if [[ {{ ansible_distribution }} == "Ubuntu" ]]; then \
+        if [[ {{ ansible_distribution }} == "Ubuntu" ]]; then \
+          if ! command -v python3 &> /dev/null; then \
             apt-get update && \
             DEBIAN_FRONTEND=noninteractive \
-            apt-get install -y python3; \
-          elif [[ {{ ansible_distribution }} == "Fedora" ]]; then \
-            dnf install -y python3; \
-          else \
-            exit 1; \
-          fi && \
-          echo "bootstrapped";
-        fi
+            apt-get install -y python3 && \
+            echo "bootstrapped"; \
+          fi; \
+        elif [[ {{ ansible_distribution }} == "Fedora" ]]; then \
+          if ! command -v python3 &> /dev/null; then \
+            dnf install -y python3 && \
+            echo "bootstrapped"; \
+          fi; \
+          if ! /usr/bin/python3 -c "import libdnf5" 2> /dev/null; then \
+            dnf install -y python3-libdnf5 && \
+            echo "bootstrapped"; \
+          fi; \
+        else \
+          echo "Unkown distro {{ ansible_distribution }}!" && \
+          exit 1; \
+        fi;
       args:
         executable: bash
       register: bootstrap

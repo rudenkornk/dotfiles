@@ -1,4 +1,4 @@
-function ll --wraps eza
+function lg3 --wraps eza
     eza \
         --classify \
         --icons \
@@ -6,6 +6,7 @@ function ll --wraps eza
         --long \
         --header \
         --tree \
-        --level 1 \
+        --level 3 \
+        --git-ignore \
         $argv
 end

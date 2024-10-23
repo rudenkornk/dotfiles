@@ -1,4 +1,4 @@
-function ll --wraps eza
+function lt3 --wraps eza
     eza \
         --classify \
         --icons \
@@ -6,6 +6,6 @@ function ll --wraps eza
         --long \
         --header \
         --tree \
-        --level 1 \
+        --level 3 \
         $argv
 end

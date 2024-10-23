@@ -1,3 +1,3 @@
 function p --wraps podman
-    podman --detach-keys "" $argv
+    podman $argv
 end

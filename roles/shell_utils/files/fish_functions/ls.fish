@@ -1,3 +1,3 @@
 function ls --wraps eza
-  eza --classify --icons $argv
+  eza --classify --icons --all $argv
 end

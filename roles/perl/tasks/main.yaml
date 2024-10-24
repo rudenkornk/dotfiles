@@ -27,7 +27,6 @@
     - File::Find
     - File::HomeDir
     - Graph::Easy
-    - Log::Dispatch::File
     - Log::Log4perl
     - Unicode::GCString
     - YAML::Tiny

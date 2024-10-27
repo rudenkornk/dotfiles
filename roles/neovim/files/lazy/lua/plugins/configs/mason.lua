@@ -15,6 +15,7 @@ local override_options = {
     "jq-lsp",
     "markdownlint",
     "perlnavigator",
+    "pylint",
     "shellcheck",
     "write-good",
   },

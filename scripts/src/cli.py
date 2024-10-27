@@ -98,8 +98,11 @@ def check_bootstrap(image: list[str]) -> None:
 
 
 @cli.command(help="Lint code.")
-def lint() -> None:
-    lint_target.lint_code()
+@click.option("-a", "--only-ansible", is_flag=True, help="Run only Ansible linters.")
+@click.option("-p", "--only-python", is_flag=True, help="Run only Python linters.")
+@click.option("-s", "--only-secrets", is_flag=True, help="Run only secrets linters.")
+def lint(only_ansible: bool, only_python: bool, only_secrets: bool) -> None:
+    lint_target.lint_code(ansible=not only_python, python=not only_ansible, secrets=not only_secrets)
 
 
 @cli.command(name="format", help="Format code.")
@@ -141,7 +144,13 @@ def graph(silent: bool) -> None:
 
 
 @cli.command(help="Generate random password.")
-@click.option("-a", "--alphabet", type=str, default=string.ascii_lowercase, help="Password alphabet.")
+@click.option(
+    "-a",
+    "--alphabet",
+    type=str,
+    default=string.ascii_lowercase,
+    help="Password alphabet.",
+)
 @click.option("-l", "--length", type=int, default=24, help="Password length.")
 @click.option(
     "-o",

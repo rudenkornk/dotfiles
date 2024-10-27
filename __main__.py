@@ -2,8 +2,8 @@
 
 import shutil
 
-from src import utils
-from src.cli import cli
+from scripts import utils
+from scripts.cli import cli
 
 
 @utils.main()

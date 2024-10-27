@@ -71,7 +71,7 @@ signature-mutators = [
   "click.decorators.help_option",
   "click.decorators.pass_context",
   "click.decorators.confirmation_option",
-  "src.utils.makelike",
+  "scripts.utils.makelike",
 ]
 
 [tool.mypy]

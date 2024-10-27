@@ -120,7 +120,11 @@ def get_venv(requirements_path: Path) -> Path:
 
     _logger.debug(f"Creating virtual environment in {venv_path} with {requirements_path})")
     shutil.rmtree(venv_path, ignore_errors=True)
-    run_shell([sys.executable, "-m", "venv", venv_path], capture_output=True, suppress_cmd_log=True)
+    run_shell(
+        [sys.executable, "-m", "venv", venv_path],
+        capture_output=True,
+        suppress_cmd_log=True,
+    )
     if not venv_executable.exists():
         raise RuntimeError("Failed to create virtual environment. Did you install pip?")
     run_shell(

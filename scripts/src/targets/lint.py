@@ -137,29 +137,32 @@ def _check_leaked_credentials() -> None:
     _logger.info("Done, no leaked credentials found.")
 
 
-def lint_code() -> None:
+def lint_code(*, ansible: bool, python: bool, secrets: bool) -> None:
     ansible_collections()
 
-    _check_leaked_credentials()
-    _check_registered_roles()
-    _check_secrets_deps()
+    if secrets:
+        _check_leaked_credentials()
+        _check_secrets_deps()
 
-    run_shell(
-        ["ansible-lint", REPO_PATH / "playbook.yaml"],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
-    )
-    run_shell(
-        ["ansible-lint", REPO_PATH / "playbook_bootstrap_hosts.yaml"],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
-    )
-    run_shell(
-        ["ansible-lint", SCRIPTS_PATH / "playbook_dotfiles_container.yaml"],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
-    )
-    run_shell(["python3", "-m", "mypy", REPO_PATH / "scripts"])
-    # Specifying job number for pylint somehow leads to false-positive errors
-    run_shell(["python3", "-m", "pylint", REPO_PATH / "scripts"])
-    run_shell(["python3", "-m", "yamllint", "--strict", REPO_PATH / ".github"])
+    if ansible:
+        _check_registered_roles()
+        run_shell(
+            ["ansible-lint", REPO_PATH / "playbook.yaml"],
+            extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
+        )
+        run_shell(
+            ["ansible-lint", REPO_PATH / "playbook_bootstrap_hosts.yaml"],
+            extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
+        )
+        run_shell(
+            ["ansible-lint", SCRIPTS_PATH / "playbook_dotfiles_container.yaml"],
+            extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
+        )
+    if python:
+        run_shell(["python3", "-m", "mypy", REPO_PATH / "scripts"])
+        # Specifying job number for pylint somehow leads to false-positive errors
+        run_shell(["python3", "-m", "pylint", REPO_PATH / "scripts"])
+        run_shell(["python3", "-m", "yamllint", "--strict", REPO_PATH / ".github"])
 
 
 def format_code() -> None:

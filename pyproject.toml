@@ -12,6 +12,35 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["scripts"]
 
+[tool.uv]
+dev-dependencies = [
+  "ansible-lint>=24.7.0 ; platform_system != 'Windows'",
+  "ansible-core>=2.17.3",
+  "black>=24.8.0",
+  "click-help-colors>=0.9.4",
+  "click>=8.1.7",
+  "gitpython>=3.1.43",
+  "graphviz>=0.20.3",
+  "isort>=5.13.2",
+  "luadata>=1.0.5",
+  "lupa>=2.2",
+  "mypy>=1.11.1",
+  "passlib>=1.7.4",
+  "psutil>=6.0.0",
+  "pydriller>=2.6",
+  "pylint>=3.2.6",
+  "requests>=2.32.3",
+  "ruamel-yaml>=0.18.6",
+  "semver>=3.0.2",
+  "types-requests>=2.32.0.20240712",
+  "types-urllib3>=1.26.25.14",
+  "yamllint>=1.35.1",
+  "ruff>=0.7.1",
+]
+
+[tool.ruff]
+line-length = 120
+
 [tool.black]
 line-length = 120
 
@@ -19,14 +48,6 @@ line-length = 120
 profile = "black"
 line_length = 120
 skip_gitignore = true
-
-[tool.mypy]
-strict = true
-# W/A for errors like this one:
-# error: Skipping analyzing "ruamel": module is installed, but missing library stubs or py.typed marker  [import-untyped]
-# https://github.com/python/mypy/issues/12664
-# https://github.com/python/mypy/issues/7276
-incremental = false
 
 [tool.pylint]
 max-line-length = 120
@@ -53,30 +74,13 @@ signature-mutators = [
   "src.utils.makelike",
 ]
 
+[tool.mypy]
+strict = true
+# W/A for errors like this one:
+# error: Skipping analyzing "ruamel": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+# https://github.com/python/mypy/issues/12664
+# https://github.com/python/mypy/issues/7276
+incremental = false
+
 [tool.pydocstyle]
 ignore = ["D100", "D103"]
-
-[tool.uv]
-dev-dependencies = [
-  "ansible-lint>=24.7.0 ; platform_system != 'Windows'",
-  "ansible-core>=2.17.3",
-  "black>=24.8.0",
-  "click-help-colors>=0.9.4",
-  "click>=8.1.7",
-  "gitpython>=3.1.43",
-  "graphviz>=0.20.3",
-  "isort>=5.13.2",
-  "luadata>=1.0.5",
-  "lupa>=2.2",
-  "mypy>=1.11.1",
-  "passlib>=1.7.4",
-  "psutil>=6.0.0",
-  "pydriller>=2.6",
-  "pylint>=3.2.6",
-  "requests>=2.32.3",
-  "ruamel-yaml>=0.18.6",
-  "semver>=3.0.2",
-  "types-requests>=2.32.0.20240712",
-  "types-urllib3>=1.26.25.14",
-  "yamllint>=1.35.1",
-]

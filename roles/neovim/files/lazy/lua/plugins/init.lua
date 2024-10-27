@@ -1,7 +1,19 @@
 return {
   {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    opts = require("plugins.configs.copilot_chat").opts,
+  },
+  {
     "echasnovski/mini.indentscope",
     opts = { draw = { delay = 0, animation = require("mini.indentscope").gen_animation.none() } },
+  },
+  {
+    "echasnovski/mini.move",
+    event = "VeryLazy",
+    opts = {
+      -- disable '<M-j>' and '<M-k>' mappings conflicting with dap
+      mappings = { line_down = "", line_up = "" },
+    },
   },
   {
     "echasnovski/mini.surround",

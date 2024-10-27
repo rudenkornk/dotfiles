@@ -1,4 +1,4 @@
-function lll --wraps eza
+function llls --wraps eza
     eza \
         --classify \
         --icons \

@@ -86,4 +86,4 @@ if ! command -v dot &>/dev/null; then
   fi
 fi
 
-uv run "$root/scripts/main.py" "${@:---help}"
+uv run "$root/__main__.py"

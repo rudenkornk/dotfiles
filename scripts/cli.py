@@ -98,11 +98,11 @@ def check_bootstrap(image: list[str]) -> None:
 
 
 @cli.command(help="Lint code.")
-@click.option("-a", "--only-ansible", is_flag=True, help="Run only Ansible linters.")
-@click.option("-p", "--only-python", is_flag=True, help="Run only Python linters.")
-@click.option("-s", "--only-secrets", is_flag=True, help="Run only secrets linters.")
-def lint(only_ansible: bool, only_python: bool, only_secrets: bool) -> None:
-    lint_target.lint_code(ansible=not only_python, python=not only_ansible, secrets=not only_secrets)
+@click.option("-a", "--exclude-ansible", is_flag=True, help="Run only Ansible linters.")
+@click.option("-p", "--exclude-python", is_flag=True, help="Run only Python linters.")
+@click.option("-s", "--exclude-secrets", is_flag=True, help="Run only secrets linters.")
+def lint(exclude_ansible: bool, exclude_python: bool, exclude_secrets: bool) -> None:
+    lint_target.lint_code(ansible=not exclude_ansible, python=not exclude_python, secrets=not exclude_secrets)
 
 
 @cli.command(name="format", help="Format code.")

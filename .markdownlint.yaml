@@ -1,4 +1,10 @@
 # MD013/line-length - Line length
 MD013:
   # Number of characters
-  line_length: 120
+  line_length: 180
+
+# Multiple top-level headings in the same document
+MD025: false
+
+# Inline html
+MD033: false

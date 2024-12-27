@@ -4,40 +4,66 @@
     - role: profile
     - role: manifest
     - role: basic_utils
-    - role: clipboard
     - role: dotfiles
     - role: shell
+    - role: clipboard
     - role: git
-    - role: go
-    - role: ruby
-    - role: python
-    - role: nodejs
-    - role: podman
-    - role: powershell
-    - role: docker
-    - role: rust
-    - role: fonts
+    - role: tmux
     - role: secrets
     - role: credentials
     - role: shell_utils
     - role: ssh_server
     - role: ssh_client
-    - role: vpn
-    - role: terminals
-    - role: keyboard_layouts
-    - role: cpp
-    - role: perl
-    - role: java
+
     - role: ansible
+      when: not minimal_mode
+    - role: nodejs
+      when: not minimal_mode
+    - role: ruby
+      when: not minimal_mode
+    - role: java
+      when: not minimal_mode
+    - role: cpp
+      when: not minimal_mode
+    - role: rust
+      when: not minimal_mode
+    - role: go
+      when: not minimal_mode
+    - role: python
+      when: not minimal_mode
+    - role: perl
+      when: not minimal_mode
     - role: latex
-      when: not reduced_check
+      when: not minimal_mode
     - role: lua
-    - role: tmux
+      when: not minimal_mode
     - role: neovim
-      when: not reduced_check
+      when: not minimal_mode
+
+    - role: powershell
+      when: not minimal_mode
+    - role: docker
+      when: not minimal_mode
+    - role: podman
+      when: not minimal_mode
+
+    - role: vpn
+      when: not server_mode and not minimal_mode
+    - role: keyboard_layouts
+      when: not server_mode and not minimal_mode
+    - role: fonts
+      when: not server_mode and not minimal_mode
+    - role: terminals
+      when: not server_mode and not minimal_mode
     - role: chrome
+      when: not server_mode and not minimal_mode
     - role: telegram
+      when: not server_mode and not minimal_mode
     - role: mattermost
+      when: not server_mode and not minimal_mode
     - role: turbovnc
+      when: not server_mode and not minimal_mode
     - role: gnome
+      when: not server_mode and not minimal_mode
+
     - role: common_utils

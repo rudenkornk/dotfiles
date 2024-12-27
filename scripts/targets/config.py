@@ -193,7 +193,8 @@ def _setup_inventory(hostnames: list[str]) -> Path:
 
 class ConfigMode(enum.Enum):
     BOOTSTRAP = enum.auto()
-    REDUCED = enum.auto()
+    MINIMAL = enum.auto()
+    SERVER = enum.auto()
     FULL = enum.auto()
 
     @classmethod

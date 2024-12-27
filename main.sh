@@ -39,10 +39,11 @@ fi
 # uv is required for python and dependency management
 if ! command -v uv &>/dev/null; then
   HOME=${HOME:-$(eval echo ~"$(whoami)")}
+  LOCAL_HOME=${LOCAL_HOME:-$HOME/.local}
   CARGO_HOME=${CARGO_HOME:-$HOME/.cargo}
-  export PATH="$PATH":"$CARGO_HOME/bin"
+  export PATH="$PATH":"$LOCAL_HOME/bin":"$CARGO_HOME/bin"
   if ! command -v uv &>/dev/null; then
-    curl -LsSf https://astral.sh/uv/0.3.0/install.sh | sh
+    curl -LsSf https://astral.sh/uv/0.5.13/install.sh | sh
   fi
 fi
 

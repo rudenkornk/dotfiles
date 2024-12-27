@@ -77,11 +77,6 @@
     gpgkey: "{{ git_gh_cli_gpg }}"
   when: ansible_distribution == "Fedora"
 
-- name: Install GitHub cli
-  become: true
-  ansible.builtin.package:
-    name: gh
-
 # unarchive usually sets owner and group to a current user
 # except for the case when the user is root
 # In such case it can even set different groups in sequential runs,

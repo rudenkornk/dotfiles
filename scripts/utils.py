@@ -1,10 +1,8 @@
 import functools
-import hashlib
 import inspect
 import logging
 import os
 import shlex
-import shutil
 import subprocess
 import sys
 import time
@@ -59,6 +57,7 @@ def _paths2shell(paths: Sequence[Path]) -> str:
 
 def shell_command(
     cmd: Sequence[str | Path] | str,
+    *,
     extra_env: Mapping[str, str | Path] | None = None,
     extra_paths: Sequence[Path] | None = None,
     capture_output: bool = False,
@@ -109,39 +108,10 @@ def shell_command(
     return print_cmd
 
 
-def get_venv(requirements_path: Path) -> Path:
-    requirements_hash = hashlib.md5(requirements_path.read_bytes()).hexdigest()[:12]
-    venv_path = TMP_PATH / "venv" / requirements_hash
-    bin_path = venv_path / "bin"
-    venv_executable = bin_path / "python"
-
-    if venv_executable.exists():
-        return venv_path
-
-    _logger.debug(f"Creating virtual environment in {venv_path} with {requirements_path})")
-    shutil.rmtree(venv_path, ignore_errors=True)
-    run_shell(
-        [sys.executable, "-m", "venv", venv_path],
-        capture_output=True,
-        suppress_cmd_log=True,
-    )
-    if not venv_executable.exists():
-        raise RuntimeError("Failed to create virtual environment. Did you install pip?")
-    run_shell(
-        [venv_executable, "-m", "pip", "install", "-r", requirements_path],
-        requirements_txt=requirements_path,
-        capture_output=True,
-        suppress_cmd_log=True,
-    )
-
-    return venv_path
-
-
 def run_shell(
     cmd: Sequence[str | Path] | str,
     *,
     extra_env: Mapping[str, str | Path] | None = None,
-    requirements_txt: Path | None = None,
     extra_paths: Sequence[Path] | None = None,
     capture_output: bool = False,
     inputs: None | str | bytes = None,
@@ -161,11 +131,6 @@ def run_shell(
         stdout = subprocess.DEVNULL
     if current_loglevel > logging.ERROR and not capture_output and stderr is None:
         stderr = subprocess.DEVNULL
-
-    if requirements_txt is not None:
-        venv_path = get_venv(requirements_txt)
-        extra_paths.append(venv_path / "bin")
-        extra_env["VIRTUAL_ENV"] = venv_path
 
     env = os.environ.copy()
     env.update({k: str(v) for k, v in extra_env.items()})

@@ -31,7 +31,7 @@ cd ~/projects/dotfiles && \
 1. **Easily updatable**.
    Versions are stored in manifests and can be easily updated with a single command.
    `neovim`'s `lazy-lock.json` however is managed separately by [lazy](https://github.com/folke/lazy.nvim).
-1. **Supports & tested under `Ubuntu 22.04-24.04`, `Fedora 38-40`, and also includes WSL support**.
+1. **Supports & tested under `Ubuntu 22.04-24.04`, `Fedora 38-41`, and also includes WSL support**.
    On Windows it integrates with the system clipboard.
 1. **Secrets inside the repo**.
    All the credentials, ssh keys, VPN configs can be stored directly in the repo with support of the [git secret](https://github.com/sobolevn/git-secret).

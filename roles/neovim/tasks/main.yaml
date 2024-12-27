@@ -7,6 +7,14 @@
   delay: "{{ web_delay }}"
   register: neovim_downloaded
   until: neovim_downloaded is not failed
+  # For some exceptionally stupid reason, this task reports changed=True
+  # after docker role executes its main installation step
+  # Specifically, this one:
+  # https://github.com/rudenkornk/dotfiles/blob/f2f8fdfed1ab0973a428d49f1c5b448c28e59cb7/roles/docker/tasks/main.yaml#L61
+  # Other tasks from any other roles do not have such impact
+  # (though I did not check this for sure, just bisected to this task)
+  # Thus, placing here "changed_when: false"
+  changed_when: false
 
 - name: Create symlink to proxied nvim binary
   ansible.builtin.file:

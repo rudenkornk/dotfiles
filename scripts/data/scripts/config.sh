@@ -34,10 +34,15 @@ if [[ "$CONFIG_MODE" == bootstrap ]]; then
   exit
 fi
 
-if [[ "$CONFIG_MODE" == reduced ]]; then
-  REDUCED_CHECK=true
+if [[ "$CONFIG_MODE" == minimal ]]; then
+  MINIMAL_MODE=true
+  SERVER_MODE=false
+elif [[ "$CONFIG_MODE" == server ]]; then
+  MINIMAL_MODE=false
+  SERVER_MODE=true
 elif [[ "$CONFIG_MODE" == full ]]; then
-  REDUCED_CHECK=false
+  MINIMAL_MODE=false
+  SERVER_MODE=false
 else
   echo "Unknown CONFIG_MODE: $CONFIG_MODE"
   exit 1
@@ -49,7 +54,8 @@ if [[ $LOCAL != true ]] || [[ "$REMOTE_USER" == "$USER" ]]; then
   ANSIBLE_LOG_PATH="$LOGS_PATH/main.log" \
     ansible-playbook \
     --extra-vars "hosts_var=$HOSTS" \
-    --extra-vars "{ reduced_check: $REDUCED_CHECK }" \
+    --extra-vars "{ minimal_mode: $MINIMAL_MODE }" \
+    --extra-vars "{ server_mode: $SERVER_MODE }" \
     --user "$REMOTE_USER" \
     --inventory "$INVENTORY" "$PLAYBOOK"
 else
@@ -94,7 +100,8 @@ else
         ANSIBLE_LOG_PATH=\"$LOGS_PATH/main.log\" \
         ansible-playbook \
         --extra-vars \"hosts_var=$HOSTS\" \
-        --extra-vars \"{ reduced_check: $REDUCED_CHECK }\" \
+        --extra-vars \"{ minimal_mode: $MINIMAL_MODE }\" \
+        --extra-vars \"{ server_mode: $SERVER_MODE }\" \
         --user \"$REMOTE_USER\" \
         --inventory \"$INVENTORY\" \"$PLAYBOOK\" \
       "

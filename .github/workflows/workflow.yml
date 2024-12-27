@@ -75,9 +75,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Check remote config
-        run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced
+        run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal
       - name: Check remote idempotence
-        run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode reduced --verify-unchanged
+        run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal --verify-unchanged
 
   lint:
     runs-on: ubuntu-22.04

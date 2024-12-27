@@ -1,6 +1,7 @@
 extra_vars:
   hosts_var: localhost
-  reduced_check: false
+  minimal_mode: false
+  server_mode: false
   container: dotfiles_ubuntu_22.04
   image: ubuntu:22.04
   user: root

@@ -1,4 +1,3 @@
 dependencies:
   - role: git
-  - role: go
   - role: shell

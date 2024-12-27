@@ -116,6 +116,8 @@
       - "use_gui: {{ use_gui }}"
       - "user: {{ ansible_user }}"
       - "user_id: {{ user_id }}"
+      - "minimal_mode: {{ minimal_mode }}"
+      - "server_mode: {{ server_mode }}"
 
 - name: Set correct state for directory /run/user/{{ user_id }}
   become: true

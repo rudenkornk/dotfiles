@@ -173,6 +173,16 @@
 
 - name: Simple configuration version management
   block:
+    - name: Create global directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0o755"
+      loop:
+        - "{{ home }}/.cache"
+        - "{{ home }}/.config"
+        - "{{ home }}/.local/share"
+
     - name: Create neovim configuration directories
       ansible.builtin.file:
         path: "{{ item }}"

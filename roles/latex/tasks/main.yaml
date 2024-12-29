@@ -40,7 +40,7 @@
   delay: "{{ web_delay }}"
   register: latex_installed
   until: latex_installed is not failed
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu' and false
 
 - name: Install draw.io on Fedora
   become: true
@@ -51,4 +51,4 @@
   delay: "{{ web_delay }}"
   register: latex_installed
   until: latex_installed is not failed
-  when: ansible_distribution == 'Fedora'
+  when: ansible_distribution == 'Fedora' and false

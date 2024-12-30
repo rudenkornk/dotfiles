@@ -7,7 +7,8 @@ vim.opt.keymap = "rnk-qwerty-jcuken"
 vim.opt.iminsert = 0
 vim.opt.imsearch = -1
 
-vim.g.autoformat = false
+vim.g.autoformat = true
+vim.g.snacks_animate = false
 
 vim.opt.relativenumber = false
 vim.wo.wrap = true

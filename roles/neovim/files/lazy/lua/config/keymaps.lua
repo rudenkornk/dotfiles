@@ -98,9 +98,11 @@ vim.keymap.set({ "x" }, "<leader>vs", ":sort i<CR>", { desc = "Sort selected lin
 vim.keymap.set({ "n" }, "<C-q>", "a<C-^><ESC>", { desc = "Toggle keyboard layout" })
 
 vim.keymap.set({ "n" }, "<A-m>", function()
-  LazyVim.terminal(nil, { cwd = LazyVim.root() })
+  Snacks.terminal(nil, { cwd = LazyVim.root() })
 end, { desc = "Terminal (Root Dir)" })
 vim.keymap.set({ "t" }, "<A-m>", "<cmd>close<cr>", { desc = "Close terminal" })
 
 vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
-vim.keymap.set({ "n" }, "<S-q>", LazyVim.ui.bufremove, { desc = "Delete current buffer" })
+vim.keymap.set({ "n" }, "<S-q>", function()
+  Snacks.bufdelete()
+end, { desc = "Delete current buffer" })

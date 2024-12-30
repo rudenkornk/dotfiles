@@ -41,8 +41,7 @@ manifest: # noqa: var-naming[no-role-prefix]
   drawio:
     url: https://github.com/jgraph/drawio-desktop/releases/download/v25.0.2/drawio-{{ pack_arch }}-25.0.2.{{ pack }}
   firacode:
-    lock: true
-    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
     version: b8d2b0df7e1241c09eff21dbb63ebcc841efc824

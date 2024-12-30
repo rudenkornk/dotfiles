@@ -50,7 +50,11 @@ def _start_container(name: str) -> None:
             REPO_PATH / "inventory.yaml",
             SCRIPTS_PATH / "playbook_dotfiles_container.yaml",
         ],
-        extra_env={"ANSIBLE_LOG_PATH": logs, "ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
+        extra_env={
+            "ANSIBLE_LOG_PATH": logs,
+            "ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH,
+            "ANSIBLE_FORCE_COLOR": "True",
+        },
     )
 
 
@@ -224,6 +228,7 @@ def config(hostnames: list[str], user: str, verify_unchanged: bool, mode: Config
         ["bash", SCRIPTS_PATH / "config.sh"],
         extra_env={
             "ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH,
+            "ANSIBLE_FORCE_COLOR": "True",
             "ANSIBLE_VERBOSITY": _ansible_verbosity(),
             "CONFIG_MODE": mode.name.lower(),
             "HOSTS": hosts_var,

@@ -37,6 +37,8 @@
       when: not minimal_mode
     - role: lua
       when: not minimal_mode
+    - role: nix
+      when: not minimal_mode
     - role: neovim
       when: not minimal_mode
 

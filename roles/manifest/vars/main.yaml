@@ -54,6 +54,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/jesseduffield/lazygit/releases/download/v0.44.1/lazygit_0.44.1_Linux_{{ ansible_architecture }}.tar.gz
   neovim:
     url: https://github.com/neovim/neovim/releases/download/v0.10.3/nvim-linux64.tar.gz
+  nixfmt:
+    url: https://github.com/NixOS/nixfmt/releases/download/v0.6.0/nixfmt-x86_64-linux
   nvchad2:
     url: https://github.com/NvChad/NvChad
     version: e5f8a38ae3d6b3bedf68f29b0e96dad7a4ca2da5

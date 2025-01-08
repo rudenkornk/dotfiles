@@ -1,0 +1,9 @@
+- name: Download nixfmt
+  ansible.builtin.get_url:
+    url: "{{ manifest.nixfmt.url }}"
+    dest: "{{ home }}/.local/bin/nixfmt"
+    mode: "0o755"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: nixfmt_downloaded
+  until: nixfmt_downloaded is not failed

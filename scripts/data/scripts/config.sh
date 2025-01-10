@@ -8,6 +8,7 @@ set -o xtrace
 # ARGS LIST:
 #
 # ANSIBLE_COLLECTIONS_PATH
+# ANSIBLE_FORCE_COLOR
 # ANSIBLE_VERBOSITY
 # CONFIG_MODE
 # HOSTS
@@ -95,6 +96,7 @@ else
         sudo bash -c '' && \
         export PATH=\"$PATH\" && \
         export ANSIBLE_COLLECTIONS_PATH=\"$ANSIBLE_COLLECTIONS_PATH\" && \
+        export ANSIBLE_FORCE_COLOR=\"$ANSIBLE_FORCE_COLOR\" && \
         export ANSIBLE_VERBOSITY=\"$ANSIBLE_VERBOSITY\" && \
 
         ANSIBLE_LOG_PATH=\"$LOGS_PATH/main.log\" \

@@ -75,12 +75,19 @@
     state: directory
     mode: "0o755"
 
+- name: Check if daemon.json is decrypted locally
+  delegate_to: localhost
+  ansible.builtin.stat:
+    path: "{{ role_path }}/files/daemon.json"
+  register: docker_daemon_json
+
 - name: Copy daemon.json
   become: true
   ansible.builtin.copy:
     src: "{{ role_path }}/files/daemon.json"
     dest: "/etc/docker/daemon.json"
     mode: "0o644"
+  when: docker_daemon_json.stat.exists
 
 - name: Add to docker group {{ ansible_user }}
   become: true

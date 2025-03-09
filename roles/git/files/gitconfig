@@ -25,6 +25,29 @@
   st = status
   sw = switch
   wt = worktree
+[core]
+  editor = nvim
+  pager = bat --plain
+[credentials]
+  helper = store
+[init]
+  defaultBranch = main
+[pull]
+  rebase = true
+[push]
+  default = current
+[rebase]
+  autoStash = true
+[rerere]
+# Very helpful when you rebase a merge commit
+enabled = true
+[fetch]
+  # https://youtu.be/aolI_Rz0ZqY?si=KpfeZxRHkhZGZ5N_&t=1699
+  writeCommitGraph = true
+
+[include]
+  path = ~/.gitconfig.user
+
 [blame]
   coloring = highlightRecent
   date = short
@@ -117,20 +140,3 @@
     39 day ago,  83, \
     24 day ago, 120, \
     10 day ago, 156
-[core]
-  editor = nvim
-  pager = bat --plain
-[credentials]
-  helper = store
-[init]
-  defaultBranch = main
-[pull]
-  rebase = true
-[push]
-  default = current
-[rebase]
-  autoStash = true
-[rerere]
-enabled = true
-[include]
-  path = ~/.gitconfig.user

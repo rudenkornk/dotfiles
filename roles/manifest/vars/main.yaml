@@ -30,32 +30,32 @@ manifest_pre:
     rpm: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-rpm-x64.rpm
     deb: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-Debian-x64.{{ pack }}
   turbovnc:
-    rpm: https://github.com/TurboVNC/turbovnc/releases/download/3.1.3/turbovnc-3.1.3.{{ ansible_architecture }}.rpm
-    deb: https://github.com/TurboVNC/turbovnc/releases/download/3.1.3/turbovnc_3.1.3_{{ pack_arch }}.{{ pack }}
+    rpm: https://github.com/TurboVNC/turbovnc/releases/download/3.1.4/turbovnc-3.1.4.{{ ansible_architecture }}.rpm
+    deb: https://github.com/TurboVNC/turbovnc/releases/download/3.1.4/turbovnc_3.1.4_{{ pack_arch }}.{{ pack }}
 
 manifest: # noqa: var-naming[no-role-prefix]
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v3.31.3/cmake-3.31.3-linux-{{ ansible_architecture }}.sh
+    url: https://github.com/Kitware/CMake/releases/download/v3.31.6/cmake-3.31.6-linux-{{ ansible_architecture }}.sh
   drawio:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v25.0.2/drawio-{{ pack_arch }}-25.0.2.{{ pack }}
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v26.0.16/drawio-{{ pack_arch }}-26.0.16.{{ pack }}
   firacode:
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: b8d2b0df7e1241c09eff21dbb63ebcc841efc824
+    version: 10cbac20f96de35acf272ddc4a998868c5694bd9
   hiddify:
     url: "{{ {'Ubuntu': manifest_pre.hiddify.deb, 'Fedora': manifest_pre.hiddify.rpm}[ansible_distribution] }}"
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
-    version: 1d379066fc44f58f4131421c31290bb8c82178d5
+    version: 31e91816bc5af6c819312d2c783f2949afa4b07a
   lazygit:
-    url: https://github.com/jesseduffield/lazygit/releases/download/v0.44.1/lazygit_0.44.1_Linux_{{ ansible_architecture }}.tar.gz
+    url: https://github.com/jesseduffield/lazygit/releases/download/v0.48.0/lazygit_0.48.0_Linux_{{ ansible_architecture }}.tar.gz
   neovim:
-    url: https://github.com/neovim/neovim/releases/download/v0.10.3/nvim-linux64.tar.gz
+    url: https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux-{{ ansible_architecture }}.tar.gz
   nixfmt:
-    url: https://github.com/NixOS/nixfmt/releases/download/v0.6.0/nixfmt-x86_64-linux
+    url: https://github.com/NixOS/nixfmt/releases/download/v0.6.0/nixfmt-{{ ansible_architecture }}-linux
   nvchad2:
     url: https://github.com/NvChad/NvChad
     version: e5f8a38ae3d6b3bedf68f29b0e96dad7a4ca2da5
@@ -69,6 +69,6 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: "{{ {'Ubuntu': manifest_pre.turbovnc.deb, 'Fedora': manifest_pre.turbovnc.rpm}[ansible_distribution] }}"
   vcpkg:
     url: https://github.com/microsoft/vcpkg
-    version: 80d54ff62d528339c626a6fbc3489a7f25956ade
+    version: 300239058e33420acd153135b3f6e6b187828992
   yazi:
-    url: https://github.com/sxyazi/yazi/releases/download/v0.4.2/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip
+    url: https://github.com/sxyazi/yazi/releases/download/v25.3.2/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip

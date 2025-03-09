@@ -39,6 +39,7 @@
   community.general.npm:
     name: "{{ item }}"
     global: true
+  when: false # broken
   loop:
     - neovim
     - npm-groovy-lint

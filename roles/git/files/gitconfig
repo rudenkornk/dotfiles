@@ -140,3 +140,5 @@ enabled = true
     39 day ago,  83, \
     24 day ago, 120, \
     10 day ago, 156
+[maintenance]
+	repo = /home/rudenkornk/projects/llvm-project

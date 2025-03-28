@@ -7,7 +7,7 @@ vim.opt.keymap = "rnk-qwerty-jcuken"
 vim.opt.iminsert = 0
 vim.opt.imsearch = -1
 
-vim.g.autoformat = true
+vim.g.autoformat = false
 vim.g.snacks_animate = false
 
 vim.opt.relativenumber = false
@@ -21,3 +21,5 @@ vim.filetype.add({
     ["playbook.*.yaml"] = "yaml.ansible",
   },
 })
+-- mitigate the long clipboard loading issue
+vim.g.clipboard = require("config.clipboard")

@@ -21,3 +21,5 @@ vim.filetype.add({
     ["playbook.*.yaml"] = "yaml.ansible",
   },
 })
+-- mitigate the long clipboard loading issue
+vim.g.clipboard = require("config.clipboard")

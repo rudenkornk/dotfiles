@@ -10,4 +10,4 @@ if [[ -f $proxy ]]; then
   source $proxy
 fi
 
-~/.local/nvim-linux64/bin/nvim "$@"
+~/.local/nvim-linux-"$(uname --machine)"/bin/nvim "$@"

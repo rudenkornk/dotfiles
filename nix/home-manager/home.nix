@@ -18,17 +18,59 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    acpi
     ansible
     ansible-lint
+    automake
+    bzip2
+    ccache
+    cmake
     curl
+    docker
+    dos2unix
+    file
+    flameshot
+    flex
+    gcc14
+    gdb
+    gh
+    git
+    git-secret
+    gnumake
     gnupg
-    rsync
-    tzdata
-    unzip
-    xz
-    ntp
-    tmux
+    gnutar
+    go
+    graphviz
+    gzip
+    htop-vim
+    iptables
+    jdk23
+    lazygit
+    lftp
+    #llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx
+    lsb-release
+    mr
     neofetch
+    nettools
+    ninja
+    ntp
+    patch
+    pkg-config
+    podman
+    rsync
+    tcl
+    tmux
+    tzdata
+    unar
+    unrar
+    unzip
+    unzip
+    valgrind
+    vcpkg
+    wget
+    xsel
+    xz
+    zip
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the

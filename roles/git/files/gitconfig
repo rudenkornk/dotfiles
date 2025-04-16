@@ -9,13 +9,14 @@
   cp = cherry-pick
   df = diff
   fp = format-patch
-  ft = fetch --all --prune
+  ft = fetch --all --prune --prune-tags
   l = log
   lg = log --graph
   ll = log --oneline
   llg = log --oneline --graph
   ls = log --stat
   mb = merge-base
+  pf = push --force-with-lease
   rb = rebase
   rbi = rebase --rebase-merges --interactive HEAD~26
   rh = reset --hard
@@ -27,7 +28,25 @@
   wt = worktree
 [core]
   editor = nvim
-  pager = bat --plain
+
+# https://www.youtube.com/watch?v=0FkBpQxOPt4
+[gpg]
+  format = ssh
+[column]
+  ui = auto
+[branch]
+  sort = -committerdate
+[tag]
+  sort = version:refname
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+[help]
+  autocorrect = prompt
+[commit]
+  verbose = true
 [credentials]
   helper = store
 [init]
@@ -36,14 +55,19 @@
   rebase = true
 [push]
   default = current
+  followTags = true
 [rebase]
   autoStash = true
+  autoSquash = true
 [rerere]
-# Very helpful when you rebase a merge commit
-enabled = true
+  # Very helpful when you rebase a merge commit
+  enabled = true
+  autoUpdate = true
 [fetch]
   # https://youtu.be/aolI_Rz0ZqY?si=KpfeZxRHkhZGZ5N_&t=1699
   writeCommitGraph = true
+[merge]
+  # conflictStyle = zdiff3 # not supported in old git versions
 
 [include]
   path = ~/.gitconfig.user

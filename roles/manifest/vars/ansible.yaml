@@ -3,7 +3,7 @@
 manifest: # noqa: var-naming[no-role-prefix]
   ansible_community_general:
     url: https://github.com/ansible-collections/community.general
-    version: 10.4.0
+    version: 10.5.0
   ansible_containers_podman:
     url: https://github.com/containers/ansible-podman-collections
     version: 1.16.3

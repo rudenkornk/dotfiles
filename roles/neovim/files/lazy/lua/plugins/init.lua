@@ -25,7 +25,10 @@ return {
       },
     },
   },
-  { "folke/edgy.nvim", opts = { animate = { enabled = false } } },
+  {
+    "folke/edgy.nvim",
+    opts = require("plugins.configs.edgy").opts,
+  },
   {
     "folke/trouble.nvim",
     keys = {

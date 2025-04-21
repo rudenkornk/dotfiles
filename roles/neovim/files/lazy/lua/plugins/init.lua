@@ -56,10 +56,6 @@ return {
     opts = require("plugins.configs.lualine").opts,
   },
   {
-    "nvim-neo-tree/neo-tree.nvim",
-    opts = { filesystem = { filtered_items = { hide_dotfiles = false, hide_gitignored = false } } },
-  },
-  {
     "nvim-treesitter/nvim-treesitter",
     opts = require("plugins.configs.treesitter"),
   },
@@ -74,10 +70,6 @@ return {
   {
     "williamboman/mason.nvim",
     opts = require("plugins.configs.mason"),
-  },
-  {
-    "linux-cultist/venv-selector.nvim",
-    opts = { settings = { options = { notify_user_on_venv_activation = false } } },
   },
 
   {

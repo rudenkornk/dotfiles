@@ -25,6 +25,7 @@ return {
       },
     },
   },
+  { "folke/edgy.nvim", opts = { animate = { enabled = false } } },
   {
     "folke/trouble.nvim",
     keys = {

@@ -30,6 +30,12 @@ return {
     opts = require("plugins.configs.edgy").opts,
   },
   {
+    "folke/snacks.nvim",
+    opts = {
+      picker = { hidden = true, ignored = true },
+    },
+  },
+  {
     "folke/trouble.nvim",
     keys = {
       { "<leader>h", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },

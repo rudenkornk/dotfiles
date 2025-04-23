@@ -5,7 +5,7 @@ dependencies:
   - role: git
   - role: go
   - role: java
-  - role: latex
+  # - role: latex
   - role: nix
   - role: nodejs
   - role: python

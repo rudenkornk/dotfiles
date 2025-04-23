@@ -34,7 +34,7 @@
     - role: perl
       when: not minimal_mode
     - role: latex
-      when: not minimal_mode
+      when: not minimal_mode and false
     - role: lua
       when: not minimal_mode
     - role: nix

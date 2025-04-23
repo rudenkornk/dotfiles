@@ -1,27 +1,18 @@
-- name: Add eza gpg key (for Ubuntu < 24.04)
-  become: true
-  ansible.builtin.get_url:
-    url: "{{ shell_utils_eza_gpg }}"
-    dest: "{{ apt_keys }}/eza.asc"
-    mode: "0o644"
+- name: Install eza
+  ansible.builtin.unarchive:
+    src: "{{ manifest.eza.url }}"
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: shell_utils_installed
-  until: shell_utils_installed is not failed
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('24.04', '<')
-
-- name: Add gierens repo (for Ubuntu < 24.04)
-  become: true
-  ansible.builtin.apt_repository:
-    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/eza.asc] {{ shell_utils_gierens_repo }}
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('24.04', '<')
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
 
 - name: Install eza, fd, bat, zoxide, hexyl, jq and moreutils
   become: true
   ansible.builtin.package:
     name:
       - bat
-      - eza
       - fd-find
       - hexyl
       - jq

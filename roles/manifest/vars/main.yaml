@@ -40,6 +40,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-{{ ansible_architecture }}.sh
   drawio:
     url: https://github.com/jgraph/drawio-desktop/releases/download/v26.2.2/drawio-{{ pack_arch }}-26.2.2.{{ pack }}
+  eza:
+    url: https://github.com/eza-community/eza/releases/download/v0.21.1/eza_{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   firacode:
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip
   fzf:

@@ -45,7 +45,7 @@
 [help]
   autocorrect = prompt
 [commit]
-  verbose = false
+  verbose = true
 [credentials]
   helper = store
 [init]

@@ -62,46 +62,6 @@
   until: neovim_status is not failed
   changed_when: "'already installed' not in neovim_status.stdout"
 
-- name: Install NvChad 2
-  block:
-    - name: Install NvChad 2
-      ansible.builtin.git:
-        repo: "{{ manifest.nvchad2.url }}"
-        dest: "{{ neovim_base }}_2/config"
-        version: "{{ manifest.nvchad2.version }}"
-        force: true
-      register: neovim_nvchad_installed
-      retries: "{{ web_retries }}"
-      delay: "{{ web_delay }}"
-      until: neovim_nvchad_installed is not failed
-      changed_when: neovim_nvchad_installed.before != neovim_nvchad_installed.after
-
-    - name: Create symlink to NvChad config
-      ansible.builtin.file:
-        src: "{{ role_host_path }}/files/nvchad2"
-        dest: "{{ neovim_base }}_2/config/lua/custom"
-        state: link
-        force: true
-
-    - name: Create neovim keymap directory
-      ansible.builtin.file:
-        path: "{{ neovim_base }}_2/config/keymap"
-        state: directory
-        mode: "0o755"
-
-    - name: Create symlink to rnk keymap
-      ansible.builtin.file:
-        src: "{{ dotfiles_host_path }}/roles/keyboard_layouts/files/rnk-qwerty-jcuken.vim"
-        dest: "{{ neovim_base }}_2/config/keymap/rnk-qwerty-jcuken.vim"
-        state: link
-        force: true
-
-    - name: Set up clipboard for neovim
-      ansible.builtin.template:
-        src: clipboard.lua
-        dest: "{{ neovim_base }}_2/config/lua/custom/clipboard.lua"
-        mode: "0o644"
-
 - name: Install LazyVim
   block:
     - name: Install lazy.nvim

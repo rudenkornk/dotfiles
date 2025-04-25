@@ -58,10 +58,6 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-{{ ansible_architecture }}.tar.gz
   nixfmt:
     url: https://github.com/NixOS/nixfmt/releases/download/v0.6.0/nixfmt-{{ ansible_architecture }}-linux
-  nvchad2:
-    url: https://github.com/NvChad/NvChad
-    version: e5f8a38ae3d6b3bedf68f29b0e96dad7a4ca2da5
-    lock: true
   stylua:
     url: https://github.com/JohnnyMorganz/StyLua/releases/download/v2.0.2/stylua-linux-{{ ansible_architecture }}.zip
   tpm:

@@ -2,6 +2,7 @@ import enum
 import json
 import logging
 import sys
+from itertools import chain
 from pathlib import Path
 
 from typing_extensions import Self
@@ -140,10 +141,13 @@ class _Domains:
         return self.get(domain)
 
     def get(self, domain: DConfKey) -> _DomainKind:
-        for key, kind in self.domains.items():
-            if str(domain).startswith(key):
-                return kind
-        return _DomainKind.UNKNOWN
+        _, result = max(
+            # Use (cheaper?) tuple `(("", _DomainKind.UNKNOWN),)` instead of
+            # creating a full dict `{"": _DomainKind.UNKNOWN}.items()` for the default value
+            chain((("", _DomainKind.UNKNOWN),), self.domains.items()),
+            key=lambda item: (str(domain).startswith(item[0]), len(item[0])),
+        )
+        return result
 
 
 def generate_ansible_vars(entries: DConf, vars_path: Path) -> None:

@@ -72,7 +72,7 @@ return {
           tmux = {
             name = "tmux",
             score_offset = -50,
-            opts = { label = " 🟩" },
+            opts = { label = " 🟩", all_panes = true },
           },
         },
       },

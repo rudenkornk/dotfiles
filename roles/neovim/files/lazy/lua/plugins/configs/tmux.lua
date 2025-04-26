@@ -1,5 +1,26 @@
 local M = {}
 
+-- https://github.com/folke/snacks.nvim/discussions/1802
+-- https://github.com/aserowy/tmux.nvim/issues/133
+-- https://github.com/folke/snacks.nvim/issues/1350
+-- https://github.com/folke/snacks.nvim/discussions/1332
+local function is_nvim_float()
+  if Snacks then
+    local is_explorer = vim.iter(Snacks.picker.get({ source = "explorer" })):any(function(picker)
+      return picker:is_focused()
+    end)
+    if is_explorer then
+      return false
+    end
+  end
+  return vim.api.nvim_win_get_config(0).relative ~= ""
+end
+
+M.config = function(opts)
+  require("tmux").setup(opts)
+  require("tmux.wrapper.nvim").is_nvim_float = is_nvim_float
+end
+
 M.opts = {
   navigation = {
     enable_default_keybindings = false,

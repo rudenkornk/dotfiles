@@ -15,10 +15,20 @@ desc = "Prev item"
 
 [[manager.prepend_keymap]]
 on = ["<C-d>"]
+run = "arrow 20"
+desc = "Scroll file list down"
+
+[[manager.prepend_keymap]]
+on = ["<C-u>"]
+run = "arrow -20"
+desc = "Scroll file list up"
+
+[[manager.prepend_keymap]]
+on = ["<C-f>"]
 run = "seek 10"
 desc = "Scroll content down"
 
 [[manager.prepend_keymap]]
-on = ["<C-u>"]
+on = ["<C-b>"]
 run = "seek -10"
 desc = "Scroll content up"

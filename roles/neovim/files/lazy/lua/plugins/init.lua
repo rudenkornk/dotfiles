@@ -44,14 +44,6 @@ return {
     opts = { highlight = { on_put = false, on_yank = false, timer = 0 } },
   },
   {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "andersevenrud/cmp-tmux",
-      "hrsh7th/cmp-emoji",
-    },
-    opts = require("plugins.configs.cmp").opts,
-  },
-  {
     "mfussenegger/nvim-dap",
     keys = require("plugins.configs.dap").keys,
   },
@@ -66,6 +58,25 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = require("plugins.configs.treesitter"),
+  },
+  {
+    "saghen/blink.cmp",
+    dependencies = {
+      "andersevenrud/cmp-tmux",
+      "hrsh7th/cmp-emoji",
+    },
+    opts = {
+      sources = {
+        compat = { "emoji", "tmux" },
+        providers = {
+          tmux = {
+            name = "tmux",
+            score_offset = -50,
+            opts = { label = " 🟩" },
+          },
+        },
+      },
+    },
   },
   {
     "stevearc/conform.nvim",

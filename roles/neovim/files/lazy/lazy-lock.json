@@ -13,6 +13,8 @@
   "catppuccin": { "branch": "main", "commit": "5b5e3aef9ad7af84f463d17b5479f06b87d5c429" },
   "clangd_extensions.nvim": { "branch": "main", "commit": "db28f29be928d18cbfb86fbfb9f83f584f658feb" },
   "cmake-tools.nvim": { "branch": "master", "commit": "a5d5bf0a93bb96085502334a5036fc054ad9cf33" },
+  "cmp-emoji": { "branch": "main", "commit": "e8398e2adf512a03bb4e1728ca017ffeac670a9f" },
+  "cmp-tmux": { "branch": "main", "commit": "95b1b921802e6f60627b3e76afb9380fddd87f9a" },
   "conform.nvim": { "branch": "master", "commit": "6632e7d788a85bf8405ea0c812d343fc308b7b8c" },
   "copilot.lua": { "branch": "master", "commit": "4d4840b08e413e2f1ee32e20e8e9010c57a984e2" },
   "crates.nvim": { "branch": "main", "commit": "73d2c590c74a0c582144987a4decb4a642755859" },

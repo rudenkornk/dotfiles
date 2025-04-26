@@ -1,3 +1,9 @@
 gui:
   # The number of lines you scroll by when scrolling the main window
   scrollHeight: 20
+keybinding:
+  universal:
+    prevPage: "<C-u>"
+    nextPage: "<C-d>"
+    scrollUpMain-alt2: <C-b>
+    scrollDownMain-alt2: <C-f>

@@ -45,9 +45,7 @@ M.keys = {
   {
     "<A-x>h",
     function()
-      -- See https://github.com/aserowy/tmux.nvim/issues/125
-      require("tmux.configuration.options").resize.resize_step_x = 20
-      require("tmux").resize_left()
+      require("tmux").resize_left(20)
     end,
     desc = "Resize window to the left",
     mode = { "c", "n", "t", "v", "i" },
@@ -55,9 +53,7 @@ M.keys = {
   {
     "<A-x>j",
     function()
-      -- See https://github.com/aserowy/tmux.nvim/issues/125
-      require("tmux.configuration.options").resize.resize_step_y = 20
-      require("tmux").resize_bottom()
+      require("tmux").resize_bottom(20)
     end,
     desc = "Resize window to the bottom",
     mode = { "c", "n", "t", "v", "i" },
@@ -65,9 +61,7 @@ M.keys = {
   {
     "<A-x>k",
     function()
-      -- See https://github.com/aserowy/tmux.nvim/issues/125
-      require("tmux.configuration.options").resize.resize_step_y = 20
-      require("tmux").resize_top()
+      require("tmux").resize_top(20)
     end,
     desc = "Resize window to the top",
     mode = { "c", "n", "t", "v", "i" },
@@ -75,9 +69,7 @@ M.keys = {
   {
     "<A-x>l",
     function()
-      -- See https://github.com/aserowy/tmux.nvim/issues/125
-      require("tmux.configuration.options").resize.resize_step_x = 20
-      require("tmux").resize_right()
+      require("tmux").resize_right(20)
     end,
     desc = "Resize window to the right",
     mode = { "c", "n", "t", "v", "i" },
@@ -85,9 +77,7 @@ M.keys = {
   {
     "<A-x><S-h>",
     function()
-      -- See https://github.com/aserowy/tmux.nvim/issues/125
-      require("tmux.configuration.options").resize.resize_step_x = 1
-      require("tmux").resize_left()
+      require("tmux").resize_left(1)
     end,
     desc = "Resize window to the left",
     mode = { "c", "n", "t", "v", "i" },
@@ -95,9 +85,7 @@ M.keys = {
   {
     "<A-x><S-j>",
     function()
-      -- See https://github.com/aserowy/tmux.nvim/issues/125
-      require("tmux.configuration.options").resize.resize_step_y = 1
-      require("tmux").resize_bottom()
+      require("tmux").resize_bottom(1)
     end,
     desc = "Resize window to the bottom",
     mode = { "c", "n", "t", "v", "i" },
@@ -105,9 +93,7 @@ M.keys = {
   {
     "<A-x><S-k>",
     function()
-      -- See https://github.com/aserowy/tmux.nvim/issues/125
-      require("tmux.configuration.options").resize.resize_step_y = 1
-      require("tmux").resize_top()
+      require("tmux").resize_top(1)
     end,
     desc = "Resize window to the top",
     mode = { "c", "n", "t", "v", "i" },
@@ -115,9 +101,7 @@ M.keys = {
   {
     "<A-x><S-l>",
     function()
-      -- See https://github.com/aserowy/tmux.nvim/issues/125
-      require("tmux.configuration.options").resize.resize_step_x = 1
-      require("tmux").resize_right()
+      require("tmux").resize_right(1)
     end,
     desc = "Resize window to the right",
     mode = { "c", "n", "t", "v", "i" },

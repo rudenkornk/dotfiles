@@ -12,6 +12,7 @@ gnome_rules:
   /org/gnome/desktop/background: excluded
   /org/gnome/desktop/calendar: included
   /org/gnome/desktop/input-sources: included
+  /org/gnome/desktop/interface/color-scheme: excluded
   /org/gnome/desktop/interface: included
   /org/gnome/desktop/notifications: excluded
   /org/gnome/desktop/peripherals: included

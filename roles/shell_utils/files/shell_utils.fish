@@ -38,7 +38,7 @@ fish_add_path ~/.fzf/bin
 
 set --export FZF_DEFAULT_OPTS \
     --ansi \
-    --bind ctrl-b:half-page-up,ctrl-f:half-page-down,ctrl-u:preview-page-up,ctrl-d:preview-page-down \
+    --bind ctrl-u:half-page-up,ctrl-d:half-page-down,ctrl-b:preview-page-up,ctrl-f:preview-page-down \
     --border \
     --cycle \
     --height=90% \

@@ -36,7 +36,13 @@
   become: true
   ansible.builtin.dnf:
     name:
-      - dnf-command(config-manager)
+      # Disable dnf-command(config-manager) because it causes libdnf5 to crash:
+      #    File \"/usr/lib64/python3.13/site-packages/libdnf5/rpm.py\", line 209, in parse
+      #    return _rpm.Nevra_parse(*args)
+      #           ~~~~~~~~~~~~~~~~^^^^^^^
+      #    libdnf5.exception.RpmNevraIncorrectInputError:
+      #        Invalid character '(' in NEVRA string \"dnf-command(config-manager)\"
+      # - dnf-command(config-manager)
       - dnf-plugins-core
       - util-linux
   when: ansible_distribution == "Fedora"

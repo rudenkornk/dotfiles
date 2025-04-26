@@ -3,7 +3,7 @@
 # If no rule matches, "excluded" is used as default
 gnome_rules:
   /ca/desrt: excluded
-  /com/github/wwmm/easyeffects: excluded
+  /com/github/wwmm/easyeffects: included
   /org/gnome/boxes: excluded
   /org/gnome/calculator/window-size: excluded
   /org/gnome/calculator: included
@@ -31,6 +31,8 @@ gnome_rules:
   /org/gnome/nautilus: excluded
   /org/gnome/nm-applet/eap: excluded
   /org/gnome/portal/filechooser: excluded
+  /org/gnome/Ptyxis: excluded
+  /org/gnome/settings-daemon/plugins/color: included
   /org/gnome/settings-daemon/plugins/media-keys: included
   /org/gnome/settings-daemon/plugins/power: included
   /org/gnome/Settings: excluded
@@ -38,7 +40,10 @@ gnome_rules:
   /org/gnome/shell/command-history: excluded
   /org/gnome/shell/favorite-apps: included
   /org/gnome/shell/keybindings: included
+  /org/gnome/shell/last-selected-power-profile: excluded
+  /org/gnome/shell/remember-mount-password: included
   /org/gnome/shell/welcome-dialog-last-shown-version: excluded
+  /org/gnome/Snapshot: "included"
   /org/gnome/software: excluded
   /org/gnome/system/locale: included
   /org/gnome/Totem: included

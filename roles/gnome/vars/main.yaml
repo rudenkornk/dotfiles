@@ -17,7 +17,6 @@ gnome_settings:
   /org/gnome/desktop/input-sources/sources: "[('xkb', 'en_rnk+qwerty_rnk'), ('xkb', 'ru_rnk+jcuken_rnk')]"
   /org/gnome/desktop/input-sources/xkb-options: "['lv3:ralt_switch']"
   /org/gnome/desktop/interface/clock-show-weekday: "true"
-  /org/gnome/desktop/interface/color-scheme: "'prefer-dark'"
   /org/gnome/desktop/peripherals/keyboard/numlock-state: "true"
   /org/gnome/desktop/peripherals/mouse/speed: "0.33082706766917291"
   /org/gnome/desktop/peripherals/touchpad/speed: "0.21052631578947367"

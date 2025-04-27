@@ -61,22 +61,8 @@ return {
   },
   {
     "saghen/blink.cmp",
-    dependencies = {
-      "andersevenrud/cmp-tmux",
-      "hrsh7th/cmp-emoji",
-    },
-    opts = {
-      sources = {
-        compat = { "emoji", "tmux" },
-        providers = {
-          tmux = {
-            name = "tmux",
-            score_offset = -50,
-            opts = { label = " 🟩", all_panes = true },
-          },
-        },
-      },
-    },
+    dependencies = require("plugins.configs.blink").dependencies,
+    opts = require("plugins.configs.blink").opts,
   },
   {
     "stevearc/conform.nvim",

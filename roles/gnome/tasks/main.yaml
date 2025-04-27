@@ -21,4 +21,11 @@
     # string filter is important here, see notes for the dconf module:
     # https://docs.ansible.com/ansible/latest/collections/community/general/dconf_module.html
     value: "{{ item.value | string }}"
+  register: gnome_result
+  # Using W/A for complicated string values in "custom-keybindings",
+  # where Ansible thinks, that value has changed, while it hasn't.
+  # For example:
+  # /org/.../custom-keybindings/custom1/command: '"bash -c ''flameshot gui &> /tmp/flameshot_log_$USER''"'
+  # Ansible misinterprets this as changed (supposedly) due to complicated parsing of qoutes.
+  changed_when: gnome_result.changed and 'custom-keybindings' not in item.key
   loop: "{{ gnome_settings | dict2items }}"

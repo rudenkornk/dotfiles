@@ -25,10 +25,10 @@ return {
       },
     },
   },
-  {
-    "folke/edgy.nvim",
-    opts = require("plugins.configs.edgy").opts,
-  },
+  -- {
+  --   "folke/edgy.nvim",
+  --   opts = require("plugins.configs.edgy").opts,
+  -- },
   {
     "folke/snacks.nvim",
     opts = require("plugins.configs.snacks").opts,

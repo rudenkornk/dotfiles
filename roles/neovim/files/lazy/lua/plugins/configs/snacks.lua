@@ -3,7 +3,15 @@ local M = {}
 M.opts = {
   picker = {
     hidden = true,
-    ignored = true,
+    sources = {
+      explorer = {
+        ignored = true,
+      },
+      files = {
+        -- For some reason, upper-level "hidden" opt is not picked up here
+        hidden = true,
+      },
+    },
     actions = {
       list_scroll_down_4 = function(picker)
         picker.list:scroll(4, false)

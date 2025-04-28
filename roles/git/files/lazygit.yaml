@@ -7,3 +7,6 @@ keybinding:
     nextPage: "<C-d>"
     scrollUpMain-alt2: <C-b>
     scrollDownMain-alt2: <C-f>
+  files:
+    findBaseCommitForFixup: "" # Conflicts with universal C-f
+    openStatusFilter: "" # Conflicts with universal C-b

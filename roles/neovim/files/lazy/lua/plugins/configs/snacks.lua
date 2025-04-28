@@ -41,4 +41,14 @@ M.opts = {
   },
 }
 
+M.keys = {
+  {
+    "<S-q>",
+    function()
+      Snacks.bufdelete()
+    end,
+    { desc = "Delete current buffer" },
+  },
+}
+
 return M

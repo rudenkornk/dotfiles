@@ -32,6 +32,7 @@ return {
   {
     "folke/snacks.nvim",
     opts = require("plugins.configs.snacks").opts,
+    keys = require("plugins.configs.snacks").keys,
   },
   {
     "folke/trouble.nvim",

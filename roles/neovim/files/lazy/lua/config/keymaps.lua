@@ -103,9 +103,6 @@ end, { desc = "Terminal (Root Dir)" })
 vim.keymap.set({ "t" }, "<A-m>", "<cmd>close<cr>", { desc = "Close terminal" })
 
 vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
-vim.keymap.set({ "n" }, "<S-q>", function()
-  Snacks.bufdelete()
-end, { desc = "Delete current buffer" })
 
 -- mitigate the long clipboard loading issue
 vim.g.clipboard = require("config.clipboard")

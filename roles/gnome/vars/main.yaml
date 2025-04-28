@@ -1,5 +1,7 @@
 # Disable line-length warning to simplify script auto-generation
 # yamllint disable rule:line-length
+# Disable error-prone typos linting
+# typos: off
 gnome_settings:
   /com/github/wwmm/easyeffects/last-used-input-preset: "'Presets'"
   /com/github/wwmm/easyeffects/last-used-output-preset: "'Presets'"
@@ -772,3 +774,5 @@ gnome_settings:
   /org/gtk/settings/file-chooser/window-position: (26, 23)
   /org/gtk/settings/file-chooser/window-size: (1203, 902)
   /system/locale/region: "'en_GB.UTF-8'"
+gnome_dummy_preserving_typos_on_comment:
+  # typos: on

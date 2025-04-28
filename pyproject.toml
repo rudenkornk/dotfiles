@@ -43,6 +43,7 @@ dev = [
   "types-urllib3>=1.26.25.14",
   "yamllint>=1.35.1",
   "ruff>=0.7.1",
+  "typos>=1.31.1",
 ]
 
 [tool.uv]
@@ -85,6 +86,17 @@ signature-mutators = [
   "click.decorators.confirmation_option",
   "scripts.utils.makelike",
 ]
+
+[tool.typos]
+# See https://github.com/crate-ci/typos/blob/master/docs/reference.md#example-configurations
+default.extend-ignore-re = [
+  "(?Rm)^.*(#|//)\\s*typos:\\s*ignore$",
+  "(?s)(#|//)\\s*typos:\\s*off.*?(#|//)\\s*typos:\\s*on",
+]
+files.extend-exclude = [
+  "lazy-lock.json"
+]
+
 
 [tool.mypy]
 strict = true

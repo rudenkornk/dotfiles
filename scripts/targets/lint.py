@@ -137,7 +137,7 @@ def _check_leaked_credentials() -> None:
     _logger.info("Done, no leaked credentials found.")
 
 
-def lint_code(*, ansible: bool, python: bool, secrets: bool) -> None:
+def lint_code(*, ansible: bool, python: bool, secrets: bool, generic: bool) -> None:
     ansible_collections()
 
     if secrets:
@@ -163,6 +163,9 @@ def lint_code(*, ansible: bool, python: bool, secrets: bool) -> None:
         # Specifying job number for pylint somehow leads to false-positive errors
         run_shell(["python3", "-m", "pylint", REPO_PATH / "scripts"])
         run_shell(["python3", "-m", "yamllint", "--strict", REPO_PATH / ".github"])
+
+    if generic:
+        run_shell(["typos"])
 
 
 def format_code() -> None:

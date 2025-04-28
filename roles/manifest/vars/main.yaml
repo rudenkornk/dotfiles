@@ -15,7 +15,7 @@
 #    Update procedure is following simple patterns and is able to update such entry.
 #    Playbook tasks will be able to reference this entry directly without disambiguating different
 #    variants themselves.
-# 2. If the component does not have a predicable URL pattern, explicilty "expand" it into the several
+# 2. If the component does not have a predicable URL pattern, explicitly "expand" it into the several
 #    variants in the `manifest_pre` variable.
 #    These variants must follow simple patterns and will be updated one-by-one by the update procedure.
 #    The final complex-templated variable should be included in the `manifest` variable and

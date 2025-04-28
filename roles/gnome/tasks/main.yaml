@@ -26,6 +26,6 @@
   # where Ansible thinks, that value has changed, while it hasn't.
   # For example:
   # /org/.../custom-keybindings/custom1/command: '"bash -c ''flameshot gui &> /tmp/flameshot_log_$USER''"'
-  # Ansible misinterprets this as changed (supposedly) due to complicated parsing of qoutes.
+  # Ansible misinterprets this as changed (supposedly) due to complicated parsing of quotes.
   changed_when: gnome_result.changed and 'custom-keybindings' not in item.key
   loop: "{{ gnome_settings | dict2items }}"

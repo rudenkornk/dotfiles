@@ -10,8 +10,8 @@
     remote_src: true
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: telegram_dowloaded
-  until: telegram_dowloaded is not failed
+  register: telegram_downloaded
+  until: telegram_downloaded is not failed
   when: not telegram_path.stat.exists
 
 - name: Set up bash

@@ -162,7 +162,7 @@ def _setup_credentials(_: str, host: dict[str, Any], user: str) -> None:
     creds_config_path = REPO_PATH / "roles" / "credentials" / "vars" / "credentials_map.yaml"
     if not creds_config_path.exists():
         _logger.warning(f"Credentials config is not decrypted locally: {creds_config_path}")
-        _logger.warning("This might result in priviledges escalation problems.")
+        _logger.warning("This might result in privileges escalation problems.")
         return
     creds_config, _1 = yaml_read(creds_config_path)
     assert isinstance(creds_config, dict)

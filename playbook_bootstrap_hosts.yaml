@@ -43,7 +43,7 @@
             echo "bootstrapped"; \
           fi; \
         else \
-          echo "Unkown distro {{ ansible_distribution }}!" && \
+          echo "Unknown distro {{ ansible_distribution }}!" && \
           exit 1; \
         fi;
       args:

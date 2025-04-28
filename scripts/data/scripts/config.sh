@@ -21,7 +21,7 @@ set -o xtrace
 # REPO_PATH
 
 if [[ "$LOCAL" == true ]]; then
-  # In case of local execution, privileges escalation is equvalent of calling sudo
+  # In case of local execution, privileges escalation is equivalent of calling sudo
   # We must call it beforehand, so Ansible will not ask for password
   sudo bash -c ''
 fi

@@ -26,7 +26,7 @@ def check_bootstrap(image: str) -> None:
         )
 
     makelike(
-        ARTIFACTS_PATH / norm_image / "bootstap_control_node",
+        ARTIFACTS_PATH / norm_image / "bootstrap_control_node",
         REPO_PATH / "main.sh",
         Path(__file__),
         auto_create=True,

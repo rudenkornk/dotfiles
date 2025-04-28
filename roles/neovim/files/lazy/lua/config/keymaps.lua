@@ -29,6 +29,9 @@
 -- <C-y> -- scroll down lines
 -- <C-z> -- ???
 
+-- <C-_> -- terminal on the bottom
+-- <C-/> -- terminal on the bottom (<C-/> and <C-_> usually interchangeable in terminals)
+
 -- <S-a> -- insert at the end of line
 -- <S-b> -- word back
 -- <S-c> -- replace rest of line
@@ -61,14 +64,14 @@
 -- <A-c> -- dap continue
 -- <A-d> -- dap down
 -- <A-e> -- dap pause
--- <A-f> --
+-- <A-f> -- terminal (floating)
 -- <A-g> -- dap restart
--- <A-h> -- dedent code
+-- <A-h> -- dedent code (visual)
 -- <A-i> -- dap step into
--- <A-j> -- move code down
--- <A-k> -- move code up
--- <A-l> -- move code right
--- <A-m> -- open terminal
+-- <A-j> -- move code down (visual)
+-- <A-k> -- move code up (visual)
+-- <A-l> -- indent code (visual)
+-- <A-m> -- vim marks
 -- <A-n> -- next reference
 -- <A-o> -- dap step out
 -- <A-p> -- previous reference
@@ -84,6 +87,10 @@
 -- <A-z> --
 
 -- <A-C> -- dap reverse continue
+-- <A-H> -- terminal (left)
+-- <A-J> -- terminal (bottom)
+-- <A-K> -- terminal (top)
+-- <A-L> -- terminal (right)
 -- <A-R> -- dap breakpoint with condition
 
 vim.keymap.set(
@@ -96,11 +103,6 @@ vim.keymap.set({ "n", "x" }, "<C-e>", "4<C-e>", { silent = true, desc = "Scroll 
 vim.keymap.set({ "n", "x" }, "<C-y>", "4<C-y>", { silent = true, desc = "Scroll down" })
 vim.keymap.set({ "x" }, "<leader>vs", ":sort i<CR>", { desc = "Sort selected lines" })
 vim.keymap.set({ "n" }, "<C-q>", "a<C-^><ESC>", { desc = "Toggle keyboard layout" })
-
-vim.keymap.set({ "n" }, "<A-m>", function()
-  Snacks.terminal(nil, { cwd = LazyVim.root() })
-end, { desc = "Terminal (Root Dir)" })
-vim.keymap.set({ "t" }, "<A-m>", "<cmd>close<cr>", { desc = "Close terminal" })
 
 vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
 

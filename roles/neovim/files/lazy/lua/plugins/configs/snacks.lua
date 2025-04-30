@@ -67,7 +67,15 @@ M.keys = {
     function()
       Snacks.bufdelete()
     end,
-    { desc = "Delete current buffer" },
+    desc = "Delete current buffer",
+  },
+  {
+    "<C-g>",
+    function()
+      Snacks.lazygit()
+    end,
+    mode = { "i", "n" },
+    desc = "Lazygit",
   },
 }
 

@@ -85,7 +85,12 @@ return {
     opts = require("plugins.configs.tmux").opts,
     keys = require("plugins.configs.tmux").keys,
   },
-  { "max397574/better-escape.nvim", event = "InsertEnter", config = true },
+  {
+    "max397574/better-escape.nvim",
+    event = "InsertEnter",
+    -- jk combination conflicts with scrolling in lazygit
+    opts = { mappings = { i = { j = { k = false } } } },
+  },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {
     "tamton-aquib/duck.nvim",

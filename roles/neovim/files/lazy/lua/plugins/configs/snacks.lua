@@ -79,7 +79,7 @@ M.keys = {
   },
 }
 
-add_terminal_key(M.keys, "<A-f>", "float", 0.9)
+add_terminal_key(M.keys, "<A-F>", "float", 0.9)
 add_terminal_key(M.keys, "<C-_>", "right", 0.4)
 add_terminal_key(M.keys, "<A-L>", "right", 0.4)
 add_terminal_key(M.keys, "<A-H>", "left", 0.4)

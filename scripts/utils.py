@@ -1,17 +1,15 @@
 import functools
-import inspect
 import logging
 import os
 import shlex
 import subprocess
-import sys
 import time
-import traceback
 from multiprocessing import cpu_count as _cpu_count
 from pathlib import Path
 from typing import IO, Any, Callable, Concatenate, Mapping, ParamSpec, Sequence, TypeVar
 
 import luadata  # type: ignore
+from rich.logging import RichHandler
 from ruamel.yaml import YAML
 
 _logger = logging.getLogger(__name__)
@@ -303,163 +301,29 @@ def yaml_write(path: Path, data: dict[str, Any], yaml: YAML | None = None, *, wi
 
 
 class _LoggerFormatter(logging.Formatter):
-    grey = "\x1b[38;20m"
-    green = "\x1b[32;20m"
-    yellow = "\x1b[33;20m"
-    red = "\x1b[38;5;196m"
-    bold_red = "\x1b[31;1m"
-    bg_palette = [
-        "\x1b[41m",
-        "\x1b[42m",
-        "\x1b[43m",
-        "\x1b[44m",
-        "\x1b[45m",
-        "\x1b[46m",
-        "\x1b[47m",
-        "\x1b[100m",
-        "\x1b[101m",
-        "\x1b[102m",
-        "\x1b[103m",
-        "\x1b[104m",
-        "\x1b[105m",
-        "\x1b[106m",
-        "\x1b[107m",
-    ]
-    reset = "\x1b[0m"
-    bg_reset = "\x1b[49m"
-    ok_format = "%(message)s"
-    warning_format = "[WARNING]: %(message)s"
-    error_format = "[ERROR]: %(message)s"
-    formats_info = {
-        logging.DEBUG: (ok_format, grey),
-        logging.INFO: (ok_format, green),
-        logging.WARNING: (warning_format, yellow),
-        logging.ERROR: (error_format, red),
-        logging.CRITICAL: (error_format, bold_red),
+    formats = {
+        logging.DEBUG: "[grey]%(message)s[/]",
+        logging.INFO: "[green]%(message)s[/]",
+        logging.WARNING: "[yellow][WARNING]: %(message)s[/]",
+        logging.ERROR: "[red][ERROR]: %(message)s[/]",
     }
 
-    def __init__(self, stream: IO[Any]) -> None:
-        self._stream = stream
-        self.indent = ""
-        self.stack_based_indent = False
-        self.stack_based_color = False
-        self._formatters = self._get_formatters(stream)
+    def __init__(self) -> None:
         super().__init__()
-
-    @staticmethod
-    def _get_formatters(stream: IO[Any]) -> dict[int, logging.Formatter]:
-        formatters = {}
-        for level, (fmt, color) in _LoggerFormatter.formats_info.items():
-            if stream.isatty():
-                fmt = color + fmt + _LoggerFormatter.reset
-            formatter = logging.Formatter(fmt)
-            formatters[level] = formatter
-        return formatters
-
-    @staticmethod
-    def _stack_based_indent(stream: IO[Any], indented: bool, colored: bool) -> str:
-        indent = ""
-        stacklen = len(inspect.stack())
-        home = str(Path.home())
-        interesting_index: int | None = None
-        stack = inspect.stack()
-        skip_asyncio = False
-        # pylint: disable-next=consider-using-enumerate
-        for index in range(len(stack)):
-            filename = stack[index].filename
-            # print(stack[index].filename, stack[index].function)
-            if "asyncio" in filename.split(os.sep):
-                skip_asyncio = True
-            if filename.startswith(home) and interesting_index is None and not filename == __file__:
-                interesting_index = index
-
-        skip = 7
-        if skip_asyncio:
-            skip += 6
-        if interesting_index is not None:
-            skip += interesting_index
-        indent_len = max(0, stacklen - skip)
-        if indented:
-            indent += "  " * indent_len
-
-        if stream.isatty() and colored:
-            bg_color_index = 0
-            if interesting_index is not None:
-                interesting = inspect.stack()[interesting_index]
-                frame_hash = hash(str(id(interesting.frame)))
-                bg_color_index = frame_hash % len(_LoggerFormatter.bg_palette)
-            bg_color = _LoggerFormatter.bg_palette[bg_color_index]
-            indent = indent + bg_color + " " + _LoggerFormatter.bg_reset
-
-        return indent
-
-    def _format(self, msg: str) -> str:
-        indent = self.indent
-        indent += self._stack_based_indent(self._stream, self.stack_based_indent, self.stack_based_color)
-
-        return indent + msg
+        self.formatters = {level: logging.Formatter(fmt) for level, fmt in self.formats.items()}
 
     def format(self, record: Any) -> str:
-        formatter = self._formatters[record.levelno]
-        raw_result = formatter.format(record)
-        result = self._format(raw_result)
-        return result
+        formatter = self.formatters[logging.DEBUG]
+        for level, fmt in self.formatters.items():
+            if record.levelno >= level:
+                formatter = fmt
+
+        return formatter.format(record)
 
 
-class _LoggerFilter(logging.Filter):
-    def __init__(self, min_level: int, max_level: int) -> None:
-        self._min = min_level
-        self._max = max_level
-        super().__init__()
-
-    def filter(self, record: Any) -> bool:
-        check = self._min <= record.levelno < self._max
-        assert isinstance(check, bool)
-        return check
-
-
-def format_logging(logger: logging.Logger = logging.getLogger(), stack_based: bool = False) -> None:
-    stdout_handler = logging.StreamHandler(sys.stdout)
-    stdout_formatter = _LoggerFormatter(sys.stdout)
-    stdout_formatter.stack_based_indent = stack_based
-    stdout_formatter.stack_based_color = False
-    stdout_handler.setFormatter(stdout_formatter)
-    stdout_handler.addFilter(_LoggerFilter(logging.DEBUG, logging.WARNING))
-    logger.addHandler(stdout_handler)
-
-    stderr_handler = logging.StreamHandler(sys.stderr)
-    stderr_formatter = _LoggerFormatter(sys.stderr)
-    stderr_formatter.stack_based_indent = stack_based
-    stderr_formatter.stack_based_color = False
-    stderr_handler.setFormatter(stderr_formatter)
-    stderr_handler.addFilter(_LoggerFilter(logging.WARNING, logging.CRITICAL + 1000))
-    logger.addHandler(stderr_handler)
-
-
-def main(stack_based: bool = False) -> Callable[[Callable[_P, _R]], Callable[_P, _R]]:
-    def main_decorator(func: Callable[_P, _R]) -> Callable[_P, _R]:
-        @functools.wraps(func)
-        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
-            format_logging(stack_based=stack_based)
-            try:
-                return func(*args, **kwargs)
-            # pylint: disable-next=broad-exception-caught
-            except Exception as exception:
-                loglevel = _logger.getEffectiveLevel()
-                if loglevel <= logging.DEBUG:
-                    traceback.print_exc()
-
-                file = Path(inspect.trace()[-1][1])
-                line = inspect.trace()[-1][2]
-                _logger.error(f"{type(exception).__name__}: {exception} ({file.name}:{line})")
-                exit_code = 1
-                if isinstance(exception, subprocess.CalledProcessError):
-                    exit_code = exception.returncode
-                sys.exit(exit_code)
-            except KeyboardInterrupt:
-                _logger.error("==== Keyboard Interrupt ====")
-                sys.exit(2)
-
-        return wrapper
-
-    return main_decorator
+def setup_logger(logger: logging.Logger | None = None) -> None:
+    logger = logger or logging.getLogger()
+    handler = RichHandler(show_time=False, show_path=False, show_level=False, markup=True)
+    handler.setFormatter(_LoggerFormatter())
+    handler.console.stderr = True
+    logger.addHandler(handler)

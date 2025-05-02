@@ -6,7 +6,7 @@ import subprocess
 import time
 from multiprocessing import cpu_count as _cpu_count
 from pathlib import Path
-from typing import IO, Any, Callable, Concatenate, Mapping, ParamSpec, Sequence, TypeVar
+from typing import IO, Any, Callable, Concatenate, Mapping, ParamSpec, Sequence, TypeVar, overload
 
 import luadata  # type: ignore
 from rich.logging import RichHandler
@@ -188,9 +188,19 @@ _P = ParamSpec("_P")
 _R = TypeVar("_R")
 
 
+@overload
 def retry(
-    delay: int | float = 5, max_tries: int = 5, suppress_logger: bool = False
-) -> Callable[[Callable[_P, _R]], Callable[_P, _R]]:
+    func: Callable[_P, _R], *, delay: int | float = ..., max_tries: int = ..., suppress_logger: bool = ...
+) -> Callable[_P, _R]: ...
+@overload
+def retry(
+    func: None = None, *, delay: int | float = ..., max_tries: int = ..., suppress_logger: bool = ...
+) -> Callable[[Callable[_P, _R]], Callable[_P, _R]]: ...
+
+
+def retry(
+    func: Callable[_P, _R] | None = None, *, delay: int | float = 5, max_tries: int = 5, suppress_logger: bool = False
+) -> Callable[[Callable[_P, _R]], Callable[_P, _R]] | Callable[_P, _R]:
     assert max_tries > 0
 
     def retry_decorator(func: Callable[_P, _R]) -> Callable[_P, _R]:
@@ -212,6 +222,9 @@ def retry(
             assert False, "Unreachable."
 
         return wrapper
+
+    if func is not None:
+        return retry_decorator(func)
 
     return retry_decorator
 

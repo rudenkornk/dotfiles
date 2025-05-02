@@ -44,6 +44,7 @@ dev = [
   "yamllint>=1.35.1",
   "ruff>=0.7.1",
   "typos>=1.31.1",
+  "rich>=14.0.0",
 ]
 
 [tool.uv]

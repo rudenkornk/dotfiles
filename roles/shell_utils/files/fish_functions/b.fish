@@ -1,3 +1,3 @@
 function b --wraps bat
-  bat --paging=never $argv
+  bat $argv
 end

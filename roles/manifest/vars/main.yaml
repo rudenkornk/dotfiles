@@ -39,27 +39,27 @@ manifest: # noqa: var-naming[no-role-prefix]
   cmake:
     url: https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-{{ ansible_architecture }}.sh
   drawio:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v26.2.2/drawio-{{ pack_arch }}-26.2.2.{{ pack }}
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v26.2.15/drawio-{{ pack_arch }}-26.2.15.{{ pack }}
   eza:
-    url: https://github.com/eza-community/eza/releases/download/v0.21.1/eza_{{ ansible_architecture }}-unknown-linux-musl.tar.gz
+    url: https://github.com/eza-community/eza/releases/download/v0.21.3/eza_{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   firacode:
-    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: e491770f1c5f50cc969ff58228cd29a7cfa76663
+    version: 9c1a47acf7453f9dad5905b7f23ad06e5195d51f
   hiddify:
     url: "{{ {'Ubuntu': manifest_pre.hiddify.deb, 'Fedora': manifest_pre.hiddify.rpm}[ansible_distribution] }}"
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
-    version: 0cff02ac3934768c99af7450f415ea2a8e14605f
+    version: 49d0a9199d64cbeb7bcf7db1a04d164ee0c16e1b
   lazygit:
-    url: https://github.com/jesseduffield/lazygit/releases/download/v0.49.0/lazygit_0.49.0_Linux_{{ ansible_architecture }}.tar.gz
+    url: https://github.com/jesseduffield/lazygit/releases/download/v0.50.0/lazygit_0.50.0_Linux_{{ ansible_architecture }}.tar.gz
   neovim:
-    url: https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-{{ ansible_architecture }}.tar.gz
+    url: https://github.com/neovim/neovim/releases/download/v0.11.1/nvim-linux-{{ ansible_architecture }}.tar.gz
   nixfmt:
     url: https://github.com/NixOS/nixfmt/releases/download/v0.6.0/nixfmt-{{ ansible_architecture }}-linux
   stylua:
-    url: https://github.com/JohnnyMorganz/StyLua/releases/download/v2.0.2/stylua-linux-{{ ansible_architecture }}.zip
+    url: https://github.com/JohnnyMorganz/StyLua/releases/download/v2.1.0/stylua-linux-{{ ansible_architecture }}.zip
   tpm:
     url: https://github.com/tmux-plugins/tpm
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
@@ -67,6 +67,6 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: "{{ {'Ubuntu': manifest_pre.turbovnc.deb, 'Fedora': manifest_pre.turbovnc.rpm}[ansible_distribution] }}"
   vcpkg:
     url: https://github.com/microsoft/vcpkg
-    version: 0d5cae153065957df7f382de7c1549ccc88027e5
+    version: 41c447cc210dc39aa85d4a5f58b4a1b9e573b3dc
   yazi:
     url: https://github.com/sxyazi/yazi/releases/download/v25.4.8/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip

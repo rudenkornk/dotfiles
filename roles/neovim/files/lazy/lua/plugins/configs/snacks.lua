@@ -1,5 +1,20 @@
 local M = {}
 
+local function filter_colorscheme(entry)
+  -- Filter out original vim themes
+  if entry.file:find(vim.env.VIMRUNTIME .. "/colors", 1, true) then
+    return false
+  end
+  -- Filter out light themes
+  local light = { "light", "day", "latte", "rose-pine-dawn", "kanagawa-lotus" }
+  for _, ending in ipairs(light) do
+    if entry.text:sub(-#ending) == ending then
+      return false
+    end
+  end
+  return true
+end
+
 M.opts = {
   picker = {
     hidden = true,
@@ -10,6 +25,14 @@ M.opts = {
       files = {
         -- For some reason, upper-level "hidden" opt is not picked up here
         hidden = true,
+      },
+      colorschemes = {
+        -- Amend list of colorschemes by excluding original vim themes and light themes
+        -- See https://github.com/LazyVim/LazyVim/discussions/6032#discussioncomment-13031344
+        finder = function()
+          local items = require("snacks.picker.source.vim").colorschemes()
+          return vim.tbl_filter(filter_colorscheme, items)
+        end,
       },
     },
     actions = {

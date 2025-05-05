@@ -23,6 +23,8 @@
       when: not minimal_mode
     - role: java
       when: not minimal_mode
+    - role: dotnet
+      when: not minimal_mode
     - role: cpp
       when: not minimal_mode
     - role: rust

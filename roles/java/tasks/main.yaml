@@ -1,4 +1,4 @@
 - name: Install java
   become: true
   ansible.builtin.package:
-    name: "{{ {'Ubuntu': 'openjdk-21-jdk', 'Fedora': 'java-21-openjdk'}[ansible_distribution] }}"
+    name: "{{ {'Ubuntu': 'openjdk-21-jdk', 'Fedora': 'java-21-openjdk-devel'}[ansible_distribution] }}"

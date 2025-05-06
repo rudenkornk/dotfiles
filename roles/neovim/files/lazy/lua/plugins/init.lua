@@ -19,9 +19,9 @@ return {
     "echasnovski/mini.surround",
     opts = {
       mappings = {
-        add = "ys",
-        delete = "ds",
-        replace = "cs",
+        add = "gaa",
+        delete = "gad",
+        replace = "gar",
       },
     },
   },
@@ -40,6 +40,11 @@ return {
     keys = {
       { "<leader>h", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
     },
+  },
+  {
+    "ggandor/flit.nvim",
+    -- https://github.com/LazyVim/LazyVim/discussions/6037
+    opts = { labeled_modes = "nxo" },
   },
   {
     "gbprod/yanky.nvim",

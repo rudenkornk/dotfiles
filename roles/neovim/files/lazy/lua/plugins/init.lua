@@ -25,10 +25,11 @@ return {
       },
     },
   },
-  -- {
-  --   "folke/edgy.nvim",
-  --   opts = require("plugins.configs.edgy").opts,
-  -- },
+  {
+    "folke/edgy.nvim",
+    enabled = false, -- weird bugs making terminal and other side windows to unexpectedly exit
+    opts = require("plugins.configs.edgy").opts,
+  },
   {
     "folke/snacks.nvim",
     opts = require("plugins.configs.snacks").opts,

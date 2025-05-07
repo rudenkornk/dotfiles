@@ -1,0 +1,25 @@
+diff --git b/scripts/network_bandwidth.sh a/scripts/network_bandwidth.sh
+index e86cedf..d31c0df 100755
+--- b/scripts/network_bandwidth.sh
++++ a/scripts/network_bandwidth.sh
+@@ -13,3 +13,3 @@ readonly SIZE=(
+-  [1024]='kB/s'
+-  [1048576]='MB/s'
+-  [1073741824]='GB/s'
++  [1024]='kiB/s'
++  [1048576]='MiB/s'
++  [1073741824]='GiB/s'
+@@ -26 +26 @@ interface_get() {
+-        name="$(ip -o route get 192.168.0.0 | awk '{print $5}')"
++        name="$(ip -o route get 192.168.0.0 | grep -oP '(?<=dev )\S+')"
+@@ -86,6 +86,4 @@ bandwidth_to_unit() {
+-  local result="0.00"
+-  if (($1 != 0)); then
+-    result="$(awk -v a="$1" -v b="$size" 'BEGIN { printf "%.2f\n", a / b }' </dev/null)"
+-  fi
+-
+-  echo "$result ${SIZE[$size]}"
++  result="$(awk -v a="$1" -v b="$size" 'BEGIN { printf "%.1f\n", a / b }' </dev/null)"
++  result_with_unit="$result ${SIZE[$size]}"
++  padded_result=$(printf "%11s" "$result_with_unit")
++  echo "$padded_result"

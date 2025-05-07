@@ -44,3 +44,11 @@
   args:
     executable: bash
   changed_when: tmux_installed is changed
+
+# git diff -p --no-index --no-prefix -- b/scripts/ a/scripts/ >
+# ~/projects/dotfiles/roles/tmux/files/tmux-kanagawa.patch
+- name: Patch tmux-kanagawa
+  ansible.posix.patch:
+    src: "{{ role_path }}/files/tmux-kanagawa.patch"
+    basedir: "{{ home }}/.tmux/plugins/tmux-kanagawa"
+    strip: 1

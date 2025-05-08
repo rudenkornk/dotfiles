@@ -47,10 +47,10 @@ gnome_rules:
   /org/gnome/software: excluded
   /org/gnome/system/locale: included
   /org/gnome/Totem: included
-  /org/gtk/gtk4/settings/file-chooser: included
-  /org/gtk/gtk4/Settings/FileChooser: included
-  /org/gtk/settings/file-chooser: included
-  /org/gtk/Settings/FileChooser: included
+  /org/gtk/gtk4/settings/file-chooser: excluded
+  /org/gtk/gtk4/Settings/FileChooser: excluded
+  /org/gtk/settings/file-chooser: excluded
+  /org/gtk/Settings/FileChooser: excluded
   /org/virt-manager: excluded
   /system/locale: included
   /system/proxy: excluded

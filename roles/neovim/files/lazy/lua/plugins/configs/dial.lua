@@ -26,6 +26,22 @@ M.config = function()
   local booleans = { "true", "false" }
   local boolean_ops = { "and", "or" }
   local on_off = { "on", "off" }
+  local numbers = {
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "eleven",
+    "twelve",
+    "thirteen",
+    -- fouteen and others conflict with "four", "six", etc.
+  }
   local ordinals = {
     "first",
     "second",
@@ -66,7 +82,8 @@ M.config = function()
   local boolean_augend = create_constants(booleans, false, true)
   local boolean_ops_augend = create_constants(boolean_ops, true, true)
   local on_off_augend = create_constants(on_off, true, true)
-  local ordinal_augend = create_constants(ordinals, false, true)
+  local number_augend = create_constants(numbers, false, false)
+  local ordinal_augend = create_constants(ordinals, false, false)
   local weekday_augend = create_constants(weekdays, false, true)
   local month_augend = create_constants(months, false, true)
   local error_augend = create_constants(errors, false, true)
@@ -84,6 +101,7 @@ M.config = function()
       unpack(boolean_augend),
       unpack(boolean_ops_augend),
       unpack(on_off_augend),
+      unpack(number_augend),
       unpack(ordinal_augend),
       unpack(weekday_augend),
       unpack(month_augend),

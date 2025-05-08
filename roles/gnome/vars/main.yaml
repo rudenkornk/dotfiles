@@ -744,35 +744,6 @@ gnome_settings:
   /org/gnome/shell/keybindings/toggle-message-tray: "['<Control><Alt>n']"
   /org/gnome/shell/remember-mount-password: "true"
   /org/gnome/system/locale/region: "'en_GB.UTF-8'"
-  /org/gtk/Settings/FileChooser/sidebar-width: "157"
-  /org/gtk/Settings/FileChooser/window-position: (26, 23)
-  /org/gtk/Settings/FileChooser/window-size: (1203, 902)
-  /org/gtk/gtk4/Settings/FileChooser/sidebar-width: "140"
-  /org/gtk/gtk4/Settings/FileChooser/sort-directories-first: "false"
-  /org/gtk/gtk4/Settings/FileChooser/view-type: "'grid'"
-  /org/gtk/gtk4/Settings/FileChooser/window-size: (1323, 683)
-  /org/gtk/gtk4/settings/file-chooser/date-format: "'regular'"
-  /org/gtk/gtk4/settings/file-chooser/location-mode: "'path-bar'"
-  /org/gtk/gtk4/settings/file-chooser/show-hidden: "false"
-  /org/gtk/gtk4/settings/file-chooser/sidebar-width: "140"
-  /org/gtk/gtk4/settings/file-chooser/sort-column: "'name'"
-  /org/gtk/gtk4/settings/file-chooser/sort-directories-first: "false"
-  /org/gtk/gtk4/settings/file-chooser/sort-order: "'ascending'"
-  /org/gtk/gtk4/settings/file-chooser/type-format: "'category'"
-  /org/gtk/gtk4/settings/file-chooser/view-type: "'grid'"
-  /org/gtk/gtk4/settings/file-chooser/window-size: (1323, 683)
-  /org/gtk/settings/file-chooser/date-format: "'regular'"
-  /org/gtk/settings/file-chooser/location-mode: "'path-bar'"
-  /org/gtk/settings/file-chooser/show-hidden: "false"
-  /org/gtk/settings/file-chooser/show-size-column: "true"
-  /org/gtk/settings/file-chooser/show-type-column: "true"
-  /org/gtk/settings/file-chooser/sidebar-width: "157"
-  /org/gtk/settings/file-chooser/sort-column: "'name'"
-  /org/gtk/settings/file-chooser/sort-directories-first: "false"
-  /org/gtk/settings/file-chooser/sort-order: "'ascending'"
-  /org/gtk/settings/file-chooser/type-format: "'category'"
-  /org/gtk/settings/file-chooser/window-position: (26, 23)
-  /org/gtk/settings/file-chooser/window-size: (1203, 902)
   /system/locale/region: "'en_GB.UTF-8'"
 gnome_dummy_preserving_typos_on_comment:
   # typos: on

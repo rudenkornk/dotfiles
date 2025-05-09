@@ -19,10 +19,22 @@ return {
     "echasnovski/mini.surround",
     opts = {
       mappings = {
-        add = "gaa",
-        delete = "gad",
-        replace = "gar",
+        -- Some candidates (though 2-letters do not work for some reason):
+        --       yc yd          ym yo yp yq    yu yx
+        -- ga gb       gj gk gl gm
+        --       dc             dm    dp dq dr du dx dy
+        --          cd          cm co cp cq cr cu cx cy
+        add = "gja",
+        delete = "gjd",
+        find = "gjf",
+        find_left = "gjF",
+        highlight = "gjh",
+        replace = "gjr",
+        update_n_lines = "gjn",
       },
+    },
+    keys = {
+      { "gj", "", desc = "+surround" },
     },
   },
   {

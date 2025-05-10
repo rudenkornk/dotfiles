@@ -55,7 +55,6 @@
 [push]
   default = current
   followTags = true
-  recurseSubmodules = on-demand
 [rebase]
   autoStash = true
   autoSquash = true
@@ -68,8 +67,6 @@
   writeCommitGraph = true
 [merge]
   # conflictStyle = zdiff3 # not supported in old git versions
-[submodule]
-  recurse = true
 
 [include]
   path = ~/.gitconfig.user

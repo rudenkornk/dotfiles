@@ -30,7 +30,7 @@ gnome_rules:
   /org/gnome/mutter: included
   /org/gnome/nautilus: excluded
   /org/gnome/nm-applet/eap: excluded
-  /org/gnome/portal/filechooser: excluded
+  /org/gnome/portal/filechooser: included
   /org/gnome/Ptyxis: excluded
   /org/gnome/settings-daemon/plugins/color: included
   /org/gnome/settings-daemon/plugins/media-keys: included
@@ -47,10 +47,20 @@ gnome_rules:
   /org/gnome/software: excluded
   /org/gnome/system/locale: included
   /org/gnome/Totem: included
-  /org/gtk/gtk4/settings/file-chooser: excluded
-  /org/gtk/gtk4/Settings/FileChooser: excluded
-  /org/gtk/settings/file-chooser: excluded
-  /org/gtk/Settings/FileChooser: excluded
+  /org/gtk/gtk4/settings/file-chooser/sidebar-width: excluded
+  /org/gtk/gtk4/settings/file-chooser/window-size: excluded
+  /org/gtk/gtk4/settings/file-chooser: included
+  /org/gtk/gtk4/Settings/FileChooser/sidebar-width: excluded
+  /org/gtk/gtk4/Settings/FileChooser/window-size: excluded
+  /org/gtk/gtk4/Settings/FileChooser: included
+  /org/gtk/settings/file-chooser/sidebar-width: excluded
+  /org/gtk/settings/file-chooser/window-position: excluded
+  /org/gtk/settings/file-chooser/window-size: excluded
+  /org/gtk/settings/file-chooser: included
+  /org/gtk/Settings/FileChooser/sidebar-width: excluded
+  /org/gtk/Settings/FileChooser/window-position: excluded
+  /org/gtk/Settings/FileChooser/window-size: excluded
+  /org/gtk/Settings/FileChooser: included
   /org/virt-manager: excluded
   /system/locale: included
   /system/proxy: excluded

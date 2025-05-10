@@ -1,41 +1,23 @@
-- name: Create directory for FiraCode in {{ dotfiles_host_tmp }}
-  ansible.builtin.file:
-    dest: "{{ dotfiles_host_tmp }}/FiraCode"
-    state: directory
-    mode: "0o755"
-
 - name: Create ~/.local/share/fonts directory
   ansible.builtin.file:
     dest: "{{ home }}/.local/share/fonts"
     state: directory
     mode: "0o755"
 
-- name: Download FiraCode font
+- name: Download fonts
   ansible.builtin.unarchive:
-    src: "{{ manifest.firacode.url }}"
-    dest: "{{ dotfiles_host_tmp }}/FiraCode"
+    src: "{{ manifest[item].url }}"
+    dest: "{{ home }}/.local/share/fonts/"
     remote_src: true
+  changed_when: false # readme files overwrite each other
+  loop:
+    - jetbrains_mono
+    - fantasque
+
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: fonts_downloaded
   until: fonts_downloaded is not failed
-
-- name: Find fonts
-  ansible.builtin.find:
-    paths: "{{ dotfiles_host_tmp }}/FiraCode/"
-    patterns: "*Mono*.ttf"
-  register: fonts_found
-  failed_when: fonts_found.files | length < 1
-
-- name: Copy ttf fonts to ~/.local/share/fonts
-  ansible.builtin.copy:
-    src: "{{ item.path }}"
-    dest: "{{ home }}/.local/share/fonts/{{ item.path | basename }}"
-    remote_src: true
-    mode: "0o644"
-  loop: "{{ fonts_found.files }}"
-  loop_control:
-    label: "{{ item.path | basename }}"
 
 - name: Install fontconfig
   become: true

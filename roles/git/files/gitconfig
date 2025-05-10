@@ -16,6 +16,7 @@
   llg = log --oneline --graph
   ls = log --stat
   mb = merge-base
+  p = push
   pf = push --force-with-lease
   rb = rebase
   rbi = rebase --rebase-merges --interactive HEAD~26

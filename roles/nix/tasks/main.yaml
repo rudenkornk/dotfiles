@@ -1,3 +1,9 @@
+- name: Install nix
+  ansible.builtin.shell: sh <(curl -L https://releases.nixos.org/nix/nix-2.28.3/install) --no-daemon
+  args:
+    creates: "/nix/store/"
+    executable: bash
+
 - name: Download nixfmt
   ansible.builtin.get_url:
     url: "{{ manifest.nixfmt.url }}"

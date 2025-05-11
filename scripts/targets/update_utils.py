@@ -3,6 +3,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import git
 import requests
@@ -133,14 +134,37 @@ class GitHubReleaseInfo:
     url: str
 
     def __init__(self, url: str):
-        parsed_url = re.search(r"(^.*?github.com)/([^/]+/[^/]+)/releases/download/([^/]+)/(.*)", url)
+        parsed_url = re.match(
+            r"(?P<prefix>https?://github.com)/"
+            r"(?P<repo>[^/]+/[^/]+)/releases/download/(?P<tag_info>[^/]+)/(?P<binary>.*)",
+            url,
+        )
         assert parsed_url is not None
-        self.prefix = parsed_url.group(1)
-        self.repo = parsed_url.group(2)
+        self.prefix = parsed_url.group("prefix")
+        self.repo = parsed_url.group("repo")
         self.path = "releases/download"
-        self.ti = GitHubTagInfo(parsed_url.group(3))
-        self.binary = parsed_url.group(4)
+        self.ti = GitHubTagInfo(parsed_url.group("tag_info"))
+        self.binary = parsed_url.group("binary")
         self.url = url
+
+
+def _requests_try_get(url: str) -> dict[str, Any] | list[Any] | None:
+    @utils.retry(delay=10)
+    def _get() -> requests.Response:
+        response = requests.get(url, timeout=15)
+        response.raise_for_status()
+        return response
+
+    try:
+        ret = _get().json()
+        assert isinstance(ret, (dict, list))
+        return ret
+    except requests.exceptions.HTTPError as e:
+        _logger.warning("Cannot get response from url")
+        _logger.warning(f"URL: {url}")
+        _logger.warning(f"Status: {e.response.status_code}")
+        _logger.warning(f"Error: {e}")
+        return None
 
 
 # pylint: disable-next=too-many-statements
@@ -156,21 +180,10 @@ def _update_github_release(url: str, locked: bool) -> str:
 
     cmp_semver = cri.ti.semver is not None
 
-    @utils.retry(delay=10)
-    def requests_get() -> requests.Response:
-        response = requests.get(request_url, timeout=15)
-        response.raise_for_status()
-        return response
-
-    try:
-        response = requests_get()
-    except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 403:
-            _logger.warning(f"{2 * tab}GitHub API rate limit exceeded. Skipping this repo.")
-            _logger.warning(2 * tab + str(e))
-            return url
-        raise
-    releases = response.json()
+    releases = _requests_try_get(request_url)
+    if not releases:
+        return url
+    assert isinstance(releases, list)
     chosen_tag = cri.ti.tag
     chosen_version = cri.ti.version
 
@@ -276,14 +289,17 @@ def update_neovim_plugin(neovim_manifest_path: Path, plugin: str, dry_run: bool)
 
 
 def get_ansible_entry_type(info: dict[str, Any]) -> str:
-    if "version" not in info:
+    url = info["url"]
+    parsed_url = urlparse(url)
+    if parsed_url.netloc == "github.com" and "version" not in info:
         return "github_release"
-    version = info["version"]
-    try:
-        Version.parse(version)
-        return "git_tag"
-    except ValueError:
+    if parsed_url.netloc == "github.com" and re.match(r"[a-zA-Z0-9]{40}", info["version"]):
         return "git_commit"
+    if parsed_url.netloc == "github.com" and Version.is_valid(info["version"]):
+        return "git_tag"
+    if parsed_url.netloc == "github.com":
+        return "unknown"
+    return "unknown"
 
 
 def update_ansible_entry(manifest_path: Path, entry: str, dry_run: bool) -> None:
@@ -296,6 +312,10 @@ def update_ansible_entry(manifest_path: Path, entry: str, dry_run: bool) -> None
 
     locked = info.get("lock", False)
     entry_type = get_ansible_entry_type(info)
+    if entry_type == "unknown":
+        _logger.warning(f"Cannot update {entry} -- no update method available")
+        return
+
     if entry_type == "git_tag":
         info["version"] = update_tag(info["url"], from_tag=info["version"], locked=locked)
     if entry_type == "git_commit":

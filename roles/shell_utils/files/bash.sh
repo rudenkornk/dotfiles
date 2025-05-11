@@ -8,9 +8,8 @@ alias la="eza --classify --icons --all"
 
 eval "$(zoxide init bash)"
 
-source ~/.local/yazi/completions/ya.bash
-source ~/.local/yazi/completions/yazi.bash
-export PATH="$HOME/.local/yazi:$PATH"
+source ~/.local/bin/yazi_dir/completions/ya.bash
+source ~/.local/bin/yazi_dir/completions/yazi.bash
 
 function c() {
   pushd "$@" && eza --classify --icons

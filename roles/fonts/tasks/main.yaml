@@ -9,7 +9,10 @@
     src: "{{ manifest[item].url }}"
     dest: "{{ home }}/.local/share/fonts/"
     remote_src: true
-  changed_when: false # readme files overwrite each other
+    extra_opts:
+      # readme files overwrite each other, making ansible report changed status
+      - "--exclude=*.txt"
+      - "--exclude=*.md"
   loop:
     - jetbrains_mono
     - fantasque

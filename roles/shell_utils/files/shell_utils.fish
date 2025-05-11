@@ -87,5 +87,6 @@ set --export MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 zoxide init fish | source
 
-source ~/.local/bin/yazi_dir/completions/ya.fish
-source ~/.local/bin/yazi_dir/completions/yazi.fish
+source ~/.local/yazi/completions/ya.fish
+source ~/.local/yazi/completions/yazi.fish
+fish_add_path ~/.local/yazi

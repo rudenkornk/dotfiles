@@ -29,6 +29,8 @@
       when: not minimal_mode
     - role: rust
       when: not minimal_mode
+    - role: zig
+      when: not minimal_mode
     - role: go
       when: not minimal_mode
     - role: python

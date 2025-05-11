@@ -1,0 +1,29 @@
+- name: Create zig directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/zig"
+    state: directory
+    mode: "0o755"
+
+- name: Download zig
+  ansible.builtin.unarchive:
+    src: "{{ manifest.zig.url }}"
+    dest: "{{ home }}/.local/zig"
+    remote_src: true
+    extra_opts:
+      - --strip-components=1
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
+
+- name: Set up bash
+  ansible.builtin.lineinfile:
+    path: "{{ home }}/.bashrc"
+    regexp: "source .*/{{ role_name }}/files"
+    line: source {{ role_host_path }}/files/bash.sh
+
+- name: Create symlink to fish config of {{ role_name }}
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/{{ role_name }}.fish"
+    dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
+    state: link

@@ -38,6 +38,8 @@ manifest_pre:
       url: https://github.com/TurboVNC/turbovnc/releases/download/3.1.4/turbovnc_3.1.4_{{ pack_arch }}.{{ pack }}
 
 manifest: # noqa: var-naming[no-role-prefix]
+  carapace:
+    url: https://github.com/carapace-sh/carapace-bin/releases/download/v1.3.1/carapace-bin_1.3.1_linux_{{ deb_arch }}.tar.gz
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
@@ -66,6 +68,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/neovim/neovim/releases/download/v0.11.1/nvim-linux-{{ ansible_architecture }}.tar.gz
   nixfmt:
     url: https://github.com/NixOS/nixfmt/releases/download/v0.6.0/nixfmt-{{ ansible_architecture }}-linux
+  nu:
+    url: https://github.com/nushell/nushell/releases/download/0.104.0/nu-0.104.0-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   stylua:
     url: https://github.com/JohnnyMorganz/StyLua/releases/download/v2.1.0/stylua-linux-{{ ansible_architecture }}.zip
   tpm:

@@ -20,6 +20,27 @@
       - ripgrep
       - zoxide
 
+- name: Install carapace
+  ansible.builtin.unarchive:
+    src: "{{ manifest.carapace.url }}"
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
+    extra_opts:
+      - --exclude=LICENSE
+      - --exclude=*.md
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
+
+- name: Create symlink to carapace nu config
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/carapace.nu"
+    dest: "{{ home }}/.config/nushell/autoload/carapace.nu"
+    state: link
+
 - name: Setup yazi
   vars:
     shell_utils_yazi_fullname: "{{ manifest.yazi.url | split('/') | last | split('.') | first }}"

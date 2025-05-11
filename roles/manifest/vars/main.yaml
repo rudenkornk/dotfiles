@@ -4,7 +4,7 @@
 # which are used in this configuration.
 # It is important to pin specific versions to ensure reproducibility.
 #
-# Most of the packages follow predicable patterns with arch and package formats.
+# Most of the packages follow predictable patterns with arch and package formats.
 # This is very useful, since it allows to compactly write down the url with some ansible templating.
 # An update procedure is also aware of these simple patterns.
 # Some packages, however, do not have predicable URL patterns.

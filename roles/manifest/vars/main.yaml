@@ -72,3 +72,5 @@ manifest: # noqa: var-naming[no-role-prefix]
     version: 41c447cc210dc39aa85d4a5f58b4a1b9e573b3dc
   yazi:
     url: https://github.com/sxyazi/yazi/releases/download/v25.4.8/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip
+  zig:
+    url: https://ziglang.org/download/0.14.0/zig-linux-{{ ansible_architecture }}-0.14.0.tar.xz

@@ -243,6 +243,77 @@ def _update_github_release(url: str, locked: bool) -> str:
     return new_url
 
 
+@dataclass
+class ZigReleaseInfo:
+    prefix: str
+    version: Version
+    os: str
+    arch: str
+    binary: str
+    url: str
+
+    def __init__(self, url: str):
+        "https://ziglang.org/download/0.14.0/zig-macos-x86_64-0.14.0.tar.xz"
+        parsed_url = re.match(
+            r"(?P<prefix>https?://ziglang.org/download/)"
+            r"(?P<version>[^/]+)/(?P<binary>zig-(?P<os>[^-]+)-(?P<arch>[^-]+)-.*)",
+            url,
+        )
+        assert parsed_url is not None
+        self.prefix = parsed_url.group("prefix")
+        self.version = Version.parse(parsed_url.group("version"))
+        self.os = parsed_url.group("os")
+        self.arch = parsed_url.group("arch")
+        self.binary = parsed_url.group("binary")
+        self.url = url
+
+
+def _update_zig_release(url: str, locked: bool) -> str:
+    tab = "  "
+    cri = ZigReleaseInfo(url)
+    releases_url = cri.prefix + "index.json"
+    _logger.info(tab + f"Updating {cri.binary}")
+    if locked:
+        _logger.info(f"{2 * tab}{cri.version} -- return (version is locked)")
+        return url
+
+    releases = _requests_try_get(releases_url)
+    if not releases:
+        return url
+    assert isinstance(releases, dict)
+    chosen_version = cri.version
+
+    for ver_candidate_str, _ in releases.items():
+        if not Version.is_valid(ver_candidate_str):
+            _logger.info(f"{2 * tab}{ver_candidate_str} -- skipping (could not parse as semver)")
+            continue
+        ver_candidate = Version.parse(ver_candidate_str)
+        if ver_candidate.prerelease:
+            _logger.info(f"{2 * tab}{ver_candidate} -- skipping (marked as prerelease)")
+            continue
+        if cri.version == ver_candidate:
+            _logger.info(f"{2 * tab}{ver_candidate} == {cri.version} -- return (reached current version)")
+            chosen_version = cri.version
+            break
+        if ver_candidate < cri.version:
+            _logger.warning(
+                f"{2 * tab}{ver_candidate} < {cri.version} -- skipping and returning current (missed current version)"
+            )
+            chosen_version = cri.version
+            break
+        if ver_candidate > cri.version:
+            breaking_note = ""
+            if ver_candidate.major > cri.version.major:
+                breaking_note = " [POSSIBLY BREAKING]"
+            _logger.info(f"{2 * tab}{ver_candidate} > {cri.version}{breaking_note} -- return (found latest version)")
+            chosen_version = ver_candidate
+            break
+        assert False
+
+    new_url = url.replace(str(cri.version), str(chosen_version))
+    return new_url
+
+
 def _materialize_templated_url(url: str) -> str:
     dummy_map = {
         "{{ ansible_architecture }}": "x86_64",
@@ -278,6 +349,13 @@ def update_github_release(url: str, locked: bool) -> str:
     return url
 
 
+def update_zig_release(url: str, locked: bool) -> str:
+    url = _materialize_templated_url(url)
+    url = _update_zig_release(url, locked)
+    url = _ephemerize_url(url)
+    return url
+
+
 def update_neovim_plugin(neovim_manifest_path: Path, plugin: str, dry_run: bool) -> None:
     manifest = utils.lua_read(neovim_manifest_path)
     info = manifest[plugin]
@@ -299,6 +377,8 @@ def get_ansible_entry_type(info: dict[str, Any]) -> str:
         return "git_tag"
     if parsed_url.netloc == "github.com":
         return "unknown"
+    if parsed_url.netloc == "ziglang.org":
+        return "zig"
     return "unknown"
 
 
@@ -329,6 +409,8 @@ def update_ansible_entry(manifest_path: Path, entry: str, dry_run: bool) -> None
             urls = manifest_pre[entry]
             for key, url in urls.items():
                 urls[key] = update_github_release(url, locked=locked)
+    if entry_type == "zig":
+        info["url"] = update_zig_release(info["url"], locked=locked)
 
     if not dry_run:
         utils.yaml_write(manifest_path, main_vars, yaml)

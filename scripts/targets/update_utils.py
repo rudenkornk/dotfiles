@@ -6,8 +6,8 @@ from typing import Any
 
 import git
 import requests
-import semver as semver_module
 from pydriller import Repository  # type: ignore
+from semver import Version
 
 from .. import utils
 
@@ -68,13 +68,13 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
     remote = repo.create_remote("origin", origin)
     remote.fetch()
 
-    current_semver = semver_module.VersionInfo.parse(from_tag)
+    current_semver = Version.parse(from_tag)
     chosen_tag = from_tag
 
     for tag_obj in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
         tag = tag_obj.name
         try:
-            semver = semver_module.VersionInfo.parse(tag)
+            semver = Version.parse(tag)
         except ValueError:
             _logger.info(f"{2 * tab}{tag} -- skipping (could not parse as semver)")
             continue
@@ -107,7 +107,7 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
 class GitHubTagInfo:
     tag: str
     version: str
-    semver: semver_module.VersionInfo | None
+    semver: Version | None
 
     def __init__(self, tag: str):
         self.tag = tag
@@ -117,7 +117,7 @@ class GitHubTagInfo:
         if tag_parsed:
             self.version = tag_parsed.group(1)
         try:
-            semver = semver_module.VersionInfo.parse(self.version)
+            semver = Version.parse(self.version)
             self.semver = semver
         except ValueError:
             pass
@@ -280,7 +280,7 @@ def get_ansible_entry_type(info: dict[str, Any]) -> str:
         return "github_release"
     version = info["version"]
     try:
-        semver_module.VersionInfo.parse(version)
+        Version.parse(version)
         return "git_tag"
     except ValueError:
         return "git_commit"

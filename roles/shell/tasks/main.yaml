@@ -94,3 +94,9 @@
     path: "{{ home }}/.local/bin"
     state: directory
     mode: "0o755"
+
+- name: Create ~/.local/share directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/share"
+    state: directory
+    mode: "0o755"

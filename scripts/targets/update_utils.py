@@ -382,35 +382,37 @@ def get_ansible_entry_type(info: dict[str, Any]) -> str:
     return "unknown"
 
 
+def _update_single_ansible_entry(*, info: dict[str, Any], entry: str) -> None:
+    entry_type = get_ansible_entry_type(info)
+    if entry_type == "unknown":
+        _logger.warning(f"Cannot update {entry} -- no update method available")
+        return
+
+    locked = info.get("lock", False)
+    if entry_type == "git_tag":
+        info["version"] = update_tag(info["url"], from_tag=info["version"], locked=locked)
+    if entry_type == "git_commit":
+        info["version"] = update_commit(info["url"], from_commit=info["version"], locked=locked)
+    if entry_type == "github_release":
+        info["url"] = update_github_release(info["url"], locked=locked)
+    if entry_type == "zig":
+        info["url"] = update_zig_release(info["url"], locked=locked)
+
+
 def update_ansible_entry(manifest_path: Path, entry: str, dry_run: bool) -> None:
     main_vars, yaml = utils.yaml_read(manifest_path)
     assert isinstance(main_vars, dict)
 
     manifest_pre = main_vars.get("manifest_pre", {})
     manifest = main_vars["manifest"]
-    info = manifest[entry]
 
-    locked = info.get("lock", False)
-    entry_type = get_ansible_entry_type(info)
-    if entry_type == "unknown":
-        _logger.warning(f"Cannot update {entry} -- no update method available")
-        return
-
-    if entry_type == "git_tag":
-        info["version"] = update_tag(info["url"], from_tag=info["version"], locked=locked)
-    if entry_type == "git_commit":
-        info["version"] = update_commit(info["url"], from_commit=info["version"], locked=locked)
-    if entry_type == "github_release":
-        if entry not in manifest_pre:
-            # URL is simple-templated
-            info["url"] = update_github_release(info["url"], locked=locked)
-        else:
-            # URL is complex-templated
-            urls = manifest_pre[entry]
-            for key, url in urls.items():
-                urls[key] = update_github_release(url, locked=locked)
-    if entry_type == "zig":
-        info["url"] = update_zig_release(info["url"], locked=locked)
+    if entry in manifest_pre:
+        # URL is complex-templated
+        for info in manifest_pre[entry].values():
+            _update_single_ansible_entry(info=info, entry=entry)
+    else:
+        # URL is simple-templated
+        _update_single_ansible_entry(info=manifest[entry], entry=entry)
 
     if not dry_run:
         utils.yaml_write(manifest_path, main_vars, yaml)

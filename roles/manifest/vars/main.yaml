@@ -27,11 +27,15 @@ pack_arch: "{{ {'Ubuntu': deb_arch, 'Fedora': ansible_architecture}[ansible_dist
 
 manifest_pre:
   hiddify:
-    rpm: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-rpm-x64.rpm
-    deb: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-Debian-x64.{{ pack }}
+    rpm:
+      url: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-rpm-x64.rpm
+    deb:
+      url: https://github.com/hiddify/hiddify-next/releases/download/v2.0.5/Hiddify-Debian-x64.{{ pack }}
   turbovnc:
-    rpm: https://github.com/TurboVNC/turbovnc/releases/download/3.1.4/turbovnc-3.1.4.{{ ansible_architecture }}.rpm
-    deb: https://github.com/TurboVNC/turbovnc/releases/download/3.1.4/turbovnc_3.1.4_{{ pack_arch }}.{{ pack }}
+    rpm:
+      url: https://github.com/TurboVNC/turbovnc/releases/download/3.1.4/turbovnc-3.1.4.{{ ansible_architecture }}.rpm
+    deb:
+      url: https://github.com/TurboVNC/turbovnc/releases/download/3.1.4/turbovnc_3.1.4_{{ pack_arch }}.{{ pack }}
 
 manifest: # noqa: var-naming[no-role-prefix]
   clipboard:
@@ -48,7 +52,7 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/junegunn/fzf.git
     version: 9c1a47acf7453f9dad5905b7f23ad06e5195d51f
   hiddify:
-    url: "{{ {'Ubuntu': manifest_pre.hiddify.deb, 'Fedora': manifest_pre.hiddify.rpm}[ansible_distribution] }}"
+    url: "{{ manifest_pre.hiddify[pack].url }}"
   jetbrains_mono:
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
   kitty_themes:
@@ -66,7 +70,7 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/tmux-plugins/tpm
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
   turbovnc:
-    url: "{{ {'Ubuntu': manifest_pre.turbovnc.deb, 'Fedora': manifest_pre.turbovnc.rpm}[ansible_distribution] }}"
+    url: "{{ manifest_pre.turbovnc[pack].url }}"
   vcpkg:
     url: https://github.com/microsoft/vcpkg
     version: 41c447cc210dc39aa85d4a5f58b4a1b9e573b3dc

@@ -15,7 +15,6 @@
       - "--exclude=*.md"
   loop:
     - jetbrains_mono
-    - fantasque
 
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"

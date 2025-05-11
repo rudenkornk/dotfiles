@@ -46,8 +46,6 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/jgraph/drawio-desktop/releases/download/v26.2.15/drawio-{{ pack_arch }}-26.2.15.{{ pack }}
   eza:
     url: https://github.com/eza-community/eza/releases/download/v0.21.3/eza_{{ ansible_architecture }}-unknown-linux-musl.tar.gz
-  fantasque:
-    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FantasqueSansMono.tar.xz
   fzf:
     url: https://github.com/junegunn/fzf.git
     version: 9c1a47acf7453f9dad5905b7f23ad06e5195d51f

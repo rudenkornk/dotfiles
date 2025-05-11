@@ -6,10 +6,16 @@
       - python3-libtmux
   register: tmux_installed
 
+- name: Create tmux config directory
+  ansible.builtin.file:
+    path: "{{ tmux_config_dir }}"
+    state: directory
+    mode: "0o755"
+
 - name: Install tmux-plugin-manager
   ansible.builtin.git:
     repo: "{{ manifest.tpm.url }}"
-    dest: "{{ home }}/.tmux/plugins/tpm"
+    dest: "{{ tmux_tpm_dir }}"
     version: "{{ manifest.tpm.version }}"
   register: tmux_downloaded
   retries: "{{ web_retries }}"
@@ -33,14 +39,14 @@
 - name: Create symlink to tmux.conf
   ansible.builtin.file:
     src: "{{ role_host_path }}/files/tmux.conf"
-    dest: "{{ home }}/.tmux.conf"
+    dest: "{{ tmux_config }}"
     state: link
 
 - name: Reload tmux config
   ansible.builtin.shell: |
-    {{ home }}/.tmux/plugins/tpm/bin/install_plugins
-    {{ home }}/.tmux/plugins/tpm/bin/update_plugins all
-    tmux -c 'tmux source-file "{{ home }}/.tmux.conf"'
+    {{ tmux_tpm_dir }}/bin/install_plugins
+    {{ tmux_tpm_dir }}/bin/update_plugins all
+    tmux -c 'tmux source-file "{{ tmux_config }}"'
   args:
     executable: bash
   changed_when: tmux_installed is changed

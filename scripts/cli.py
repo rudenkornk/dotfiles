@@ -99,14 +99,20 @@ def check_bootstrap(image: list[str]) -> None:
 
 
 @cli.command(help="Lint code.")
-@click.option("-a", "--exclude-ansible", is_flag=True, help="Exclude Ansible linters.")
-@click.option("-p", "--exclude-python", is_flag=True, help="Exclude Python linters.")
-@click.option("-s", "--exclude-secrets", is_flag=True, help="Exclude secrets linters.")
-@click.option("-g", "--exclude-generic", is_flag=True, help="Exclude generic linters (like typos).")
-def lint(exclude_ansible: bool, exclude_python: bool, exclude_secrets: bool, exclude_generic: bool) -> None:
-    lint_target.lint_code(
-        ansible=not exclude_ansible, python=not exclude_python, secrets=not exclude_secrets, generic=not exclude_generic
-    )
+@click.option(
+    "-o",
+    "--only",
+    type=click.Choice(["all"] + lint_target.lint_choices()),
+    default=["all"],
+    help="Only lint these.",
+    multiple=True,
+)
+def lint(only: list[str]) -> None:
+    if "all" in only:
+        args = {arg: True for arg in lint_target.lint_choices()}
+    else:
+        args = {arg: arg in only for arg in lint_target.lint_choices()}
+    lint_target.lint_code(**args)
 
 
 @cli.command(name="format", help="Format code.")

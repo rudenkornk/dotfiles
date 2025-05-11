@@ -1,3 +1,4 @@
+import inspect
 import logging
 import re
 import tempfile
@@ -166,6 +167,10 @@ def lint_code(*, ansible: bool, python: bool, secrets: bool, generic: bool) -> N
 
     if generic:
         run_shell(["typos"])
+
+
+def lint_choices() -> list[str]:
+    return inspect.getfullargspec(lint_code).kwonlyargs
 
 
 def format_code() -> None:

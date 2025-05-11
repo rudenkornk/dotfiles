@@ -118,7 +118,7 @@
     fisher update
     echo 1 1 1 2 3 1 1 2 y | tide configure
   args:
-    executable: fish
+    executable: "{{ home }}/.local/bin/fish"
   changed_when: false
 
 - name: Create symlink to cmd.exe

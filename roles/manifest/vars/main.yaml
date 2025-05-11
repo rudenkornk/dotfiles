@@ -42,6 +42,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
     url: https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-{{ ansible_architecture }}.sh
+  fish:
+    url: https://github.com/fish-shell/fish-shell/releases/download/4.0.2/fish-static-{{ deb_arch }}-4.0.2.tar.xz
   gh:
     url: https://github.com/cli/cli/releases/download/v2.72.0/gh_2.72.0_linux_{{ deb_arch }}.tar.gz
   drawio:

@@ -1,37 +1,39 @@
-- name: Add fish gpg key
-  become: true
-  ansible.builtin.get_url:
-    url: "{{ shell_fish_key_url }}"
-    dest: "{{ apt_keys }}/fish.asc"
-    mode: "0o644"
+- name: Create ~/.local/bin directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/bin"
+    state: directory
+    mode: "0o755"
+
+- name: Create ~/.local/share directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/share"
+    state: directory
+    mode: "0o755"
+
+- name: Download fish
+  ansible.builtin.unarchive:
+    src: "{{ manifest.fish.url }}"
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html
+    # If left unspecified and we are configuring for root user,
+    # ansible will not set user and group for us,
+    # which leads to incorrect ownership of the extracted files
+    # and idempotency issues.
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: shell_installed
-  until: shell_installed is not failed
-  # It looks like Ubuntu keyserver stores several different gpg keys
-  # Their actual key part is the same, but some metadata differs,
-  # thus ansible reports that this task has changed state
-  # and idempotence checks fail
-  # As a workaround we set `changed_when` to false
-  changed_when: false
-  when: ansible_distribution == "Ubuntu"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
 
-- name: Add fish repository
-  become: true
-  ansible.builtin.apt_repository:
-    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/fish.asc] {{ shell_fish_repo }}
-  when: ansible_distribution == "Ubuntu"
-
-- name: Add fish src repository
-  become: true
-  ansible.builtin.apt_repository:
-    repo: deb-src [arch={{ deb_arch }} signed-by={{ apt_keys }}/fish.asc] {{ shell_fish_repo }}
-  when: ansible_distribution == "Ubuntu"
-
-- name: Install fish
-  become: true
-  ansible.builtin.package:
-    name: fish
+- name: Install fish configs
+  ansible.builtin.shell: |
+    set -o pipefail
+    echo yes | ~/.local/bin/fish --install
+  args:
+    executable: bash
+    creates: "{{ home }}/.local/share/fish/install"
 
 - name: Create fish functions directory
   ansible.builtin.file:
@@ -61,7 +63,7 @@
   become: true
   ansible.builtin.user:
     name: "{{ ansible_user }}"
-    shell: /usr/bin/fish
+    shell: "{{ home }}/.local/bin/fish"
 
 - name: Install bash-completion
   become: true
@@ -88,15 +90,3 @@
     dest: "{{ home }}/.config/fish/functions/{{ item | basename }}"
     state: link
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"
-
-- name: Create ~/.local/bin directory
-  ansible.builtin.file:
-    path: "{{ home }}/.local/bin"
-    state: directory
-    mode: "0o755"
-
-- name: Create ~/.local/share directory
-  ansible.builtin.file:
-    path: "{{ home }}/.local/share"
-    state: directory
-    mode: "0o755"

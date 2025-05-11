@@ -49,50 +49,50 @@
     dest: "{{ home }}/.mrconfig"
     state: link
 
-- name: Add GitHub cli gpg key on Ubuntu
-  become: true
-  ansible.builtin.get_url:
-    url: "{{ git_gh_cli_gpg }}"
-    dest: "{{ apt_keys }}/gh_cli.gpg"
-    mode: "0o644"
+- name: Download gh binary
+  ansible.builtin.unarchive:
+    src: "{{ manifest.gh.url }}"
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
+    extra_opts:
+      - --strip-components=2
+      - --exclude=man
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: gh_cli_installed
-  until: gh_cli_installed is not failed
-  when: ansible_distribution == "Ubuntu"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
 
-- name: Add GitHub cli repository on Ubuntu
-  become: true
-  ansible.builtin.apt_repository:
-    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/gh_cli.gpg] {{ git_gh_cli_repo }}
-  when: ansible_distribution == "Ubuntu"
+- name: Download gh man
+  ansible.builtin.unarchive:
+    src: "{{ manifest.gh.url }}"
+    dest: "{{ home }}/.local/share/"
+    remote_src: true
+    extra_opts:
+      - --strip-components=2
+      - --exclude=gh
+    # See https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#parameter-owner
+    # If left unspecified and we are configuring for root user,
+    # ansible will not set user and group for us,
+    # which leads to incorrect ownership of the extracted files
+    # and idempotency issues.
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
 
-- name: Add GitHub cli repository on Fedora
-  become: true
-  ansible.builtin.yum_repository:
-    name: gh-cli
-    description: "packages for the GitHub CLI"
-    baseurl: "{{ git_gh_cli_rpm_repo }}"
-    enabled: true
-    gpgkey: "{{ git_gh_cli_gpg }}"
-  when: ansible_distribution == "Fedora"
-
-- name: Install gh
-  become: true
-  ansible.builtin.package:
-    name: gh
-
-# unarchive usually sets owner and group to a current user
-# except for the case when the user is root
-# In such case it can even set different groups in sequential runs,
-# which leads to idempotency check failures
-# For a weird reason this happens only on this exact unarchive usage.
-# Thus, we force owner and group to the current user here
-# See https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#parameter-owner
 - name: Install lazygit
   ansible.builtin.unarchive:
     src: "{{ manifest.lazygit.url }}"
     dest: "{{ home }}/.local/bin"
+    # See https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#parameter-owner
+    # If left unspecified and we are configuring for root user,
+    # ansible will not set user and group for us,
+    # which leads to incorrect ownership of the extracted files
+    # and idempotency issues.
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     remote_src: true

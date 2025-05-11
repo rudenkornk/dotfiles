@@ -42,6 +42,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
     url: https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-{{ ansible_architecture }}.sh
+  gh:
+    url: https://github.com/cli/cli/releases/download/v2.72.0/gh_2.72.0_linux_{{ deb_arch }}.tar.gz
   drawio:
     url: https://github.com/jgraph/drawio-desktop/releases/download/v26.2.15/drawio-{{ pack_arch }}-26.2.15.{{ pack }}
   eza:

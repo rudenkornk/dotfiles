@@ -4,17 +4,34 @@
     state: directory
     mode: "0o755"
 
-- name: Download zig
+- name: Install zig
   ansible.builtin.unarchive:
     src: "{{ manifest.zig.url }}"
     dest: "{{ home }}/.local/zig"
     remote_src: true
     extra_opts:
       - --strip-components=1
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
-  register: shell_utils_downloaded
-  until: shell_utils_downloaded is not failed
+  register: zig_downloaded
+  until: zig_downloaded is not failed
+
+- name: Install zls
+  ansible.builtin.unarchive:
+    src: "{{ manifest.zls.url }}"
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
+    extra_opts:
+      - --exclude=LICENSE
+      - --exclude=*.md
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: zig_downloaded
+  until: zig_downloaded is not failed
 
 - name: Set up bash
   ansible.builtin.lineinfile:

@@ -8,6 +8,8 @@
     src: "{{ telegram_url }}"
     dest: "{{ home }}/.local"
     remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: telegram_downloaded

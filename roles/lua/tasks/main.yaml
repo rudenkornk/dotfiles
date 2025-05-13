@@ -11,6 +11,8 @@
     src: "{{ lua_rocks_url }}"
     dest: "{{ dotfiles_host_tmp }}"
     remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: lua_downloaded
@@ -117,6 +119,8 @@
     src: "{{ manifest.stylua.url }}"
     dest: "{{ home }}/.local/bin"
     remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   retries: "{{ web_retries }}"
   delay: "{{ web_delay }}"
   register: lua_downloaded

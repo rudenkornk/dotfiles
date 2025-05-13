@@ -28,6 +28,8 @@
         src: "{{ manifest.clipboard.url }}"
         dest: "{{ dotfiles_host_tmp }}/win32yank"
         remote_src: true
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
       retries: "{{ web_retries }}"
       delay: "{{ web_delay }}"
       register: clipboard_downloaded

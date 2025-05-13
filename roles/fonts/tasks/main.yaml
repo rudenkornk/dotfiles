@@ -13,6 +13,8 @@
       # readme files overwrite each other, making ansible report changed status
       - "--exclude=*.txt"
       - "--exclude=*.md"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   loop:
     - jetbrains_mono
 

@@ -7,7 +7,10 @@ function _fzf_search_files --description "Search the current directory with ripg
     set unescaped_exp_token (string unescape -- $expanded_token)
 
     if not set --query fzf_rg_opts
-        set rg_opts --line-number --no-heading --color=always --smart-case --follow --hidden
+      set rg_opts --line-number --no-heading --color=always --smart-case --follow --hidden
+      if git check-ignore --quiet -- . &> /dev/null
+        set rg_opts $rg_opts --no-ignore
+      end
     else
       set rg_opts $fzf_rg_opts
     end

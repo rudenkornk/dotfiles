@@ -10,6 +10,7 @@ vim.opt.imsearch = -1
 vim.g.autoformat = false
 vim.g.snacks_animate = false
 
+vim.opt.relativenumber = false
 vim.wo.wrap = true
 
 -- Setup ansible filetype

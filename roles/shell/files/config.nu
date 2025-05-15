@@ -14,4 +14,3 @@ def c [argv: string = ""] {
     z $argv; eza --all --classify --icons
   }
 }
-source $"($nu.home-path)/.cargo/env.nu"

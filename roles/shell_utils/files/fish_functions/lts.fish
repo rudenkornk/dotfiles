@@ -8,5 +8,6 @@ function lts --wraps eza
         --tree \
         --level 2 \
         --total-size \
+        --sort size \
         $argv
 end

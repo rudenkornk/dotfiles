@@ -17,5 +17,6 @@ function llls --wraps eza
         --flags \
         --blocksize \
         --total-size \
+        --sort size \
         $argv
 end

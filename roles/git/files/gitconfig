@@ -9,7 +9,7 @@
   cp = cherry-pick
   df = diff
   fp = format-patch
-  ft = fetch --all --prune --prune-tags
+  ft = fetch --all
   l = log
   lg = log --graph
   ll = log --oneline
@@ -66,6 +66,9 @@
 [fetch]
   # https://youtu.be/aolI_Rz0ZqY?si=KpfeZxRHkhZGZ5N_&t=1699
   writeCommitGraph = true
+  prune = true
+  pruneTags = true
+  parallel = 8
 [merge]
   # conflictStyle = zdiff3 # not supported in old git versions
 

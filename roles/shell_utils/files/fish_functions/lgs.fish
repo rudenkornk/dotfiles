@@ -8,6 +8,7 @@ function lgs --wraps eza
         --tree \
         --level 2 \
         --total-size \
+        --sort size \
         --git-ignore \
         $argv
 end

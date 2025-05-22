@@ -13,6 +13,15 @@ M.opts = {
         score_offset = -50,
         opts = { label = " ", all_panes = true },
       },
+      supermaven = {
+        score_offset = 1,
+      },
+      copilot = {
+        score_offset = 1,
+      },
+      codeium = {
+        score_offset = 1,
+      },
     },
   },
 }

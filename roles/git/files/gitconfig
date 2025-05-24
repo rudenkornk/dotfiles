@@ -34,7 +34,7 @@
 [gpg]
   format = ssh
 [column]
-  ui = auto
+  ui = never # column view looks confusing to me
 [branch]
   sort = -committerdate
 [tag]

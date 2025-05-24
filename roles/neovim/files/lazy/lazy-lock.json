@@ -15,7 +15,6 @@
   "cmake-tools.nvim": { "branch": "master", "commit": "1ee065c33ca777c0e03cd7c358010202ee70bb88" },
   "cmp-emoji": { "branch": "main", "commit": "e8398e2adf512a03bb4e1728ca017ffeac670a9f" },
   "cmp-tmux": { "branch": "main", "commit": "95b1b921802e6f60627b3e76afb9380fddd87f9a" },
-  "codeium.nvim": { "branch": "main", "commit": "821b570b526dbb05b57aa4ded578b709a704a38a" },
   "conform.nvim": { "branch": "master", "commit": "372fc521f8421b7830ea6db4d6ea3bae1c77548c" },
   "copilot.lua": { "branch": "master", "commit": "a5c390f8d8e85b501b22dcb2f30e0cbbd69d5ff0" },
   "crates.nvim": { "branch": "main", "commit": "2c8f4fab02e3e9ea42c6ad9b547e4207a914a397" },

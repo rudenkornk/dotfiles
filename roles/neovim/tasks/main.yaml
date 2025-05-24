@@ -95,8 +95,8 @@
 
     - name: Set up clipboard for neovim
       ansible.builtin.template:
-        src: clipboard.lua
-        dest: "{{ neovim_base }}_3/config/lua/config/clipboard.lua"
+        src: this_clipboard.lua
+        dest: "{{ neovim_base }}_3/config/lua/config/this_clipboard.lua"
         mode: "0o644"
 
 - name: Install LazyVim experiments
@@ -127,12 +127,6 @@
         dest: "{{ neovim_base }}_4/config"
         state: link
         force: true
-
-    - name: Set up clipboard for neovim
-      ansible.builtin.template:
-        src: clipboard.lua
-        dest: "{{ neovim_base }}_4/config/lua/config/clipboard.lua"
-        mode: "0o644"
 
 - name: Simple configuration version management
   block:

@@ -1,3 +1,5 @@
+# https://carapace-sh.github.io/carapace-bin/setup.html#nushell
+
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
 
 if not (echo "~/.cache/carapace/init.nu" | path exists) {

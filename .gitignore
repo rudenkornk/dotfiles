@@ -4,7 +4,7 @@ __pycache__
 
 /node_modules
 .mypy_cache
-clipboard.lua
+this_clipboard.lua
 credentials.json
 credentials.yaml
 credentials_map.yaml

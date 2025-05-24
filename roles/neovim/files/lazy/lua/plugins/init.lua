@@ -24,11 +24,11 @@ return {
         -- ga gb       gj gk gl gm
         --       dc             dm    dp dq dr du dx dy
         --          cd          cm co cp cq cr cu cx cy
-        add = "ga",
+        add = "gm",
         delete = "dm",
         find = "gj",
         find_left = "gk",
-        highlight = "gm",
+        highlight = "ga",
         replace = "cm",
       },
     },

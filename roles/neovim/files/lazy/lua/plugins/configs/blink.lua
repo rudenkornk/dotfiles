@@ -19,9 +19,6 @@ M.opts = {
       copilot = {
         score_offset = 1,
       },
-      codeium = {
-        score_offset = 1,
-      },
     },
   },
 }

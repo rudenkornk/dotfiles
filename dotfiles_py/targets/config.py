@@ -48,7 +48,7 @@ def _start_container(name: str) -> None:
             f"image={image}",
             "--inventory",
             REPO_PATH / "inventory.yaml",
-            SCRIPTS_PATH / "playbook_dotfiles_container.yaml",
+            REPO_PATH / "playbook_dotfiles_container.yaml",
         ],
         extra_env={
             "ANSIBLE_LOG_PATH": logs,

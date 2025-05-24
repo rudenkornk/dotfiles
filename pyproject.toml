@@ -6,16 +6,9 @@ readme = "readme.md"
 # Python 3.12.5 has a memory safety issue that can cause 
 # Black's AST safety checks to fail.
 requires-python = ">=3.10,!=3.12.5"
+license = "MIT"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["scripts"]
-
-[dependency-groups]
-dev = [
+dependencies = [
   "ansible-lint>=24.12.2 ; sys_platform != 'win32'",
   "ansible-core>=2.17.3",
   "black>=24.8.0",
@@ -25,10 +18,6 @@ dev = [
   "graphviz>=0.20.3",
   "isort>=5.13.2",
   "luadata>=1.0.5",
-  # required for no-longer-needed roles/terminals
-  # and causes issues when bootstraping the project,
-  # since it requires C compiler
-  #"lupa>=2.2",
   "mypy>=1.11.1",
   "passlib>=1.7.4",
   "psutil>=6.0.0",
@@ -46,6 +35,16 @@ dev = [
   "typos>=1.31.1",
   "rich>=14.0.0",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dotfiles_py"]
+
+[project.scripts]
+dotfiles = "dotfiles_py:cli.main"
 
 [tool.uv]
 # W/A for ansible-lint
@@ -85,7 +84,7 @@ signature-mutators = [
   "click.decorators.help_option",
   "click.decorators.pass_context",
   "click.decorators.confirmation_option",
-  "scripts.utils.makelike",
+  "dotfiles_py.utils.makelike",
 ]
 
 [tool.typos]
@@ -94,10 +93,7 @@ default.extend-ignore-re = [
   "(?Rm)^.*(#|//)\\s*typos:\\s*ignore$",
   "(?s)(#|//)\\s*typos:\\s*off.*?(#|//)\\s*typos:\\s*on",
 ]
-files.extend-exclude = [
-  "lazy-lock.json"
-]
-
+files.extend-exclude = ["lazy-lock.json"]
 
 [tool.mypy]
 strict = true

@@ -1,6 +1,7 @@
 import getpass
 import logging
 import secrets
+import shutil
 import string
 from pathlib import Path
 
@@ -177,3 +178,8 @@ def password(alphabet: str, length: int, output: Path, number: int) -> None:
     with output.open("a") as output_file:
         output_file.writelines(passwords)
     _logger.info(f"Password saved to the end of {output} file")
+
+
+def main() -> None:
+    utils.setup_logger()
+    cli(max_content_width=shutil.get_terminal_size(fallback=(120, 24)).columns)

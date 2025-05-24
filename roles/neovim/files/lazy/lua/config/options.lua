@@ -37,3 +37,15 @@ vim.filetype.add({
 
 -- mitigate the long clipboard loading issue
 vim.g.clipboard = require("config.clipboard")
+
+-- Detect root only using .git
+-- `LazyVim` defaults for `<leader><space>` find files and `<leader>/` live grep open in a  "root" directory.
+-- This `root` directory has a rather complicated algorithm, which does not work for me well
+-- in cases with nested projects inside one repo:
+--    It correctly detects the root of each sub-project,
+--    whereas I, being a simple man, just want to use the root of the whole repo.
+-- See:
+-- https://github.com/LazyVim/LazyVim/blob/25abbf546d564dc484cf903804661ba12de45507/lua/lazyvim/config/options.lua#L33
+-- https://github.com/LazyVim/LazyVim/blob/25abbf546d564dc484cf903804661ba12de45507/lua/lazyvim/util/root.lua
+-- https://github.com/LazyVim/lazyvim.github.io/blob/5cc96146d96bb61ad915088bc3eec4151643cd6f/docs/news.md?plain=1#L258
+vim.g.root_spec = { ".git", "cwd" }

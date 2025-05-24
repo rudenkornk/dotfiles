@@ -16,6 +16,7 @@ _logger = logging.getLogger(__name__)
 
 
 REPO_PATH = Path(__file__).parent.parent
+DOTPY_PATH = Path(__file__).parent
 ARTIFACTS_PATH = REPO_PATH / "__artifacts__"
 TMP_PATH = ARTIFACTS_PATH / "tmp"
 DATA_PATH = Path(__file__).parent / "data"

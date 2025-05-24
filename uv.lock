@@ -327,9 +327,7 @@ wheels = [
 name = "dotfiles"
 version = "1.0.0"
 source = { editable = "." }
-
-[package.dev-dependencies]
-dev = [
+dependencies = [
     { name = "ansible-core", version = "2.17.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' and sys_platform != 'win32'" },
     { name = "ansible-core", version = "2.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' and sys_platform != 'win32'" },
     { name = "ansible-lint", marker = "sys_platform != 'win32'" },
@@ -357,9 +355,7 @@ dev = [
 ]
 
 [package.metadata]
-
-[package.metadata.requires-dev]
-dev = [
+requires-dist = [
     { name = "ansible-core", specifier = ">=2.17.3" },
     { name = "ansible-lint", marker = "sys_platform != 'win32'", specifier = ">=24.12.2" },
     { name = "black", specifier = ">=24.8.0" },

@@ -240,6 +240,16 @@
     executable: "{{ home }}/.local/bin/fish"
   changed_when: false
 
+- name: Download wiki-tui binary
+  ansible.builtin.unarchive:
+    src: "{{ manifest.wiki.url }}"
+    dest: "{{ home }}/.local/bin"
+    extra_opts:
+      - --transform=s/wiki-tui/wiki/g
+    remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
 - name: Create symlink to cmd.exe
   ansible.builtin.file:
     src: "/mnt/c/Windows/System32/cmd.exe"

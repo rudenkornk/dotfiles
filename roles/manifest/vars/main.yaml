@@ -44,6 +44,10 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
     url: https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-{{ ansible_architecture }}.sh
+  dua:
+    url: https://github.com/Byron/dua-cli/releases/download/v2.30.1/dua-v2.30.1-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
+  dust:
+    url: https://github.com/bootandy/dust/releases/download/v1.2.0/dust-v1.2.0-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   fish:
     url: https://github.com/fish-shell/fish-shell/releases/download/4.0.2/fish-static-{{ deb_arch }}-4.0.2.tar.xz
   gh:

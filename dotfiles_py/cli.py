@@ -9,12 +9,11 @@ import click
 from click_help_colors import HelpColorsGroup
 
 from . import utils
-from .targets import bootstrap
+from .targets import bootstrap, oh_my_posh
 from .targets import config as config_target
 from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
 from .targets import lint as lint_target
-from .targets import oh_my_posh
 from .targets import roles_graph as roles_graph_target
 from .targets import update as update_target
 
@@ -68,7 +67,10 @@ def cli(log_level: str) -> None:
     help="Target user to configure.",
 )
 @click.option(
-    "-v", "--verify-unchanged", is_flag=True, help="This is an idempotency check. If anything was changed, fail."
+    "-v",
+    "--verify-unchanged",
+    is_flag=True,
+    help="This is an idempotency check. If anything was changed, fail.",
 )
 @click.option(
     "-m",
@@ -81,7 +83,7 @@ def cli(log_level: str) -> None:
     "'server' will skip all GUI tools. "
     "'full' will do full configuration.",
 )
-def config(host: list[str], user: str, verify_unchanged: bool, mode: str) -> None:
+def config(*, host: list[str], user: str, verify_unchanged: bool, mode: str) -> None:
     mode_enum = config_target.ConfigMode[mode.upper()]
     config_target.config(hostnames=host, user=user, verify_unchanged=verify_unchanged, mode=mode_enum)
 
@@ -104,14 +106,14 @@ def check_bootstrap(image: list[str]) -> None:
 @click.option(
     "-o",
     "--only",
-    type=click.Choice(["all"] + lint_target.lint_choices()),
+    type=click.Choice(["all", *lint_target.lint_choices()]),
     default=["all"],
     help="Only lint these.",
     multiple=True,
 )
-def lint(only: list[str]) -> None:
+def lint(*, only: list[str]) -> None:
     if "all" in only:
-        args = {arg: True for arg in lint_target.lint_choices()}
+        args = dict.fromkeys(lint_target.lint_choices(), True)
     else:
         args = {arg: arg in only for arg in lint_target.lint_choices()}
     lint_target.lint_code(**args)
@@ -131,17 +133,17 @@ def hooks() -> None:
 @click.option(
     "-c",
     "--components",
-    type=click.Choice(["all"] + update_target.get_update_choices()),
+    type=click.Choice(["all", *update_target.get_update_choices()]),
     default=["all"],
     help="Component to update.",
     multiple=True,
 )
 @click.option("-d", "--dry-run", is_flag=True, help="Do not actually change versions.")
-def update(components: list[str], dry_run: bool) -> None:
+def update(*, components: list[str], dry_run: bool) -> None:
     if "all" in components:
         components = update_target.get_update_choices()
 
-    update_target.update(components, dry_run)
+    update_target.update(components, dry_run=dry_run)
 
 
 @cli.command(help="Regenerate gnome settings")
@@ -151,8 +153,8 @@ def gnome() -> None:
 
 @cli.command(help="Generate ansible roles dependency graph.")
 @click.option("-s", "--silent", is_flag=True, help="Do not open graph in image viewer.")
-def graph(silent: bool) -> None:
-    roles_graph_target.generate_png(silent)
+def graph(*, silent: bool) -> None:
+    roles_graph_target.generate_png(view=silent)
 
 
 @cli.command(help="Generate random password.")
@@ -172,7 +174,7 @@ def graph(silent: bool) -> None:
     help="Where to store generated password.",
 )
 @click.option("-n", "--number", type=int, default=1, help="Number of passwords to generate.")
-def password(alphabet: str, length: int, output: Path, number: int) -> None:
+def password(*, alphabet: str, length: int, output: Path, number: int) -> None:
     passwords_str = "".join(secrets.choice(alphabet) for _ in range(length * number))
     passwords = [passwords_str[i : i + length] + "\n" for i in range(0, len(passwords_str), length)]
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -183,7 +185,7 @@ def password(alphabet: str, length: int, output: Path, number: int) -> None:
 
 @cli.command(name="omp-themes", help="Choose oh-my-posh theme candidates.")
 @click.option("-a", "--from-all", is_flag=True, help="Choose from all themes, not from already chosen candidates.")
-def omp_themes(from_all: bool) -> None:
+def omp_themes(*, from_all: bool) -> None:
     oh_my_posh.choose(from_all=from_all)
 
 

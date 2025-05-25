@@ -22,7 +22,7 @@ def check_bootstrap(image: str) -> None:
                 "bash",
                 "-c",
                 f"bash {sources[0]}",
-            ]
+            ],
         )
 
     makelike(

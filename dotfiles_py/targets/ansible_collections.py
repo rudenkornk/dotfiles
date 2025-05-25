@@ -17,7 +17,10 @@ ANSIBLE_COLLECTIONS_PATH = ARTIFACTS_PATH / platform.node() / "ansible_collectio
 )
 def ansible_collections(artifact: Path, sources: list[Path]) -> None:
     yaml, _ = yaml_read(sources[0])
-    assert isinstance(yaml, dict)
+    if not isinstance(yaml, dict):
+        msg = f"Expected a dictionary in {sources[0]}, got {type(yaml)}"
+        raise TypeError(msg)
+
     manifest = yaml["manifest"]
     run_shell(
         [

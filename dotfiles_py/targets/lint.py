@@ -15,7 +15,9 @@ _logger = logging.getLogger(__name__)
 def _check_registered_roles() -> None:
     _logger.info("Checking if all roles are registered in playbook.yaml...")
     playbook, _ = yaml_read(REPO_PATH / "playbook.yaml")
-    assert isinstance(playbook, list)
+    if not isinstance(playbook, list):
+        msg = f"Expected a list in {REPO_PATH / 'playbook.yaml'}, got {type(playbook)}"
+        raise TypeError(msg)
     roles = {entry["role"] for entry in playbook[0]["roles"]}
     missing = set()
     for role_path in (REPO_PATH / "roles").iterdir():
@@ -23,7 +25,8 @@ def _check_registered_roles() -> None:
             missing.add(role_name)
 
     if missing:
-        raise RuntimeError(f"Missing roles: {', '.join(missing)} in playbook.yaml")
+        msg = f"Missing roles: {', '.join(missing)} in playbook.yaml"
+        raise RuntimeError(msg)
 
     _logger.info("All roles are registered!")
 
@@ -55,7 +58,8 @@ def _check_secrets_deps() -> None:
         role = secret.split("/")[1]
 
         if role not in graph:
-            raise RuntimeError(f"Secret {secret} is not used by any role!")
+            msg = f"Secret {secret} is not used by any role!"
+            raise RuntimeError(msg)
 
         if "secrets" in graph[role]:
             continue
@@ -96,7 +100,7 @@ def _check_leaked_credentials() -> None:
         if commit.hexsha in ignored:
             continue
 
-        for path in commit.stats.files.keys():
+        for path in commit.stats.files:
             if not re.search(
                 (
                     "("
@@ -119,7 +123,7 @@ def _check_leaked_credentials() -> None:
             # Error message is taken from
             # https://docs.gitguardian.com/secrets-detection/secrets-detection-engine/leaks_remediation
             _logger.error("LOOKS LIKE SSH KEY, VPN CONFIG OR SOME AUTH DATA LEAKED!!!")
-            _logger.error(f"Problematic commit:     {str(commit.summary)}")
+            _logger.error(f"Problematic commit:     {commit.summary!s}")
             _logger.error(f"Problematic commit SHA: {commit.hexsha}")
             _logger.error(f"Problematic path: {path}")
             _logger.error("")
@@ -134,7 +138,8 @@ def _check_leaked_credentials() -> None:
             _logger.error("  * Step 1: Revoke the exposed secret.")
             _logger.error("  * Step 2: Clean the git history.")
             _logger.error("  * Step 3: Inspect logs.")
-            raise RuntimeError("Leaked credentials detected!")
+            msg = "Leaked credentials detected!"
+            raise RuntimeError(msg)
     _logger.info("Done, no leaked credentials found.")
 
 
@@ -162,7 +167,7 @@ def lint_code(*, ansible: bool, python: bool, secrets: bool, generic: bool) -> N
     if python:
         run_shell(["python3", "-m", "mypy", DOTPY_PATH])
         # Specifying job number for pylint somehow leads to false-positive errors
-        run_shell(["python3", "-m", "pylint", DOTPY_PATH])
+        run_shell(["python3", "-m", "ruff", "check"])
         run_shell(["python3", "-m", "yamllint", "--strict", REPO_PATH / ".github"])
 
     if generic:
@@ -174,8 +179,8 @@ def lint_choices() -> list[str]:
 
 
 def format_code() -> None:
-    run_shell(["python3", "-m", "black", REPO_PATH])
-    run_shell(["python3", "-m", "isort", REPO_PATH])
+    run_shell(["python3", "-m", "ruff", "format"])
+    run_shell(["python3", "-m", "ruff", "check", "--fix", "--unsafe-fixes"])
 
     # All the other formatting tools require a machine to be configured,
     # Thus we ignore errors here, making these optional

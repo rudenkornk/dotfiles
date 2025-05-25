@@ -1,4 +1,4 @@
-import graphviz  # type: ignore
+import graphviz  # type: ignore[import-untyped]
 
 from .. import utils
 
@@ -21,14 +21,17 @@ def roles_graph() -> dict[str, set[str]]:
             continue
 
         yaml, _ = utils.yaml_read(dependencies_path)
-        assert isinstance(yaml, dict)
+        if not isinstance(yaml, dict):
+            msg = f"Expected a dictionary in {dependencies_path}, got {type(yaml)}"
+            raise TypeError(msg)
+
         for dep in yaml["dependencies"]:
             graph[role].add(dep["role"])
 
     return graph
 
 
-def generate_png(view: bool = False) -> None:
+def generate_png(*, view: bool = False) -> None:
     graph = graphviz.Digraph(name="roles")
 
     str_graph = roles_graph()

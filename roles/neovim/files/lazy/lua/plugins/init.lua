@@ -83,7 +83,7 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
-        python = { "isort", "black" },
+        python = { "ruff_organize_imports", "ruff_format", "ruff_fix" },
       },
     },
   },

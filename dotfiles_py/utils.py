@@ -4,11 +4,12 @@ import os
 import shlex
 import subprocess
 import time
+from collections.abc import Callable, Mapping, Sequence
 from multiprocessing import cpu_count as _cpu_count
 from pathlib import Path
-from typing import IO, Any, Callable, Concatenate, Mapping, ParamSpec, Sequence, TypeVar, overload
+from typing import IO, Any, ClassVar, Concatenate, ParamSpec, TypeVar, overload
 
-import luadata  # type: ignore
+import luadata  # type: ignore[import-untyped]
 from rich.logging import RichHandler
 from ruamel.yaml import YAML
 
@@ -36,8 +37,8 @@ def _cgroup_cpu_count() -> int | None:
         # more like milli * centi
         return int(cpu_micros / 100000)
     # pylint: disable-next=broad-except
-    except Exception:
-        pass
+    except Exception as exc:  # noqa: BLE001
+        _logger.debug(f"Could not read cgroup cpu.max: {exc}")
     return None
 
 
@@ -54,7 +55,7 @@ def _paths2shell(paths: Sequence[Path]) -> str:
     return ":".join([str(p) for p in paths])
 
 
-def shell_command(
+def shell_command(  # noqa: PLR0913, C901
     cmd: Sequence[str | Path] | str,
     *,
     extra_env: Mapping[str, str | Path] | None = None,
@@ -70,7 +71,8 @@ def shell_command(
     extra_paths = extra_paths or []
 
     if "PATH" in extra_env:
-        raise ValueError("Do not pass PATH to extra_env. Use extra_paths instead.")
+        msg = "Do not pass PATH to extra_env. Use extra_paths instead."
+        raise ValueError(msg)
 
     extra_paths_str = _paths2shell(extra_paths)
     print_cmd = ""
@@ -90,9 +92,11 @@ def shell_command(
 
     if isinstance(cmd, list):
         print_cmd += " ".join([shlex.quote(str(arg)) for arg in cmd])
-    else:
-        assert isinstance(cmd, str)
+    elif isinstance(cmd, str):
         print_cmd += cmd
+    else:
+        msg = f"Unexpected command type for run_shell util: {type(cmd)}"
+        raise TypeError(msg)
 
     suppress_stdout = capture_output or stdout is not None
     suppress_stderr = capture_output or stderr is not None
@@ -103,11 +107,10 @@ def shell_command(
     elif suppress_stderr:
         print_cmd += " 2> $CAPTURE"
 
-    print_cmd = print_cmd.strip()
-    return print_cmd
+    return print_cmd.strip()
 
 
-def run_shell(
+def run_shell(  # noqa: PLR0913
     cmd: Sequence[str | Path] | str,
     *,
     extra_env: Mapping[str, str | Path] | None = None,
@@ -135,8 +138,10 @@ def run_shell(
     env.update({k: str(v) for k, v in extra_env.items()})
 
     if extra_paths:
-        new_path = _paths2shell(extra_paths)
-        assert new_path.strip()
+        new_path = _paths2shell(extra_paths).strip()
+        if not new_path:
+            msg = f"PATH is empty, cannot add extra_paths {extra_paths}"
+            raise ValueError(msg)
         if "PATH" in env and env["PATH"].strip():
             new_path += ":" + env["PATH"]
         env["PATH"] = new_path
@@ -156,7 +161,7 @@ def run_shell(
         _logger.log(loglevel, f"[RUNNING IN SHELL]: {print_cmd}")
 
     if isinstance(cmd, str):
-        return subprocess.run(
+        return subprocess.run(  # noqa: S602
             cmd,
             env=env,
             check=check,
@@ -170,7 +175,7 @@ def run_shell(
             executable="bash",
         )
     if isinstance(cmd, Sequence):
-        return subprocess.run(
+        return subprocess.run(  # noqa: S603
             cmd,
             env=env,
             check=check,
@@ -182,7 +187,8 @@ def run_shell(
             cwd=cwd,
         )
 
-    assert False, f"Unexpected command type for run_shell util: {type(cmd)}"
+    msg = f"Unexpected command type for run_shell util: {type(cmd)}"
+    raise AssertionError(msg)
 
 
 _P = ParamSpec("_P")
@@ -191,24 +197,38 @@ _R = TypeVar("_R")
 
 @overload
 def retry(
-    func: Callable[_P, _R], *, delay: int | float = ..., max_tries: int = ..., suppress_logger: bool = ...
+    func: Callable[_P, _R],
+    *,
+    delay: float = ...,
+    max_tries: int = ...,
+    suppress_logger: bool = ...,
 ) -> Callable[_P, _R]: ...
 @overload
 def retry(
-    func: None = None, *, delay: int | float = ..., max_tries: int = ..., suppress_logger: bool = ...
+    func: None = None,
+    *,
+    delay: float = ...,
+    max_tries: int = ...,
+    suppress_logger: bool = ...,
 ) -> Callable[[Callable[_P, _R]], Callable[_P, _R]]: ...
 
 
 def retry(
-    func: Callable[_P, _R] | None = None, *, delay: int | float = 5, max_tries: int = 5, suppress_logger: bool = False
+    func: Callable[_P, _R] | None = None,
+    *,
+    delay: float = 5,
+    max_tries: int = 5,
+    suppress_logger: bool = False,
 ) -> Callable[[Callable[_P, _R]], Callable[_P, _R]] | Callable[_P, _R]:
-    assert max_tries > 0
+    if max_tries <= 0:
+        msg = f"max_tries must be greater than 0, got {max_tries}"
+        raise ValueError(msg)
 
     def retry_decorator(func: Callable[_P, _R]) -> Callable[_P, _R]:
         @functools.wraps(func)
         def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
             for i in range(max_tries):
-                setattr(wrapper, "current_try", i)
+                wrapper.current_try = i  # type: ignore[attr-defined]
                 try:
                     return func(*args, **kwargs)
                 # pylint: disable-next=broad-except
@@ -220,7 +240,8 @@ def retry(
                         _logger.warning(f"  {type(exc).__name__}: {exc}")
                         _logger.warning(f"  Retry {i + 2} of {max_tries}...")
                     time.sleep(delay)
-            assert False, "Unreachable."
+            msg = "Unreachable."
+            raise AssertionError(msg)
 
         return wrapper
 
@@ -230,12 +251,14 @@ def retry(
     return retry_decorator
 
 
-def makelike(
-    artifact: Path, *sources: Path | Callable[[], Path], auto_create: bool = False
+def makelike(  # noqa: C901
+    artifact: Path,
+    *sources: Path | Callable[[], Path],
+    auto_create: bool = False,
 ) -> Callable[[Callable[Concatenate[Path, list[Path], _P], None]], Callable[_P, Path]]:
-    def makelike_decorator(func: Callable[Concatenate[Path, list[Path], _P], None]) -> Callable[_P, Path]:
+    def makelike_decorator(func: Callable[Concatenate[Path, list[Path], _P], None]) -> Callable[_P, Path]:  # noqa: C901
         @functools.wraps(func)
-        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> Path:
+        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> Path:  # noqa: C901, PLR0912
             forward_sources: list[Path] = []
 
             uptodate = True
@@ -253,16 +276,20 @@ def makelike(
                 elif isinstance(source, Path):
                     source_path = source
                 else:
-                    assert False
+                    msg = f"Unexpected type for source: {type(source)}"
+                    raise TypeError(msg)
 
-                assert (
-                    source_path.exists()
-                ), f"Source file {source_path} does not exist for a makelike function {func.__name__}!"
+                if not source_path.exists():
+                    msg = f"Source file {source_path} does not exist for a makelike function {func.__name__}!"
+                    raise FileNotFoundError(msg)
                 forward_sources.append(source_path)
                 if not uptodate:
                     continue
 
-                assert artifact_mtime is not None
+                if artifact_mtime is None:
+                    msg = f"Artifact {artifact} mtime is None!"
+                    raise FileNotFoundError(msg)
+
                 if source_path.stat().st_mtime > artifact_mtime:
                     reason += f"not up-to-date, because source {source_path} is newer than artifact {artifact}"
                     uptodate = False
@@ -278,7 +305,9 @@ def makelike(
                 artifact.parent.mkdir(parents=True, exist_ok=True)
                 artifact.touch()
 
-            assert artifact.exists(), f"Artifact {artifact} was not created in makelike function {func.__name__}!"
+            if not artifact.exists():
+                msg = f"Artifact {artifact} was not created in makelike function {func.__name__}!"
+                raise FileNotFoundError(msg)
             return artifact
 
         return wrapper
@@ -288,7 +317,9 @@ def makelike(
 
 def lua_read(path: Path) -> dict[str, Any]:
     lua = luadata.read(path, encoding="utf-8")
-    assert isinstance(lua, dict)
+    if not isinstance(lua, dict):
+        msg = f"Expected a dictionary in {path}, got {type(lua)}"
+        raise TypeError(msg)
     return lua
 
 
@@ -300,7 +331,9 @@ def yaml_read(path: Path) -> tuple[dict[str, Any] | list[Any], YAML]:
     yaml = YAML()
     yaml.preserve_quotes = True
     val = yaml.load(path)
-    assert isinstance(val, (dict, list))
+    if not isinstance(val, dict | list):
+        msg = f"Expected a dictionary or list in {path}, got {type(val)}"
+        raise TypeError(msg)
     return val, yaml
 
 
@@ -315,7 +348,7 @@ def yaml_write(path: Path, data: dict[str, Any], yaml: YAML | None = None, *, wi
 
 
 class _LoggerFormatter(logging.Formatter):
-    formats = {
+    formats: ClassVar = {
         logging.DEBUG: "[grey]%(message)s[/]",
         logging.INFO: "[green]%(message)s[/]",
         logging.WARNING: "[yellow][WARNING]: %(message)s[/]",
@@ -326,7 +359,7 @@ class _LoggerFormatter(logging.Formatter):
         super().__init__()
         self.formatters = {level: logging.Formatter(fmt) for level, fmt in self.formats.items()}
 
-    def format(self, record: Any) -> str:
+    def format(self, record: Any) -> str:  # noqa: ANN401
         formatter = self.formatters[logging.DEBUG]
         for level, fmt in self.formatters.items():
             if record.levelno >= level:

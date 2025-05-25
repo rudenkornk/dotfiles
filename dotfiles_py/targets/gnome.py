@@ -20,7 +20,7 @@ class _Style(enum.Enum):
 class DConfKey(Path):
     if sys.version_info < (3, 12):
         # pylint: disable-next=protected-access, no-member
-        _flavour = type(Path())._flavour  # type: ignore
+        _flavour = type(Path())._flavour  # type: ignore[attr-defined] # noqa: SLF001
 
     def to_str(self, style: _Style = _Style.DCONF) -> str:
         if style == _Style.DCONF:
@@ -32,7 +32,7 @@ class DConfKey(Path):
             dot_path = dot_path.replace("/", ".")
             return f"{dot_path} {self.name}"
 
-        assert False
+        raise AssertionError
 
     @classmethod
     def parse(cls, str_path: str, line: str, style: _Style) -> tuple[Self, str]:
@@ -48,7 +48,7 @@ class DConfKey(Path):
             key, value = line.split(maxsplit=1)
             return cls(path / key), value
 
-        assert False
+        raise AssertionError
 
     @classmethod
     def parse_gsettings(cls, line: str) -> tuple[Self, str]:
@@ -69,14 +69,17 @@ class DConf(dict[DConfKey, str]):
         result = cls()
 
         for line in result_lines:
-            line = line.strip()
+            line = line.strip()  # noqa: PLW2901
             if not line:
                 continue
             if line.startswith("["):
                 path = Path("/" + line[1:-1])
                 continue
 
-            assert path is not None
+            if path is None:
+                msg = f"Could not parse path from line {line}"
+                raise ValueError(msg)
+
             key, val = DConfKey.parse_dconf(path, line)
             result[key] = val
 
@@ -86,7 +89,9 @@ class DConf(dict[DConfKey, str]):
     def _generate_default_gsettings(cls) -> Self:
         extra_env = {"XDG_CONFIG_HOME": "/dev/null"}
         result_lines = utils.run_shell(
-            ["gsettings", "list-recursively"], extra_env=extra_env, capture_output=True
+            ["gsettings", "list-recursively"],
+            extra_env=extra_env,
+            capture_output=True,
         ).stdout.splitlines()
         result = cls()
         for line in result_lines:
@@ -95,19 +100,17 @@ class DConf(dict[DConfKey, str]):
         return result
 
     @classmethod
-    def generate(cls, default: bool = False) -> Self:
+    def generate(cls, *, default: bool = False) -> Self:
         if default:
             return cls._generate_default_gsettings()
         return cls._generate_dconf()
 
-    def dump(self, prefix: str = "") -> str:
+    def dump(self, *, prefix: str = "") -> str:
         result_list = []
         for key, val in sorted(self.items()):
             key_str = json.dumps(str(key))
-            val = json.dumps(val)
-            result_list.append(f"{prefix}{key_str}: {val}")
-        result = "\n".join(result_list)
-        return result
+            result_list.append(f"{prefix}{key_str}: {json.dumps(val)}")
+        return "\n".join(result_list)
 
 
 class _DomainKind(enum.Enum):
@@ -124,7 +127,7 @@ class _DomainKind(enum.Enum):
 
 
 class _Domains:
-    def __init__(self, domains: dict[str, _DomainKind] | None = None):
+    def __init__(self, domains: dict[str, _DomainKind] | None = None) -> None:
         self.domains = domains or {}
 
     def serialize(self) -> dict[str, str]:
@@ -152,7 +155,9 @@ class _Domains:
 
 def generate_ansible_vars(entries: DConf, vars_path: Path) -> None:
     ansible_vars, yaml = utils.yaml_read(vars_path)
-    assert isinstance(ansible_vars, dict)
+    if not isinstance(ansible_vars, dict):
+        msg = f"Expected a dictionary in {vars_path}, got {type(ansible_vars)}"
+        raise TypeError(msg)
     ansible_vars["gnome_settings"] = {str(key): val for key, val in sorted(entries.items())}
     utils.yaml_write(vars_path, ansible_vars, yaml)
 
@@ -165,7 +170,9 @@ def gnome_config() -> None:
 
     domain_rules_path = utils.REPO_PATH / "roles" / "gnome" / "vars" / "rules.yaml"
     domain_rules, _ = utils.yaml_read(domain_rules_path)
-    assert isinstance(domain_rules, dict)
+    if not isinstance(domain_rules, dict):
+        msg = f"Expected a dictionary in {domain_rules_path}, got {type(domain_rules)}"
+        raise TypeError(msg)
     domains = _Domains.deserialize(domain_rules["gnome_rules"])
 
     cats: dict[_DomainKind, DConf] = {kind: DConf() for kind in _DomainKind}

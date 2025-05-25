@@ -99,71 +99,27 @@
   # f(x) = round(10 * x^1.66)
   # Credits: https://stackoverflow.com/a/66250482/8099151
   highlightRecent = \
-                 16, \
-  1825 day ago, 232, \
-  1791 day ago, 233, \
-  1758 day ago, 234, \
-  1724 day ago, 235, \
-  1691 day ago, 236, \
-  1658 day ago, 237, \
-  1625 day ago, 238, \
-  1592 day ago, 239, \
-  1559 day ago, 240, \
-  1526 day ago,  59, \
-  1494 day ago, 241, \
-  1462 day ago, 242, \
-  1429 day ago, 243, \
-  1397 day ago, 244, \
-  1365 day ago, 102, \
-  1333 day ago, 245, \
-  1302 day ago, 246, \
-  1270 day ago, 247, \
-  1239 day ago, 248, \
-  1208 day ago, 145, \
-  1176 day ago, 249, \
-  1146 day ago, 250, \
-  1115 day ago, 251, \
-  1084 day ago,  52, \
-  1054 day ago,  88, \
-  1024 day ago, 124, \
-   993 day ago, 160, \
-   964 day ago, 196, \
-   934 day ago, 203, \
-   904 day ago, 167, \
-   875 day ago,   9, \
-   846 day ago,   1, \
-   817 day ago, 210, \
-   788 day ago, 130, \
-   759 day ago, 208, \
-   731 day ago, 214, \
-   703 day ago, 178, \
-   675 day ago, 220, \
-   647 day ago, 221, \
-   620 day ago, 179, \
-   592 day ago,  11, \
-   565 day ago, 222, \
-   538 day ago,  18, \
-   512 day ago,  17, \
-   486 day ago,  19, \
-   460 day ago,  20, \
-   434 day ago,  21, \
-   408 day ago,  63, \
-   383 day ago,  62, \
-   358 day ago, 105, \
-   334 day ago,  23, \
-   310 day ago,  30, \
-   286 day ago,  37, \
-   263 day ago,  44, \
-   240 day ago,  45, \
-   217 day ago,  51, \
-   195 day ago,  87, \
-   173 day ago, 123, \
-   152 day ago,  22, \
-   131 day ago,  28, \
-   111 day ago,  34, \
-    92 day ago,  40, \
-    73 day ago,  46, \
-    56 day ago,  82, \
-    39 day ago,  83, \
-    24 day ago, 120, \
-    10 day ago, 156
+    237, 20 month ago,\
+    238, 19 month ago,\
+    239, 18 month ago,\
+    240, 17 month ago,\
+    241, 16 month ago,\
+    242, 15 month ago,\
+    243, 14 month ago,\
+    244, 13 month ago,\
+    245, 12 month ago,\
+    246, 11 month ago,\
+    247, 10 month ago,\
+    248, 9 month ago,\
+    249, 8 month ago,\
+    250, 7 month ago,\
+    251, 6 month ago,\
+    252, 5 month ago,\
+    253, 4 month ago,\
+    254, 3 month ago,\
+    231, 2 month ago,\
+    230, 1 month ago,\
+    229, 3 weeks ago,\
+    228, 2 weeks ago,\
+    227, 1 week ago,\
+    226

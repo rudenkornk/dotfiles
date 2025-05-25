@@ -10,13 +10,14 @@
   register: shell_utils_downloaded
   until: shell_utils_downloaded is not failed
 
-- name: Install eza, fd, bat, zoxide, hexyl, jq and moreutils
+- name: Install eza, fd, bat, zoxide, hexyl, hyperfine, jq and moreutils
   become: true
   ansible.builtin.package:
     name:
       - bat
       - fd-find
       - hexyl
+      - hyperfine
       - jq
       - moreutils
       - ripgrep

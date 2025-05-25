@@ -93,3 +93,8 @@ if test -f ~/.local/bin/yazi_dir/completions/ya.fish
 end
 
 oh-my-posh init fish --config ~/.config/oh-my-posh/theme.json | source
+
+fish_add_path ~/.local/xh
+if test -f ~/.local/xh/completions/xh.fish
+    source ~/.local/xh/completions/xh.fish
+end

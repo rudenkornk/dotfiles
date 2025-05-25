@@ -44,6 +44,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
     url: https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-{{ ansible_architecture }}.sh
+  delta:
+    url: https://github.com/dandavison/delta/releases/download/0.18.2/delta-0.18.2-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   dua:
     url: https://github.com/Byron/dua-cli/releases/download/v2.30.1/dua-v2.30.1-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   dust:

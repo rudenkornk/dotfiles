@@ -22,6 +22,32 @@
       - ripgrep
       - zoxide
 
+- name: Create xh directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/xh"
+    state: directory
+    mode: "0o755"
+
+- name: Download xh binary
+  ansible.builtin.unarchive:
+    src: "{{ manifest.xh.url }}"
+    dest: "{{ home }}/.local/xh"
+    extra_opts:
+      - --strip-components=1
+    remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
+
+- name: Create symlink to xh man
+  ansible.builtin.file:
+    src: "{{ home }}/.local/xh/doc/xh.1"
+    dest: "{{ home }}/.local/share/man/man1/xh.1"
+    state: link
+
 - name: Install carapace
   ansible.builtin.unarchive:
     src: "{{ manifest.carapace.url }}"

@@ -6,6 +6,8 @@ from ..utils import REPO_PATH, run_shell
 
 _logger = logging.getLogger(__name__)
 
+TERMINATE_CODE = 100
+
 
 def _choose_impl(*, candidates_list: list[Path], theme: Path, candidates_out: Path) -> None:
     shell = os.environ["SHELL"]
@@ -18,7 +20,7 @@ def _choose_impl(*, candidates_list: list[Path], theme: Path, candidates_out: Pa
             res = run_shell([shell], check=False)
             if res.returncode == 0:
                 candidates.write(candidate.name + "\n")
-            elif res.returncode == 100:  # Allow user to stop this
+            elif res.returncode == TERMINATE_CODE:  # Allow user to stop this
                 return
 
 

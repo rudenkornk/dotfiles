@@ -100,6 +100,19 @@
     dest: "{{ home }}/.config/yamllint/config"
     state: link
 
+- name: Create ~/.config/ruff directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/ruff"
+    state: directory
+    mode: "0o755"
+
+# https://docs.astral.sh/ruff/configuration/#config-file-discovery
+- name: Create symlink to global ruff config
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/ruff.toml"
+    dest: "{{ home }}/.config/ruff/ruff.toml"
+    state: link
+
 - name: Create ~/.config/flameshot directory
   ansible.builtin.file:
     path: "{{ home }}/.config/flameshot"

@@ -13,7 +13,9 @@ _neovim_manifest_path = utils.REPO_PATH / "roles" / "neovim" / "files" / "nvchad
 
 def get_ansible_choices(manifest_path: Path) -> list[str]:
     yaml, _ = utils.yaml_read(manifest_path)
-    assert isinstance(yaml, dict)
+    if not isinstance(yaml, dict):
+        msg = f"Expected a dictionary in {manifest_path}, got {type(yaml)}"
+        raise TypeError(msg)
     return list(yaml["manifest"].keys())
 
 
@@ -29,25 +31,22 @@ def get_update_choices() -> list[str]:
     return choices
 
 
-def _update(choice: str, dry_run: bool) -> None:
+def _update(choice: str, *, dry_run: bool) -> None:
     title = choice.replace("_", " ")
     suffix = " (dry run)" if dry_run else ""
     _logger.info(f"Updating {title}{suffix}:")
 
-    # Deprecate nvchad
-    # elif choice == "neovim_plugins":
-    #    for plugin in get_neovim_plugins_choices():
-    #        _update_utils.update_neovim_plugin(_neovim_manifest_path, plugin, dry_run=dry_run)
     if choice in get_ansible_choices(_ansible_manifest_path):
         update_utils.update_ansible_entry(_ansible_manifest_path, choice, dry_run=dry_run)
     elif choice in get_ansible_choices(_ansible_collections_path):
         update_utils.update_ansible_entry(_ansible_collections_path, choice, dry_run=dry_run)
     else:
-        assert False, f"Invalid choice: {choice}"
+        msg = f"Invalid choice: {choice}"
+        raise AssertionError(msg)
 
     _logger.info("")
 
 
-def update(choices: list[str], dry_run: bool) -> None:
+def update(choices: list[str], *, dry_run: bool) -> None:
     for choice in choices:
         _update(choice, dry_run=dry_run)

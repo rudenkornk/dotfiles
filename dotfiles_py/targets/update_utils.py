@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 
 import git
 import requests
-from pydriller import Repository  # type: ignore
+from pydriller import Repository  # type: ignore[import-untyped]
 from semver import Version
 
 from .. import utils
@@ -15,14 +15,14 @@ from .. import utils
 _logger = logging.getLogger(__name__)
 
 
-def update_commit(origin: str, from_commit: str, locked: bool) -> str:
+def update_commit(origin: str, from_commit: str, *, locked: bool) -> str:
     num_new_commits = 0
     last_hash = ""
     max_log = 5
     hash_len = 7
     tab = "  "
     locked_msg = " (version is locked)" if locked else ""
-    _logger.info(tab + f"Updating {origin}{locked_msg}")
+    _logger.info(f"{tab}Updating {origin}{locked_msg}")
     if locked:
         return from_commit
 
@@ -50,14 +50,16 @@ def update_commit(origin: str, from_commit: str, locked: bool) -> str:
     if num_new_commits > 0:
         _logger.info(f"{tab * 2}Total {num_new_commits} new commits.")
 
-    assert last_hash
+    if not last_hash:
+        msg = f"Could not find a commit in {origin} matching {from_commit}"
+        raise RuntimeError(msg)
     return last_hash
 
 
-def update_tag(origin: str, from_tag: str, locked: bool) -> str:
+def update_tag(origin: str, from_tag: str, *, locked: bool) -> str:  # noqa: C901
     tab = "  "
     locked_msg = " (version is locked)" if locked else ""
-    _logger.info(tab + f"Updating {origin}{locked_msg}")
+    _logger.info(f"{tab}Updating {origin}{locked_msg}")
     if locked:
         return from_tag
 
@@ -100,7 +102,7 @@ def update_tag(origin: str, from_tag: str, locked: bool) -> str:
             _logger.info(f"{2 * tab}{tag} > {from_tag}{breaking_note} -- return (found latest version)")
             chosen_tag = tag
             break
-        assert False
+        raise AssertionError
     return chosen_tag
 
 
@@ -110,7 +112,7 @@ class GitHubTagInfo:
     version: str
     semver: Version | None
 
-    def __init__(self, tag: str):
+    def __init__(self, tag: str) -> None:
         self.tag = tag
         self.version = tag
         self.semver = None
@@ -133,13 +135,15 @@ class GitHubReleaseInfo:
     binary: str
     url: str
 
-    def __init__(self, url: str):
+    def __init__(self, url: str) -> None:
         parsed_url = re.match(
             r"(?P<prefix>https?://github.com)/"
             r"(?P<repo>[^/]+/[^/]+)/releases/download/(?P<tag_info>[^/]+)/(?P<binary>.*)",
             url,
         )
-        assert parsed_url is not None
+        if not parsed_url:
+            msg = f"Could not parse url {url}"
+            raise ValueError(msg)
         self.prefix = parsed_url.group("prefix")
         self.repo = parsed_url.group("repo")
         self.path = "releases/download"
@@ -157,7 +161,9 @@ def _requests_try_get(url: str) -> dict[str, Any] | list[Any] | None:
 
     try:
         ret = _get().json()
-        assert isinstance(ret, (dict, list))
+        if not isinstance(ret, dict | list):
+            msg = f"Expected a dictionary or list in {url}, got {type(ret)}"
+            raise TypeError(msg)
         return ret
     except requests.exceptions.HTTPError as e:
         _logger.warning("Cannot get response from url")
@@ -168,12 +174,12 @@ def _requests_try_get(url: str) -> dict[str, Any] | list[Any] | None:
 
 
 # pylint: disable-next=too-many-statements
-def _update_github_release(url: str, locked: bool) -> str:
+def _update_github_release(url: str, *, locked: bool) -> str:  # noqa: PLR0912, PLR0915, C901
     tab = "  "
     cri = GitHubReleaseInfo(url)
     releases_url = f"https://github.com/{cri.repo}/releases"
     request_url = f"https://api.github.com/repos/{cri.repo}/releases"
-    _logger.info(tab + f"Updating {releases_url}")
+    _logger.info(f"{tab}Updating {releases_url}")
     if locked:
         _logger.info(f"{2 * tab}{cri.ti.tag} -- return (version is locked)")
         return url
@@ -183,7 +189,10 @@ def _update_github_release(url: str, locked: bool) -> str:
     releases = _requests_try_get(request_url)
     if not releases:
         return url
-    assert isinstance(releases, list)
+    if not isinstance(releases, list):
+        msg = f"Expected a list in {request_url}, got {type(releases)}"
+        raise TypeError(msg)
+
     chosen_tag = cri.ti.tag
     chosen_version = cri.ti.version
 
@@ -205,14 +214,15 @@ def _update_github_release(url: str, locked: bool) -> str:
                 chosen_tag = ti.tag
                 chosen_version = ti.version
                 break
-            else:
-                _logger.info(f"{2 * tab}{ti.tag} == {cri.ti.tag} -- return (reached current version)")
-                chosen_tag = cri.ti.tag
-                chosen_version = cri.ti.version
-                break
+            _logger.info(f"{2 * tab}{ti.tag} == {cri.ti.tag} -- return (reached current version)")
+            chosen_tag = cri.ti.tag
+            chosen_version = cri.ti.version
+            break
 
-        assert ti.semver is not None
-        assert cri.ti.semver is not None
+        if ti.semver is None or cri.ti.semver is None:
+            msg = f"Could not parse as semver: {ti.tag} or {cri.ti.tag}"
+            raise ValueError(msg)
+
         if ti.semver == cri.ti.semver:
             _logger.info(f"{2 * tab}{ti.tag} == {cri.ti.tag} -- return (reached current version)")
             chosen_tag = cri.ti.tag
@@ -220,7 +230,7 @@ def _update_github_release(url: str, locked: bool) -> str:
             break
         if ti.semver < cri.ti.semver:
             _logger.warning(
-                f"{2 * tab}{ti.tag} < {cri.ti.tag} -- skipping and returning current (missed current version)"
+                f"{2 * tab}{ti.tag} < {cri.ti.tag} -- skipping and returning current (missed current version)",
             )
             chosen_tag = cri.ti.tag
             chosen_version = cri.ti.version
@@ -236,11 +246,10 @@ def _update_github_release(url: str, locked: bool) -> str:
             chosen_tag = ti.tag
             chosen_version = ti.version
             break
-        assert False
+        raise AssertionError
 
     chosen_binary = cri.binary.replace(cri.ti.version, chosen_version)
-    new_url = f"{cri.prefix}/{cri.repo}/{cri.path}/{chosen_tag}/{chosen_binary}"
-    return new_url
+    return f"{cri.prefix}/{cri.repo}/{cri.path}/{chosen_tag}/{chosen_binary}"
 
 
 @dataclass
@@ -252,14 +261,17 @@ class ZigReleaseInfo:
     binary: str
     url: str
 
-    def __init__(self, url: str):
-        "https://ziglang.org/download/0.14.0/zig-macos-x86_64-0.14.0.tar.xz"
+    def __init__(self, url: str) -> None:
+        # https://ziglang.org/download/0.14.0/zig-macos-x86_64-0.14.0.tar.xz.
         parsed_url = re.match(
             r"(?P<prefix>https?://ziglang.org/download/)"
             r"(?P<version>[^/]+)/(?P<binary>zig-(?P<os>[^-]+)-(?P<arch>[^-]+)-.*)",
             url,
         )
-        assert parsed_url is not None
+        if parsed_url is None:
+            msg = f"Could not parse url {url}"
+            raise ValueError(msg)
+
         self.prefix = parsed_url.group("prefix")
         self.version = Version.parse(parsed_url.group("version"))
         self.os = parsed_url.group("os")
@@ -268,11 +280,11 @@ class ZigReleaseInfo:
         self.url = url
 
 
-def _update_zig_release(url: str, locked: bool) -> str:
+def _update_zig_release(url: str, *, locked: bool) -> str:  # noqa: C901
     tab = "  "
     cri = ZigReleaseInfo(url)
     releases_url = cri.prefix + "index.json"
-    _logger.info(tab + f"Updating {cri.binary}")
+    _logger.info(f"{tab}Updating {cri.binary}")
     if locked:
         _logger.info(f"{2 * tab}{cri.version} -- return (version is locked)")
         return url
@@ -280,10 +292,12 @@ def _update_zig_release(url: str, locked: bool) -> str:
     releases = _requests_try_get(releases_url)
     if not releases:
         return url
-    assert isinstance(releases, dict)
+    if not isinstance(releases, dict):
+        msg = f"Expected a dictionary in {releases_url}, got {type(releases)}"
+        raise TypeError(msg)
     chosen_version = cri.version
 
-    for ver_candidate_str, _ in releases.items():
+    for ver_candidate_str in releases:
         if not Version.is_valid(ver_candidate_str):
             _logger.info(f"{2 * tab}{ver_candidate_str} -- skipping (could not parse as semver)")
             continue
@@ -297,7 +311,7 @@ def _update_zig_release(url: str, locked: bool) -> str:
             break
         if ver_candidate < cri.version:
             _logger.warning(
-                f"{2 * tab}{ver_candidate} < {cri.version} -- skipping and returning current (missed current version)"
+                f"{2 * tab}{ver_candidate} < {cri.version} -- skipping and returning current (missed current version)",
             )
             chosen_version = cri.version
             break
@@ -308,10 +322,9 @@ def _update_zig_release(url: str, locked: bool) -> str:
             _logger.info(f"{2 * tab}{ver_candidate} > {cri.version}{breaking_note} -- return (found latest version)")
             chosen_version = ver_candidate
             break
-        assert False
+        raise AssertionError
 
-    new_url = url.replace(str(cri.version), str(chosen_version))
-    return new_url
+    return url.replace(str(cri.version), str(chosen_version))
 
 
 def _materialize_templated_url(url: str) -> str:
@@ -342,21 +355,19 @@ def _ephemerize_url(url: str) -> str:
     return url
 
 
-def update_github_release(url: str, locked: bool) -> str:
+def update_github_release(url: str, *, locked: bool) -> str:
     url = _materialize_templated_url(url)
-    url = _update_github_release(url, locked)
-    url = _ephemerize_url(url)
-    return url
+    url = _update_github_release(url, locked=locked)
+    return _ephemerize_url(url)
 
 
-def update_zig_release(url: str, locked: bool) -> str:
+def update_zig_release(url: str, *, locked: bool) -> str:
     url = _materialize_templated_url(url)
-    url = _update_zig_release(url, locked)
-    url = _ephemerize_url(url)
-    return url
+    url = _update_zig_release(url, locked=locked)
+    return _ephemerize_url(url)
 
 
-def update_neovim_plugin(neovim_manifest_path: Path, plugin: str, dry_run: bool) -> None:
+def update_neovim_plugin(neovim_manifest_path: Path, plugin: str, *, dry_run: bool) -> None:
     manifest = utils.lua_read(neovim_manifest_path)
     info = manifest[plugin]
     repo = "https://github.com/" + plugin
@@ -399,9 +410,11 @@ def _update_single_ansible_entry(*, info: dict[str, Any], entry: str) -> None:
         info["url"] = update_zig_release(info["url"], locked=locked)
 
 
-def update_ansible_entry(manifest_path: Path, entry: str, dry_run: bool) -> None:
+def update_ansible_entry(manifest_path: Path, entry: str, *, dry_run: bool) -> None:
     main_vars, yaml = utils.yaml_read(manifest_path)
-    assert isinstance(main_vars, dict)
+    if not isinstance(main_vars, dict):
+        msg = f"Expected a dictionary in {manifest_path}, got {type(main_vars)}"
+        raise TypeError(msg)
 
     manifest_pre = main_vars.get("manifest_pre", {})
     manifest = main_vars["manifest"]

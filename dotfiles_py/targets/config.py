@@ -5,10 +5,11 @@ import os
 import re
 import shutil
 import socket
+from collections.abc import Mapping
 from contextlib import closing
 from functools import cache
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 from ..utils import ARTIFACTS_PATH, REPO_PATH, SCRIPTS_PATH, run_shell, yaml_read, yaml_write
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
@@ -21,7 +22,9 @@ _ANSIBLE_LOGS_PATH = ARTIFACTS_PATH / "ansible_logs"
 @cache
 def hosts() -> dict[str, dict[str, str]]:
     inventory, _ = yaml_read(REPO_PATH / "inventory.yaml")
-    assert isinstance(inventory, dict)
+    if not isinstance(inventory, dict):
+        msg = f"Expected a dictionary in inventory.yaml, got {type(inventory)}"
+        raise TypeError(msg)
     return dict(inventory["all"]["hosts"])
 
 
@@ -63,7 +66,7 @@ def _changes(logs: str) -> list[str]:
     current_task = ""
     for line in logs.splitlines():
         if match := re.search(r"\d{4}-\d{2}-\d{2}.*?\| (.*)", line):
-            line = match.group(1)
+            line = match.group(1)  # noqa: PLW2901
 
         if line.startswith("TASK"):
             current_task = ""
@@ -92,8 +95,9 @@ def _verify_unchanged() -> None:
     for logpath, changes in file_changes:
         _logger.error(f"Changes detected in {logpath.name}")
         for change in changes:
-            _logger.error("\n" + change)
-    raise RuntimeError("\nIDEMPOTENCY CHECK FAILED!")
+            _logger.error(f"\n{change}")
+    msg = "\nIDEMPOTENCY CHECK FAILED!"
+    raise RuntimeError(msg)
 
 
 def _ansible_verbosity() -> str:
@@ -110,9 +114,7 @@ def _ansible_verbosity() -> str:
 
 def _check_port(address: str, port: int) -> bool:
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
-        if sock.connect_ex((address, port)) == 0:
-            return True
-        return False
+        return sock.connect_ex((address, port)) == 0
 
 
 def _setup_ssh_port(hostname: str, host: dict[str, Any], ssh_config: Mapping[str, Any] | None) -> None:
@@ -124,14 +126,18 @@ def _setup_ssh_port(hostname: str, host: dict[str, Any], ssh_config: Mapping[str
         port_candidates.append(ssh_config["ssh_server_config_map"][host.get("ssh_kind", "default_kind")]["port"])
 
     address = host.get("ansible_host", hostname)
-    assert isinstance(address, str)
+    if not isinstance(address, str):
+        msg = f"Expected a string address for {hostname}, got {type(address)}"
+        raise TypeError(msg)
+
     for port in port_candidates:
         if not _check_port(address, port):
             continue
         if port is not None:
             host["ansible_port"] = port
         return
-    raise RuntimeError(f"Could not connect to {address} on any of the following ports: {port_candidates}")
+    msg = f"Could not connect to {address} on any of the following ports: {port_candidates}"
+    raise RuntimeError(msg)
 
 
 def _setup_ssh(hostname: str, host: dict[str, Any]) -> None:
@@ -145,7 +151,11 @@ def _setup_ssh(hostname: str, host: dict[str, Any]) -> None:
         _logger.warning("Using default settings for SSH connection.")
         _logger.warning("This might result in connection issues.")
     else:
-        ssh_config, _ = yaml_read(ssh_config_path)  # type: ignore
+        yaml_ssh_config, _ = yaml_read(ssh_config_path)
+        if not isinstance(yaml_ssh_config, dict):
+            msg = f"Expected a dictionary in {ssh_config_path}, got {type(yaml_ssh_config)}"
+            raise TypeError(msg)
+        ssh_config = yaml_ssh_config
 
     _setup_ssh_port(hostname, host, ssh_config)
 
@@ -165,7 +175,9 @@ def _setup_credentials(_: str, host: dict[str, Any], user: str) -> None:
         _logger.warning("This might result in privileges escalation problems.")
         return
     creds_config, _1 = yaml_read(creds_config_path)
-    assert isinstance(creds_config, dict)
+    if not isinstance(creds_config, dict):
+        msg = f"Expected a dictionary in {creds_config_path}, got {type(creds_config)}"
+        raise TypeError(msg)
 
     creds_host = creds_config["credentials_map"][host.get("credentials_kind", "default_kind")]
     creds_user = creds_host.get(user, creds_host["default_user"])
@@ -183,7 +195,9 @@ def _setup_inventory(hostnames: list[str]) -> Path:
     # Dynamically set correct secret settings for the hosts
 
     inventory, yaml = yaml_read(REPO_PATH / "inventory.yaml")
-    assert isinstance(inventory, dict)
+    if not isinstance(inventory, dict):
+        msg = f"Expected a dictionary in inventory.yaml, got {type(inventory)}"
+        raise TypeError(msg)
     for hostname in hostnames:
         inventory["all"]["hosts"][hostname] = _setup_host(hostname, inventory["all"]["hosts"][hostname])
 
@@ -206,7 +220,7 @@ class ConfigMode(enum.Enum):
         return [mode.name.lower() for mode in cls]
 
 
-def config(hostnames: list[str], user: str, verify_unchanged: bool, mode: ConfigMode) -> None:
+def config(*, hostnames: list[str], user: str, verify_unchanged: bool, mode: ConfigMode) -> None:
     ansible_collections()
 
     if verify_unchanged:

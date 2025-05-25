@@ -14,6 +14,7 @@ from .targets import config as config_target
 from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
 from .targets import lint as lint_target
+from .targets import oh_my_posh
 from .targets import roles_graph as roles_graph_target
 from .targets import update as update_target
 
@@ -178,6 +179,12 @@ def password(alphabet: str, length: int, output: Path, number: int) -> None:
     with output.open("a") as output_file:
         output_file.writelines(passwords)
     _logger.info(f"Password saved to the end of {output} file")
+
+
+@cli.command(name="omp-themes", help="Choose oh-my-posh theme candidates.")
+@click.option("-a", "--from-all", is_flag=True, help="Choose from all themes, not from already chosen candidates.")
+def omp_themes(from_all: bool) -> None:
+    oh_my_posh.choose(from_all=from_all)
 
 
 def main() -> None:

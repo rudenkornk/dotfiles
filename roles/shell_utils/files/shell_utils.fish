@@ -89,3 +89,5 @@ zoxide init fish | source
 
 source ~/.local/bin/yazi_dir/completions/ya.fish
 source ~/.local/bin/yazi_dir/completions/yazi.fish
+
+oh-my-posh init fish --config ~/.config/oh-my-posh/theme.json | source

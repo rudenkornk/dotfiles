@@ -1,0 +1,226 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "alignment": "left",
+      "segments": [
+        {
+          "foreground": "p:neutral",
+          "style": "plain",
+          "template": "{{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
+          "type": "os"
+        },
+        {
+          "foreground": "#00afff",
+          "properties": {
+            "folder_separator_icon": "/",
+            "max_depth": 7,
+            "display_root": true,
+            "style": "agnoster_short"
+          },
+          "style": "plain",
+          "template": "   {{ .Path }} ",
+          "type": "path"
+        },
+        {
+          "foreground": "#5fd700",
+          "properties": { "fetch_status": true },
+          "style": "plain",
+          "template": "{{ .HEAD }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}  ",
+          "type": "git"
+        },
+        {
+          "foreground": "#00BFFF",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "crystal"
+        },
+        {
+          "foreground": "#00B4AB",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "dart"
+        },
+        {
+          "foreground": "#512BD4",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "dotnet"
+        },
+        {
+          "foreground": "#A97FF3",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "elixir"
+        },
+        {
+          "foreground": "#734F96",
+          "style": "plain",
+          "template": "󱈚 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "fortran"
+        },
+        {
+          "foreground": "#7FD5EA",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "go"
+        },
+        {
+          "foreground": "#FFB86C",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "haskell"
+        },
+        {
+          "foreground": "#ea2d2e",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "java"
+        },
+        {
+          "foreground": "#4063D8",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "julia"
+        },
+        {
+          "foreground": "#F18E33",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "kotlin"
+        },
+        {
+          "foreground": "#8f89c4",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "lua"
+        },
+        {
+          "foreground": "#FF4500",
+          "style": "plain",
+          "template": "🔥{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "mojo"
+        },
+        {
+          "foreground": "#FFE873",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "nim"
+        },
+        {
+          "foreground": "#76b367",
+          "style": "plain",
+          "template": " {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }} ",
+          "type": "node"
+        },
+        {
+          "foreground": "#FF6347",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "ocaml"
+        },
+        {
+          "foreground": "#0298C3",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "perl"
+        },
+        {
+          "foreground": "#4F5D95",
+          "style": "plain",
+          "template": "󰌟 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "php"
+        },
+        {
+          "foreground": "#FFD43B",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "python"
+        },
+        {
+          "foreground": "#198CE7",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "rust"
+        },
+        {
+          "foreground": "#f44336",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "ruby"
+        },
+        {
+          "foreground": "#FA7343",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "swift"
+        },
+        {
+          "foreground": "#5D87BF",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "v"
+        },
+        {
+          "foreground": "#A56DE2",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "vala"
+        },
+        {
+          "foreground": "#F7A41D",
+          "style": "plain",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "zig"
+        },
+
+        {
+          "foreground": "p:success",
+          "foreground_templates": ["{{ if gt .Code 0 }}p:fail{{ end }}"],
+          "properties": {
+            "style": "austin",
+            "always_enabled": true
+          },
+          "style": "diamond",
+          "template": "  {{ .FormattedMs }}",
+          "type": "executiontime"
+        },
+        {
+          "type": "status",
+          "style": "plain",
+          "foreground": "p:success",
+          "foreground_templates": ["{{ if gt .Code 0 }}p:fail{{ end }}"],
+          "template": " ({{ .Code }})"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "p:danger",
+          "style": "plain",
+          "template": " 󱐋󱐋󱐋 ",
+          "type": "root"
+        },
+        {
+          "foreground": "p:success",
+          "foreground_templates": ["{{ if gt .Code 0 }}p:fail{{ end }}"],
+          "style": "plain",
+          "template": "{{ if gt .SHLVL 1 }}{{ .SHLVL }}{{ end }}❯ ",
+          "type": "text"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "palette": {
+    "success": "#00ff00",
+    "fail": "#ff0022",
+    "danger": "#f2481d",
+    "neutral": "#ffffff"
+  },
+  "version": 3
+}

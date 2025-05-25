@@ -136,12 +136,46 @@
     dest: "{{ home }}/.config/fish/fish_plugins"
     state: link
 
+- name: Create oh-my-posh directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/oh-my-posh/themes"
+    state: directory
+    mode: "0o755"
+
+- name: Install oh-my-posh
+  ansible.builtin.get_url:
+    url: "{{ manifest.oh_my_posh.url }}"
+    dest: "{{ home }}/.local/bin/oh-my-posh"
+    mode: "0o755"
+    force: true
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
+
+- name: Install oh-my-posh custom theme
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/theme.json"
+    dest: "{{ home }}/.config/oh-my-posh/theme.json"
+    state: link
+
+- name: Install oh-my-posh themes
+  ansible.builtin.unarchive:
+    src: "{{ manifest.oh_my_posh_themes.url }}"
+    dest: "{{ home }}/.config/oh-my-posh/themes"
+    remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
+
 - name: Install fisher plugins
   ansible.builtin.shell: |
     set -o pipefail
     set -x TERM xterm-256color
     fisher update
-    echo 1 1 1 2 3 1 1 2 y | tide configure
   args:
     executable: "{{ home }}/.local/bin/fish"
   changed_when: false

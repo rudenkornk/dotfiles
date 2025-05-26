@@ -3,8 +3,8 @@ function llls --wraps eza
         --classify \
         --icons \
         --all \
-        --header \
         --long \
+        --header \
         --binary \
         --group \
         --smart-group \

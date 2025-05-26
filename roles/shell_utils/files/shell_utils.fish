@@ -78,8 +78,8 @@ set --export fzf_processes_opts \
 fzf_configure_bindings --directory=\ct --git_log=\co --git_status= --history=\cr --processes=\cx --variables=\cv --files=\cq
 
 for mode in default insert
-    bind --mode $mode \cg __fish_disable_focus lazygit
-    bind --mode $mode \cy __fish_disable_focus yazi
+    bind --mode $mode \cg lazygit
+    bind --mode $mode \cy yazi
 end
 
 set --export MANROFFOPT -c

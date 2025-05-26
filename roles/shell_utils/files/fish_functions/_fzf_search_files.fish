@@ -7,35 +7,34 @@ function _fzf_search_files --description "Search the current directory with ripg
     set unescaped_exp_token (string unescape -- $expanded_token)
 
     if not set --query fzf_rg_opts
-      set rg_opts --line-number --no-heading --color=always --smart-case --follow --hidden
-      if git check-ignore --quiet -- . &> /dev/null
-        set rg_opts $rg_opts --no-ignore
-      end
+        set rg_opts --line-number --no-heading --color=always --smart-case --follow --hidden
+        if git check-ignore --quiet -- . &>/dev/null
+            set rg_opts $rg_opts --no-ignore
+        end
     else
-      set rg_opts $fzf_rg_opts
+        set rg_opts $fzf_rg_opts
     end
 
     set fzf_arguments \
-      --ansi \
-      --bind "change:reload:sleep 0.1; rg $rg_opts {q} || true" \
-      --delimiter : \
-      --disabled \
-      --multi \
-      --preview-window='wrap,+{2}+3/3' \
-      --preview='_fzf_preview_file {1} {2}' \
-      --prompt="Search Files> " \
-      --query="$unescaped_exp_token" \
-      $fzf_files_opts
+        --ansi \
+        --bind "change:reload:sleep 0.1; rg $rg_opts {q} || true" \
+        --delimiter : \
+        --disabled \
+        --multi \
+        --preview-window='wrap,+{2}+3/3' \
+        --preview='_fzf_preview_file {1} {2}' \
+        --prompt="Search Files> " \
+        --query="$unescaped_exp_token" \
+        $fzf_files_opts
 
     set raw_selected (rg $rg_opts "" 2>/dev/null | _fzf_wrapper $fzf_arguments)
     set re '(^[^:]*):'
     for raw in $raw_selected
-      set -a file_paths_selected $(string match --regex "$re" --groups-only "$raw")
+        set -a file_paths_selected $(string match --regex "$re" --groups-only "$raw")
     end
 
-
     if test $status -eq 0
-      commandline --current-token --replace -- (string escape -- $file_paths_selected | string join ' ')
+        commandline --current-token --replace -- (string escape -- $file_paths_selected | string join ' ')
     end
 
     commandline --function repaint

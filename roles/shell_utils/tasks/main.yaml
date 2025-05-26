@@ -277,7 +277,7 @@
   loop: "{{ lookup('fileglob', '{{ role_path }}/files/fish_functions/*', wantlist=True) }}"
   register: shell_utils_functions
 
-# git diff -p --no-index --no-prefix -- a/functions/ b/functions/ >
+# git diff -U0 -p --no-index --no-prefix -- a/functions/ b/functions/ >
 # ~/projects/dotfiles/roles/shell_utils/files/fzf.fish.patch
 - name: Patch fzf - fix focus events and add ripgrep support
   ansible.posix.patch:

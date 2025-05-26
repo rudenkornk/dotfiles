@@ -11,6 +11,23 @@
           "type": "os"
         },
         {
+          "type": "shell",
+          "style": "plain",
+          "foreground": "p:success",
+          "properties": {
+            "mapped_shell_names": {
+              "bash": "#!",
+              "cmd": " ",
+              "elvish": "󰘧 ",
+              "fish": " ",
+              "nu": "nu",
+              "xonsh": " ",
+              "zsh": "%_",
+              "pwsh": " "
+            }
+          }
+        },
+        {
           "foreground": "#00afff",
           "properties": {
             "folder_separator_icon": "/",
@@ -19,11 +36,11 @@
             "style": "agnoster_short"
           },
           "style": "plain",
-          "template": "   {{ .Path }} ",
+          "template": "  {{ .Path }} ",
           "type": "path"
         },
         {
-          "foreground": "#5fd700",
+          "foreground": "p:success",
           "properties": { "fetch_status": true },
           "style": "plain",
           "template": "{{ .HEAD }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}  ",
@@ -220,7 +237,8 @@
     "success": "#00ff00",
     "fail": "#ff0022",
     "danger": "#f2481d",
-    "neutral": "#ffffff"
+    "neutral": "#ffffff",
+    "good": "#5fd700"
   },
   "version": 3
 }

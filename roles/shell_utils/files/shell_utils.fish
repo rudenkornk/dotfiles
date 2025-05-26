@@ -35,7 +35,6 @@ fish_add_path ~/.fzf/bin
 # We do not set FZF_DEFAULT_COMMAND here directly. Instead we use fish plugin PatrickF1/fzf.fish, which sets most of options for us.
 # So to customize fzf behaviour we use fzf.fish proxy variables such as fzf_fd_opts,
 
-
 set --export FZF_DEFAULT_OPTS \
     --ansi \
     --bind ctrl-u:half-page-up,ctrl-d:half-page-down,ctrl-b:preview-page-up,ctrl-f:preview-page-down \
@@ -85,14 +84,18 @@ end
 set --export MANROFFOPT -c
 set --export MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
-zoxide init fish | source
-
-if test -f ~/.local/bin/yazi_dir/completions/ya.fish
-  source ~/.local/bin/yazi_dir/completions/ya.fish
-  source ~/.local/bin/yazi_dir/completions/yazi.fish
+if type -q zoxide
+    zoxide init fish | source
 end
 
-oh-my-posh init fish --config ~/.config/oh-my-posh/theme.json | source
+if test -f ~/.local/bin/yazi_dir/completions/ya.fish
+    source ~/.local/bin/yazi_dir/completions/ya.fish
+    source ~/.local/bin/yazi_dir/completions/yazi.fish
+end
+
+if type -q oh-my-posh
+    oh-my-posh init fish --config ~/.config/oh-my-posh/theme.json | source
+end
 
 fish_add_path ~/.local/xh
 if test -f ~/.local/xh/completions/xh.fish

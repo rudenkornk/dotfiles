@@ -97,12 +97,6 @@
   register: shell_utils_downloaded
   until: shell_utils_downloaded is not failed
 
-- name: Create symlink to carapace nu config
-  ansible.builtin.file:
-    src: "{{ role_host_path }}/files/carapace.nu"
-    dest: "{{ home }}/.config/nushell/autoload/carapace.nu"
-    state: link
-
 - name: Setup yazi
   vars:
     shell_utils_yazi_fullname: "{{ manifest.yazi.url | split('/') | last | split('.') | first }}"
@@ -263,10 +257,16 @@
     regexp: "source .*/{{ role_name }}/files"
     line: source {{ role_host_path }}/files/bash.sh
 
-- name: Create symlink to fish config of {{ role_name }}
+- name: Create symlink to fish config
   ansible.builtin.file:
     src: "{{ role_host_path }}/files/{{ role_name }}.fish"
     dest: "{{ home }}/.config/fish/conf.d/{{ role_name }}.fish"
+    state: link
+
+- name: Create symlink to nu config
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/{{ role_name }}.nu"
+    dest: "{{ home }}/.config/nushell/autoload/{{ role_name }}.nu"
     state: link
 
 - name: Create symlinks to fish functions

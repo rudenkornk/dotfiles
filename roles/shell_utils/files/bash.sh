@@ -50,4 +50,6 @@ fi
 export PATH="$HOME/.fzf/bin:$PATH"
 export PATH="$HOME/.local/xh:$PATH"
 
-eval "$(oh-my-posh init bash)"
+if command -v oh-my-posh >/dev/null; then
+  eval "$(oh-my-posh init bash)"
+fi

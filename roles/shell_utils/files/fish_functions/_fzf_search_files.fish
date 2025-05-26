@@ -8,8 +8,11 @@ function _fzf_search_files --description "Search the current directory with ripg
 
     if not set --query fzf_rg_opts
         set rg_opts --line-number --no-heading --color=always --smart-case --follow --hidden
-        if git check-ignore --quiet -- . &>/dev/null
+        set is_git_repo "$(git rev-parse --is-inside-work-tree 2> /dev/null || echo false)"
+        if not $is_git_repo -eq true or (git check-ignore --quiet -- . &>/dev/null)
             set rg_opts $rg_opts --no-ignore
+        else
+            set rg_opts $rg_opts --glob '!.git'
         end
     else
         set rg_opts $fzf_rg_opts

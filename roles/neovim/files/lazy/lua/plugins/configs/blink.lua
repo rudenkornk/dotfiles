@@ -21,6 +21,32 @@ M.opts = {
       },
     },
   },
+  completion = {
+    list = {
+      -- For some reason enabled auto_insert suddenly closes the completion menu,
+      -- after pressed down "select_next/select_prev" keymaps for ~1000ms.
+      selection = { auto_insert = false },
+      cycle = { from_bottom = false, from_top = false },
+    },
+    documentation = { auto_show_delay_ms = 0 },
+  },
+  keymap = {
+    ["<C-k>"] = { "show", "show_documentation", "hide_documentation" },
+    ["<C-d>"] = {
+      function(cmp)
+        for _ = 1, 5 do
+          cmp.select_next()
+        end
+      end,
+    },
+    ["<C-u>"] = {
+      function(cmp)
+        for _ = 1, 5 do
+          cmp.select_prev()
+        end
+      end,
+    },
+  },
 }
 
 return M

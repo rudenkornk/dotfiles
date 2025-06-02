@@ -69,6 +69,8 @@ set --export fzf_ps_opts \
     -o 'pid user %cpu %mem time command' \
     --sort -pcpu
 
+set --export fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
+
 set --export fzf_processes_opts \
     --bind='ctrl-x:reload(ps $fzf_ps_opts)' \
     --header-lines=1 \

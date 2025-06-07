@@ -4,8 +4,22 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-ansible_distribution=$(grep -oP '^ID=\K.*' /etc/os-release | sed -e 's/\(.*\)/\L\1/' | sed 's/\([[:alpha:]]\)/\U\1/')
 root=$(dirname "$0")
+
+ansible_distribution=$(grep -oP '^ID=\K.*' /etc/os-release | sed -e 's/\(.*\)/\L\1/' | sed 's/\([[:alpha:]]\)/\U\1/')
+ansible_architecture=$(uname -m)
+
+deb_arch=""
+case $ansible_architecture in
+x86_64) deb_arch="amd64" ;;
+aarch64) deb_arch="arm64" ;;
+*) deb_arch="$(dpkg --print-architecture)" ;;
+esac
+
+HOME=${HOME:-$(eval echo ~"$(whoami)")}
+LOCAL_HOME=${LOCAL_HOME:-$HOME/.local}
+CARGO_HOME=${CARGO_HOME:-$HOME/.cargo}
+export PATH="$PATH":"$LOCAL_HOME/bin":"$CARGO_HOME/bin"
 
 # sudo is required for all of the other package management operations
 # This is basically a dummy check, since the only way to install sudo without sudo
@@ -31,13 +45,7 @@ fi
 
 # uv is required for python and dependency management
 if ! command -v uv &>/dev/null; then
-  HOME=${HOME:-$(eval echo ~"$(whoami)")}
-  LOCAL_HOME=${LOCAL_HOME:-$HOME/.local}
-  CARGO_HOME=${CARGO_HOME:-$HOME/.cargo}
-  export PATH="$PATH":"$LOCAL_HOME/bin":"$CARGO_HOME/bin"
-  if ! command -v uv &>/dev/null; then
-    curl -LsSf https://astral.sh/uv/0.5.13/install.sh | sh
-  fi
+  curl -LsSf https://astral.sh/uv/0.7.12/install.sh | sh
 fi
 
 # rsync is required for Ansible synchronization tasks

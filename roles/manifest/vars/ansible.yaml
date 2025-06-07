@@ -1,12 +1,15 @@
 # yamllint disable rule:line-length
+#
+# Changes in this file trigger config scripts to re-install collections.
+# For this reason, this file is kept separate from the main manifest.
 
 manifest: # noqa: var-naming[no-role-prefix]
-  ansible_community_general:
-    url: https://github.com/ansible-collections/community.general
-    version: 10.6.0
-  ansible_containers_podman:
-    url: https://github.com/containers/ansible-podman-collections
-    version: 1.16.3
-  ansible_posix:
+  collections.ansible.posix:
     url: https://github.com/ansible-collections/ansible.posix
     version: 2.0.0
+  collections.community.general:
+    url: https://github.com/ansible-collections/community.general
+    version: 10.6.0
+  collectsions.containers.podman:
+    url: https://github.com/containers/ansible-podman-collections
+    version: 1.16.3

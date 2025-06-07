@@ -19,13 +19,6 @@ if ! command -v sudo &>/dev/null; then
   fi
 fi
 
-# tzdata is required for python3 installation on Ubuntu >= 23.10
-if [[ $ansible_distribution == Ubuntu ]] && ! (dpkg --get-selections | grep --quiet tzdata); then
-  sudo ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime
-  sudo apt-get update
-  sudo apt-get install --yes --no-install-recommends tzdata
-fi
-
 # curl is required for uv installation
 if ! command -v curl &>/dev/null; then
   if [[ $ansible_distribution == Ubuntu ]]; then

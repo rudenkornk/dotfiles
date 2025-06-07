@@ -22,31 +22,14 @@ def ansible_collections(artifact: Path, sources: list[Path]) -> None:
         raise TypeError(msg)
 
     manifest = yaml["manifest"]
-    run_shell(
-        [
-            "ansible-galaxy",
-            "collection",
-            "install",
-            f"community.general:{manifest['ansible_community_general']['version']}",
-        ],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
-    )
-    run_shell(
-        [
-            "ansible-galaxy",
-            "collection",
-            "install",
-            f"ansible.posix:{manifest['ansible_posix']['version']}",
-        ],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
-    )
-    run_shell(
-        [
-            "ansible-galaxy",
-            "collection",
-            "install",
-            f"containers.podman:{manifest['ansible_containers_podman']['version']}",
-        ],
-        extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
-    )
+
+    for name, data in manifest.items():
+        if not name.startswith("collections."):
+            continue
+        collection = name.removeprefix("collections.")
+        version = data["version"]
+        run_shell(
+            ["ansible-galaxy", "collection", "install", collection + ":" + version],
+            extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
+        )
     artifact.touch()

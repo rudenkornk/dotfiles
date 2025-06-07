@@ -59,7 +59,8 @@ While being decently generic, this config focuses more on some tools rather than
 ## Try this config
 
 Config is tested inside `podman` containers, which can also be used to try this config.
-Note, that this will install some tools (like `python` and `podman`) on your system.
+Note, that this will install some basic tools:
+`uv`, `podman`, `sops`, `age`, `curl`, `ca-certificates`, `rsync`, `git` `graphviz`.  
 This will not install any specific configs though.
 
 ```bash

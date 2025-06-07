@@ -10,6 +10,9 @@ manifest: # noqa: var-naming[no-role-prefix]
   collections.community.general:
     url: https://github.com/ansible-collections/community.general
     version: 10.6.0
+  collections.community.sops:
+    url: https://github.com/ansible-collections/community.sops
+    version: 2.0.5
   collectsions.containers.podman:
     url: https://github.com/containers/ansible-podman-collections
     version: 1.16.3

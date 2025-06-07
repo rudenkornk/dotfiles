@@ -58,6 +58,22 @@ if ! command -v rsync &>/dev/null; then
   fi
 fi
 
+# age & sops is required for secrets decryption
+if ! command -v age &>/dev/null; then
+  if [[ $ansible_distribution == Ubuntu ]]; then
+    sudo apt-get update
+    sudo apt-get install --yes --no-install-recommends age
+  elif [[ $ansible_distribution == Fedora ]]; then
+    sudo dnf install --assumeyes age
+  fi
+fi
+if ! command -v sops &>/dev/null; then
+  url=$(grep -oP 'https://.*sops.*' roles/manifest/vars/main.yaml | sed "s/{{ deb_arch }}/$deb_arch/")
+  mkdir -p "$LOCAL_HOME/bin"
+  curl -L "$url" --output "$LOCAL_HOME/bin/sops"
+  chmod +x "$LOCAL_HOME/bin/sops"
+fi
+
 # podman is required for local configuration testing inside containers
 if ! command -v podman &>/dev/null; then
   if [[ $ansible_distribution == Ubuntu ]]; then

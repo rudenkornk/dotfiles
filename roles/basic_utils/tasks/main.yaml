@@ -7,6 +7,7 @@
   become: true
   ansible.builtin.package:
     name:
+      - age
       - curl
       - gnupg
       - patch
@@ -133,6 +134,22 @@
     mode: "0o700"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
+
+- name: Create ~/.local/bin directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/bin"
+    state: directory
+    mode: "0o755"
+
+- name: Install sops
+  ansible.builtin.get_url:
+    url: "{{ manifest.sops.url }}"
+    dest: "{{ home }}/.local/bin/sops"
+    mode: "0o755"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: bash_utils_downloaded
+  until: bash_utils_downloaded is not failed
 
 - name: WSL stuff
   when: in_wsl

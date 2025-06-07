@@ -80,6 +80,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v25.23.3/posh-linux-{{ deb_arch }}
   oh_my_posh_themes:
     url: https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v25.23.3/themes.zip
+  sops:
+    url: https://github.com/getsops/sops/releases/download/v3.10.2/sops-v3.10.2.linux.{{ deb_arch }}
   stylua:
     url: https://github.com/JohnnyMorganz/StyLua/releases/download/v2.1.0/stylua-linux-{{ ansible_architecture }}.zip
   tpm:

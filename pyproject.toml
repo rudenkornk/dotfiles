@@ -132,7 +132,10 @@ default.extend-ignore-re = [
   "(?Rm)^.*(#|//)\\s*typos:\\s*ignore$",
   "(?s)(#|//)\\s*typos:\\s*off.*?(#|//)\\s*typos:\\s*on",
 ]
-files.extend-exclude = ["lazy-lock.json"]
+files.extend-exclude = [
+  "lazy-lock.json",
+  "*.sops.yaml",
+]
 
 [tool.mypy]
 strict = true

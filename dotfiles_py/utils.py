@@ -111,7 +111,7 @@ def shell_command(  # noqa: PLR0913, C901
 
 
 def run_shell(  # noqa: PLR0913
-    cmd: Sequence[str | Path] | str,
+    cmd: Sequence[str | Path],
     *,
     extra_env: Mapping[str, str | Path] | None = None,
     extra_paths: Sequence[Path] | None = None,
@@ -127,12 +127,6 @@ def run_shell(  # noqa: PLR0913
 ) -> subprocess.CompletedProcess[str]:
     extra_env = dict(extra_env) if extra_env is not None else {}
     extra_paths = list(extra_paths) if extra_paths is not None else []
-
-    current_loglevel = _logger.getEffectiveLevel()
-    if current_loglevel > loglevel and not capture_output and stdout is None:
-        stdout = subprocess.DEVNULL
-    if current_loglevel > logging.ERROR and not capture_output and stderr is None:
-        stderr = subprocess.DEVNULL
 
     env = os.environ.copy()
     env.update({k: str(v) for k, v in extra_env.items()})
@@ -159,36 +153,17 @@ def run_shell(  # noqa: PLR0913
             cwd=cwd,
         )
         _logger.log(loglevel, f"[RUNNING IN SHELL]: {print_cmd}")
-
-    if isinstance(cmd, str):
-        return subprocess.run(  # noqa: S602
-            cmd,
-            env=env,
-            check=check,
-            capture_output=capture_output,
-            input=inputs,
-            stdout=stdout,
-            stderr=stderr,
-            text=True,
-            cwd=cwd,
-            shell=True,
-            executable="bash",
-        )
-    if isinstance(cmd, Sequence):
-        return subprocess.run(  # noqa: S603
-            cmd,
-            env=env,
-            check=check,
-            capture_output=capture_output,
-            input=inputs,
-            stdout=stdout,
-            stderr=stderr,
-            text=True,
-            cwd=cwd,
-        )
-
-    msg = f"Unexpected command type for run_shell util: {type(cmd)}"
-    raise AssertionError(msg)
+    return subprocess.run(  # noqa: S603
+        cmd,
+        env=env,
+        check=check,
+        capture_output=capture_output,
+        input=inputs,
+        stdout=stdout,
+        stderr=stderr,
+        text=True,
+        cwd=cwd,
+    )
 
 
 _P = ParamSpec("_P")

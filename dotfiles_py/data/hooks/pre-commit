@@ -3,14 +3,16 @@
 changed=$(git diff --cached --name-only)
 regex="(\
 rsa|\
-pub|\
+ed25519|\
+ed25519_sk|\
+ecdsa|\
+ecdsa_sk|\
 ovpn|\
 auth|\
 amnezia|\
 xray|\
 socks|\
 credentials.json|\
-ssh_server_config.yaml|\
 private.gpg\
 )\$"
 

@@ -15,29 +15,6 @@
     dest: "{{ home }}/.gitconfig"
     state: link
 
-- name: Add git-secret gpg key
-  become: true
-  ansible.builtin.get_url:
-    url: "{{ git_secret_gpg }}"
-    dest: "{{ apt_keys }}/git_secret.asc"
-    mode: "0o644"
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: git_installed
-  until: git_installed is not failed
-  when: ansible_distribution == "Ubuntu"
-
-- name: Add git-secret repository
-  become: true
-  ansible.builtin.apt_repository:
-    repo: deb [arch={{ deb_arch }} signed-by={{ apt_keys }}/git_secret.asc] {{ git_secret_repo }}
-  when: ansible_distribution == "Ubuntu"
-
-- name: Install git secret
-  become: true
-  ansible.builtin.package:
-    name: git-secret
-
 - name: Download delta binary
   ansible.builtin.unarchive:
     src: "{{ manifest.delta.url }}"

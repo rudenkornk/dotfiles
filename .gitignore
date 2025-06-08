@@ -7,17 +7,11 @@ __pycache__
 this_clipboard.lua
 credentials.json
 credentials.yaml
-credentials_map.yaml
-ssh_server_config.yaml
 *private.gpg
 *id_rsa
-*id_rsa.pub
 *id_ecdsa
-*id_ecdsa.pub
 *id_ecdsa_sk
-*id_ecdsa_sk.pub
 *id_ed25519
-*id_ed25519.pub
 *.auth
 *.ovpn
 *.amnezia

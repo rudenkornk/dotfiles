@@ -1,1 +1,2 @@
 ssh_client_local_path: "{{ playbook_dir }}/roles/ssh_client/files/keys"
+ssh_client_local_default_pub_key: "{{ ssh_client_local_path }}/id_ed25519.pub"

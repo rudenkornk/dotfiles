@@ -34,8 +34,10 @@ cd ~/projects/dotfiles && \
 1. **Supports & tested under `Ubuntu 22.04-24.04`, `Fedora 38-42`, and also includes WSL support**.
    On Windows it integrates with the system clipboard.
 1. **Secrets inside the repo**.
-   All the credentials, ssh keys, VPN configs can be stored directly in the repo with support of the [git secret](https://github.com/sobolevn/git-secret).
-   `gpg key` is optional: config works fine if it is not provided and secrets are not decrypted.
+   All the credentials, ssh keys, VPN configs can be stored directly in the repo using
+   [`sops`](https://github.com/getsops/sops) and
+   [`age`](https://github.com/FiloSottile/age).
+   Secret decryption is optional: config works even if secrets are not decrypted.
 1. **Bootstrap with a single command.**
    Aside from `OS` limitations, there are zero requirements.
 

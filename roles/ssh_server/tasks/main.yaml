@@ -45,19 +45,15 @@
     line: UsePAM no
   register: ssh_config_4
 
-- name: Check if private config is decrypted locally
-  delegate_to: localhost
-  ansible.builtin.stat:
-    path: "{{ playbook_dir }}/roles/ssh_server/vars/ssh_server_config.yaml"
-  register: ssh_server_vars_status
+- name: Try load encrypted ssh config
+  community.sops.load_vars:
+    file: ssh_server_config.sops.yaml
+  register: ssh_server_vars_loaded
+  ignore_errors: true
 
 - name: Set private config options
-  when: ssh_server_vars_status.stat.exists
+  when: not ssh_server_vars_loaded.failed
   block:
-    - name: Load decrypted credentials
-      ansible.builtin.include_vars:
-        file: "{{ playbook_dir }}/roles/ssh_server/vars/ssh_server_config.yaml"
-
     - name: Get host config
       ansible.builtin.set_fact:
         ssh_server_config: "{{ ssh_server_config_map[ssh_server_config_kind] }}"
@@ -93,4 +89,4 @@
   ansible.builtin.set_fact:
     ansible_port: "{{ ssh_server_config.port }}"
   no_log: true
-  when: ssh_server_vars_status.stat.exists
+  when: not ssh_server_vars_loaded.failed

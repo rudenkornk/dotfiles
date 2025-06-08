@@ -53,7 +53,7 @@ all:
       ansible_python_interpreter: auto_silent
       image: fedora:42
       trusted: true
-    beta.tallinn.network.rudenkornk.com:
+    alpha.network.rudenkornk.com:
       ansible_ssh_common_args: -o StrictHostKeyChecking=no -o 'PreferredAuthentications publickey,password'
       ansible_python_interpreter: auto_silent
       trusted: false

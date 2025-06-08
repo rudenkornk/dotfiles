@@ -3,7 +3,7 @@
 # If no rule matches, "excluded" is used as default
 gnome_rules:
   /ca/desrt: excluded
-  /com/github/wwmm/easyeffects: included
+  /com/github/wwmm/easyeffects: excluded
   /org/gnome/boxes: excluded
   /org/gnome/calculator/window-size: excluded
   /org/gnome/calculator: included

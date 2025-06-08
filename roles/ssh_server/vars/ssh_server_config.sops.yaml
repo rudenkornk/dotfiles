@@ -1,0 +1,22 @@
+ssh_server_config_map:
+  default_kind:
+    port: ENC[AES256_GCM,data:IGdi2Ug=,iv:YGJd9kzQlqUtks/QOKGMu82TWPZlf5/5JnVtd2ghWbQ=,tag:4FYQC864UnbqG0ViChZq0Q==,type:int]
+  corporate:
+    port: ENC[AES256_GCM,data:9Co=,iv:sRR2c6PZTK4/Q3zuxgozkRQrBpwr+Bsk/GRyX4Jj2vY=,tag:FM6qvRXi0uIek794Smo2yw==,type:int]
+sops:
+  age:
+    - recipient: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINzKTzMo0Z61n1tdlinPox7zKDU2BHEM8SOzk2dQrTPX
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFZFVis2QSBrOVQy
+        V1hVWlVxK0wrVGU3UG4zcnJxSnFFajdQTnU2c2VKQldxVUU0bGhVCmZrRWlDYUhD
+        ZElzdGg1L3E0R09Pa3NILzRpeDZmdEFDOTA0UG1rWXlBcjQKLS0tIEFPQ25remdL
+        WkFhVTBnL1Iwenk2RVdIVXVYa3F4bFlHUm4zNjhyZVZZKzgKHsQhZ5wCzBlkWXTg
+        JMMRTyL+dHXmmN1npGQKjlBb/yq0M8q+0LHCGsMEg/YAsK0q7yBF5y7QZe7wEjdQ
+        E3+5Sg==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2025-06-10T18:22:59Z"
+  mac: ENC[AES256_GCM,data:DEu274IikSvtc238tcAqmb5DP/pEiLl7RjyTGLjEFmeyXWk+n7FOs8mul2vcXCMn0Dy3DRXrLzMgU0NzLqb0FjNtRTiarziQXW0TwjakKgxmo8JfIc7oPae/6YhAp+a0WJyUqepCLB6BSx0JKM/GmIIJtASIL12mSC1Tui0UKKo=,iv:qCHsfEna4b8mrOMCn0FaUJ0H73V7vLM3q7fr+gTSHIU=,tag:xOF6e+o4oXQinX6CuxKieg==,type:str]
+  unencrypted_suffix: _unencrypted
+  mac_only_encrypted: true
+  version: 3.10.2

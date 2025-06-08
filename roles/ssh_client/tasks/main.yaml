@@ -12,33 +12,18 @@
     state: directory
     mode: "0o755"
 
-- name: List decrypted private keys
+- name: List ssh keys
   ansible.builtin.find:
     paths: "{{ ssh_client_host_path }}"
-    patterns: "*rsa"
+    patterns: ["*.sops", "*.pub"]
   register: ssh_rsa_keys
 
-- name: Create symlinks to ssh private keys
+- name: Create symlinks to ssh keys
   ansible.builtin.file:
     src: "{{ item.path }}"
     dest: "{{ home }}/.ssh/{{ item.path | basename }}"
     state: link
   loop: "{{ ssh_rsa_keys.files }}"
-  loop_control:
-    label: "{{ item.path | basename }}"
-
-- name: List public keys
-  ansible.builtin.find:
-    paths: "{{ ssh_client_host_path }}"
-    patterns: "*rsa.pub"
-  register: ssh_rsa_pub_keys
-
-- name: Create symlinks to ssh public keys
-  ansible.builtin.file:
-    src: "{{ item.path }}"
-    dest: "{{ home }}/.ssh/{{ item.path | basename }}"
-    state: link
-  loop: "{{ ssh_rsa_pub_keys.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
 

@@ -5,11 +5,13 @@ import os
 import re
 import shutil
 import socket
-from collections.abc import Mapping
-from contextlib import closing
+from collections.abc import Iterator, Mapping
+from contextlib import closing, contextmanager
 from functools import cache
 from pathlib import Path
 from typing import Any
+
+from ruamel.yaml import YAML
 
 from ..utils import ARTIFACTS_PATH, REPO_PATH, SCRIPTS_PATH, run_shell, yaml_read, yaml_write
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
@@ -144,14 +146,17 @@ def _setup_ssh(hostname: str, host: dict[str, Any]) -> None:
     if host.get("ansible_connection", "ssh") != "ssh":
         return
 
-    ssh_config_path = REPO_PATH / "roles" / "ssh_server" / "vars" / "ssh_server_config.yaml"
     ssh_config: None | dict[str, Any] = None
-    if not ssh_config_path.exists():
+
+    ssh_config_path = REPO_PATH / "roles" / "ssh_server" / "vars" / "ssh_server_config.sops.yaml"
+    ssh_config_cp = run_shell(["sops", "--decrypt", str(ssh_config_path)], capture_output=True, check=False)
+
+    if ssh_config_cp.returncode:
         _logger.warning(f"SSH config is not decrypted locally: {ssh_config_path}")
         _logger.warning("Using default settings for SSH connection.")
         _logger.warning("This might result in connection issues.")
     else:
-        yaml_ssh_config, _ = yaml_read(ssh_config_path)
+        yaml_ssh_config = YAML().load(ssh_config_cp.stdout)
         if not isinstance(yaml_ssh_config, dict):
             msg = f"Expected a dictionary in {ssh_config_path}, got {type(yaml_ssh_config)}"
             raise TypeError(msg)
@@ -169,12 +174,13 @@ def _setup_credentials(_: str, host: dict[str, Any], user: str) -> None:
     if host.get("ansible_become_pass") is not None:
         return
 
-    creds_config_path = REPO_PATH / "roles" / "credentials" / "vars" / "credentials_map.yaml"
-    if not creds_config_path.exists():
+    creds_config_path = REPO_PATH / "roles" / "credentials" / "vars" / "credentials_map.sops.yaml"
+    creds_config_cp = run_shell(["sops", "--decrypt", str(creds_config_path)], capture_output=True, check=False)
+    if creds_config_cp.returncode:
         _logger.warning(f"Credentials config is not decrypted locally: {creds_config_path}")
         _logger.warning("This might result in privileges escalation problems.")
         return
-    creds_config, _1 = yaml_read(creds_config_path)
+    creds_config = YAML().load(creds_config_cp.stdout)
     if not isinstance(creds_config, dict):
         msg = f"Expected a dictionary in {creds_config_path}, got {type(creds_config)}"
         raise TypeError(msg)
@@ -191,7 +197,8 @@ def _setup_host(hostname: str, host: dict[str, Any]) -> dict[str, Any]:
     return host
 
 
-def _setup_inventory(hostnames: list[str]) -> Path:
+@contextmanager
+def _setup_inventory(hostnames: list[str]) -> Iterator[Path]:
     # Dynamically set correct secret settings for the hosts
 
     inventory, yaml = yaml_read(REPO_PATH / "inventory.yaml")
@@ -205,8 +212,11 @@ def _setup_inventory(hostnames: list[str]) -> Path:
     private_inventory_path.parent.mkdir(parents=True, exist_ok=True)
     private_inventory_path.touch(exist_ok=True)
     private_inventory_path.chmod(0o600)
-    yaml_write(private_inventory_path, inventory, yaml)
-    return private_inventory_path
+    try:
+        yaml_write(private_inventory_path, inventory, yaml)
+        yield private_inventory_path
+    finally:
+        private_inventory_path.unlink()
 
 
 class ConfigMode(enum.Enum):
@@ -233,28 +243,27 @@ def config(*, hostnames: list[str], user: str, verify_unchanged: bool, mode: Con
         if host_ in container_hosts_:
             _start_container(host_)
 
-    inventory_path = _setup_inventory(hostnames)
-
     has_local = "localhost" in hostnames or "127.0.0.1" in hostnames
     hosts_var = ",".join(hostnames)
 
-    run_shell(
-        ["bash", SCRIPTS_PATH / "config.sh"],
-        extra_env={
-            "ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH,
-            "ANSIBLE_FORCE_COLOR": "True",
-            "ANSIBLE_VERBOSITY": _ansible_verbosity(),
-            "CONFIG_MODE": mode.name.lower(),
-            "HOSTS": hosts_var,
-            "INVENTORY": inventory_path,
-            "LOCAL": str(has_local).lower(),
-            "LOGS_PATH": _ANSIBLE_LOGS_PATH,
-            "PLAYBOOK": REPO_PATH / "playbook.yaml",
-            "PLAYBOOK_BOOTSTRAP_HOSTS": str(REPO_PATH / "playbook_bootstrap_hosts.yaml"),
-            "REMOTE_USER": user,
-            "REPO_PATH": REPO_PATH,
-        },
-    )
+    with _setup_inventory(hostnames) as inventory_path:
+        run_shell(
+            ["bash", SCRIPTS_PATH / "config.sh"],
+            extra_env={
+                "ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH,
+                "ANSIBLE_FORCE_COLOR": "True",
+                "ANSIBLE_VERBOSITY": _ansible_verbosity(),
+                "CONFIG_MODE": mode.name.lower(),
+                "HOSTS": hosts_var,
+                "INVENTORY": inventory_path,
+                "LOCAL": str(has_local).lower(),
+                "LOGS_PATH": _ANSIBLE_LOGS_PATH,
+                "PLAYBOOK": REPO_PATH / "playbook.yaml",
+                "PLAYBOOK_BOOTSTRAP_HOSTS": str(REPO_PATH / "playbook_bootstrap_hosts.yaml"),
+                "REMOTE_USER": user,
+                "REPO_PATH": REPO_PATH,
+            },
+        )
 
     if verify_unchanged:
         _verify_unchanged()

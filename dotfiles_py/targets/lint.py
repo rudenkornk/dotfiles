@@ -7,7 +7,6 @@ from git import Repo
 
 from ..utils import DOTPY_PATH, REPO_PATH, run_shell, yaml_read
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
-from .roles_graph import roles_graph
 
 _logger = logging.getLogger(__name__)
 
@@ -29,49 +28,6 @@ def _check_registered_roles() -> None:
         raise RuntimeError(msg)
 
     _logger.info("All roles are registered!")
-
-
-def _check_secrets_deps() -> None:
-    # This ansible config uses secrets to fully setup hosts.
-    # Since the configuration is tested inside some untrusted CI, it should work even if secrets are not decrypted.
-    # Thus, all of the tasks, which use secrets are "optional" and skipped in case secrets are not decrypted.
-    # This creates a potential configuration mistake:
-    # one can create some role, which uses secrets, but forget to add "secrets" role as a dependency.
-    # Since all secrets tasks are optional, CI will not catch such mistake, but local scenarios might be broken.
-    # In order to prevent such case, there is a linting check, which ensures that all roles containing secrets
-    # are also depend on the "secrets" role.
-
-    _logger.info("Checking if all secrets are properly used by roles...")
-
-    secrets_index = REPO_PATH / ".gitsecret" / "paths" / "mapping.cfg"
-    secrets_raw = secrets_index.read_text(encoding="utf-8").splitlines()
-    secrets = {line.split(":", maxsplit=1)[0] for line in secrets_raw}
-    graph = roles_graph()
-
-    for secret in secrets:
-        if not secret.startswith("roles/"):
-            continue
-
-        if secret.startswith("roles/secrets/"):
-            continue
-
-        role = secret.split("/")[1]
-
-        if role not in graph:
-            msg = f"Secret {secret} is not used by any role!"
-            raise RuntimeError(msg)
-
-        if "secrets" in graph[role]:
-            continue
-
-        msg = (
-            f"Looks like {role} role uses {secret} secret,\n"
-            "but the role does not have 'secrets' role in its dependencies!\n"
-            "This is likely a configuration error and can lead to unexpected behavior.\n"
-        )
-        raise RuntimeError(msg)
-
-    _logger.info("All secrets are properly used!")
 
 
 def _check_leaked_credentials() -> None:
@@ -105,15 +61,16 @@ def _check_leaked_credentials() -> None:
                 (
                     "("
                     "\\.rsa|"
+                    "\\.ed25519|"
+                    "\\.ed25519_sk|"
+                    "\\.ecdsa|"
+                    "\\.ecdsa_sk|"
                     "\\.ovpn|"
-                    "\\.pub|"
                     "\\.amnezia|"
                     "\\.xray|"
                     "\\.socks|"
                     "\\.auth|"
                     "credentials.json|"
-                    "credentials_map.yaml|"
-                    "ssh_server_config.yaml|"
                     "private.gpg"
                     ")$"
                 ),
@@ -148,7 +105,6 @@ def lint_code(*, ansible: bool, python: bool, secrets: bool, generic: bool) -> N
 
     if secrets:
         _check_leaked_credentials()
-        _check_secrets_deps()
 
     if ansible:
         _check_registered_roles()

@@ -11,3 +11,6 @@ enable_list:
   - no-log-password
   - no-same-owner
   - name[prefix]
+
+exclude_paths:
+  - "*.sops.yaml"

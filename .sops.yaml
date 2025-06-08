@@ -1,5 +1,37 @@
 creation_rules:
   - age: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINzKTzMo0Z61n1tdlinPox7zKDU2BHEM8SOzk2dQrTPX"
+    mac_only_encrypted: True
+
+    # The current SOPS version
+    # (3.10.2 https://github.com/getsops/sops/commit/0c82206e560396703f59ba12cc2220838d18abc1 )
+    # supports 6 mutially-exclusive ways of disabling encryption of some values:
+    # unencrypted_suffix -- default. Encrypts ALL comments.
+    # encrypted_suffix -- only encrypts keys with the suffix. Too easy to make a mistake.
+    # unencrypted_regex -- do not encrypts keys that match the regex. Encrypts ALL comments.
+    # encrypted_regex -- only encrypts keys that match the regex.
+    #                    This one is interesting. We can specify `.` as regex,
+    #                    and it will encrypt all leaves, but not comments.
+    #                    https://github.com/getsops/sops/issues/921#issuecomment-1014683228
+    #                    This, however, probably works by mistake, since this behaves
+    #                    differently compared to unencrypted_regex option.
+    #                    Also, `.` regex does not allow to leave some keys unencrypted.
+    #
+    #                    This could be fixed by specifying negetive lookbehind `(?<!_unencrypted)$`,
+    #                    but such regex is not supported by go regex flavor.
+    # unencrypted_comment_regex -- do not encrypt lines having matching comment AND
+    #                    lines following matching comment, even if there are other commented lines.
+    #                    This almost works, but too easy to make a mistake.
+    #                    This yaml is broken for example:
+    #                    ```yaml
+    #                    # Some comment # unencrypted
+    #                    # Another comment
+    #                    key: value # WILL NOT BE ENCRYPTED!!!
+    #                    ````
+    # encrypted_comment_regex -- same probblem as for encrypted_regex.
+    #
+    # So at the moment there is no way to encrypt everything by default,
+    # except explicitly marked comments and values.
+    # For this reason, just leave default setting, which encrypts all comments.
 
 stores:
   json:

@@ -14,10 +14,10 @@ M.opts = {
         opts = { label = " ", all_panes = true },
       },
       supermaven = {
-        score_offset = 10,
+        score_offset = 15,
       },
       copilot = {
-        score_offset = 10,
+        score_offset = 14,
       },
     },
   },

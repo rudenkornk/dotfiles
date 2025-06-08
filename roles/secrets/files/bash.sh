@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+export SOPS_EDITOR='unshare --net --map-root-user vim -Z -u DEFAULTS -i NONE -n'
+alias sops="EDITOR=\"$SOPS_EDITOR\" sops"
+alias rvim="$SOPS_EDITOR"
+
 ldap_user='$(cat ~/.config/ldap/ldap_user.auth)'
 ldap_server='$(cat ~/.config/ldap/ldap_server.auth)'
 ldap_domain='$(cat ~/.config/ldap/ldap_domain.auth)'

@@ -1,0 +1,10 @@
+creation_rules:
+  - age: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINzKTzMo0Z61n1tdlinPox7zKDU2BHEM8SOzk2dQrTPX"
+
+stores:
+  json:
+    indent: 2
+  json_binary:
+    indent: 2
+  yaml:
+    indent: 2

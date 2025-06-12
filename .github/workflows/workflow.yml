@@ -20,13 +20,18 @@ jobs:
       # checkout action falls back to REST API if it does not find 'git',
       # which is a case in our virgin container
       # This leads to a missing .git directory and complaining
-      # format check step
+      # format & lint check step
       # As an exception, let's install git.
       # More precise checks will be done in another jobs
       - name: Install git
         run: apt update && apt-get install --yes --no-install-recommends git ca-certificates
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # Checkout must be onto the original commit, not a single PR
+          # Otherwise lint will not see full history and diagnose secrets leakage
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
       # Checkout action sets repo as safe, but this does not look like to work inside container
       - name: Mark repo as safe
         run: git config --system --add safe.directory $(pwd)
@@ -34,17 +39,18 @@ jobs:
         run: ./main.sh config
       - name: Check idempotence
         run: ./main.sh config --verify-unchanged
-      # All format checks only available after complete machine setup
+      # All format & lint checks only available after complete machine setup
       # So, we need to do them in one of the check jobs
       - name: Check format
         run: |
-          export PATH="$HOME/.local/bin/:$PATH"
           ./main.sh format
           if [[ -n "$(git diff)" ]]; then
             echo "Code is not formatted."
             git diff
             exit 1
           fi
+      - name: Check lint
+        run: ./main.sh lint
 
   # As mentioned, previous check for the root user might not be representative
   # Thus, all the main checks are done by root for the "random_user"
@@ -79,19 +85,6 @@ jobs:
         run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal
       - name: Check remote idempotence
         run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal --verify-unchanged
-
-  lint:
-    runs-on: ubuntu-22.04
-    steps:
-      # Checkout must be onto the original commit, not a single PR
-      # Otherwise lint will not see full history and diagnose secrets leakage
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Lint
-        run: ./main.sh lint
 
   scripts:
     runs-on: ubuntu-22.04

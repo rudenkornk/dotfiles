@@ -1,9 +1,6 @@
 import inspect
 import logging
-import re
 import tempfile
-
-from git import Repo
 
 from ..utils import DOTPY_PATH, REPO_PATH, run_shell, yaml_read
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
@@ -37,67 +34,11 @@ def _check_leaked_credentials() -> None:
     # it will throw an error.
     first_commit = "78946fc7d7e562042c62d589b331abf222c688e7"
 
-    # There are some deep-history problematic commits, which secrets were revoked
-    # Instead of rewriting history of the entire repo, let's just skip them
-    ignored = [
-        "ab2bd0cd41b3530c575bda668f026a7aac2c1e56",
-        "a81129b55711ac920ca7ffcedc8382b210d31473",
-        "e766f66940d59cb8af176c5d67ddc3e6e42bac44",
-        "9e1efdf0add1b9b5d7f52e89d621fdd2d667dd63",
-        "66ab8392a693e26945239e0ecf8ff78066f6f5b5",
-        "d65d287dd22d85254169d4c02014675891f21f85",
-    ]
+    if run_shell(["git", "cat-file", "-e", first_commit], check=False).returncode:
+        _logger.error("Looks like git history is shallow and credential check cannot be performed.")
+        raise RuntimeError
 
-    logging.getLogger("git").setLevel(logging.WARNING)
-    _logger.info("Analyzing repository history for leaked credentials...")
-
-    repo = Repo(REPO_PATH)
-    for commit in repo.iter_commits(f"{first_commit}..HEAD"):
-        if commit.hexsha in ignored:
-            continue
-
-        for path in commit.stats.files:
-            if not re.search(
-                (
-                    "("
-                    "\\.rsa|"
-                    "\\.ed25519|"
-                    "\\.ed25519_sk|"
-                    "\\.ecdsa|"
-                    "\\.ecdsa_sk|"
-                    "\\.ovpn|"
-                    "\\.amnezia|"
-                    "\\.xray|"
-                    "\\.socks|"
-                    "\\.auth|"
-                    "credentials.json|"
-                    "private.gpg"
-                    ")$"
-                ),
-                str(path),
-            ):
-                continue
-            # Error message is taken from
-            # https://docs.gitguardian.com/secrets-detection/secrets-detection-engine/leaks_remediation
-            _logger.error("LOOKS LIKE SSH KEY, VPN CONFIG OR SOME AUTH DATA LEAKED!!!")
-            _logger.error(f"Problematic commit:     {commit.summary!s}")
-            _logger.error(f"Problematic commit SHA: {commit.hexsha}")
-            _logger.error(f"Problematic path: {path}")
-            _logger.error("")
-            _logger.error("What you should NOT do:")
-            _logger.error("  * Committing on top of the current source code version is not a solution.")
-            _logger.error("    Bear in mind that git keeps track of the history,")
-            _logger.error("    the secret will still be visible in previous commits.")
-            _logger.error("  * Only taking down the involved repository is not a correct solution.")
-            _logger.error("    The leaked credentials will still be exposed in forks of the repository,")
-            _logger.error("    and attackers could still access it in mirrored versions of GitHub.")
-            _logger.error("Step by step guide to remediate the leak:")
-            _logger.error("  * Step 1: Revoke the exposed secret.")
-            _logger.error("  * Step 2: Clean the git history.")
-            _logger.error("  * Step 3: Inspect logs.")
-            msg = "Leaked credentials detected!"
-            raise RuntimeError(msg)
-    _logger.info("Done, no leaked credentials found.")
+    run_shell(["gitleaks", "git"], cwd=REPO_PATH)
 
 
 def lint_code(*, ansible: bool, python: bool, secrets: bool, generic: bool) -> None:

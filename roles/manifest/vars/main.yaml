@@ -54,6 +54,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/fish-shell/fish-shell/releases/download/4.0.2/fish-static-{{ deb_arch }}-4.0.2.tar.xz
   gh:
     url: https://github.com/cli/cli/releases/download/v2.72.0/gh_2.72.0_linux_{{ deb_arch }}.tar.gz
+  gitleaks:
+    url: https://github.com/gitleaks/gitleaks/releases/download/v8.27.2/gitleaks_8.27.2_linux_x64.tar.gz
   drawio:
     url: https://github.com/jgraph/drawio-desktop/releases/download/v26.2.15/drawio-{{ pack_arch }}-26.2.15.{{ pack }}
   eza:

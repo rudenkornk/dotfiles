@@ -1,0 +1,14 @@
+[extend]
+# useDefault will extend the default gitleaks config built in to the binary
+# the latest version is located at:
+# https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
+useDefault = true
+
+[[allowlists]]
+paths = [".gitsecret/paths/mapping.cfg"]
+
+# APT repos keys
+stopwords = [
+  "0x59FDA1CE1B84B3FAD89366C027557F056DC33CA5",
+  "0x60C317803A41BA51845E371A1E9377A2BA9EF27F",
+]

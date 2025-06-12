@@ -15,6 +15,29 @@
     dest: "{{ home }}/.gitconfig"
     state: link
 
+- name: Download gitleaks
+  ansible.builtin.unarchive:
+    src: "{{ manifest.gitleaks.url }}"
+    dest: "{{ home }}/.local/bin"
+    extra_opts:
+      - --exclude=LICENSE
+      - --exclude=*.md
+    remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: git_downloaded
+  until: git_downloaded is not failed
+
+- name: Install gitleaks completions
+  ansible.builtin.shell: |
+    {{ home }}/.local/bin/gitleaks completion bash > {{ home }}/.local/share/bash-completion/completions/gitleaks
+    {{ home }}/.local/bin/gitleaks completion fish > {{ home }}/.config/fish/completions/gitleaks.fish
+  args:
+    executable: bash
+  changed_when: false
+
 - name: Download delta binary
   ansible.builtin.unarchive:
     src: "{{ manifest.delta.url }}"

@@ -12,14 +12,12 @@ dependencies = [
   "ansible-lint>=24.12.2 ; sys_platform != 'win32'",
   "ansible-core>=2.17.3",
   "black>=24.8.0",
-  "click-help-colors>=0.9.4",
   "click>=8.1.7",
   "gitpython>=3.1.43",
   "graphviz>=0.20.3",
   "isort>=5.13.2",
   "luadata>=1.0.5",
   "mypy>=1.11.1",
-  "passlib>=1.7.4",
   "psutil>=6.0.0",
   # Limit pydriller version since it requires git >= 2.38
   # Whereas Ubuntu 22.04 only has 2.34

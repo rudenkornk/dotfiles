@@ -34,6 +34,7 @@ dependencies = [
   "ruff>=0.7.1",
   "typos>=1.31.1",
   "rich>=14.0.0",
+  "typer>=0.16.0",
 ]
 
 [build-system]
@@ -44,7 +45,7 @@ build-backend = "hatchling.build"
 packages = ["dotfiles_py"]
 
 [project.scripts]
-dotfiles = "dotfiles_py:cli.main"
+dotfiles = "dotfiles_py:cli.app"
 
 [tool.uv]
 # W/A for ansible-lint
@@ -132,10 +133,7 @@ default.extend-ignore-re = [
   "(?Rm)^.*(#|//)\\s*typos:\\s*ignore$",
   "(?s)(#|//)\\s*typos:\\s*off.*?(#|//)\\s*typos:\\s*on",
 ]
-files.extend-exclude = [
-  "lazy-lock.json",
-  "*.sops.yaml",
-]
+files.extend-exclude = ["lazy-lock.json", "*.sops.yaml"]
 
 [tool.mypy]
 strict = true

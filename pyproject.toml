@@ -5,7 +5,7 @@ description = "Ansible playbooks for setting up personal machines."
 readme = "readme.md"
 # Python 3.12.5 has a memory safety issue that can cause 
 # Black's AST safety checks to fail.
-requires-python = ">=3.10,!=3.12.5"
+requires-python = ">=3.11,!=3.12.5"
 license = "MIT"
 
 dependencies = [

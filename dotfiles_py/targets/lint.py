@@ -1,6 +1,5 @@
 import inspect
 import logging
-import tempfile
 
 from ..utils import DOTPY_PATH, REPO_PATH, run_shell, yaml_read
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
@@ -79,15 +78,6 @@ def format_code() -> None:
     run_shell(["python3", "-m", "ruff", "format"])
     run_shell(["python3", "-m", "ruff", "check", "--fix", "--unsafe-fixes"])
 
-    # All the other formatting tools require a machine to be configured,
-    # Thus we ignore errors here, making these optional
-    run_shell(["npm", "install", "--save-exact"], check=False)
-    with tempfile.NamedTemporaryFile(mode="w+t") as combinedignore:
-        gitignore = REPO_PATH / ".gitignore"
-        prettierignore = REPO_PATH / ".prettierignore"
-        combinedignore.write(gitignore.read_text(encoding="utf-8"))
-        combinedignore.write(prettierignore.read_text(encoding="utf-8"))
-        combinedignore.flush()
-        run_shell(["npx", "prettier", "--ignore-path", combinedignore.name, "-w", REPO_PATH], check=False)
-
-    run_shell(["stylua", REPO_PATH], check=False)
+    run_shell(["npm", "install", "--save-exact"])
+    run_shell(["npx", "prettier", "-w", REPO_PATH])
+    run_shell(["stylua", REPO_PATH])

@@ -219,15 +219,11 @@ def _setup_inventory(hostnames: list[str]) -> Iterator[Path]:
         private_inventory_path.unlink()
 
 
-class ConfigMode(enum.Enum):
+class ConfigMode(enum.StrEnum):
     BOOTSTRAP = enum.auto()
     MINIMAL = enum.auto()
     SERVER = enum.auto()
     FULL = enum.auto()
-
-    @classmethod
-    def values(cls) -> list[str]:
-        return [mode.name.lower() for mode in cls]
 
 
 def config(*, hostnames: list[str], user: str, verify_unchanged: bool, mode: ConfigMode) -> None:

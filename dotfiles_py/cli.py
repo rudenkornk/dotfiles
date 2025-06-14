@@ -2,7 +2,6 @@ import getpass
 import logging
 import secrets
 import string
-from enum import StrEnum, auto
 from pathlib import Path
 from typing import Annotated
 
@@ -26,59 +25,43 @@ app = typer.Typer(
     help="Main script for spawning Ansible operations or managing dotfiles.",
 )
 
-
-class LoggingLevelOpt(StrEnum):
-    s = auto()
-    spam = auto()
-    d = auto()
-    debug = auto()
-    v = auto()
-    verbose = auto()
-    i = auto()
-    info = auto()
-    n = auto()
-    notice = auto()
-    w = auto()
-    warning = auto()
-    u = auto()
-    success = auto()
-    e = auto()
-    error = auto()
-    c = auto()
-    critical = auto()
-
-    @property
-    def to_logging_level(self) -> int:
-        return {
-            "s": logging.DEBUG - 5,
-            "spam": logging.DEBUG - 5,
-            "d": logging.DEBUG,
-            "debug": logging.DEBUG,
-            "v": logging.INFO - 5,
-            "verbose": logging.INFO - 5,
-            "i": logging.INFO,
-            "info": logging.INFO,
-            "n": logging.WARNING - 5,
-            "notice": logging.WARNING - 5,
-            "w": logging.WARNING,
-            "warning": logging.WARNING,
-            "u": logging.ERROR - 5,
-            "success": logging.ERROR - 5,
-            "e": logging.ERROR,
-            "error": logging.ERROR,
-            "c": logging.CRITICAL,
-            "critical": logging.CRITICAL,
-        }[self.value]
+loglevel_map = {
+    "s": logging.DEBUG - 5,
+    "spam": logging.DEBUG - 5,
+    "d": logging.DEBUG,
+    "debug": logging.DEBUG,
+    "v": logging.INFO - 5,
+    "verbose": logging.INFO - 5,
+    "i": logging.INFO,
+    "info": logging.INFO,
+    "n": logging.WARNING - 5,
+    "notice": logging.WARNING - 5,
+    "w": logging.WARNING,
+    "warning": logging.WARNING,
+    "u": logging.ERROR - 5,
+    "success": logging.ERROR - 5,
+    "e": logging.ERROR,
+    "error": logging.ERROR,
+    "c": logging.CRITICAL,
+    "critical": logging.CRITICAL,
+}
 
 
 @app.callback()
 def setup_app(
     *,
-    log_level: Annotated[
-        LoggingLevelOpt, typer.Option("-l", "--log-level", help="Logging level.", case_sensitive=False)
-    ] = LoggingLevelOpt.info,
+    loglevel: Annotated[
+        str,
+        typer.Option(
+            "-l",
+            "--log-level",
+            click_type=click.Choice(list(loglevel_map.keys())),
+            help="Logging level.",
+            case_sensitive=False,
+        ),
+    ] = "info",
 ) -> None:
-    logging.getLogger().setLevel(log_level.to_logging_level)
+    logging.getLogger().setLevel(loglevel_map[loglevel])
     utils.setup_logger()
 
 
@@ -107,22 +90,21 @@ def config(
         typer.Option("-v", "--verify-unchanged", help="This is an idempotency check. If anything was changed, fail."),
     ] = False,
     mode: Annotated[
-        str,
+        config_target.ConfigMode,
         typer.Option(
             "-m",
             "--mode",
-            click_type=click.Choice(config_target.ConfigMode.values()),
+            case_sensitive=False,
             help="Configuration mode. "
             "'bootstrap' will only install python and create target user on the host. "
             "'minimal' will install only the most critical parts like credentials and shell utils. "
             "'server' will skip all GUI tools. "
             "'full' will do full configuration.",
         ),
-    ] = "full",
+    ] = config_target.ConfigMode.FULL,
 ) -> None:
     """Configure systems."""
-    mode_enum = config_target.ConfigMode[mode.upper()]
-    config_target.config(hostnames=host, user=user, verify_unchanged=verify_unchanged, mode=mode_enum)
+    config_target.config(hostnames=host, user=user, verify_unchanged=verify_unchanged, mode=mode)
 
 
 @app.command()
@@ -239,6 +221,7 @@ def password(
     passwords = [passwords_str[i : i + length] + "\n" for i in range(0, len(passwords_str), length)]
     output.parent.mkdir(parents=True, exist_ok=True)
     output.touch(0o600)
+    output.chmod(0o600)
     with output.open("a") as output_file:
         output_file.writelines(passwords)
     _logger.info(f"Password saved to the end of {output} file")

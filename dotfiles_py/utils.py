@@ -382,6 +382,7 @@ def typer_exit(
             try:
                 return func(*args, **kwargs)
             except exceptions as exc:
+                _logger.error(str(exc))  # noqa: TRY400
                 raise typer.Exit(code) from exc
 
         return wrapper

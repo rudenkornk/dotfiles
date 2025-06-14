@@ -16,6 +16,7 @@ if [[ ! -f $proxy ]]; then
 fi
 
 if [[ -f $proxy ]]; then
+  # shellcheck source=/dev/null
   source $proxy
 fi
 

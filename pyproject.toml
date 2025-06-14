@@ -25,7 +25,6 @@ dependencies = [
   "types-urllib3>=1.26.25.14",
   "yamllint>=1.35.1",
   "ruff>=0.7.1",
-  "typos>=1.31.1",
   "rich>=14.0.0",
   "typer>=0.16.0",
 ]

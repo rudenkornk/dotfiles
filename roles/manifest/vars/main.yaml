@@ -91,6 +91,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     version: 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
   turbovnc:
     url: "{{ manifest_pre.turbovnc[pack].url }}"
+  typos:
+    url: https://github.com/crate-ci/typos/releases/download/v1.33.1/typos-v1.33.1-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   vcpkg:
     url: https://github.com/microsoft/vcpkg
     version: 41c447cc210dc39aa85d4a5f58b4a1b9e573b3dc

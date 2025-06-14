@@ -43,7 +43,9 @@ function yy() {
 eval "$(zoxide init bash)"
 
 if [[ -f ~/.local/bin/yazi_dir/completions/ya.bash ]]; then
+  # shellcheck source=/dev/null
   source ~/.local/bin/yazi_dir/completions/ya.bash
+  # shellcheck source=/dev/null
   source ~/.local/bin/yazi_dir/completions/yazi.bash
 fi
 

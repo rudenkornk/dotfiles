@@ -45,6 +45,21 @@
   register: common_utils_downloaded
   until: common_utils_downloaded is not failed
 
+- name: Install shellcheck
+  ansible.builtin.unarchive:
+    src: "{{ manifest.shellcheck.url }}"
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
+    extra_opts:
+      - --strip-components=1
+      - --exclude=*.txt
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: common_utils_downloaded
+  until: common_utils_downloaded is not failed
+
 - name: Setup printscreen shutter sound
   vars:
     common_utils_shutter: /usr/share/sounds/freedesktop/stereo/camera-shutter.oga

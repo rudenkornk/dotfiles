@@ -1,5 +1,6 @@
 import inspect
 import logging
+from pathlib import Path
 
 from ..utils import DOTPY_PATH, REPO_PATH, run_shell, yaml_read
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
@@ -40,7 +41,7 @@ def _check_leaked_credentials() -> None:
     run_shell(["gitleaks", "git"], cwd=REPO_PATH)
 
 
-def lint_code(*, ansible: bool, python: bool, secrets: bool, generic: bool) -> None:
+def lint_code(*, ansible: bool, python: bool, secrets: bool, sh: bool, generic: bool) -> None:
     ansible_collections()
 
     if secrets:
@@ -65,6 +66,14 @@ def lint_code(*, ansible: bool, python: bool, secrets: bool, generic: bool) -> N
         # Specifying job number for pylint somehow leads to false-positive errors
         run_shell(["python3", "-m", "ruff", "check"])
         run_shell(["python3", "-m", "yamllint", "--strict", REPO_PATH / ".github"])
+
+    if sh:
+        files = [
+            Path(file)
+            for file in run_shell(["git", "ls-files"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
+            if file.endswith(".sh")
+        ]
+        run_shell(["shellcheck", *files])
 
     if generic:
         run_shell(["typos"])

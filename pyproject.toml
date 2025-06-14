@@ -27,6 +27,8 @@ dependencies = [
   "ruff>=0.7.1",
   "rich>=14.0.0",
   "typer>=0.16.0",
+  # passlib is needed for Ansible `password_hash` filter
+  "passlib>=1.7.4",
 ]
 
 [build-system]

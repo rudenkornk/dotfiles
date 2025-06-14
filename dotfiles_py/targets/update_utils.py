@@ -295,9 +295,9 @@ def _update_zig_release(url: str, *, locked: bool) -> str:  # noqa: C901
     if not isinstance(releases, dict):
         msg = f"Expected a dictionary in {releases_url}, got {type(releases)}"
         raise TypeError(msg)
-    chosen_version = cri.version
+    chosen = url
 
-    for ver_candidate_str in releases:
+    for ver_candidate_str, data in releases.items():
         if not Version.is_valid(ver_candidate_str):
             _logger.info(f"{2 * tab}{ver_candidate_str} -- skipping (could not parse as semver)")
             continue
@@ -307,24 +307,22 @@ def _update_zig_release(url: str, *, locked: bool) -> str:  # noqa: C901
             continue
         if cri.version == ver_candidate:
             _logger.info(f"{2 * tab}{ver_candidate} == {cri.version} -- return (reached current version)")
-            chosen_version = cri.version
             break
         if ver_candidate < cri.version:
             _logger.warning(
                 f"{2 * tab}{ver_candidate} < {cri.version} -- skipping and returning current (missed current version)",
             )
-            chosen_version = cri.version
             break
         if ver_candidate > cri.version:
             breaking_note = ""
             if ver_candidate.major > cri.version.major:
                 breaking_note = " [POSSIBLY BREAKING]"
             _logger.info(f"{2 * tab}{ver_candidate} > {cri.version}{breaking_note} -- return (found latest version)")
-            chosen_version = ver_candidate
+            chosen = data["x86_64-linux"]["tarball"]
             break
         raise AssertionError
 
-    return url.replace(str(cri.version), str(chosen_version))
+    return chosen
 
 
 def _materialize_templated_url(url: str) -> str:

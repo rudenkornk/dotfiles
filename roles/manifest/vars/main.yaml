@@ -39,49 +39,49 @@ manifest_pre:
 
 manifest: # noqa: var-naming[no-role-prefix]
   carapace:
-    url: https://github.com/carapace-sh/carapace-bin/releases/download/v1.3.1/carapace-bin_1.3.1_linux_{{ deb_arch }}.tar.gz
+    url: https://github.com/carapace-sh/carapace-bin/releases/download/v1.3.2/carapace-bin_1.3.2_linux_{{ deb_arch }}.tar.gz
   clipboard:
     url: https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
   cmake:
-    url: https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-{{ ansible_architecture }}.sh
+    url: https://github.com/Kitware/CMake/releases/download/v4.0.3/cmake-4.0.3-linux-{{ ansible_architecture }}.sh
   delta:
     url: https://github.com/dandavison/delta/releases/download/0.18.2/delta-0.18.2-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   dua:
     url: https://github.com/Byron/dua-cli/releases/download/v2.30.1/dua-v2.30.1-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   dust:
-    url: https://github.com/bootandy/dust/releases/download/v1.2.0/dust-v1.2.0-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
+    url: https://github.com/bootandy/dust/releases/download/v1.2.1/dust-v1.2.1-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   fish:
     url: https://github.com/fish-shell/fish-shell/releases/download/4.0.2/fish-static-{{ deb_arch }}-4.0.2.tar.xz
   gh:
-    url: https://github.com/cli/cli/releases/download/v2.72.0/gh_2.72.0_linux_{{ deb_arch }}.tar.gz
+    url: https://github.com/cli/cli/releases/download/v2.74.1/gh_2.74.1_linux_{{ deb_arch }}.tar.gz
   gitleaks:
     url: https://github.com/gitleaks/gitleaks/releases/download/v8.27.2/gitleaks_8.27.2_linux_x64.tar.gz
   drawio:
-    url: https://github.com/jgraph/drawio-desktop/releases/download/v26.2.15/drawio-{{ pack_arch }}-26.2.15.{{ pack }}
+    url: https://github.com/jgraph/drawio-desktop/releases/download/v27.0.9/drawio-{{ pack_arch }}-27.0.9.{{ pack }}
   eza:
-    url: https://github.com/eza-community/eza/releases/download/v0.21.3/eza_{{ ansible_architecture }}-unknown-linux-musl.tar.gz
+    url: https://github.com/eza-community/eza/releases/download/v0.21.4/eza_{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   fzf:
     url: https://github.com/junegunn/fzf.git
-    version: 9c1a47acf7453f9dad5905b7f23ad06e5195d51f
+    version: 3b68dcdd81394f1ac9f743e1f74ff754f95eef9e
   hiddify:
     url: "{{ manifest_pre.hiddify[pack].url }}"
   jetbrains_mono:
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
   kitty_themes:
     url: https://github.com/kovidgoyal/kitty-themes.git
-    version: 49d0a9199d64cbeb7bcf7db1a04d164ee0c16e1b
+    version: e23ccc1b1f23d404950bc3a0900ee4856448c111
   lazygit:
-    url: https://github.com/jesseduffield/lazygit/releases/download/v0.50.0/lazygit_0.50.0_Linux_{{ ansible_architecture }}.tar.gz
+    url: https://github.com/jesseduffield/lazygit/releases/download/v0.52.0/lazygit_0.52.0_Linux_{{ ansible_architecture }}.tar.gz
   neovim:
-    url: https://github.com/neovim/neovim/releases/download/v0.11.1/nvim-linux-{{ ansible_architecture }}.tar.gz
+    url: https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-{{ ansible_architecture }}.tar.gz
   nixfmt:
     url: https://github.com/NixOS/nixfmt/releases/download/v0.6.0/nixfmt-{{ ansible_architecture }}-linux
   nu:
-    url: https://github.com/nushell/nushell/releases/download/0.104.0/nu-0.104.0-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
+    url: https://github.com/nushell/nushell/releases/download/0.105.1/nu-0.105.1-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   oh_my_posh:
-    url: https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v25.23.3/posh-linux-{{ deb_arch }}
+    url: https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v26.7.0/posh-linux-{{ deb_arch }}
   oh_my_posh_themes:
-    url: https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v25.23.3/themes.zip
+    url: https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v26.7.0/themes.zip
   shellcheck:
     url: https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.linux.{{ ansible_architecture }}.tar.xz
   sops:
@@ -97,14 +97,14 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/crate-ci/typos/releases/download/v1.33.1/typos-v1.33.1-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   vcpkg:
     url: https://github.com/microsoft/vcpkg
-    version: 41c447cc210dc39aa85d4a5f58b4a1b9e573b3dc
+    version: ef7dbf94b9198bc58f45951adcf1f041fcbc5ea0
   wiki:
     url: https://github.com/Builditluc/wiki-tui/releases/download/v0.9.1/wiki-tui-linux.tar.gz
   xh:
     url: https://github.com/ducaale/xh/releases/download/v0.24.1/xh-v0.24.1-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   yazi:
-    url: https://github.com/sxyazi/yazi/releases/download/v25.4.8/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip
+    url: https://github.com/sxyazi/yazi/releases/download/v25.5.31/yazi-{{ ansible_architecture }}-unknown-linux-musl.zip
   zls:
     url: https://github.com/zigtools/zls/releases/download/0.14.0/zls-{{ ansible_architecture }}-linux.tar.xz
   zig:
-    url: https://ziglang.org/download/0.14.0/zig-linux-{{ ansible_architecture }}-0.14.0.tar.xz
+    url: https://ziglang.org/download/0.14.1/zig-{{ ansible_architecture }}-linux-0.14.1.tar.xz

@@ -15,7 +15,7 @@ ANSIBLE_COLLECTIONS_PATH = ARTIFACTS_PATH / platform.node() / "ansible_collectio
     Path(__file__),
     auto_create=True,
 )
-def ansible_collections(artifact: Path, sources: list[Path]) -> None:
+def ansible_collections(artifact: Path, sources: list[Path]) -> None:  # noqa: ARG001
     yaml, _ = yaml_read(sources[0])
     if not isinstance(yaml, dict):
         msg = f"Expected a dictionary in {sources[0]}, got {type(yaml)}"
@@ -32,4 +32,3 @@ def ansible_collections(artifact: Path, sources: list[Path]) -> None:
             ["ansible-galaxy", "collection", "install", collection + ":" + version],
             extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
         )
-    artifact.touch()

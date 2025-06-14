@@ -75,9 +75,9 @@ def lint_choices() -> list[str]:
 
 
 def format_code() -> None:
-    run_shell(["python3", "-m", "ruff", "format"])
-    run_shell(["python3", "-m", "ruff", "check", "--fix", "--unsafe-fixes"])
+    run_shell(["python3", "-m", "ruff", "format"], cwd=REPO_PATH)
+    run_shell(["python3", "-m", "ruff", "check", "--fix", "--unsafe-fixes"], cwd=REPO_PATH)
 
-    run_shell(["npm", "install", "--save-exact"])
+    run_shell(["npm", "install", "--save-exact"], cwd=REPO_PATH)
     run_shell(["npx", "prettier", "-w", REPO_PATH])
     run_shell(["stylua", REPO_PATH])

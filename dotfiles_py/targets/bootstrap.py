@@ -6,6 +6,12 @@ from ..utils import ARTIFACTS_PATH, REPO_PATH, makelike, run_shell
 def check_bootstrap(image: str) -> None:
     norm_image = image.replace(":", "_").replace("/", "_")
 
+    @makelike(
+        ARTIFACTS_PATH / norm_image / "bootstrap_control_node",
+        REPO_PATH / "main.sh",
+        Path(__file__),
+        auto_create=True,
+    )
     def run_check_bootstrap(_: Path, sources: list[Path]) -> None:
         run_shell(
             [
@@ -25,9 +31,4 @@ def check_bootstrap(image: str) -> None:
             ],
         )
 
-    makelike(
-        ARTIFACTS_PATH / norm_image / "bootstrap_control_node",
-        REPO_PATH / "main.sh",
-        Path(__file__),
-        auto_create=True,
-    )(run_check_bootstrap)()
+    run_check_bootstrap()

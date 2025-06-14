@@ -59,6 +59,26 @@ return {
     opts = { highlight = { on_put = false, on_yank = false, timer = 0 } },
   },
   {
+    "iamcco/markdown-preview.nvim",
+    config = function()
+      -- For this `vim.cmd(...)` see original in LazyVim:
+      -- https://github.com/LazyVim/lazyvim.github.io/blob/5cc96146d96bb61ad915088bc3eec4151643cd6f/docs/extras/lang/markdown.md#markdown-previewnvim
+      vim.cmd([[do FileType]])
+      -- Do not close preview on buffer switch.
+      -- See https://github.com/iamcco/markdown-preview.nvim/tree/a923f5fc5ba36a3b17e289dc35dc17f66d0548ee?tab=readme-ov-file#markdownpreview-config
+      vim.g.mkdp_auto_close = 0
+    end,
+  },
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    opts = {
+      -- Prevent rendered and normal versions to be different in lines,
+      -- which makes document "flicker" when switching between them.
+      code = { border = "thick" },
+      pipe_table = { style = "normal" },
+    },
+  },
+  {
     "mfussenegger/nvim-dap",
     keys = require("plugins.configs.dap").keys,
   },

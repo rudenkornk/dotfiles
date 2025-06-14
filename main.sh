@@ -21,87 +21,93 @@ LOCAL_HOME=${LOCAL_HOME:-$HOME/.local}
 CARGO_HOME=${CARGO_HOME:-$HOME/.cargo}
 export PATH="$PATH":"$LOCAL_HOME/bin":"$CARGO_HOME/bin"
 
+_apt_updated=""
+
+function install_pkg() {
+  local cmd="$1"
+  local fedora_packages=${2:-$cmd}
+  local ubuntu_packages=${3:-$fedora_packages}
+
+  if ! command -v "$cmd" &>/dev/null; then
+    sudo=sudo
+    if [[ "$fedora_packages" == "sudo" ]]; then
+      sudo=""
+    fi
+
+    # shellcheck disable=SC2086  # prevent word splitting.
+    # Here it is intentional to pass several packages in one argument.
+    if [[ $ansible_distribution == Ubuntu ]]; then
+      if [[ "$_apt_updated" == "" ]]; then
+        $sudo apt-get update
+        _apt_updated=1
+      fi
+      $sudo apt-get install --yes --no-install-recommends $ubuntu_packages
+    elif [[ $ansible_distribution == Fedora ]]; then
+      $sudo dnf install --assumeyes $fedora_packages
+    fi
+  fi
+}
+
+function install_binary() {
+  local cmd="$1"
+  local extra_opts=${2:-$cmd}
+
+  if ! command -v "$cmd" &>/dev/null; then
+    url=$(grep -oP "https://.*$cmd.*" "$root/roles/manifest/vars/main.yaml")
+    url=${url//"{{ deb_arch }}"/$deb_arch}
+    url=${url//"{{ ansible_architecture }}"/$ansible_architecture}
+    mkdir -p "$LOCAL_HOME/bin"
+
+    if [[ "$url" == *".gz" || "$url" == *".xz" || "$url" == *".zip" || "$url" == *".tar" ]]; then
+      # shellcheck disable=SC2086  # prevent word splitting, intentionally passing several options.
+      curl -L "$url" |
+        bsdtar --extract --verbose \
+          --exclude=LICENSE* \
+          --exclude=*.md \
+          --exclude=*.txt \
+          --exclude=doc \
+          --cd "$LOCAL_HOME/bin" \
+          $extra_opts
+    else
+      curl -L "$url" --output "$LOCAL_HOME/bin/$cmd"
+    fi
+
+    chmod +x "$LOCAL_HOME/bin/$cmd"
+  fi
+}
+
 # sudo is required for all of the other package management operations
-# This is basically a dummy check, since the only way to install sudo without sudo
-# is to being root
-if ! command -v sudo &>/dev/null; then
-  if [[ $ansible_distribution == Ubuntu ]]; then
-    apt-get update
-    apt-get install --yes --no-install-recommends sudo
-  elif [[ $ansible_distribution == Fedora ]]; then
-    dnf install --assumeyes sudo
-  fi
-fi
-
-# curl is required for uv installation
-if ! command -v curl &>/dev/null; then
-  if [[ $ansible_distribution == Ubuntu ]]; then
-    sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends curl ca-certificates
-  elif [[ $ansible_distribution == Fedora ]]; then
-    sudo dnf install --assumeyes curl ca-certificates
-  fi
-fi
-
-# uv is required for python and dependency management
-if ! command -v uv &>/dev/null; then
+# This is basically a dummy check, since the only way to install sudo without sudo is to being root
+install_pkg sudo
+install_pkg curl "curl ca-certificates" # curl is required for uv installation
+if ! command -v uv &>/dev/null; then    # uv is required for python and dependency management
   curl -LsSf https://astral.sh/uv/0.7.12/install.sh | sh
 fi
 
-# rsync is required for Ansible synchronization tasks
-if ! command -v rsync &>/dev/null; then
-  if [[ $ansible_distribution == Ubuntu ]]; then
-    sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends rsync
-  elif [[ $ansible_distribution == Fedora ]]; then
-    sudo dnf install --assumeyes rsync
-  fi
-fi
+# Dependencies after this point are optional and required for:
+# - configuring another host
+# - formatting and linting
+# - updating dependencies
 
-# age & sops is required for secrets decryption
-if ! command -v age &>/dev/null; then
-  if [[ $ansible_distribution == Ubuntu ]]; then
-    sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends age
-  elif [[ $ansible_distribution == Fedora ]]; then
-    sudo dnf install --assumeyes age
-  fi
-fi
-if ! command -v sops &>/dev/null; then
-  url=$(grep -oP 'https://.*sops.*' roles/manifest/vars/main.yaml | sed "s/{{ deb_arch }}/$deb_arch/")
-  mkdir -p "$LOCAL_HOME/bin"
-  curl -L "$url" --output "$LOCAL_HOME/bin/sops"
-  chmod +x "$LOCAL_HOME/bin/sops"
-fi
+install_pkg bsdtar bsdtar libarchive-tools # bsdtar is required for installing other optional dependencies
 
-# podman is required for local configuration testing inside containers
-if ! command -v podman &>/dev/null; then
-  if [[ $ansible_distribution == Ubuntu ]]; then
-    sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends podman
-  elif [[ $ansible_distribution == Fedora ]]; then
-    sudo dnf install --assumeyes podman
-  fi
-fi
+# Dependencies for configuring another host
+install_pkg rsync   # rsync is required for Ansible synchronization tasks
+install_pkg age     # age & sops is required for secrets decryption
+install_binary sops # age & sops is required for secrets decryption
+install_pkg podman  # podman is required for local configuration testing inside containers
 
-# git is used for performing project dependencies updates
-if ! command -v git &>/dev/null; then
-  if [[ $ansible_distribution == Ubuntu ]]; then
-    sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends git
-  elif [[ $ansible_distribution == Fedora ]]; then
-    sudo dnf install --assumeyes git
-  fi
-fi
+# Lint dependencies
+install_pkg git                                  # git is required for secrets linting
+install_binary gitleaks                          # gitleaks is required for secrets linting
+install_binary typos                             # typos is required for generic typo linting
+install_binary shellcheck '--strip-components=1' # .sh code linting
 
-# graphviz is used for generating Ansible roles dependency graph
-if ! command -v dot &>/dev/null; then
-  if [[ $ansible_distribution == Ubuntu ]]; then
-    sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends graphviz
-  elif [[ $ansible_distribution == Fedora ]]; then
-    sudo dnf install --assumeyes graphviz
-  fi
-fi
+# Format dependencies
+install_binary stylua
+install_pkg npm
+
+# Generating roles dependency graph
+install_pkg dot graphviz
 
 uv run dotfiles "${@:---help}"

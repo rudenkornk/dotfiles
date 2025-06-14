@@ -60,10 +60,14 @@ While being decently generic, this config focuses more on some tools rather than
 
 ## Try this config
 
-Config is tested inside `podman` containers, which can also be used to try this config.
-Note, that this will install some basic tools:
-`uv`, `podman`, `sops`, `age`, `curl`, `ca-certificates`, `rsync`, `git` `graphviz`.  
-This will not install any specific configs though.
+Config is tested inside `podman` containers, which can also be used to try this config.  
+Thought next command will not install any specific configs, be noted that it will install several packages **system-wide** or **globally**:
+
+- `curl`, `ca-certificates`, `uv` for `python` bootstrapping.
+- `bsdtar`, `rsync`, `age`, `sops`, `podman` for configuring remote hosts (`podman` containers in this case).
+- `git`, `gitleaks`, `typos`, `shellcheck` for code linting.
+- `stylua` and `npm` for code formatting (`npm` is required for `prettier` and takes a LOT of space).
+- `graphviz` for generating role dependency graph.
 
 ```bash
 ./main.sh config --target dotfiles_ubuntu_22.04
@@ -75,7 +79,7 @@ podman exec --interactive --tty --workdir $(pwd) --user $(id --user) dotfiles_ub
 The first things you would want to customize if forking this repo are:
 
 1. Personal information in `roles/profile/vars/main.yaml`.
-1. Credentials, ssh keys and vpn configs shown in `git secret list`.
+1. Credentials, ssh keys and vpn configs shown in `git ls-files | grep '\.sops'`.
 
 ## Update components versions
 
@@ -92,6 +96,8 @@ The first things you would want to customize if forking this repo are:
 ## Test
 
 ```bash
-./main.sh
+./main.sh format
+./main.sh lint
+./main.sh check-bootstrap
 ./main.sh config --target dotfiles_ubuntu_22.04
 ```

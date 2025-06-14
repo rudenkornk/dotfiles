@@ -14,8 +14,8 @@ jobs:
   check_current_user:
     env:
       HOME: /root
-    runs-on: ubuntu-22.04
-    container: ubuntu:22.04
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
     steps:
       # checkout action falls back to REST API if it does not find 'git',
       # which is a case in our virgin container
@@ -55,7 +55,7 @@ jobs:
   # As mentioned, previous check for the root user might not be representative
   # Thus, all the main checks are done by root for the "random_user"
   check:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     container: ${{ matrix.image }}
     steps:
       - name: Checkout repository
@@ -77,7 +77,7 @@ jobs:
 
   # Check that the project is able to configure remote host, with a user different from the current one
   check_remote:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -87,7 +87,7 @@ jobs:
         run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal --verify-unchanged
 
   scripts:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

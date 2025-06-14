@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import IO, Any, ClassVar, Concatenate, ParamSpec, TypeVar, overload
 
 import luadata  # type: ignore[import-untyped]
+import typer
 from rich.logging import RichHandler
 from ruamel.yaml import YAML
 
@@ -349,3 +350,43 @@ def setup_logger(logger: logging.Logger | None = None) -> None:
     handler.setFormatter(_LoggerFormatter())
     handler.console.stderr = True
     logger.addHandler(handler)
+
+
+@overload
+def typer_exit(
+    func: Callable[_P, _R],
+    *,
+    exceptions: tuple[type[Exception], ...] = ...,
+    code: int = ...,
+) -> Callable[_P, _R]: ...
+
+
+@overload
+def typer_exit(
+    func: None = None,
+    *,
+    exceptions: tuple[type[Exception], ...] = ...,
+    code: int = ...,
+) -> Callable[[Callable[_P, _R]], Callable[_P, _R]]: ...
+
+
+def typer_exit(
+    func: Callable[_P, _R] | None = None,
+    *,
+    exceptions: tuple[type[Exception], ...] = (Exception,),
+    code: int = 1,
+) -> Callable[[Callable[_P, _R]], Callable[_P, _R]] | Callable[_P, _R]:
+    def exit_decorator(func: Callable[_P, _R]) -> Callable[_P, _R]:
+        @functools.wraps(func)
+        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
+            try:
+                return func(*args, **kwargs)
+            except exceptions as exc:
+                raise typer.Exit(code) from exc
+
+        return wrapper
+
+    if func is not None:
+        return exit_decorator(func)
+
+    return exit_decorator

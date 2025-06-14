@@ -83,6 +83,7 @@ def setup_app(
 
 
 @app.command()
+@utils.typer_exit()
 def config(
     *,
     host: Annotated[
@@ -125,6 +126,7 @@ def config(
 
 
 @app.command()
+@utils.typer_exit()
 def check_bootstrap(
     *,
     image: Annotated[
@@ -143,6 +145,7 @@ def check_bootstrap(
 
 
 @app.command()
+@utils.typer_exit()
 def lint(
     *,
     only: Annotated[
@@ -164,18 +167,21 @@ def lint(
 
 
 @app.command(name="format")
+@utils.typer_exit()
 def format_code() -> None:
     """Format code."""
     lint_target.format_code()
 
 
 @app.command()
+@utils.typer_exit()
 def hooks() -> None:
     """Perform git hooks setup in repo."""
     hooks_target.hooks()
 
 
 @app.command()
+@utils.typer_exit()
 def update(
     *,
     components: Annotated[
@@ -197,12 +203,14 @@ def update(
 
 
 @app.command()
+@utils.typer_exit()
 def gnome() -> None:
     """Regenerate gnome settings."""
     gnome_target.gnome_config()
 
 
 @app.command()
+@utils.typer_exit()
 def graph(
     *,
     silent: Annotated[bool, typer.Option("-s", "--silent", help="Do not open graph in image viewer.")] = False,
@@ -212,6 +220,7 @@ def graph(
 
 
 @app.command()
+@utils.typer_exit()
 def password(
     *,
     alphabet: Annotated[
@@ -236,6 +245,7 @@ def password(
 
 
 @app.command(name="omp-themes")
+@utils.typer_exit()
 def omp_themes(
     *,
     from_all: Annotated[

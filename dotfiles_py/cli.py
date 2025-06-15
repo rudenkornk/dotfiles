@@ -121,7 +121,7 @@ def check_bootstrap(
         ),
     ] = [config_target.images()[0]],  # noqa: B006, B008
 ) -> None:
-    """Check that main.sh bootstrapping script works correctly on different systems."""
+    """Check that dotfiles.sh bootstrapping script works correctly on different systems."""
     for image_ in image:
         bootstrap.check_bootstrap(image_)
 

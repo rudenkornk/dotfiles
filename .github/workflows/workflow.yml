@@ -21,9 +21,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Config
-        run: ./main.sh config
+        run: ./dotfiles.sh config
       - name: Check idempotence
-        run: ./main.sh config --verify-unchanged
+        run: ./dotfiles.sh config --verify-unchanged
 
   # As mentioned, previous check for the root user might not be representative.
   # Thus, all the main checks are done by root for the "random_user".
@@ -34,9 +34,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Config
-        run: ./main.sh config --user random_user
+        run: ./dotfiles.sh config --user random_user
       - name: Check idempotence
-        run: ./main.sh config --user random_user --verify-unchanged
+        run: ./dotfiles.sh config --user random_user --verify-unchanged
     strategy:
       matrix:
         image:
@@ -55,9 +55,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Check remote config
-        run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal
+        run: ./dotfiles.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal
       - name: Check remote idempotence
-        run: ./main.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal --verify-unchanged
+        run: ./dotfiles.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal --verify-unchanged
 
   lint:
     runs-on: ubuntu-24.04
@@ -80,14 +80,14 @@ jobs:
         run: git config --system --add safe.directory $(pwd)
       - name: Check format
         run: |
-          ./main.sh format
+          ./dotfiles.sh format
           if [[ -n "$(git diff)" ]]; then
             echo "Code is not formatted."
             git diff
             exit 1
           fi
       - name: Lint
-        run: ./main.sh lint
+        run: ./dotfiles.sh lint
 
   scripts:
     runs-on: ubuntu-24.04
@@ -96,9 +96,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Generate roles graph
-        run: ./main.sh graph
+        run: ./dotfiles.sh graph
       - name: Check update works
-        run: ./main.sh update
+        run: ./dotfiles.sh update
 
 name: dotfiles workflow
 

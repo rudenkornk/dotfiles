@@ -8,7 +8,7 @@ def check_bootstrap(image: str) -> None:
 
     @makelike(
         ARTIFACTS_PATH / norm_image / "bootstrap_control_node",
-        REPO_PATH / "main.sh",
+        REPO_PATH / "dotfiles.sh",
         REPO_PATH / "pyproject.toml",
         REPO_PATH / "uv.lock",
         REPO_PATH / "roles" / "manifest" / "vars" / "main.yaml",

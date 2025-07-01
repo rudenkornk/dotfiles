@@ -6,4 +6,7 @@ function c --wraps z
     pushd .
     z $argv && eza --classify --icons --all
   end
+  if test -f .venv/bin/activate.fish
+    source .venv/bin/activate.fish
+  end
 end

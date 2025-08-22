@@ -6,13 +6,13 @@
 manifest: # noqa: var-naming[no-role-prefix]
   collections.ansible.posix:
     url: https://github.com/ansible-collections/ansible.posix
-    version: 2.0.0
+    version: 2.1.0
   collections.community.general:
     url: https://github.com/ansible-collections/community.general
-    version: 10.7.0
+    version: 11.2.1
   collections.community.sops:
     url: https://github.com/ansible-collections/community.sops
-    version: 2.0.5
+    version: 2.2.1
   collections.containers.podman:
     url: https://github.com/containers/ansible-podman-collections
-    version: 1.16.4
+    version: 1.17.0

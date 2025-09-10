@@ -1,9 +1,5 @@
 return {
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    opts = require("plugins.configs.copilot_chat").opts,
-  },
-  {
     "echasnovski/mini.indentscope",
     opts = { draw = { delay = 0, animation = require("mini.indentscope").gen_animation.none() } },
   },
@@ -76,7 +72,9 @@ return {
       -- which makes document "flicker" when switching between them.
       code = { border = "thick" },
       pipe_table = { style = "normal" },
+      file_types = { "markdown", "Avante" },
     },
+    ft = { "markdown", "Avante" },
   },
   {
     "mfussenegger/nvim-dap",
@@ -136,6 +134,12 @@ return {
     },
   },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    build = require("plugins.configs.avante").build,
+    opts = require("plugins.configs.avante").opts,
+  },
   {
     "tamton-aquib/duck.nvim",
     keys = require("plugins.configs.duck").keys,

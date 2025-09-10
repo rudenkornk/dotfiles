@@ -1,17 +1,30 @@
 local M = {}
 
 M.dependencies = {
+  "Saghen/blink.compat",
   "andersevenrud/cmp-tmux",
   "hrsh7th/cmp-emoji",
+  "Kaiser-Yang/blink-cmp-avante",
 }
 M.opts = {
   sources = {
     compat = { "emoji", "tmux" },
+    default = {
+      "lsp",
+      "path",
+      "snippets",
+      "buffer",
+      "avante",
+    },
     providers = {
       tmux = {
         name = "tmux",
         score_offset = -50,
         opts = { label = " ", all_panes = true },
+      },
+      avante = {
+        name = "avante",
+        module = "blink-cmp-avante",
       },
       supermaven = {
         score_offset = 15,

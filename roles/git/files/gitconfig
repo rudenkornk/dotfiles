@@ -41,7 +41,6 @@
   sort = version:refname
 [diff]
   algorithm = histogram
-  mnemonicPrefix = true
   renames = true
 [help]
   autocorrect = prompt

@@ -11,4 +11,7 @@ alias vd="nvim -d"
 if [[ -n "$NVIM" && -n "$MYVIMRC" ]]; then
   unset HTTP_PROXY
   unset HTTPS_PROXY
+  unset TAVILY_API_KEY
+  unset MORPH_API_KEY
+  unset CORP_LLM_API_KEY
 fi

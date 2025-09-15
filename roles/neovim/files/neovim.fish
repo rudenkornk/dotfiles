@@ -12,4 +12,7 @@ set -Ux EDITOR nvim
 if test -n "$NVIM" && test -n "$MYVIMRC"
     set --unexport HTTP_PROXY
     set --unexport HTTPS_PROXY
+    set --unexport TAVILY_API_KEY
+    set --unexport MORPH_API_KEY
+    set --unexport CORP_LLM_API_KEY
 end

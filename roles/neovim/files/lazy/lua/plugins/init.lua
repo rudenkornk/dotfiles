@@ -141,6 +141,12 @@ return {
     opts = require("plugins.configs.avante").opts,
   },
   {
+    "HakonHarnes/img-clip.nvim",
+    keys = {
+      { "<leader>P", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+    },
+  },
+  {
     "tamton-aquib/duck.nvim",
     keys = require("plugins.configs.duck").keys,
   },

@@ -78,10 +78,12 @@ def lint_choices() -> list[str]:
     return inspect.getfullargspec(lint_code).kwonlyargs
 
 
-def format_code() -> None:
-    run_shell(["python3", "-m", "ruff", "format"], cwd=REPO_PATH)
-    run_shell(["python3", "-m", "ruff", "check", "--fix", "--unsafe-fixes"], cwd=REPO_PATH)
+def format_code(*, check: bool) -> None:
+    check_arg = ["--check"] if check else []
+    diff_arg = ["--diff"] if check else []
+    run_shell(["python3", "-m", "ruff", "format", *check_arg], cwd=REPO_PATH)
+    run_shell(["python3", "-m", "ruff", "check", "--fix", "--unsafe-fixes", *diff_arg], cwd=REPO_PATH)
 
     run_shell(["npm", "install", "--save-exact"], cwd=REPO_PATH)
-    run_shell(["npx", "prettier", "-w", REPO_PATH])
-    run_shell(["stylua", REPO_PATH])
+    run_shell(["npx", "prettier", "-w", REPO_PATH, *check_arg])
+    run_shell(["stylua", REPO_PATH, *check_arg])

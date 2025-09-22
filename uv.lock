@@ -262,6 +262,8 @@ dependencies = [
     { name = "gitpython", marker = "sys_platform != 'win32'" },
     { name = "graphviz", marker = "sys_platform != 'win32'" },
     { name = "luadata", marker = "sys_platform != 'win32'" },
+    { name = "mdformat", marker = "sys_platform != 'win32'" },
+    { name = "mdformat-toc", marker = "sys_platform != 'win32'" },
     { name = "mypy", marker = "sys_platform != 'win32'" },
     { name = "passlib", marker = "sys_platform != 'win32'" },
     { name = "pydriller", marker = "sys_platform != 'win32'" },
@@ -285,6 +287,8 @@ requires-dist = [
     { name = "gitpython", specifier = ">=3.1.43" },
     { name = "graphviz", specifier = ">=0.20.3" },
     { name = "luadata", specifier = ">=1.0.5" },
+    { name = "mdformat", specifier = ">=0.7.22" },
+    { name = "mdformat-toc", specifier = ">=0.3.0" },
     { name = "mypy", specifier = ">=1.11.1" },
     { name = "passlib", specifier = ">=1.7.4" },
     { name = "pydriller", specifier = "<2.7" },
@@ -491,6 +495,30 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e7/ff/0ffefdcac38932a54d2b5eed4e0ba8a408f215002cd178ad1df0f2806ff8/mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325", size = 9658 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/27/1a/1f68f9ba0c207934b35b86a8ca3aad8395a3d6dd7921c0686e23853ff5a9/mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e", size = 7350 },
+]
+
+[[package]]
+name = "mdformat"
+version = "0.7.22"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "markdown-it-py", marker = "sys_platform != 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fc/eb/b5cbf2484411af039a3d4aeb53a5160fae25dd8c84af6a4243bc2f3fedb3/mdformat-0.7.22.tar.gz", hash = "sha256:eef84fa8f233d3162734683c2a8a6222227a229b9206872e6139658d99acb1ea", size = 34610 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f2/6f/94a7344f6d634fe3563bea8b33bccedee37f2726f7807e9a58440dc91627/mdformat-0.7.22-py3-none-any.whl", hash = "sha256:61122637c9e1d9be1329054f3fa216559f0d1f722b7919b060a8c2a4ae1850e5", size = 34447 },
+]
+
+[[package]]
+name = "mdformat-toc"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "mdformat", marker = "sys_platform != 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b1/5c/c3dfdf66aba3468ef031be23fe25083f2d5410de86fd4f86f76571e2e94d/mdformat-toc-0.3.0.tar.gz", hash = "sha256:e8735f7517068f274b58b83407491b75445dc938473a3d5fa6467c0db0142daa", size = 9847 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/21/1e/dabc477b3e564c358bf84afa6f8e4995a8440c384df8407c360ebb8f659e/mdformat_toc-0.3.0-py3-none-any.whl", hash = "sha256:49d1f47d563f47405f3c165c6a4c30e8404a39f56ae254a27c2a90dd7eae1849", size = 9752 },
 ]
 
 [[package]]

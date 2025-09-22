@@ -29,6 +29,8 @@ dependencies = [
   "typer>=0.16.0",
   # passlib is needed for Ansible `password_hash` filter
   "passlib>=1.7.4",
+  "mdformat>=0.7.22",
+  "mdformat-toc>=0.3.0",
 ]
 
 [build-system]

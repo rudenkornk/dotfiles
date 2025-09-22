@@ -84,6 +84,9 @@ def format_code(*, check: bool) -> None:
     run_shell(["python3", "-m", "ruff", "format", *check_arg], cwd=REPO_PATH)
     run_shell(["python3", "-m", "ruff", "check", "--fix", "--unsafe-fixes", *diff_arg], cwd=REPO_PATH)
 
+    md_files = run_shell(["git", "ls-files", "*.md"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
+    run_shell(["python3", "-m", "mdformat", *md_files, *check_arg], cwd=REPO_PATH)
+
     run_shell(["npm", "install", "--save-exact"], cwd=REPO_PATH)
     run_shell(["npx", "prettier", "-w", REPO_PATH, *check_arg])
     run_shell(["stylua", REPO_PATH, *check_arg])

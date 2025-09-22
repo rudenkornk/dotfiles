@@ -1,6 +1,5 @@
 import inspect
 import logging
-from pathlib import Path
 
 from ..utils import DOTPY_PATH, REPO_PATH, run_shell, yaml_read
 from .ansible_collections import ANSIBLE_COLLECTIONS_PATH, ansible_collections
@@ -68,12 +67,8 @@ def lint_code(*, ansible: bool, python: bool, secrets: bool, sh: bool, generic: 
         run_shell(["python3", "-m", "yamllint", "--strict", REPO_PATH / ".github"])
 
     if sh:
-        files = [
-            Path(file)
-            for file in run_shell(["git", "ls-files"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
-            if file.endswith(".sh")
-        ]
-        run_shell(["shellcheck", *files])
+        sh_files = run_shell(["git", "ls-files", "*.sh"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
+        run_shell(["shellcheck", *sh_files])
 
     if generic:
         run_shell(["typos"])

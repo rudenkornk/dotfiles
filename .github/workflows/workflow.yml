@@ -79,13 +79,7 @@ jobs:
       - name: Mark repo as safe
         run: git config --system --add safe.directory $(pwd)
       - name: Check format
-        run: |
-          ./dotfiles.sh format
-          if [[ -n "$(git diff)" ]]; then
-            echo "Code is not formatted."
-            git diff
-            exit 1
-          fi
+        run: ./dotfiles.sh format --check
       - name: Lint
         run: ./dotfiles.sh lint
 

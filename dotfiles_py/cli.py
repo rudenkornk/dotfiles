@@ -150,9 +150,15 @@ def lint(
 
 @app.command(name="format")
 @utils.typer_exit()
-def format_code() -> None:
+def format_code(
+    *,
+    check: Annotated[
+        bool,
+        typer.Option("-c", "--check", help="Only check if code is formatted."),
+    ] = False,
+) -> None:
     """Format code."""
-    lint_target.format_code()
+    lint_target.format_code(check=check)
 
 
 @app.command()

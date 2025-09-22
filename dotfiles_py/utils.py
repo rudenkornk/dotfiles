@@ -7,7 +7,7 @@ import time
 from collections.abc import Callable, Mapping, Sequence
 from multiprocessing import cpu_count as _cpu_count
 from pathlib import Path
-from typing import IO, Any, ClassVar, Concatenate, ParamSpec, TypeVar, overload
+from typing import Any, ClassVar, Concatenate, ParamSpec, TypeVar, overload
 
 import luadata  # type: ignore[import-untyped]
 import typer
@@ -56,16 +56,12 @@ def _paths2shell(paths: Sequence[Path]) -> str:
     return ":".join([str(p) for p in paths])
 
 
-def shell_command(  # noqa: PLR0913, C901
+def shell_command(
     cmd: Sequence[str | Path] | str,
     *,
     extra_env: Mapping[str, str | Path] | None = None,
     extra_paths: Sequence[Path] | None = None,
     capture_output: bool = False,
-    inputs: None | str | bytes = None,
-    stdout: None | int | IO[Any] = None,
-    stderr: None | int | IO[Any] = None,
-    suppress_env_log: bool = False,
     cwd: Path | None = None,
 ) -> str:
     extra_env = extra_env or {}
@@ -81,12 +77,8 @@ def shell_command(  # noqa: PLR0913, C901
     if cwd is not None:
         print_cmd += f"cd {shlex.quote(str(cwd))} && "
 
-    if inputs is not None:
-        print_cmd += "echo $CAPTURE | "
-
-    if not suppress_env_log:
-        for k, val in extra_env.items():
-            print_cmd += f"{shlex.quote(str(k))}={shlex.quote(str(val))} "
+    for k, val in extra_env.items():
+        print_cmd += f"{shlex.quote(str(k))}={shlex.quote(str(val))} "
 
     if extra_paths:
         print_cmd += f'PATH="{extra_paths_str}:${{PATH}}" '
@@ -99,14 +91,8 @@ def shell_command(  # noqa: PLR0913, C901
         msg = f"Unexpected command type for run_shell util: {type(cmd)}"
         raise TypeError(msg)
 
-    suppress_stdout = capture_output or stdout is not None
-    suppress_stderr = capture_output or stderr is not None
-    if suppress_stdout and suppress_stderr:
+    if capture_output:
         print_cmd += " &> $CAPTURE"
-    elif suppress_stdout:
-        print_cmd += " 1> $CAPTURE"
-    elif suppress_stderr:
-        print_cmd += " 2> $CAPTURE"
 
     return print_cmd.strip()
 
@@ -117,11 +103,6 @@ def run_shell(  # noqa: PLR0913
     extra_env: Mapping[str, str | Path] | None = None,
     extra_paths: Sequence[Path] | None = None,
     capture_output: bool = False,
-    inputs: None | str | bytes = None,
-    stdout: None | int | IO[Any] = None,
-    stderr: None | int | IO[Any] = None,
-    suppress_cmd_log: bool = False,
-    suppress_env_log: bool = False,
     cwd: Path | None = None,
     check: bool = True,
     loglevel: int = logging.INFO,
@@ -141,27 +122,19 @@ def run_shell(  # noqa: PLR0913
             new_path += ":" + env["PATH"]
         env["PATH"] = new_path
 
-    if not suppress_cmd_log:
-        print_cmd = shell_command(
-            cmd,
-            extra_env=extra_env,
-            extra_paths=extra_paths,
-            capture_output=capture_output,
-            inputs=inputs,
-            stdout=stdout,
-            stderr=stderr,
-            suppress_env_log=suppress_env_log,
-            cwd=cwd,
-        )
-        _logger.log(loglevel, f"[RUNNING IN SHELL]: {print_cmd}")
+    print_cmd = shell_command(
+        cmd,
+        extra_env=extra_env,
+        extra_paths=extra_paths,
+        capture_output=capture_output,
+        cwd=cwd,
+    )
+    _logger.log(loglevel, f"[RUNNING IN SHELL]: {print_cmd}")
     return subprocess.run(  # noqa: S603
         cmd,
         env=env,
         check=check,
         capture_output=capture_output,
-        input=inputs,
-        stdout=stdout,
-        stderr=stderr,
         text=True,
         cwd=cwd,
     )

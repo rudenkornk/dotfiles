@@ -18,10 +18,6 @@ M.opts = {
     provider = "snacks",
     provider_opts = {},
   },
-  behaviour = {
-    auto_suggestions = true,
-    enable_fastapply = false,
-  },
   mappings = {
     sidebar = {
       close_from_input = {

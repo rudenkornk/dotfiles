@@ -1,5 +1,18 @@
 local M = {}
 
+local kind_icons = {
+  claude = " ",
+  openai = " ",
+  codestral = "󰬔 ",
+  gemini = " ",
+  Groq = "",
+  Openrouter = "󱂇 ",
+  Ollama = "󰳆 ",
+  ["Llama.cpp"] = "󰳆 ",
+  Deepseek = "󱢴 ",
+  qwen = " ",
+}
+
 M.dependencies = {
   "Saghen/blink.compat",
   "andersevenrud/cmp-tmux",
@@ -15,6 +28,7 @@ M.opts = {
       "snippets",
       "buffer",
       "avante",
+      "minuet",
     },
     providers = {
       tmux = {
@@ -26,6 +40,15 @@ M.opts = {
         name = "avante",
         module = "blink-cmp-avante",
       },
+      minuet = {
+        name = "minuet",
+        module = "minuet.blink",
+        async = true,
+        -- Should match minuet.config.request_timeout * 1000,
+        -- since minuet.config.request_timeout is in seconds
+        timeout_ms = 3000,
+        score_offset = 10,
+      },
       supermaven = {
         score_offset = 15,
       },
@@ -33,6 +56,9 @@ M.opts = {
         score_offset = 14,
       },
     },
+  },
+  appearance = {
+    kind_icons = kind_icons,
   },
   completion = {
     list = {

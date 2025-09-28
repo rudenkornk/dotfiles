@@ -135,6 +135,11 @@ return {
     opts = require("plugins.configs.avante").opts,
   },
   {
+    "milanglacier/minuet-ai.nvim",
+    -- `opts` must be defined (at least to `{}`), otherwise minuet will throw an error.
+    opts = require("plugins.configs.minuet").opts,
+  },
+  {
     "HakonHarnes/img-clip.nvim",
     keys = {
       { "<leader>P", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },

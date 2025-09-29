@@ -53,7 +53,7 @@ M.opts = {
         score_offset = 15,
       },
       copilot = {
-        score_offset = 14,
+        score_offset = 20,
       },
     },
   },

@@ -29,6 +29,9 @@
   wt = worktree
 [core]
   editor = nvim
+  untrackedCache = true
+  preloadIndex = true
+
 
 # https://www.youtube.com/watch?v=0FkBpQxOPt4
 [gpg]

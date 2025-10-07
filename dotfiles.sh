@@ -76,38 +76,38 @@ function install_binary() {
   fi
 }
 
-# sudo is required for all of the other package management operations
-# This is basically a dummy check, since the only way to install sudo without sudo is to being root
+# sudo is required for all of the other package management operations.
+# This is basically a dummy check, since the only way to install sudo without sudo is to being root.
 install_pkg sudo
-install_pkg curl "curl ca-certificates" # curl is required for uv installation
-if ! command -v uv &>/dev/null; then    # uv is required for python and dependency management
+install_pkg curl "curl ca-certificates" # curl is required for uv installation.
+if ! command -v uv &>/dev/null; then    # uv is required for python and dependency management.
   curl -LsSf https://astral.sh/uv/0.7.12/install.sh | sh
 fi
 
 # Dependencies after this point are optional and required for:
-# - configuring another host
-# - formatting and linting
-# - updating dependencies
+# - Configuring another host.
+# - Formatting and linting.
+# - Updating dependencies.
 
-install_pkg bsdtar bsdtar libarchive-tools # bsdtar is required for installing other optional dependencies
+install_pkg bsdtar bsdtar libarchive-tools # bsdtar is required for installing other optional dependencies.
 
-# Dependencies for configuring another host
-install_pkg rsync   # rsync is required for Ansible synchronization tasks
-install_pkg age     # age & sops is required for secrets decryption
-install_binary sops # age & sops is required for secrets decryption
-install_pkg podman  # podman is required for local configuration testing inside containers
+# Dependencies for configuring another host.
+install_pkg rsync   # rsync is required for Ansible synchronization tasks.
+install_pkg age     # age & sops is required for secrets decryption.
+install_binary sops # age & sops is required for secrets decryption.
+install_pkg podman  # podman is required for local configuration testing inside containers.
 
 # Lint dependencies
-install_pkg git                                  # git is required for secrets linting
-install_binary gitleaks                          # gitleaks is required for secrets linting
-install_binary typos                             # typos is required for generic typo linting
-install_binary shellcheck '--strip-components=1' # .sh code linting
+install_pkg git                                  # git is required for secrets linting.
+install_binary gitleaks                          # gitleaks is required for secrets linting.
+install_binary typos                             # typos is required for generic typo linting.
+install_binary shellcheck '--strip-components=1' # .sh code linting.
 
-# Format dependencies
+# Format dependencies.
 install_binary stylua
 install_pkg npm
 
-# Generating roles dependency graph
+# Generating roles dependency graph.
 install_pkg dot graphviz
 
 uv run dotfiles "${@:---help}"

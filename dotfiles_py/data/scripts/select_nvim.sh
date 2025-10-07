@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 version=${1:-2}
 
 mkdir --parents ~/.local/share/nvim_versions/nvim_"$version"/cache

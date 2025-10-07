@@ -7,30 +7,35 @@ requires-python = ">=3.11"
 license = "MIT"
 
 dependencies = [
-  "ansible-lint>=24.12.2 ; sys_platform != 'win32'",
   "ansible-core>=2.17.3",
-  "click>=8.1.7",
+  "passlib>=1.7.4",       # Passlib is needed for Ansible `password_hash` filter.
+
+  # CLI tools.
+  "typer>=0.16.0", # Primary CLI engine.
+  "click>=8.1.7",  # Used for some typer tweaking.
+  "rich>=14.0.0",
+
+  # Parsing tools for update scripts.
   "gitpython>=3.1.43",
-  "graphviz>=0.20.3",
-  "luadata>=1.0.5",
-  "mypy>=1.11.1",
-  # Limit pydriller version since it requires git >= 2.38
-  # Whereas Ubuntu 22.04 only has 2.34
-  "pydriller<2.7",
-  "pylint>=3.2.6",
-  "requests>=2.32.3",
-  "ruamel-yaml>=0.18.6",
   "semver>=3.0.4",
+  "luadata>=1.0.5",
+  "pydriller<2.7",                   # Limit pydriller version since it requires git >= 2.38, whereas Ubuntu 22.04 only has 2.34.
+  "requests>=2.32.3",
   "types-requests>=2.32.0.20240712",
   "types-urllib3>=1.26.25.14",
-  "yamllint>=1.35.1",
-  "ruff>=0.7.1",
-  "rich>=14.0.0",
-  "typer>=0.16.0",
-  # passlib is needed for Ansible `password_hash` filter
-  "passlib>=1.7.4",
-  "mdformat>=0.7.22",
+
+  # Visualization tools.
+  "graphviz>=0.20.3",
+
+  # Linters.
+  "ansible-lint>=24.12.2 ; sys_platform != 'win32'",
   "mdformat-toc>=0.3.0",
+  "mdformat>=0.7.22",
+  "mypy>=1.11.1",
+  "pylint>=3.2.6",
+  "ruamel-yaml>=0.18.6",
+  "ruff>=0.7.1",
+  "yamllint>=1.35.1",
 ]
 
 [build-system]

@@ -33,7 +33,7 @@ M.opts = {
     providers = {
       tmux = {
         name = "tmux",
-        score_offset = -10,
+        score_offset = -100,
         opts = { label = " ", all_panes = true },
       },
       avante = {

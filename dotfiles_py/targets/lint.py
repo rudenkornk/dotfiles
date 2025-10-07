@@ -40,7 +40,7 @@ def _check_leaked_credentials() -> None:
     run_shell(["gitleaks", "git"], cwd=REPO_PATH)
 
 
-def lint_code(*, ansible: bool, python: bool, secrets: bool, sh: bool, generic: bool) -> None:
+def lint_code(*, ansible: bool, python: bool, secrets: bool, sh: bool, md: bool, generic: bool) -> None:  # noqa: PLR0913
     ansible_collections()
 
     if secrets:
@@ -60,6 +60,7 @@ def lint_code(*, ansible: bool, python: bool, secrets: bool, sh: bool, generic: 
             ["ansible-lint", REPO_PATH / "playbook_dotfiles_container.yaml"],
             extra_env={"ANSIBLE_COLLECTIONS_PATH": ANSIBLE_COLLECTIONS_PATH},
         )
+
     if python:
         run_shell(["python3", "-m", "mypy", DOTPY_PATH])
         # Specifying job number for pylint somehow leads to false-positive errors
@@ -69,6 +70,10 @@ def lint_code(*, ansible: bool, python: bool, secrets: bool, sh: bool, generic: 
     if sh:
         sh_files = run_shell(["git", "ls-files", "*.sh"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
         run_shell(["shellcheck", *sh_files])
+
+    if md:
+        run_shell(["npm", "install", "--save-exact"], cwd=REPO_PATH)
+        run_shell(["npx", "markdownlint", "--ignore-path", REPO_PATH / ".gitignore", REPO_PATH], cwd=REPO_PATH)
 
     if generic:
         run_shell(["typos"])
@@ -84,8 +89,17 @@ def format_code(*, check: bool) -> None:
     run_shell(["python3", "-m", "ruff", "format", *check_arg], cwd=REPO_PATH)
     run_shell(["python3", "-m", "ruff", "check", "--fix", "--unsafe-fixes", *diff_arg], cwd=REPO_PATH)
 
+    # Normally we should use just `mdformat .` + exclude patterns,
+    # but for some reason excludes are only available with python>=3.13.
+    # Thus, listing .md files explicitly.
     md_files = run_shell(["git", "ls-files", "*.md"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
-    run_shell(["python3", "-m", "mdformat", *md_files, *check_arg], cwd=REPO_PATH)
+    md_res = run_shell(["python3", "-m", "mdformat", *md_files, *check_arg], cwd=REPO_PATH, capture_output=check)
+    # mdformat does not set non-zero exit code on warnings and errors, check manually.
+    if md_res.stderr:
+        raise RuntimeError(md_res.stderr)
+
+    sh_files = run_shell(["git", "ls-files", "*.sh"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
+    run_shell(["shfmt", "--write", *diff_arg, *sh_files])
 
     run_shell(["npm", "install", "--save-exact"], cwd=REPO_PATH)
     run_shell(["npx", "prettier", "-w", REPO_PATH, *check_arg])

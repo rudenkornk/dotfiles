@@ -101,6 +101,7 @@ install_pkg podman  # podman is required for local configuration testing inside 
 install_pkg git                                  # git is required for secrets linting.
 install_binary gitleaks                          # gitleaks is required for secrets linting.
 install_binary typos                             # typos is required for generic typo linting.
+install_binary shfmt                             # .sh code formatting.
 install_binary shellcheck '--strip-components=1' # .sh code linting.
 
 # Format dependencies.

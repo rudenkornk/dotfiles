@@ -4,11 +4,24 @@ Ansible playbooks, which idempotently configure new system with a single bootstr
 
 ## Bootstrap
 
+<!--
+mdformat-shfmt does not pick up .editorconfig settings for some reason.
+Ideally, it should format .sh blocks exactly as all other .sh scripts in the project.
+A bit worse solution is to disable mdformat-shfmt for this block only,
+to avoid its hard-tabs indents.
+BUT. mdformat does not have ignore comments!
+Thus, we have to disable markdownlint for this block instead.
+-->
+
+<!-- markdownlint-disable MD010 -->
+
 ```bash
 git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles &&
 	cd ~/projects/dotfiles &&
 	./dotfiles.sh config
 ```
+
+<!-- markdownlint-enable MD010 -->
 
 ## Showcase
 

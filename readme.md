@@ -5,9 +5,9 @@ Ansible playbooks, which idempotently configure new system with a single bootstr
 ## Bootstrap
 
 ```bash
-git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles && \
-cd ~/projects/dotfiles && \
-./dotfiles.sh config
+git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles &&
+	cd ~/projects/dotfiles &&
+	./dotfiles.sh config
 ```
 
 ## Showcase

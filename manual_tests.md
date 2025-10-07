@@ -13,7 +13,8 @@ ctrl-v # opens fzf variables list
 ctrl-x # opens fzf processes list, which updates when pressing ctrl-x again
 ```
 
-When splitting tmux window in two panes and opening any fzf search in any git repo in one of the panes, changing focus between panes should not insert any weird (like "O" and "I") characters in fzf search bar.
+When splitting tmux window in two panes and opening any fzf search in any git repo in one of the panes,
+changing focus between panes should not insert any weird (like "O" and "I") characters in fzf search bar.
 
 ## tmux
 

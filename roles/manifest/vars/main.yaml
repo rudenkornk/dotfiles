@@ -84,6 +84,8 @@ manifest: # noqa: var-naming[no-role-prefix]
     url: https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v26.19.1/themes.zip
   shellcheck:
     url: https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.{{ ansible_architecture }}.tar.xz
+  shfmt:
+    url: https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_{{ deb_arch }}
   sops:
     url: https://github.com/getsops/sops/releases/download/v3.10.2/sops-v3.10.2.linux.{{ deb_arch }}
   stylua:

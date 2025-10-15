@@ -43,6 +43,11 @@ M.opts = {
         picker.list:scroll(-4, false)
       end,
     },
+    formatters = {
+      file = {
+        truncate = 150,
+      },
+    },
     win = {
       input = {
         keys = {

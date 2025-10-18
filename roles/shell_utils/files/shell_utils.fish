@@ -90,6 +90,11 @@ if type -q zoxide
     zoxide init fish | source
 end
 
+if type -q atuin
+    atuin init fish --disable-up-arrow | source
+    atuin gen-completions --shell fish | source
+end
+
 if test -f ~/.local/bin/yazi_dir/completions/ya.fish
     source ~/.local/bin/yazi_dir/completions/ya.fish
     source ~/.local/bin/yazi_dir/completions/yazi.fish

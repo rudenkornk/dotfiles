@@ -24,6 +24,35 @@
       - ripgrep
       - zoxide
 
+- name: Download atuin binary
+  ansible.builtin.unarchive:
+    src: "{{ manifest.atuin.url }}"
+    dest: "{{ home }}/.local/bin"
+    extra_opts:
+      - --strip-components=1
+      - --exclude=LICENSE
+      - --exclude=*.md
+    remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  retries: "{{ web_retries }}"
+  delay: "{{ web_delay }}"
+  register: shell_utils_downloaded
+  until: shell_utils_downloaded is not failed
+
+- name: Create atuin directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config/atuin"
+    state: directory
+    mode: "0o755"
+
+- name: Install atuin config
+  ansible.builtin.file:
+    src: "{{ role_host_path }}/files/atuin/config.toml"
+    dest: "{{ home }}/.config/atuin/config.toml"
+    force: true # Atuin config is pretty persistent if done softly.
+    state: link
+
 - name: Create xh directory
   ansible.builtin.file:
     path: "{{ home }}/.local/xh"

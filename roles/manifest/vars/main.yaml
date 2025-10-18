@@ -38,6 +38,8 @@ manifest_pre:
       url: https://github.com/TurboVNC/turbovnc/releases/download/3.1.4/turbovnc_3.1.4_{{ pack_arch }}.{{ pack }}
 
 manifest: # noqa: var-naming[no-role-prefix]
+  atuin:
+    url: https://github.com/atuinsh/atuin/releases/download/v18.8.0/atuin-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
   carapace:
     url: https://github.com/carapace-sh/carapace-bin/releases/download/v1.4.1/carapace-bin_1.4.1_linux_{{ deb_arch }}.tar.gz
   clipboard:

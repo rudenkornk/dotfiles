@@ -27,14 +27,6 @@
   register: shell_utils_downloaded
   until: shell_utils_downloaded is not failed
 
-- name: Install fish configs
-  ansible.builtin.shell: |
-    set -o pipefail
-    echo yes | ~/.local/bin/fish --install
-  args:
-    executable: bash
-    creates: "{{ home }}/.local/share/fish/install"
-
 - name: Create fish functions directory
   ansible.builtin.file:
     path: "{{ home }}/.config/fish/functions"

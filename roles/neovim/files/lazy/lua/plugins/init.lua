@@ -1,10 +1,10 @@
 return {
   {
-    "echasnovski/mini.indentscope",
+    "nvim-mini/mini.indentscope",
     opts = { draw = { delay = 0, animation = require("mini.indentscope").gen_animation.none() } },
   },
   {
-    "echasnovski/mini.move",
+    "nvim-mini/mini.move",
     event = "VeryLazy",
     opts = {
       -- disable '<M-j>' and '<M-k>' mappings conflicting with dap
@@ -12,7 +12,7 @@ return {
     },
   },
   {
-    "echasnovski/mini.surround",
+    "nvim-mini/mini.surround",
     opts = {
       mappings = {
         -- Some candidates:
@@ -100,7 +100,7 @@ return {
     },
   },
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = require("plugins.configs.mason"),
   },
 

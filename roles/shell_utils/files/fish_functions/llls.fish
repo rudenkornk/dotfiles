@@ -13,7 +13,7 @@ function llls --wraps eza
         --modified \
         --created \
         --accessed \
-        --time-style "relative" \
+        --time-style relative \
         --flags \
         --blocksize \
         --total-size \

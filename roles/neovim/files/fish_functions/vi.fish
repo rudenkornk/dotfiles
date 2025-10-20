@@ -1,3 +1,3 @@
 function vi --wraps nvim
-  nvim $argv
+    nvim $argv
 end

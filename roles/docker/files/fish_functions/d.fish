@@ -1,3 +1,3 @@
 function d --wraps docker
-  docker $argv
+    docker $argv
 end

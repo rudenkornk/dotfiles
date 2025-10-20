@@ -1,3 +1,3 @@
 function sv --wraps vim
-  sudo vim $argv
+    sudo vim $argv
 end

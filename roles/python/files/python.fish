@@ -5,13 +5,13 @@ set -a venvs ".venv/bin/activate.fish"
 set -a venvs "venv/bin/activate.fish"
 
 while string match --quiet "$HOME*" "$current"
-  set activate "$current/.makepy/artifacts/venv/$(hostname)/bin/activate.fish"
-  for candidate in $venvs
-    if test -f $current/$candidate
-      set --export VIRTUAL_ENV_DISABLE_PROMPT 1
-      source $current/$candidate
-      return
+    set activate "$current/.makepy/artifacts/venv/$(hostname)/bin/activate.fish"
+    for candidate in $venvs
+        if test -f $current/$candidate
+            set --export VIRTUAL_ENV_DISABLE_PROMPT 1
+            source $current/$candidate
+            return
+        end
     end
-  end
-  set current (dirname "$current")
+    set current (dirname "$current")
 end

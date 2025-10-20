@@ -1,3 +1,3 @@
 function b --wraps bat
-  bat $argv
+    bat $argv
 end

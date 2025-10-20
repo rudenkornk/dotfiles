@@ -103,6 +103,7 @@ install_binary gitleaks                          # gitleaks is required for secr
 install_binary typos                             # typos is required for generic typo linting.
 install_binary shfmt                             # .sh code formatting.
 install_binary shellcheck '--strip-components=1' # .sh code linting.
+install_binary fish                              # .fish code formatting.
 
 # Format dependencies.
 install_binary stylua

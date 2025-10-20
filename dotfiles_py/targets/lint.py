@@ -100,6 +100,9 @@ def format_code(*, check: bool) -> None:
 
     sh_files = run_shell(["git", "ls-files", "*.sh"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
     run_shell(["shfmt", "--write", *diff_arg, *sh_files])
+    fish_files = run_shell(["git", "ls-files", "*.fish"], capture_output=True, cwd=REPO_PATH).stdout.splitlines()
+    # fish_indent is a fish builtin, so we need to invoke a shell and pass everything as one argument.
+    run_shell(["fish", "--no-config", "--command", "fish_indent --write " + " ".join(check_arg + fish_files)])
 
     run_shell(["npm", "install", "--save-exact"], cwd=REPO_PATH)
     run_shell(["npx", "prettier", "-w", REPO_PATH, *check_arg])

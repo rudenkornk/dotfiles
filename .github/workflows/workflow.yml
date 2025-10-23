@@ -7,92 +7,24 @@ defaults:
     shell: bash
 
 jobs:
-  # Check that the project is able to configure the current user.
-  # This is the main use case, except for the fact that the current user is root due to GitHub Actions defaults.
-  # This might not be representative, so here we just check that configuring the current user works.
-  check_current_user:
-    env:
-      # GitHub Actions set HOME to /github/home, which is not detectable by Ansible's `ansible.builtin.getent` task.
-      # Thus, set it to default `/root`.
-      HOME: /root
-    runs-on: ubuntu-24.04
-    container: ubuntu:24.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Config
-        run: ./dotfiles.sh config
-      - name: Check idempotence
-        run: ./dotfiles.sh config --verify-unchanged
-
-  # As mentioned, previous check for the root user might not be representative.
-  # Thus, all the main checks are done by root for the "random_user".
-  check:
-    runs-on: ubuntu-24.04
-    container: ${{ matrix.image }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Config
-        run: ./dotfiles.sh config --user random_user
-      - name: Check idempotence
-        run: ./dotfiles.sh config --user random_user --verify-unchanged
-    strategy:
-      matrix:
-        image:
-          - ubuntu:22.04
-          - ubuntu:24.04
-          - fedora:38
-          - fedora:39
-          - fedora:40
-          - fedora:41
-          - fedora:42
-
-  # Check that the project is able to configure remote host, with a user different from the current one.
-  check_remote:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Check remote config
-        run: ./dotfiles.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal
-      - name: Check remote idempotence
-        run: ./dotfiles.sh config --host dotfiles_ubuntu_22.04 --user random_user --mode minimal --verify-unchanged
-
   lint:
     runs-on: ubuntu-24.04
-    container: ubuntu:24.04
     steps:
-      # checkout action falls back to REST API if it does not find 'git', which is a case in our virgin container.
-      # This leads to a missing .git directory and failed secrets leakage check.
-      # As an exception, let's install git.
-      - name: Install git
-        run: apt update && apt-get install --yes --no-install-recommends git ca-certificates
       # Checkout must be onto the original commit, not a single PR.
       # Otherwise lint will not see full history and diagnose secrets leakage.
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
-      # Checkout action sets repo as safe, but this does not look like to work inside container.
-      - name: Mark repo as safe
-        run: git config --system --add safe.directory $(pwd)
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+      - name: Flake check
+        run: nix flake check
       - name: Check format
-        run: ./dotfiles.sh format --check
+        run: nix develop --command dotfiles format --check
       - name: Lint
-        run: ./dotfiles.sh lint
-
-  scripts:
-    runs-on: ubuntu-24.04
-    container: ubuntu:24.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Generate roles graph
-        run: ./dotfiles.sh graph
-      - name: Check update works
-        run: ./dotfiles.sh update
+        run: nix develop --command dotfiles lint
 
 name: dotfiles workflow
 

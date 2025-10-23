@@ -1,4 +1,0 @@
-dependencies:
-  - role: basic_utils
-  - role: cpp
-  - role: perl

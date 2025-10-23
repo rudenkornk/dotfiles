@@ -1,4 +1,0 @@
-dependencies:
-  - role: shell
-  - role: ssh_client
-  - role: cpp

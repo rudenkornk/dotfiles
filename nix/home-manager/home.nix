@@ -1,124 +1,211 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  username,
+  ...
+}:
 
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
-  home.username = "rudenkornk";
-  home.homeDirectory = "/home/rudenkornk";
+  home = {
+    inherit username;
+    homeDirectory = "/home/${username}";
 
-  # This value determines the Home Manager release that your configuration is
-  # compatible with. This helps avoid breakage when a new Home Manager release
-  # introduces backwards incompatible changes.
-  #
-  # You should not change this value, even if you update Home Manager. If you do
-  # want to update the value, then make sure to first check the Home Manager
-  # release notes.
-  home.stateVersion = "24.11"; # Please read the comment before changing.
+    # This value determines the Home Manager release that your configuration is
+    # compatible with. This helps avoid breakage when a new Home Manager release
+    # introduces backwards incompatible changes.
+    #
+    # You should not change this value, even if you update Home Manager. If you do
+    # want to update the value, then make sure to first check the Home Manager
+    # release notes.
+    stateVersion = "25.11"; # Did you read the comment?
 
-  # The home.packages option allows you to install Nix packages into your
-  # environment.
-  home.packages = with pkgs; [
-    acpi
-    ansible
-    ansible-lint
-    automake
-    bzip2
-    ccache
-    cmake
-    curl
-    docker
-    dos2unix
-    file
-    flameshot
-    flex
-    gcc14
-    gdb
-    gh
-    git
-    git-secret
-    gnumake
-    gnupg
-    gnutar
-    go
-    graphviz
-    gzip
-    htop-vim
-    iptables
-    jdk23
-    lazygit
-    lftp
-    #llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx
-    lsb-release
-    mr
-    neofetch
-    nettools
-    ninja
-    ntp
-    patch
-    pkg-config
-    podman
-    rsync
-    tcl
-    tmux
-    tzdata
-    unar
-    unrar
-    unzip
-    unzip
-    valgrind
-    vcpkg
-    wget
-    xsel
-    xz
-    zip
+    packages = with pkgs; [
+      (pkgs.lib.hiPrio gcc)
+      (pkgs.lib.hiPrio xorg.xvfb)
+      acpi
+      age
+      alsa-lib
+      angular-language-server
+      ansible
+      ansible-lint
+      asciinema
+      astro-language-server
+      automake
+      bash-completion
+      bat
+      bison
+      bzip2
+      cacert
+      carapace
+      ccache
+      clang
+      cmake
+      coder
+      corefonts
+      curl
+      dbus
+      dconf
+      dconf-editor
+      dconf2nix
+      delta
+      docker
+      docker-compose
+      dos2unix
+      dotnet-sdk_8
+      drawio
+      dua
+      dust
+      fd
+      file
+      flex
+      fontconfig
+      fzf
+      gdb
+      git
+      gitleaks
+      glibcLocales
+      gnumake
+      gnupg
+      gnutar
+      go
+      google-chrome
+      gpgme
+      graphviz
+      gzip
+      statix
+      hexyl
+      htop-vim
+      hyperfine
+      iptables
+      iputils
+      jq
+      kubectl
+      lftp
+      libarchive
+      libevent
+      libgcc
+      llvm
+      lsb-release
+      lua5_4
+      minikube
+      moreutils
+      ncurses
+      nerd-fonts.fira-code
+      nerd-fonts.jetbrains-mono
+      ninja
+      nixfmt
+      nodejs
+      ntp
+      nushell
+      oh-my-posh
+      openjdk21
+      openldap
+      openvpn
+      p7zip
+      patch
+      perl
+      pkg-config
+      podman
+      poppler-utils
+      powershell
+      prettier
+      python311
+      python3Packages.debugpy
+      ripgrep
+      rsync
+      ruby
+      rustc
+      rustup
+      shellcheck
+      shfmt
+      sops
+      stylua
+      svelte-language-server
+      tcl
+      telegram-desktop
+      texlive.combined.scheme-full
+      tree-sitter
+      turbovnc
+      typos
+      tzdata
+      unar
+      unrar
+      unzip
+      uutils-coreutils-noprefix
+      uv
+      valgrind
+      vcpkg
+      vim
+      virtualbox
+      vscode-js-debug
+      vue-language-server
+      wget
+      wiki-tui
+      xh
+      xsel
+      xz
+      yarn
+      zig
+      zip
+      zls
+    ];
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+    file = {
+      ".config" = {
+        source = ./configs/.config;
+        recursive = true;
+      };
+      ".groovylintrc.json".source = ./configs/.groovylintrc.json;
+      ".isort.cfg".source = ./configs/.isort.cfg;
+      ".markdownlint.yaml".source = ./configs/.markdownlint.yaml;
+      ".pydocstyle".source = ./configs/.pydocstyle;
 
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-  ];
+      ".ssh" = {
+        source = ./secrets/ssh;
+        recursive = true;
+      };
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
+      # Workaround for missing mason packages in neovim.
+      # https://github.com/LazyVim/LazyVim/discussions/6892
+      ".local/share/nvim/mason/packages/angular-language-server/node_modules/@angular/language-server".source =
+        "${pkgs.angular-language-server}/lib";
+      ".local/share/nvim/mason/packages/astro-language-server/node_modules/@astrojs/ts-plugin".source =
+        "${pkgs.astro-language-server}/lib/astro-language-server/packages/ts-plugin/";
+      ".local/share/nvim/mason/packages/svelte-language-server/node_modules/typescript-svelte-plugin".source =
+        "${pkgs.svelte-language-server}/lib/node_modules/svelte-language-server/packages/typescript-plugin/";
+      ".local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js".source =
+        "${pkgs.vscode-js-debug}/lib/node_modules/js-debug/src/dapDebugServer.ts";
+      ".local/share/nvim/mason/packages/vue-language-server/node_modules/@vue/language-server".source =
+        "${pkgs.vue-language-server}/lib/language-tools/packages/language-server";
+    };
   };
 
-  # Home Manager can also manage your environment variables through
-  # 'home.sessionVariables'. These will be explicitly sourced when using a
-  # shell provided by Home Manager. If you don't want to manage your shell
-  # through Home Manager then you have to manually source 'hm-session-vars.sh'
-  # located at either
-  #
-  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-  #
-  # or
-  #
-  #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
-  #
-  # or
-  #
-  #  /etc/profiles/per-user/rudenkornk/etc/profile.d/hm-session-vars.sh
-  #
-  home.sessionVariables = { EDITOR = "nvim"; };
+  fonts.fontconfig.enable = true;
 
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+  programs = {
+    atuin = import ./programs/atuin.nix;
+    bash = import ./programs/bash.nix;
+    docker-cli = import ./programs/docker-cli.nix;
+    eza = import ./programs/eza.nix;
+    fish = import ./programs/fish.nix { inherit pkgs inputs; };
+    gh.enable = true;
+    git = import ./programs/git.nix;
+    home-manager.enable = true;
+    kitty = import ./programs/kitty.nix { inherit pkgs inputs; };
+    lazygit = import ./programs/lazygit.nix;
+    mypy = import ./programs/mypy.nix;
+    neovim = import ./programs/neovim.nix { inherit pkgs; };
+    oh-my-posh = import ./programs/oh-my-posh.nix;
+    ruff = import ./programs/ruff.nix;
+    tmux = import ./programs/tmux.nix { inherit pkgs inputs; };
+    yazi = import ./programs/yazi.nix;
+    zoxide = import ./programs/zoxide.nix;
+  };
+
+  services = {
+    flameshot = import ./services/flameshot.nix;
+  };
+
+  imports = [ ./dconf/settings.nix ];
 }

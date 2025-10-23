@@ -1,0 +1,6 @@
+# https://www.pydocstyle.org/en/6.3.0/usage.html?highlight=config#configuration-files
+[tool.pydocstyle]
+ignore = [
+  "D100",
+  "D103",
+]

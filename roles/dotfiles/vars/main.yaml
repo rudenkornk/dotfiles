@@ -1,6 +1,0 @@
-projects_host_path: "{{ home }}/projects" # noqa: var-naming[no-role-prefix]
-dotfiles_host_parent_path: "{{ projects_host_path }}"
-dotfiles_host_path: "{{ projects_host_path }}/dotfiles"
-dotfiles_tmp_dir: "__artifacts__/tmp"
-dotfiles_host_tmp: "{{ dotfiles_host_path }}/{{ dotfiles_tmp_dir }}"
-role_host_path: "{{ dotfiles_host_path }}/roles/{{ role_name }}" # noqa: var-naming[no-role-prefix]

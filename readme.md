@@ -1,6 +1,6 @@
 # dotfiles
 
-Ansible playbooks, which idempotently configure new system with a single bootstrap command.
+A NixOS configuration.
 
 ## Bootstrap
 
@@ -16,9 +16,10 @@ Thus, we have to disable markdownlint for this block instead.
 <!-- markdownlint-disable MD010 -->
 
 ```bash
+nix-shell -p git
 git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles &&
 	cd ~/projects/dotfiles &&
-	./dotfiles.sh config
+	nixos-rebuild switch --flake .#default
 ```
 
 <!-- markdownlint-enable MD010 -->
@@ -27,23 +28,12 @@ git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles &&
 
 <img width="1916" alt="neovim_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/5af2a3fb-a84f-40f3-b6f0-70f6a36eadef">
 <img width="1918" alt="tmux_fish_fzf_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/64b8f3cf-98ee-41d3-b081-40fe380d16a3">
-<img width="1192" alt="deps_graph_example" src="https://github.com/rudenkornk/dotfiles/assets/28059451/b0dfe406-d44f-44cc-b6f7-9f469ee017e5">
 
 ## Features
 
-1. **Ansible!**
-   Config utilizes a fully-fledged configuration manager, specifically designed to put machines into a desired end state.
-   Config is idempotent and is capable of configuring not only `localhost`, but also several remote machines at once.
+1. **NixOS!**
 1. **Stable and reproducible**.
-   All the program versions that _can_ be pinned _are_ pinned.
-   Amongst other tools, that includes `ansible` itself, `neovim` and all its plugins.
-   Packages, managed by `apt` and `dnf` cannot be pinned,
-   so we rely on stability of `Canonical` and `RedHat` packages update front.
 1. **Easily updatable**.
-   Versions are stored in manifests and can be easily updated with a single command.
-   `neovim`'s `lazy-lock.json` however is managed separately by [lazy](https://github.com/folke/lazy.nvim).
-1. **Supports & tested under `Ubuntu 22.04-24.04`, `Fedora 38-42`, and also includes WSL support**.
-   On Windows it integrates with the system clipboard.
 1. **Secrets inside the repo**.
    All the credentials, ssh keys, VPN configs can be stored directly in the repo using
    [`sops`](https://github.com/getsops/sops) and
@@ -69,46 +59,10 @@ While being decently generic, this config focuses more on some tools rather than
    Config provides releases of `cmake`, `LLVM` and `GCC` toolchains as well as editor support.
 1. Config also provides some support for **Python**, **LaTeX** and **Lua**.
 
-## Try this config
-
-Config is tested inside `podman` containers, which can also be used to try this config.\
-Thought next command will not install any specific configs, be noted that it will install several packages **system-wide** or **globally**:
-
-- `curl`, `ca-certificates`, `uv` for `python` bootstrapping.
-- `bsdtar`, `rsync`, `age`, `sops`, `podman` for configuring remote hosts (`podman` containers in this case).
-- `git`, `gitleaks`, `typos`, `shellcheck` for code linting.
-- `stylua` and `npm` for code formatting (`npm` is required for `prettier` and takes a LOT of space).
-- `graphviz` for generating role dependency graph.
-
-```bash
-./dotfiles.sh config --target dotfiles_ubuntu_22.04
-podman exec --interactive --tty --workdir $(pwd) --user $(id --user) dotfiles_ubuntu_22.04 fish
-```
-
-## Fork
-
-The first things you would want to customize if forking this repo are:
-
-1. Personal information in `roles/profile/vars/main.yaml`.
-1. Credentials, ssh keys and vpn configs shown in `git ls-files | grep '\.sops'`.
-
-## Update components versions
-
-```bash
-./dotfiles.sh update
-```
-
-## Show role dependency graph
-
-```bash
-./dotfiles.sh graph
-```
-
 ## Test
 
 ```bash
-./dotfiles.sh format
-./dotfiles.sh lint
-./dotfiles.sh check-bootstrap
-./dotfiles.sh config --target dotfiles_ubuntu_22.04
+nix develop
+dotfiles format --check
+dotfiles lint
 ```

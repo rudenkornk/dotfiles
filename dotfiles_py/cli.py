@@ -1,4 +1,3 @@
-import getpass
 import logging
 import secrets
 import string
@@ -9,16 +8,18 @@ import click
 import typer
 
 from . import utils
-from .targets import bootstrap, oh_my_posh
-from .targets import config as config_target
 from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
 from .targets import lint as lint_target
-from .targets import roles_graph as roles_graph_target
-from .targets import update as update_target
 
 _logger = logging.getLogger(__name__)
 
+
+REPO_PATH = Path(__file__).parent.parent
+DOTPY_PATH = Path(__file__).parent
+ARTIFACTS_PATH = REPO_PATH / "__artifacts__"
+DATA_PATH = Path(__file__).parent / "data"
+SCRIPTS_PATH = DATA_PATH / "scripts"
 
 app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},
@@ -67,85 +68,9 @@ def setup_app(
 
 @app.command()
 @utils.typer_exit()
-def config(
-    *,
-    host: Annotated[
-        list[str],
-        typer.Option(
-            "-t",
-            "--host",
-            click_type=click.Choice(list(config_target.hosts().keys())),
-            help="Hosts to configure. Note, that 'dotfiles_*' hostnames have a special meaning: "
-            "they are actually podman containers, which are automatically started and used for testing purposes.",
-            show_choices=True,
-            case_sensitive=False,
-        ),
-    ] = ["localhost"],  # noqa: B006
-    user: Annotated[
-        str,
-        typer.Option("-u", "--user", help="Target user to configure."),
-    ] = getpass.getuser(),
-    verify_unchanged: Annotated[
-        bool,
-        typer.Option("-v", "--verify-unchanged", help="This is an idempotency check. If anything was changed, fail."),
-    ] = False,
-    mode: Annotated[
-        config_target.ConfigMode,
-        typer.Option(
-            "-m",
-            "--mode",
-            case_sensitive=False,
-            help="Configuration mode. "
-            "'bootstrap' will only install python and create target user on the host. "
-            "'minimal' will install only the most critical parts like credentials and shell utils. "
-            "'server' will skip all GUI tools. "
-            "'full' will do full configuration.",
-        ),
-    ] = config_target.ConfigMode.FULL,
-) -> None:
-    """Configure systems."""
-    config_target.config(hostnames=host, user=user, verify_unchanged=verify_unchanged, mode=mode)
-
-
-@app.command()
-@utils.typer_exit()
-def check_bootstrap(
-    *,
-    image: Annotated[
-        list[str],
-        typer.Option(
-            "-i",
-            "--image",
-            help="Target container image, where to check bootstrap.sh script.",
-            click_type=click.Choice(config_target.images()),
-        ),
-    ] = [config_target.images()[0]],  # noqa: B006, B008
-) -> None:
-    """Check that dotfiles.sh bootstrapping script works correctly on different systems."""
-    for image_ in image:
-        bootstrap.check_bootstrap(image_)
-
-
-@app.command()
-@utils.typer_exit()
-def lint(
-    *,
-    only: Annotated[
-        list[str],
-        typer.Option(
-            "-o",
-            "--only",
-            help="Only lint these.",
-            click_type=click.Choice(["all", *lint_target.lint_choices()]),
-        ),
-    ] = ["all"],  # noqa: B006
-) -> None:
+def lint() -> None:
     """Lint code."""
-    if "all" in only:
-        args = dict.fromkeys(lint_target.lint_choices(), True)
-    else:
-        args = {arg: arg in only for arg in lint_target.lint_choices()}
-    lint_target.lint_code(**args)
+    lint_target.lint_code(repo_path=REPO_PATH)
 
 
 @app.command(name="format")
@@ -158,53 +83,24 @@ def format_code(
     ] = False,
 ) -> None:
     """Format code."""
-    lint_target.format_code(check=check)
+    lint_target.format_code(repo_path=REPO_PATH, check=check)
 
 
 @app.command()
 @utils.typer_exit()
 def hooks() -> None:
     """Perform git hooks setup in repo."""
-    hooks_target.hooks()
-
-
-@app.command()
-@utils.typer_exit()
-def update(
-    *,
-    components: Annotated[
-        list[str],
-        typer.Option(
-            "-c",
-            "--components",
-            help="Component to update.",
-            click_type=click.Choice(["all", *update_target.get_update_choices()]),
-        ),
-    ] = ["all"],  # noqa: B006
-    dry_run: Annotated[bool, typer.Option("-d", "--dry-run", help="Do not actually change versions.")] = False,
-) -> None:
-    """Update components versions."""
-    if "all" in components:
-        components = update_target.get_update_choices()
-
-    update_target.update(components, dry_run=dry_run)
+    hooks_target.hooks(repo_path=REPO_PATH, hooks_path=DATA_PATH / "hooks")
 
 
 @app.command()
 @utils.typer_exit()
 def gnome() -> None:
     """Regenerate gnome settings."""
-    gnome_target.gnome_config()
-
-
-@app.command()
-@utils.typer_exit()
-def graph(
-    *,
-    silent: Annotated[bool, typer.Option("-s", "--silent", help="Do not open graph in image viewer.")] = False,
-) -> None:
-    """Generate ansible roles dependency graph."""
-    roles_graph_target.generate_png(view=silent)
+    domain_rules_path = REPO_PATH / "nix" / "home-manager" / "dconf" / "rules.yaml"
+    nix_path = REPO_PATH / "nix" / "home-manager" / "dconf" / "settings.nix"
+    rules = gnome_target.DomainRules.load(domain_rules_path)
+    gnome_target.gnome_config(rules=rules, nix_path=nix_path)
 
 
 @app.command()
@@ -219,7 +115,7 @@ def password(
     output: Annotated[
         Path,
         typer.Option("-o", "--output", help="Where to store generated password.", dir_okay=False, writable=True),
-    ] = utils.ARTIFACTS_PATH / "password.txt",
+    ] = ARTIFACTS_PATH / "password.txt",
     number: Annotated[int, typer.Option("-n", "--number", help="Number of passwords to generate.")] = 1,
 ) -> None:
     """Generate random password."""
@@ -231,15 +127,3 @@ def password(
     with output.open("a") as output_file:
         output_file.writelines(passwords)
     _logger.info(f"Password saved to the end of {output} file")
-
-
-@app.command(name="omp-themes")
-@utils.typer_exit()
-def omp_themes(
-    *,
-    from_all: Annotated[
-        bool, typer.Option("-a", "--from-all", help="Choose from all themes, not from already chosen candidates.")
-    ] = False,
-) -> None:
-    """Choose oh-my-posh theme candidates."""
-    oh_my_posh.choose(from_all=from_all)

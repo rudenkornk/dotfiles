@@ -1,34 +1,21 @@
 [project]
 name = "dotfiles"
 version = "1.0.0"
-description = "Ansible playbooks for setting up personal machines."
+description = "NixOS configuration for setting up personal machines."
 readme = "readme.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 license = "MIT"
 
 dependencies = [
-  "ansible-core>=2.17.3",
-  "passlib>=1.7.4",       # Passlib is needed for Ansible `password_hash` filter.
-
   # CLI tools.
   "typer>=0.16.0", # Primary CLI engine.
   "click>=8.1.7",  # Used for some typer tweaking.
   "rich>=14.0.0",
 
-  # Parsing tools for update scripts.
-  "gitpython>=3.1.43",
-  "semver>=3.0.4",
-  "luadata>=1.0.5",
-  "pydriller<2.7",                   # Limit pydriller version since it requires git >= 2.38, whereas Ubuntu 22.04 only has 2.34.
-  "requests>=2.32.3",
-  "types-requests>=2.32.0.20240712",
-  "types-urllib3>=1.26.25.14",
-
-  # Visualization tools.
-  "graphviz>=0.20.3",
+  # Support tools.
+  "ruamel-yaml>=0.18.6",
 
   # Linters.
-  "ansible-lint>=24.12.2 ; sys_platform != 'win32'",
   "mdformat-config>=0.2.1",
   "mdformat-ruff>=0.1.3",
   "mdformat-shfmt>=0.2.0",
@@ -37,9 +24,6 @@ dependencies = [
   "mdformat-web>=0.2.0",
   "mdformat>=0.7.22",
   "mypy>=1.11.1",
-  "pylint>=3.2.6",
-  "ruamel-yaml>=0.18.6",
-  "ruff>=0.7.1",
   "yamllint>=1.35.1",
 ]
 
@@ -52,11 +36,6 @@ packages = ["dotfiles_py"]
 
 [project.scripts]
 dotfiles = "dotfiles_py:cli.app"
-
-[tool.uv]
-# W/A for ansible-lint
-# For some reason ansible-lint-specific sys_platform marker is not working
-environments = ["sys_platform != 'win32'"]
 
 [tool.ruff]
 line-length = 120
@@ -134,7 +113,7 @@ default.extend-ignore-re = [
   "(?Rm)^.*(#|//|<!--)\\s*typos:\\s*ignore$",
   "(?s)(#|//|<!--)\\s*typos:\\s*off.*?(#|//|<!--)\\s*typos:\\s*on",
 ]
-files.extend-exclude = ["lazy-lock.json", "*.sops.yaml", "*.klc"]
+files.extend-exclude = ["lazy-lock.json", "*.sops", "*.sops.json", "*.sops.yaml", "*.klc"]
 
 [tool.mypy]
 strict = true

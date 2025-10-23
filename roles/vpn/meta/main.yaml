@@ -1,3 +1,0 @@
-dependencies:
-  - role: basic_utils
-  - role: secrets

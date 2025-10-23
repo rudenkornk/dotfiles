@@ -18,7 +18,7 @@ private.gpg\
 
 secrets=$(echo "$changed" | grep --perl-regex "$regex")
 if [[ -n "$secrets" ]]; then
-  echo "Refusing to commit potentially sensitive info. Detected files:"
-  echo "$secrets"
-  exit 1
+	echo "Refusing to commit potentially sensitive info. Detected files:"
+	echo "$secrets"
+	exit 1
 fi

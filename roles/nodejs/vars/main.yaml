@@ -1,3 +1,0 @@
-nodejs_gpg: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
-nodejs_version: 20
-nodejs_repo: https://deb.nodesource.com/node_{{ nodejs_version }}.x nodistro main

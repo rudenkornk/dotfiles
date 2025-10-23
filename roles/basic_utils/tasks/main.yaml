@@ -3,19 +3,6 @@
     that:
       - ansible_distribution in "Ubuntu|Fedora"
 
-- name: Install common utils for other Ansible tasks
-  become: true
-  ansible.builtin.package:
-    name:
-      - age
-      - curl
-      - gnupg
-      - patch
-      - rsync
-      - tzdata
-      - unzip
-      - "{{ {'Ubuntu': 'xz-utils', 'Fedora': 'xz'}[ansible_distribution] }}"
-
 - name: Install Ubuntu-specific common utils for other Ansible tasks
   become: true
   ansible.builtin.apt:

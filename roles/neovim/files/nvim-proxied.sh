@@ -26,4 +26,4 @@ for secret in "${secrets[@]}"; do
   fi
 done
 
-~/.local/nvim-linux-"$(uname --machine)"/bin/nvim "$@"
+~/.nix-profile/bin/nvim "$@"

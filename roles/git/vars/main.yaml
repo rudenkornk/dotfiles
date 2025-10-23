@@ -1,5 +1,0 @@
-git_secret_gpg: https://gitsecret.jfrog.io/artifactory/api/gpg/key/public
-git_secret_repo: https://gitsecret.jfrog.io/artifactory/git-secret-deb git-secret main
-git_gh_cli_gpg: https://cli.github.com/packages/githubcli-archive-keyring.gpg
-git_gh_cli_repo: https://cli.github.com/packages stable main
-git_gh_cli_rpm_repo: https://cli.github.com/packages/rpm

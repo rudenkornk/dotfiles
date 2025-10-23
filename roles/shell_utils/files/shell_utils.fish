@@ -1,4 +1,4 @@
-fish_add_path ~/.fzf/bin
+set --export __fish_data_dir $HOME/.local/share/fish/install
 
 # Control keys:
 # C-a beginning of the line
@@ -104,7 +104,6 @@ if type -q oh-my-posh
     oh-my-posh init fish --config ~/.config/oh-my-posh/theme.json | source
 end
 
-fish_add_path ~/.local/xh
-if test -f ~/.local/xh/completions/xh.fish
-    source ~/.local/xh/completions/xh.fish
+if type -q xh
+    xh --generate complete-fish | source
 end

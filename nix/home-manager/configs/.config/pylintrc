@@ -1,0 +1,11 @@
+# https://pylint.pycqa.org/en/latest/user_guide/usage/run.html#command-line-options
+[tool.pylint]
+max-line-length = 120
+disable = [
+  "logging-fstring-interpolation",
+  "logging-not-lazy",
+  "too-few-public-methods",
+  "too-many-arguments",
+  "too-many-locals",
+  "too-many-instance-attributes",
+]

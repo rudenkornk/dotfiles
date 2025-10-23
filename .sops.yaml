@@ -1,5 +1,5 @@
 creation_rules:
-  - age: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINzKTzMo0Z61n1tdlinPox7zKDU2BHEM8SOzk2dQrTPX"
+  - age: "age1acasm9lv35nv48a4u4fpsfhdkal5yz3cmt3m6v0xhh5ehafrdvaqww8r8m"
     mac_only_encrypted: True
 
     # The current SOPS version

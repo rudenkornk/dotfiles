@@ -1,4 +1,0 @@
-dependencies:
-  - role: basic_utils
-  - role: ssh_server
-  - role: secrets

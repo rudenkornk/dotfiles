@@ -5,50 +5,14 @@ import shlex
 import subprocess
 import time
 from collections.abc import Callable, Mapping, Sequence
-from multiprocessing import cpu_count as _cpu_count
 from pathlib import Path
-from typing import Any, ClassVar, Concatenate, ParamSpec, TypeVar, overload
+from typing import Any, ClassVar, Concatenate, overload
 
-import luadata  # type: ignore[import-untyped]
 import typer
 from rich.logging import RichHandler
 from ruamel.yaml import YAML
 
 _logger = logging.getLogger(__name__)
-
-
-REPO_PATH = Path(__file__).parent.parent
-DOTPY_PATH = Path(__file__).parent
-ARTIFACTS_PATH = REPO_PATH / "__artifacts__"
-TMP_PATH = ARTIFACTS_PATH / "tmp"
-DATA_PATH = Path(__file__).parent / "data"
-SCRIPTS_PATH = DATA_PATH / "scripts"
-
-
-def _cgroup_cpu_count() -> int | None:
-    cgroup_info = Path("/sys/fs/cgroup/cpu.max")
-    if not cgroup_info.exists():
-        return None
-    # Wrap with try-except in case we encounter a weird system
-    try:
-        cpu_micros_str = cgroup_info.read_text(encoding="utf-8").strip().split()[0]
-        if cpu_micros_str == "max":
-            return None
-        cpu_micros = int(cpu_micros_str)
-        # more like milli * centi
-        return int(cpu_micros / 100000)
-    # pylint: disable-next=broad-except
-    except Exception as exc:  # noqa: BLE001
-        _logger.debug(f"Could not read cgroup cpu.max: {exc}")
-    return None
-
-
-def cpu_count() -> int:
-    container_cpus = _cgroup_cpu_count()
-    if container_cpus is not None:
-        return container_cpus
-
-    return _cpu_count()
 
 
 def _paths2shell(paths: Sequence[Path]) -> str:
@@ -140,42 +104,38 @@ def run_shell(  # noqa: PLR0913
     )
 
 
-_P = ParamSpec("_P")
-_R = TypeVar("_R")
-
-
 @overload
-def retry(
-    func: Callable[_P, _R],
+def retry[**P, R](
+    func: Callable[P, R],
     *,
     delay: float = ...,
     max_tries: int = ...,
     suppress_logger: bool = ...,
-) -> Callable[_P, _R]: ...
+) -> Callable[P, R]: ...
 @overload
-def retry(
+def retry[**P, R](
     func: None = None,
     *,
     delay: float = ...,
     max_tries: int = ...,
     suppress_logger: bool = ...,
-) -> Callable[[Callable[_P, _R]], Callable[_P, _R]]: ...
+) -> Callable[[Callable[P, R]], Callable[P, R]]: ...
 
 
-def retry(
-    func: Callable[_P, _R] | None = None,
+def retry[**P, R](
+    func: Callable[P, R] | None = None,
     *,
     delay: float = 5,
     max_tries: int = 5,
     suppress_logger: bool = False,
-) -> Callable[[Callable[_P, _R]], Callable[_P, _R]] | Callable[_P, _R]:
+) -> Callable[[Callable[P, R]], Callable[P, R]] | Callable[P, R]:
     if max_tries <= 0:
         msg = f"max_tries must be greater than 0, got {max_tries}"
         raise ValueError(msg)
 
-    def retry_decorator(func: Callable[_P, _R]) -> Callable[_P, _R]:
+    def retry_decorator(func: Callable[P, R]) -> Callable[P, R]:
         @functools.wraps(func)
-        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             for i in range(max_tries):
                 wrapper.current_try = i  # type: ignore[attr-defined]
                 try:
@@ -200,14 +160,14 @@ def retry(
     return retry_decorator
 
 
-def makelike(  # noqa: C901
+def makelike[**P](  # noqa: C901
     artifact: Path,
     *sources: Path | Callable[[], Path],
     auto_create: bool = False,
-) -> Callable[[Callable[Concatenate[Path, list[Path], _P], None]], Callable[_P, Path]]:
-    def makelike_decorator(func: Callable[Concatenate[Path, list[Path], _P], None]) -> Callable[_P, Path]:  # noqa: C901
+) -> Callable[[Callable[Concatenate[Path, list[Path], P], None]], Callable[P, Path]]:
+    def makelike_decorator(func: Callable[Concatenate[Path, list[Path], P], None]) -> Callable[P, Path]:  # noqa: C901
         @functools.wraps(func)
-        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> Path:  # noqa: C901, PLR0912
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> Path:  # noqa: C901, PLR0912
             forward_sources: list[Path] = []
 
             uptodate = True
@@ -264,18 +224,6 @@ def makelike(  # noqa: C901
     return makelike_decorator
 
 
-def lua_read(path: Path) -> dict[str, Any]:
-    lua = luadata.read(path, encoding="utf-8")
-    if not isinstance(lua, dict):
-        msg = f"Expected a dictionary in {path}, got {type(lua)}"
-        raise TypeError(msg)
-    return lua
-
-
-def lua_write(path: Path, data: dict[str, Any]) -> None:
-    luadata.write(path, data, encoding="utf-8", indent="  ", prefix="return ")
-
-
 def yaml_read(path: Path) -> tuple[dict[str, Any] | list[Any], YAML]:
     yaml = YAML()
     yaml.preserve_quotes = True
@@ -326,32 +274,32 @@ def setup_logger(logger: logging.Logger | None = None) -> None:
 
 
 @overload
-def typer_exit(
-    func: Callable[_P, _R],
+def typer_exit[**P, R](
+    func: Callable[P, R],
     *,
     exceptions: tuple[type[Exception], ...] = ...,
     code: int = ...,
-) -> Callable[_P, _R]: ...
+) -> Callable[P, R]: ...
 
 
 @overload
-def typer_exit(
+def typer_exit[**P, R](
     func: None = None,
     *,
     exceptions: tuple[type[Exception], ...] = ...,
     code: int = ...,
-) -> Callable[[Callable[_P, _R]], Callable[_P, _R]]: ...
+) -> Callable[[Callable[P, R]], Callable[P, R]]: ...
 
 
-def typer_exit(
-    func: Callable[_P, _R] | None = None,
+def typer_exit[**P, R](
+    func: Callable[P, R] | None = None,
     *,
     exceptions: tuple[type[Exception], ...] = (Exception,),
     code: int = 1,
-) -> Callable[[Callable[_P, _R]], Callable[_P, _R]] | Callable[_P, _R]:
-    def exit_decorator(func: Callable[_P, _R]) -> Callable[_P, _R]:
+) -> Callable[[Callable[P, R]], Callable[P, R]] | Callable[P, R]:
+    def exit_decorator(func: Callable[P, R]) -> Callable[P, R]:
         @functools.wraps(func)
-        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             try:
                 return func(*args, **kwargs)
             except exceptions as exc:

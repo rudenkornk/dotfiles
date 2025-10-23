@@ -1,2 +1,0 @@
-neovim_version: 3
-neovim_base: "{{ home }}/.local/share/nvim_versions/nvim"

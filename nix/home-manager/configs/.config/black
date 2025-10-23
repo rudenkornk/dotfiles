@@ -1,0 +1,3 @@
+# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#where-black-looks-for-the-file
+[tool.black]
+line-length = 120

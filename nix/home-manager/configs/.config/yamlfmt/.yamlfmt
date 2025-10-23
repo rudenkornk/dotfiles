@@ -1,0 +1,4 @@
+# https://github.com/google/yamlfmt#configuration-file
+formatter:
+  retain_line_breaks: true
+  max_line_length: 120

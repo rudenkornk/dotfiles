@@ -1,9 +1,0 @@
-- name: vcpkg | Download vcpkg
-  ansible.builtin.git:
-    repo: "{{ manifest.vcpkg.url }}"
-    dest: "{{ home }}/.local/vcpkg"
-    version: "{{ manifest.vcpkg.version }}"
-  register: cpp_downloaded
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  until: cpp_downloaded is not failed

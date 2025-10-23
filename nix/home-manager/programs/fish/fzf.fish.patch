@@ -1,0 +1,183 @@
+From aacd97bc97dc96e3e917a93e4a79c6344d606e53 Mon Sep 17 00:00:00 2001
+From: Nikita Rudenko <rudenkornk@gmail.com>
+Date: Tue, 16 Dec 2025 13:08:15 +0300
+Subject: [PATCH] amends
+
+---
+ functions/_fzf_preview_file.fish      |  8 +++--
+ functions/_fzf_search_files.fish      | 43 +++++++++++++++++++++++++++
+ functions/_fzf_search_history.fish    | 15 +++++++++-
+ functions/_fzf_search_processes.fish  |  7 ++++-
+ functions/fzf_configure_bindings.fish |  6 ++--
+ 5 files changed, 73 insertions(+), 6 deletions(-)
+ create mode 100644 functions/_fzf_search_files.fish
+
+diff --git a/functions/_fzf_preview_file.fish b/functions/_fzf_preview_file.fish
+index c926475..ecadfc3 100644
+--- a/functions/_fzf_preview_file.fish
++++ b/functions/_fzf_preview_file.fish
+@@ -2,7 +2,11 @@
+ function _fzf_preview_file --description "Print a preview for the given file based on its file type."
+     # because there's no way to guarantee that _fzf_search_directory passes the path to _fzf_preview_file
+     # as one argument, we collect all the arguments into one single variable and treat that as the path
+-    set -f file_path $argv
++    set file_path $argv[1]
++    if test (count $argv) -gt 1
++      set line_number $argv[2]
++      set bat_highlight_opt --highlight-line $line_number
++    end
+ 
+     if test -L "$file_path" # symlink
+         # notify user and recurse on the target of the symlink, which can be any of these file types
+@@ -18,7 +22,7 @@ function _fzf_preview_file --description "Print a preview for the given file bas
+             # need to escape quotes to make sure eval receives file_path as a single arg
+             eval "$fzf_preview_file_cmd '$file_path'"
+         else
+-            bat --style=numbers --color=always "$file_path"
++            bat --style=numbers --color=always $bat_highlight_opt "$file_path"
+         end
+     else if test -d "$file_path" # directory
+         if set --query fzf_preview_dir_cmd
+diff --git a/functions/_fzf_search_files.fish b/functions/_fzf_search_files.fish
+new file mode 100644
+index 0000000..f16575c
+--- /dev/null
++++ b/functions/_fzf_search_files.fish
+@@ -0,0 +1,43 @@
++function _fzf_search_files --description "Search the current directory with ripgrep. Replace the current token with the selected file paths."
++    set token (commandline --current-token)
++    # expand any variables or leading tilde (~) in the token
++    set expanded_token (eval echo -- $token)
++    # unescape token because it's already quoted so backslashes will mess up the path
++    set unescaped_exp_token (string unescape -- $expanded_token)
++
++    if not set --query fzf_rg_opts
++        set rg_opts --line-number --no-heading --color=always --smart-case --follow --hidden
++    else
++        set rg_opts $fzf_rg_opts
++    end
++    set is_git_repo "$(git rev-parse --is-inside-work-tree 2> /dev/null || echo false)"
++    if not $is_git_repo -eq true or (git check-ignore --quiet -- . &>/dev/null)
++        set rg_opts $rg_opts --no-ignore
++    else
++        set rg_opts $rg_opts --glob '!.git'
++    end
++
++    set fzf_arguments \
++        --ansi \
++        --bind "change:reload:sleep 0.1; rg $rg_opts {q} || true" \
++        --delimiter : \
++        --disabled \
++        --multi \
++        --preview-window='wrap,+{2}+3/3' \
++        --preview='_fzf_preview_file {1} {2}' \
++        --prompt="Search Files> " \
++        --query="$unescaped_exp_token" \
++        $fzf_files_opts
++
++    set raw_selected (rg $rg_opts "" 2>/dev/null | _fzf_wrapper $fzf_arguments)
++    set re '(^[^:]*):'
++    for raw in $raw_selected
++        set -a file_paths_selected $(string match --regex "$re" --groups-only "$raw")
++    end
++
++    if test $status -eq 0
++        commandline --current-token --replace -- (string escape -- $file_paths_selected | string join ' ')
++    end
++
++    commandline --function repaint
++end
+diff --git a/functions/_fzf_search_history.fish b/functions/_fzf_search_history.fish
+index cafbce9..543fbde 100644
+--- a/functions/_fzf_search_history.fish
++++ b/functions/_fzf_search_history.fish
+@@ -10,13 +10,26 @@ function _fzf_search_history --description "Search command history. Replace the
+         set -f fzf_history_time_format "%m-%d %H:%M:%S"
+     end
+ 
++    if not set --query fzf_history_provider
++      set fzf_history_provider "builtin"
++    end
++    switch $fzf_history_provider
++      case "builtin"
++        set history_cmd 'builtin history --null --show-time="$fzf_history_time_format │ "'
++      case "atuin"
++        set history_cmd 'atuin history list --print0 --reverse=false --format "{time} │ {command}"'
++      case "*"
++        echo "Incorrect fzf_history_provider: $fzf_history_provider"
++        return 1
++    end
++
+     # Delinate time from command in history entries using the vertical box drawing char (U+2502).
+     # Then, to get raw command from history entries, delete everything up to it. The ? on regex is
+     # necessary to make regex non-greedy so it won't match into commands containing the char.
+     set -f time_prefix_regex '^.*? │ '
+     # Delinate commands throughout pipeline using null rather than newlines because commands can be multi-line
+     set -f commands_selected (
+-        builtin history --null --show-time="$fzf_history_time_format │ " |
++        eval $history_cmd |
+         _fzf_wrapper --read0 \
+             --print0 \
+             --multi \
+diff --git a/functions/_fzf_search_processes.fish b/functions/_fzf_search_processes.fish
+index 133a880..2720de4 100644
+--- a/functions/_fzf_search_processes.fish
++++ b/functions/_fzf_search_processes.fish
+@@ -2,11 +2,16 @@ function _fzf_search_processes --description "Search all running processes. Repl
+     # Directly use ps command because it is often aliased to a different command entirely
+     # or with options that dirty the search results and preview output
+     set -f ps_cmd (command -v ps || echo "ps")
++    if not set --query fzf_ps_opts
++      set ps_opts -A -opid,command
++    else
++      set ps_opts $fzf_ps_opts
++    end
+     # use all caps to be consistent with ps default format
+     # snake_case because ps doesn't seem to allow spaces in the field names
+     set -f ps_preview_fmt (string join ',' 'pid' 'ppid=PARENT' 'user' '%cpu' 'rss=RSS_IN_KB' 'start=START_TIME' 'command')
+     set -f processes_selected (
+-        $ps_cmd -A -opid,command | \
++        $ps_cmd $ps_opts | \
+         _fzf_wrapper --multi \
+                     --prompt="Processes> " \
+                     --query (commandline --current-token) \
+diff --git a/functions/fzf_configure_bindings.fish b/functions/fzf_configure_bindings.fish
+index 4b4e7a2..0dba3b6 100644
+--- a/functions/fzf_configure_bindings.fish
++++ b/functions/fzf_configure_bindings.fish
+@@ -4,7 +4,7 @@ function fzf_configure_bindings --description "Installs the default key bindings
+     # no need to install bindings if not in interactive mode or running tests
+     status is-interactive || test "$CI" = true; or return
+ 
+-    set -f options_spec h/help 'directory=?' 'git_log=?' 'git_status=?' 'history=?' 'processes=?' 'variables=?'
++    set -f options_spec h/help 'directory=?' 'git_log=?' 'git_status=?' 'history=?' 'processes=?' 'variables=?' 'files=?'
+     argparse --max-args=0 --ignore-unknown $options_spec -- $argv 2>/dev/null
+     if test $status -ne 0
+         echo "Invalid option or a positional argument was provided." >&2
+@@ -16,13 +16,14 @@ function fzf_configure_bindings --description "Installs the default key bindings
+     else
+         # Initialize with default key sequences and then override or disable them based on flags
+         # index 1 = directory, 2 = git_log, 3 = git_status, 4 = history, 5 = processes, 6 = variables
+-        set -f key_sequences \e\cf \e\cl \e\cs \cr \e\cp \cv # \c = control, \e = escape
++        set -f key_sequences \e\cf \e\cl \e\cs \cr \e\cp \cv \cq # \c = control, \e = escape
+         set --query _flag_directory && set key_sequences[1] "$_flag_directory"
+         set --query _flag_git_log && set key_sequences[2] "$_flag_git_log"
+         set --query _flag_git_status && set key_sequences[3] "$_flag_git_status"
+         set --query _flag_history && set key_sequences[4] "$_flag_history"
+         set --query _flag_processes && set key_sequences[5] "$_flag_processes"
+         set --query _flag_variables && set key_sequences[6] "$_flag_variables"
++        set --query _flag_files && set key_sequences[7] "$_flag_files"
+ 
+         # If fzf bindings already exists, uninstall it first for a clean slate
+         if functions --query _fzf_uninstall_bindings
+@@ -36,6 +37,7 @@ function fzf_configure_bindings --description "Installs the default key bindings
+             test -n $key_sequences[4] && bind --mode $mode $key_sequences[4] _fzf_search_history
+             test -n $key_sequences[5] && bind --mode $mode $key_sequences[5] _fzf_search_processes
+             test -n $key_sequences[6] && bind --mode $mode $key_sequences[6] "$_fzf_search_vars_command"
++            test -n $key_sequences[7] && bind --mode $mode $key_sequences[7] _fzf_search_files
+         end
+ 
+         function _fzf_uninstall_bindings --inherit-variable key_sequences
+-- 
+2.51.2
+

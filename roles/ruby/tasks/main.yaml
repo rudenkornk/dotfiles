@@ -1,4 +1,0 @@
-- name: Install ruby
-  become: true
-  ansible.builtin.package:
-    name: "{{ {'Ubuntu': 'ruby-full', 'Fedora': 'ruby-devel'}[ansible_distribution] }}"

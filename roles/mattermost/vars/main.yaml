@@ -1,4 +1,0 @@
-mattermost_gpg: https://deb.packages.mattermost.com/pubkey.gpg
-mattermost_repo: https://deb.packages.mattermost.com stable main
-mattermost_rpm: https://releases.mattermost.com/desktop/5.7.0/mattermost-desktop-5.7.0-linux-{{
-  ansible_architecture }}.rpm

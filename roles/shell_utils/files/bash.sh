@@ -42,16 +42,6 @@ function yy() {
 
 eval "$(zoxide init bash)"
 
-if [[ -f ~/.local/bin/yazi_dir/completions/ya.bash ]]; then
-  # shellcheck source=/dev/null
-  source ~/.local/bin/yazi_dir/completions/ya.bash
-  # shellcheck source=/dev/null
-  source ~/.local/bin/yazi_dir/completions/yazi.bash
-fi
-
-export PATH="$HOME/.fzf/bin:$PATH"
-export PATH="$HOME/.local/xh:$PATH"
-
 if command -v oh-my-posh >/dev/null; then
   eval "$(oh-my-posh init bash)"
 fi

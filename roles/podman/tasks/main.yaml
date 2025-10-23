@@ -1,8 +1,3 @@
-- name: Install podman
-  become: true
-  ansible.builtin.package:
-    name: podman
-
 - name: Install podman completions
   ansible.builtin.shell: |
     podman completion bash --file {{ home }}/.local/share/bash-completion/completions/podman

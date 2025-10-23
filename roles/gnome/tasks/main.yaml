@@ -8,13 +8,6 @@
       - "{{ {'Ubuntu': 'dbus', 'Fedora': 'dbus-daemon'}[ansible_distribution] }}"
       - "{{ {'Ubuntu': 'dbus', 'Fedora': 'dbus-tools'}[ansible_distribution] }}"
 
-- name: Install python support packages
-  become: true
-  ansible.builtin.package:
-    name:
-      - python3-psutil
-      - "{{ {'Ubuntu': 'python3-gi', 'Fedora': 'python3-gobject'}[ansible_distribution] }}"
-
 - name: Configure gnome
   community.general.dconf:
     key: "{{ item.key }}"

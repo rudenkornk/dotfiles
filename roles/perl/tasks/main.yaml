@@ -1,11 +1,3 @@
-- name: Install perl
-  become: true
-  ansible.builtin.package:
-    name:
-      - perl
-      - perl-doc
-      - cpanminus
-
 - name: Configure cpan
   become: true
   ansible.builtin.shell: |

@@ -1,8 +1,3 @@
-- name: Install git
-  become: true
-  ansible.builtin.package:
-    name: git
-
 - name: Set up user.gitconfig
   ansible.builtin.template:
     src: gitconfig.user
@@ -15,21 +10,6 @@
     dest: "{{ home }}/.gitconfig"
     state: link
 
-- name: Download gitleaks
-  ansible.builtin.unarchive:
-    src: "{{ manifest.gitleaks.url }}"
-    dest: "{{ home }}/.local/bin"
-    extra_opts:
-      - --exclude=LICENSE
-      - --exclude=*.md
-    remote_src: true
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: git_downloaded
-  until: git_downloaded is not failed
-
 - name: Install gitleaks completions
   ansible.builtin.shell: |
     {{ home }}/.local/bin/gitleaks completion bash > {{ home }}/.local/share/bash-completion/completions/gitleaks
@@ -38,47 +18,11 @@
     executable: bash
   changed_when: false
 
-- name: Download delta binary
-  ansible.builtin.unarchive:
-    src: "{{ manifest.delta.url }}"
-    dest: "{{ home }}/.local/bin"
-    extra_opts:
-      - --strip-components=1
-      - --exclude=LICENSE
-      - --exclude=*.md
-    remote_src: true
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: git_downloaded
-  until: git_downloaded is not failed
-
-- name: Install mr
-  become: true
-  ansible.builtin.package:
-    name: mr
-
 - name: Set up .mrconfig
   ansible.builtin.file:
     src: "{{ role_host_path }}/files/mrconfig"
     dest: "{{ home }}/.mrconfig"
     state: link
-
-- name: Download gh binary
-  ansible.builtin.unarchive:
-    src: "{{ manifest.gh.url }}"
-    dest: "{{ home }}/.local/bin"
-    remote_src: true
-    extra_opts:
-      - --strip-components=2
-      - --exclude=man
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: shell_utils_downloaded
-  until: shell_utils_downloaded is not failed
 
 - name: Download gh man
   ansible.builtin.unarchive:
@@ -99,23 +43,6 @@
   delay: "{{ web_delay }}"
   register: shell_utils_downloaded
   until: shell_utils_downloaded is not failed
-
-- name: Install lazygit
-  ansible.builtin.unarchive:
-    src: "{{ manifest.lazygit.url }}"
-    dest: "{{ home }}/.local/bin"
-    # See https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#parameter-owner
-    # If left unspecified and we are configuring for root user,
-    # ansible will not set user and group for us,
-    # which leads to incorrect ownership of the extracted files
-    # and idempotency issues.
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    remote_src: true
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: git_downloaded
-  until: git_downloaded is not failed
 
 - name: Create ~/.config/lazygit directory
   ansible.builtin.file:

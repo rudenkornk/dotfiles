@@ -3,19 +3,6 @@
     that:
       - ansible_distribution in "Ubuntu|Fedora"
 
-- name: Install common utils for other Ansible tasks
-  become: true
-  ansible.builtin.package:
-    name:
-      - age
-      - curl
-      - gnupg
-      - patch
-      - rsync
-      - tzdata
-      - unzip
-      - "{{ {'Ubuntu': 'xz-utils', 'Fedora': 'xz'}[ansible_distribution] }}"
-
 - name: Install Ubuntu-specific common utils for other Ansible tasks
   become: true
   ansible.builtin.apt:
@@ -140,16 +127,6 @@
     path: "{{ home }}/.local/bin"
     state: directory
     mode: "0o755"
-
-- name: Install sops
-  ansible.builtin.get_url:
-    url: "{{ manifest.sops.url }}"
-    dest: "{{ home }}/.local/bin/sops"
-    mode: "0o755"
-  retries: "{{ web_retries }}"
-  delay: "{{ web_delay }}"
-  register: bash_utils_downloaded
-  until: bash_utils_downloaded is not failed
 
 - name: WSL stuff
   when: in_wsl

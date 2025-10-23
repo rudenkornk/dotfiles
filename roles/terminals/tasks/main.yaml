@@ -1,8 +1,3 @@
-- name: Install kitty
-  become: true
-  ansible.builtin.package:
-    name: kitty
-
 - name: Download kitty themes
   ansible.builtin.git:
     repo: "{{ manifest.kitty_themes.url }}"

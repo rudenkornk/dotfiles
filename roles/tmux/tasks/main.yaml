@@ -1,11 +1,3 @@
-- name: Install tmux packages
-  become: true
-  ansible.builtin.package:
-    name:
-      - tmux
-      - python3-libtmux
-  register: tmux_installed
-
 - name: Create tmux config directory
   ansible.builtin.file:
     path: "{{ tmux_config_dir }}"

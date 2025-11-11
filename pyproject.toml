@@ -87,9 +87,6 @@ ignore = [
   "TID252",
   # "Avoid specifying long messages outside the exception class"
   "TRY003",
-  # "Consider moving this statement to an `else` block"
-  # I find `try-except-else` more confusing than this rule suggests.
-  "TRY300",
 
 
   # warning: The following rules may cause conflicts when used with the formatter: `COM812`, `ISC001`.

@@ -164,13 +164,14 @@ def _requests_try_get(url: str) -> dict[str, Any] | list[Any] | None:
         if not isinstance(ret, dict | list):
             msg = f"Expected a dictionary or list in {url}, got {type(ret)}"
             raise TypeError(msg)
-        return ret
     except requests.exceptions.HTTPError as e:
         _logger.warning("Cannot get response from url")
         _logger.warning(f"URL: {url}")
         _logger.warning(f"Status: {e.response.status_code}")
         _logger.warning(f"Error: {e}")
         return None
+    else:
+        return ret
 
 
 # pylint: disable-next=too-many-statements

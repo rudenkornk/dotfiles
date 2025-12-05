@@ -27,7 +27,7 @@ local function is_nvim_border(border)
   return require("tmux.wrapper.nvim").is_nvim_border_original(border)
 end
 
-M.config = function(opts)
+M.config = function(_, opts)
   require("tmux").setup(opts)
 
   local tmux_nvim = require("tmux.wrapper.nvim")

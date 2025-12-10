@@ -65,8 +65,6 @@
       when: not server_mode and not minimal_mode
     - role: telegram
       when: not server_mode and not minimal_mode
-    - role: mattermost
-      when: not server_mode and not minimal_mode
     - role: turbovnc
       when: not server_mode and not minimal_mode
     - role: gnome

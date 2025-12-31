@@ -11,18 +11,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    fish_plugin_autopair = {
-      url = "github:jorgebucaran/autopair.fish";
-      flake = false;
-    };
-    fish_plugin_puffer = {
-      url = "github:nickeb96/puffer-fish";
-      flake = false;
-    };
-    fish_plugin_fzf = {
-      url = "github:patrickf1/fzf.fish";
-      flake = false;
-    };
     tmux_plugin_kanagawa = {
       url = "github:Nybkox/tmux-kanagawa";
       flake = false;

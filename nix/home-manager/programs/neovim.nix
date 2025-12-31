@@ -116,4 +116,37 @@
         yq
       ]);
   };
+
+  home = {
+    packages = with pkgs; [
+      angular-language-server
+      astro-language-server
+      svelte-language-server
+      vscode-js-debug
+      vue-language-server
+
+      xsel
+      python3Packages.debugpy
+    ];
+
+    file = {
+      ".config/nvim" = {
+        source = ./neovim/config;
+        recursive = true;
+      };
+
+      # Workaround for missing mason packages in neovim.
+      # https://github.com/LazyVim/LazyVim/discussions/6892
+      ".local/share/nvim/mason/packages/angular-language-server/node_modules/@angular/language-server".source =
+        "${pkgs.angular-language-server}/lib";
+      ".local/share/nvim/mason/packages/astro-language-server/node_modules/@astrojs/ts-plugin".source =
+        "${pkgs.astro-language-server}/lib/astro-language-server/packages/ts-plugin/";
+      ".local/share/nvim/mason/packages/svelte-language-server/node_modules/typescript-svelte-plugin".source =
+        "${pkgs.svelte-language-server}/lib/node_modules/svelte-language-server/packages/typescript-plugin/";
+      ".local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js".source =
+        "${pkgs.vscode-js-debug}/lib/node_modules/js-debug/src/dapDebugServer.ts";
+      ".local/share/nvim/mason/packages/vue-language-server/node_modules/@vue/language-server".source =
+        "${pkgs.vue-language-server}/lib/language-tools/packages/language-server";
+    };
+  };
 }

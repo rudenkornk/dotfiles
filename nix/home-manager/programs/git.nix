@@ -1,150 +1,152 @@
-{
-  enable = true;
-  lfs.enable = true;
-  settings = {
-    user = {
-      email = "rudenkornk@gmail.com";
-      name = "Nikita Rudenko";
-    };
-    alias = {
-      bl = "blame --minimal";
-      br = "branch -vv";
-      ck = "checkout";
-      cm = "commit";
-      cma = "commit --allow-empty --reuse-message @";
-      cmd = "commit --amend --reuse-message @";
-      cmm = "commit --amend";
-      cp = "cherry-pick";
-      df = "diff";
-      fp = "format-patch";
-      ft = "fetch --all";
-      l = "log";
-      lg = "log --graph";
-      ll = "log --oneline";
-      llg = "log --oneline --graph";
-      ls = "log --stat";
-      mb = "merge-base";
-      p = "push";
-      pf = "push --force-with-lease";
-      rb = "rebase";
-      rbi = "rebase --rebase-merges --interactive HEAD~26";
-      rh = "reset --hard";
-      rv = "remote -v";
-      sg = "diff --staged";
-      sh = "show";
-      st = "status";
-      sw = "switch";
-      wt = "worktree";
-    };
-    core = {
-      editor = "nvim";
-      untrackedCache = true;
-      preloadIndex = true;
-    };
-    # https://www.youtube.com/watch?v=0FkBpQxOPt4
-    gpg = {
-      format = "ssh";
-    };
-    column = {
-      ui = "never"; # column view looks confusing to me
-    };
-    branch = {
-      sort = "-committerdate";
-    };
-    tag = {
-      sort = "version:refname";
-    };
-    diff = {
-      algorithm = "histogram";
-      renames = true;
-    };
-    commit = {
-      verbose = true;
-    };
-    credential = {
-      helper = "store";
-    };
-    init = {
-      defaultBranch = "main";
-    };
-    pull = {
-      rebase = true;
-    };
-    push = {
-      default = "current";
-      followTags = true;
-    };
-    rebase = {
-      autoStash = true;
-      autoSquash = true;
-    };
-    rerere = {
-      # Very helpful when you rebase a merge commit
-      enabled = true;
-      autoUpdate = true;
-    };
-    fetch = {
-      # https://youtu.be/aolI_Rz0ZqY?si=KpfeZxRHkhZGZ5N_&t=1699
-      writeCommitGraph = true;
-      prune = true;
-      pruneTags = true;
-      parallel = 8;
-    };
+_: {
+  programs.git = {
+    enable = true;
+    lfs.enable = true;
+    settings = {
+      user = {
+        email = "rudenkornk@gmail.com";
+        name = "Nikita Rudenko";
+      };
+      alias = {
+        bl = "blame --minimal";
+        br = "branch -vv";
+        ck = "checkout";
+        cm = "commit";
+        cma = "commit --allow-empty --reuse-message @";
+        cmd = "commit --amend --reuse-message @";
+        cmm = "commit --amend";
+        cp = "cherry-pick";
+        df = "diff";
+        fp = "format-patch";
+        ft = "fetch --all";
+        l = "log";
+        lg = "log --graph";
+        ll = "log --oneline";
+        llg = "log --oneline --graph";
+        ls = "log --stat";
+        mb = "merge-base";
+        p = "push";
+        pf = "push --force-with-lease";
+        rb = "rebase";
+        rbi = "rebase --rebase-merges --interactive HEAD~26";
+        rh = "reset --hard";
+        rv = "remote -v";
+        sg = "diff --staged";
+        sh = "show";
+        st = "status";
+        sw = "switch";
+        wt = "worktree";
+      };
+      core = {
+        editor = "nvim";
+        untrackedCache = true;
+        preloadIndex = true;
+      };
+      # https://www.youtube.com/watch?v=0FkBpQxOPt4
+      gpg = {
+        format = "ssh";
+      };
+      column = {
+        ui = "never"; # column view looks confusing to me
+      };
+      branch = {
+        sort = "-committerdate";
+      };
+      tag = {
+        sort = "version:refname";
+      };
+      diff = {
+        algorithm = "histogram";
+        renames = true;
+      };
+      commit = {
+        verbose = true;
+      };
+      credential = {
+        helper = "store";
+      };
+      init = {
+        defaultBranch = "main";
+      };
+      pull = {
+        rebase = true;
+      };
+      push = {
+        default = "current";
+        followTags = true;
+      };
+      rebase = {
+        autoStash = true;
+        autoSquash = true;
+      };
+      rerere = {
+        # Very helpful when you rebase a merge commit
+        enabled = true;
+        autoUpdate = true;
+      };
+      fetch = {
+        # https://youtu.be/aolI_Rz0ZqY?si=KpfeZxRHkhZGZ5N_&t=1699
+        writeCommitGraph = true;
+        prune = true;
+        pruneTags = true;
+        parallel = 8;
+      };
 
-    merge = {
-      # conflictStyle = "zdiff3" # not supported in old git versions
-    };
-    blame = {
-      coloring = "highlightRecent";
-      date = "short";
-    };
-    color = {
+      merge = {
+        # conflictStyle = "zdiff3" # not supported in old git versions
+      };
       blame = {
-        # rs = 1, re=67
-        # range=rs:re
-        # min day = s = 10
-        # max day = e = 365 * 5 = 1825
-        #
-        # Target function f(x) = a * x^b
-        # f(rs) = s, f(re) = e
-        # which gives:
-        #      ln(s) - ln(e)
-        # b = ---------------
-        #     ln(rs) - ln(re)
-        #
-        #          ln(rs)*ln(e) - ln(re)*ln(s)
-        # ln(a) = ----------------------------
-        #               ln(rs) - ln(re)
-        #
-        # resulting in:
-        # f(x) = round(10 * x^1.66)
-        # Credits: https://stackoverflow.com/a/66250482/8099151
-        highlightRecent = ''
-          237, 20 month ago,
-          238, 19 month ago,
-          239, 18 month ago,
-          240, 17 month ago,
-          241, 16 month ago,
-          242, 15 month ago,
-          243, 14 month ago,
-          244, 13 month ago,
-          245, 12 month ago,
-          246, 11 month ago,
-          247, 10 month ago,
-          248, 9 month ago,
-          249, 8 month ago,
-          250, 7 month ago,
-          251, 6 month ago,
-          252, 5 month ago,
-          253, 4 month ago,
-          254, 3 month ago,
-          231, 2 month ago,
-          230, 1 month ago,
-          229, 3 weeks ago,
-          228, 2 weeks ago,
-          227, 1 week ago,
-          226
-        '';
+        coloring = "highlightRecent";
+        date = "short";
+      };
+      color = {
+        blame = {
+          # rs = 1, re=67
+          # range=rs:re
+          # min day = s = 10
+          # max day = e = 365 * 5 = 1825
+          #
+          # Target function f(x) = a * x^b
+          # f(rs) = s, f(re) = e
+          # which gives:
+          #      ln(s) - ln(e)
+          # b = ---------------
+          #     ln(rs) - ln(re)
+          #
+          #          ln(rs)*ln(e) - ln(re)*ln(s)
+          # ln(a) = ----------------------------
+          #               ln(rs) - ln(re)
+          #
+          # resulting in:
+          # f(x) = round(10 * x^1.66)
+          # Credits: https://stackoverflow.com/a/66250482/8099151
+          highlightRecent = ''
+            237, 20 month ago,
+            238, 19 month ago,
+            239, 18 month ago,
+            240, 17 month ago,
+            241, 16 month ago,
+            242, 15 month ago,
+            243, 14 month ago,
+            244, 13 month ago,
+            245, 12 month ago,
+            246, 11 month ago,
+            247, 10 month ago,
+            248, 9 month ago,
+            249, 8 month ago,
+            250, 7 month ago,
+            251, 6 month ago,
+            252, 5 month ago,
+            253, 4 month ago,
+            254, 3 month ago,
+            231, 2 month ago,
+            230, 1 month ago,
+            229, 3 weeks ago,
+            228, 2 weeks ago,
+            227, 1 week ago,
+            226
+          '';
+        };
       };
     };
   };

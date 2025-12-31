@@ -1,5 +1,7 @@
-{
-  enable = true;
-  enableBashIntegration = true;
-  enableFishIntegration = true;
+_: {
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegration = true;
+    enableFishIntegration = true;
+  };
 }

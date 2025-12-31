@@ -1,8 +1,10 @@
-{
-  enable = true;
-  settings = {
-    mypy = {
-      strict = true;
+_: {
+  programs.mypy = {
+    enable = true;
+    settings = {
+      mypy = {
+        strict = true;
+      };
     };
   };
 }

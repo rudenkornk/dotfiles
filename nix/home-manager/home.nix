@@ -89,8 +89,6 @@
       minikube
       moreutils
       ncurses
-      nerd-fonts.fira-code
-      nerd-fonts.jetbrains-mono
       ninja
       nixfmt
       nodejs

@@ -24,5 +24,14 @@
       shell = "${pkgs.fish}/bin/fish";
     };
   };
+
+  home = {
+    packages =
+      with pkgs;
+      [ fontconfig ]
+      ++ (with pkgs.nerd-fonts; [
+        fira-code
+        jetbrains-mono
+      ]);
   };
 }

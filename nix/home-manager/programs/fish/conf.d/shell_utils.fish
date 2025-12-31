@@ -3,8 +3,7 @@ for mode in default insert
     bind --mode $mode \cy yazi
 end
 
-set --export MANROFFOPT -c
-set --export MANPAGER "sh -c 'col -bx | bat -l man -p'"
+set --export MANPAGER "bat --plain --language man"
 
 set --export SOPS_EDITOR unshare --net --map-root-user vim -Z -u DEFAULTS -i NONE -n
 

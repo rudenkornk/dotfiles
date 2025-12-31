@@ -8,6 +8,14 @@
     withPython3 = true;
     withRuby = true;
 
+    extraWrapperArgs = [
+      "--run"
+      ''
+        source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/proxy.sh.sops} 2>/dev/null)
+        source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/keys.sh.sops} 2>/dev/null)
+      ''
+    ];
+
     extraLuaPackages =
       luaPkgs: with luaPkgs; [
         jsregexp

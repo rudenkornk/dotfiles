@@ -1,53 +1,5 @@
 {
   "nodes": {
-    "fish_plugin_autopair": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1656950411,
-        "narHash": "sha256-qt3t1iKRRNuiLWiVoiAYOu+9E7jsyECyIqZJ/oRIT1A=",
-        "owner": "jorgebucaran",
-        "repo": "autopair.fish",
-        "rev": "4d1752ff5b39819ab58d7337c69220342e9de0e2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jorgebucaran",
-        "repo": "autopair.fish",
-        "type": "github"
-      }
-    },
-    "fish_plugin_fzf": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1712464035,
-        "narHash": "sha256-T8KYLA/r/gOKvAivKRoeqIwE2pINlxFQtZJHpOy9GMM=",
-        "owner": "patrickf1",
-        "repo": "fzf.fish",
-        "rev": "8920367cf85eee5218cc25a11e209d46e2591e7a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "patrickf1",
-        "repo": "fzf.fish",
-        "type": "github"
-      }
-    },
-    "fish_plugin_puffer": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1763062131,
-        "narHash": "sha256-Dhx5+XRxJvlhdnFyimNxFyFiASrGU4ZwyefsDwtKnSg=",
-        "owner": "nickeb96",
-        "repo": "puffer-fish",
-        "rev": "83174b07de60078be79985ef6123d903329622b8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nickeb96",
-        "repo": "puffer-fish",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": ["nixpkgs"]
@@ -85,9 +37,6 @@
     },
     "root": {
       "inputs": {
-        "fish_plugin_autopair": "fish_plugin_autopair",
-        "fish_plugin_fzf": "fish_plugin_fzf",
-        "fish_plugin_puffer": "fish_plugin_puffer",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "sops-nix": "sops-nix",

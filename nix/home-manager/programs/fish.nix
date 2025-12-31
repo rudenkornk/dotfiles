@@ -52,15 +52,6 @@
         );
         wraps = "ldapsearch";
       };
-      nvim = {
-        body = builtins.readFile (
-          pkgs.replaceVars ./fish/functions/nvim.fish {
-            proxy = "${../secrets/proxy.sh.sops}";
-            keys = "${../secrets/keys.sh.sops}";
-          }
-        );
-        wraps = "nvim";
-      };
       rvim = {
         body = builtins.readFile ./fish/functions/rvim.fish;
         wraps = "vim";

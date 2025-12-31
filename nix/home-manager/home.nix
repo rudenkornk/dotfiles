@@ -60,7 +60,6 @@
       fontconfig
       fzf
       gdb
-      git
       gitleaks
       glibcLocales
       gnumake
@@ -71,8 +70,8 @@
       gpgme
       graphviz
       gzip
-      statix
       hexyl
+      home-manager
       htop-vim
       hyperfine
       iptables
@@ -90,6 +89,10 @@
       moreutils
       ncurses
       ninja
+      nix-diff
+      nix-output-monitor
+      nix-top
+      nix-tree
       nixfmt
       nodejs
       ntp
@@ -115,6 +118,7 @@
       shellcheck
       shfmt
       sops
+      statix
       stylua
       tcl
       telegram-desktop

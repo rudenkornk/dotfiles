@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 {
   config,
   pkgs,
@@ -11,7 +7,6 @@
 
 {
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.default
     inputs.sops-nix.nixosModules.sops
@@ -31,7 +26,6 @@
       efi.canTouchEfiVariables = true;
     };
 
-    # Use latest kernel.
     kernelPackages = pkgs.linuxPackages_latest;
   };
 
@@ -44,7 +38,6 @@
     };
   };
 
-  # Enable networking
   networking = {
     hostName = "nixos";
     networkmanager = {
@@ -53,10 +46,8 @@
     };
   };
 
-  # Set your time zone.
   time.timeZone = "Europe/Moscow";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -84,7 +75,6 @@
   };
 
   services = {
-    # Enable the GNOME Desktop Environment.
     displayManager.gdm = {
       enable = true;
       wayland = true;
@@ -100,10 +90,8 @@
     };
 
     xserver = {
-      # Enable the X11 windowing system.
       enable = true;
 
-      # Configure keymap in X11
       xkb = {
         layout = "qwerty_rnk";
         variant = "";
@@ -122,9 +110,7 @@
       };
     };
 
-    # Enable CUPS to print documents.
     printing.enable = true;
-    # Enable sound with pipewire.
     pulseaudio.enable = false;
     pipewire = {
       enable = true;
@@ -146,10 +132,6 @@
   # Enable sound with pipewire.
   security.rtkit.enable = true;
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users = {
     rudenkornk = {
       isNormalUser = true;

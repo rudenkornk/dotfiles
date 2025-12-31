@@ -2,12 +2,14 @@
   config,
   pkgs,
   inputs,
+  host,
+  users,
   ...
 }:
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ./hosts/${host.hostname}/hardware-configuration.nix
     inputs.home-manager.nixosModules.default
     inputs.sops-nix.nixosModules.sops
   ];
@@ -62,7 +64,7 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  sops.age.keyFile = "/home/rudenkornk/.config/sops/age/keys.txt";
+  sops.age.keyFile = "/root/.config/sops/age/keys.txt";
   sops.secrets = {
     corp_vpn_config = {
       sopsFile = ./secrets/vpn/ya_corp_pc.ovpn.sops;
@@ -132,32 +134,21 @@
   # Enable sound with pipewire.
   security.rtkit.enable = true;
 
-  users.users = {
-    rudenkornk = {
-      isNormalUser = true;
-      description = "Nikita Rudenko";
-      extraGroups = [
-        "networkmanager"
-        "wheel"
-      ];
-    };
-    rudenkornk_corp = {
-      isNormalUser = true;
-      description = "Nikita Rudenko (corp)";
-      extraGroups = [
-        "networkmanager"
-        "wheel"
-      ];
-    };
-  };
+  users.users = builtins.mapAttrs (name: user: {
+    isNormalUser = true;
+    inherit (user) description;
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
+  }) users;
 
   home-manager = {
     extraSpecialArgs = { inherit pkgs inputs; };
-    users = {
-      "rudenkornk" = args: import ./home-manager/home.nix (args // { username = "rudenkornk"; });
-      "rudenkornk_corp" =
-        args: import ./home-manager/home.nix (args // { username = "rudenkornk_corp"; });
-    };
+    users = builtins.mapAttrs (
+      name: user: args:
+      import ./home-manager/home.nix (args // { inherit user; })
+    ) users;
   };
 
   environment.systemPackages = with pkgs; [

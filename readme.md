@@ -19,7 +19,7 @@ Thus, we have to disable markdownlint for this block instead.
 nix-shell -p git
 git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles &&
 	cd ~/projects/dotfiles &&
-	nixos-rebuild switch --flake .#default
+	nixos-rebuild switch --flake .#dellxps
 ```
 
 <!-- markdownlint-enable MD010 -->

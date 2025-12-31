@@ -2,14 +2,17 @@
   config,
   pkgs,
   inputs,
-  username,
+  user,
   ...
 }:
 
 {
   home = {
-    inherit username;
-    homeDirectory = "/home/${username}";
+    inherit (user) username;
+    homeDirectory = "/home/${user.username}";
+    sessionVariables = {
+      USERKIND = user.userkind;
+    };
 
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release

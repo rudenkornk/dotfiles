@@ -29,31 +29,41 @@
           allowUnfree = true;
         };
       };
+      users = {
+        rudenkornk = {
+          username = "rudenkornk";
+          description = "Nikita Rudenko";
+          userkind = "default";
+        };
+        rudenkornk_corp = {
+          username = "rudenkornk_corp";
+          description = "Nikita Rudenko (corp)";
+          userkind = "corp";
+        };
+      };
+      hosts = {
+        dellxps = {
+          hostname = "dellxps";
+        };
+      };
     in
     {
-      nixosConfigurations.default = lib.nixosSystem {
-        inherit system pkgs;
-        specialArgs = { inherit inputs; };
-        modules = [ ./nix/configuration.nix ];
-      };
-      homeConfigurations = {
-        rudenkornk = home-manager.lib.homeManagerConfiguration {
+      nixosConfigurations = builtins.mapAttrs (
+        name: host:
+        lib.nixosSystem {
+          inherit system pkgs;
+          specialArgs = { inherit inputs users host; };
+          modules = [ ./nix/configuration.nix ];
+        }
+      ) hosts;
+      homeConfigurations = builtins.mapAttrs (
+        name: user:
+        home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = {
-            inherit inputs;
-            username = "rudenkornk";
-          };
+          extraSpecialArgs = { inherit inputs user; };
           modules = [ ./nix/home-manager/home.nix ];
-        };
-        rudenkornk_corp = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = {
-            inherit inputs;
-            username = "rudenkornk_corp";
-          };
-          modules = [ ./nix/home-manager/home.nix ];
-        };
-      };
+        }
+      ) users;
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
           # Bootstrap python & python packages.

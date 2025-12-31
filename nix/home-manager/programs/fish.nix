@@ -81,17 +81,17 @@
     plugins = [
       {
         name = "autopair";
-        src = inputs.fish_plugin_autopair;
+        inherit (pkgs.fishPlugins.autopair) src;
       }
       {
         name = "puffer";
-        src = inputs.fish_plugin_puffer;
+        inherit (pkgs.fishPlugins.puffer) src;
       }
       {
         name = "fzf";
         # git format-patch @~1
         src = pkgs.runCommand "patched_fzf" { } ''
-          cp -r ${inputs.fish_plugin_fzf} $out
+          cp -r ${pkgs.fishPlugins.fzf-fish.src} $out
           chmod -R +w $out
           cd $out
           patch -p1 < ${./fish/fzf.fish.patch}

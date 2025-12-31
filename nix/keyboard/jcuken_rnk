@@ -56,7 +56,7 @@ xkb_symbols "jcuken_rnk" {
     key <AB09> { [       Cyrillic_yu,       Cyrillic_YU,      apostrophe,       apostrophe ] };
     key <AB10> { [            period,             comma,           grave,            comma ] };
 
-    key <SPCE> { [            space,              space,           space,            space ] };
+    key <SPCE> { [             space,             space,           space,            space ] };
 
     // Map CapsLock to Ctrl, Ctrl to Super, Super to Alt, Alt to AltGr
     // Also map Super to right Alt

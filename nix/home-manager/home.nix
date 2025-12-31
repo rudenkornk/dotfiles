@@ -26,11 +26,9 @@
       acpi
       age
       alsa-lib
-      angular-language-server
       ansible
       ansible-lint
       asciinema
-      astro-language-server
       automake
       bash-completion
       bat
@@ -111,7 +109,6 @@
       powershell
       prettier
       python311
-      python3Packages.debugpy
       ripgrep
       rsync
       ruby
@@ -121,7 +118,6 @@
       shfmt
       sops
       stylua
-      svelte-language-server
       tcl
       telegram-desktop
       texlive.combined.scheme-full
@@ -138,8 +134,6 @@
       vcpkg
       vim
       virtualbox
-      vscode-js-debug
-      vue-language-server
       wget
       wiki-tui
       xh
@@ -165,19 +159,6 @@
         source = ./secrets/ssh;
         recursive = true;
       };
-
-      # Workaround for missing mason packages in neovim.
-      # https://github.com/LazyVim/LazyVim/discussions/6892
-      ".local/share/nvim/mason/packages/angular-language-server/node_modules/@angular/language-server".source =
-        "${pkgs.angular-language-server}/lib";
-      ".local/share/nvim/mason/packages/astro-language-server/node_modules/@astrojs/ts-plugin".source =
-        "${pkgs.astro-language-server}/lib/astro-language-server/packages/ts-plugin/";
-      ".local/share/nvim/mason/packages/svelte-language-server/node_modules/typescript-svelte-plugin".source =
-        "${pkgs.svelte-language-server}/lib/node_modules/svelte-language-server/packages/typescript-plugin/";
-      ".local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js".source =
-        "${pkgs.vscode-js-debug}/lib/node_modules/js-debug/src/dapDebugServer.ts";
-      ".local/share/nvim/mason/packages/vue-language-server/node_modules/@vue/language-server".source =
-        "${pkgs.vue-language-server}/lib/language-tools/packages/language-server";
     };
   };
 

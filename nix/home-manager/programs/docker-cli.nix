@@ -1,6 +1,10 @@
+_:
+
 {
-  enable = true;
-  settings = {
-    detachKeys = "ctrl-z";
+  programs.docker-cli = {
+    enable = true;
+    settings = {
+      detachKeys = "ctrl-z";
+    };
   };
 }

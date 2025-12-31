@@ -183,29 +183,22 @@
 
   fonts.fontconfig.enable = true;
 
-  programs = {
-    atuin = import ./programs/atuin.nix;
-    bash = import ./programs/bash.nix;
-    docker-cli = import ./programs/docker-cli.nix;
-    eza = import ./programs/eza.nix;
-    fish = import ./programs/fish.nix { inherit pkgs inputs; };
-    gh.enable = true;
-    git = import ./programs/git.nix;
-    home-manager.enable = true;
-    kitty = import ./programs/kitty.nix { inherit pkgs inputs; };
-    lazygit = import ./programs/lazygit.nix;
-    mypy = import ./programs/mypy.nix;
-    neovim = import ./programs/neovim.nix { inherit pkgs; };
-    oh-my-posh = import ./programs/oh-my-posh.nix;
-    ruff = import ./programs/ruff.nix;
-    tmux = import ./programs/tmux.nix { inherit pkgs inputs; };
-    yazi = import ./programs/yazi.nix;
-    zoxide = import ./programs/zoxide.nix;
-  };
-
-  services = {
-    flameshot = import ./services/flameshot.nix;
-  };
-
-  imports = [ ./dconf/settings.nix ];
+  imports = [
+    ./programs/atuin.nix
+    ./programs/docker-cli.nix
+    ./programs/eza.nix
+    ./programs/fish.nix
+    ./programs/git.nix
+    ./programs/kitty.nix
+    ./programs/lazygit.nix
+    ./programs/mypy.nix
+    ./programs/neovim.nix
+    ./programs/oh-my-posh.nix
+    ./programs/ruff.nix
+    ./programs/tmux.nix
+    ./programs/yazi.nix
+    ./programs/zoxide.nix
+    ./services/flameshot.nix
+    ./dconf/settings.nix
+  ];
 }

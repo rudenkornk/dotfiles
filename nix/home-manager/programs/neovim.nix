@@ -11,7 +11,9 @@
     extraWrapperArgs = [
       "--run"
       ''
-        source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/proxy.sh.sops} 2>/dev/null)
+        if [[ "$USERKIND" == "default" ]]; then
+          source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/proxy.sh.sops} 2>/dev/null)
+        fi
         source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/keys.sh.sops} 2>/dev/null)
       ''
     ];

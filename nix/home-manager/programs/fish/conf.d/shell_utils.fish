@@ -10,6 +10,9 @@ set --export SOPS_EDITOR unshare --net --map-root-user vim -Z -u DEFAULTS -i NON
 # Prevent accidentally closing terminal
 bind \cd delete-char
 
+# Delete by smaller chunks
+bind \cw backward-kill-word
+
 fish_config theme choose "ayu Dark"
 
 # Set vertical line cursor

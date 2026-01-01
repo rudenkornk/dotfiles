@@ -102,6 +102,14 @@ return {
   { "mason-org/mason.nvim", enabled = false },
   { "mason-org/mason-lspconfig.nvim", enabled = false },
   { "jay-babu/mason-nvim-dap.nvim", enabled = false },
+  {
+    "zbirenbaum/copilot.lua",
+    enabled = os.getenv("USERKIND") == "default",
+  },
+  {
+    "supermaven-inc/supermaven-nvim",
+    enabled = os.getenv("USERKIND") == "default",
+  },
 
   {
     "aserowy/tmux.nvim",

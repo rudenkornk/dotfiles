@@ -19,4 +19,6 @@ if test -n "$NVIM" && test -n "$MYVIMRC"
     set --unexport TAVILY_API_KEY
     set --unexport MORPH_API_KEY
     set --unexport CORP_LLM_API_KEY
+    set --unexport CORP_LLM_ENDPOINT_COMPLETIONS
+    set --unexport CORP_LLM_ENDPOINT_CHAT
 end

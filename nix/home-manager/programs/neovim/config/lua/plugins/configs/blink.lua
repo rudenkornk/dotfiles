@@ -19,6 +19,18 @@ M.dependencies = {
   "hrsh7th/cmp-emoji",
   "Kaiser-Yang/blink-cmp-avante",
 }
+
+-- `internet` as an antonym for `intranet`.
+local internet_providers = {
+  supermaven = {
+    score_offset = 15,
+  },
+  copilot = {
+    score_offset = 20,
+  },
+}
+local maybe_internet_providers = os.getenv("USERKIND") == "default" and internet_providers or {}
+
 M.opts = {
   sources = {
     compat = { "emoji", "tmux" },
@@ -30,7 +42,7 @@ M.opts = {
       "avante",
       "minuet",
     },
-    providers = {
+    providers = vim.tbl_extend("error", {
       tmux = {
         name = "tmux",
         score_offset = -100,
@@ -49,13 +61,7 @@ M.opts = {
         timeout_ms = 3000,
         score_offset = 10,
       },
-      supermaven = {
-        score_offset = 15,
-      },
-      copilot = {
-        score_offset = 20,
-      },
-    },
+    }, maybe_internet_providers),
   },
   appearance = {
     kind_icons = kind_icons,

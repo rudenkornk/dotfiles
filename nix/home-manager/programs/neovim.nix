@@ -29,24 +29,14 @@
 
     extraPython3Packages =
       pythonPkgs: with pythonPkgs; [
-        black
-        debugpy
-        flake8
-        isort
         libtmux
-        mypy
         packaging
         pip
         psutil
-        pydocstyle
         pygments
         pygobject3
-        pylint
         pynvim
-        ruff
         sympy
-        virtualenv
-        yamllint
       ];
 
     extraPackages =
@@ -60,70 +50,90 @@
         UnicodeString
         YAMLTiny
       ])
-      ++ (with pkgs.vscode-extensions; [
-        dbaeumer.vscode-eslint
-        gleam.gleam
-        mathiasfrohlich.kotlin
-        redhat.ansible
-        vadimcn.vscode-lldb
-        xdebug.php-debug
-      ])
+
       ++ (with pkgs; [
+        # Formatters & linters.
         actionlint
-        angular-language-server
-        astro-language-server
-        bash-language-server
         beautysh
+        black
+        python3Packages.flake8
         clang-tools
         cpplint
-        docker-compose-language-service
-        dockerfile-language-server
         eslint
         ghalint
-        gitlab-ci-ls
         gitleaks
         gitlint
-        gleam
-        gopls
-        helm-ls
-        imagemagick
-        jq
-        kotlin-language-server
         kube-linter
-        lldb
-        lua-language-server
         markdownlint-cli2
-        marksman
-        mermaid-cli
-        neocmakelsp
-        netcoredbg
-        nil
+        mypy
         nixfmt
-        nushell
-        php
-        phpactor
-        pyright
+        pylint
         rubocop
-        ruby-lsp
+        ruff
         shfmt
         statix
         stylua
+        ty
+        vscode-extensions.dbaeumer.vscode-eslint
+        yamlfmt
+        yamllint
+        isort
+        python3Packages.pydocstyle
+
+        # LSP servers.
+        angular-language-server
+        astro-language-server
+        bash-language-server
+        copilot-language-server
+        docker-compose-language-service
+        dockerfile-language-server
+        gitlab-ci-ls
+        gopls
+        helm-ls
+        kotlin-language-server
+        lua-language-server
+        marksman
+        neocmakelsp
+        nil
+        phpactor
+        pyright
+        ruby-lsp
         svelte-language-server
         tailwindcss-language-server
         taplo
         terraform-ls
         texlab
-        tslib
-        ty
         typescript-language-server
-        vscode-js-debug
+        vscode-extensions.gleam.gleam
+        vscode-extensions.mathiasfrohlich.kotlin
+        vscode-extensions.redhat.ansible
         vscode-json-languageserver
         vtsls
         vue-language-server
         yaml-language-server
-        yamlfmt
-        yamllint
+        zls
+
+        # Compilers, interpreters & language processors.
+        dotnet-sdk
+        gleam
+        jq
+        mermaid-cli
+        nushell
+        php
         yq
+
+        # Debuggers.
+        lldb
+        netcoredbg
+        python3Packages.debugpy
+        vscode-extensions.vadimcn.vscode-lldb
+        vscode-extensions.xdebug.php-debug
+        vscode-js-debug
+
+        # Other tools.
+        imagemagick
+        tree-sitter
+        virtualenv
       ]);
   };
 

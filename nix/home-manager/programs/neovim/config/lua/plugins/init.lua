@@ -55,6 +55,12 @@ return {
     opts = { highlight = { on_put = false, on_yank = false, timer = 0 } },
   },
   {
+    "HakonHarnes/img-clip.nvim",
+    keys = {
+      { "<leader>P", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+    },
+  },
+  {
     "iamcco/markdown-preview.nvim",
     config = function()
       -- For this `vim.cmd(...)` see original in LazyVim:
@@ -110,6 +116,10 @@ return {
     "supermaven-inc/supermaven-nvim",
     enabled = os.getenv("USERKIND") == "default",
   },
+  {
+    "yetone/avante.nvim",
+    opts = require("plugins.configs.avante").opts,
+  },
 
   {
     "aserowy/tmux.nvim",
@@ -137,21 +147,9 @@ return {
   },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {
-    "yetone/avante.nvim",
-    event = "VeryLazy",
-    build = require("plugins.configs.avante").build,
-    opts = require("plugins.configs.avante").opts,
-  },
-  {
     "milanglacier/minuet-ai.nvim",
     -- `opts` must be defined (at least to `{}`), otherwise minuet will throw an error.
     opts = require("plugins.configs.minuet").opts,
-  },
-  {
-    "HakonHarnes/img-clip.nvim",
-    keys = {
-      { "<leader>P", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
-    },
   },
   {
     "tamton-aquib/duck.nvim",

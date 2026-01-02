@@ -1,5 +1,6 @@
 {
   "extras": [
+    "lazyvim.plugins.extras.ai.avante",
     "lazyvim.plugins.extras.ai.copilot",
     "lazyvim.plugins.extras.ai.supermaven",
     "lazyvim.plugins.extras.coding.luasnip",
@@ -63,6 +64,7 @@
     "lazyvim.plugins.extras.ui.mini-indentscope",
     "lazyvim.plugins.extras.ui.treesitter-context",
     "lazyvim.plugins.extras.util.dot",
+    "lazyvim.plugins.extras.util.gh",
     "lazyvim.plugins.extras.util.mini-hipatterns",
     "lazyvim.plugins.extras.util.startuptime"
   ],

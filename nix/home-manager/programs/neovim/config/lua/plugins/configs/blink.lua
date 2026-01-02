@@ -17,7 +17,6 @@ M.dependencies = {
   "Saghen/blink.compat",
   "andersevenrud/cmp-tmux",
   "hrsh7th/cmp-emoji",
-  "Kaiser-Yang/blink-cmp-avante",
 }
 
 -- `internet` as an antonym for `intranet`.
@@ -47,10 +46,6 @@ M.opts = {
         name = "tmux",
         score_offset = -100,
         opts = { label = " ", all_panes = true },
-      },
-      avante = {
-        name = "avante",
-        module = "blink-cmp-avante",
       },
       minuet = {
         name = "minuet",

@@ -13,10 +13,6 @@ M.opts = {
   pipe_table = { style = "normal" },
   link = { enabled = false },
   win_options = { conceallevel = { default = 0, rendered = 0 } },
-
-  file_types = { "markdown", "Avante" },
 }
-
-M.ft = { "markdown", "Avante" }
 
 return M

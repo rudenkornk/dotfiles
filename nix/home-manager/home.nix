@@ -24,130 +24,155 @@
     stateVersion = "25.11"; # Did you read the comment?
 
     packages = with pkgs; [
+      # Basic tools.
+      curl
+      git
+      htop-vim
+      lsb-release
+      moreutils
+      patch
+      uutils-coreutils-noprefix
+      vim
+      wget
+
+      # Compilers, interpreters, debuggers & build systems.
       (pkgs.lib.hiPrio gcc)
-      (pkgs.lib.hiPrio xorg.xvfb)
-      acpi
-      age
-      alsa-lib
       ansible
-      ansible-lint
-      asciinema
       automake
-      bash-completion
-      bat
       bison
-      bzip2
-      cacert
-      carapace
       ccache
       clang
       cmake
-      coder
-      corefonts
-      curl
-      dbus
-      dconf
-      dconf-editor
-      dconf2nix
-      delta
-      docker
-      docker-compose
-      dos2unix
-      dotnet-sdk_8
-      drawio
-      dua
-      dust
-      fd
-      file
       flex
-      fontconfig
-      fzf
       gdb
-      gitleaks
-      glibcLocales
       gnumake
-      gnupg
-      gnutar
       go
-      google-chrome
-      gpgme
       graphviz
-      gzip
-      hexyl
-      home-manager
-      htop-vim
-      hyperfine
-      iptables
-      iputils
       jq
-      kubectl
-      lftp
-      libarchive
-      libevent
       libgcc
       llvm
-      lsb-release
       lua5_4
-      minikube
-      moreutils
-      ncurses
       ninja
+      nodejs
+      openjdk21
+      perl
+      pkg-config
+      poppler-utils
+      python311
+      ruby
+      rustc
+      rustup
+      tcl
+      texlive.combined.scheme-full
+      valgrind
+      zig
+
+      # Package managers.
+      uv
+      vcpkg
+      yarn
+
+      # Formatters & linters.
+      ansible-lint
+      gitleaks
+      mypy
+      nixfmt
+      prettier
+      ruff
+      shellcheck
+      shfmt
+      statix
+      stylua
+      typos
+
+      # Trust & encryption tools.
+      age
+      cacert
+      gnupg
+      gpgme
+      sops
+
+      # Networking tools.
+      iptables
+      iputils
+      lftp
+      ntp
+
+      # Remote desktop & corporate tooling.
+      coder
+      openldap
+      openvpn
+      turbovnc
+
+      # Virtualization & containerization tools.
+      docker
+      docker-compose
+      kubectl
+      minikube
+      podman
+      virtualbox
+
+      # File management & search tools.
+      bat
+      dua
+      dust
+      eza
+      fd
+      file
+      fzf
+      hexyl
+      ripgrep
+      rsync
+
+      # Archival tools.
+      bzip2
+      gnutar
+      gzip
+      libarchive
+      p7zip
+      unar
+      unrar
+      unzip
+      xz
+      zip
+
+      # Shells & shells extensions.
+      atuin
+      bash-completion
+      carapace
+      fish
+      nushell
+      oh-my-posh
+      powershell
+      tmux
+
+      # Nix.
+      dconf2nix
+      home-manager
       nix-diff
       nix-output-monitor
       nix-top
       nix-tree
-      nixfmt
-      nodejs
-      ntp
-      nushell
-      oh-my-posh
-      openjdk21
-      openldap
-      openvpn
-      p7zip
-      patch
-      perl
-      pkg-config
-      podman
-      poppler-utils
-      powershell
-      prettier
-      python311
-      ripgrep
-      rsync
-      ruby
-      rustc
-      rustup
-      shellcheck
-      shfmt
-      sops
-      statix
-      stylua
-      tcl
+
+      # Fonts & graphics.
+      (pkgs.lib.hiPrio xorg.xvfb)
+      corefonts
+      fontconfig
+      ncurses
+
+      # GUI apps.
+      google-chrome
       telegram-desktop
-      texlive.combined.scheme-full
-      tree-sitter
-      turbovnc
-      typos
-      tzdata
-      unar
-      unrar
-      unzip
-      uutils-coreutils-noprefix
-      uv
-      valgrind
-      vcpkg
-      vim
-      virtualbox
-      wget
+
+      # Other useful tools.
+      asciinema
+      dbus
+      dconf
+      dconf-editor
+      dos2unix
+      hyperfine
       wiki-tui
       xh
-      xsel
-      xz
-      yarn
-      zig
-      zip
-      zls
     ];
 
     file = {

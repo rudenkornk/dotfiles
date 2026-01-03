@@ -14,10 +14,14 @@ if [[ -n "$NVIM" && -n "$MYVIMRC" ]]; then
   unset https_proxy
 
   unset OPENAI_API_KEY
+  unset OPENAI_BASE_URL
+  unset OPENAI_MODEL
   unset GEMINI_API_KEY
   unset CODESTRAL_API_KEY
   unset DEEPSEEK_API_KEY
   unset TAVILY_API_KEY
   unset MORPH_API_KEY
+
   unset CORP_LLM_API_KEY
+  unset CORP_LLM_ENDPOINT_COMPLETIONS
 fi

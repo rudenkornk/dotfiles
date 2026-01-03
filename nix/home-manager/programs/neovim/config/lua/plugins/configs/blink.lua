@@ -38,7 +38,6 @@ M.opts = {
       "path",
       "snippets",
       "buffer",
-      "avante",
       "minuet",
     },
     providers = vim.tbl_extend("error", {

@@ -184,6 +184,7 @@
       dconf
       dconf-editor
       dos2unix
+      gh
       hyperfine
       wiki-tui
       xh

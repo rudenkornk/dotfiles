@@ -70,7 +70,6 @@
           gitleaks
           markdownlint-cli
           nixfmt
-          nodejs
           prettier
           ruff
           shellcheck

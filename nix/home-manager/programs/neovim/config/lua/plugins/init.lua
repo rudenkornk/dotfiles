@@ -35,6 +35,10 @@ return {
     opts = require("plugins.configs.edgy").opts,
   },
   {
+    "folke/sidekick.nvim",
+    keys = require("plugins.configs.sidekick").keys,
+  },
+  {
     "folke/snacks.nvim",
     opts = require("plugins.configs.snacks").opts,
     keys = require("plugins.configs.snacks").keys,
@@ -115,10 +119,6 @@ return {
   {
     "supermaven-inc/supermaven-nvim",
     enabled = os.getenv("USERKIND") == "default",
-  },
-  {
-    "yetone/avante.nvim",
-    opts = require("plugins.configs.avante").opts,
   },
 
   {

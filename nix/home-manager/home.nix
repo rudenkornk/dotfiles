@@ -29,6 +29,7 @@
       git
       htop-vim
       lsb-release
+      lsof
       moreutils
       patch
       uutils-coreutils-noprefix
@@ -154,6 +155,17 @@
       nix-output-monitor
       nix-top
       nix-tree
+
+      # CLI AI tools.
+      aider-chat-full
+      claude-code
+      codex
+      crush
+      cursor-cli
+      gemini-cli
+      github-copilot-cli
+      opencode
+      qwen-code
 
       # Fonts & graphics.
       (pkgs.lib.hiPrio xorg.xvfb)

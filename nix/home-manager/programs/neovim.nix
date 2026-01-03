@@ -13,8 +13,10 @@
       ''
         if [[ "$USERKIND" == "default" ]]; then
           source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/proxy.sh.sops} 2>/dev/null)
+          source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/keys.sh.sops} 2>/dev/null)
+        elif [[ "$USERKIND" == "corp" ]]; then
+          source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/corp_keys.sh.sops} 2>/dev/null)
         fi
-        source <(${pkgs.sops}/bin/sops --decrypt ${../secrets/keys.sh.sops} 2>/dev/null)
       ''
     ];
 

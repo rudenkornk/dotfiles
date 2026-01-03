@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 
 M.opts = {
   provider = os.getenv("USERKIND") == "corp" and "openai_fim_compatible" or nil,

@@ -150,6 +150,7 @@
       dconf2nix
       home-manager
       nix-diff
+      nix-index
       nix-output-monitor
       nix-top
       nix-tree

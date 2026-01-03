@@ -62,9 +62,6 @@ _: {
       commit = {
         verbose = true;
       };
-      credential = {
-        helper = "store";
-      };
       init = {
         defaultBranch = "main";
       };

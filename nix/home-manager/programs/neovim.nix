@@ -97,6 +97,7 @@
         marksman
         neocmakelsp
         nil
+        ocamlPackages.ocaml-lsp
         phpactor
         pyright
         ruby-lsp
@@ -105,7 +106,9 @@
         taplo
         terraform-ls
         texlab
+        tinymist
         typescript-language-server
+        vscode-extensions.elixir-lsp.vscode-elixir-ls
         vscode-extensions.gleam.gleam
         vscode-extensions.mathiasfrohlich.kotlin
         vscode-extensions.redhat.ansible
@@ -117,11 +120,13 @@
         zls
 
         # Compilers, interpreters & language processors.
+        dart
         dotnet-sdk
         gleam
         jq
         mermaid-cli
         nushell
+        ocaml
         php
         yq
 
@@ -134,10 +139,11 @@
         vscode-js-debug
 
         # Other tools.
+        ghostscript
         imagemagick
         tree-sitter
         virtualenv
-        ghostscript
+
       ]);
   };
 
@@ -149,8 +155,9 @@
       vscode-js-debug
       vue-language-server
 
-      xsel
       python3Packages.debugpy
+      sqlite
+      xsel
     ];
 
     file = {

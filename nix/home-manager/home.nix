@@ -55,6 +55,7 @@
       lua5_4
       ninja
       nodejs
+      ocaml
       openjdk21
       perl
       pkg-config

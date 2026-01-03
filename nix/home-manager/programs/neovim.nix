@@ -110,6 +110,7 @@
         vscode-extensions.mathiasfrohlich.kotlin
         vscode-extensions.redhat.ansible
         vscode-json-languageserver
+        vscode-langservers-extracted
         vtsls
         vue-language-server
         yaml-language-server
@@ -136,6 +137,7 @@
         imagemagick
         tree-sitter
         virtualenv
+        ghostscript
       ]);
   };
 

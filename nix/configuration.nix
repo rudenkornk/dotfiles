@@ -24,7 +24,10 @@
 
   boot = {
     loader = {
-      systemd-boot.enable = true;
+      limine = {
+        enable = true;
+        secureBoot.enable = true;
+      };
       efi.canTouchEfiVariables = true;
     };
 
@@ -153,6 +156,7 @@
 
   environment.systemPackages = with pkgs; [
     git
+    sbctl
     vim
     wget
   ];

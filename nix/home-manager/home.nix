@@ -100,7 +100,7 @@
       lftp
       ntp
 
-      # Remote desktop & corporate tooling.
+      # Remote desktop, corporate tooling & VPNs.
       coder
       openldap
       openvpn

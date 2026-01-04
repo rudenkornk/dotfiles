@@ -210,6 +210,7 @@
   fonts.fontconfig.enable = true;
 
   imports = [
+    ./dconf/settings.nix
     ./programs/atuin.nix
     ./programs/docker-cli.nix
     ./programs/eza.nix
@@ -225,6 +226,5 @@
     ./programs/yazi.nix
     ./programs/zoxide.nix
     ./services/flameshot.nix
-    ./dconf/settings.nix
   ];
 }

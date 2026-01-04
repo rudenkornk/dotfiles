@@ -26,6 +26,7 @@
         p = "podman";
         v = "nvim";
         vd = "nvim -d";
+        nix-search-tv = ''command nix-search-tv print | fzf --prompt="Search NixOS> " --preview 'command nix-search-tv preview {}' --scheme history'';
       };
     functions = {
       c = {

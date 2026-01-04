@@ -220,6 +220,7 @@
     ./programs/lazygit.nix
     ./programs/mypy.nix
     ./programs/neovim.nix
+    ./programs/nix-search-tv.nix
     ./programs/oh-my-posh.nix
     ./programs/ruff.nix
     ./programs/tmux.nix

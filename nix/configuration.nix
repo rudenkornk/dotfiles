@@ -152,8 +152,8 @@
   };
 
   environment.systemPackages = with pkgs; [
-    vim
     git
+    vim
     wget
   ];
 

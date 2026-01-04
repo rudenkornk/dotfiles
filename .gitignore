@@ -22,3 +22,4 @@ credentials.yaml
 .gitsecret/keys/random_seed
 !*.secret
 .aider*
+/result

@@ -67,11 +67,11 @@
   sops.age.keyFile = "/root/.config/sops/age/keys.txt";
   sops.secrets = {
     corp_vpn_config = {
-      sopsFile = ./secrets/vpn/ya_corp_pc.ovpn.sops;
+      sopsFile = ./secrets/vpn/corp_pc.ovpn.sops;
       format = "binary";
     };
     corp_vpn_auth = {
-      sopsFile = ./secrets/vpn/ya_corp_pc.auth.sops;
+      sopsFile = ./secrets/vpn/corp_pc.auth.sops;
       format = "binary";
     };
   };

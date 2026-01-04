@@ -10,6 +10,7 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     tmux_plugin_kanagawa = {
       url = "github:Nybkox/tmux-kanagawa";

@@ -85,6 +85,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/sound" = {
+      event-sounds = false;
       theme-name = "__custom";
     };
 
@@ -181,13 +182,13 @@ with lib.hm.gvariant;
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "";
-      command = "bash -c 'flameshot gui &> /tmp/flameshot_log_$USER'";
+      command = "sh -c \"QT_QPA_PLATFORM=xcb flameshot gui --raw --path ~/Downloads/ | wl-copy\"";
       name = "Flameshot";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       binding = "<Alt>3";
-      command = "bash -c 'flameshot gui &> /tmp/flameshot_log_$USER'";
+      command = "sh -c \"QT_QPA_PLATFORM=xcb flameshot gui --raw --path ~/Downloads/ | wl-copy\"";
       name = "Flameshot";
     };
 

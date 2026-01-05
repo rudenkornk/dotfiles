@@ -38,16 +38,6 @@
     extraModulePackages = [ ];
   };
 
-  environment.sessionVariables = {
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    __NV_PRIME_RENDER_OFFLOAD = "1";
-    __VK_LAYER_NV_optimus = "NVIDIA_only";
-    GBM_BACKEND = "nvidia-drm";
-    LIBVA_DRIVER_NAME = "nvidia";
-    NVD_BACKEND = "direct";
-    WLR_NO_HARDWARE_CURSORS = "1";
-  };
-
   fileSystems."/" = {
     device = "/dev/mapper/luks-adad80d8-7e75-42dd-866d-07a15c73d2ec";
     fsType = "ext4";

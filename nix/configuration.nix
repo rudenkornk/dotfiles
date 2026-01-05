@@ -12,7 +12,6 @@
     ./hosts/${host.hostname}/hardware-configuration.nix
     inputs.home-manager.nixosModules.default
     inputs.sops-nix.nixosModules.sops
-    inputs.nix-mineral.nixosModules.nix-mineral
   ];
 
   # This value determines the NixOS release from which the default
@@ -42,10 +41,6 @@
         "flakes"
       ];
     };
-  };
-
-  nix-mineral = {
-    enable = true;
   };
 
   networking = {

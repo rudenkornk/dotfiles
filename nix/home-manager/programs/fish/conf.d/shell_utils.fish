@@ -3,10 +3,6 @@ for mode in default insert
     bind --mode $mode \cy yazi
 end
 
-set --export MANPAGER "bat --plain --language man"
-
-set --export SOPS_EDITOR unshare --net --map-root-user vim -Z -u DEFAULTS -i NONE -n
-
 # Prevent accidentally closing terminal
 bind \cd delete-char
 

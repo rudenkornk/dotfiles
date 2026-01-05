@@ -158,6 +158,7 @@
 
       python3Packages.debugpy
       sqlite
+      wl-clipboard
       xsel
     ];
 

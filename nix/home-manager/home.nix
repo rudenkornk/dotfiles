@@ -104,7 +104,6 @@
       coder
       openldap
       openvpn
-      turbovnc
 
       # Virtualization & containerization tools.
       docker

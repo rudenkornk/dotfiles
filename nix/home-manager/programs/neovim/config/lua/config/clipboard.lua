@@ -22,12 +22,12 @@ local clipboards = {
   ["xsel"] = {
     name = "xsel",
     copy = {
-      ["+"] = { "xsel", "--nodetach", "-i", "-b" },
-      ["*"] = { "xsel", "--nodetach", "-i", "-p" },
+      ["+"] = { "xsel", "--nodetach", "--input", "--clipboard" },
+      ["*"] = { "xsel", "--nodetach", "--input", "--primary" },
     },
     paste = {
-      ["+"] = { "xsel", "-o", "-b" },
-      ["*"] = { "xsel", "-o", "-p" },
+      ["+"] = { "xsel", "--output", "--clipboard" },
+      ["*"] = { "xsel", "--output", "--primary" },
     },
     cache_enabled = true,
   },

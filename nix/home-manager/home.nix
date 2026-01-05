@@ -27,9 +27,6 @@
       # Basic tools.
       curl
       git
-      htop-vim
-      lsb-release
-      lsof
       moreutils
       patch
       uutils-coreutils-noprefix
@@ -178,6 +175,11 @@
       # CJK fonts for chinese, japanese, korean languages in Chrome.
       wqy_zenhei
       noto-fonts-cjk-sans
+
+      # Monitoring & system info.
+      htop-vim
+      lsb-release
+      lsof
 
       # GUI apps.
       google-chrome

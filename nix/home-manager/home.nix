@@ -40,6 +40,7 @@
   imports = [
     ./dconf/settings.nix
     ./home/packages.nix
+    ./home/shellAliases.nix
     ./programs/atuin.nix
     ./programs/docker-cli.nix
     ./programs/eza.nix

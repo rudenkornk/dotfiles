@@ -46,6 +46,20 @@ _:
           +
             # Disable swap files.
             "-n";
+
+        Throne =
+          # "Warm up" `sudo` before running it under `nohup`, to avoid failure.
+          ''sudo echo "" && ''
+          + "nohup sudo Throne "
+          # Redirect both stdout and stderr to a log file.
+          # Otherwise, `nohup` will create unnecessary `nohup.out` in cwd.
+          + "&> /tmp/Throne_$USER.log &; "
+          + "disown "
+          +
+            # `#` at the end is significant -- fish wrapper will add `$args` at the end
+            # (since it will be a function in fish), which will mess up with `&` detachment.
+            # Adding `#` allows to ignore added `$args`.
+            "#";
       };
 
     sessionVariables = {

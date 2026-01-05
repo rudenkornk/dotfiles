@@ -31,6 +31,20 @@ local clipboards = {
     },
     cache_enabled = true,
   },
+  ["wl-clipboard"] = {
+    name = "wl-clipboard",
+    copy = {
+      -- "--trim-newline" removes extra newline before pasted text.
+      ["+"] = { "wl-copy", "--trim-newline", "--foreground" },
+      ["*"] = { "wl-copy", "--trim-newline", "--foreground" },
+    },
+    paste = {
+      -- "--no-newline" removes extra newline after pasted text.
+      ["+"] = { "wl-paste", "--no-newline" },
+      ["*"] = { "wl-paste", "--no-newline" },
+    },
+    cache_enabled = true,
+  },
 }
 
 return clipboards[require("config.this_clipboard")]

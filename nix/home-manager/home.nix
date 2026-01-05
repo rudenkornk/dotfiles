@@ -180,6 +180,8 @@
       htop-vim
       lsb-release
       lsof
+      neofetch
+      nvtopPackages.full
 
       # GUI apps.
       google-chrome

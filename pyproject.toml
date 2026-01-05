@@ -122,6 +122,9 @@ strict = true
 # https://github.com/python/mypy/issues/12664
 # https://github.com/python/mypy/issues/7276
 incremental = false
+exclude = [
+  '^result/',
+]
 
 [tool.pydocstyle]
 ignore = ["D100", "D103"]

@@ -28,7 +28,6 @@ def lint_code(*, repo_path: Path) -> None:
     _check_leaked_credentials(repo_path)
 
     run_shell(["statix", "check", repo_path])
-    run_shell(["mypy", repo_path])
 
     run_shell(["mypy", repo_path])
     run_shell(["ruff", "check"])

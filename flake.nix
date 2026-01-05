@@ -11,6 +11,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nix-mineral.url = "github:cynicsketch/nix-mineral";
 
     tmux_plugin_kanagawa = {
       url = "github:Nybkox/tmux-kanagawa";

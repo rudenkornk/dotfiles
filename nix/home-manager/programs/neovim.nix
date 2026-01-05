@@ -128,6 +128,7 @@
         nushell
         ocaml
         php
+        python3Packages.pylatexenc
         yq
 
         # Debuggers.

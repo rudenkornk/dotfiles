@@ -27,6 +27,9 @@
       limine = {
         enable = true;
         secureBoot.enable = true;
+        style = {
+          wallpapers = [ ];
+        };
       };
       efi.canTouchEfiVariables = true;
     };

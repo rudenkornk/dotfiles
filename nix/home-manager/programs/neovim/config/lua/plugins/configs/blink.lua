@@ -21,9 +21,6 @@ M.dependencies = {
 
 -- `internet` as an antonym for `intranet`.
 local internet_providers = {
-  supermaven = {
-    score_offset = 15,
-  },
   copilot = {
     score_offset = 20,
   },

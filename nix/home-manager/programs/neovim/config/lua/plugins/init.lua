@@ -116,10 +116,6 @@ return {
     "zbirenbaum/copilot.lua",
     enabled = os.getenv("USERKIND") == "default",
   },
-  {
-    "supermaven-inc/supermaven-nvim",
-    enabled = os.getenv("USERKIND") == "default",
-  },
 
   {
     "aserowy/tmux.nvim",

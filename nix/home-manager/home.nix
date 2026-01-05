@@ -104,6 +104,7 @@
       coder
       openldap
       openvpn
+      throne
 
       # Virtualization & containerization tools.
       docker

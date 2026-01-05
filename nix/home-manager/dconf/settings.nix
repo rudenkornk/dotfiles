@@ -30,11 +30,11 @@ with lib.hm.gvariant;
       mru-sources = [
         (mkTuple [
           "xkb"
-          "en_rnk"
+          "qwerty_rnk"
         ])
         (mkTuple [
           "xkb"
-          "ru_rnk"
+          "jcuken_rnk"
         ])
       ];
       per-window = true;

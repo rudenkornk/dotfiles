@@ -175,6 +175,10 @@
       fontconfig
       ncurses
 
+      # CJK fonts for chinese, japanese, korean languages in Chrome.
+      wqy_zenhei
+      noto-fonts-cjk-sans
+
       # GUI apps.
       google-chrome
       telegram-desktop

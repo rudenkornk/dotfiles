@@ -5,6 +5,11 @@ with lib.hm.gvariant;
 
 {
   dconf.settings = {
+    "desktop/ibus/general" = {
+      preload-engines = [ "xkb:us::eng" ];
+      version = "1.5.33";
+    };
+
     "org/gnome/Snapshot" = {
       play-shutter-sound = false;
     };
@@ -22,6 +27,50 @@ with lib.hm.gvariant;
       target-units = "degree";
     };
 
+    "org/gnome/desktop/app-folders" = {
+      folder-children = [
+        "System"
+        "Utilities"
+        "YaST"
+        "Pardus"
+      ];
+    };
+
+    "org/gnome/desktop/app-folders/folders/Pardus" = {
+      categories = [ "X-Pardus-Apps" ];
+      name = "X-Pardus-Apps.directory";
+      translate = true;
+    };
+
+    "org/gnome/desktop/app-folders/folders/System" = {
+      apps = [
+        "org.gnome.baobab.desktop"
+        "org.gnome.DiskUtility.desktop"
+        "org.gnome.Logs.desktop"
+        "org.gnome.SystemMonitor.desktop"
+      ];
+      name = "X-GNOME-Shell-System.directory";
+      translate = true;
+    };
+
+    "org/gnome/desktop/app-folders/folders/Utilities" = {
+      apps = [
+        "org.gnome.Decibels.desktop"
+        "org.gnome.Connections.desktop"
+        "org.gnome.Papers.desktop"
+        "org.gnome.font-viewer.desktop"
+        "org.gnome.Loupe.desktop"
+      ];
+      name = "X-GNOME-Shell-Utilities.directory";
+      translate = true;
+    };
+
+    "org/gnome/desktop/app-folders/folders/YaST" = {
+      categories = [ "X-SuSE-YaST" ];
+      name = "suse-yast.directory";
+      translate = true;
+    };
+
     "org/gnome/desktop/calendar" = {
       show-weekdate = true;
     };
@@ -30,11 +79,11 @@ with lib.hm.gvariant;
       mru-sources = [
         (mkTuple [
           "xkb"
-          "qwerty_rnk"
+          "jcuken_rnk"
         ])
         (mkTuple [
           "xkb"
-          "jcuken_rnk"
+          "qwerty_rnk"
         ])
       ];
       per-window = true;
@@ -53,6 +102,40 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/interface" = {
       clock-show-weekday = true;
+    };
+
+    "org/gnome/desktop/notifications/application/gnome-about-panel" = {
+      application-id = "gnome-about-panel.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/gnome-printers-panel" = {
+      application-id = "gnome-printers-panel.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/google-chrome" = {
+      application-id = "google-chrome.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/kitty" = {
+      application-id = "kitty.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-telegram-desktop" = {
+      application-id = "org.telegram.desktop.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/throne" = {
+      application-id = "throne.desktop";
+    };
+
+    "org/gnome/desktop/notifications" = {
+      application-children = [
+        "gnome-about-panel"
+        "google-chrome"
+        "org-telegram-desktop"
+        "throne"
+        "gnome-printers-panel"
+      ];
     };
 
     "org/gnome/desktop/peripherals/keyboard" = {
@@ -94,25 +177,31 @@ with lib.hm.gvariant;
         "<Control><Alt>x"
         "<Alt>F4"
       ];
-      cycle-windows = [ "<Alt>Tab" ];
-      cycle-windows-backward = [ "<Shift><Alt>Tab" ];
-      maximize = [ "<Control><Alt>f" ];
+      cycle-windows = [ ];
+      cycle-windows-backward = [ ];
       minimize = [ "<Control><Alt>c" ];
-      move-to-monitor-down = [ "<Control><Alt>s" ];
-      move-to-monitor-left = [ "<Control><Alt>a" ];
-      move-to-monitor-right = [ "<Control><Alt>d" ];
-      move-to-monitor-up = [ "<Control><Alt>w" ];
-      move-to-workspace-left = [ "<Shift><Alt>q" ];
-      move-to-workspace-right = [ "<Shift><Alt>e" ];
+      move-to-workspace-down = [ ];
+      move-to-workspace-left = [ "<Control><Alt>q" ];
+      move-to-workspace-right = [ "<Control><Alt>e" ];
+      move-to-workspace-up = [ ];
       switch-applications = [ ];
       switch-applications-backward = [ ];
+      switch-group = [ ];
+      switch-group-backward = [ ];
       switch-input-source = [ "<Control>space" ];
       switch-input-source-backward = [ "<Shift><Control>space" ];
-      switch-to-workspace-1 = [ "<Shift><Alt>s" ];
-      switch-to-workspace-last = [ "<Shift><Alt>w" ];
-      switch-to-workspace-left = [ "<Shift><Alt>a" ];
-      switch-to-workspace-right = [ "<Shift><Alt>d" ];
-      unmaximize = [ "<Control><Alt>r" ];
+      switch-panels = [ ];
+      switch-panels-backward = [ ];
+      switch-to-workspace-left = [
+        "<Control><Alt>1"
+        "<Shift><Alt>q"
+      ];
+      switch-to-workspace-right = [
+        "<Control><Alt>2"
+        "<Shift><Alt>e"
+      ];
+      switch-windows = [ "<Alt>Tab" ];
+      switch-windows-backward = [ "<Shift><Alt>Tab" ];
     };
 
     "org/gnome/gnome-system-monitor/disktreenew" = {
@@ -120,7 +209,12 @@ with lib.hm.gvariant;
       col-6-width = 0;
     };
 
+    "org/gnome/gnome-system-monitor" = {
+      maximized = false;
+    };
+
     "org/gnome/gnome-system-monitor/proctree" = {
+      col-26-visible = false;
       col-26-width = 0;
       columns-order = [
         0
@@ -153,13 +247,23 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/gnome-system-monitor" = {
+      show-dependencies = false;
+      show-whose-processes = "user";
       window-height = 840;
       window-width = 1186;
     };
 
+    "org/gnome/mutter" = {
+      attach-modal-dialogs = false;
+      edge-tiling = false;
+    };
+
     "org/gnome/mutter/keybindings" = {
-      toggle-tiled-left = [ "<Control><Alt>q" ];
-      toggle-tiled-right = [ "<Control><Alt>e" ];
+      cancel-input-capture = [ ];
+    };
+
+    "org/gnome/mutter/wayland/keybindings" = {
+      restore-shortcuts = [ ];
     };
 
     "org/gnome/mutter" = {
@@ -172,18 +276,11 @@ with lib.hm.gvariant;
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
       calculator = [ "<Alt>6" ];
-      control-center = [ "<Alt>ssharp" ];
+      control-center = [ "<Alt>4" ];
       custom-keybindings = [
-        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
       ];
-    };
-
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-      binding = "";
-      command = "sh -c \"QT_QPA_PLATFORM=xcb flameshot gui --raw --path ~/Downloads/ | wl-copy\"";
-      name = "Flameshot";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
@@ -199,8 +296,9 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
-      home = [ "<Alt>4" ];
-      screensaver = [ "<Control><Alt>l" ];
+      home = [ "<Alt>5" ];
+      rotate-video-lock-static = [ ];
+      screensaver = [ "<Control><Alt>o" ];
       www = [ "<Alt>2" ];
     };
 
@@ -209,6 +307,70 @@ with lib.hm.gvariant;
       idle-dim = false;
       sleep-inactive-ac-timeout = 259200;
       sleep-inactive-battery-timeout = 1800;
+    };
+
+    "org/gnome/shell" = {
+      enabled-extensions = [ "pop-shell@system76.com" ];
+    };
+
+    "org/gnome/shell/extensions/pop-shell" = {
+      activate-launcher = [ "" ];
+      active-hint = false;
+      active-hint-border-radius = mkUint32 0;
+      column-size = 0;
+      focus-down = [ "<Control><Alt>j" ];
+      focus-left = [ "<Control><Alt>h" ];
+      focus-right = [ "<Control><Alt>l" ];
+      focus-up = [ "<Control><Alt>k" ];
+      fullscreen-launcher = true;
+      gap-inner = mkUint32 0;
+      gap-outer = mkUint32 0;
+      hint-color-rgba = "rgba(196, 147, 61)";
+      log-level = 1;
+      management-orientation = [ "" ];
+      max-window-width = 1;
+      mouse-cursor-focus-location = mkUint32 1;
+      mouse-cursor-follows-active-window = true;
+      pop-monitor-down = [ ];
+      pop-monitor-left = [ ];
+      pop-monitor-right = [ ];
+      pop-monitor-up = [ ];
+      pop-workspace-down = [ ];
+      pop-workspace-up = [ ];
+      row-size = 1;
+      show-skip-taskbar = true;
+      show-title = false;
+      smart-gaps = true;
+      snap-to-grid = false;
+      stacking-with-mouse = true;
+      tile-accept = [
+        "<Control><Alt>f"
+        "f"
+      ];
+      tile-by-default = true;
+      tile-enter = [ "<Control><Alt>g" ];
+      tile-move-down = [ ];
+      tile-move-down-global = [ "<Control><Alt>s" ];
+      tile-move-left = [ ];
+      tile-move-left-global = [ "<Control><Alt>a" ];
+      tile-move-right = [ ];
+      tile-move-right-global = [ "<Control><Alt>d" ];
+      tile-move-up = [ ];
+      tile-move-up-global = [ "<Control><Alt>w" ];
+      tile-orientation = [ "<Control><Alt>r" ];
+      tile-reject = [ "Escape" ];
+      tile-resize-down = [ "<Control><Alt>s" ];
+      tile-resize-left = [ "<Control><Alt>a" ];
+      tile-resize-right = [ "<Control><Alt>d" ];
+      tile-resize-up = [ "<Control><Alt>w" ];
+      tile-swap-down = [ "s" ];
+      tile-swap-left = [ "a" ];
+      tile-swap-right = [ "d" ];
+      tile-swap-up = [ "w" ];
+      toggle-floating = [ "<Control><Alt>f" ];
+      toggle-stacking = [ ];
+      toggle-stacking-global = [ "<Control><Alt>v" ];
+      toggle-tiling = [ "<Super>y" ];
     };
 
     "org/gnome/shell" = {
@@ -225,7 +387,10 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/shell/keybindings" = {
+      focus-active-notification = [ ];
       screenshot-window = [ ];
+      shift-overview-down = [ ];
+      shift-overview-up = [ ];
       toggle-application-view = [ "<Alt>Escape" ];
       toggle-message-tray = [ "<Control><Alt>n" ];
     };

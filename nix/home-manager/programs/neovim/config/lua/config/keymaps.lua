@@ -64,7 +64,7 @@
 -- <A-c> -- dap continue
 -- <A-d> -- dap down
 -- <A-e> -- dap pause
--- <A-f> -- terminal (floating)
+-- <A-f> --
 -- <A-g> -- dap restart
 -- <A-h> -- dedent code (visual)
 -- <A-i> -- dap step into
@@ -86,12 +86,19 @@
 -- <A-y> --
 -- <A-z> --
 
+-- <A-A> --
 -- <A-C> -- dap reverse continue
+-- <A-D> --
+-- <A-E> -- WM reserved
+-- <A-F> -- terminal (floating)
 -- <A-H> -- terminal (left)
 -- <A-J> -- terminal (bottom)
 -- <A-K> -- terminal (top)
 -- <A-L> -- terminal (right)
+-- <A-Q> -- WM reserved
 -- <A-R> -- dap breakpoint with condition
+-- <A-S> --
+-- <A-W> --
 
 vim.keymap.set(
   { "n", "x" },

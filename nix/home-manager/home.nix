@@ -46,6 +46,7 @@
     ./programs/eza.nix
     ./programs/fish.nix
     ./programs/git.nix
+    ./programs/gnome-shell.nix
     ./programs/kitty.nix
     ./programs/lazygit.nix
     ./programs/mypy.nix

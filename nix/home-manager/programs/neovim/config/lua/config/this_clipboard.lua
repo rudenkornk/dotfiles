@@ -1,1 +1,1 @@
-return "xsel"
+return "wl-clipboard"

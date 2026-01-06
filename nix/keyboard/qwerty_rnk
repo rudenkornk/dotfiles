@@ -58,12 +58,33 @@ xkb_symbols "qwerty_rnk" {
 
     key <SPCE> { [             space,             space,           space,            space ] };
 
-    // Map CapsLock to Ctrl, Ctrl to Super, Super to Alt, Alt to AltGr
-    // Also map Super to right Alt
+    // KEYS:  <CAPS>      <LFSH>    <LCTL>     <LWIN>  <LALT>        <RALT>        <RWIN>   <RCTL>     <RTSH>
+    // MAPS:  Control_L   Shift_L   Control_L  Alt_L   Level3_Shift  Level3_Shift  Alt_R    Super_R    Shift_R
+
+    // KEYS:  <CAPS>
+    // MAPS:  Control_L
     include "capslock(ctrl_modifier)"
-    key <LCTL> {[  Super_L  ]};
-    key <RCTL> {[  Super_R  ]};
-    modifier_map Mod4 { <LCTL>, <RCTL> };
+
+    // KEYS:                                   <LWIN>                              <RWIN>
+    // MAPS:                                   Alt_L                               Alt_R
     include "altwin(alt_win)"
+
+    // KEYS:                                           <LALT>        <RALT>
+    // MAPS:                                           Level3_Shift  Level3_Shift
     include "level3(lalt_switch)"
+
+    // KEYS:                                                                                <RCTL>
+    // MAPS:                                                                                Super_R
+    // Do not map <LCTL> to Super_L -- using Super_L from <LCTL> is very inconvenient; also it messes up workflow in draw.io.
+    key <RCTL> {[  Super_R  ]};
+    modifier_map Mod4 { <RCTL> };
+
+    // It would be actually nice to set <RALT> to Super_R, but no matter how I tried to do this,
+    // I could not reach the desired effect.
+    // Even worse -- for some weird reason, setting <RALT> to Super_R made Level3_Shift on <LALT> behave very strangely,
+    // effectively breaking the whole layout.
+    // Ideally all modifier keys should be set with these includes:
+    // include "capslock(ctrl_modifier)"
+    // include "altwin(swap_alt_win)"
+    // include "level3(lalt_switch)"
 };

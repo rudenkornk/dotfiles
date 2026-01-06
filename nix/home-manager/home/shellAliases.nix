@@ -63,6 +63,7 @@ _:
       };
 
     sessionVariables = {
+      LESSCHARSET = "utf-8";
       MANPAGER = "bat --plain --language man";
       SOPS_EDITOR = "unshare --net --map-root-user vim -Z -u DEFAULTS -i NONE -n";
     };

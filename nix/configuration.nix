@@ -157,6 +157,8 @@
     ) users;
   };
 
+  nixpkgs.overlays = [ (import ./home-manager/nixpkgs/overlays/sops-cached.nix) ];
+
   environment.systemPackages = with pkgs; [
     git
     sbctl

@@ -25,6 +25,7 @@
             # warning: Using 'builtins.derivation' to create a derivation named 'nvim.fish'
             #   that references the store path without a proper context.
             ldap_auth = "${../secrets/ldap.auth.sops.json}";
+            inherit (pkgs) jq sops-cached;
           }
         );
         wraps = "ldapsearch";

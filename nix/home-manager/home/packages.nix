@@ -176,6 +176,7 @@
       dos2unix
       gh
       hyperfine
+      tldr
       wiki-tui
       xh
     ];

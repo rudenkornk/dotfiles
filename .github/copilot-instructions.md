@@ -90,7 +90,7 @@ All commands below assume you're inside `nix develop`:
 The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs and main branch pushes:
 
 ```yaml
-  - nix flake check
+  - nix flake check --no-build
   - nix develop --command dotfiles format --check
   - nix develop --command dotfiles lint
 ```

@@ -48,7 +48,7 @@
         };
       };
     in
-    {
+    rec {
       nixosConfigurations = builtins.mapAttrs (
         name: host:
         lib.nixosSystem {
@@ -57,6 +57,7 @@
           modules = [ ./nix/configuration.nix ];
         }
       ) hosts;
+
       homeConfigurations = builtins.mapAttrs (
         name: user:
         home-manager.lib.homeManagerConfiguration {
@@ -65,6 +66,9 @@
           modules = [ ./nix/home-manager/home.nix ];
         }
       ) users;
+      # Also register home-manager configs for `nix flake check`.
+      checks."${system}" = builtins.mapAttrs (name: config: config.activationPackage) homeConfigurations;
+
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
           # Bootstrap python & python packages.

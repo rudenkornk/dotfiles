@@ -172,7 +172,7 @@ with lib.hm.gvariant;
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
       calculator = [ "<Alt>6" ];
-      control-center = [ "<Alt>5" ];
+      control-center = [ "<Alt>ssharp" ];
       custom-keybindings = [
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"

@@ -122,7 +122,15 @@
   # Enable sound with pipewire.
   security = {
     rtkit.enable = true;
-    tpm2.enable = true;
+    tpm2 = {
+      # https://nixos.org/manual/nixos/stable/#module-security-tpm2-nixosmodule
+      enable = true;
+      abrmd.enable = true;
+      pkcs11.enable = true;
+
+      tctiEnvironment.enable = true;
+      tctiEnvironment.interface = "tabrmd";
+    };
   };
 
   users.users = builtins.mapAttrs (name: user: {

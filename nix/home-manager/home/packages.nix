@@ -70,6 +70,7 @@
       gnupg
       gpgme
       sops
+      tpm2-tools
 
       # Networking tools.
       iptables

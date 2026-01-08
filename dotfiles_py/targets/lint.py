@@ -37,7 +37,7 @@ def lint_code(*, repo_path: Path) -> None:
 
     run_shell(["typos"])
 
-    run_shell(["markdownlint", "--ignore-path", repo_path / ".gitignore", repo_path], cwd=repo_path)
+    run_shell(["markdownlint-cli2", "."], cwd=repo_path)
 
 
 def format_code(*, repo_path: Path, check: bool) -> None:

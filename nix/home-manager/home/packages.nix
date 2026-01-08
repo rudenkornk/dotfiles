@@ -53,6 +53,7 @@
       # Formatters & linters.
       ansible-lint
       gitleaks
+      markdownlint-cli2
       mypy
       nixfmt
       prettier

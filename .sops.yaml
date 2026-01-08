@@ -1,5 +1,7 @@
 creation_rules:
-  - age: "age1acasm9lv35nv48a4u4fpsfhdkal5yz3cmt3m6v0xhh5ehafrdvaqww8r8m"
+  - age:
+      - "age1acasm9lv35nv48a4u4fpsfhdkal5yz3cmt3m6v0xhh5ehafrdvaqww8r8m" # Regular.
+      - "age1tpm1qvp2zxr0d583zg663hxzh4lq8l9xe863nn74hq7qk0gtsceasvwrcsmawja" # TPM on dellxps.
     mac_only_encrypted: True
 
     # The current SOPS version

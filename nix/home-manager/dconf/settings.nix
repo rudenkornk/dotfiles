@@ -192,14 +192,8 @@ with lib.hm.gvariant;
       switch-input-source-backward = [ "<Shift><Control>space" ];
       switch-panels = [ ];
       switch-panels-backward = [ ];
-      switch-to-workspace-left = [
-        "<Control><Alt>1"
-        "<Shift><Alt>q"
-      ];
-      switch-to-workspace-right = [
-        "<Control><Alt>2"
-        "<Shift><Alt>e"
-      ];
+      switch-to-workspace-left = [ "<Control><Alt>1" ];
+      switch-to-workspace-right = [ "<Control><Alt>2" ];
       switch-windows = [ "<Alt>Tab" ];
       switch-windows-backward = [ "<Shift><Alt>Tab" ];
     };
@@ -359,14 +353,14 @@ with lib.hm.gvariant;
       tile-move-up-global = [ "<Control><Alt>w" ];
       tile-orientation = [ "<Control><Alt>r" ];
       tile-reject = [ "Escape" ];
-      tile-resize-down = [ "<Control><Alt>s" ];
-      tile-resize-left = [ "<Control><Alt>a" ];
-      tile-resize-right = [ "<Control><Alt>d" ];
-      tile-resize-up = [ "<Control><Alt>w" ];
-      tile-swap-down = [ "s" ];
-      tile-swap-left = [ "a" ];
-      tile-swap-right = [ "d" ];
-      tile-swap-up = [ "w" ];
+      tile-resize-down = [ "<Control><Alt>j" ];
+      tile-resize-left = [ "<Control><Alt>h" ];
+      tile-resize-right = [ "<Control><Alt>l" ];
+      tile-resize-up = [ "<Control><Alt>k" ];
+      tile-swap-down = [ "<Control><Alt>s" ];
+      tile-swap-left = [ "<Control><Alt>a" ];
+      tile-swap-right = [ "<Control><Alt>d" ];
+      tile-swap-up = [ "<Control><Alt>w" ];
       toggle-floating = [ "<Control><Alt>f" ];
       toggle-stacking = [ ];
       toggle-stacking-global = [ "<Control><Alt>v" ];

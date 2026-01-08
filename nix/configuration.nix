@@ -120,7 +120,10 @@
   };
 
   # Enable sound with pipewire.
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    tpm2.enable = true;
+  };
 
   users.users = builtins.mapAttrs (name: user: {
     isNormalUser = true;
@@ -128,6 +131,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "tss"
     ];
   }) users;
 

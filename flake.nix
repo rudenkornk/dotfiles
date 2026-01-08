@@ -79,7 +79,7 @@
           fish
           git
           gitleaks
-          markdownlint-cli
+          markdownlint-cli2
           nixfmt
           prettier
           ruff

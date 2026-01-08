@@ -66,7 +66,7 @@ All commands below assume you're inside `nix develop`:
    - `ruff check`: Python linter
    - `yamllint --strict`: YAML linting for `.github/` directory
    - `shellcheck`: Shell script linting (6 .sh files)
-   - `markdownlint`: Markdown linting (note: command name is `markdownlint`, package is `markdownlint-cli`)
+   - `markdownlint`: Markdown linting (note: command name is `markdownlint-cli2`)
    - `typos`: Spell checking
 
 1. **Flake Check** (~10 seconds):
@@ -107,8 +107,8 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
 
 1. **Missing Markdownlint Binary**:
 
-   - For some reason even after entering `nix develop`, `markdownlint` binary is missing in the shell.
-   - To work around this, run `nix-shell -p markdownlint-cli` to enter a shell with `markdownlint` available.
+   - For some reason even after entering `nix develop`, `markdownlint-cli2` binary is missing in the shell.
+   - To work around this, run `nix-shell -p markdownlint-cli2` to enter a shell with `markdownlint-cli2` available.
 
 1. **Path Dependencies**:
 

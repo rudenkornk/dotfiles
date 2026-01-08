@@ -71,16 +71,7 @@
   };
 
   sops.age.keyFile = "/root/.config/sops/age/keys.txt";
-  sops.secrets = {
-    corp_vpn_config = {
-      sopsFile = ./secrets/vpn/corp_pc.ovpn.sops;
-      format = "binary";
-    };
-    corp_vpn_auth = {
-      sopsFile = ./secrets/vpn/corp_pc.auth.sops;
-      format = "binary";
-    };
-  };
+  sops.secrets = { };
 
   services = {
     displayManager.gdm = {
@@ -125,15 +116,6 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-    };
-
-    openvpn.servers = {
-      corp = {
-        config = "config ${config.sops.secrets.corp_vpn_config.path}";
-        authUserPass = "${config.sops.secrets.corp_vpn_auth.path}";
-        updateResolvConf = true;
-        autoStart = false;
-      };
     };
   };
 

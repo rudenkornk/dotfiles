@@ -703,7 +703,7 @@ Development environment:
 - **21 Lua config files** (Neovim)
 - **11 Fish shell files** (`.fish`)
 - **640 KiB total repository size**
-- **3+ program configurations** (Neovim, fish, git, GNOME, tmux, kitty, etc.)
+- **20+ program configurations** (Neovim, fish, git, GNOME, tmux, kitty, etc.)
 
 ______________________________________________________________________
 

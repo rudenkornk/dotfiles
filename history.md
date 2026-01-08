@@ -861,7 +861,7 @@ ______________________________________________________________________
 1. **Commit Frequency**: Averaged ~328 commits/year (excluding 2021 and partial 2026)
 1. **Rewrite Cycle**: Major rewrite every ~12-18 months
 1. **Tool Migration**: Typically 2-3 tool replacements per year
-1. **Editor Focus**: Neovim consistently highest activity (32% of categorized commits)
+1. **Editor Focus**: Neovim consistently highest activity (~52% of categorized commits)
 
 ### Current Stability
 

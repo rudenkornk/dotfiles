@@ -65,6 +65,7 @@
 
       # Trust & encryption tools.
       age
+      age-plugin-tpm
       cacert
       gnupg
       gpgme

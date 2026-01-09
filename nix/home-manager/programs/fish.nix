@@ -17,17 +17,16 @@
         description = "Shows user added PATH entries and removes the selected one";
       };
       ldaps = {
-        body = builtins.readFile (
-          pkgs.replaceVars ./fish/functions/ldaps.fish {
-            # Here we could use a bit simpler form like this:
-            # proxy = ../secrets/proxy.sh.sops;
-            # (I.e. without quotes and ${}), but that issues a warning:
-            # warning: Using 'builtins.derivation' to create a derivation named 'nvim.fish'
-            #   that references the store path without a proper context.
-            ldap_auth = "${../secrets/ldap.auth.sops.json}";
-            inherit (pkgs) jq sops-cached;
-          }
-        );
+        # It would be nice to use `builtins.readFile (pkgs.replaceVars ...)` here,
+        # but it causes errors during `nix flake check --no-build` in a fresh environment,
+        # since `builtins.readFile` expects a valid existing path, which is not yet ready at
+        # evaluation time:
+        # "error: path '/nix/store/...-ldaps.fish.drv' is not valid"
+        body =
+          pkgs.lib.replaceStrings
+            [ "@ldap_auth@" "@jq@" "@sops-cached@" ]
+            [ "${../secrets/ldap.auth.sops.json}" "${pkgs.jq}" "${pkgs.sops-cached}" ]
+            (builtins.readFile ./fish/functions/ldaps.fish);
         wraps = "ldapsearch";
       };
       sops = {

@@ -40,7 +40,7 @@ M.opts = {
     providers = vim.tbl_extend("error", {
       tmux = {
         name = "tmux",
-        score_offset = -100,
+        score_offset = -50,
         opts = { label = " ", all_panes = true },
       },
       minuet = {

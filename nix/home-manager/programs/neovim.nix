@@ -129,6 +129,7 @@
         ocaml
         php
         python3Packages.pylatexenc
+        typst
         yq
 
         # Debuggers.
@@ -144,7 +145,7 @@
         imagemagick
         tree-sitter
         virtualenv
-
+        websocat # For typst.
       ]);
   };
 

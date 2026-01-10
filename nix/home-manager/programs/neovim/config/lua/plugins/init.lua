@@ -1,10 +1,14 @@
+-- Comments near plugin specifications refer to the LazyVim extras.
+-- This allows easier tracking whenever LazyVim decides to deprecate some extras
+-- or we change extras set here.
+
 return {
   {
-    "nvim-mini/mini.indentscope",
+    "nvim-mini/mini.indentscope", -- ui.mini-indentscope
     opts = { draw = { delay = 0, animation = require("mini.indentscope").gen_animation.none() } },
   },
   {
-    "nvim-mini/mini.move",
+    "nvim-mini/mini.move", -- editor.mini-move
     event = "VeryLazy",
     opts = {
       -- disable '<M-j>' and '<M-k>' mappings conflicting with dap
@@ -12,7 +16,7 @@ return {
     },
   },
   {
-    "nvim-mini/mini.surround",
+    "nvim-mini/mini.surround", -- coding.mini-surround, editor.leap
     opts = {
       mappings = {
         -- Some candidates:
@@ -30,42 +34,36 @@ return {
     },
   },
   {
-    "folke/edgy.nvim",
+    "folke/edgy.nvim", -- ui.edgy as well as bunch of other extras.
     enabled = false, -- weird bugs making terminal and other side windows to unexpectedly exit
     opts = require("plugins.configs.edgy").opts,
   },
   {
-    "folke/sidekick.nvim",
+    "folke/sidekick.nvim", -- ai.sidekick
     keys = require("plugins.configs.sidekick").keys,
   },
   {
-    "folke/snacks.nvim",
+    "folke/snacks.nvim", -- Core UI plugin.
     opts = require("plugins.configs.snacks").opts,
     keys = require("plugins.configs.snacks").keys,
   },
   {
-    "folke/trouble.nvim",
+    "folke/trouble.nvim", -- Core UI plugin.
     keys = {
       { "<leader>h", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
     },
   },
   {
-    "ggandor/flit.nvim",
+    "ggandor/flit.nvim", -- editor.leap
     -- https://github.com/LazyVim/LazyVim/discussions/6037
     opts = { labeled_modes = "nxo" },
   },
   {
-    "gbprod/yanky.nvim",
+    "gbprod/yanky.nvim", -- coding.yanky
     opts = { highlight = { on_put = false, on_yank = false, timer = 0 } },
   },
   {
-    "HakonHarnes/img-clip.nvim",
-    keys = {
-      { "<leader>P", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
-    },
-  },
-  {
-    "iamcco/markdown-preview.nvim",
+    "iamcco/markdown-preview.nvim", -- lang.markdown
     config = function()
       -- For this `vim.cmd(...)` see original in LazyVim:
       -- https://github.com/LazyVim/lazyvim.github.io/blob/5cc96146d96bb61ad915088bc3eec4151643cd6f/docs/extras/lang/markdown.md#markdown-previewnvim
@@ -76,44 +74,45 @@ return {
     end,
   },
   {
-    "MeanderingProgrammer/render-markdown.nvim",
+    "MeanderingProgrammer/render-markdown.nvim", -- lang.markdown
     opts = require("plugins.configs.render_markdown").opts,
     ft = require("plugins.configs.render_markdown").ft,
   },
   {
-    "mfussenegger/nvim-dap",
+    "mfussenegger/nvim-dap", -- dap.core and lots of lang plugins.
     keys = require("plugins.configs.dap").keys,
   },
   {
-    "monaqa/dial.nvim",
+    "monaqa/dial.nvim", -- editor.dial
     config = require("plugins.configs.dial").config,
   },
   {
-    "nvim-lualine/lualine.nvim",
+    "nvim-lualine/lualine.nvim", -- Core UI plugin.
     opts = require("plugins.configs.lualine").opts,
   },
   {
-    "nvim-treesitter/nvim-treesitter",
+    "nvim-treesitter/nvim-treesitter", -- Core lang plugin.
     opts = require("plugins.configs.treesitter"),
   },
   {
-    "saghen/blink.cmp",
+    "saghen/blink.cmp", -- coding.blink and lots of lang plugins.
     dependencies = require("plugins.configs.blink").dependencies,
     opts = require("plugins.configs.blink").opts,
   },
   {
-    "stevearc/conform.nvim",
+    "stevearc/conform.nvim", -- Core lang plugin.
     opts = {
       formatters_by_ft = {
         python = { "ruff_organize_imports", "ruff_format", "ruff_fix" },
       },
     },
   },
-  { "mason-org/mason.nvim", enabled = false },
-  { "mason-org/mason-lspconfig.nvim", enabled = false },
-  { "jay-babu/mason-nvim-dap.nvim", enabled = false },
+  { "mason-org/mason.nvim", enabled = false }, -- Core lang plugin.
+  { "mason-org/mason-lspconfig.nvim", enabled = false }, -- Core lang plugin.
+  { "mason-org/mason-null-ls.nvim", enabled = false }, -- Core lang plugin.
+  { "jay-babu/mason-nvim-dap.nvim", enabled = false }, -- Core lang plugin.
   {
-    "zbirenbaum/copilot.lua",
+    "zbirenbaum/copilot.lua", -- ai.copilot
     enabled = os.getenv("USERKIND") == "default",
   },
 

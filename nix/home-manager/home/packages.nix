@@ -42,6 +42,7 @@
       rustup
       tcl
       texlive.combined.scheme-full
+      typst
       valgrind
       zig
 

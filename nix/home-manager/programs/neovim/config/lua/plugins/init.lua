@@ -111,6 +111,14 @@ return {
     end,
   },
   {
+    "chomosuke/typst-preview.nvim", -- lang.typst
+    opts = {
+      -- By default typst-preview.nvim uses dynamically-downloaded `websocat` binary.
+      -- Use nix instead.
+      dependencies_bin = { websocat = "websocat" },
+    },
+  },
+  {
     "MeanderingProgrammer/render-markdown.nvim", -- lang.markdown
     opts = require("plugins.configs.render_markdown").opts,
     ft = require("plugins.configs.render_markdown").ft,

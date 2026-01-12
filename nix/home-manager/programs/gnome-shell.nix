@@ -62,7 +62,14 @@
 
     extensions = with pkgs.gnomeExtensions; [
       # See https://github.com/NixOS/nixpkgs/issues/314969 regarding keybinding customization.
-      { package = pop-shell; }
+      {
+        package = pop-shell.overrideAttrs (old: {
+          patches = (old.patches or [ ]) ++ [
+            # Patch pop-shell with always-on stacking mode.
+            ./gnome-shell/0001-feat-stacking-force-stacking-mode-to-be-always-on.patch
+          ];
+        });
+      }
       # { package = forge; }
       # { package = paperwm; }
     ];

@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nikita Rudenko <rudenkornk@gmail.com>
+Date: Mon, 12 Jan 2026 20:27:15 +0300
+Subject: [PATCH] feat(stacking): force stacking mode to be always-on
+
+---
+ src/extension.ts |  5 +++++
+ src/tiling.ts    | 22 +++++++++++++++-------
+ 2 files changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/src/extension.ts b/src/extension.ts
+index 503407f..f9afa76 100644
+--- a/src/extension.ts
++++ b/src/extension.ts
+@@ -1719,0 +1720,5 @@ export class Ext extends Ecs.System<ExtEvent> {
++
++                const focused = this.focus_window();
++                if (focused && !this.contains_tag(focused.entity, Tags.Floating)) {
++                  this?.auto_tiler?.create_stack(this, focused);
++                }
+diff --git a/src/tiling.ts b/src/tiling.ts
+index 8ea7256..1558300 100644
+--- a/src/tiling.ts
++++ b/src/tiling.ts
+@@ -224,4 +224,6 @@ export class Tiler {
+-                            this.move_from_stack(ext, s, focused, direction);
+-                            this.moving = false;
+-                            place_pointer();
+-                            return;
++                            const moved = this.move_from_stack(ext, s, focused, direction);
++                            if (moved) {
++                              this.moving = false;
++                              place_pointer();
++                              return;
++                            }
+@@ -327,2 +329,2 @@ export class Tiler {
+-    ) {
+-        if (!ext.auto_tiler) return;
++    ): boolean {
++        if (!ext.auto_tiler) return false;
+@@ -335 +337 @@ export class Tiler {
+-            return;
++            return false;
+@@ -416,0 +419 @@ export class Tiler {
++        return true;
+@@ -542,0 +546,4 @@ export class Tiler {
++                if (!ext.contains_tag(move_to.entity, Tags.Floating)) {
++                  at.create_stack(ext, move_to);
++                }
++
+@@ -544,0 +552 @@ export class Tiler {
++
+-- 
+2.51.2
+

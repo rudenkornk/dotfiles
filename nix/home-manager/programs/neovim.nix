@@ -20,6 +20,9 @@
           # shellcheck source=/dev/null
           source "$(${pkgs.sops-cached}/bin/sops-cached ${../secrets/corp_keys.sh.sops})"
         fi
+
+        # Workaround for https://github.com/iamcco/markdown-preview.nvim/issues/737
+        export NVIM_MKDP_LOG_FILE="/tmp/mkdp-nvim-$USER.log"
       ''
     ];
 

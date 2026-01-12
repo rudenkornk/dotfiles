@@ -12,10 +12,13 @@
       "--run"
       ''
         if [[ "$USERKIND" == "default" ]]; then
-          source $(${pkgs.sops-cached}/bin/sops-cached ${../secrets/proxy.sh.sops})
-          source $(${pkgs.sops-cached}/bin/sops-cached ${../secrets/keys.sh.sops})
+          # shellcheck source=/dev/null
+          source "$(${pkgs.sops-cached}/bin/sops-cached ${../secrets/proxy.sh.sops})"
+          # shellcheck source=/dev/null
+          source "$(${pkgs.sops-cached}/bin/sops-cached ${../secrets/keys.sh.sops})"
         elif [[ "$USERKIND" == "corp" ]]; then
-          source $(${pkgs.sops-cached}/bin/sops-cached ${../secrets/corp_keys.sh.sops})
+          # shellcheck source=/dev/null
+          source "$(${pkgs.sops-cached}/bin/sops-cached ${../secrets/corp_keys.sh.sops})"
         fi
       ''
     ];

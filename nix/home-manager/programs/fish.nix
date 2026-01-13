@@ -42,24 +42,21 @@
       source ${./fish/conf.d/ssh_client.fish}
       source ${./fish/conf.d/tmux.fish}
     '';
-    plugins = [
+    plugins = with pkgs.fishPlugins; [
       {
         name = "autopair";
-        inherit (pkgs.fishPlugins.autopair) src;
+        inherit (autopair) src;
       }
       {
         name = "puffer";
-        inherit (pkgs.fishPlugins.puffer) src;
+        inherit (puffer) src;
       }
       {
         name = "fzf";
-        # git format-patch @~1
-        src = pkgs.runCommand "patched_fzf" { } ''
-          cp -r ${pkgs.fishPlugins.fzf-fish.src} $out
-          chmod -R +w $out
-          cd $out
-          patch -p1 < ${./fish/fzf.fish.patch}
-        '';
+        src = pkgs.applyPatches {
+          inherit (fzf-fish) src;
+          patches = [ ./fish/fzf.fish.patch ];
+        };
       }
     ];
   };

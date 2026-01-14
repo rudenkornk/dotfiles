@@ -168,6 +168,7 @@
 
       # GUI apps.
       google-chrome
+      libreoffice
       telegram-desktop
 
       # Other useful tools.

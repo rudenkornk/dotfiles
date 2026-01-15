@@ -112,18 +112,9 @@ def password(
         typer.Option("-a", "--alphabet", help="Password alphabet."),
     ] = string.ascii_lowercase,
     length: Annotated[int, typer.Option("-l", "--length", help="Password length.")] = 24,
-    output: Annotated[
-        Path,
-        typer.Option("-o", "--output", help="Where to store generated password.", dir_okay=False, writable=True),
-    ] = ARTIFACTS_PATH / "password.txt",
     number: Annotated[int, typer.Option("-n", "--number", help="Number of passwords to generate.")] = 1,
 ) -> None:
     """Generate random password."""
     passwords_str = "".join(secrets.choice(alphabet) for _ in range(length * number))
-    passwords = [passwords_str[i : i + length] + "\n" for i in range(0, len(passwords_str), length)]
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.touch(0o600)
-    output.chmod(0o600)
-    with output.open("a") as output_file:
-        output_file.writelines(passwords)
-    _logger.info(f"Password saved to the end of {output} file")
+    passwords = "\n".join(passwords_str[i : i + length] for i in range(0, len(passwords_str), length))
+    print(passwords)  # noqa: T201

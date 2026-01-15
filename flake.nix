@@ -46,6 +46,9 @@
         dellxps = {
           hostname = "dellxps";
         };
+        thinkpad = {
+          hostname = "thinkpad";
+        };
       };
     in
     rec {

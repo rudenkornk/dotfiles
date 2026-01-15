@@ -2,6 +2,8 @@ concurrency:
   cancel-in-progress: true
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
 
+permissions: read-all
+
 defaults:
   run:
     shell: bash

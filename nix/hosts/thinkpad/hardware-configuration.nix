@@ -5,6 +5,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   modulesPath,
   ...
 }:
@@ -12,6 +13,18 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    # It is actually Lenovo ThinkPad P15s Gen 2i, but there is no such config in nixos-hardware.
+    # p14s-intel-gen2 looks very similar, at least it has matching PCI bus ids.
+    # I.e. on the real machine `lspci` output:
+    # $ lspci
+    # 00:02.0 VGA compatible controller: Intel Corporation TigerLake-LP GT2 [Iris Xe Graphics] (rev 01)
+    # 01:00.0 3D controller: NVIDIA Corporation TU117GLM [Quadro T500 Mobile] (rev a1)
+    # ...
+    #
+    # p14s-intel-gen2 config:
+    # intelBusId = "PCI:0:2:0";
+    # nvidiaBusId = "PCI:1:0:0";
+    inputs.nixos-hardware.nixosModules.lenovo-thinkpad-p14s-intel-gen2
   ];
 
   boot = {

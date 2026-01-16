@@ -180,6 +180,8 @@ with lib.hm.gvariant;
       cycle-windows = [ ];
       cycle-windows-backward = [ ];
       minimize = [ "<Control><Alt>c" ];
+      move-to-monitor-down = [ "<Control><Alt>s" ];
+      move-to-monitor-up = [ "<Control><Alt>w" ];
       move-to-workspace-down = [ ];
       move-to-workspace-left = [ "<Control><Alt>q" ];
       move-to-workspace-right = [ "<Control><Alt>e" ];
@@ -196,6 +198,7 @@ with lib.hm.gvariant;
       switch-to-workspace-right = [ "<Control><Alt>2" ];
       switch-windows = [ "<Alt>Tab" ];
       switch-windows-backward = [ "<Shift><Alt>Tab" ];
+      toggle-maximized = [ "<Control><Alt>r" ];
     };
 
     "org/gnome/gnome-system-monitor/disktreenew" = {
@@ -254,6 +257,8 @@ with lib.hm.gvariant;
 
     "org/gnome/mutter/keybindings" = {
       cancel-input-capture = [ ];
+      toggle-tiled-left = [ "<Control><Alt>a" ];
+      toggle-tiled-right = [ "<Control><Alt>d" ];
     };
 
     "org/gnome/mutter/wayland/keybindings" = {
@@ -304,67 +309,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/shell" = {
-      enabled-extensions = [ "pop-shell@system76.com" ];
-    };
-
-    "org/gnome/shell/extensions/pop-shell" = {
-      activate-launcher = [ "" ];
-      active-hint = false;
-      active-hint-border-radius = mkUint32 0;
-      column-size = 0;
-      focus-down = [ "<Control><Alt>j" ];
-      focus-left = [ "<Control><Alt>h" ];
-      focus-right = [ "<Control><Alt>l" ];
-      focus-up = [ "<Control><Alt>k" ];
-      fullscreen-launcher = true;
-      gap-inner = mkUint32 0;
-      gap-outer = mkUint32 0;
-      hint-color-rgba = "rgba(196, 147, 61)";
-      log-level = 1;
-      management-orientation = [ "" ];
-      max-window-width = 1;
-      mouse-cursor-focus-location = mkUint32 1;
-      mouse-cursor-follows-active-window = true;
-      pop-monitor-down = [ ];
-      pop-monitor-left = [ ];
-      pop-monitor-right = [ ];
-      pop-monitor-up = [ ];
-      pop-workspace-down = [ ];
-      pop-workspace-up = [ ];
-      row-size = 1;
-      show-skip-taskbar = true;
-      show-title = false;
-      smart-gaps = true;
-      snap-to-grid = false;
-      stacking-with-mouse = true;
-      tile-accept = [
-        "<Control><Alt>f"
-        "f"
-      ];
-      tile-by-default = true;
-      tile-enter = [ "<Control><Alt>g" ];
-      tile-move-down = [ ];
-      tile-move-down-global = [ "<Control><Alt>s" ];
-      tile-move-left = [ ];
-      tile-move-left-global = [ "<Control><Alt>a" ];
-      tile-move-right = [ ];
-      tile-move-right-global = [ "<Control><Alt>d" ];
-      tile-move-up = [ ];
-      tile-move-up-global = [ "<Control><Alt>w" ];
-      tile-orientation = [ "<Control><Alt>r" ];
-      tile-reject = [ "Escape" ];
-      tile-resize-down = [ "<Control><Alt>j" ];
-      tile-resize-left = [ "<Control><Alt>h" ];
-      tile-resize-right = [ "<Control><Alt>l" ];
-      tile-resize-up = [ "<Control><Alt>k" ];
-      tile-swap-down = [ "<Control><Alt>s" ];
-      tile-swap-left = [ "<Control><Alt>a" ];
-      tile-swap-right = [ "<Control><Alt>d" ];
-      tile-swap-up = [ "<Control><Alt>w" ];
-      toggle-floating = [ "<Control><Alt>f" ];
-      toggle-stacking = [ ];
-      toggle-stacking-global = [ "<Control><Alt>v" ];
-      toggle-tiling = [ "<Super>y" ];
+      enabled-extensions = [ ];
     };
 
     "org/gnome/shell" = {
@@ -385,8 +330,8 @@ with lib.hm.gvariant;
       screenshot-window = [ ];
       shift-overview-down = [ ];
       shift-overview-up = [ ];
-      toggle-application-view = [ "<Alt>Escape" ];
       toggle-message-tray = [ "<Control><Alt>n" ];
+      toggle-overview = [ "<Alt>Escape" ];
     };
 
     "org/gnome/shell" = {

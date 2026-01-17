@@ -72,36 +72,6 @@
       # Also register home-manager configs for `nix flake check`.
       checks."${system}" = builtins.mapAttrs (name: config: config.activationPackage) homeConfigurations;
 
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
-          # Bootstrap python & python packages.
-          python313
-          uv
-
-          # Tools for dumping gnome settings.
-          dconf
-          dconf2nix
-
-          # Format & lint tools.
-          fish
-          git
-          gitleaks
-          markdownlint-cli2
-          nixfmt
-          prettier
-          ruff
-          shellcheck
-          shfmt
-          statix
-          stylua
-          typos
-        ];
-
-        shellHook = ''
-          uv sync
-          source .venv/bin/activate
-          echo "Welcome to the project devshell!"
-        '';
-      };
+      devShells.${system}.default = import ./nix/devshell.nix { inherit pkgs; };
     };
 }

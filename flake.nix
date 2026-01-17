@@ -42,14 +42,15 @@
           userkind = "corp";
         };
       };
-      hosts = {
-        dellxps = {
-          hostname = "dellxps";
-        };
-        thinkpad = {
-          hostname = "thinkpad";
-        };
-      };
+      hostnames = builtins.attrNames (
+        lib.filterAttrs (name: type: type == "directory") (builtins.readDir ./nix/hosts)
+      );
+      hosts = builtins.listToAttrs (
+        map (hostname: {
+          name = hostname;
+          value = { inherit hostname; };
+        }) hostnames
+      );
     in
     rec {
       nixosConfigurations = builtins.mapAttrs (

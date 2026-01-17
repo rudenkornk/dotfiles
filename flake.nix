@@ -30,6 +30,15 @@
           allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
         };
       };
+      hostsdir = ./nix/hosts;
+      hostfiles = lib.filterAttrs (name: type: type == "regular") (builtins.readDir hostsdir);
+      hosts = lib.mapAttrs' (file: _filetype: rec {
+        name = lib.removeSuffix ".nix" file;
+        value = {
+          inherit name;
+          file = hostsdir + ("/" + file);
+        };
+      }) hostfiles;
       users = {
         rudenkornk = {
           username = "rudenkornk";
@@ -42,15 +51,6 @@
           userkind = "corp";
         };
       };
-      hostnames = builtins.attrNames (
-        lib.filterAttrs (name: type: type == "directory") (builtins.readDir ./nix/hosts)
-      );
-      hosts = builtins.listToAttrs (
-        map (hostname: {
-          name = hostname;
-          value = { inherit hostname; };
-        }) hostnames
-      );
     in
     rec {
       nixosConfigurations = builtins.mapAttrs (

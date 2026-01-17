@@ -9,7 +9,7 @@
 
 {
   imports = [
-    ./hosts/${host.hostname}/hardware-configuration.nix
+    host.file
     inputs.home-manager.nixosModules.default
     inputs.sops-nix.nixosModules.sops
   ];

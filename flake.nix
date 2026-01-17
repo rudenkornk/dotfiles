@@ -27,7 +27,7 @@
       pkgs = import inputs.nixpkgs {
         inherit system;
         config = {
-          allowUnfree = true;
+          allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
         };
       };
       users = {

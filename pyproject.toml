@@ -117,11 +117,6 @@ files.extend-exclude = ["lazy-lock.json", "*.sops", "*.sops.json", "*.sops.yaml"
 
 [tool.mypy]
 strict = true
-# W/A for errors like this one:
-# error: Skipping analyzing "ruamel": module is installed, but missing library stubs or py.typed marker  [import-untyped]
-# https://github.com/python/mypy/issues/12664
-# https://github.com/python/mypy/issues/7276
-incremental = false
 exclude = [
   '^result/',
 ]

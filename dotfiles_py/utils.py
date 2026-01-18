@@ -160,6 +160,12 @@ def retry[**P, R](
     return retry_decorator
 
 
+def git_files(repo_path: Path, *ext: str) -> list[str]:
+    return run_shell(
+        ["git", "ls-files", *[f"*{e}" for e in ext]], capture_output=True, cwd=repo_path
+    ).stdout.splitlines()
+
+
 def makelike[**P](  # noqa: C901
     artifact: Path,
     *sources: Path | Callable[[], Path],

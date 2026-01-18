@@ -31,7 +31,9 @@
         };
       };
       hostsdir = ./nix/hosts;
-      hostfiles = lib.filterAttrs (name: type: type == "regular") (builtins.readDir hostsdir);
+      hostfiles = lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".nix" name) (
+        builtins.readDir hostsdir
+      );
       hosts = lib.mapAttrs' (file: _filetype: rec {
         name = lib.removeSuffix ".nix" file;
         value = {

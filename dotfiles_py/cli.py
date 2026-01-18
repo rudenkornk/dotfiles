@@ -11,6 +11,7 @@ from . import utils
 from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
 from .targets import lint as lint_target
+from .targets import secrets as secrets_target
 
 _logger = logging.getLogger(__name__)
 
@@ -101,6 +102,13 @@ def gnome() -> None:
     nix_path = REPO_PATH / "nix" / "home-manager" / "dconf" / "settings.nix"
     rules = gnome_target.DomainRules.load(domain_rules_path)
     gnome_target.gnome_config(rules=rules, nix_path=nix_path)
+
+
+@app.command()
+@utils.typer_exit()
+def updatekeys() -> None:
+    """Update AGE keys in project secrets if recipients have changed."""
+    secrets_target.updatekeys(repo_path=REPO_PATH)
 
 
 @app.command()

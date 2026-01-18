@@ -117,6 +117,11 @@
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+
+    # Firmware updates.
+    fwupd = {
+      enable = true;
+    };
   };
 
   # Enable sound with pipewire.

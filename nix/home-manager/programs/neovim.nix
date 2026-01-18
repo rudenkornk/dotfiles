@@ -107,6 +107,7 @@
         phpactor
         pyright
         ruby-lsp
+        rust-analyzer
         svelte-language-server
         tailwindcss-language-server
         taplo

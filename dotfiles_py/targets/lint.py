@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-from ..utils import run_shell
+from ..utils import git_files, run_shell
 
 _logger = logging.getLogger(__name__)
 
@@ -20,10 +20,6 @@ def _check_leaked_credentials(repo_path: Path) -> None:
     run_shell(["gitleaks", "git"], cwd=repo_path)
 
 
-def _git_files(repo_path: Path, ext: str) -> list[str]:
-    return run_shell(["git", "ls-files", ext], capture_output=True, cwd=repo_path).stdout.splitlines()
-
-
 def lint_code(*, repo_path: Path) -> None:
     _check_leaked_credentials(repo_path)
 
@@ -33,7 +29,7 @@ def lint_code(*, repo_path: Path) -> None:
     run_shell(["ruff", "check"])
     run_shell(["yamllint", "--strict", repo_path / ".github"])
 
-    run_shell(["shellcheck", *_git_files(repo_path, "*.sh")])
+    run_shell(["shellcheck", *git_files(repo_path, ".sh")])
 
     run_shell(["typos"])
 
@@ -50,14 +46,13 @@ def format_code(*, repo_path: Path, check: bool) -> None:
     if check and statix_res.stdout.strip():
         raise RuntimeError(statix_res.stdout)
 
-    run_shell(["nixfmt", "--verify", "--strict", *check_arg, *_git_files(repo_path, "*.nix")], cwd=repo_path)
+    run_shell(["nixfmt", "--verify", "--strict", *check_arg, *git_files(repo_path, ".nix")], cwd=repo_path)
     run_shell(["ruff", "format", *check_arg], cwd=repo_path)
     run_shell(["ruff", "check", "--fix", "--unsafe-fixes", *diff_arg], cwd=repo_path)
 
-    run_shell(["mdformat", *_git_files(repo_path, "*.md"), *check_arg])
-
+    run_shell(["mdformat", *git_files(repo_path, ".md"), *check_arg])
     run_shell(["shfmt", *write_arg, *diff_arg, repo_path])
-    fish_files = run_shell(["git", "ls-files", "*.fish"], capture_output=True, cwd=repo_path).stdout.splitlines()
+    fish_files = git_files(repo_path, ".fish")
     # fish_indent is a fish builtin, so we need to invoke a shell and pass everything as one argument.
     run_shell(["fish", "--no-config", "--command", "fish_indent " + " ".join(write_arg + check_arg + fish_files)])
     run_shell(["prettier", *write_arg, repo_path, *check_arg])

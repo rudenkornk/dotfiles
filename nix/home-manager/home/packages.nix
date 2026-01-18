@@ -17,8 +17,10 @@
       ansible
       automake
       bison
+      cargo
       ccache
       clang
+      clippy
       cmake
       flex
       gdb
@@ -39,7 +41,7 @@
       python311
       ruby
       rustc
-      rustup
+      rustfmt
       tcl
       texlive.combined.scheme-full
       typst

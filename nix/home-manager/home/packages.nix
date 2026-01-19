@@ -31,6 +31,7 @@
       libgcc
       llvm
       lua5_4
+      m4
       ninja
       nodejs
       ocaml

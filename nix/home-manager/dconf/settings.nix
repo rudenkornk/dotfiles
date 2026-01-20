@@ -309,10 +309,6 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/shell" = {
-      enabled-extensions = [ ];
-    };
-
-    "org/gnome/shell" = {
       favorite-apps = [
         "google-chrome.desktop"
         "kitty.desktop"
@@ -368,10 +364,6 @@ with lib.hm.gvariant;
       sort-directories-first = false;
       sort-order = "ascending";
       type-format = "category";
-    };
-
-    "system/locale" = {
-      region = "en_GB.UTF-8";
     };
 
   };

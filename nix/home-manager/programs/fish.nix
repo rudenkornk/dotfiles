@@ -34,6 +34,15 @@
         body = builtins.readFile ./fish/functions/sops.fish;
         wraps = "sops";
       };
+      openconnect_corp = {
+        body =
+          with pkgs;
+          lib.replaceStrings
+            [ "@corp_auth@" "@jq@" "@sops-cached@" "@openconnect@" ]
+            [ "${../secrets/corp_auth.sops.json}" "${jq}" "${sops-cached}" "${openconnect}" ]
+            (builtins.readFile ./fish/functions/openconnect_corp.fish);
+        wraps = "openconnect";
+      };
     };
     interactiveShellInit = ''
       source ${./fish/conf.d/fzf.fish}

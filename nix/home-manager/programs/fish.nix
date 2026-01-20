@@ -24,8 +24,8 @@
         # "error: path '/nix/store/...-ldaps.fish.drv' is not valid"
         body =
           pkgs.lib.replaceStrings
-            [ "@ldap_auth@" "@jq@" "@sops-cached@" ]
-            [ "${../secrets/ldap.auth.sops.json}" "${pkgs.jq}" "${pkgs.sops-cached}" ]
+            [ "@corp_auth@" "@jq@" "@sops-cached@" ]
+            [ "${../secrets/corp_auth.sops.json}" "${pkgs.jq}" "${pkgs.sops-cached}" ]
             (builtins.readFile ./fish/functions/ldaps.fish);
         wraps = "ldapsearch";
       };

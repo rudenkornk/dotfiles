@@ -85,6 +85,7 @@
 
       # Remote desktop, corporate tooling & VPNs.
       coder
+      openconnect
       openldap
       openvpn
       throne

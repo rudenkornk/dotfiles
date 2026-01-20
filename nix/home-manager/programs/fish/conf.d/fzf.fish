@@ -77,6 +77,7 @@ set --export fzf_processes_opts \
     --header='Press CTRL-X to reload'
 
 set --export fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
+set --export fzf_files_opts --bind "ctrl-o:execute($EDITOR +{2} {1} &> /dev/tty)"
 
 # fish shell load happens in the following order:
 # 1. Loading plugins, including fzf.fish, which sets default keybindings and `_fzf_uninstall_bindings` function.

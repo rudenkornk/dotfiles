@@ -50,7 +50,11 @@
     hostName = "nixos";
     networkmanager = {
       enable = true;
-      plugins = with pkgs; [ networkmanager-openvpn ];
+      plugins = with pkgs; [
+        networkmanager-openconnect
+        networkmanager-openvpn
+        networkmanager-ssh
+      ];
     };
   };
 

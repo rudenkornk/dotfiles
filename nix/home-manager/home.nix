@@ -29,7 +29,7 @@
       ".pydocstyle".source = ./configs/.pydocstyle;
 
       ".ssh" = {
-        source = ./secrets/ssh;
+        source = ../secrets/ssh;
         recursive = true;
       };
     };

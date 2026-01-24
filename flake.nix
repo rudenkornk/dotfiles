@@ -12,6 +12,10 @@
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    nur = {
+      url = "github:nix-community/NUR";
+    };
+
     tmux_plugin_kanagawa = {
       url = "github:Nybkox/tmux-kanagawa";
       flake = false;
@@ -68,7 +72,13 @@
         name: user:
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit inputs user; };
+          extraSpecialArgs = {
+            inherit inputs user;
+            nur = import inputs.nur {
+              nurpkgs = pkgs;
+              pkgs = pkgs;
+            };
+          };
           modules = [ ./nix/home-manager/home.nix ];
         }
       ) users;

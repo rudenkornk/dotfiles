@@ -169,6 +169,7 @@
       lsb-release
       lsof
       neofetch
+      ntfs3g
       nvtopPackages.full
 
       # GUI apps.

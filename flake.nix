@@ -33,6 +33,7 @@
         config = {
           allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
         };
+        overlays = import ./nix/nixpkgs/overlays.nix;
       };
       hostsdir = ./nix/hosts;
       hostfiles = lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".nix" name) (

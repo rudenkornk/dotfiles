@@ -144,15 +144,15 @@
       nix-tree
 
       # CLI AI tools.
-      aider-chat-full
-      claude-code
-      codex
-      crush
-      cursor-cli
-      gemini-cli
-      github-copilot-cli
-      opencode
-      qwen-code
+      (locallib.with_secrets { pkg = aider-chat-full; })
+      (locallib.with_secrets { pkg = claude-code; })
+      (locallib.with_secrets { pkg = codex; })
+      (locallib.with_secrets { pkg = crush; })
+      (locallib.with_secrets { pkg = cursor-cli; })
+      (locallib.with_secrets { pkg = gemini-cli; })
+      (locallib.with_secrets { pkg = github-copilot-cli; })
+      (locallib.with_secrets { pkg = opencode; })
+      (locallib.with_secrets { pkg = qwen-code; })
 
       # Fonts & graphics.
       (lib.hiPrio xorg.xvfb)

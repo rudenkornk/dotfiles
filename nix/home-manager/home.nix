@@ -1,4 +1,4 @@
-{ user, pkgs, config, ... }:
+{ user, config, ... }:
 
 {
   home = {
@@ -38,8 +38,6 @@
   xdg.enable = true;
 
   fonts.fontconfig.enable = true;
-
-  nixpkgs.overlays = [ (import ./nixpkgs/overlays/sops-cached.nix) ];
 
   imports = [
     ./dconf/settings.nix

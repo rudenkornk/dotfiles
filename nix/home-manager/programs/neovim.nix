@@ -14,15 +14,7 @@ in
     extraWrapperArgs = [
       "--run"
       ''
-        if [[ "$USERKIND" == "default" ]]; then
-          # shellcheck source=/dev/null
-          source "$(${pkgs.sops-cached}/bin/sops-cached ${../../secrets/proxy.sh.sops})"
-          # shellcheck source=/dev/null
-          source "$(${pkgs.sops-cached}/bin/sops-cached ${../../secrets/keys.sh.sops})"
-        elif [[ "$USERKIND" == "corp" ]]; then
-          # shellcheck source=/dev/null
-          source "$(${pkgs.sops-cached}/bin/sops-cached ${../../secrets/corp_keys.sh.sops})"
-        fi
+        ${pkgs.locallib.bash_secrets}
 
         # Workaround for https://github.com/iamcco/markdown-preview.nvim/issues/737
         export NVIM_MKDP_LOG_FILE="/tmp/mkdp-nvim-$USER.log"

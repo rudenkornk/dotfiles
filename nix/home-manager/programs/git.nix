@@ -12,7 +12,7 @@ _: {
         br = "branch -vv";
         ck = "checkout";
         cm = "commit";
-        cma = "commit --allow-empty --reuse-message @";
+        cma = "commit --all --message 'a'";
         cmd = "commit --amend --reuse-message @";
         cmm = "commit --amend";
         cp = "cherry-pick";

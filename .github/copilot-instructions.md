@@ -170,9 +170,9 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
 - `nix/home-manager/home.nix`: Home Manager config importing all program configs
 - `nix/home-manager/programs/`: Individual program configs (atuin, bash, docker, eza, fish, git, kitty, lazygit, mypy, neovim, oh-my-posh, ruff, tmux, yazi, zoxide)
 - `nix/home-manager/dconf/`: GNOME settings (settings.nix, rules.yaml)
-- `nix/home-manager/secrets/`: Encrypted secrets (SSH keys, VPN configs) using sops
 - `nix/home-manager/configs/`: Dotfiles symlinked to home directory
 - `nix/keyboard/`: Custom keyboard layouts (qwerty_rnk, jcuken_rnk)
+- `nix/secrets/`: Encrypted secrets (SSH keys, VPN configs) using sops
 
 **Key Nix Patterns**:
 

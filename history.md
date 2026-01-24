@@ -390,7 +390,7 @@ October 23, 2025 marked the most radical transformation: **complete elimination 
 
    - **sops-nix** integration
    - **age encryption** with TPM-backed keys (`c63b96d` - Jan 2026)
-   - Encrypted secrets stored in `nix/home-manager/secrets/`:
+   - Encrypted secrets stored in `nix/secrets/`:
      - SSH keys
      - VPN configurations
      - API credentials (OpenAI, Anthropic, etc.)
@@ -600,9 +600,9 @@ dotfiles/
 │   │   ├── home.nix - Home Manager entry point
 │   │   ├── programs/ - Per-program Nix modules (20+ programs)
 │   │   ├── configs/ - Actual dotfiles (symlinked)
-│   │   ├── secrets/ - Encrypted credentials (sops)
 │   │   └── dconf/ - GNOME settings
-│   └── keyboard/ - Custom XKB layouts
+│   ├── keyboard/ - Custom XKB layouts
+│   └── secrets/ - Encrypted credentials (sops)
 ├── dotfiles_py/ - Python CLI tool
 │   ├── cli.py - Main CLI entry point
 │   ├── utils.py - Utilities

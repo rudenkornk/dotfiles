@@ -1,4 +1,4 @@
-{ user, pkgs, ... }:
+{ user, pkgs, config, ... }:
 
 {
   home = {
@@ -18,7 +18,7 @@
     stateVersion = "25.11"; # Did you read the comment?
 
     file = {
-      ".config" = {
+      "${config.xdg.configHome}" = {
         source = ./configs/.config;
         recursive = true;
       };
@@ -34,6 +34,8 @@
       };
     };
   };
+
+  xdg.enable = true;
 
   fonts.fontconfig.enable = true;
 

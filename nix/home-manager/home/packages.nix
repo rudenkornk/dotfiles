@@ -13,7 +13,7 @@
       wget
 
       # Compilers, interpreters, debuggers & build systems.
-      (pkgs.lib.hiPrio gcc)
+      (lib.hiPrio gcc)
       ansible
       automake
       bison
@@ -155,7 +155,7 @@
       qwen-code
 
       # Fonts & graphics.
-      (pkgs.lib.hiPrio xorg.xvfb)
+      (lib.hiPrio xorg.xvfb)
       corefonts
       fontconfig
       ncurses

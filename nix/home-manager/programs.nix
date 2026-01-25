@@ -147,7 +147,6 @@
       (locallib.with_secrets { pkg = aider-chat-full; })
       (locallib.with_secrets { pkg = claude-code; })
       (locallib.with_secrets { pkg = codex; })
-      (locallib.with_secrets { pkg = crush; })
       (locallib.with_secrets { pkg = cursor-cli; })
       (locallib.with_secrets { pkg = gemini-cli; })
       (locallib.with_secrets { pkg = github-copilot-cli; })
@@ -194,6 +193,7 @@
 
   imports = [
     ./programs/atuin.nix
+    ./programs/crush.nix
     ./programs/docker-cli.nix
     ./programs/eza.nix
     ./programs/fish.nix

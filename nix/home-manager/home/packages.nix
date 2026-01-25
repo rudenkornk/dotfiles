@@ -171,6 +171,7 @@
       neofetch
       ntfs3g
       nvtopPackages.full
+      sysstat
 
       # GUI apps.
       google-chrome

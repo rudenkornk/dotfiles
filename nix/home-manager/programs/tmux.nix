@@ -69,13 +69,17 @@
           plugin = kanagawa-upd;
           extraConfig = ''
             set -g @kanagawa-theme 'dragon'
-            set -g @kanagawa-plugins "network-bandwidth cpu-usage ram-usage weather ssh-session"
+            set -g @kanagawa-plugins "network-bandwidth disk-usage cpu-usage ram-usage weather ssh-session"
             set -g @kanagawa-show-powerline true
             set -g @kanagawa-show-edge-icons true
 
+            set -g @kanagawa-network-bandwidth-download-label " "
+            set -g @kanagawa-network-bandwidth-upload-label " "
             set -g @kanagawa-cpu-usage-label " "
+            set -g @kanagawa-cpu-usage-colors "carp_yellow dark_gray"
             set -g @kanagawa-ram-usage-label " "
-            set -g @kanagawa-ram-usage-colors "orange dark_gray"
+            set -g @kanagawa-ram-usage-colors "carp_yellow dark_gray"
+            set -g @kanagawa-disk-usage-colors "orange dark_gray"
             set -g @kanagawa-show-location false
             set -g @kanagawa-left-icon "#(date '+%d.%m.%y %R')"
             set -g @kanagawa-show-ssh-session-port true

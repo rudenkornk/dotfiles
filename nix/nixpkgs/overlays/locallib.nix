@@ -1,14 +1,8 @@
 _: final: prev:
 
 let
-  inherit (prev) lib;
-  lib_modules = lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".nix" name) (
-    builtins.readDir ./locallib
-  );
-  locallib = lib.mapAttrs' (nix_module: _filetype: {
-    name = lib.removeSuffix ".nix" nix_module;
-    value = import ./locallib/${nix_module} { pkgs = final; };
-  }) lib_modules;
+  lib_modules = import ./locallib/get_modules.nix null ./locallib;
+  locallib = builtins.mapAttrs (name: value: import value { pkgs = final; }) lib_modules;
 in
 {
   inherit locallib;

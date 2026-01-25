@@ -1,4 +1,4 @@
-final: prev:
+_: final: prev:
 
 let
   inherit (prev) lib;

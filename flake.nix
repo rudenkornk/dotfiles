@@ -3,6 +3,10 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-25.11";
     };
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
@@ -33,7 +37,7 @@
         config = {
           allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
         };
-        overlays = import ./nix/nixpkgs/overlays.nix;
+        overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
       };
       hostsdir = ./nix/hosts;
       hostfiles = lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".nix" name) (

@@ -1,4 +1,4 @@
-final: prev: {
+_: final: prev: {
   sops-cached =
     # Simple wrapper over sops, which cache its output in tmpfs /run/user/$id/ dir.
     # This is primarily needed to avoid multiple costly decryption queries when using TPM.

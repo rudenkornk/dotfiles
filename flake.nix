@@ -39,17 +39,8 @@
         };
         overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
       };
-      hostsdir = ./nix/hosts;
-      hostfiles = lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".nix" name) (
-        builtins.readDir hostsdir
-      );
-      hosts = lib.mapAttrs' (file: _filetype: rec {
-        name = lib.removeSuffix ".nix" file;
-        value = {
-          inherit name;
-          file = hostsdir + ("/" + file);
-        };
-      }) hostfiles;
+      hostfiles = pkgs.locallib.get_modules ./nix/hosts;
+      hosts = lib.mapAttrs (name: file: { inherit name file; }) hostfiles;
       users = {
         rudenkornk = {
           username = "rudenkornk";

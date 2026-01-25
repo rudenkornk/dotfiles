@@ -128,15 +128,15 @@
     "tmux_plugin_kanagawa": {
       "flake": false,
       "locked": {
-        "lastModified": 1765940068,
-        "narHash": "sha256-ldc++p2PcYdzoOLrd4PGSrueAGNWncdbc5k6wmFM9kQ=",
-        "owner": "Nybkox",
+        "lastModified": 1769355247,
+        "narHash": "sha256-J7DVICvYTDQwHjIbSYgA6U9xr50NNfiZzBcoq5nsmNc=",
+        "owner": "rudenkornk",
         "repo": "tmux-kanagawa",
-        "rev": "10a59af0a50aacf7e68e6757fb42e94d1804246e",
+        "rev": "98c57ab46778a95a1e91f690e2513dae8c19f5aa",
         "type": "github"
       },
       "original": {
-        "owner": "Nybkox",
+        "owner": "rudenkornk",
         "repo": "tmux-kanagawa",
         "type": "github"
       }

@@ -21,7 +21,7 @@
     };
 
     tmux_plugin_kanagawa = {
-      url = "github:Nybkox/tmux-kanagawa";
+      url = "github:rudenkornk/tmux-kanagawa";
       flake = false;
     };
   };

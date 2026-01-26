@@ -208,11 +208,35 @@ with lib.hm.gvariant;
 
     "org/gnome/gnome-system-monitor" = {
       maximized = false;
+      process-memory-in-iec = true;
     };
 
     "org/gnome/gnome-system-monitor/proctree" = {
-      col-26-visible = false;
-      col-26-width = 0;
+      col-0-visible = true;
+      col-0-width = 571;
+      col-1-visible = false;
+      col-1-width = 98;
+      col-10-visible = false;
+      col-10-width = 70;
+      col-11-visible = true;
+      col-11-width = 48;
+      col-12-visible = true;
+      col-12-width = 136;
+      col-14-visible = false;
+      col-14-width = 293;
+      col-17-visible = false;
+      col-17-width = 48;
+      col-2-visible = true;
+      col-2-width = 145;
+      col-22-visible = true;
+      col-23-visible = true;
+      col-23-width = 100;
+      col-26-visible = true;
+      col-26-width = 93;
+      col-3-visible = false;
+      col-3-width = 90;
+      col-9-visible = true;
+      col-9-width = 295;
       columns-order = [
         0
         1
@@ -241,13 +265,17 @@ with lib.hm.gvariant;
         25
         26
       ];
+      sort-col = 8;
+      sort-order = 0;
     };
 
     "org/gnome/gnome-system-monitor" = {
       show-dependencies = false;
-      show-whose-processes = "user";
-      window-height = 840;
-      window-width = 1186;
+      show-whose-processes = "all";
+      solaris-mode = false;
+      update-interval = 15000;
+      window-height = 987;
+      window-width = 1825;
     };
 
     "org/gnome/mutter" = {

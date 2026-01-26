@@ -73,8 +73,8 @@
             set -g @kanagawa-show-powerline true
             set -g @kanagawa-show-edge-icons true
 
-            set -g @kanagawa-network-bandwidth-download-label " "
-            set -g @kanagawa-network-bandwidth-upload-label " "
+            set -g @kanagawa-network-bandwidth-download-label "  "
+            set -g @kanagawa-network-bandwidth-upload-label "  "
             set -g @kanagawa-cpu-usage-label " "
             set -g @kanagawa-cpu-usage-colors "carp_yellow dark_gray"
             set -g @kanagawa-ram-usage-label " "

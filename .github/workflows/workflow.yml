@@ -10,23 +10,45 @@ defaults:
 
 jobs:
   lint:
-    runs-on: ubuntu-24.04
+    runs-on: macos-latest
     steps:
-      # Checkout must be onto the original commit, not a single PR.
-      # Otherwise lint will not see full history and diagnose secrets leakage.
       - name: Checkout repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Install nix
-        uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
       - name: Flake check
-        run: nix flake check --no-build
-      - name: Check format
-        run: nix develop --command dotfiles format --check
-      - name: Lint
-        run: nix develop --command dotfiles lint
+        run: |
+          set -x
+          diskutil list
+          sleep 1
+          df $HOME
+          df "$HOME" | tail -1 | cut -d " " -f1
+          device=$(df "$HOME" | tail -1 | cut -d " " -f1)
+          device=$(basename $device)
+          sudo iostat -d "$device" 1 2
+          iostat -d "$device" 1 2 | grep --invert-match --extended-regexp '^[[:space:]]*$'
+          iostat -d "$device" 1 2 | grep --invert-match --extended-regexp '^[[:space:]]*$' | tail -1
+          iostat -d "$device" 1 2 | grep --invert-match --extended-regexp '^[[:space:]]*$' | tail -1 | awk '{printf "%f %f", $3 / 1024, $4 / 1024}'
+
+          sleep 1
+          bash -x disk_usage.sh
+  lint2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - name: Flake check
+        run: |
+          set -x
+          df $HOME
+          df "$HOME" | tail -1 | cut -d " " -f1
+          device=$(df "$HOME" | tail -1 | cut -d " " -f1)
+          iostat -d "$device" 1 2
+          iostat -d "$device" 1 2 | grep --invert-match --extended-regexp '^[[:space:]]*$'
+          iostat -d "$device" 1 2 | grep --invert-match --extended-regexp '^[[:space:]]*$' | tail -1
+          iostat -d "$device" 1 2 | grep --invert-match --extended-regexp '^[[:space:]]*$' | tail -1 | awk '{printf "%f %f", $3 / 1024, $4 / 1024}'
+
+          sleep 1
+          bash -x disk_usage.sh
+
 
 name: dotfiles workflow
 

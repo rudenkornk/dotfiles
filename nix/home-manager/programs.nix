@@ -11,6 +11,13 @@
     vim
     wget
 
+    # System tools.
+    alsa-utils
+    dbus
+    pavucontrol
+    pciutils
+    sof-firmware
+
     # Compilers, interpreters, debuggers & build systems.
     (lib.hiPrio gcc)
     ansible
@@ -179,7 +186,6 @@
 
     # Other useful tools.
     asciinema
-    dbus
     dconf
     dconf-editor
     dos2unix

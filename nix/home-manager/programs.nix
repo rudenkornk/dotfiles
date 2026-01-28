@@ -1,195 +1,193 @@
 { pkgs, ... }:
 
 {
-  home = {
-    packages = with pkgs; [
-      # Basic tools.
-      curl
-      git
-      moreutils
-      patch
-      uutils-coreutils-noprefix
-      vim
-      wget
+  home.packages = with pkgs; [
+    # Basic tools.
+    curl
+    git
+    moreutils
+    patch
+    uutils-coreutils-noprefix
+    vim
+    wget
 
-      # Compilers, interpreters, debuggers & build systems.
-      (lib.hiPrio gcc)
-      ansible
-      automake
-      bison
-      cargo
-      ccache
-      clang
-      clippy
-      cmake
-      flex
-      gdb
-      gnumake
-      go
-      graphviz
-      jq
-      libgcc
-      llvm
-      lua5_4
-      m4
-      ninja
-      nodejs
-      ocaml
-      openjdk21
-      perl
-      pkg-config
-      poppler-utils
-      python311
-      ruby
-      rustc
-      rustfmt
-      tcl
-      texlive.combined.scheme-full
-      typst
-      valgrind
-      zig
+    # Compilers, interpreters, debuggers & build systems.
+    (lib.hiPrio gcc)
+    ansible
+    automake
+    bison
+    cargo
+    ccache
+    clang
+    clippy
+    cmake
+    flex
+    gdb
+    gnumake
+    go
+    graphviz
+    jq
+    libgcc
+    llvm
+    lua5_4
+    m4
+    ninja
+    nodejs
+    ocaml
+    openjdk21
+    perl
+    pkg-config
+    poppler-utils
+    python311
+    ruby
+    rustc
+    rustfmt
+    tcl
+    texlive.combined.scheme-full
+    typst
+    valgrind
+    zig
 
-      # Package managers.
-      uv
-      vcpkg
-      yarn
+    # Package managers.
+    uv
+    vcpkg
+    yarn
 
-      # Formatters & linters.
-      ansible-lint
-      gitleaks
-      markdownlint-cli2
-      mypy
-      nixfmt
-      prettier
-      ruff
-      shellcheck
-      shfmt
-      statix
-      stylua
-      typos
+    # Formatters & linters.
+    ansible-lint
+    gitleaks
+    markdownlint-cli2
+    mypy
+    nixfmt
+    prettier
+    ruff
+    shellcheck
+    shfmt
+    statix
+    stylua
+    typos
 
-      # Trust & encryption tools.
-      age
-      age-plugin-tpm
-      cacert
-      gnupg
-      gpgme
-      sops
-      tpm2-tools
+    # Trust & encryption tools.
+    age
+    age-plugin-tpm
+    cacert
+    gnupg
+    gpgme
+    sops
+    tpm2-tools
 
-      # Networking tools.
-      iptables
-      iputils
-      lftp
-      ntp
+    # Networking tools.
+    iptables
+    iputils
+    lftp
+    ntp
 
-      # Remote desktop, corporate tooling & VPNs.
-      coder
-      openconnect
-      openldap
-      openvpn
-      throne
+    # Remote desktop, corporate tooling & VPNs.
+    coder
+    openconnect
+    openldap
+    openvpn
+    throne
 
-      # Virtualization & containerization tools.
-      docker
-      docker-compose
-      docker-machine-kvm2 # Required for `minikube --driver kvm2`, see https://github.com/kubernetes/minikube/issues/6023#issuecomment-2103782263
-      kubectl
-      minikube
-      podman
-      qemu_full
+    # Virtualization & containerization tools.
+    docker
+    docker-compose
+    docker-machine-kvm2 # Required for `minikube --driver kvm2`, see https://github.com/kubernetes/minikube/issues/6023#issuecomment-2103782263
+    kubectl
+    minikube
+    podman
+    qemu_full
 
-      # File management & search tools.
-      bat
-      dua
-      dust
-      eza
-      fd
-      file
-      fzf
-      hexyl
-      ripgrep
-      rsync
+    # File management & search tools.
+    bat
+    dua
+    dust
+    eza
+    fd
+    file
+    fzf
+    hexyl
+    ripgrep
+    rsync
 
-      # Archival tools.
-      bzip2
-      gnutar
-      gzip
-      libarchive
-      p7zip
-      unar
-      unrar
-      unzip
-      xz
-      zip
+    # Archival tools.
+    bzip2
+    gnutar
+    gzip
+    libarchive
+    p7zip
+    unar
+    unrar
+    unzip
+    xz
+    zip
 
-      # Shells & shells extensions.
-      atuin
-      bash-completion
-      carapace
-      fish
-      nushell
-      oh-my-posh
-      powershell
-      tmux
+    # Shells & shells extensions.
+    atuin
+    bash-completion
+    carapace
+    fish
+    nushell
+    oh-my-posh
+    powershell
+    tmux
 
-      # Nix.
-      dconf2nix
-      home-manager
-      nix-diff
-      nix-index
-      nix-melt
-      nix-output-monitor
-      nix-top
-      nix-tree
+    # Nix.
+    dconf2nix
+    home-manager
+    nix-diff
+    nix-index
+    nix-melt
+    nix-output-monitor
+    nix-top
+    nix-tree
 
-      # CLI AI tools.
-      (locallib.with_secrets { pkg = aider-chat-full; })
-      (locallib.with_secrets { pkg = claude-code; })
-      (locallib.with_secrets { pkg = codex; })
-      (locallib.with_secrets { pkg = cursor-cli; })
-      (locallib.with_secrets { pkg = gemini-cli; })
-      (locallib.with_secrets { pkg = github-copilot-cli; })
-      (locallib.with_secrets { pkg = opencode; })
-      (locallib.with_secrets { pkg = qwen-code; })
+    # CLI AI tools.
+    (locallib.with_secrets { pkg = aider-chat-full; })
+    (locallib.with_secrets { pkg = claude-code; })
+    (locallib.with_secrets { pkg = codex; })
+    (locallib.with_secrets { pkg = cursor-cli; })
+    (locallib.with_secrets { pkg = gemini-cli; })
+    (locallib.with_secrets { pkg = github-copilot-cli; })
+    (locallib.with_secrets { pkg = opencode; })
+    (locallib.with_secrets { pkg = qwen-code; })
 
-      # Fonts & graphics.
-      (lib.hiPrio xorg.xvfb)
-      corefonts
-      fontconfig
-      ncurses
+    # Fonts & graphics.
+    (lib.hiPrio xorg.xvfb)
+    corefonts
+    fontconfig
+    ncurses
 
-      # CJK fonts for chinese, japanese, korean languages in Chrome.
-      wqy_zenhei
-      noto-fonts-cjk-sans
+    # CJK fonts for chinese, japanese, korean languages in Chrome.
+    wqy_zenhei
+    noto-fonts-cjk-sans
 
-      # Monitoring & system info.
-      htop-vim
-      lsb-release
-      lsof
-      neofetch
-      ntfs3g
-      nvtopPackages.full
-      sysstat
+    # Monitoring & system info.
+    htop-vim
+    lsb-release
+    lsof
+    neofetch
+    ntfs3g
+    nvtopPackages.full
+    sysstat
 
-      # GUI apps.
-      google-chrome
-      libreoffice
-      telegram-desktop
+    # GUI apps.
+    google-chrome
+    libreoffice
+    telegram-desktop
 
-      # Other useful tools.
-      asciinema
-      dbus
-      dconf
-      dconf-editor
-      dos2unix
-      gh
-      hyperfine
-      tldr
-      wiki-tui
-      xh
-    ];
-  };
+    # Other useful tools.
+    asciinema
+    dbus
+    dconf
+    dconf-editor
+    dos2unix
+    gh
+    hyperfine
+    tldr
+    wiki-tui
+    xh
+  ];
 
   imports = [
     ./programs/atuin.nix

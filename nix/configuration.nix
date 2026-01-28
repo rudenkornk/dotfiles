@@ -47,7 +47,7 @@
   };
 
   networking = {
-    hostName = "nixos";
+    hostName = host.name;
     networkmanager = {
       enable = true;
       plugins = with pkgs; [

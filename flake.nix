@@ -41,18 +41,8 @@
       };
       hostfiles = pkgs.locallib.get_modules ./nix/hosts;
       hosts = lib.mapAttrs (name: file: { inherit name file; }) hostfiles;
-      users = {
-        rudenkornk = {
-          username = "rudenkornk";
-          description = "Nikita Rudenko";
-          userkind = "default";
-        };
-        rudenkornk_corp = {
-          username = "rudenkornk_corp";
-          description = "Nikita Rudenko (corp)";
-          userkind = "corp";
-        };
-      };
+      userfiles = pkgs.locallib.get_modules ./nix/users;
+      users = lib.mapAttrs (lib.const import) userfiles;
     in
     rec {
       nixosConfigurations = builtins.mapAttrs (

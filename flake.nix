@@ -35,7 +35,7 @@
       pkgs = import inputs.nixpkgs {
         inherit system;
         config = {
-          allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
+          allowUnfreePredicate = import ./nix/nixpkgs/unfree.nix { inherit lib; };
         };
         overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
       };

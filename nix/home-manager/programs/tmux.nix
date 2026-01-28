@@ -75,6 +75,7 @@
 
             set -g @kanagawa-network-bandwidth-download-label "  "
             set -g @kanagawa-network-bandwidth-upload-label "  "
+            set -g @kanagawa-network-bandwidth-interval "5"
             set -g @kanagawa-cpu-usage-label " "
             set -g @kanagawa-cpu-usage-colors "carp_yellow dark_gray"
             set -g @kanagawa-ram-usage-label " "

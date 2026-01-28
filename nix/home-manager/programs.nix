@@ -135,6 +135,7 @@
     # Nix.
     dconf2nix
     home-manager
+    nh
     nix-diff
     nix-index
     nix-melt

@@ -23,5 +23,7 @@
 
   fonts.fontconfig.enable = true;
 
+  # We cannot use `pkgs.locallib.get_modules2` in `imports`, because it will result in
+  # infinite recursion error.
   imports = import ../nixpkgs/overlays/locallib/get_modules2.nix null ./programs;
 }

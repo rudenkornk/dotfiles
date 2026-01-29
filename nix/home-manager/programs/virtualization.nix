@@ -13,5 +13,10 @@
     qemu_full
   ];
 
+  home.shellAliases = {
+    d = "docker";
+    p = "podman";
+  };
+
   imports = [ ./virtualization/docker-cli.nix ];
 }

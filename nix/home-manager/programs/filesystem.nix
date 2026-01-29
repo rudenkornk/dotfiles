@@ -15,6 +15,7 @@
   ];
 
   imports = [
+    ./filesystem/bat.nix
     ./filesystem/eza.nix
     ./filesystem/yazi.nix
     ./filesystem/zoxide.nix

@@ -11,6 +11,7 @@
     homeDirectory = "/home/${user.username}";
     sessionVariables = {
       USERKIND = user.userkind;
+      LESSCHARSET = "utf-8";
     };
 
     # This value determines the Home Manager release that your configuration is
@@ -36,7 +37,6 @@
 
   imports = [
     ./dconf/settings.nix
-    ./home/shellAliases.nix
     ./programs.nix
   ];
 }

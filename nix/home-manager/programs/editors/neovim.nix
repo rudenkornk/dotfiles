@@ -90,5 +90,10 @@ in
       "${xdg.dataHome}/nvim/mason/packages/vue-language-server/node_modules/@vue/language-server".source =
         "${pkgs.vue-language-server}/lib/language-tools/packages/language-server";
     };
+
+    shellAliases = {
+      v = "nvim";
+      vd = "nvim -d";
+    };
   };
 }

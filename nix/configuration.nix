@@ -157,7 +157,11 @@
   }) users;
 
   home-manager = {
-    extraSpecialArgs = { inherit pkgs inputs; };
+    extraSpecialArgs = {
+      inherit pkgs inputs;
+      # This is presented in pkgs.locallib, but cannot be used in `imports` clause from there.
+      get_modules = import ./nixpkgs/overlays/locallib/get_modules.nix null;
+    };
     users = builtins.mapAttrs (
       name: user: args:
       import ./home-manager/home.nix (args // { inherit user; })

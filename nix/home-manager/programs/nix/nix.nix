@@ -1,4 +1,4 @@
-{ pkgs, get_modules, ... }:
+{ pkgs, ... }:
 
 # Nix-related tools.
 {
@@ -13,6 +13,4 @@
     nix-top
     nix-tree
   ];
-
-  imports = get_modules ./nix;
 }

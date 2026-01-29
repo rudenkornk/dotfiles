@@ -17,6 +17,4 @@
     d = "docker";
     p = "podman";
   };
-
-  imports = get_modules ./virtualization;
 }

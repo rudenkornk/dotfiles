@@ -1,4 +1,4 @@
-{ pkgs, get_modules, ... }:
+{ pkgs, ... }:
 
 # Shells & shells extensions.
 {
@@ -12,6 +12,4 @@
     powershell
     tmux
   ];
-
-  imports = get_modules ./shell;
 }

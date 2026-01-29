@@ -1,219 +1,25 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    # Basic tools.
-    curl
-    git
-    moreutils
-    patch
-    uutils-coreutils-noprefix
-    vim
-    wget
-
-    # System tools.
-    alsa-utils
-    dbus
-    pavucontrol
-    pciutils
-    sof-firmware
-
-    # Compilers, interpreters, debuggers & build systems.
-    (lib.hiPrio gcc)
-    ansible
-    automake
-    bison
-    cargo
-    ccache
-    clang
-    clippy
-    cmake
-    flex
-    gdb
-    gnumake
-    go
-    graphviz
-    jq
-    libgcc
-    llvm
-    lua5_4
-    m4
-    ninja
-    nodejs
-    ocaml
-    openjdk21
-    perl
-    pkg-config
-    poppler-utils
-    python311
-    ruby
-    rustc
-    rustfmt
-    tcl
-    texlive.combined.scheme-full
-    typst
-    valgrind
-    zig
-
-    # Package managers.
-    uv
-    vcpkg
-    yarn
-
-    # Formatters & linters.
-    ansible-lint
-    gitleaks
-    markdownlint-cli2
-    mypy
-    nixfmt
-    prettier
-    ruff
-    shellcheck
-    shfmt
-    statix
-    stylua
-    typos
-
-    # Trust & encryption tools.
-    age
-    age-plugin-tpm
-    cacert
-    gnupg
-    gpgme
-    sops
-    tpm2-tools
-
-    # Networking tools.
-    iptables
-    iputils
-    lftp
-    ntp
-
-    # Remote desktop, corporate tooling & VPNs.
-    coder
-    openconnect
-    openldap
-    openvpn
-    throne
-
-    # Virtualization & containerization tools.
-    docker
-    docker-compose
-    docker-machine-kvm2 # Required for `minikube --driver kvm2`, see https://github.com/kubernetes/minikube/issues/6023#issuecomment-2103782263
-    kubectl
-    kubernetes
-    minikube
-    podman
-    qemu_full
-
-    # File management & search tools.
-    bat
-    dua
-    dust
-    eza
-    fd
-    file
-    fzf
-    hexyl
-    ripgrep
-    rsync
-
-    # Archival tools.
-    bzip2
-    gnutar
-    gzip
-    libarchive
-    p7zip
-    unar
-    unrar
-    unzip
-    xz
-    zip
-
-    # Shells & shells extensions.
-    atuin
-    bash-completion
-    carapace
-    fish
-    nushell
-    oh-my-posh
-    powershell
-    tmux
-
-    # Nix.
-    dconf2nix
-    home-manager
-    nh
-    nix-diff
-    nix-index
-    nix-melt
-    nix-output-monitor
-    nix-top
-    nix-tree
-
-    # CLI AI tools.
-    (locallib.with_secrets { pkg = aider-chat-full; })
-    (locallib.with_secrets { pkg = claude-code; })
-    (locallib.with_secrets { pkg = codex; })
-    (locallib.with_secrets { pkg = cursor-cli; })
-    (locallib.with_secrets { pkg = gemini-cli; })
-    (locallib.with_secrets { pkg = github-copilot-cli; })
-    (locallib.with_secrets { pkg = opencode; })
-    (locallib.with_secrets { pkg = qwen-code; })
-
-    # Fonts & graphics.
-    (lib.hiPrio xorg.xvfb)
-    corefonts
-    fontconfig
-    ncurses
-
-    # CJK fonts for chinese, japanese, korean languages in Chrome.
-    wqy_zenhei
-    noto-fonts-cjk-sans
-
-    # Monitoring & system info.
-    htop-vim
-    lsb-release
-    lsof
-    neofetch
-    ntfs3g
-    nvtopPackages.full
-    sysstat
-
-    # GUI apps.
-    google-chrome
-    libreoffice
-    telegram-desktop
-
-    # Other useful tools.
-    asciinema
-    dconf
-    dconf-editor
-    dos2unix
-    gh
-    hyperfine
-    tldr
-    wiki-tui
-    xh
-  ];
-
   imports = [
-    ./programs/atuin.nix
-    ./programs/crush.nix
-    ./programs/docker-cli.nix
-    ./programs/eza.nix
-    ./programs/fish.nix
-    ./programs/git.nix
-    ./programs/gnome-shell.nix
-    ./programs/kitty.nix
-    ./programs/lazygit.nix
-    ./programs/mypy.nix
-    ./programs/neovim.nix
-    ./programs/nix-search-tv.nix
-    ./programs/oh-my-posh.nix
-    ./programs/ruff.nix
-    ./programs/tmux.nix
-    ./programs/yazi.nix
-    ./programs/zoxide.nix
+    ./programs/ai.nix
+    ./programs/archival.nix
+    ./programs/basic.nix
+    ./programs/editors.nix
+    ./programs/encryption.nix
+    ./programs/filesystem.nix
+    ./programs/fonts.nix
+    ./programs/gui.nix
+    ./programs/linters.nix
+    ./programs/networking.nix
+    ./programs/nix.nix
+    ./programs/other.nix
+    ./programs/package-managers.nix
+    ./programs/remotes.nix
+    ./programs/shell.nix
+    ./programs/system.nix
+    ./programs/toolchains.nix
+    ./programs/vcs.nix
+    ./programs/virtualization.nix
   ];
 }

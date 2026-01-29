@@ -17,19 +17,19 @@
     # to avoid mistakes.
     # newSession has an adverse side effect: a new sessions is also created on config reload.
     newSession = false;
-    clock24 = true; # No effect actually, since clock is managed by tmux-kanagawa plugin.
+    clock24 = true; # No effect actually, since clock is managed by tmux-ukiyo plugin.
 
     prefix = "C-s";
     mouse = true;
     extraConfig = builtins.readFile ./tmux/tmux.conf;
     plugins =
       let
-        # TODO: remove this when tmux-kanagawa is updated in nixpkgs.
-        # https://github.com/NixOS/nixpkgs/pull/474114
-        kanagawa-upd = pkgs.tmuxPlugins.mkTmuxPlugin {
-          pluginName = "kanagawa";
+        # TODO: remove this when tmux-ukiyo is updated in nixpkgs.
+        # https://github.com/NixOS/nixpkgs/pull/485092
+        ukiyo-upd = pkgs.tmuxPlugins.mkTmuxPlugin {
+          pluginName = "ukiyo";
           version = "1.0.0";
-          src = inputs.tmux_plugin_kanagawa;
+          src = inputs.tmux_plugin_ukiyo;
         };
       in
       with pkgs.tmuxPlugins;
@@ -66,26 +66,29 @@
           '';
         }
         {
-          plugin = kanagawa-upd;
+          plugin = ukiyo-upd;
           extraConfig = ''
-            set -g @kanagawa-theme 'dragon'
-            set -g @kanagawa-plugins "network-bandwidth disk-usage cpu-usage ram-usage weather ssh-session"
-            set -g @kanagawa-show-powerline true
-            set -g @kanagawa-show-edge-icons true
+            set -g @ukiyo-theme 'tokyonight/night'
 
-            set -g @kanagawa-network-bandwidth-download-label "  "
-            set -g @kanagawa-network-bandwidth-upload-label "  "
-            set -g @kanagawa-network-bandwidth-interval "5"
-            set -g @kanagawa-cpu-usage-label " "
-            set -g @kanagawa-cpu-usage-colors "carp_yellow dark_gray"
-            set -g @kanagawa-ram-usage-label " "
-            set -g @kanagawa-ram-usage-colors "carp_yellow dark_gray"
-            set -g @kanagawa-disk-usage-colors "orange dark_gray"
-            set -g @kanagawa-show-location false
-            set -g @kanagawa-left-icon "#(date '+%d.%m.%y %R')"
-            set -g @kanagawa-show-ssh-session-port true
-            set -g @kanagawa-time-colors "green dark_gray"
-            set -g @kanagawa-weather-colors "green dark_gray"
+            set -g @ukiyo-plugins "network-bandwidth disk-usage cpu-usage ram-usage weather ssh-session"
+            set -g @ukiyo-show-powerline true
+
+            set -g @ukiyo-left-icon "#(date '+%d.%m.%y %R')"
+
+            set -g @ukiyo-network-bandwidth-download-label " "
+            set -g @ukiyo-network-bandwidth-upload-label " "
+            set -g @ukiyo-network-bandwidth-interval "2"
+            set -g @ukiyo-network-bandwidth-min-unit-divisor "1024"
+            set -g @ukiyo-network-bandwidth-unit-fmt "%3.0f"
+
+            set -g @ukiyo-cpu-usage-label " "
+            set -g @ukiyo-cpu-usage-colors "info bg_pane"
+
+            set -g @ukiyo-ram-usage-label " "
+
+            set -g @ukiyo-weather-colors "accent bg_pane"
+            set -g @ukiyo-show-location false
+            set -g @ukiyo-show-ssh-session-port true
           '';
         }
       ];

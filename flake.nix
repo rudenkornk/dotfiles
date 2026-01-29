@@ -20,8 +20,8 @@
       url = "github:NixOS/nixos-hardware/master";
     };
 
-    tmux_plugin_kanagawa = {
-      url = "github:rudenkornk/tmux-kanagawa";
+    tmux_plugin_ukiyo = {
+      url = "github:Nybkox/tmux-ukiyo";
       flake = false;
     };
   };

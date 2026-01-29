@@ -9,6 +9,7 @@
   ];
 
   imports = [
+    ./gui/firefox.nix
     ./gui/flameshot.nix
     ./gui/gnome-shell.nix
     ./gui/kitty.nix

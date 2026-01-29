@@ -26,7 +26,7 @@
           with pkgs;
           lib.replaceStrings
             [ "@corp_auth@" "@jq@" "@sops-cached@" "@openldap@" ]
-            [ "${../../secrets/corp_auth.sops.json}" "${jq}" "${sops-cached}" "${openldap}" ]
+            [ "${../../../secrets/corp_auth.sops.json}" "${jq}" "${sops-cached}" "${openldap}" ]
             (builtins.readFile ./fish/functions/ldaps.fish);
         wraps = "ldapsearch";
       };
@@ -39,7 +39,7 @@
           with pkgs;
           lib.replaceStrings
             [ "@corp_auth@" "@jq@" "@sops-cached@" "@openconnect@" ]
-            [ "${../../secrets/corp_auth.sops.json}" "${jq}" "${sops-cached}" "${openconnect}" ]
+            [ "${../../../secrets/corp_auth.sops.json}" "${jq}" "${sops-cached}" "${openconnect}" ]
             (builtins.readFile ./fish/functions/openconnect_corp.fish);
         wraps = "openconnect";
       };

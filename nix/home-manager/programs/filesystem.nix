@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, get_modules, ... }:
 
 # File management & search tools.
 {
@@ -14,10 +14,5 @@
     rsync
   ];
 
-  imports = [
-    ./filesystem/bat.nix
-    ./filesystem/eza.nix
-    ./filesystem/yazi.nix
-    ./filesystem/zoxide.nix
-  ];
+  imports = get_modules ./filesystem;
 }

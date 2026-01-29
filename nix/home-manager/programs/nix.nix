@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, get_modules, ... }:
 
 # Nix-related tools.
 {
@@ -14,5 +14,5 @@
     nix-tree
   ];
 
-  imports = [ ./nix/nix-search-tv.nix ];
+  imports = get_modules ./nix;
 }

@@ -1,9 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, get_modules, ... }:
 
 # VCS.
 {
-  imports = [
-    ./vcs/git.nix
-    ./vcs/lazygit.nix
-  ];
+  imports = get_modules ./vcs;
 }

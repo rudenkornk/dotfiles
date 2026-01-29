@@ -39,9 +39,9 @@
         };
         overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
       };
-      hostfiles = pkgs.locallib.get_modules ./nix/hosts;
+      hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
       hosts = lib.mapAttrs (name: file: { inherit name file; }) hostfiles;
-      userfiles = pkgs.locallib.get_modules ./nix/users;
+      userfiles = pkgs.locallib.get_modules_map ./nix/users;
       users = lib.mapAttrs (lib.const import) userfiles;
     in
     rec {

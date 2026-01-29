@@ -1,7 +1,7 @@
 _: final: prev:
 
 let
-  lib_modules = import ./locallib/get_modules.nix null ./locallib;
+  lib_modules = import ./locallib/get_modules_map.nix null ./locallib;
   locallib = builtins.mapAttrs (name: value: import value { pkgs = final; }) lib_modules;
 in
 {

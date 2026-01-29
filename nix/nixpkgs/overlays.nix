@@ -3,7 +3,7 @@
 args:
 
 let
-  overlay_modules = builtins.attrValues (import ./overlays/locallib/get_modules.nix null ./overlays);
+  overlay_modules = import ./overlays/locallib/get_modules.nix null ./overlays;
   overlays = map (overlay: import overlay args) overlay_modules;
 in
 overlays

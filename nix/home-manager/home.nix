@@ -23,8 +23,5 @@
 
   fonts.fontconfig.enable = true;
 
-  imports = [
-    ./dconf/settings.nix
-  ]
-  ++ import ../nixpkgs/overlays/locallib/get_modules2.nix null ./programs;
+  imports = import ../nixpkgs/overlays/locallib/get_modules2.nix null ./programs;
 }

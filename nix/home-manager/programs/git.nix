@@ -30,6 +30,7 @@ _: {
         rb = "rebase";
         rbi = "rebase --rebase-merges --interactive HEAD~26";
         rh = "reset --hard";
+        rt = "restore";
         rv = "remote -v";
         sg = "diff --staged";
         sh = "show";

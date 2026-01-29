@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-# Compilers, interpreters, debuggers & build systems.
+# Compilers, interpreters, build systems & language processors.
 {
   home.packages = with pkgs; [
     (lib.hiPrio gcc)
@@ -12,8 +12,10 @@
     clang
     clippy
     cmake
+    dart
+    dotnet-sdk
     flex
-    gdb
+    gleam
     gnumake
     go
     graphviz
@@ -22,14 +24,18 @@
     llvm
     lua5_4
     m4
+    mermaid-cli
     ninja
     nodejs
+    nushell
     ocaml
     openjdk21
     perl
+    php
     pkg-config
     poppler-utils
     python311
+    python3Packages.pylatexenc
     ruby
     rustc
     rustfmt
@@ -37,6 +43,7 @@
     texlive.combined.scheme-full
     typst
     valgrind
+    yq
     zig
   ];
 }

@@ -98,8 +98,8 @@ def hooks() -> None:
 @utils.typer_exit()
 def gnome() -> None:
     """Regenerate gnome settings."""
-    domain_rules_path = REPO_PATH / "nix" / "home-manager" / "dconf" / "rules.yaml"
-    nix_path = REPO_PATH / "nix" / "home-manager" / "dconf" / "settings.nix"
+    domain_rules_path = REPO_PATH / "nix" / "home-manager" / "programs" / "gui" / "dconf" / "rules.yaml"
+    nix_path = REPO_PATH / "nix" / "home-manager" / "programs" / "gui" / "dconf.nix"
     rules = gnome_target.DomainRules.load(domain_rules_path)
     gnome_target.gnome_config(rules=rules, nix_path=nix_path)
 

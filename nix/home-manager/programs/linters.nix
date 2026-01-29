@@ -1,4 +1,9 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  get_modules,
+  ...
+}:
 
 # Formatters & linters.
 {
@@ -49,8 +54,5 @@
     ".pydocstyle".source = ./linters/configs/.pydocstyle;
   };
 
-  imports = [
-    ./linters/mypy.nix
-    ./linters/ruff.nix
-  ];
+  imports = get_modules ./linters;
 }

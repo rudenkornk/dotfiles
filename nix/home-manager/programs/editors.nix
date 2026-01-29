@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, get_modules, ... }:
 
 # Editors.
 {
   home.packages = with pkgs; [ vim ];
-  imports = [ ./editors/neovim.nix ];
+  imports = get_modules ./editors;
 }

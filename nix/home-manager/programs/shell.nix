@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, get_modules, ... }:
 
 # Shells & shells extensions.
 {
@@ -13,11 +13,5 @@
     tmux
   ];
 
-  imports = [
-    ./shell/atuin.nix
-    ./shell/bash.nix
-    ./shell/fish.nix
-    ./shell/oh-my-posh.nix
-    ./shell/tmux.nix
-  ];
+  imports = get_modules ./shell;
 }

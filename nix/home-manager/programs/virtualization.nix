@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, get_modules, ... }:
 
 # Virtualization & containerization tools.
 {
@@ -18,5 +18,5 @@
     p = "podman";
   };
 
-  imports = [ ./virtualization/docker-cli.nix ];
+  imports = get_modules ./virtualization;
 }

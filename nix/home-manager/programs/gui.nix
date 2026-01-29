@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, get_modules, ... }:
 
 # GUI apps.
 {
@@ -8,10 +8,5 @@
     telegram-desktop
   ];
 
-  imports = [
-    ./gui/firefox.nix
-    ./gui/flameshot.nix
-    ./gui/gnome-shell.nix
-    ./gui/kitty.nix
-  ];
+  imports = get_modules ./gui;
 }

@@ -148,4 +148,7 @@ _: {
       };
     };
   };
+  home.shellAliases = {
+    g = "git";
+  };
 }

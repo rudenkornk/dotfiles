@@ -1,9 +1,4 @@
-{
-  user,
-  config,
-  pkgs,
-  ...
-}:
+{ user, ... }:
 
 {
   home = {
@@ -22,13 +17,6 @@
     # want to update the value, then make sure to first check the Home Manager
     # release notes.
     stateVersion = "25.11"; # Did you read the comment?
-
-    file = {
-      ".ssh" = {
-        source = pkgs.locallib.secrets + /ssh;
-        recursive = true;
-      };
-    };
   };
 
   xdg.enable = true;

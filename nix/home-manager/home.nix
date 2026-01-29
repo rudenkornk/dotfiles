@@ -38,6 +38,5 @@
     ./dconf/settings.nix
     ./home/shellAliases.nix
     ./programs.nix
-    ./services/flameshot.nix
   ];
 }

@@ -12,6 +12,7 @@
     host.file
     inputs.home-manager.nixosModules.default
     inputs.sops-nix.nixosModules.sops
+    inputs.stylix.nixosModules.stylix
   ];
 
   # This value determines the NixOS release from which the default
@@ -155,6 +156,12 @@
       "wheel"
     ];
   }) users;
+
+  stylix = {
+    enable = true;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+
+  };
 
   home-manager = {
     extraSpecialArgs = { inherit pkgs inputs; };

@@ -102,7 +102,7 @@
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "sops-nix": "sops-nix",
-        "tmux_plugin_kanagawa": "tmux_plugin_kanagawa"
+        "tmux_plugin_ukiyo": "tmux_plugin_ukiyo"
       }
     },
     "sops-nix": {
@@ -125,19 +125,19 @@
         "type": "github"
       }
     },
-    "tmux_plugin_kanagawa": {
+    "tmux_plugin_ukiyo": {
       "flake": false,
       "locked": {
-        "lastModified": 1769355247,
-        "narHash": "sha256-J7DVICvYTDQwHjIbSYgA6U9xr50NNfiZzBcoq5nsmNc=",
-        "owner": "rudenkornk",
-        "repo": "tmux-kanagawa",
-        "rev": "98c57ab46778a95a1e91f690e2513dae8c19f5aa",
+        "lastModified": 1769698773,
+        "narHash": "sha256-OztWAMxs6rUQ1dfdRD935iMxJD6xACX89k4ypPRhNuc=",
+        "owner": "Nybkox",
+        "repo": "tmux-ukiyo",
+        "rev": "bf4fbf9be5c4e6a72b36f851b76bb4a8737a5839",
         "type": "github"
       },
       "original": {
-        "owner": "rudenkornk",
-        "repo": "tmux-kanagawa",
+        "owner": "Nybkox",
+        "repo": "tmux-ukiyo",
         "type": "github"
       }
     }

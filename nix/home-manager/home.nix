@@ -1,4 +1,9 @@
-{ user, config, ... }:
+{
+  user,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   home = {
@@ -29,7 +34,7 @@
       ".pydocstyle".source = ./configs/.pydocstyle;
 
       ".ssh" = {
-        source = ../secrets/ssh;
+        source = pkgs.locallib.secrets + /ssh;
         recursive = true;
       };
     };

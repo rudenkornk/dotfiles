@@ -14,5 +14,18 @@
         }
       ]
     }
+  },
+  "mcp": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "nix",
+      "args": ["run", "github:utensils/mcp-nixos", "--"],
+      "timeout": 120
+    }
+  },
+  "lsp": {
+    "nix": {
+      "command": "nil"
+    }
   }
 }

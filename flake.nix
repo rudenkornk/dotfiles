@@ -58,11 +58,7 @@
         name: user:
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = {
-            inherit inputs user;
-            # This is presented in pkgs.locallib, but cannot be used in `imports` clause from there.
-            get_modules = import ./nix/nixpkgs/overlays/locallib/get_modules.nix null;
-          };
+          extraSpecialArgs = { inherit inputs user; };
           modules = [ ./nix/home-manager/home.nix ];
         }
       ) users;

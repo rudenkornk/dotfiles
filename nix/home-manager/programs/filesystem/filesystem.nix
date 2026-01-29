@@ -1,4 +1,4 @@
-{ pkgs, get_modules, ... }:
+{ pkgs, ... }:
 
 # File management & search tools.
 {
@@ -13,6 +13,4 @@
     ripgrep
     rsync
   ];
-
-  imports = get_modules ./filesystem;
 }

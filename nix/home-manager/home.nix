@@ -25,6 +25,6 @@
 
   imports = [
     ./dconf/settings.nix
-    ./programs.nix
-  ];
+  ]
+  ++ import ../nixpkgs/overlays/locallib/get_modules2.nix null ./programs;
 }

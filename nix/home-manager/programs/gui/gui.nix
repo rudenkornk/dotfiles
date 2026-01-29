@@ -1,4 +1,4 @@
-{ pkgs, get_modules, ... }:
+{ pkgs, ... }:
 
 # GUI apps.
 {
@@ -7,6 +7,4 @@
     libreoffice
     telegram-desktop
   ];
-
-  imports = get_modules ./gui;
 }

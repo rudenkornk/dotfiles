@@ -66,6 +66,7 @@ in
 
   home = {
     packages = with pkgs; [
+      vim
       sqlite
       wl-clipboard
       xsel

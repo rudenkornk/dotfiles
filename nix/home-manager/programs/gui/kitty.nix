@@ -4,10 +4,6 @@
   programs.kitty = {
     enable = true;
     themeFile = "Dracula";
-    font = {
-      name = "JetBrainsMono Nerd Font";
-      size = 11.0;
-    };
     shellIntegration = {
       enableFishIntegration = true;
       enableBashIntegration = true;
@@ -23,15 +19,5 @@
       hide_window_decorations = true;
       shell = "${pkgs.fish}/bin/fish";
     };
-  };
-
-  home = {
-    packages =
-      with pkgs;
-      [ fontconfig ]
-      ++ (with pkgs.nerd-fonts; [
-        fira-code
-        jetbrains-mono
-      ]);
   };
 }

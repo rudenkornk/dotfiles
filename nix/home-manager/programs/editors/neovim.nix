@@ -54,95 +54,8 @@ in
         YAMLTiny
       ])
 
+      # Other tools.
       ++ (with pkgs; [
-        # Formatters & linters.
-        actionlint
-        beautysh
-        black
-        python3Packages.flake8
-        clang-tools
-        cpplint
-        eslint
-        ghalint
-        gitleaks
-        gitlint
-        kube-linter
-        markdownlint-cli2
-        mypy
-        nixfmt
-        pylint
-        rubocop
-        ruff
-        shfmt
-        statix
-        stylua
-        ty
-        vscode-extensions.dbaeumer.vscode-eslint
-        yamlfmt
-        yamllint
-        isort
-        python3Packages.pydocstyle
-
-        # LSP servers.
-        angular-language-server
-        astro-language-server
-        bash-language-server
-        copilot-language-server
-        docker-compose-language-service
-        dockerfile-language-server
-        gitlab-ci-ls
-        gopls
-        helm-ls
-        kotlin-language-server
-        lua-language-server
-        marksman
-        neocmakelsp
-        nil
-        ocamlPackages.ocaml-lsp
-        phpactor
-        pyright
-        ruby-lsp
-        rust-analyzer
-        svelte-language-server
-        tailwindcss-language-server
-        taplo
-        terraform-ls
-        texlab
-        tinymist
-        typescript-language-server
-        vscode-extensions.elixir-lsp.vscode-elixir-ls
-        vscode-extensions.gleam.gleam
-        vscode-extensions.mathiasfrohlich.kotlin
-        vscode-extensions.redhat.ansible
-        vscode-json-languageserver
-        vscode-langservers-extracted
-        vtsls
-        vue-language-server
-        yaml-language-server
-        zls
-
-        # Compilers, interpreters & language processors.
-        dart
-        dotnet-sdk
-        gleam
-        jq
-        mermaid-cli
-        nushell
-        ocaml
-        php
-        python3Packages.pylatexenc
-        typst
-        yq
-
-        # Debuggers.
-        lldb
-        netcoredbg
-        python3Packages.debugpy
-        vscode-extensions.vadimcn.vscode-lldb
-        vscode-extensions.xdebug.php-debug
-        vscode-js-debug
-
-        # Other tools.
         ghostscript
         imagemagick
         tree-sitter
@@ -153,13 +66,6 @@ in
 
   home = {
     packages = with pkgs; [
-      angular-language-server
-      astro-language-server
-      svelte-language-server
-      vscode-js-debug
-      vue-language-server
-
-      python3Packages.debugpy
       sqlite
       wl-clipboard
       xsel

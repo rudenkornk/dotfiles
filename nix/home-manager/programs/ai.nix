@@ -19,5 +19,6 @@
 
   home.file = {
     "${config.xdg.configHome}/crush/crush.json".source = ./ai/crush/crush.json;
+    ".copilot/mcp-config.json".source = ./ai/copilot/mcp-config.json;
   };
 }

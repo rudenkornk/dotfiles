@@ -23,16 +23,6 @@
     stateVersion = "25.11"; # Did you read the comment?
 
     file = {
-      "${config.xdg.configHome}" = {
-        source = ./configs/.config;
-        recursive = true;
-      };
-      ".copilot/mcp-config.json".source = ./configs/.copilot/mcp-config.json;
-      ".groovylintrc.json".source = ./configs/.groovylintrc.json;
-      ".isort.cfg".source = ./configs/.isort.cfg;
-      ".markdownlint.yaml".source = ./configs/.markdownlint.yaml;
-      ".pydocstyle".source = ./configs/.pydocstyle;
-
       ".ssh" = {
         source = pkgs.locallib.secrets + /ssh;
         recursive = true;

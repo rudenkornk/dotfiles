@@ -1,7 +1,11 @@
 _: {
   programs.lazygit = {
     enable = true;
-    enableBashIntegration = true;
+    # Disable bash integration, since it is broken in lazygit:
+    #     bash: ~/.bashrc: line 82: syntax error near unexpected token `('
+    #     bash: ~/.bashrc: line 82: `lg() {'
+    # https://github.com/nix-community/home-manager/pull/8670
+    enableBashIntegration = false;
     enableFishIntegration = true;
     settings = {
       gui = {

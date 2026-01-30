@@ -128,11 +128,11 @@
     "tmux_plugin_ukiyo": {
       "flake": false,
       "locked": {
-        "lastModified": 1769698773,
-        "narHash": "sha256-OztWAMxs6rUQ1dfdRD935iMxJD6xACX89k4ypPRhNuc=",
+        "lastModified": 1769776888,
+        "narHash": "sha256-ILQVOQ6cfG7I7hFN72mgSTc0AZZW4WWHSxwWKbK0piY=",
         "owner": "Nybkox",
         "repo": "tmux-ukiyo",
-        "rev": "bf4fbf9be5c4e6a72b36f851b76bb4a8737a5839",
+        "rev": "14fdf51ad16f7b81019c53b987877e78e697f51b",
         "type": "github"
       },
       "original": {

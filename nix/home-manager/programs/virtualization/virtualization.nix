@@ -18,4 +18,11 @@
     d = "docker";
     p = "podman";
   };
+
+  programs.docker-cli = {
+    enable = true;
+    settings = {
+      detachKeys = "ctrl-z";
+    };
+  };
 }

@@ -47,4 +47,13 @@
     ".markdownlint.yaml".source = ./configs/.markdownlint.yaml;
     ".pydocstyle".source = ./configs/.pydocstyle;
   };
+
+  programs.mypy = {
+    enable = true;
+    settings = {
+      mypy = {
+        strict = true;
+      };
+    };
+  };
 }

@@ -77,9 +77,11 @@
 
             set -g @ukiyo-network-bandwidth-download-label " "
             set -g @ukiyo-network-bandwidth-upload-label " "
-            set -g @ukiyo-network-bandwidth-interval "2"
-            set -g @ukiyo-network-bandwidth-min-unit-divisor "1024"
-            set -g @ukiyo-network-bandwidth-unit-fmt "%3.0f"
+            set -g @ukiyo-network-bandwidth-interval "5"
+            set -g @ukiyo-network-bandwidth-min-unit-divisor "1048576"
+            set -g @ukiyo-network-bandwidth-unit-fmt "%5.1f"
+
+            set -g @ukiyo-disk-format "%5.1fMiB/s"
 
             set -g @ukiyo-cpu-usage-label " "
             set -g @ukiyo-cpu-usage-colors "info bg_pane"

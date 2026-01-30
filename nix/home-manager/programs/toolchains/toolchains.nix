@@ -25,6 +25,7 @@
     lua5_4
     m4
     mermaid-cli
+    molecule
     ninja
     nodejs
     nushell

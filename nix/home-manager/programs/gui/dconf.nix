@@ -10,6 +10,10 @@ with lib.hm.gvariant;
       version = "1.5.33";
     };
 
+    "org/gnome/Showtime/State" = {
+      is-maximized = false;
+    };
+
     "org/gnome/Snapshot" = {
       play-shutter-sound = false;
     };
@@ -25,6 +29,10 @@ with lib.hm.gvariant;
       source-units = "radian";
       target-currency = "DZD";
       target-units = "degree";
+    };
+
+    "org/gnome/desktop/a11y" = {
+      always-show-universal-access-status = true;
     };
 
     "org/gnome/desktop/app-folders" = {
@@ -71,6 +79,13 @@ with lib.hm.gvariant;
       translate = true;
     };
 
+    "org/gnome/desktop/background" = {
+      picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/amber-l.jxl";
+      picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/amber-d.jxl";
+      primary-color = "#ff7800";
+      secondary-color = "#000000";
+    };
+
     "org/gnome/desktop/calendar" = {
       show-weekdate = true;
     };
@@ -102,6 +117,7 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/interface" = {
       clock-show-weekday = true;
+      monospace-font-name = "JetBrainsMono Nerd Font 12";
     };
 
     "org/gnome/desktop/notifications/application/gnome-about-panel" = {
@@ -201,6 +217,10 @@ with lib.hm.gvariant;
       toggle-maximized = [ "<Control><Alt>r" ];
     };
 
+    "org/gnome/eog/view" = {
+      background-color = "#24283b";
+    };
+
     "org/gnome/gnome-system-monitor/disktreenew" = {
       col-6-visible = true;
       col-6-width = 0;
@@ -270,6 +290,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/gnome-system-monitor" = {
+      resources-disk-expanded = true;
       show-dependencies = false;
       show-whose-processes = "all";
       solaris-mode = false;
@@ -297,7 +318,22 @@ with lib.hm.gvariant;
       workspaces-only-on-primary = false;
     };
 
+    "org/gnome/papers/default" = {
+      annot-color = "yellow";
+      continuous = true;
+      dual-page = false;
+      dual-page-odd-left = false;
+      enable-spellchecking = true;
+      show-sidebar = true;
+      sizing-mode = "automatic";
+    };
+
+    "org/gnome/papers" = {
+      night-mode = false;
+    };
+
     "org/gnome/settings-daemon/plugins/color" = {
+      night-light-enabled = false;
       night-light-schedule-automatic = false;
     };
 

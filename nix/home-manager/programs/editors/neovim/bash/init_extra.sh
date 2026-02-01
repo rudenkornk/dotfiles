@@ -1,11 +1,4 @@
-#!/usr/bin/env bash
-
-stty erase '^?'
-stty -ixon
-
-alias v=nvim
-alias vd="nvim -d"
-
+# shellcheck shell=bash
 # See neovim.fish for explanation.
 if [[ -n "$NVIM" && -n "$MYVIMRC" ]]; then
   unset HTTP_PROXY

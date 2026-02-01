@@ -97,4 +97,13 @@ in
       vd = "nvim -d";
     };
   };
+
+  programs = {
+    fish = {
+      interactiveShellInit = builtins.readFile ./neovim/fish/conf.d/neovim.fish;
+    };
+    bash = {
+      initExtra = builtins.readFile ./neovim/bash/init_extra.sh;
+    };
+  };
 }

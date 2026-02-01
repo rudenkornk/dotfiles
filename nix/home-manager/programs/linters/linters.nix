@@ -13,6 +13,7 @@
     ghalint
     gitleaks
     gitlint
+    golangci-lint
     isort
     kube-linter
     markdownlint-cli2

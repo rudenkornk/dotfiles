@@ -43,6 +43,15 @@
             (builtins.readFile ./fish/functions/openconnect_corp.fish);
         wraps = "openconnect";
       };
+      Throne = {
+        body =
+          with pkgs;
+          lib.replaceStrings
+            [ "@throne@" ]
+            [ "${throne}" ]
+            (builtins.readFile ./fish/functions/Throne.fish);
+        wraps = "Throne";
+      };
     };
     interactiveShellInit = ''
       source ${./fish/conf.d/fzf.fish}

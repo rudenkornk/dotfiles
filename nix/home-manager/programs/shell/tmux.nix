@@ -95,4 +95,8 @@
         }
       ];
   };
+
+  programs.fish = {
+    interactiveShellInit = builtins.readFile ./tmux/fish/conf.d/tmux.fish;
+  };
 }

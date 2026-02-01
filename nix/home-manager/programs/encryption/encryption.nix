@@ -41,4 +41,13 @@
       SOPS_EDITOR = "unshare --net --map-root-user vim -Z -u DEFAULTS -i NONE -n";
     };
   };
+
+  programs.fish = {
+    functions = {
+      sops = {
+        body = builtins.readFile ./fish/functions/sops.fish;
+        wraps = "sops";
+      };
+    };
+  };
 }

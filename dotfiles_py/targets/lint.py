@@ -26,12 +26,12 @@ def lint_code(*, repo_path: Path) -> None:
     run_shell(["statix", "check", repo_path])
 
     run_shell(["mypy", repo_path])
-    run_shell(["ruff", "check"])
+    run_shell(["ruff", "check"], cwd=repo_path)
     run_shell(["yamllint", "--strict", repo_path / ".github"])
 
-    run_shell(["shellcheck", *git_files(repo_path, ".sh")])
+    run_shell(["shellcheck", *git_files(repo_path, ".sh")], cwd=repo_path)
 
-    run_shell(["typos"])
+    run_shell(["typos"], cwd=repo_path)
 
     run_shell(["markdownlint-cli2", "."], cwd=repo_path)
 
@@ -50,10 +50,13 @@ def format_code(*, repo_path: Path, check: bool) -> None:
     run_shell(["ruff", "format", *check_arg], cwd=repo_path)
     run_shell(["ruff", "check", "--fix", "--unsafe-fixes", *diff_arg], cwd=repo_path)
 
-    run_shell(["mdformat", *git_files(repo_path, ".md"), *check_arg])
+    run_shell(["mdformat", *git_files(repo_path, ".md"), *check_arg], cwd=repo_path)
     run_shell(["shfmt", *write_arg, *diff_arg, repo_path])
     fish_files = git_files(repo_path, ".fish")
     # fish_indent is a fish builtin, so we need to invoke a shell and pass everything as one argument.
-    run_shell(["fish", "--no-config", "--command", "fish_indent " + " ".join(write_arg + check_arg + fish_files)])
-    run_shell(["prettier", *write_arg, repo_path, *check_arg])
-    run_shell(["stylua", repo_path, *check_arg])
+    run_shell(
+        ["fish", "--no-config", "--command", "fish_indent " + " ".join(write_arg + check_arg + fish_files)],
+        cwd=repo_path,
+    )
+    run_shell(["prettier", *write_arg, repo_path, *check_arg], cwd=repo_path)
+    run_shell(["stylua", repo_path, *check_arg], cwd=repo_path)

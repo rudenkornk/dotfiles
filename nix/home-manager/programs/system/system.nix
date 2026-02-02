@@ -3,6 +3,7 @@
 # System, monitoring & system info tools.
 {
   home.packages = with pkgs; [
+    acpi
     alsa-utils
     dbus
     htop-vim

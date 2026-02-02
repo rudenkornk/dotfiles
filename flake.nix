@@ -31,6 +31,7 @@
     let
       inherit (inputs) home-manager;
       inherit (inputs.nixpkgs) lib;
+      inherit (builtins) mapAttrs;
       system = "x86_64-linux";
       pkgs = import inputs.nixpkgs {
         inherit system;
@@ -40,12 +41,12 @@
         overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
       };
       hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
-      hosts = lib.mapAttrs (name: file: { inherit name file; }) hostfiles;
+      hosts = mapAttrs (name: file: { inherit name file; }) hostfiles;
       userfiles = pkgs.locallib.get_modules_map ./nix/users;
-      users = lib.mapAttrs (lib.const import) userfiles;
+      users = mapAttrs (lib.const import) userfiles;
     in
     rec {
-      nixosConfigurations = builtins.mapAttrs (
+      nixosConfigurations = mapAttrs (
         name: host:
         lib.nixosSystem {
           inherit system pkgs;
@@ -54,7 +55,7 @@
         }
       ) hosts;
 
-      homeConfigurations = builtins.mapAttrs (
+      homeConfigurations = mapAttrs (
         name: user:
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
@@ -63,7 +64,7 @@
         }
       ) users;
       # Also register home-manager configs for `nix flake check`.
-      checks."${system}" = builtins.mapAttrs (name: config: config.activationPackage) homeConfigurations;
+      checks."${system}" = mapAttrs (name: config: config.activationPackage) homeConfigurations;
 
       devShells.${system}.default = import ./nix/devshell.nix { inherit pkgs; };
     };

@@ -17,8 +17,8 @@
     (locallib.with_secrets { pkg = qwen-code; })
   ];
 
-  home.file = {
-    "${config.xdg.configHome}/crush/crush.json".source = ./crush/crush.json;
-    ".copilot/mcp-config.json".source = ./copilot/mcp-config.json;
+  home.file = pkgs.locallib.homefiles {
+    inherit (config) xdg;
+    path = ./configs;
   };
 }

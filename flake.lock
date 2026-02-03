@@ -46,14 +46,13 @@
       "locked": {
         "lastModified": 1767185284,
         "narHash": "sha256-ljDBUDpD1Cg5n3mJI81Hz5qeZAwCGxon4kQW3Ho3+6Q=",
-        "owner": "NixOS",
+        "owner": "nixos",
         "repo": "nixos-hardware",
         "rev": "40b1a28dce561bea34858287fbb23052c3ee63fe",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "master",
+        "owner": "nixos",
         "repo": "nixos-hardware",
         "type": "github"
       }
@@ -85,13 +84,13 @@
         "lastModified": 1769276368,
         "narHash": "sha256-8nPZ46zpG9Ma4KIAALtQmu7MqzHBULpiyMNRsKLX/Ro=",
         "owner": "nix-community",
-        "repo": "NUR",
+        "repo": "nur",
         "rev": "5a0a92b9aea3fe294d8c00fe52e2d00b9738bfa4",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
-        "repo": "NUR",
+        "repo": "nur",
         "type": "github"
       }
     },
@@ -114,13 +113,13 @@
       "locked": {
         "lastModified": 1767499857,
         "narHash": "sha256-0zUU/PW09d6oBaR8x8vMHcAhg1MOvo3CwoXgHijzzNE=",
-        "owner": "Mic92",
+        "owner": "mic92",
         "repo": "sops-nix",
         "rev": "ecc41505948ec2ab0325f14c9862a4329c2b4190",
         "type": "github"
       },
       "original": {
-        "owner": "Mic92",
+        "owner": "mic92",
         "repo": "sops-nix",
         "type": "github"
       }
@@ -130,13 +129,13 @@
       "locked": {
         "lastModified": 1769776888,
         "narHash": "sha256-ILQVOQ6cfG7I7hFN72mgSTc0AZZW4WWHSxwWKbK0piY=",
-        "owner": "Nybkox",
+        "owner": "nybkox",
         "repo": "tmux-ukiyo",
         "rev": "14fdf51ad16f7b81019c53b987877e78e697f51b",
         "type": "github"
       },
       "original": {
-        "owner": "Nybkox",
+        "owner": "nybkox",
         "repo": "tmux-ukiyo",
         "type": "github"
       }

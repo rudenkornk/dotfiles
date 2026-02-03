@@ -23,6 +23,7 @@ _: {
     enable = true;
     enableFishIntegration = true;
     enableBashIntegration = true;
+    enableNushellIntegration = true;
     icons = "always";
     extraOptions = [ "--classify" ];
   };

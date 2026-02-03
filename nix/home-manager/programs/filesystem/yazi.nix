@@ -3,6 +3,7 @@ _: {
     enable = true;
     enableBashIntegration = true;
     enableFishIntegration = true;
+    enableNushellIntegration = true;
     settings = {
       mgr = {
         show_hidden = true;

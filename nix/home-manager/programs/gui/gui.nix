@@ -7,4 +7,8 @@
     libreoffice
     telegram-desktop
   ];
+
+  programs.firefox = {
+    enable = true;
+  };
 }

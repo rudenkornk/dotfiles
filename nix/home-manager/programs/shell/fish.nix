@@ -5,10 +5,6 @@
     enable = true;
 
     functions = {
-      c = {
-        wraps = "z";
-        body = builtins.readFile ./fish/functions/c.fish;
-      };
       fish_greeting = {
         body = "";
       };

@@ -4,8 +4,11 @@
       url = "github:nixos/nixpkgs/nixos-25.11";
     };
     nur = {
-      url = "github:nix-community/NUR";
+      url = "github:nix-community/nur";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-hardware = {
+      url = "github:nixos/nixos-hardware";
     };
 
     home-manager = {
@@ -13,15 +16,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix";
+      url = "github:mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixos-hardware = {
-      url = "github:NixOS/nixos-hardware/master";
     };
 
     tmux_plugin_ukiyo = {
-      url = "github:Nybkox/tmux-ukiyo";
+      url = "github:nybkox/tmux-ukiyo";
       flake = false;
     };
   };

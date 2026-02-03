@@ -23,7 +23,7 @@ _: {
     enable = true;
     enableFishIntegration = true;
     enableBashIntegration = true;
-    enableNushellIntegration = true;
+    enableNushellIntegration = false; # Do not replace nushell's ls builtin.
     icons = "always";
     extraOptions = [ "--classify" ];
   };

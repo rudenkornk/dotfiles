@@ -7,6 +7,7 @@ _: {
     # https://github.com/nix-community/home-manager/pull/8670
     enableBashIntegration = false;
     enableFishIntegration = true;
+    enableNushellIntegration = true;
     settings = {
       gui = {
         # The number of lines you scroll by when scrolling the main window

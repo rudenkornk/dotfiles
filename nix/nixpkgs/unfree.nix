@@ -3,24 +3,24 @@
 pkg:
 builtins.any (prefix: lib.hasPrefix prefix (lib.getName pkg)) [
   # nvidia-related stuff.
-  "nvidia-"
   "cuda-"
   "cuda_"
   "libcu"
-  "libnvjitlink"
   "libnpp"
+  "libnvjitlink"
+  "nvidia-"
 
   # AI.
   "claude-"
+  "copilot-"
   "crush"
   "cursor-"
-  "github-"
   "gemini-"
-  "copilot-"
+  "github-"
 
   # Generic apps.
-  "google-chrome"
   "corefonts"
+  "google-chrome"
   "terraform"
   "unrar"
 ]

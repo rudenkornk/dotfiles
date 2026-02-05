@@ -38,6 +38,8 @@
       kernelModules = [ ];
       luks.devices."luks-af224072-4e2b-4576-95c0-86df4fa2a40a".device =
         "/dev/disk/by-uuid/af224072-4e2b-4576-95c0-86df4fa2a40a";
+      luks.devices."luks-eff1c0ef-9d50-4135-b042-7e283dbba58c".device =
+        "/dev/disk/by-uuid/eff1c0ef-9d50-4135-b042-7e283dbba58c";
     };
 
     kernelModules = [ "kvm-intel" ];
@@ -58,7 +60,7 @@
     ];
   };
 
-  swapDevices = [ ];
+  swapDevices = [ { device = "/dev/mapper/luks-eff1c0ef-9d50-4135-b042-7e283dbba58c"; } ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

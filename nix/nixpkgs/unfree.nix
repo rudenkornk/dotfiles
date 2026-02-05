@@ -23,4 +23,5 @@ builtins.any (prefix: lib.hasPrefix prefix (lib.getName pkg)) [
   "google-chrome"
   "terraform"
   "unrar"
+  "vagrant"
 ]

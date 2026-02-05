@@ -12,6 +12,7 @@
     minikube
     podman
     qemu_full
+    vagrant
   ];
 
   home.shellAliases = {

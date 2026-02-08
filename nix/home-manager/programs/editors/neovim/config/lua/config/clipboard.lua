@@ -47,4 +47,4 @@ local clipboards = {
   },
 }
 
-return clipboards[require("config.this_clipboard")]
+return clipboards["xsel"]

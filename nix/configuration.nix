@@ -115,7 +115,40 @@
       };
     };
 
-    printing.enable = true;
+    # https://wiki.nixos.org/wiki/Printing
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+    };
+    printing = {
+      enable = true;
+      drivers = with pkgs; [
+        brgenml1lpr
+        brlaser # Brother Laser.
+        cnijfilter2 # Canon Pixma devices (Proprietary driver)
+        cups-browsed
+        cups-filters
+        epson-escpr # Epson devices.
+        epson-escpr2 # Newer Epson devices.
+        gutenprint # Wide range of inkjet/laser printers.
+        gutenprintBin # Additional, binary-only drivers for some printers.
+        hplip # HP Printers.
+        hplipWithPlugin # Drivers for HP printers, with the proprietary plugin, see also Setting up HP printers with proprietary drivers.
+        brgenml1cupswrapper # More Brother printers (Proprietary drivers).
+        postscript-lexmark # Postscript drivers for Lexmark.
+        samsung-unified-linux-driver # Proprietary Samsung Drivers.
+        splix # Drivers for printers supporting SPL (Samsung Printer Language).
+      ];
+
+      # Security issues?
+      # https://discourse.nixos.org/t/newly-announced-vulnerabilities-in-cups/52771
+      browsed.enable = false;
+      browsing = false; # Default value.
+      defaultShared = false; # Default value.
+      startWhenNeeded = true; # Default value.
+    };
+
     pulseaudio.enable = false;
     pipewire = {
       enable = true;

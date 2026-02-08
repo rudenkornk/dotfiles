@@ -5,6 +5,7 @@
   home.packages = with pkgs; [
     acpi
     alsa-utils
+    cups
     dbus
     htop-vim
     lsb-release
@@ -14,6 +15,7 @@
     nvtopPackages.full
     pavucontrol
     pciutils
+    sbctl
     sof-firmware
     sysstat
   ];

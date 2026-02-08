@@ -10,6 +10,12 @@ builtins.any (prefix: lib.hasPrefix prefix (lib.getName pkg)) [
   "libnvjitlink"
   "nvidia-"
 
+  # Printer drivers.
+  "brgenml1lpr"
+  "cnijfilter2"
+  "hplip"
+  "samsung-unified-linux-driver"
+
   # AI.
   "claude-"
   "copilot-"

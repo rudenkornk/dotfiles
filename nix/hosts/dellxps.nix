@@ -52,5 +52,12 @@
   swapDevices = [ { device = "/dev/mapper/luks-ff12b5a3-e0af-4db6-bf90-e8a8b5d912c7"; } ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware = {
+    cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+    logitech.wireless = {
+      enable = true;
+      enableGraphical = true;
+    };
+  };
 }

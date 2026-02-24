@@ -22,7 +22,7 @@ M.dependencies = {
 -- `internet` as an antonym for `intranet`.
 local internet_providers = {
   copilot = {
-    score_offset = 20,
+    score_offset = 0,
   },
 }
 local maybe_internet_providers = os.getenv("USERKIND") == "default" and internet_providers or {}
@@ -50,7 +50,7 @@ M.opts = {
         -- Should match minuet.config.request_timeout * 1000,
         -- since minuet.config.request_timeout is in seconds
         timeout_ms = 3000,
-        score_offset = 10,
+        score_offset = 0,
       },
     }, maybe_internet_providers),
   },

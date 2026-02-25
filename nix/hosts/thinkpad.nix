@@ -42,6 +42,11 @@
         "/dev/disk/by-uuid/eff1c0ef-9d50-4135-b042-7e283dbba58c";
     };
 
+    kernel = {
+      sysctl = {
+        "vm.swappiness" = 10; # Plenty of RAM allows to reduce swap usage.
+      };
+    };
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
   };

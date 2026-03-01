@@ -8,6 +8,7 @@
     cups
     dbus
     htop-vim
+    libcgroup
     lsb-release
     lsof
     neofetch

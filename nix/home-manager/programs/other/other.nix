@@ -10,6 +10,8 @@
       dos2unix
       gh
       hyperfine
+      stress
+      stress-ng
       wiki-tui
       xh
     ];

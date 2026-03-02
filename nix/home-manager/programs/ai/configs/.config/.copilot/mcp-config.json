@@ -1,8 +1,23 @@
 {
   "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "tools": ["*"]
+    },
     "nixos": {
       "command": "nix",
       "args": ["run", "github:utensils/mcp-nixos", "--"],
+      "tools": ["*"]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"],
+      "tools": ["*"]
+    },
+    "cloudflare-doc": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://docs.mcp.cloudflare.com/mcp"],
       "tools": ["*"]
     }
   }

@@ -14,6 +14,7 @@
     neofetch
     ntfs3g
     nvtopPackages.full
+    parted
     pavucontrol
     pciutils
     sbctl

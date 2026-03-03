@@ -27,13 +27,13 @@
   boot = {
     initrd = {
       availableKernelModules = [
-        "xhci_pci"
-        "thunderbolt"
         "nvme"
-        "usbhid"
-        "usb_storage"
-        "sd_mod"
         "rtsx_pci_sdmmc"
+        "sd_mod"
+        "thunderbolt"
+        "usb_storage"
+        "usbhid"
+        "xhci_pci"
       ];
       kernelModules = [ ];
       luks.devices."luks-af224072-4e2b-4576-95c0-86df4fa2a40a".device =

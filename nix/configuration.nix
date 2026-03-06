@@ -206,7 +206,7 @@
 
   programs = {
     nix-ld = {
-      enable = true;
+      enable = false;
       libraries = with pkgs; [
         # Add any missing dynamic libraries for unpackaged programs
         # here, NOT in environment.systemPackages

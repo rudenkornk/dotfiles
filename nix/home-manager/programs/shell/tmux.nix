@@ -3,21 +3,10 @@
 {
   programs.tmux = {
     enable = true;
-    sensibleOnTop = true;
-    # Despite enabled sensibleOnTop, home-manager still overrides some of its settings.
-    # We need to explicitly set them here again.
-    escapeTime = 0;
-    historyLimit = 100000;
-    terminal = "screen-256color";
-    keyMode = "emacs";
-    focusEvents = true;
-    aggressiveResize = true;
 
-    # Actually false by default, but let's set it explicitly,
-    # to avoid mistakes.
-    # newSession has an adverse side effect: a new sessions is also created on config reload.
+    # Actually false by default, but let's set it explicitly, to avoid mistakes.
+    # newSession has an adverse side effect: a new session is also created on config reload.
     newSession = false;
-    clock24 = true; # No effect actually, since clock is managed by tmux-ukiyo plugin.
 
     prefix = "C-s";
     mouse = true;
@@ -34,6 +23,12 @@
       in
       with pkgs.tmuxPlugins;
       [
+        {
+          # home-manager actually has `sensibleOnTop` option, but for some reason it loads `sensible`
+          # at the very top. After that home-manager **overwrites** same settings with its own defaults.
+          # Adding sensible as a normal plugin, since in that case it is placed **after** home-manager's defaults.
+          plugin = sensible;
+        }
         {
           # Quick copy pane contents with tmux-fingers,
           # Alternatives to tmux-fingers:

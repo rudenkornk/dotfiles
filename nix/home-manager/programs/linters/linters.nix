@@ -8,6 +8,7 @@
     beautysh
     black
     clang-tools
+    cmake-lint
     cpplint
     eslint
     ghalint

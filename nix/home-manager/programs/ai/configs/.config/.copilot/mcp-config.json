@@ -10,5 +10,6 @@
       "args": ["run", "github:utensils/mcp-nixos", "--"],
       "tools": ["*"]
     }
-  }
+  },
+  "allowedTools": ["sequential-thinking"]
 }

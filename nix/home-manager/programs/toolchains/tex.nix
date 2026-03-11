@@ -5,9 +5,11 @@
   home.packages = with pkgs; [
     graphviz
     mermaid-cli
+    pandoc
     poppler-utils
     python3Packages.pylatexenc
     texlive.combined.scheme-full
+    texlivePackages.cm-unicode
     typst
   ];
 }

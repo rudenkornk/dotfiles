@@ -24,6 +24,10 @@ return {
     },
   },
   {
+    "neovim/nvim-lspconfig",
+    opts = require("plugins.configs.lspconfig").opts,
+  },
+  {
     "nvim-lualine/lualine.nvim", -- Core UI plugin for statusline.
     opts = require("plugins.configs.lualine").opts,
   },

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "keybinds": {
+    "editor_open": "alt+e",
+    "messages_page_up": "pageup,ctrl+b",
+    "messages_page_down": "pagedown,ctrl+f",
+    "messages_half_page_up": "ctrl+u",
+    "messages_half_page_down": "ctrl+d",
+    "input_move_left": "left",
+    "input_move_right": "right"
+  }
+}

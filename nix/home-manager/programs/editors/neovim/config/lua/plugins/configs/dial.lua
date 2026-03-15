@@ -28,6 +28,7 @@ M.config = function()
   local on_off = { "on", "off" }
   local yes_no = { "yes", "no" }
   local included_excluded = { "included", "excluded" }
+  local visibility = { "private", "protected", "public" }
   local numbers = {
     "one",
     "two",
@@ -85,7 +86,8 @@ M.config = function()
   local boolean_ops_augend = create_constants(boolean_ops, true, true)
   local on_off_augend = create_constants(on_off, true, true)
   local yes_no_augend = create_constants(yes_no, true, true)
-  local included_excluded_augend = create_constants(included_excluded, true, true)
+  local included_excluded_augend = create_constants(included_excluded, false, true)
+  local visibility_augend = create_constants(visibility, false, true)
   local number_augend = create_constants(numbers, false, false)
   local ordinal_augend = create_constants(ordinals, false, false)
   local weekday_augend = create_constants(weekdays, false, true)
@@ -107,6 +109,7 @@ M.config = function()
       unpack(on_off_augend),
       unpack(yes_no_augend),
       unpack(included_excluded_augend),
+      unpack(visibility_augend),
       unpack(number_augend),
       unpack(ordinal_augend),
       unpack(weekday_augend),

@@ -11,6 +11,12 @@
           "name": "Qwen3-Coder-30B-A3B-Instruct-FP8",
           "context_window": 256000,
           "default_max_tokens": 16384
+        },
+        {
+          "id": "GLM-4.7-FP8",
+          "name": "GLM-4.7-FP8",
+          "context_window": 256000,
+          "default_max_tokens": 16384
         }
       ]
     }

@@ -3,6 +3,7 @@
 # Debuggers.
 {
   home.packages = with pkgs; [
+    creduce
     gdb
     lldb
     netcoredbg

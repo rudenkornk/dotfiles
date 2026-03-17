@@ -65,7 +65,7 @@
           extraConfig = ''
             set -g @ukiyo-theme 'tokyonight/night'
 
-            set -g @ukiyo-plugins "network-bandwidth disk-usage cpu-usage ram-usage weather ssh-session"
+            set -g @ukiyo-plugins "network-bandwidth disk-usage cpu-usage ram-usage ssh-session"
             set -g @ukiyo-show-powerline true
 
             set -g @ukiyo-left-icon "#(date '+%d.%m.%y %R')"

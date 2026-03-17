@@ -6,4 +6,21 @@
       "command": ["nix", "run", "github:utensils/mcp-nixos", "--"],
     },
   },
+  "provider": {
+    "corp": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "{env:OPENAI_BASE_URL}",
+        "apiKey": "{env:OPENAI_API_KEY}",
+      },
+      "models": {
+        "Qwen3-Coder-30B-A3B-Instruct-FP8": {
+          "name": "Qwen3-Coder-30B-A3B-Instruct-FP8",
+        },
+        "GLM-4.7-FP8": {
+          "name": "GLM-4.7-FP8",
+        },
+      },
+    },
+  },
 }

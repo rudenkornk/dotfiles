@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 # System, monitoring & system info tools.
 {
@@ -21,4 +21,9 @@
     sof-firmware
     sysstat
   ];
+
+  home.file = pkgs.locallib.homefiles {
+    inherit (config) xdg;
+    path = ./configs;
+  };
 }

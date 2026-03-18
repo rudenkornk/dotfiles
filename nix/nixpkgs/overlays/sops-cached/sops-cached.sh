@@ -3,7 +3,8 @@
 file="$1"
 suffix="${2:-}"
 
-decrypted=/run/user/"$(id --user)"/secrets/$(basename "$file")_decrypted
+decrypted_name=$(basename "$file")_$(sha1sum "$file" | head -c 10)_decrypted
+decrypted=/run/user/"$(id --user)"/secrets/"$decrypted_name"
 if [[ -n "$suffix" ]]; then
   # Suffix allows making a specific name for a secret.
   # For example some programs may require fixed names for their configs.

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://charm.land/crush.json",
   "providers": {
     "corp": {
       "name": "corp",
@@ -22,7 +23,14 @@
     }
   },
   "mcp": {
-    "filesystem": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer $GITHUB_API_KEY"
+      }
+    },
+    "nix": {
       "type": "stdio",
       "command": "nix",
       "args": ["run", "github:utensils/mcp-nixos", "--"],

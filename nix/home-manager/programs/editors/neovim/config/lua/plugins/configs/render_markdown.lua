@@ -13,6 +13,7 @@ M.opts = {
   pipe_table = { style = "normal" },
   link = { enabled = false },
   win_options = { conceallevel = { default = 0, rendered = 0 } },
+  latex = { enabled = false },
 }
 
 return M

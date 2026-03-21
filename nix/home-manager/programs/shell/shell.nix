@@ -20,7 +20,7 @@
   # ctrl-d delete one char.
   # ctrl-e end of the line.
   # ctrl-f one char forward.
-  # ctrl-g fzf git log.
+  # ctrl-g fzf git.
   # ctrl-h goto left window.
   # ctrl-i tab (shell reserved).
   # ctrl-j goto lower window.
@@ -28,14 +28,14 @@
   # ctrl-l goto right window.
   # ctrl-m enter (shell reserved).
   # ctrl-n next history command.
-  # ctrl-o fzf git status.
+  # ctrl-o fzf nix-search-tv.
   # ctrl-p previous history command.
-  # ctrl-q fzf search files with ripgrep.
+  # ctrl-q fzf search text.
   # ctrl-r fzf command history.
   # ctrl-s tmux reserved.
   # ctrl-t fzf search files.
   # ctrl-u delete all to the left.
-  # ctrl-v fzf search variables (previously paste).
+  # ctrl-v fzf search tldr (previously paste).
   # ctrl-w delete one word to the left.
   # ctrl-x fzf search processes (previously copy fish command).
   # ctrl-y fzf yazi.

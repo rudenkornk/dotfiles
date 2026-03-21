@@ -1,5 +1,9 @@
 for mode in default insert
     bind --mode $mode \cg lazygit
+    bind --mode $mode \co "tv nix-search-tv"
+    bind --mode $mode \cq "tv text"
+    bind --mode $mode \cv "tv tldr"
+    bind --mode $mode \cx "tv procs"
     bind --mode $mode \cy yazi
 end
 

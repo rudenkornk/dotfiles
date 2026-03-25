@@ -1,0 +1,46 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "keybinds": {
+    // ctrl-a move to start of current line.
+    // ctrl-b messages_page_up (previously move cursor back one character).
+    // ctrl-c interrupt process.
+    // ctrl-d LEADER (previously delete character under cursor).
+    // ctrl-e move to end of current line.
+    // ctrl-f messages_page_down (previously move cursor forward one character).
+    // ctrl-g messages_first.
+    // ctrl-h tmux reserved.
+    // ctrl-i shell reserved.
+    // ctrl-j tmux reserved.
+    // ctrl-k tmux reserved.
+    // ctrl-l tmux reserved.
+    // ctrl-m shell reserved.
+    // ctrl-n messages_next.
+    // ctrl-o command list.
+    // ctrl-p messages_previous (previously command list).
+    // ctrl-q
+    // ctrl-r
+    // ctrl-s tmux reserved.
+    // ctrl-t model variants.
+    // ctrl-u previously delete all to the left.
+    // ctrl-v
+    // ctrl-w delete one word to the left.
+    // ctrl-x
+    // ctrl-y messages_copy.
+    // ctrl-z suspend.
+
+    "leader": "ctrl+d",
+    "editor_open": "alt+e",
+    "app_exit": "ctrl+c,<leader>q",
+
+    "command_list": "ctrl+o",
+    "messages_next": "ctrl+n",
+    "messages_page_down": "pagedown,ctrl+f",
+    "messages_page_up": "pageup,ctrl+b",
+    "messages_previous": "ctrl+p",
+    "messages_copy": "ctrl+y,<leader>y",
+    "session_child_cycle": "j,right",
+    "session_child_cycle_reverse": "k,left",
+    "session_child_first": "<leader>j",
+    "session_parent": "h,up",
+  },
+}

@@ -79,12 +79,12 @@ set --export fzf_processes_opts \
 set --export fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
 set --export fzf_files_opts --bind "ctrl-o:execute($EDITOR +{2} {1} &> /dev/tty)"
 
+fzf_configure_bindings --directory=\ct --git_log=\co --git_status= --history=\cr --processes=\cx --variables=\cv --files=\cq
 # fish shell load happens in the following order:
 # 1. Loading plugins, including fzf.fish, which sets default keybindings and `_fzf_uninstall_bindings` function.
 # 2. Loading atuin config, which overwrites `ctrl-r` binding set by fzf.fish.
 # 3. Loading ~/.config/fish/config.fish which invokes this file.
 # 4. `fzf_configure_bindings` in this file invokes `_fzf_uninstall_bindings` to remove all previous bindings set by fzf.fish.
 # 5. `ctrl-r` binding set for atuin is now unset and atuin ctrl-r does not work.
-fzf_configure_bindings --directory=\ct --git_log=\co --git_status= --history= --processes=\cx --variables=\cv --files=\cq
-# To fix this issue, manually restore atuin ctrl-r binding.
-bind ctrl-r _atuin_search
+# To enable atuin's ctrl-r uncomment next line.
+# bind ctrl-r _atuin_search

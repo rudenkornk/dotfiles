@@ -14,7 +14,6 @@
       };
     };
     interactiveShellInit = ''
-      source ${./fish/conf.d/fzf.fish}
       source ${./fish/conf.d/python.fish}
       source ${./fish/conf.d/shell_utils.fish}
       source ${./fish/conf.d/ssh_client.fish}
@@ -27,13 +26,6 @@
       {
         name = "puffer";
         inherit (puffer) src;
-      }
-      {
-        name = "fzf";
-        src = pkgs.applyPatches {
-          inherit (fzf-fish) src;
-          patches = [ ./fish/fzf.fish.patch ];
-        };
       }
     ];
   };

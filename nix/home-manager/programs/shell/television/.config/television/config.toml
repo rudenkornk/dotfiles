@@ -4,7 +4,7 @@ tick_rate = 200
 # ctrl-a = "go_to_input_start"
 ctrl-b = "scroll_preview_half_page_up"
 # ctrl-c = "quit"
-ctrl-d = "select_next_page"
+ctrl-d = "select_next_half_page_nocycle"
 # ctrl-e = "go_to_input_end"
 ctrl-f = "scroll_preview_half_page_down"
 # ctrl-g -- FREE.
@@ -21,7 +21,7 @@ ctrl-f = "scroll_preview_half_page_down"
 ctrl-r  = "cycle_sources"
 # ctrl-s -- tmux reserved.
 # ctrl-t = "toggle_remote_control"
-ctrl-u = "select_prev_page"
+ctrl-u = "select_prev_half_page_nocycle"
 # ctrl-v -- channel reserved.
 # ctrl-w = "delete_prev_word"
 ctrl-x = "toggle_layout"

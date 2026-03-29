@@ -9,5 +9,7 @@
     (lib.setPrio 12 python312)
     (lib.setPrio 13 python313)
     (lib.setPrio 14 python314)
+    jupyter-all
+    python3Packages.jupytext
   ];
 }

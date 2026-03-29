@@ -36,10 +36,12 @@
           luacheck
           luafilesystem
           luasec
+          magick
         ];
 
       extraPython3Packages =
         pythonPkgs: with pythonPkgs; [
+          jupyter-client
           libtmux
           packaging
           pip

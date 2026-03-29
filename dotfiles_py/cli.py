@@ -1,4 +1,5 @@
 import logging
+import os
 import secrets
 import string
 from pathlib import Path
@@ -12,6 +13,7 @@ from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
 from .targets import lint as lint_target
 from .targets import secrets as secrets_target
+from .targets import syms as syms_target
 
 _logger = logging.getLogger(__name__)
 
@@ -109,6 +111,20 @@ def gnome() -> None:
 def updatekeys() -> None:
     """Update AGE keys in project secrets if recipients have changed."""
     secrets_target.updatekeys(repo_path=REPO_PATH)
+
+
+@app.command()
+@utils.typer_exit()
+def syms() -> None:
+    """Create symlinks in home directory for dotfile configs."""
+    xdg_config_home = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+    syms_target.create_symlinks(
+        source_dir=REPO_PATH / "nix/home-manager/programs/editors/neovim/config",
+        target_dir=xdg_config_home / "nvim",
+    )
+    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/shell/television")
+    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/system/configs")
+    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/ai/configs")
 
 
 @app.command()

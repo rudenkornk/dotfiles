@@ -46,8 +46,8 @@ in
       src = unstable.fetchFromGitHub {
         owner = "alexpasmantier";
         repo = "television";
-        rev = "4e699797d8c1c24c0fbbf8f8d619d7b028179573";
-        hash = "sha256-8e22iLuaHLbC51CxR5Eo0AByNUCxHueIVur5WHJCacE=";
+        rev = "2ee64a8bf469074419016ccf3757eb5239b87cc6";
+        hash = "sha256-Ylx6TITM45P4rHO0kPu8nk3/htI1UYTCnMURv5zXTHM=";
       };
     in
     unstable.television.overrideAttrs (_: {

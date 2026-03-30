@@ -119,7 +119,7 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
 ### Root Directory Files
 
 - `flake.nix`: Nix flake defining NixOS configs, Home Manager configs, and dev shell
-- `flake.lock`: Locked dependency versions (nixpkgs 25.11, home-manager, sops-nix)
+- `flake.lock`: Locked dependency versions (nixpkgs 25.11, home-manager)
 - `pyproject.toml`: Python project config with dependencies, ruff/mypy/black/pylint settings
 - `readme.md`: User-facing documentation with bootstrap instructions
 - `manual_tests.md`: Interactive test scenarios (fzf, tmux)
@@ -176,7 +176,7 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
 
 - Uses NixOS 25.11 (stable channel)
 - Home Manager manages user environment for `rudenkornk` and `rudenkornk_corp` users
-- Secrets encrypted with sops-nix and age
+- Secrets encrypted with sops and age
 - Custom keyboard layouts via xkb
 - Fish shell is primary shell (11 .fish files)
 - Neovim config based on LazyVim

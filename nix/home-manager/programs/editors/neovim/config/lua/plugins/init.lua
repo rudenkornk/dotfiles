@@ -151,7 +151,7 @@ return {
       default_mappings = false,
       timeout = 200,
       mappings = {
-        i = { l = { j = "<Esc>" }, ["д"] = { ["о"] = "<Esc>" } },
+        i = { l = { j = "<Esc>" } },
         c = { l = { j = "<C-c>" } },
         t = { l = { j = "<C-\\><C-n>" }, ["д"] = { ["о"] = "<Esc>" } },
         v = { l = { j = "<Esc>" }, ["д"] = { ["о"] = "<Esc>" } },

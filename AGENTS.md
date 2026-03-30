@@ -11,7 +11,7 @@ The repository focuses on configuring development tools including Neovim (LazyVi
 - **Python 3.13**: CLI tooling and automation (8 .py files in `dotfiles_py/`)
 - **Home Manager**: User environment configuration
 - **Languages**: Shell scripts (.sh, .fish), Lua configs (21 files), Nix expressions
-- **Package Management**: uv (Python), Nix flakes
+- **Package Management**: Nix flakes
 
 ## Build and Validation Commands
 
@@ -26,11 +26,10 @@ nix develop
 This command:
 
 - Takes ~10-60 seconds on first run (may fetch packages from cache.nixos.org)
-- Automatically runs `uv sync` to install Python dependencies into `.venv/`
 - Activates the virtual environment automatically
-- Provides all necessary tools: python313, uv, formatters, linters, and more
+- Provides all necessary tools: python313, formatters, linters, and more
 
-**CRITICAL:** Do NOT run `uv sync` manually. The `nix develop` shell hook handles this automatically.
+**CRITICAL:** Do NOT run `uv sync` manually. The `nix develop` shell hook handles python env automatically.
 
 ### Primary Commands
 
@@ -122,7 +121,6 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
 - `flake.nix`: Nix flake defining NixOS configs, Home Manager configs, and dev shell
 - `flake.lock`: Locked dependency versions (nixpkgs 25.11, home-manager, sops-nix)
 - `pyproject.toml`: Python project config with dependencies, ruff/mypy/black/pylint settings
-- `uv.lock`: Python dependency lock file (417 lines)
 - `readme.md`: User-facing documentation with bootstrap instructions
 - `manual_tests.md`: Interactive test scenarios (fzf, tmux)
 - `license.md`: MIT license

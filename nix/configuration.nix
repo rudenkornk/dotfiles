@@ -11,7 +11,6 @@
   imports = [
     host.file
     inputs.home-manager.nixosModules.default
-    inputs.sops-nix.nixosModules.sops
   ];
 
   # This value determines the NixOS release from which the default
@@ -75,9 +74,6 @@
       LC_TIME = "en_GB.UTF-8"; # 24-hour, DD/MM/YYYY format.
     };
   };
-
-  sops.age.keyFile = "/root/.config/sops/age/keys.txt";
-  sops.secrets = { };
 
   services = {
     displayManager.gdm = {

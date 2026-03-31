@@ -117,11 +117,17 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/interface" = {
       clock-show-weekday = true;
+      cursor-size = 32;
+      locate-pointer = true;
       monospace-font-name = "JetBrainsMono Nerd Font 12";
     };
 
     "org/gnome/desktop/notifications/application/gnome-about-panel" = {
       application-id = "gnome-about-panel.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/gnome-power-panel" = {
+      application-id = "gnome-power-panel.desktop";
     };
 
     "org/gnome/desktop/notifications/application/gnome-printers-panel" = {
@@ -134,6 +140,14 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/notifications/application/kitty" = {
       application-id = "kitty.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-gnome-evolution-alarm-notify" = {
+      application-id = "org.gnome.Evolution-alarm-notify.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-gnome-geary" = {
+      application-id = "org.gnome.Geary.desktop";
     };
 
     "org/gnome/desktop/notifications/application/org-telegram-desktop" = {
@@ -197,10 +211,12 @@ with lib.hm.gvariant;
       cycle-windows-backward = [ ];
       minimize = [ "<Control><Alt>c" ];
       move-to-monitor-down = [ "<Control><Alt>s" ];
+      move-to-monitor-left = [ "<Control><Alt>a" ];
+      move-to-monitor-right = [ "<Control><Alt>d" ];
       move-to-monitor-up = [ "<Control><Alt>w" ];
       move-to-workspace-down = [ ];
-      move-to-workspace-left = [ "<Control><Alt>q" ];
-      move-to-workspace-right = [ "<Control><Alt>e" ];
+      move-to-workspace-left = [ "<Control><Alt>j" ];
+      move-to-workspace-right = [ "<Control><Alt>k" ];
       move-to-workspace-up = [ ];
       switch-applications = [ ];
       switch-applications-backward = [ ];
@@ -306,8 +322,8 @@ with lib.hm.gvariant;
 
     "org/gnome/mutter/keybindings" = {
       cancel-input-capture = [ ];
-      toggle-tiled-left = [ "<Control><Alt>a" ];
-      toggle-tiled-right = [ "<Control><Alt>d" ];
+      toggle-tiled-left = [ "<Control><Alt>q" ];
+      toggle-tiled-right = [ "<Control><Alt>e" ];
     };
 
     "org/gnome/mutter/wayland/keybindings" = {
@@ -325,7 +341,10 @@ with lib.hm.gvariant;
       dual-page-odd-left = false;
       enable-spellchecking = true;
       show-sidebar = true;
+      sidebar-page = "thumbnails";
       sizing-mode = "automatic";
+      window-maximized = true;
+      zoom = 1.007486480193103;
     };
 
     "org/gnome/papers" = {

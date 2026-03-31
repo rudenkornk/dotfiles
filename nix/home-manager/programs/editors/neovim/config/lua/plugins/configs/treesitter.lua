@@ -1,4 +1,6 @@
-local override_options = {
+local M = {}
+
+M.opts = {
   ignore_install = { "help" },
   ensure_installed = {
     "ada",
@@ -330,4 +332,4 @@ local override_options = {
   },
 }
 
-return override_options
+return M

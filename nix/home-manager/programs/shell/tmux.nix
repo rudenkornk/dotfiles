@@ -8,8 +8,23 @@
     # newSession has an adverse side effect: a new session is also created on config reload.
     newSession = false;
 
-    prefix = "C-s";
+    # home-manager actually has `sensibleOnTop` option, but for some reason it loads `sensible` at the very top.
+    # After that home-manager **overwrites** same settings with its own defaults.
+    # That makes resulting tmux.conf hard to read.
+    # After some back & forth changes I decided to ditch both `sensibleOnTop` and `sensible` plugin,
+    # and just list everything explicitly here.
+    escapeTime = 0; # Address vim mode switching delay (http://superuser.com/a/252717/65504).
+    historyLimit = 50000; # Scrollback buffer size.
+    # Emacs key bindings in tmux command prompt (prefix + :) are better than vi keys, even for vim users.
+    keyMode = "emacs";
+    focusEvents = true;
+    aggressiveResize = true;
     mouse = true;
+    baseIndex = 1;
+    terminal = "tmux-256color";
+    shell = "${pkgs.fish}/bin/fish";
+
+    prefix = "C-s";
     extraConfig = builtins.readFile ./tmux/tmux.conf;
     plugins =
       let
@@ -23,12 +38,6 @@
       in
       with pkgs.tmuxPlugins;
       [
-        {
-          # home-manager actually has `sensibleOnTop` option, but for some reason it loads `sensible`
-          # at the very top. After that home-manager **overwrites** same settings with its own defaults.
-          # Adding sensible as a normal plugin, since in that case it is placed **after** home-manager's defaults.
-          plugin = sensible;
-        }
         {
           # Quick copy pane contents with tmux-fingers,
           # Alternatives to tmux-fingers:

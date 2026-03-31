@@ -17,14 +17,12 @@
     (locallib.with_secrets { pkg = qwen-code; })
   ];
 
-  home.file =
-    pkgs.locallib.homefiles {
-      inherit (config) xdg;
-      path = ./configs;
-    }
-    // {
-      # W/A for https://github.com/anomalyco/opencode/issues/16885
-      "${config.xdg.dataHome}/opencode/opencode.db".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.xdg.dataHome}/opencode/opencode-stable.db";
-    };
+  # W/A for https://github.com/anomalyco/opencode/issues/16885
+  xdg.dataFile."opencode/opencode.db".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.xdg.dataHome}/opencode/opencode-stable.db";
+
+  home.file = pkgs.locallib.homefiles {
+    inherit (config) xdg;
+    path = ./configs;
+  };
 }

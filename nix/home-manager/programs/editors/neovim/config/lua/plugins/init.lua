@@ -162,7 +162,7 @@ return {
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {
     "milanglacier/minuet-ai.nvim",
-    -- `opts` must be defined (at least to `{}`), otherwise minuet will throw an error.
+    -- `opts` must be defined for this plugin (at least to `{}`).
     opts = require("plugins.configs.minuet").opts,
   },
   {

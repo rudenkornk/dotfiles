@@ -116,24 +116,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs_unstable": "nixpkgs_unstable",
-        "nur": "nur",
-        "tmux_plugin_ukiyo": "tmux_plugin_ukiyo"
-      }
-    },
-    "tmux_plugin_ukiyo": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1769776888,
-        "narHash": "sha256-ILQVOQ6cfG7I7hFN72mgSTc0AZZW4WWHSxwWKbK0piY=",
-        "owner": "nybkox",
-        "repo": "tmux-ukiyo",
-        "rev": "14fdf51ad16f7b81019c53b987877e78e697f51b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nybkox",
-        "repo": "tmux-ukiyo",
-        "type": "github"
+        "nur": "nur"
       }
     }
   },

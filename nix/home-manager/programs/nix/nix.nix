@@ -14,11 +14,6 @@
     nix-tree
   ];
 
-  home.shellAliases = {
-    nix-search-tv = ''command nix-search-tv print | fzf --prompt="Search NixOS> " --preview 'command nix-search-tv preview {}' --scheme history'';
-    nst = "nix-search-tv";
-  };
-
   programs.nix-search-tv = {
     enable = true;
     enableTelevisionIntegration = true;

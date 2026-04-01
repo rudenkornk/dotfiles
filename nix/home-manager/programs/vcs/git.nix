@@ -12,9 +12,10 @@ _: {
         br = "branch -vv";
         ck = "checkout";
         cm = "commit";
-        cma = "commit --all --message 'a'";
+        cma = "commit --all --message 'a'"; # Commit all.
         cmd = "commit --amend --reuse-message @";
         cmm = "commit --amend";
+        cms = "commit --message 's'"; # Commit staged.
         cp = "cherry-pick";
         df = "diff";
         fp = "format-patch";

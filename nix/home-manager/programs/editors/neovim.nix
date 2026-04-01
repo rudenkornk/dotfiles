@@ -12,6 +12,7 @@
 
       extraWrapperArgs = [
         "--run"
+        # bash
         ''
           ${pkgs.locallib.bash_secrets}
 

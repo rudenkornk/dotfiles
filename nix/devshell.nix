@@ -37,13 +37,15 @@ pkgs.mkShell {
 
   ];
 
-  shellHook = ''
-    export PYTHONPATH="$PWD/src:$PWD:$PYTHONPATH"
-    mkdir --parents __build
-    echo -e '#!/usr/bin/env bash\n\npython3 -m dotfiles_py "$@"' > __build/dotfiles
-    chmod +x __build/dotfiles
-    export PATH="$PWD/__build:$PATH"
+  shellHook =
+    # bash
+    ''
+      export PYTHONPATH="$PWD/src:$PWD:$PYTHONPATH"
+      mkdir --parents __build
+      echo -e '#!/usr/bin/env bash\n\npython3 -m dotfiles_py "$@"' > __build/dotfiles
+      chmod +x __build/dotfiles
+      export PATH="$PWD/__build:$PATH"
 
-    echo "Welcome to the project devshell!"
-  '';
+      echo "Welcome to the project devshell!"
+    '';
 }

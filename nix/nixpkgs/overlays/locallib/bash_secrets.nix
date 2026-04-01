@@ -1,5 +1,6 @@
 { pkgs, ... }:
 
+# bash
 ''
   if [[ "$USERKIND" == "default" ]]; then
     # shellcheck source=/dev/null

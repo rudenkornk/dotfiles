@@ -11,5 +11,4 @@ return {
   { "rose-pine/neovim", name = "rose-pine", opts = { variant = "auto" } }, -- auto, main, moon, dawn
   { "sainnhe/everforest" },
   { "shaunsingh/nord.nvim" },
-  { "rebelot/kanagawa.nvim" }, -- broken visuals :(
 }

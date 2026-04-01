@@ -33,7 +33,7 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter", -- Core lang plugin.
-    opts = require("plugins.configs.treesitter").opts,
+    build = "", -- Don't run anything when installing/updating.
   },
   {
     "mfussenegger/nvim-dap", -- Core DAP plugin.

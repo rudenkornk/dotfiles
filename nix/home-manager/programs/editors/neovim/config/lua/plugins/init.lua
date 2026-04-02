@@ -125,7 +125,6 @@ return {
   {
     "MeanderingProgrammer/render-markdown.nvim", -- lang.markdown
     opts = require("plugins.configs.render_markdown").opts,
-    ft = require("plugins.configs.render_markdown").ft,
   },
   {
     "monaqa/dial.nvim", -- editor.dial

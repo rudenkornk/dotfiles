@@ -136,14 +136,6 @@ return {
   },
 
   {
-    "3rd/image.nvim",
-    event = "VeryLazy",
-    -- `opts` must be defined for this plugin (at least to `{}`).
-    opts = {
-      processor = "magick_rock",
-    },
-  },
-  {
     "aserowy/tmux.nvim",
     event = "VeryLazy",
     config = require("plugins.configs.tmux").config,

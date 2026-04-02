@@ -189,4 +189,15 @@ return {
   -- https://github.com/SUSTech-data/neopyter (> 150 stars)
   --
   -- https://github.com/ajbucci/ipynb.nvim (> 20 stars)
+  {
+    "ajbucci/ipynb.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "neovim/nvim-lspconfig",
+      "folke/snacks.nvim", -- For inline images.
+    },
+    lazy = false,
+    -- `opts` must be defined for this plugin (at least to `{}`).
+    opts = {},
+  },
 }

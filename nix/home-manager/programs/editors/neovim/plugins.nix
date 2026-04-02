@@ -31,6 +31,7 @@ let
     haskell-snippets-nvim
     haskell-tools-nvim
     helm-ls-nvim
+    ipynb-nvim
     inc-rename-nvim
     lazy-nvim
     lazydev-nvim

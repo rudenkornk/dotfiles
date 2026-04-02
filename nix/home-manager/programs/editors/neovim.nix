@@ -36,6 +36,7 @@
           luacheck
           luafilesystem
           luasec
+          magick
         ];
 
       extraPython3Packages =

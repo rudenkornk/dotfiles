@@ -39,6 +39,7 @@ command = [
      --no-hidden
   """,
 ]
+frecency = false
 
 [preview]
 command = "bat -n --color=always '{}'"

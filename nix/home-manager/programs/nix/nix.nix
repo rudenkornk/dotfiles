@@ -3,6 +3,7 @@
 # Nix-related tools.
 {
   home.packages = with pkgs; [
+    cachix
     dconf2nix
     home-manager
     nh

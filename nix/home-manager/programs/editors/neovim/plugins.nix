@@ -32,6 +32,8 @@ let
     haskell-tools-nvim
     helm-ls-nvim
     inc-rename-nvim
+    iron-nvim
+    jupytext-nvim
     lazy-nvim
     lazydev-nvim
     lean-nvim
@@ -67,6 +69,7 @@ let
     neotest-zig
     noice-nvim # typos: ignore
     nord-nvim
+    NotebookNavigator-nvim
     nui-nvim
     nvim-dap
     nvim-dap-go

@@ -1,0 +1,84 @@
+return {
+  -- Alternatives:
+
+  -- https://github.com/michaelb/sniprun (> 1700 stars)
+  --   Generic interactive REPL.
+
+  -- https://github.com/Vigemus/iron.nvim (> 1300 stars)
+  --   Generic interactive REPL.
+
+  -- https://github.com/kiyoon/jupynium.nvim (> 750 stars)
+  --   A bit cumbersome setup with strict requirement on Firefox
+  --   and non-nixpackaged jupynium python module counterpart.
+
+  -- https://github.com/goerz/jupytext.nvim (> 90 stars)
+  -- https://github.com/benlubas/molten-nvim (> 1100 stars)
+  --    Combination of auto-conversion between ipynb and py files and interactive REPL.
+  --    Setup is very cumbersome. At the end the problem was in a very slow performance.
+  -- {
+  --   "benlubas/molten-nvim",
+  --   build = ":UpdateRemotePlugins",
+  --   lazy = false,
+  --   dependencies = { "3rd/image.nvim" },
+  -- },
+  -- {
+  --   "3rd/image.nvim",
+  --   event = "VeryLazy",
+  --   -- `opts` must be defined for this plugin (at least to `{}`).
+  --   opts = {
+  --     processor = "magick_rock",
+  --     -- https://github.com/benlubas/molten-nvim/blob/c1db39e78fe18559d8f2204bf5c4d476bdc80d3e/docs/Not-So-Quick-Start-Guide.md
+  --     max_width = 120,
+  --     max_height = 200,
+  --     max_height_window_percentage = math.huge,
+  --     max_width_window_percentage = math.huge,
+  --     window_overlap_clear_enabled = true,
+  --     window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+  --   },
+  -- },
+  -- {
+  --   "GCBallesteros/jupytext.nvim",
+  --   lazy = false,
+  --   opts = {},
+  -- },
+
+  -- https://github.com/SUSTech-data/neopyter (> 150 stars)
+  -- Eventually did not work.
+  -- {
+  --   "SUSTech-data/neopyter",
+  --   lazy = false,
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-treesitter/nvim-treesitter",
+  --     "AbaoFromCUG/websocket.nvim", -- for mode='direct'.
+  --   },
+  -- },
+
+  -- https://github.com/ajbucci/ipynb.nvim (> 20 stars)
+  -- Very buggy.
+  --  One problem is regular termination of jupyter kernel with no apparent reason.
+  --  Another is broken rendering of cells in some conditions.
+  {
+    "ajbucci/ipynb.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "neovim/nvim-lspconfig",
+      "folke/snacks.nvim", -- For inline images.
+    },
+    lazy = false,
+    -- `opts` must be defined for this plugin (at least to `{}`).
+    opts = {},
+  },
+  {
+    "nvim-lualine/lualine.nvim",
+    opts = function(_, opts)
+      opts.sections.lualine_y = {
+        {
+          require("ipynb.kernel").statusline,
+          cond = require("ipynb.kernel").statusline_visible,
+          color = require("ipynb.kernel").statusline_color,
+        },
+      }
+    end,
+  },
+}

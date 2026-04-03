@@ -13,13 +13,7 @@ M.opts = function(_, opts)
   -- Assign cursor position to the last segment.
   -- Previously last segment displayed datetime, which is redundant in `tmux` context.
   opts.sections.lualine_z = opts.sections.lualine_y
-  opts.sections.lualine_y = {
-    {
-      require("ipynb.kernel").statusline,
-      cond = require("ipynb.kernel").statusline_visible,
-      color = require("ipynb.kernel").statusline_color,
-    },
-  }
+  opts.sections.lualine_y = {}
 end
 
 return M

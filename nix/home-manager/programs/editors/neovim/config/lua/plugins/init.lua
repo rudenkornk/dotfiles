@@ -169,35 +169,5 @@ return {
     "tamton-aquib/duck.nvim",
     keys = require("plugins.configs.duck").keys,
   },
-
-  -- Alternatives:
-  -- https://github.com/michaelb/sniprun (> 1700 stars)
-  --   Generic interactive REPL.
-  --
-  -- https://github.com/Vigemus/iron.nvim (> 1300 stars)
-  --   Generic interactive REPL.
-  --
-  -- https://github.com/kiyoon/jupynium.nvim (> 750 stars)
-  --   A bit cumbersome setup with strict requirement on Firefox
-  --   and non-nixpackaged jupynium python module counterpart.
-  --
-  -- https://github.com/goerz/jupytext.nvim (> 90 stars)
-  -- https://github.com/benlubas/molten-nvim (> 1100 stars)
-  --    Combination of auto-conversion between ipynb and py files and interactive REPL.
-  --    Setup is very cumbersome. At the end the problem was in a very slow performance.
-  --
-  -- https://github.com/SUSTech-data/neopyter (> 150 stars)
-  --
-  -- https://github.com/ajbucci/ipynb.nvim (> 20 stars)
-  {
-    "ajbucci/ipynb.nvim",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "neovim/nvim-lspconfig",
-      "folke/snacks.nvim", -- For inline images.
-    },
-    lazy = false,
-    -- `opts` must be defined for this plugin (at least to `{}`).
-    opts = {},
-  },
+  { import = "plugins.configs.ipynb" },
 }

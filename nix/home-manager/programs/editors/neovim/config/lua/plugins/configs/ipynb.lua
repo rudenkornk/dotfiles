@@ -58,27 +58,27 @@ return {
   -- Very buggy.
   --  One problem is regular termination of jupyter kernel with no apparent reason.
   --  Another is broken rendering of cells in some conditions.
-  {
-    "ajbucci/ipynb.nvim",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "neovim/nvim-lspconfig",
-      "folke/snacks.nvim", -- For inline images.
-    },
-    lazy = false,
-    -- `opts` must be defined for this plugin (at least to `{}`).
-    opts = {},
-  },
-  {
-    "nvim-lualine/lualine.nvim",
-    opts = function(_, opts)
-      opts.sections.lualine_y = {
-        {
-          require("ipynb.kernel").statusline,
-          cond = require("ipynb.kernel").statusline_visible,
-          color = require("ipynb.kernel").statusline_color,
-        },
-      }
-    end,
-  },
+  -- {
+  --   "ajbucci/ipynb.nvim",
+  --   dependencies = {
+  --     "nvim-treesitter/nvim-treesitter",
+  --     "neovim/nvim-lspconfig",
+  --     "folke/snacks.nvim", -- For inline images.
+  --   },
+  --   lazy = false,
+  --   -- `opts` must be defined for this plugin (at least to `{}`).
+  --   opts = {},
+  -- },
+  -- {
+  --   "nvim-lualine/lualine.nvim",
+  --   opts = function(_, opts)
+  --     opts.sections.lualine_y = {
+  --       {
+  --         require("ipynb.kernel").statusline,
+  --         cond = require("ipynb.kernel").statusline_visible,
+  --         color = require("ipynb.kernel").statusline_color,
+  --       },
+  --     }
+  --   end,
+  -- },
 }

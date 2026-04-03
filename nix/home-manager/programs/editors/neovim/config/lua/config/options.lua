@@ -33,9 +33,6 @@ vim.filetype.add({
     ["inventory.yaml"] = "yaml.ansible",
     ["playbook.*.yaml"] = "yaml.ansible",
   },
-  extension = {
-    ipynb = "ipynb",
-  },
 })
 
 -- mitigate the long clipboard loading issue

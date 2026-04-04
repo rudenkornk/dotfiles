@@ -5,41 +5,39 @@ requirements = ["fd", "bat"]
 
 [source]
 command = [
+  # 1. No hidden, respect ignore.
   """fd --type file \
-     --exclude .ansible \
-     --exclude .bun \
-     --exclude .cache \
-     --exclude .cargo \
-     --exclude .dbus \
-     --exclude .fzf \
-     --exclude .git \
-     --exclude .gnupg \
-     --exclude .gradle \
-     --exclude .mozilla \
-     --exclude .mypy_cache \
-     --exclude .npm \
-     --exclude .ruff_cache \
-     --exclude .rustup \
-     --exclude .cursor \
-     --exclude .nix-defexpr \
-     --exclude __pycache__ \
-     --exclude site-packages \
-     --follow \
-     --no-ignore \
-     --hidden
+  --no-hidden \
+  --ignore \
+  --ignore-file "${XDG_CONFIG_HOME:-$HOME/.config}/television/ignore" \
+  --follow \
   """,
+
+  # 2. Hidden, respect ignore, manual excludes.
   """fd --type file \
-     --follow \
-     --no-ignore \
-     --hidden
+  --hidden \
+  --ignore \
+  --ignore-file "${XDG_CONFIG_HOME:-$HOME/.config}/television/ignore" \
+  --follow \
   """,
+
+  # 3. Hidden, no ignore, manual excludes.
   """fd --type file \
-     --follow \
-     --ignore \
-     --no-hidden
+  --hidden \
+  --no-ignore \
+  --ignore-file "${XDG_CONFIG_HOME:-$HOME/.config}/television/ignore" \
+  --follow \
+  """,
+
+  # 4. Hidden, no ignore.
+  """fd --type file \
+  --hidden \
+  --no-ignore \
+  --follow \
   """,
 ]
 frecency = false
+shell = "bash"
 
 [preview]
 command = "bat -n --color=always '{}'"

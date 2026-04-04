@@ -4,26 +4,59 @@ description = "A channel to find and select text from files"
 requirements = ["rg", "bat"]
 
 [source]
-command = ["""\
-  rg . \
+command = [
+  # 1. No hidden, respect ignore.
+  """rg . \
+  --ignore-file "${XDG_CONFIG_HOME:-$HOME/.config}/television/ignore" \
+  --follow \
   --no-heading \
   --line-number \
   --colors 'match:fg:white' \
   --colors 'path:fg:blue' \
   --color=always \
-  --glob='!.git' \
-  --hidden
-  """, """\
-  rg . \
+  """,
+
+  # 2. Hidden, respect ignore, manual excludes.
+  """rg . \
+  --hidden \
+  --ignore-file "${XDG_CONFIG_HOME:-$HOME/.config}/television/ignore" \
+  --follow \
   --no-heading \
   --line-number \
   --colors 'match:fg:white' \
   --colors 'path:fg:blue' \
-  --color=always
-  """]
+  --color=always \
+  """,
+
+  # 3. Hidden, no ignore, manual excludes.
+  """rg . \
+  --hidden \
+  --no-ignore \
+  --ignore-file "${XDG_CONFIG_HOME:-$HOME/.config}/television/ignore" \
+  --follow \
+  --no-heading \
+  --line-number \
+  --colors 'match:fg:white' \
+  --colors 'path:fg:blue' \
+  --color=always \
+  """,
+
+  # 4. Hidden, no ignore.
+  """rg . \
+  --hidden \
+  --no-ignore \
+  --follow \
+  --no-heading \
+  --line-number \
+  --colors 'match:fg:white' \
+  --colors 'path:fg:blue' \
+  --color=always \
+  """,
+]
 ansi = true
 frecency = false
 output = "{strip_ansi|split:\\::..2}"
+shell = "bash"
 
 [preview]
 command = "bat -n --color=always '{strip_ansi|split:\\::0}'"

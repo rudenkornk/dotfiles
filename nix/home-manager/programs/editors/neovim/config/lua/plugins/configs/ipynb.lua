@@ -98,7 +98,7 @@ return {
         config = {
           scratch_repl = true,
           repl_definition = {
-            ["python.ipynb"] = {
+            ["python"] = {
               command = { "ipython", "--no-autoindent" },
               format = common.bracketed_paste_python,
               block_dividers = { "# %%", "#%%" },

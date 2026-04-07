@@ -180,6 +180,7 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
 - Custom keyboard layouts via xkb
 - Fish shell is primary shell (11 .fish files)
 - Neovim config based on LazyVim
+- NOTE: WHEN ADDING NEW NIX OR CONFIG FILE, ADD IT TO GIT STAGING AREA. OTHERWISE NIX WILL NOT SEE IT.
 
 ### Important File Locations
 

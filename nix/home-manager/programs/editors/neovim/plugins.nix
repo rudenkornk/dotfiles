@@ -20,6 +20,7 @@ let
     crates-nvim
     dial-nvim
     dracula-nvim
+    duck-nvim
     everforest
     flash-nvim
     flit-nvim
@@ -71,10 +72,12 @@ let
     nord-nvim
     NotebookNavigator-nvim
     nui-nvim
+    nvim-ansible
     nvim-dap
     nvim-dap-go
     nvim-dap-lldb
     nvim-dap-python
+    nvim-dap-ruby
     nvim-dap-ui
     nvim-dap-virtual-text
     nvim-jdtls
@@ -128,6 +131,10 @@ let
     {
       name = "LuaSnip";
       path = luasnip;
+    }
+    {
+      name = "FluoroMachine.nvim";
+      path = fluoromachine-nvim;
     }
 
     # TODO: remove this W/A once LazyVim supports all the quirks.

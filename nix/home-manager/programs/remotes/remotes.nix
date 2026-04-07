@@ -3,11 +3,13 @@
 # Remote desktop, corporate tooling & VPNs.
 {
   home.packages = with pkgs; [
+    cifs-utils
     coder
     openconnect
     openldap
     openssh
     openvpn
+    samba
     throne
   ];
 

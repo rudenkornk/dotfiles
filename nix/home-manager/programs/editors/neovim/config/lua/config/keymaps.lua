@@ -66,16 +66,16 @@
 -- <A-e> -- dap pause (normal, dap terminal), open in editor (terminal).
 -- <A-f> -- next word (terminal).
 -- <A-g> -- dap restart.
--- <A-h> -- dedent code.
+-- <A-h> -- WM reserved (previously dedent code).
 -- <A-i> -- dap step into.
--- <A-j> -- dap step over (normal), move code down (visual).
--- <A-k> -- dap step back (normal), move code up (visual).
--- <A-l> -- indent code.
--- <A-m> -- vim marks.
+-- <A-j> -- WM reserved (previously move code down (visual)).
+-- <A-k> -- WM reserved (previously move code up (visual)).
+-- <A-l> -- WM reserved (previously indent code).
+-- <A-m> -- dap step over.
 -- <A-n> -- next reference.
 -- <A-o> -- dap step out.
 -- <A-p> -- previous reference.
--- <A-q> --
+-- <A-q> -- dap step back.
 -- <A-r> -- dap breakpoint.
 -- <A-s> --
 -- <A-t> --

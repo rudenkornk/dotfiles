@@ -13,7 +13,7 @@ M.keys = {
     mode = { "n", "t" },
   },
   {
-    "<A-j>",
+    "<A-m>",
     function()
       require("dap").step_over()
     end,
@@ -21,7 +21,7 @@ M.keys = {
     mode = { "n", "t" },
   },
   {
-    "<A-k>",
+    "<A-q>",
     function()
       require("dap").step_back()
     end,

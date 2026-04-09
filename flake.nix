@@ -35,9 +35,25 @@
         overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
       };
       hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
-      hosts = mapAttrs (name: file: { inherit name file; }) hostfiles;
+      hosts = mapAttrs (name: file: import file // { inherit name; }) hostfiles;
       userfiles = pkgs.locallib.get_modules_map ./nix/users;
       users = mapAttrs (lib.const import) userfiles;
+
+      userHostPairs = lib.cartesianProduct {
+        user = lib.attrsToList users;
+        host = lib.attrsToList hosts;
+      };
+      makeHomeConfig =
+        { user, host }:
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit inputs;
+            user = user.value;
+            host = host.value;
+          };
+          modules = [ ./nix/home-manager/home.nix ];
+        };
     in
     rec {
       nixosConfigurations = mapAttrs (
@@ -49,16 +65,17 @@
         }
       ) hosts;
 
-      homeConfigurations = mapAttrs (
-        name: user:
-        home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = { inherit inputs user; };
-          modules = [ ./nix/home-manager/home.nix ];
-        }
-      ) users;
+      homeConfigurations = lib.listToAttrs (
+        map (
+          { user, host }:
+          {
+            name = "${user.name}@${host.name}";
+            value = makeHomeConfig { inherit user host; };
+          }
+        ) userHostPairs
+      );
       # Also register home-manager configs for `nix flake check`.
-      checks."${system}" = mapAttrs (name: config: config.activationPackage) homeConfigurations;
+      checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations;
 
       devShells.${system}.default = import ./nix/devshell.nix { inherit pkgs; };
     };

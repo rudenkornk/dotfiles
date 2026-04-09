@@ -47,10 +47,12 @@
             (builtins.readFile ./fish/functions/openconnect_corp.fish);
         wraps = "openconnect";
       };
-      Throne = {
+      ThroneRun = {
         body =
           with pkgs;
-          lib.replaceStrings [ "@throne@" ] [ "${throne}" ] (builtins.readFile ./fish/functions/Throne.fish);
+          lib.replaceStrings [ "@throne@" ] [ "${throne}" ] (
+            builtins.readFile ./fish/functions/ThroneRun.fish
+          );
         wraps = "Throne";
       };
     };

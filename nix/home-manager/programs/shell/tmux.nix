@@ -71,7 +71,7 @@
             set -g @ukiyo-plugins "network-bandwidth disk-usage cpu-usage ram-usage ssh-session"
             set -g @ukiyo-show-powerline true
 
-            set -g @ukiyo-left-icon "#(date '+%d.%m.%y %R')"
+            set -g @ukiyo-left-icon "#(date '+%d.%m.%y %R (%a)')"
 
             set -g @ukiyo-network-bandwidth-download-label " "
             set -g @ukiyo-network-bandwidth-upload-label " "

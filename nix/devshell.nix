@@ -21,6 +21,7 @@ pkgs.mkShell {
     fish
     git
     gitleaks
+    kdlfmt
     markdownlint-cli2
     mypy
     nixfmt

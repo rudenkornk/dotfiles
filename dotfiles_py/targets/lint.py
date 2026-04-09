@@ -60,3 +60,6 @@ def format_code(*, repo_path: Path, check: bool) -> None:
     )
     run_shell(["prettier", *write_arg, repo_path, *check_arg], cwd=repo_path)
     run_shell(["stylua", repo_path, *check_arg], cwd=repo_path)
+
+    kdlcmd = "format" if not check else "check"
+    run_shell(["kdlfmt", kdlcmd, *git_files(repo_path, ".kdl")], cwd=repo_path)

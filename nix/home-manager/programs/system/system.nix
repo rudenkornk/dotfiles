@@ -5,6 +5,7 @@
   home.packages = with pkgs; [
     acpi
     alsa-utils
+    brightnessctl
     cups
     dbus
     htop-vim
@@ -17,6 +18,7 @@
     parted
     pavucontrol
     pciutils
+    playerctl
     sbctl
     sof-firmware
     sysstat

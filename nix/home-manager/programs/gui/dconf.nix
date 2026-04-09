@@ -215,8 +215,8 @@ with lib.hm.gvariant;
       move-to-monitor-right = [ "<Control><Alt>d" ];
       move-to-monitor-up = [ "<Control><Alt>w" ];
       move-to-workspace-down = [ ];
-      move-to-workspace-left = [ "<Control><Alt>j" ];
-      move-to-workspace-right = [ "<Control><Alt>k" ];
+      move-to-workspace-left = [ "<Control><Alt>q" ];
+      move-to-workspace-right = [ "<Control><Alt>e" ];
       move-to-workspace-up = [ ];
       switch-applications = [ ];
       switch-applications-backward = [ ];
@@ -322,8 +322,8 @@ with lib.hm.gvariant;
 
     "org/gnome/mutter/keybindings" = {
       cancel-input-capture = [ ];
-      toggle-tiled-left = [ "<Control><Alt>q" ];
-      toggle-tiled-right = [ "<Control><Alt>e" ];
+      toggle-tiled-left = [ "<Control><Alt>h" ];
+      toggle-tiled-right = [ "<Control><Alt>l" ];
     };
 
     "org/gnome/mutter/wayland/keybindings" = {

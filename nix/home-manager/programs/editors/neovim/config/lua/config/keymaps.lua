@@ -60,11 +60,11 @@
 -- <S-z> --
 
 -- <A-a> --
--- <A-b> --
+-- <A-b> -- prev word (terminal).
 -- <A-c> -- dap continue.
 -- <A-d> -- dap down.
--- <A-e> -- dap pause.
--- <A-f> --
+-- <A-e> -- dap pause (normal, dap terminal), open in editor (terminal).
+-- <A-f> -- next word (terminal).
 -- <A-g> -- dap restart.
 -- <A-h> -- dedent code.
 -- <A-i> -- dap step into.

@@ -44,6 +44,7 @@ return {
     opts = {
       formatters_by_ft = {
         python = { "ruff_organize_imports", "ruff_format", "ruff_fix" },
+        kdl = { "kdlfmt" },
       },
     },
   },

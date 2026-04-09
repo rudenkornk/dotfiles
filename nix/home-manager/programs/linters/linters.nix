@@ -16,6 +16,7 @@
     gitlint
     golangci-lint
     isort
+    kdlfmt
     kube-linter
     markdownlint-cli2
     mypy

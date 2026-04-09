@@ -68,10 +68,12 @@
           ''
             set -g @ukiyo-theme 'tokyonight/night'
 
-            set -g @ukiyo-plugins "network-bandwidth disk-usage cpu-usage ram-usage ssh-session"
+            set -g @ukiyo-plugins "network-bandwidth disk-usage cpu-usage ram-usage custom:${./tmux/layout.sh} ssh-session"
             set -g @ukiyo-show-powerline true
 
             set -g @ukiyo-left-icon "#(date '+%d.%m.%y %R (%a)')"
+
+            set -g @ukiyo-custom-plugin-colors "accent bg_pane"
 
             set -g @ukiyo-network-bandwidth-download-label " "
             set -g @ukiyo-network-bandwidth-upload-label " "

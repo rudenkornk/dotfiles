@@ -67,6 +67,9 @@
         extraConfig = # tmux
           ''
             set -g @ukiyo-theme 'tokyonight/night'
+            set -g pane-border-style fg=#80f0ff,bg=#1a1b26 # bg should be in sync with ukiyo-theme.
+            set -g pane-active-border-style fg=#80f0ff,bg=#1a1b26
+
 
             set -g @ukiyo-plugins "network-bandwidth disk-usage cpu-usage ram-usage custom:${./tmux/layout.sh} ssh-session"
             set -g @ukiyo-show-powerline true

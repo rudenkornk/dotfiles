@@ -22,6 +22,7 @@
       clipboard_control = "write-clipboard write-primary no-append";
       hide_window_decorations = true;
       shell = "${pkgs.fish}/bin/fish";
+      background = "#1a1b26"; # Should be in sync with tmux theme.
     };
   };
 

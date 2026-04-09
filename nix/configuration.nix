@@ -9,7 +9,7 @@
 
 {
   imports = [
-    host.file
+    host.hardware-configuration
     inputs.home-manager.nixosModules.default
   ];
 
@@ -186,7 +186,7 @@
   }) users;
 
   home-manager = {
-    extraSpecialArgs = { inherit pkgs inputs; };
+    extraSpecialArgs = { inherit pkgs inputs host; };
     users = builtins.mapAttrs (
       name: user: args:
       import ./home-manager/home.nix (args // { inherit user; })

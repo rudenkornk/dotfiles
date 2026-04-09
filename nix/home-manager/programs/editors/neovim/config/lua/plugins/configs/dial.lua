@@ -57,6 +57,18 @@ M.config = function()
     "ninth",
     "tenth",
   }
+  local counters = {
+    "single",
+    "double",
+    "triple",
+    "quadruple",
+    "quintuple",
+    "sextuple",
+    "septuple",
+    "octuple",
+    "nonuple",
+    "decuple",
+  }
   local weekdays = {
     "monday",
     "tuesday",
@@ -89,6 +101,7 @@ M.config = function()
   local included_excluded_augend = create_constants(included_excluded, false, true)
   local visibility_augend = create_constants(visibility, false, true)
   local number_augend = create_constants(numbers, false, false)
+  local counter_augend = create_constants(counters, false, false)
   local ordinal_augend = create_constants(ordinals, false, false)
   local weekday_augend = create_constants(weekdays, false, true)
   local month_augend = create_constants(months, false, true)
@@ -111,6 +124,7 @@ M.config = function()
       unpack(included_excluded_augend),
       unpack(visibility_augend),
       unpack(number_augend),
+      unpack(counter_augend),
       unpack(ordinal_augend),
       unpack(weekday_augend),
       unpack(month_augend),

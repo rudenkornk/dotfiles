@@ -138,7 +138,6 @@ return {
   {
     "aserowy/tmux.nvim",
     event = "VeryLazy",
-    config = require("plugins.configs.tmux").config,
     opts = require("plugins.configs.tmux").opts,
     keys = require("plugins.configs.tmux").keys,
   },

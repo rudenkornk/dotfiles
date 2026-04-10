@@ -10,6 +10,7 @@
     openssh
     openvpn
     samba
+    sing-box
     throne
   ];
 
@@ -54,6 +55,15 @@
             builtins.readFile ./fish/functions/ThroneRun.fish
           );
         wraps = "Throne";
+      };
+      sing-box-run = {
+        body =
+          with pkgs;
+          lib.replaceStrings
+            [ "@bash@" "@sing-box@" "@sops@" "@default_config@" ]
+            [ "${bash}" "${sing-box}" "${sops}" "${pkgs.locallib.secrets + /vpn/beta.json.sops}" ]
+            (builtins.readFile ./fish/functions/sing-box-run.fish);
+        wraps = "sing-box";
       };
     };
   };

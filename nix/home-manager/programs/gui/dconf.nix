@@ -172,7 +172,9 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/peripherals/keyboard" = {
+      delay = mkUint32 250;
       numlock-state = true;
+      repeat-interval = mkUint32 25;
     };
 
     "org/gnome/desktop/peripherals/mouse" = {

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 # GUI apps.
 {
@@ -11,5 +11,10 @@
 
   programs.firefox = {
     enable = true;
+  };
+
+  home.file = pkgs.locallib.homefiles {
+    inherit (config) xdg;
+    path = ./configs;
   };
 }

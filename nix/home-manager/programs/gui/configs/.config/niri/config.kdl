@@ -1,0 +1,241 @@
+include "monitors.kdl"
+input {
+    keyboard {
+        xkb {
+            layout "qwerty_rnk,jcuken_rnk"
+            options "lv3:ralt_switch"
+        }
+        repeat-delay 250
+        repeat-rate 45
+    }
+    touchpad {
+        tap
+        natural-scroll
+    }
+    focus-follows-mouse
+}
+cursor {
+    xcursor-theme "Adwaita"
+    xcursor-size 24
+}
+environment {
+    QT_QPA_PLATFORM "wayland"
+    XDG_CURRENT_DESKTOP "niri"
+}
+binds {
+    Alt+1 {
+        spawn "kitty"
+    }
+    Alt+2 {
+        spawn "google-chrome-stable"
+    }
+    Alt+3 {
+        spawn-sh "QT_QPA_PLATFORM=xcb flameshot gui --raw --path ~/Downloads/ | wl-copy"
+    }
+    Alt+4 {
+        spawn "gnome-control-center"
+    }
+    Alt+5 {
+        spawn "nautilus"
+    }
+    Alt+0 {
+        spawn "gnome-calculator"
+    }
+    Alt+H {
+        focus-column-or-monitor-left
+    }
+    Alt+L {
+        focus-column-or-monitor-right
+    }
+    Alt+K {
+        focus-window-or-monitor-up
+    }
+    Alt+J {
+        focus-window-or-monitor-down
+    }
+    Ctrl+Alt+1 {
+        focus-workspace-up
+    }
+    Ctrl+Alt+2 {
+        focus-workspace-down
+    }
+    Ctrl+Alt+W {
+        move-column-to-monitor-up
+    }
+    Ctrl+Alt+S {
+        move-column-to-monitor-down
+    }
+    Ctrl+Alt+D {
+        move-column-right-or-to-monitor-right
+    }
+    Ctrl+Alt+A {
+        move-column-left-or-to-monitor-left
+    }
+    Ctrl+Alt+E {
+        move-window-down-or-to-workspace-down
+    }
+    Ctrl+Alt+Q {
+        move-window-up-or-to-workspace-up
+    }
+    Ctrl+Alt+M {
+        consume-or-expel-window-right
+    }
+    Ctrl+Alt+N {
+        consume-or-expel-window-left
+    }
+    Ctrl+Alt+I {
+        consume-window-into-column
+    }
+    Ctrl+Alt+O {
+        expel-window-from-column
+    }
+    Ctrl+Alt+Shift+H {
+        move-workspace-to-monitor-left
+    }
+    Ctrl+Alt+Shift+J {
+        move-workspace-to-monitor-down
+    }
+    Ctrl+Alt+Shift+K {
+        move-workspace-to-monitor-up
+    }
+    Ctrl+Alt+Shift+L {
+        move-workspace-to-monitor-right
+    }
+    Ctrl+Alt+H {
+        set-column-width "-10%"
+    }
+    Ctrl+Alt+J {
+        set-window-height "+10%"
+    }
+    Ctrl+Alt+K {
+        set-window-height "-10%"
+    }
+    Ctrl+Alt+L {
+        set-column-width "+10%"
+    }
+    Alt+Minus {
+        set-column-width "-10%"
+    }
+    Alt+Equal {
+        set-column-width "+10%"
+    }
+    Alt+Shift+Minus {
+        set-window-height "-10%"
+    }
+    Alt+Shift+Equal {
+        set-window-height "+10%"
+    }
+    Ctrl+Alt+F {
+        toggle-window-floating
+    }
+    Ctrl+Alt+C {
+        center-column
+    }
+    Ctrl+Alt+R {
+        maximize-column
+    }
+    Ctrl+Alt+T {
+        maximize-window-to-edges
+    }
+    Alt+Escape {
+        toggle-overview
+    }
+    Alt+F4 {
+        close-window
+    }
+    Ctrl+Alt+X {
+        close-window
+    }
+    Ctrl+Space {
+        switch-layout "next"
+    }
+    Shift+Ctrl+Space {
+        switch-layout "prev"
+    }
+    Ctrl+Alt+Delete {
+        quit
+    }
+    Print {
+        screenshot
+    }
+    Alt+Print {
+        screenshot-window
+    }
+    Ctrl+Print {
+        screenshot-screen
+    }
+    XF86AudioRaiseVolume allow-when-locked=true {
+        spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+" "-l" "1.0"
+    }
+    XF86AudioLowerVolume allow-when-locked=true {
+        spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05-"
+    }
+    XF86AudioMute allow-when-locked=true {
+        spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"
+    }
+    XF86AudioMicMute allow-when-locked=true {
+        spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"
+    }
+    XF86AudioPlay allow-when-locked=true {
+        spawn "playerctl" "play-pause"
+    }
+    XF86AudioStop allow-when-locked=true {
+        spawn "playerctl" "stop"
+    }
+    XF86AudioPrev allow-when-locked=true {
+        spawn "playerctl" "previous"
+    }
+    XF86AudioNext allow-when-locked=true {
+        spawn "playerctl" "next"
+    }
+    XF86MonBrightnessUp allow-when-locked=true {
+        spawn "brightnessctl" "--class=backlight" "set" "+10%"
+    }
+    XF86MonBrightnessDown allow-when-locked=true {
+        spawn "brightnessctl" "--class=backlight" "set" "10%-"
+    }
+}
+recent-windows {
+    binds {
+        Alt+Tab {
+            next-window
+        }
+        Alt+Shift+Tab {
+            previous-window
+        }
+    }
+}
+layout {
+    gaps 8
+    border {
+        off
+    }
+    focus-ring {
+        width 4
+        active-gradient from="#79e675" to="#24fff0"
+    }
+    default-column-width {
+        proportion 0.5
+    }
+    shadow {
+        on
+    }
+    always-center-single-column
+}
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+prefer-no-csd
+window-rule {
+    match app-id="gnome-calculator"
+    open-floating true
+}
+window-rule {
+    match app-id="org.gnome.Weather"
+    open-floating true
+}
+window-rule {
+    match app-id="org.gnome.Contacts"
+    open-floating true
+}

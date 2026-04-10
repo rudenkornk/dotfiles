@@ -23,12 +23,15 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/calculator" = {
+      base = 10;
       button-mode = "advanced";
       show-thousands = true;
       source-currency = "DZD";
       source-units = "radian";
       target-currency = "DZD";
       target-units = "degree";
+      unit-category = "angle";
+      window-maximized = false;
     };
 
     "org/gnome/desktop/a11y" = {
@@ -315,11 +318,6 @@ with lib.hm.gvariant;
       window-width = 1825;
     };
 
-    "org/gnome/mutter" = {
-      attach-modal-dialogs = false;
-      edge-tiling = false;
-    };
-
     "org/gnome/mutter/keybindings" = {
       cancel-input-capture = [ ];
       toggle-tiled-left = [ "<Control><Alt>h" ];
@@ -328,10 +326,6 @@ with lib.hm.gvariant;
 
     "org/gnome/mutter/wayland/keybindings" = {
       restore-shortcuts = [ ];
-    };
-
-    "org/gnome/mutter" = {
-      workspaces-only-on-primary = false;
     };
 
     "org/gnome/papers/default" = {
@@ -344,7 +338,7 @@ with lib.hm.gvariant;
       sidebar-page = "thumbnails";
       sizing-mode = "automatic";
       window-maximized = true;
-      zoom = 1.007486480193103;
+      zoom = 1.007486;
     };
 
     "org/gnome/papers" = {

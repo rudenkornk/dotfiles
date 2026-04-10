@@ -8,6 +8,7 @@
     brightnessctl
     cups
     dbus
+    ddcutil
     htop-vim
     libcgroup
     lsb-release

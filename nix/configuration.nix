@@ -36,6 +36,12 @@
     kernelPackages = pkgs.linuxPackages_latest;
   };
 
+  hardware = {
+    bluetooth = {
+      enable = true;
+    };
+  };
+
   nix = {
     settings = {
       experimental-features = [
@@ -88,6 +94,14 @@
         [org.gnome.mutter]
         experimental-features=['scale-monitor-framebuffer']
       '';
+    };
+
+    power-profiles-daemon = {
+      enable = true;
+    };
+
+    upower = {
+      enable = true;
     };
 
     xserver = {

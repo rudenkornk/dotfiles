@@ -123,6 +123,7 @@ def syms() -> None:
         target_dir=xdg_config_home / "nvim",
     )
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/ai/configs")
+    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/gui/configs")
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/linters/configs")
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/shell/television")
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/system/configs")

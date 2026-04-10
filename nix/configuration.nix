@@ -219,6 +219,8 @@
   ];
 
   programs = {
+    niri.enable = true;
+
     nix-ld = {
       enable = true;
       libraries = with pkgs; [

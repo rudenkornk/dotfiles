@@ -19,6 +19,7 @@
     php
     ruby
     tcl
+    terraform
     yq
     zig
   ];

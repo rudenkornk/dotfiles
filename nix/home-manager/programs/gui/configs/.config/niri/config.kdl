@@ -15,8 +15,8 @@ input {
     focus-follows-mouse
 }
 cursor {
-    xcursor-theme "Adwaita"
-    xcursor-size 24
+    xcursor-theme "Bibata-Original-Amber"
+    xcursor-size 40
 }
 environment {
     QT_QPA_PLATFORM "wayland"

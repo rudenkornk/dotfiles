@@ -120,7 +120,8 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/interface" = {
       clock-show-weekday = true;
-      cursor-size = 32;
+      cursor-size = 40;
+      cursor-theme = "Bibata-Original-Amber";
       locate-pointer = true;
       monospace-font-name = "JetBrainsMono Nerd Font 12";
     };

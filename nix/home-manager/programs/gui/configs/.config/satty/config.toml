@@ -1,0 +1,7 @@
+[general]
+copy-command = "wl-copy"
+corner-roundness = 12
+fullscreen = false
+initial-tool = "rectangle"
+output-filename = "~/Downloads/screenshot-%Y-%m-%d_%H:%M:%S.png"
+save-after-copy = true

@@ -8,6 +8,12 @@
       libreoffice
       prismlauncher
       telegram-desktop
+
+      # Screenshot tools.
+      grim
+      slurp
+      ksnip
+      satty
     ];
 
     file = pkgs.locallib.homefiles {

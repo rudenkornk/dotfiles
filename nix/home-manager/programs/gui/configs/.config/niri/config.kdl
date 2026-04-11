@@ -31,7 +31,16 @@ binds {
         spawn "google-chrome-stable"
     }
     Alt+3 {
-        spawn-sh "QT_QPA_PLATFORM=xcb flameshot gui --raw --path ~/Downloads/ | wl-copy"
+        spawn-sh "grim -g \"$(slurp)\" - | satty --filename - "
+    }
+    Print {
+        screenshot
+    }
+    Alt+Print {
+        screenshot-window
+    }
+    Ctrl+Print {
+        screenshot-screen
     }
     Alt+4 {
         spawn "noctalia-shell" "ipc" "call" "settings" "toggle"
@@ -183,15 +192,6 @@ binds {
     Ctrl+Alt+Delete {
         quit
     }
-    Print {
-        screenshot
-    }
-    Alt+Print {
-        screenshot-window
-    }
-    Ctrl+Print {
-        screenshot-screen
-    }
     XF86AudioRaiseVolume allow-when-locked=true {
         spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+" "-l" "1.0"
     }
@@ -257,6 +257,10 @@ window-rule {
 prefer-no-csd
 window-rule {
     match app-id="gnome-calculator"
+    open-floating true
+}
+window-rule {
+    match app-id="ksnip"
     open-floating true
 }
 window-rule {

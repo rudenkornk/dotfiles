@@ -40,6 +40,15 @@ in
   xdg = {
     configFile = {
       "niri/monitors.kdl".text = monitorsKdl;
+
+      # See https://github.com/niri-wm/niri/discussions/3734
+      "systemd/user/niri.service.d/override.conf".text = ''
+        [Service]
+        UnsetEnvironment=SHLVL
+        UnsetEnvironment=SHELL
+        UnsetEnvironment=TERM
+        UnsetEnvironment=PWD
+      '';
     };
   };
 

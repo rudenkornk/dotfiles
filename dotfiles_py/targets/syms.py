@@ -1,5 +1,6 @@
 import logging
 import os
+import shutil
 from pathlib import Path
 
 _logger = logging.getLogger(__name__)
@@ -52,3 +53,14 @@ def create_symlinks(*, source_dir: Path, target_dir: Path | None = None) -> None
         rel = source.relative_to(source_dir).as_posix()
         dest = _resolve_xdg(rel, home_dir) if apply_xdg else resolved_target / rel
         _create_symlink(source=source, dest=dest, home_dir=home_dir)
+
+
+def materialize_symlink(link: Path) -> None:
+    if not link.is_symlink():
+        return
+
+    source = link.readlink()
+    link.unlink()
+    shutil.copy2(source, link)
+    link.chmod(0o644)
+    _logger.info(f"Materialized symlink {link} -> {source}")

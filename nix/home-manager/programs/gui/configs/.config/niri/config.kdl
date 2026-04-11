@@ -22,6 +22,7 @@ environment {
     QT_QPA_PLATFORM "wayland"
     XDG_CURRENT_DESKTOP "niri"
 }
+spawn-at-startup "noctalia-shell"
 binds {
     Alt+1 {
         spawn "kitty"
@@ -33,13 +34,40 @@ binds {
         spawn-sh "QT_QPA_PLATFORM=xcb flameshot gui --raw --path ~/Downloads/ | wl-copy"
     }
     Alt+4 {
-        spawn "gnome-control-center"
+        spawn "noctalia-shell" "ipc" "call" "settings" "toggle"
     }
     Alt+5 {
         spawn "nautilus"
     }
     Alt+0 {
         spawn "gnome-calculator"
+    }
+    Alt+ssharp {
+        spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
+    }
+    Alt+Cyrillic_io {
+        spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
+    }
+    Ctrl+Alt+C {
+        spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
+    }
+    Ctrl+Alt+F {
+        spawn "noctalia-shell" "ipc" "call" "controlCenter" "toggle"
+    }
+    Ctrl+Alt+P {
+        spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"
+    }
+    Ctrl+Alt+U {
+        spawn "noctalia-shell" "ipc" "call" "darkMode" "toggle"
+    }
+    Ctrl+Alt+B {
+        spawn "noctalia-shell" "ipc" "call" "notifications" "toggleHistory"
+    }
+    Ctrl+Alt+Y {
+        spawn "noctalia-shell" "ipc" "call" "calendar" "toggle"
+    }
+    Ctrl+Alt+0 {
+        spawn "noctalia-shell" "ipc" "call" "plugin:noctalia-calculator" "toggle"
     }
     Alt+H {
         focus-column-or-monitor-left
@@ -125,10 +153,10 @@ binds {
     Alt+Shift+Equal {
         set-window-height "+10%"
     }
-    Ctrl+Alt+F {
+    Ctrl+Alt+G {
         toggle-window-floating
     }
-    Ctrl+Alt+C {
+    Ctrl+Alt+V {
         center-column
     }
     Ctrl+Alt+R {

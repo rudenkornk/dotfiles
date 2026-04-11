@@ -13,6 +13,11 @@
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
     };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      # Noctalia depends on nixpkgs-unstable.
+      inputs.nixpkgs.follows = "nixpkgs_unstable";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";

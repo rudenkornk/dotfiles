@@ -75,5 +75,6 @@
 
   monitors = {
     niri = { };
+    noctalia = { };
   };
 }

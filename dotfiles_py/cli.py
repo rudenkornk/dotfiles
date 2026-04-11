@@ -1,5 +1,6 @@
 import logging
 import os
+import platform
 import secrets
 import string
 from pathlib import Path
@@ -12,6 +13,7 @@ from . import utils
 from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
 from .targets import lint as lint_target
+from .targets import noctalia as noctalia_target
 from .targets import secrets as secrets_target
 from .targets import syms as syms_target
 
@@ -98,12 +100,16 @@ def hooks() -> None:
 
 @app.command()
 @utils.typer_exit()
-def gnome() -> None:
-    """Regenerate gnome settings."""
+def gui() -> None:
+    """Regenerate gnome & noctalia settings."""
     domain_rules_path = REPO_PATH / "nix/home-manager/programs/gui/dconf/rules.yaml"
     nix_path = REPO_PATH / "nix/home-manager/programs/gui/dconf.nix"
     rules = gnome_target.DomainRules.load(domain_rules_path)
     gnome_target.gnome_config(rules=rules, nix_path=nix_path)
+
+    noctalia_settings = REPO_PATH / "nix/home-manager/programs/gui/noctalia/settings.json"
+    monitor_settings = REPO_PATH / f"nix/hosts/{platform.node()}/noctalia_monitors.nix"
+    noctalia_target.noctalia_config(settings_path=noctalia_settings, monitor_settings_path=monitor_settings)
 
 
 @app.command()
@@ -127,6 +133,10 @@ def syms() -> None:
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/linters/configs")
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/shell/television")
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/system/configs")
+
+    # We need to additionally unlink noctalia settings, to prevent noctalia from randomly reloading pinned settings,
+    # which were modified in memory, but not yet backuped in nix config.
+    syms_target.unlink_from_nix_store(xdg_config_home / "noctalia/settings.json")
 
 
 @app.command()

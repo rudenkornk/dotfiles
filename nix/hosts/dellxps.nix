@@ -96,5 +96,6 @@
         };
       };
     };
+    noctalia = import ./dellxps/noctalia_monitors.nix;
   };
 }

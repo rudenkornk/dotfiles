@@ -1,0 +1,18 @@
+[
+  {
+    "command": "next_chat",
+    "keys": "ctrl+n"
+  },
+  {
+    "command": "previous_chat",
+    "keys": "ctrl+p"
+  },
+  {
+    "command": null,
+    "keys": "alt+up"
+  },
+  {
+    "command": null,
+    "keys": "alt+down"
+  }
+]

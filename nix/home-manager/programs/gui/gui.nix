@@ -2,19 +2,24 @@
 
 # GUI apps.
 {
-  home.packages = with pkgs; [
-    google-chrome
-    libreoffice
-    prismlauncher
-    telegram-desktop
-  ];
+  home = {
+    packages = with pkgs; [
+      google-chrome
+      libreoffice
+      prismlauncher
+      telegram-desktop
+    ];
 
-  programs.firefox = {
-    enable = true;
+    file = pkgs.locallib.homefiles {
+      inherit (config) xdg;
+      path = ./configs;
+    };
   };
 
-  home.file = pkgs.locallib.homefiles {
-    inherit (config) xdg;
-    path = ./configs;
+  programs = {
+    firefox = {
+      enable = true;
+    };
   };
+
 }

@@ -7,6 +7,9 @@
     }
   ],
   "states": {
+    "file-search": {
+      "enabled": true
+    },
     "kaomoji-provider": {
       "enabled": true,
       "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"

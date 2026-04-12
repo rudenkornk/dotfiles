@@ -10,8 +10,10 @@ shopt -s nullglob
 export LC_ALL=en_US.UTF-8
 
 main() {
-  echo -n "  "
+  echo -n "  "
+  df / --block-size G | awk 'NR==2 {printf "%.1fTiB/%.1fTiB  ", $3 / 1024, $2 / 1024}'
 
+  echo -n "  "
   if [[ "${XDG_CURRENT_DESKTOP,,}" == *"gnome"* ]]; then
     gsettings get org.gnome.desktop.input-sources mru-sources | python3 -c "import sys, ast; print(ast.literal_eval(sys.stdin.read())[0][1])"
   elif [[ "${XDG_CURRENT_DESKTOP,,}" == *"niri"* || -v NIRI_SOCKET ]]; then

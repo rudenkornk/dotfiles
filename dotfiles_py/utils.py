@@ -1,4 +1,5 @@
 import functools
+import hashlib
 import logging
 import os
 import shlex
@@ -164,6 +165,12 @@ def git_files(repo_path: Path, *ext: str) -> list[str]:
     return run_shell(
         ["git", "ls-files", *[f"*{e}" for e in ext]], capture_output=True, cwd=repo_path
     ).stdout.splitlines()
+
+
+def sha1(path: Path) -> str:
+    with path.open("rb") as f:
+        digest = hashlib.file_digest(f, "sha1")
+        return digest.hexdigest()
 
 
 def makelike[**P](  # noqa: C901

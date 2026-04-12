@@ -237,7 +237,7 @@ recent-windows {
     }
 }
 layout {
-    gaps 8
+    gaps 6
     border {
         off
     }

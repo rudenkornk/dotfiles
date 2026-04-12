@@ -136,7 +136,7 @@ def syms() -> None:
 
     # We need to additionally unlink noctalia settings, to prevent noctalia from randomly reloading pinned settings,
     # which were modified in memory, but not yet backuped in nix config.
-    syms_target.unlink_from_nix_store(xdg_config_home / "noctalia/settings.json")
+    syms_target.materialize_symlink(xdg_config_home / "noctalia/settings.json")
 
 
 @app.command()

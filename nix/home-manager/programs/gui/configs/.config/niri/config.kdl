@@ -60,14 +60,17 @@ binds {
     Alt+Cyrillic_io {
         spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
     }
-    Ctrl+Alt+C {
+    Ctrl+Alt+F {
         spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
     }
-    Ctrl+Alt+F {
+    Ctrl+Alt+C {
         spawn "noctalia-shell" "ipc" "call" "controlCenter" "toggle"
     }
     Ctrl+Alt+P {
         spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"
+    }
+    Ctrl+Alt+Period {
+        spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"
     }
     Ctrl+Alt+U {
         spawn "noctalia-shell" "ipc" "call" "darkMode" "toggle"

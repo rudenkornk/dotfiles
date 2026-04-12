@@ -1,6 +1,7 @@
 import logging
 import os
 import shutil
+from datetime import UTC, datetime
 from pathlib import Path
 
 _logger = logging.getLogger(__name__)
@@ -55,12 +56,30 @@ def create_symlinks(*, source_dir: Path, target_dir: Path | None = None) -> None
         _create_symlink(source=source, dest=dest, home_dir=home_dir)
 
 
-def materialize_symlink(link: Path) -> None:
+def unlink_from_nix_store(link: Path) -> None:
+    """Re-link given file from nix store to a local writable file.
+
+    This function copies file from nix store to the same directory as the link,
+    and then modifies the link to point to the new file.
+
+    The function does not copy file to `link` path itself,
+        since that would make home-manager clobber during activation phase,
+        if `--backup` option is set.
+    """
     if not link.is_symlink():
+        _logger.debug(f"Requested relinking for not-symlink: {link}")
         return
 
     source = link.readlink()
+    if not source.is_relative_to(Path("/nix/store")):
+        _logger.debug(f"Link does not point to /nix/store: {link}")
+        return
+
+    date = datetime.now(tz=UTC).astimezone().strftime("%Y.%m.%d-%H.%M")
+    dest = link.parent / (link.stem + "-" + date + link.suffix)
+    shutil.copy2(source, dest)
+    dest.chmod(dest.stat().st_mode | 0o200)  # Add write permission for owner.
+
     link.unlink()
-    shutil.copy2(source, link)
-    link.chmod(0o644)
+    link.symlink_to(dest)
     _logger.info(f"Materialized symlink {link} -> {source}")

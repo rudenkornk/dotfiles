@@ -191,6 +191,10 @@
       name: user: args:
       import ./home-manager/home.nix (args // { inherit user; })
     ) users;
+    # Static extention, which only protects from clobbering once.
+    # Accompanying backup mechanism in `syms.py` is used to ensure
+    # that modified configs are not lost during activation phase.
+    backupFileExtension = "bak";
   };
 
   environment.systemPackages = with pkgs; [

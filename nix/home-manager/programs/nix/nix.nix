@@ -14,9 +14,17 @@
       nix-top
       nix-tree
     ];
+
+    sessionVariables = {
+      NH_SHOW_ACTIVATION_LOGS = 1;
+    };
   };
 
   programs = {
+    nh = {
+      enable = true;
+    };
+
     nix-search-tv = {
       enable = true;
       enableTelevisionIntegration = true;

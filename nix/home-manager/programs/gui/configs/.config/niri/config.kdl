@@ -260,6 +260,10 @@ window-rule {
     open-floating true
 }
 window-rule {
+    match app-id="org.gnome.Calculator"
+    open-floating true
+}
+window-rule {
     match app-id="ksnip"
     open-floating true
 }

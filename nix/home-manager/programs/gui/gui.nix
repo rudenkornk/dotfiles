@@ -10,10 +10,18 @@
       telegram-desktop
 
       # Screenshot tools.
+      ffmpeg
+      gifski
       grim
-      slurp
+      imagemagick
       ksnip
       satty
+      slurp
+      tesseract
+      translate-shell
+      wl-clipboard
+      wl-screenrec
+      zbar
     ];
 
     file = pkgs.locallib.homefiles {

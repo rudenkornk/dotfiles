@@ -33,6 +33,9 @@ binds {
     Alt+3 {
         spawn-sh "grim -g \"$(slurp)\" - | satty --filename - "
     }
+    Ctrl+Alt+3 {
+        spawn "noctalia-shell" "ipc" "call" "plugin:screen-toolkit" "toggle"
+    }
     Print {
         screenshot
     }

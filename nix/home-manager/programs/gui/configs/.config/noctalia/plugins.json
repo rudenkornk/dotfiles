@@ -21,6 +21,9 @@
     "privacy-indicator": {
       "enabled": true,
       "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+    },
+    "screen-toolkit": {
+      "enabled": true
     }
   },
   "version": 2

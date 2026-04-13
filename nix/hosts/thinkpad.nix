@@ -1,4 +1,5 @@
 {
+  name = "thinkpad";
   hardware-configuration =
     {
       config,

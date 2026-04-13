@@ -79,6 +79,8 @@
           x = 0;
           y = 0;
         };
+        external = true;
+        i2c-bus = "/dev/i2c-16";
       };
       "DP-6" = {
         mode = "3840x2160@59.996";
@@ -87,6 +89,8 @@
           x = 3840;
           y = 0;
         };
+        external = true;
+        i2c-bus = "/dev/i2c-17";
       };
       "eDP-1" = {
         mode = "3456x2160@60.001";
@@ -95,6 +99,8 @@
           x = 0;
           y = 2160;
         };
+        external = false;
+        i2c-bus = "/dev/i2c-12";
       };
     };
     noctalia = import ./dellxps/noctalia_monitors.nix;

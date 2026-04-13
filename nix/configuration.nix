@@ -40,6 +40,9 @@
     bluetooth = {
       enable = true;
     };
+    i2c = {
+      enable = true;
+    };
   };
 
   nix = {

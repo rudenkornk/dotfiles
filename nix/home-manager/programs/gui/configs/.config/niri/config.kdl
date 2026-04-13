@@ -23,6 +23,10 @@ environment {
     XDG_CURRENT_DESKTOP "niri"
 }
 spawn-at-startup "noctalia-shell"
+spawn-at-startup "kitty"
+hotkey-overlay {
+    skip-at-startup
+}
 binds {
     Alt+1 {
         spawn "kitty"

@@ -16,11 +16,13 @@ let
         scale ${toString cfg.scale}
       }
     '';
-  outputsKdl = lib.concatStringsSep "\n" (lib.mapAttrsToList mkOutputsKdl host.monitors.niri);
+  outputsKdl = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList mkOutputsKdl (host.monitors.niri or { })
+  );
 
   # Workaround for https://github.com/caelestia-dots/shell/issues/1341
   brightnessStep = toString 5;
-  externalMonitors = lib.filterAttrs (name: cfg: cfg.external) host.monitors.niri;
+  externalMonitors = lib.filterAttrs (name: cfg: cfg.external) (host.monitors.niri or { });
   mkDdcCmd =
     name: cfg:
     lib.concatStringsSep " " [

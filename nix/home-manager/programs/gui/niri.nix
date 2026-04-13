@@ -7,7 +7,7 @@
 }:
 
 let
-  mkOutputsKdl =
+  mkMonitorKdl =
     name: cfg: # kdl
     ''
       output "${name}" {
@@ -17,42 +17,8 @@ let
       }
     '';
   outputsKdl = lib.concatStringsSep "\n" (
-    lib.mapAttrsToList mkOutputsKdl (host.monitors.niri or { })
+    lib.mapAttrsToList mkMonitorKdl (host.monitors.niri or { })
   );
-
-  # Workaround for https://github.com/caelestia-dots/shell/issues/1341
-  brightnessStep = toString 5;
-  externalMonitors = lib.filterAttrs (name: cfg: cfg.external) (host.monitors.niri or { });
-  mkDdcCmd =
-    name: cfg:
-    lib.concatStringsSep " " [
-      "ddcutil"
-      "--noverify"
-      "--enable-dynamic-sleep"
-      "--sleep-multiplier=0.05"
-      "--bus"
-      (lib.last (lib.splitString "-" cfg.i2c-bus))
-      "setvcp"
-      "10" # VCP code for brightness.
-    ];
-  mkDdcCmdPlus = name: cfg: (mkDdcCmd name cfg) + " + " + brightnessStep + ";";
-  mkDdcCmdMinus = name: cfg: (mkDdcCmd name cfg) + " - " + brightnessStep + ";";
-  ddcCmdsPlus = lib.concatStringsSep " " (lib.mapAttrsToList mkDdcCmdPlus externalMonitors);
-  ddcCmdsMinus = lib.concatStringsSep " " (lib.mapAttrsToList mkDdcCmdMinus externalMonitors);
-  monitorsKdl = # kdl
-    ''
-      ${outputsKdl}
-
-      binds {
-        XF86MonBrightnessUp allow-when-locked=true {
-            spawn-sh "brightnessctl --class=backlight set ${brightnessStep}%+; ${ddcCmdsPlus}"
-        }
-        XF86MonBrightnessDown allow-when-locked=true {
-            spawn-sh "brightnessctl --class=backlight set ${brightnessStep}%-; ${ddcCmdsMinus}"
-        }
-      }
-    '';
-
 in
 {
   home.packages = with pkgs; [
@@ -69,7 +35,7 @@ in
 
   xdg = {
     configFile = {
-      "niri/monitors.kdl".text = monitorsKdl;
+      "niri/monitors.kdl".text = outputsKdl;
 
       "systemd/user/niri.service.d/override.conf".text =
         let

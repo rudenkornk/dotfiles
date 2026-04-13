@@ -17,7 +17,7 @@
         inherit (builtins) fromJSON readFile;
         main_settings = fromJSON (readFile ./noctalia/settings.json);
       in
-      lib.recursiveUpdate main_settings host.monitors.noctalia;
+      lib.recursiveUpdate main_settings (host.monitors.noctalia or { });
   };
 
   imports = [ inputs.noctalia.homeModules.default ];

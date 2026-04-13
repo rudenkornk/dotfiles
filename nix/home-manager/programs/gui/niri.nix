@@ -71,14 +71,26 @@ in
     configFile = {
       "niri/monitors.kdl".text = monitorsKdl;
 
-      # See https://github.com/niri-wm/niri/discussions/3734
-      "systemd/user/niri.service.d/override.conf".text = ''
-        [Service]
-        UnsetEnvironment=SHLVL
-        UnsetEnvironment=SHELL
-        UnsetEnvironment=TERM
-        UnsetEnvironment=PWD
-      '';
+      "systemd/user/niri.service.d/override.conf".text =
+        let
+          envList = lib.mapAttrsToList (name: value: "Environment=${name}=${value}") (
+            host.gpu.offloadVars or { }
+          );
+          offloadLinesRaw = lib.concatStringsSep "\n" envList;
+          offloadLines = if (host.gpu.niri.enable or false) then offloadLinesRaw else "";
+        in
+        # toml
+        ''
+          [Service]
+          # See https://github.com/niri-wm/niri/discussions/3734
+          UnsetEnvironment=SHLVL
+          UnsetEnvironment=SHELL
+          UnsetEnvironment=TERM
+          UnsetEnvironment=PWD
+
+          # GPU offload.
+          ${offloadLines}
+        '';
     };
   };
 

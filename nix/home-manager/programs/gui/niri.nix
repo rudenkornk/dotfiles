@@ -8,21 +8,14 @@
 
 let
   mkMonitorKdl =
-    name: cfg:
-    lib.hm.generators.toKDL { } {
-      output = {
-        _args = [ name ];
-        mode = {
-          _args = [ cfg.mode ];
-        };
-        scale = {
-          _args = [ cfg.scale ];
-        };
-        position = {
-          _props = { inherit (cfg.position) x y; };
-        };
-      };
-    };
+    name: cfg: # kdl
+    ''
+      output "${name}" {
+        mode "${cfg.mode}"
+        position x=${cfg.position.x} y=${cfg.position.y}
+        scale ${cfg.scale}
+      }
+    '';
   monitorsKdl = lib.concatStringsSep "\n" (lib.mapAttrsToList mkMonitorKdl host.monitors.niri);
 in
 {

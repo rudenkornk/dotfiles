@@ -82,7 +82,7 @@ binds {
     Ctrl+Alt+B {
         spawn "noctalia-shell" "ipc" "call" "notifications" "toggleHistory"
     }
-    Ctrl+Alt+Y {
+    Ctrl+Alt+Z {
         spawn "noctalia-shell" "ipc" "call" "calendar" "toggle"
     }
     Ctrl+Alt+0 {

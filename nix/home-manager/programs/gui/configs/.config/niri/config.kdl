@@ -226,6 +226,12 @@ binds {
     XF86AudioNext allow-when-locked=true {
         spawn "playerctl" "next"
     }
+    XF86MonBrightnessUp allow-when-locked=true {
+        spawn "noctalia-shell" "ipc" "call" "brightness" "increase"
+    }
+    XF86MonBrightnessDown allow-when-locked=true {
+        spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"
+    }
 }
 recent-windows {
     binds {

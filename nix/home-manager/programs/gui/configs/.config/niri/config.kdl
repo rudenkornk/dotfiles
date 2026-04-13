@@ -223,10 +223,10 @@ binds {
         spawn "playerctl" "next"
     }
     XF86MonBrightnessUp allow-when-locked=true {
-        spawn "brightnessctl" "--class=backlight" "set" "+10%"
+        spawn "noctalia-shell" "ipc" "call" "brightness" "increase"
     }
     XF86MonBrightnessDown allow-when-locked=true {
-        spawn "brightnessctl" "--class=backlight" "set" "10%-"
+        spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"
     }
 }
 recent-windows {

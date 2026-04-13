@@ -194,9 +194,10 @@
     isNormalUser = true;
     inherit (user) description;
     extraGroups = [
-      "networkmanager"
       "docker"
+      "i2c"
       "libvirtd"
+      "networkmanager"
       "tss"
       "wheel"
     ];

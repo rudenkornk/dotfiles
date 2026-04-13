@@ -1,4 +1,5 @@
 {
+  name = "dellxps";
   hardware-configuration =
     {
       config,

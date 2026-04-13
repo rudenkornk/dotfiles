@@ -40,7 +40,7 @@
         overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
       };
       hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
-      hosts = mapAttrs (name: file: import file // { inherit name; }) hostfiles;
+      hosts = mapAttrs (lib.const import) hostfiles;
       userfiles = pkgs.locallib.get_modules_map ./nix/users;
       users = mapAttrs (lib.const import) userfiles;
 

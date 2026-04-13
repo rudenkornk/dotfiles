@@ -47,4 +47,4 @@ local clipboards = {
   },
 }
 
-return clipboards["xsel"]
+return clipboards["wl-clipboard"]

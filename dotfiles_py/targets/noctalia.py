@@ -42,6 +42,12 @@ def noctalia_config(*, settings_path: Path, monitor_settings_path: Path) -> None
     _replace_home(settings)
     monitors = _extract_monitors(settings)
 
+    # Do not enforce dark/light mode.
+    del settings["colorSchemes"]["darkMode"]
+    # In theory we should also do the same for color scheme,
+    # but that makes color scheme reset to default after reload.
+    # -- del settings["colorSchemes"]["predefinedScheme"]
+
     settings_path.parent.mkdir(parents=True, exist_ok=True)
     settings_path.write_text(json.dumps(settings, indent=2, sort_keys=True))
 

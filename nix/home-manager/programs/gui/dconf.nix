@@ -249,6 +249,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/gnome-system-monitor" = {
+      cpu-stacked-area-chart = true;
       maximized = false;
       process-memory-in-iec = true;
     };

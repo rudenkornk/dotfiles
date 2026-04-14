@@ -75,7 +75,37 @@
     };
 
   monitors = {
-    niri = { };
-    noctalia = { };
+    niri = {
+      "DP-3" = {
+        mode = "2560x1440@59.951";
+        scale = 1;
+        position = {
+          x = 0;
+          y = 0;
+        };
+        external = true;
+        i2c-bus = "/dev/i2c-16";
+      };
+      "eDP-1" = {
+        mode = "3840x2160@60.000";
+        scale = 1.333;
+        position = {
+          x = 0;
+          y = 1440;
+        };
+        external = false;
+        i2c-bus = "/dev/i2c-12";
+      };
+    };
+    noctalia = import ./thinkpad/noctalia_monitors.nix;
+  };
+  gpu = {
+    offloadVars = {
+      __NV_PRIME_RENDER_OFFLOAD = "1";
+      __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      __VK_LAYER_NV_optimus = "NVIDIA_only";
+    };
+    niri.enable = false;
   };
 }

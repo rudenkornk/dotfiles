@@ -36,6 +36,10 @@ in
   xdg = {
     configFile = {
       "niri/monitors.kdl".text = outputsKdl;
+      "niri/niri-tweaks.kdl".text = # kdl
+        ''
+          spawn-at-startup "${pkgs.niri-tweaks}/bin/niri_tile_to_n" "-n=4"
+        '';
 
       "systemd/user/niri.service.d/override.conf".text =
         let

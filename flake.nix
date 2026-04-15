@@ -23,6 +23,11 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    niri-tweaks = {
+      url = "github:heyoeyo/niri_tweaks";
+      flake = false;
+    };
   };
 
   outputs =

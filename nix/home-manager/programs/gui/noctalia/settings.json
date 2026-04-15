@@ -406,7 +406,7 @@
     "lockScreenBlur": 0.4,
     "lockScreenCountdownDuration": 3000,
     "lockScreenTint": 0.3,
-    "passwordChars": true,
+    "passwordChars": false,
     "radiusRatio": 1.5,
     "reverseScroll": false,
     "scaleRatio": 1.2,

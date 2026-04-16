@@ -11,6 +11,7 @@ input {
     }
     touchpad {
         tap
+        dwt
         natural-scroll
     }
     focus-follows-mouse
@@ -245,13 +246,13 @@ recent-windows {
     }
 }
 layout {
-    gaps 6
+    gaps 10
     border {
         off
     }
     focus-ring {
-        width 4
-        active-gradient from="#79e675" to="#24fff0"
+        width 5
+        active-gradient from="#42ff71" to="#1fd2ff"
     }
     default-column-width {
         proportion 0.5

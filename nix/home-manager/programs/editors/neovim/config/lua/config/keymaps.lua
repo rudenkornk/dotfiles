@@ -29,8 +29,8 @@
 -- <C-y> -- scroll down lines.
 -- <C-z> -- ???
 
--- <C-_> -- terminal on the bottom.
--- <C-/> -- terminal on the bottom (<C-/> and <C-_> usually interchangeable in terminals).
+-- <C-_> -- terminal on the right.
+-- <C-/> -- terminal on the right (<C-/> and <C-_> usually interchangeable in terminals).
 
 -- <S-a> -- insert at the end of line.
 -- <S-b> -- word back.
@@ -91,15 +91,15 @@
 -- <A-C> -- dap reverse continue.
 -- <A-D> -- WM reserved.
 -- <A-E> --
--- <A-F> --
+-- <A-F> -- terminal (floating).
 -- <A-G> --
 -- <A-H> -- WM reserved.
 -- <A-I> --
 -- <A-J> -- WM reserved.
 -- <A-K> -- WM reserved.
 -- <A-L> -- WM reserved.
--- <A-M> --
--- <A-N> --
+-- <A-M> -- terminal on the right.
+-- <A-N> -- terminal on the bottom.
 -- <A-O> --
 -- <A-P> --
 -- <A-Q> --

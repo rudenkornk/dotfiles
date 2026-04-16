@@ -209,7 +209,7 @@
       name: user: args:
       import ./home-manager/home.nix (args // { inherit user; })
     ) users;
-    backupCommand = "${pkgs.trash-cli}/bin/trash";
+    backupCommand = "${pkgs.lib.getExe pkgs.trash-cli}";
   };
 
   environment.systemPackages = with pkgs; [

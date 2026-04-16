@@ -36,14 +36,14 @@ M.keys = {
   tmux_move("l", "<C-l>"),
   tmux_move("j", "<C-j>"),
   tmux_move("k", "<C-k>"),
-  tmux_resize("h", "<A-x>h", 15),
-  tmux_resize("l", "<A-x>l", 15),
-  tmux_resize("j", "<A-x>j", 10),
-  tmux_resize("k", "<A-x>k", 10),
-  tmux_resize("h", "<A-x><S-h>", 1),
-  tmux_resize("l", "<A-x><S-l>", 1),
-  tmux_resize("j", "<A-x><S-j>", 1),
-  tmux_resize("k", "<A-x><S-k>", 1),
+  tmux_resize("h", "<A-z>h", 15),
+  tmux_resize("l", "<A-z>l", 15),
+  tmux_resize("j", "<A-z>j", 10),
+  tmux_resize("k", "<A-z>k", 10),
+  tmux_resize("h", "<A-z><S-h>", 1),
+  tmux_resize("l", "<A-z><S-l>", 1),
+  tmux_resize("j", "<A-z><S-j>", 1),
+  tmux_resize("k", "<A-z><S-k>", 1),
 }
 
 return M

@@ -15,6 +15,10 @@
       "enabled": true,
       "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
     },
+    "niri-overview-launcher": {
+      "enabled": true,
+      "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+    },
     "noctalia-calculator": {
       "enabled": true,
       "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
@@ -24,6 +28,14 @@
       "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
     },
     "screen-toolkit": {
+      "enabled": true,
+      "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+    },
+    "translator": {
+      "enabled": true,
+      "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+    },
+    "web-search": {
       "enabled": true,
       "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
     }

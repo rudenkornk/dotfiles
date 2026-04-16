@@ -13,7 +13,7 @@ final: prev: {
       for f in *.py; do
         cp "$f" "$out/share/niri-tweaks/"
         name=$(basename "$f" .py)
-        makeWrapper ${final.python3}/bin/python3 "$out/bin/$name" \
+        makeWrapper ${final.lib.getExe final.python3} "$out/bin/$name" \
           --add-flags "$out/share/niri-tweaks/$f"
       done
       for f in *.sh; do

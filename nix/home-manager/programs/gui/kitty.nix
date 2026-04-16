@@ -21,7 +21,7 @@
       # https://github.com/kovidgoyal/kitty/issues/1951
       clipboard_control = "write-clipboard write-primary no-append";
       hide_window_decorations = true;
-      shell = "${pkgs.fish}/bin/fish";
+      shell = "${pkgs.lib.getExe pkgs.fish}";
       background = "#1a1b26"; # Should be in sync with tmux theme.
     };
   };

@@ -82,9 +82,9 @@
 -- <A-u> -- dap up.
 -- <A-v> -- dap run to cursor.
 -- <A-w> --
--- <A-x> -- tmux reserved.
+-- <A-x> --
 -- <A-y> --
--- <A-z> --
+-- <A-z> -- tmux reserved.
 
 -- <A-A> --
 -- <A-B> --

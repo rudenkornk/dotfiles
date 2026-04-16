@@ -102,11 +102,17 @@ binds {
     Alt+J {
         focus-window-or-monitor-down
     }
-    Ctrl+Alt+1 {
+    Alt+Shift+K {
         focus-workspace-up
     }
-    Ctrl+Alt+2 {
+    Alt+Shift+J {
         focus-workspace-down
+    }
+    Alt+Shift+L {
+        focus-column-or-monitor-right
+    }
+    Alt+Shift+H {
+        focus-column-or-monitor-left
     }
     Ctrl+Alt+W {
         move-column-to-monitor-up
@@ -120,11 +126,17 @@ binds {
     Ctrl+Alt+A {
         move-column-left-or-to-monitor-left
     }
-    Ctrl+Alt+E {
+    Alt+Shift+W {
+        move-window-up-or-to-workspace-up
+    }
+    Alt+Shift+S {
         move-window-down-or-to-workspace-down
     }
-    Ctrl+Alt+Q {
-        move-window-up-or-to-workspace-up
+    Alt+Shift+D {
+        move-column-right-or-to-monitor-right
+    }
+    Alt+Shift+A {
+        move-column-left-or-to-monitor-left
     }
     Ctrl+Alt+M {
         consume-or-expel-window-right

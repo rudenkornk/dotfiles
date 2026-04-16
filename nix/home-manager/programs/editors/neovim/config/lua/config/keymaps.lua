@@ -113,6 +113,33 @@
 -- <A-Y> --
 -- <A-Z> --
 
+-- <C-A-a> -- WM reserved.
+-- <C-A-b> -- WM reserved.
+-- <C-A-c> -- WM reserved.
+-- <C-A-d> -- WM reserved.
+-- <C-A-e> -- WM reserved.
+-- <C-A-f> -- WM reserved.
+-- <C-A-g> -- WM reserved.
+-- <C-A-h> -- WM reserved.
+-- <C-A-i> -- WM reserved.
+-- <C-A-j> -- WM reserved.
+-- <C-A-k> -- WM reserved.
+-- <C-A-l> -- WM reserved.
+-- <C-A-m> -- WM reserved.
+-- <C-A-n> -- WM reserved.
+-- <C-A-o> -- WM reserved.
+-- <C-A-p> -- WM reserved.
+-- <C-A-q> -- WM reserved.
+-- <C-A-r> -- WM reserved.
+-- <C-A-s> -- WM reserved.
+-- <C-A-t> -- WM reserved.
+-- <C-A-u> -- WM reserved.
+-- <C-A-v> -- WM reserved.
+-- <C-A-w> -- WM reserved.
+-- <C-A-x> -- WM reserved.
+-- <C-A-y> -- WM reserved.
+-- <C-A-z> -- WM reserved.
+
 vim.keymap.set(
   { "n", "x" },
   "<C-z>",

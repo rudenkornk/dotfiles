@@ -86,20 +86,32 @@
 -- <A-y> --
 -- <A-z> -- tmux reserved.
 
--- <A-A> --
+-- <A-A> -- WM reserved.
 -- <A-B> --
 -- <A-C> -- dap reverse continue.
--- <A-D> --
+-- <A-D> -- WM reserved.
 -- <A-E> --
--- <A-F> -- terminal (floating).
--- <A-H> -- terminal (left).
--- <A-J> -- terminal (bottom).
--- <A-K> -- terminal (top).
--- <A-L> -- terminal (right).
+-- <A-F> --
+-- <A-G> --
+-- <A-H> -- WM reserved.
+-- <A-I> --
+-- <A-J> -- WM reserved.
+-- <A-K> -- WM reserved.
+-- <A-L> -- WM reserved.
+-- <A-M> --
+-- <A-N> --
+-- <A-O> --
+-- <A-P> --
 -- <A-Q> --
 -- <A-R> -- dap breakpoint with condition.
--- <A-S> --
--- <A-W> --
+-- <A-S> -- WM reserved.
+-- <A-T> --
+-- <A-U> --
+-- <A-V> --
+-- <A-W> -- WM reserved.
+-- <A-X> --
+-- <A-Y> --
+-- <A-Z> --
 
 vim.keymap.set(
   { "n", "x" },

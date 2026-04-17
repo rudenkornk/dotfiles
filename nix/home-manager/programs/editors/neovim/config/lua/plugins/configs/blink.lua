@@ -22,7 +22,7 @@ M.dependencies = {
 -- `internet` as an antonym for `intranet`.
 local internet_providers = {
   copilot = {
-    score_offset = 0,
+    score_offset = 5,
   },
 }
 local maybe_internet_providers = os.getenv("USERKIND") == "default" and internet_providers or {}
@@ -40,7 +40,7 @@ M.opts = {
     providers = vim.tbl_extend("error", {
       tmux = {
         name = "tmux",
-        score_offset = -50,
+        score_offset = -5,
         opts = { label = " ", all_panes = true },
       },
       minuet = {

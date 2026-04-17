@@ -374,7 +374,7 @@
     "size": 1.75
   },
   "general": {
-    "allowPanelsOnScreenWithoutBar": true,
+    "allowPanelsOnScreenWithoutBar": false,
     "allowPasswordWithFprintd": true,
     "animationDisabled": false,
     "animationSpeed": 2,

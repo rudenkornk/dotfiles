@@ -81,6 +81,7 @@
         {
           "defaultSettings": {
             "activeColor": "primary",
+            "camFilterRegex": "",
             "enableToast": true,
             "hideInactive": false,
             "iconSpacing": 4,
@@ -491,7 +492,7 @@
     "clearDismissed": true,
     "criticalUrgencyDuration": 10,
     "density": "default",
-    "enableBatteryToast": true,
+    "enableBatteryToast": false,
     "enableKeyboardLayoutToast": false,
     "enableMarkdown": false,
     "enableMediaToast": false,
@@ -646,7 +647,7 @@
     "fontDefaultScale": 1,
     "fontFixed": "JetBrainsMono NF",
     "fontFixedScale": 1,
-    "panelBackgroundOpacity": 0.99,
+    "panelBackgroundOpacity": 1,
     "panelsAttachedToBar": true,
     "scrollbarAlwaysVisible": true,
     "settingsPanelMode": "centered",

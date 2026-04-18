@@ -243,13 +243,16 @@ with lib.hm.gvariant;
       background-color = "#24283b";
     };
 
+    "org/gnome/gnome-system-monitor" = {
+      cpu-stacked-area-chart = true;
+    };
+
     "org/gnome/gnome-system-monitor/disktreenew" = {
       col-6-visible = true;
       col-6-width = 0;
     };
 
     "org/gnome/gnome-system-monitor" = {
-      cpu-stacked-area-chart = true;
       maximized = false;
       process-memory-in-iec = true;
     };

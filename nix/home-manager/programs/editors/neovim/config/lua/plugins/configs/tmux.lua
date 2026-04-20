@@ -32,18 +32,18 @@ local function tmux_resize(direction, key, size)
 end
 
 M.keys = {
-  tmux_move("h", "<C-h>"),
-  tmux_move("l", "<C-l>"),
-  tmux_move("j", "<C-j>"),
-  tmux_move("k", "<C-k>"),
-  tmux_resize("h", "<A-z>h", 15),
-  tmux_resize("l", "<A-z>l", 15),
-  tmux_resize("j", "<A-z>j", 10),
-  tmux_resize("k", "<A-z>k", 10),
-  tmux_resize("h", "<A-z><S-h>", 1),
-  tmux_resize("l", "<A-z><S-l>", 1),
-  tmux_resize("j", "<A-z><S-j>", 1),
-  tmux_resize("k", "<A-z><S-k>", 1),
+  tmux_move("left", "<C-h>"),
+  tmux_move("right", "<C-l>"),
+  tmux_move("bottom", "<C-j>"),
+  tmux_move("top", "<C-k>"),
+  tmux_resize("left", "<A-z>h", 15),
+  tmux_resize("right", "<A-z>l", 15),
+  tmux_resize("bottom", "<A-z>j", 10),
+  tmux_resize("top", "<A-z>k", 10),
+  tmux_resize("left", "<A-z><S-h>", 1),
+  tmux_resize("right", "<A-z><S-l>", 1),
+  tmux_resize("bottom", "<A-z><S-j>", 1),
+  tmux_resize("top", "<A-z><S-k>", 1),
 }
 
 return M

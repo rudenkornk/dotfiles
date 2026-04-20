@@ -145,19 +145,7 @@ return {
   {
     "max397574/better-escape.nvim",
     event = "InsertEnter",
-    -- jk combination conflicts with scrolling in lazygit
-    -- jj messes up with visual mode
-    opts = {
-      default_mappings = false,
-      timeout = 200,
-      mappings = {
-        i = { l = { j = "<Esc>" } },
-        c = { l = { j = "<C-c>" } },
-        t = { l = { j = "<C-\\><C-n>" }, ["д"] = { ["о"] = "<Esc>" } },
-        v = { l = { j = "<Esc>" }, ["д"] = { ["о"] = "<Esc>" } },
-        s = { l = { j = "<Esc>" } },
-      },
-    },
+    opts = require("plugins.configs.better_escape").opts,
   },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {

@@ -7,18 +7,23 @@
   ...
 }:
 
+let
+  inherit (builtins) fromJSON readFile;
+  toJson = (pkgs.formats.json { }).generate;
+in
 {
-  programs.noctalia-shell = {
-    enable = true;
-    # For settings we need quirky merging with monitors config.
-    # Colors and plugins are linked as-is.
-    settings =
-      let
-        inherit (builtins) fromJSON readFile;
-        main_settings = fromJSON (readFile ./noctalia/settings.json);
-      in
-      lib.recursiveUpdate main_settings (host.monitors.noctalia or { });
+  home = {
+    packages = with pkgs; [ unstable.noctalia-shell ];
   };
 
-  imports = [ inputs.noctalia.homeModules.default ];
+  xdg = {
+    configFile = {
+      "noctalia/settings.json".source =
+        let
+          main_settings = fromJSON (readFile ./noctalia/settings.json);
+          nix_settings = lib.recursiveUpdate main_settings (host.monitors.noctalia or { });
+        in
+        toJson "noctalia-settings.json" nix_settings;
+    };
+  };
 }

@@ -87,40 +87,31 @@ local M = {}
 -- jk combination conflicts with scrolling in lazygit
 -- jj messes up with visual mode
 -- js is probably OK, but it conflicts with `json` word.
+-- fs is also OK, but conflicts with `fst` (first) word.
 M.opts = {
   default_mappings = false,
   timeout = 200,
   mappings = {
     i = {
-      f = { s = "<Esc>" },
       s = { f = "<Esc>" },
-      ["а"] = { ["ы"] = "<Esc>" },
       ["ы"] = { ["а"] = "<Esc>" },
     },
     c = {
-      f = { s = "<C-c>" },
       s = { f = "<C-c>" },
-      ["а"] = { ["ы"] = "<C-c>" },
       ["ы"] = { ["а"] = "<C-c>" },
     },
     t = {
-      f = { s = "<C-\\><C-n>" },
       s = { f = "<C-\\><C-n>" },
-      ["а"] = { ["ы"] = "<C-\\><C-n>" },
       ["ы"] = { ["а"] = "<C-\\><C-n>" },
     },
     v = {
       j = { s = "<Esc>" },
-      f = { s = "<Esc>" },
       s = { f = "<Esc>" },
       ["о"] = { ["ы"] = "<Esc>" },
-      ["а"] = { ["ы"] = "<Esc>" },
       ["ы"] = { ["а"] = "<Esc>" },
     },
     s = {
-      f = { s = "<Esc>" },
       s = { f = "<Esc>" },
-      ["а"] = { ["ы"] = "<Esc>" },
       ["ы"] = { ["а"] = "<Esc>" },
     },
   },

@@ -28,8 +28,8 @@ xkb_symbols "qwerty_rnk" {
     key <AD07> { [                 u,                 U,       ampersand,                5 ] };
     key <AD08> { [                 i,                 I,       braceleft,                6 ] };
     key <AD09> { [                 o,                 O,      braceright,                7 ] };
-    key <AD10> { [                 p,                 P,        question,                8 ] };
-    key <AD11> { [        udiaeresis,        Udiaeresis,       BackSpace,        BackSpace ] };
+    key <AD10> { [                 p,                 P,       BackSpace,        BackSpace ] };
+    key <AD11> { [        udiaeresis,        Udiaeresis,        question,         question ] };
     key <AD12> { [             aring,             Aring,      asciitilde,       asciitilde ] };
     key <BKSL> { [         backslash,               bar,             bar,              bar ] };
 
@@ -49,7 +49,7 @@ xkb_symbols "qwerty_rnk" {
     key <AB02> { [                 x,                 X,      asciitilde,       asciitilde ] };
     key <AB03> { [                 c,                 C,          Return,           Return ] };
     key <AB04> { [                 v,                 V,          dollar,           period ] };
-    key <AB05> { [                 b,                 B,       backslash,        backslash ] };
+    key <AB05> { [                 b,                 B,       backslash,                8 ] };
     key <AB06> { [                 n,                 N,     bracketleft,                9 ] };
     key <AB07> { [                 m,                 M,    bracketright,                0 ] };
     key <AB08> { [            oslash,            Oslash,        quotedbl,         quotedbl ] };

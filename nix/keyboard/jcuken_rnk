@@ -28,8 +28,8 @@ xkb_symbols "jcuken_rnk" {
     key <AD07> { [      Cyrillic_ghe,      Cyrillic_GHE,       ampersand,                5 ] };
     key <AD08> { [      Cyrillic_sha,      Cyrillic_SHA,       braceleft,                6 ] };
     key <AD09> { [    Cyrillic_shcha,    Cyrillic_SHCHA,      braceright,                7 ] };
-    key <AD10> { [       Cyriliic_ze,       Cyrillic_ZE,        question,                8 ] };
-    key <AD11> { [       Cyrillic_ha,       Cyrillic_HA,       BackSpace,        BackSpace ] };
+    key <AD10> { [       Cyriliic_ze,       Cyrillic_ZE,       BackSpace,        BackSpace ] };
+    key <AD11> { [       Cyrillic_ha,       Cyrillic_HA,        question,         question ] };
     key <AD12> { [ Cyrillic_hardsign, Cyrillic_HARDSIGN,      asciitilde,       asciitilde ] };
     key <BKSL> { [         backslash,               bar,             bar,              bar ] };
 
@@ -49,7 +49,7 @@ xkb_symbols "jcuken_rnk" {
     key <AB02> { [      Cyrillic_che,      Cyrillic_CHE,      asciitilde,       asciitilde ] };
     key <AB03> { [       Cyrillic_es,       Cyrillic_ES,          Return,           Return ] };
     key <AB04> { [       Cyrillic_em,       Cyrillic_EM,          dollar,           period ] };
-    key <AB05> { [        Cyrillic_i,        Cyrillic_I,       backslash,        backslash ] };
+    key <AB05> { [        Cyrillic_i,        Cyrillic_I,       backslash,                8 ] };
     key <AB06> { [       Cyrillic_te,       Cyrillic_TE,     bracketleft,                9 ] };
     key <AB07> { [ Cyrillic_softsign, Cyrillic_SOFTSIGN,    bracketright,                0 ] };
     key <AB08> { [       Cyrillic_be,       Cyrillic_BE,        quotedbl,         quotedbl ] };

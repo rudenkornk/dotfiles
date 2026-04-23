@@ -1,4 +1,43 @@
-// Qwerty for programmers
+// Qwerty for programmers.
+// NORMAL:
+// ß   1   2   3   4   5   6   7   8   9   0   -   =   󰭜
+//
+// 󰌒     q   w   e   r   t   y   u   i   o   p   ü   å   \
+//
+// Ctrl    a   s   d   f   g   h   j   k   l   ö   ä   󰌑
+//
+// 󰘶         z   x   c   v   b   n   m   ø   æ   .
+//
+//
+// SHIFT:
+// Ģ   ^   @   #   $   %   ^   &   *   (   )   _   +   󰭜
+//
+// 󰌒     Q   W   E   R   T   Y   U   I   O   P   Ü   Å   |
+//
+// Ctrl    A   S   D   F   G   H   J   K   L   Ö   Ä   󰌑
+//
+// 󰘶         Z   X   C   V   B   N   M   Ø   Æ   ,
+//
+//
+// LEVEL 3:
+// ~   ^   @   #   $   %   ^   &   *   (   )   _   +   󰭜
+//
+// 󰌒     %   |   -   +   *   /   &   {   }   󰭜   ?   ~   |
+//
+// Ctrl    !   ~   <   =   >   󰌑   (   )   _   :   ;   󰌑
+//
+// 󰘶         ~   ~   󱊷   $   \   [   ]   "   '   `
+//
+//
+// LEVEL 4:
+// ~   ^   @   #   $   %   ^   &   *   (   )   _   +   󰭜
+//
+// 󰌒     %   |   -   +   *   /   5   6   7   󰭜   ?   ~   |
+//
+// Ctrl    !   ~   <   =   >   󰌑   1   2   3   4   ;   󰌑
+//
+// 󰘶         ~   ~   󱊷   .   8   9   0   "   '   ,
+
 partial alphanumeric_keys
 xkb_symbols "qwerty_rnk" {
 
@@ -6,7 +45,7 @@ xkb_symbols "qwerty_rnk" {
     name[Group1]= "English (Qwerty for programmers)";
 
     key <TLDE> { [            ssharp,             U0122,      asciitilde,       asciitilde ] };
-    key <AE01> { [                 1,            exclam,          exclam,           exclam ] };
+    key <AE01> { [                 1,       asciicircum,     asciicircum,      asciicircum ] };
     key <AE02> { [                 2,                at,              at,               at ] };
     key <AE03> { [                 3,        numbersign,      numbersign,       numbersign ] };
     key <AE04> { [                 4,            dollar,          dollar,           dollar ] };
@@ -20,11 +59,11 @@ xkb_symbols "qwerty_rnk" {
     key <AE12> { [             equal,              plus,            plus,             plus ] };
 
     key <AD01> { [                 q,                 Q,         percent,          percent ] };
-    key <AD02> { [                 w,                 W,     asciicircum,      asciicircum ] };
+    key <AD02> { [                 w,                 W,             bar,              bar ] };
     key <AD03> { [                 e,                 E,           minus,            minus ] };
     key <AD04> { [                 r,                 R,            plus,             plus ] };
     key <AD05> { [                 t,                 T,        asterisk,         asterisk ] };
-    key <AD06> { [                 y,                 Y,             bar,              bar ] };
+    key <AD06> { [                 y,                 Y,           slash,            slash ] };
     key <AD07> { [                 u,                 U,       ampersand,                5 ] };
     key <AD08> { [                 i,                 I,       braceleft,                6 ] };
     key <AD09> { [                 o,                 O,      braceright,                7 ] };
@@ -38,7 +77,7 @@ xkb_symbols "qwerty_rnk" {
     key <AC03> { [                 d,                 D,            less,             less ] };
     key <AC04> { [                 f,                 F,           equal,            equal ] };
     key <AC05> { [                 g,                 G,         greater,          greater ] };
-    key <AC06> { [                 h,                 H,           slash,            slash ] };
+    key <AC06> { [                 h,                 H,          Return,           Return ] };
     key <AC07> { [                 j,                 J,       parenleft,                1 ] };
     key <AC08> { [                 k,                 K,      parenright,                2 ] };
     key <AC09> { [                 l,                 L,      underscore,                3 ] };
@@ -47,7 +86,7 @@ xkb_symbols "qwerty_rnk" {
 
     key <AB01> { [                 z,                 Z,      asciitilde,       asciitilde ] };
     key <AB02> { [                 x,                 X,      asciitilde,       asciitilde ] };
-    key <AB03> { [                 c,                 C,          Return,           Return ] };
+    key <AB03> { [                 c,                 C,          Escape,           Escape ] };
     key <AB04> { [                 v,                 V,          dollar,           period ] };
     key <AB05> { [                 b,                 B,       backslash,                8 ] };
     key <AB06> { [                 n,                 N,     bracketleft,                9 ] };
@@ -88,3 +127,34 @@ xkb_symbols "qwerty_rnk" {
     // include "altwin(swap_alt_win)"
     // include "level3(lalt_switch)"
 };
+
+// Bonus. Special characters stats in this repo:
+//     󰌑 -- 12266
+//     " -- 8529
+//     _ -- 3483
+//     / -- 3162
+//     = -- 2724
+//     : -- 2856
+//     { -- 1840
+//     } -- 1828
+//     ) -- 1448
+//     ( -- 1447
+//     ; -- 1346
+//     * -- 1174
+//     # -- 1000
+//     [ -- 815
+//     ] -- 813
+//     ` -- 726
+//     \ -- 632
+//     > -- 616
+//     < -- 502
+//     $ -- 384
+//     ' -- 374
+//     % -- 316
+//     | -- 230
+//     @ -- 173
+//     & -- 61
+//     ? -- 58
+//     ! -- 55
+//     ~ -- 51
+//     ^ -- 20

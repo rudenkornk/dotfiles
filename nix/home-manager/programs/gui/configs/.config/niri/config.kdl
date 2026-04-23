@@ -100,16 +100,16 @@ binds {
         focus-column-or-monitor-right
     }
     Alt+K {
-        focus-window-or-monitor-up
+        spawn-sh "if [ $(niri msg -j outputs | jq 'length') -gt 1 ]; then niri msg action focus-window-or-monitor-up; else niri msg action focus-window-or-workspace-up; fi"
     }
     Alt+J {
-        focus-window-or-monitor-down
+        spawn-sh "if [ $(niri msg -j outputs | jq 'length') -gt 1 ]; then niri msg action focus-window-or-monitor-down; else niri msg action focus-window-or-workspace-down; fi"
     }
     Alt+Shift+K {
-        focus-workspace-up
+        focus-window-or-workspace-up
     }
     Alt+Shift+J {
-        focus-workspace-down
+        focus-window-or-workspace-down
     }
     Alt+Shift+L {
         focus-column-or-monitor-right
@@ -118,10 +118,10 @@ binds {
         focus-column-or-monitor-left
     }
     Ctrl+Alt+W {
-        move-column-to-monitor-up
+        spawn-sh "if [ $(niri msg -j outputs | jq 'length') -gt 1 ]; then niri msg action move-column-to-monitor-up; else niri msg action move-window-up-or-to-workspace-up; fi"
     }
     Ctrl+Alt+S {
-        move-column-to-monitor-down
+        spawn-sh "if [ $(niri msg -j outputs | jq 'length') -gt 1 ]; then niri msg action move-column-to-monitor-down; else niri msg action move-window-down-or-to-workspace-down; fi"
     }
     Ctrl+Alt+D {
         move-column-right-or-to-monitor-right

@@ -25,10 +25,10 @@ xkb_symbols "qwerty_rnk" {
     key <AD04> { [                 r,                 R,            plus,             plus ] };
     key <AD05> { [                 t,                 T,        asterisk,         asterisk ] };
     key <AD06> { [                 y,                 Y,             bar,              bar ] };
-    key <AD07> { [                 u,                 U,       ampersand,                2 ] };
-    key <AD08> { [                 i,                 I,       braceleft,                3 ] };
-    key <AD09> { [                 o,                 O,      braceright,                4 ] };
-    key <AD10> { [                 p,                 P,        question,                5 ] };
+    key <AD07> { [                 u,                 U,       ampersand,                5 ] };
+    key <AD08> { [                 i,                 I,       braceleft,                6 ] };
+    key <AD09> { [                 o,                 O,      braceright,                7 ] };
+    key <AD10> { [                 p,                 P,        question,                8 ] };
     key <AD11> { [        udiaeresis,        Udiaeresis,       BackSpace,        BackSpace ] };
     key <AD12> { [             aring,             Aring,      asciitilde,       asciitilde ] };
     key <BKSL> { [         backslash,               bar,             bar,              bar ] };
@@ -39,20 +39,20 @@ xkb_symbols "qwerty_rnk" {
     key <AC04> { [                 f,                 F,           equal,            equal ] };
     key <AC05> { [                 g,                 G,         greater,          greater ] };
     key <AC06> { [                 h,                 H,           slash,            slash ] };
-    key <AC07> { [                 j,                 J,       parenleft,                0 ] };
-    key <AC08> { [                 k,                 K,      parenright,                1 ] };
-    key <AC09> { [                 l,                 L,      underscore,       underscore ] };
-    key <AC10> { [        odiaeresis,        Odiaeresis,           colon,            colon ] };
+    key <AC07> { [                 j,                 J,       parenleft,                1 ] };
+    key <AC08> { [                 k,                 K,      parenright,                2 ] };
+    key <AC09> { [                 l,                 L,      underscore,                3 ] };
+    key <AC10> { [        odiaeresis,        Odiaeresis,           colon,                4 ] };
     key <AC11> { [        adiaeresis,        Adiaeresis,       semicolon,        semicolon ] };
 
     key <AB01> { [                 z,                 Z,      asciitilde,       asciitilde ] };
     key <AB02> { [                 x,                 X,      asciitilde,       asciitilde ] };
     key <AB03> { [                 c,                 C,          Return,           Return ] };
     key <AB04> { [                 v,                 V,          dollar,           period ] };
-    key <AB05> { [                 b,                 B,       backslash,                6 ] };
-    key <AB06> { [                 n,                 N,     bracketleft,                7 ] };
-    key <AB07> { [                 m,                 M,    bracketright,                8 ] };
-    key <AB08> { [            oslash,            Oslash,        quotedbl,                9 ] };
+    key <AB05> { [                 b,                 B,       backslash,        backslash ] };
+    key <AB06> { [                 n,                 N,     bracketleft,                9 ] };
+    key <AB07> { [                 m,                 M,    bracketright,                0 ] };
+    key <AB08> { [            oslash,            Oslash,        quotedbl,         quotedbl ] };
     key <AB09> { [                ae,                AE,      apostrophe,       apostrophe ] };
     key <AB10> { [            period,             comma,           grave,            comma ] };
 

@@ -67,7 +67,7 @@ xkb_symbols "jcuken_rnk" {
     key <AD07> { [      Cyrillic_ghe,      Cyrillic_GHE,       ampersand,                5 ] };
     key <AD08> { [      Cyrillic_sha,      Cyrillic_SHA,       braceleft,                6 ] };
     key <AD09> { [    Cyrillic_shcha,    Cyrillic_SHCHA,      braceright,                7 ] };
-    key <AD10> { [       Cyriliic_ze,       Cyrillic_ZE,       BackSpace,        BackSpace ] };
+    key <AD10> { [       Cyrillic_ze,       Cyrillic_ZE,       BackSpace,        BackSpace ] };
     key <AD11> { [       Cyrillic_ha,       Cyrillic_HA,        question,         question ] };
     key <AD12> { [ Cyrillic_hardsign, Cyrillic_HARDSIGN,      asciitilde,       asciitilde ] };
     key <BKSL> { [         backslash,               bar,             bar,              bar ] };

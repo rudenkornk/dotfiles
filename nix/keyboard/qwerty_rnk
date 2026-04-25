@@ -131,6 +131,8 @@ xkb_symbols "qwerty_rnk" {
 // Bonus. Special characters stats in this repo:
 //     󰌑 -- 12266
 //     " -- 8529
+//     . -- 4062
+//     , -- 3847
 //     _ -- 3483
 //     / -- 3162
 //     = -- 2724

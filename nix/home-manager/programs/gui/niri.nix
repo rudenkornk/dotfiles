@@ -28,6 +28,7 @@ in
     playerctl # Media control.
     polkit_gnome # Permission prompts.
     wireplumber # Volume control.
+    wtype # Wayland key injection.
     xdg-desktop-portal-gnome # Screen sharing.
     xdg-desktop-portal-gtk # Screen sharing.
     xwayland-satellite # X11 proxy.

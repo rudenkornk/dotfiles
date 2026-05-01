@@ -60,6 +60,16 @@ return {
   { "mason-org/mason-null-ls.nvim", enabled = false },
   { "jay-babu/mason-nvim-dap.nvim", enabled = false },
 
+  -- W/A for strange bug:
+  -- ```
+  -- .../refactoring.nvim/lua/refactoring.lua:45: module 'async' not found
+  -- ```
+  -- Probably should be removed in the future.
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = { "lewis6991/async.nvim" },
+  },
+
   -- LazyVim support for specific features and plugins.
   {
     "nvim-mini/mini.indentscope", -- ui.mini-indentscope

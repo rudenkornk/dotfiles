@@ -33,7 +33,7 @@
       inherit (builtins) mapAttrs;
       system = "x86_64-linux";
       pkgs = import inputs.nixpkgs {
-        inherit system;
+        localSystem = system;
         config = {
           allowUnfreePredicate = import ./nix/nixpkgs/unfree.nix { inherit lib; };
         };

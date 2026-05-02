@@ -1,2 +1,7 @@
 { inputs, ... }:
-final: prev: { unstable = import inputs.nixpkgs_unstable { inherit (prev) system config; }; }
+final: prev: {
+  unstable = import inputs.nixpkgs_unstable {
+    localSystem = prev.stdenv.hostPlatform.system;
+    inherit (prev) config;
+  };
+}

@@ -32,7 +32,10 @@ let
   # https://github.com/NixOS/nixpkgs/commit/82f750dc41a1215b792d4661564107dd573b4de4
   # https://github.com/NixOS/nixpkgs/commit/74a6c30612152d8b186f55f9c8b998f978afd6eb
 
-  unstable = import inputs.nixpkgs_unstable { inherit (prev) system config; };
+  unstable = import inputs.nixpkgs_unstable {
+    localSystem = prev.stdenv.hostPlatform.system;
+    inherit (prev) config;
+  };
 in
 
 {

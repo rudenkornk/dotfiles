@@ -10,7 +10,10 @@
 {
   imports = [
     host.hardware-configuration
+    ./disk.nix
     inputs.home-manager.nixosModules.default
+    inputs.preservation.nixosModules.default
+    inputs.disko.nixosModules.disko
   ];
 
   # This value determines the NixOS release from which the default
@@ -22,6 +25,8 @@
   system.stateVersion = "25.11"; # Did you read the comment?
 
   boot = {
+    initrd.systemd.enable = true;
+
     loader = {
       limine = {
         enable = true;
@@ -192,7 +197,7 @@
 
   users.users = builtins.mapAttrs (name: user: {
     isNormalUser = true;
-    inherit (user) description;
+    inherit (user) description initialPassword;
     extraGroups = [
       "docker"
       "i2c"
@@ -257,4 +262,5 @@
     docker.enable = true;
     libvirtd.enable = true;
   };
+
 }

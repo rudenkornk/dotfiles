@@ -45,15 +45,15 @@
     "capsuleColorKey": "none",
     "capsuleOpacity": 1,
     "contentPadding": 2,
-    "density": "spacious",
-    "displayMode": "auto_hide",
+    "density": "default",
+    "displayMode": "always_visible",
     "enableExclusionZoneInset": true,
-    "fontScale": 1.2000000000000002,
+    "fontScale": 1.6,
     "frameRadius": 12,
     "frameThickness": 8,
     "hideOnOverview": false,
     "marginHorizontal": 4,
-    "marginVertical": 4,
+    "marginVertical": 0,
     "middleClickAction": "settings",
     "middleClickCommand": "",
     "middleClickFollowMouse": false,
@@ -71,7 +71,7 @@
         "name": "eDP-1"
       }
     ],
-    "showCapsule": true,
+    "showCapsule": false,
     "showOnWorkspaceSwitch": false,
     "showOutline": false,
     "useSeparateOpacity": false,
@@ -157,12 +157,19 @@
           "onlyActiveWorkspaces": false,
           "onlySameOutput": false,
           "showPinnedApps": true,
-          "showTitle": false,
+          "showTitle": true,
           "smartWidth": true,
           "titleWidth": 100
         }
       ],
       "right": [
+        {
+          "displayMode": "forceOpen",
+          "iconColor": "none",
+          "id": "KeyboardLayout",
+          "showIcon": true,
+          "textColor": "none"
+        },
         {
           "applyToAllMonitors": false,
           "displayMode": "alwaysShow",
@@ -178,32 +185,15 @@
           "textColor": "none"
         },
         {
-          "displayMode": "alwaysShow",
-          "iconColor": "none",
-          "id": "Network",
-          "textColor": "none"
-        },
-        {
           "displayMode": "onhover",
           "iconColor": "none",
           "id": "Bluetooth",
           "textColor": "none"
         },
         {
-          "colorizeDistroLogo": false,
-          "colorizeSystemIcon": "none",
-          "colorizeSystemText": "none",
-          "customIconPath": "",
-          "enableColorization": false,
-          "icon": "toggle-left-filled",
-          "id": "ControlCenter",
-          "useDistroLogo": false
-        },
-        {
-          "displayMode": "forceOpen",
+          "displayMode": "alwaysShow",
           "iconColor": "none",
-          "id": "KeyboardLayout",
-          "showIcon": true,
+          "id": "Network",
           "textColor": "none"
         },
         {
@@ -351,7 +341,7 @@
     "deadOpacity": 0.6,
     "displayMode": "auto_hide",
     "dockType": "floating",
-    "enabled": true,
+    "enabled": false,
     "floatingRatio": 0,
     "groupApps": false,
     "groupClickAction": "cycle",
@@ -363,7 +353,7 @@
     "indicatorThickness": 3,
     "launcherIcon": "",
     "launcherIconColor": "none",
-    "launcherPosition": "end",
+    "launcherPosition": "start",
     "launcherUseDistroLogo": true,
     "onlySameOutput": false,
     "pinnedApps": [],
@@ -657,7 +647,7 @@
   },
   "wallpaper": {
     "automationEnabled": false,
-    "directory": "~/Pictures/Wallpapers",
+    "directory": "~/Downloads/Wallpapers",
     "enableMultiMonitorDirectories": false,
     "enabled": true,
     "favorites": [],

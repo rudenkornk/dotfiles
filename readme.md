@@ -15,12 +15,40 @@ Thus, we have to disable markdownlint for this block instead.
 
 <!-- markdownlint-disable MD010 -->
 
-```bash
-nix-shell -p git
-git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles &&
-	cd ~/projects/dotfiles &&
-	nixos-rebuild switch --flake .#dellxps
-```
+1. In BIOS/UEFI: disable Secure Boot, enable Setup Mode (also called Audit Mode).
+
+1. Boot live NixOS USB.
+
+1. Clone the repo and format disk:
+
+   ```bash
+   git clone https://github.com/rudenkornk/dotfiles.git
+   sudo nix --extra-experimental-features "nix-command flakes" \
+    run ./dotfiles#disko -- \
+    --mode destroy,format,mount --flake ./dotfiles#dellxps
+   ```
+
+1. Generate Secure Boot keys and copy them into persistent storage:
+
+   ```bash
+   sudo bash
+   nix-shell -p sbctl
+   sbctl create-keys
+   mkdir -p /mnt/{persistent,}/var/lib/
+   cp -r /var/lib/sbctl /mnt/persistent/var/lib/sbctl
+   cp -r /var/lib/sbctl /mnt/var/lib/sbctl
+   chattr -i /sys/firmware/efi/efivars/{PK,KEK,db}-*
+   sbctl enroll-keys --microsoft --firmware-builtin
+   ```
+
+1. Install NixOS (signs boot files automatically):
+
+   ```bash
+   sudo nixos-install --flake ./dotfiles#dellxps --root /mnt
+   sudo reboot
+   ```
+
+1. In BIOS/UEFI: enable Secure Boot.
 
 <!-- markdownlint-enable MD010 -->
 
@@ -40,8 +68,6 @@ git clone https://github.com/rudenkornk/dotfiles ~/projects/dotfiles &&
    [`sops`](https://github.com/getsops/sops) and
    [`age`](https://github.com/FiloSottile/age).
    Secret decryption is optional: config works even if secrets are not decrypted.
-1. **Bootstrap with a single command.**
-   Aside from `OS` limitations, there are zero requirements.
 
 ## Tools
 
@@ -59,6 +85,35 @@ While being decently generic, this config focuses more on some tools rather than
 1. **C++**.
    Config provides releases of `cmake`, `LLVM` and `GCC` toolchains as well as editor support.
 1. Config also provides some support for **Python**, **LaTeX** and **Lua**.
+
+## Maintenance
+
+<!-- markdownlint-disable MD010 -->
+
+### Apply new system config
+
+```bash
+nh os switch .
+```
+
+### Apply only home-manager config part
+
+```bash
+nh home switch . -b $(date '+%y.%m.%d-%H.%M')
+```
+
+### System recovery from live USB
+
+```bash
+git clone https://github.com/rudenkornk/dotfiles.git
+sudo nix --extra-experimental-features "nix-command flakes" \
+	run ./dotfiles#disko -- \
+	--mode mount --flake ./dotfiles#dellxps
+sudo nixos-install --flake ./dotfiles#dellxps --root /mnt
+sudo reboot
+```
+
+<!-- markdownlint-enable MD010 -->
 
 ## Test
 

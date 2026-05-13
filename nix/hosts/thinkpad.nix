@@ -39,10 +39,6 @@
             "xhci_pci"
           ];
           kernelModules = [ ];
-          luks.devices."luks-af224072-4e2b-4576-95c0-86df4fa2a40a".device =
-            "/dev/disk/by-uuid/af224072-4e2b-4576-95c0-86df4fa2a40a";
-          luks.devices."luks-eff1c0ef-9d50-4135-b042-7e283dbba58c".device =
-            "/dev/disk/by-uuid/eff1c0ef-9d50-4135-b042-7e283dbba58c";
         };
 
         kernel = {
@@ -54,26 +50,14 @@
         extraModulePackages = [ ];
       };
 
-      fileSystems."/" = {
-        device = "/dev/mapper/luks-af224072-4e2b-4576-95c0-86df4fa2a40a";
-        fsType = "ext4";
-      };
-
-      fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/DADD-39D5";
-        fsType = "vfat";
-        options = [
-          "fmask=0077"
-          "dmask=0077"
-        ];
-      };
-
-      swapDevices = [ { device = "/dev/mapper/luks-eff1c0ef-9d50-4135-b042-7e283dbba58c"; } ];
-
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
       hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     };
 
+  disk = {
+    device = "/dev/nvme1n1";
+    swapSize = "48G";
+  };
   monitors = {
     niri = {
       "DP-3" = {

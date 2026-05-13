@@ -23,6 +23,15 @@
       url = "github:heyoeyo/niri_tweaks";
       flake = false;
     };
+
+    preservation = {
+      url = "github:nix-community/preservation";
+    };
+
+    disko = {
+      url = "github:nix-community/disko/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -83,5 +92,7 @@
       checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations;
 
       devShells.${system}.default = import ./nix/devshell.nix { inherit pkgs; };
+
+      packages.${system}.disko = inputs.disko.packages.${system}.disko;
     };
 }

@@ -9,11 +9,11 @@
     cups
     dbus
     ddcutil
+    fastfetch
     htop-vim
     libcgroup
     lsb-release
     lsof
-    neofetch
     ntfs3g
     nvtopPackages.full
     parted

@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  hm_inputs,
   host,
   users,
   ...
@@ -209,7 +210,10 @@
   }) users;
 
   home-manager = {
-    extraSpecialArgs = { inherit pkgs inputs host; };
+    extraSpecialArgs = {
+      inputs = hm_inputs;
+      inherit pkgs host;
+    };
     users = builtins.mapAttrs (
       name: user: args:
       import ./home-manager/home.nix (args // { inherit user; })

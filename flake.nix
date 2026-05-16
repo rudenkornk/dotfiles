@@ -40,6 +40,15 @@
       inherit (inputs) home-manager;
       inherit (inputs.nixpkgs) lib;
       inherit (builtins) mapAttrs;
+      hm_inputs = { };
+      nixos_inputs = {
+        inherit (inputs)
+          disko
+          home-manager
+          nixos-hardware
+          preservation
+          ;
+      };
       system = "x86_64-linux";
       pkgs = import inputs.nixpkgs {
         localSystem = system;
@@ -62,7 +71,7 @@
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
-            inherit inputs;
+            inputs = hm_inputs;
             user = user.value;
             host = host.value;
           };
@@ -74,7 +83,10 @@
         name: host:
         lib.nixosSystem {
           inherit system pkgs;
-          specialArgs = { inherit inputs users host; };
+          specialArgs = {
+            inputs = nixos_inputs;
+            inherit hm_inputs users host;
+          };
           modules = [ ./nix/configuration.nix ];
         }
       ) hosts;
@@ -93,6 +105,6 @@
 
       devShells.${system}.default = import ./nix/devshell.nix { inherit pkgs; };
 
-      packages.${system}.disko = inputs.disko.packages.${system}.disko;
+      packages.${system}.disko = pkgs.disko;
     };
 }

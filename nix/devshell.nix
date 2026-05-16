@@ -27,6 +27,7 @@ pkgs.mkShell {
     nixfmt
     prettier
     pythonPkgs.mdformat
+    pythonPkgs.mdformat-beautysh
     pythonPkgs.mdformat-gfm
     ruff
     shellcheck

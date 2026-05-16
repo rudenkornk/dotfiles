@@ -4,17 +4,6 @@ A NixOS configuration.
 
 ## Bootstrap
 
-<!--
-mdformat-shfmt does not pick up .editorconfig settings for some reason.
-Ideally, it should format .sh blocks exactly as all other .sh scripts in the project.
-A bit worse solution is to disable mdformat-shfmt for this block only,
-to avoid its hard-tabs indents.
-BUT. mdformat does not have ignore comments!
-Thus, we have to disable markdownlint for this block instead.
--->
-
-<!-- markdownlint-disable MD010 -->
-
 1. In BIOS/UEFI: disable Secure Boot, enable Setup Mode (also called Audit Mode).
 
 1. Boot live NixOS USB.
@@ -24,8 +13,8 @@ Thus, we have to disable markdownlint for this block instead.
    ```bash
    git clone https://github.com/rudenkornk/dotfiles.git
    sudo nix --extra-experimental-features "nix-command flakes" \
-    run ./dotfiles#disko -- \
-    --mode destroy,format,mount --flake ./dotfiles#dellxps
+       run ./dotfiles#disko -- \
+       --mode destroy,format,mount --flake ./dotfiles#dellxps
    ```
 
 1. Generate Secure Boot keys and copy them into persistent storage:
@@ -49,8 +38,6 @@ Thus, we have to disable markdownlint for this block instead.
    ```
 
 1. In BIOS/UEFI: enable Secure Boot.
-
-<!-- markdownlint-enable MD010 -->
 
 ## Showcase
 
@@ -88,8 +75,6 @@ While being decently generic, this config focuses more on some tools rather than
 
 ## Maintenance
 
-<!-- markdownlint-disable MD010 -->
-
 ### Apply new system config
 
 ```bash
@@ -107,13 +92,11 @@ nh home switch . -b $(date '+%y.%m.%d-%H.%M')
 ```bash
 git clone https://github.com/rudenkornk/dotfiles.git
 sudo nix --extra-experimental-features "nix-command flakes" \
-	run ./dotfiles#disko -- \
-	--mode mount --flake ./dotfiles#dellxps
+    run ./dotfiles#disko -- \
+    --mode mount --flake ./dotfiles#dellxps
 sudo nixos-install --flake ./dotfiles#dellxps --root /mnt
 sudo reboot
 ```
-
-<!-- markdownlint-enable MD010 -->
 
 ## Test
 

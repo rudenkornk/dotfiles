@@ -8,6 +8,14 @@
     "keys": "ctrl+p"
   },
   {
+    "command": "next_folder",
+    "keys": "ctrl+shift+n"
+  },
+  {
+    "command": "previous_folder",
+    "keys": "ctrl+shift+p"
+  },
+  {
     "command": null,
     "keys": "alt+up"
   },

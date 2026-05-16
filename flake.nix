@@ -104,7 +104,5 @@
       checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations;
 
       devShells.${system} = import ./nix/devshell.nix { inherit pkgs; };
-
-      packages.${system}.disko = pkgs.disko;
     };
 }

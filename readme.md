@@ -11,17 +11,14 @@ A NixOS configuration.
 1. Clone the repo and format disk:
 
    ```bash
-   git clone https://github.com/rudenkornk/dotfiles.git
-   sudo nix --extra-experimental-features "nix-command flakes" \
-       run ./dotfiles#disko -- \
-       --mode destroy,format,mount --flake ./dotfiles#dellxps
+   git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
+   sudo nix --extra-experimental-features "nix-command flakes" develop .#install
+   disko --mode destroy,format,mount --flake .#dellxps
    ```
 
 1. Generate Secure Boot keys and copy them into persistent storage:
 
    ```bash
-   sudo bash
-   nix-shell -p sbctl
    sbctl create-keys
    mkdir -p /mnt/{persistent,}/var/lib/
    cp -r /var/lib/sbctl /mnt/persistent/var/lib/sbctl
@@ -33,8 +30,8 @@ A NixOS configuration.
 1. Install NixOS (signs boot files automatically):
 
    ```bash
-   sudo nixos-install --flake ./dotfiles#dellxps --root /mnt
-   sudo reboot
+   nixos-install --flake .#dellxps --root /mnt
+   reboot
    ```
 
 1. In BIOS/UEFI: enable Secure Boot.
@@ -90,12 +87,11 @@ nh home switch . -b $(date '+%y.%m.%d-%H.%M')
 ### System recovery from live USB
 
 ```bash
-git clone https://github.com/rudenkornk/dotfiles.git
-sudo nix --extra-experimental-features "nix-command flakes" \
-    run ./dotfiles#disko -- \
-    --mode mount --flake ./dotfiles#dellxps
-sudo nixos-install --flake ./dotfiles#dellxps --root /mnt
-sudo reboot
+git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
+sudo nix --extra-experimental-features "nix-command flakes" develop .#install
+disko --mode mount --flake .#dellxps
+nixos-install --flake .#dellxps --root /mnt
+reboot
 ```
 
 ## Test

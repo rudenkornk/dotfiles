@@ -52,4 +52,25 @@ in
         echo "Welcome to the project devshell!"
       '';
   };
+
+  install = pkgs.mkShell {
+    packages = with pkgs; [
+      disko
+      e2fsprogs
+      mokutil
+      sbctl
+      vim
+    ];
+
+    shellHook =
+      # bash
+      ''
+        echo "You are in the project NixOS install shell."
+        echo "It is supposed to run from inside NixOS live OS via:"
+        echo ""
+        echo "sudo nix --extra-experimental-features \"nix-command flakes\" develop .#install"
+        echo ""
+        echo 'After that `disko`, `sbctl` and `nixos-install` can be used to install or recover the system.'
+      '';
+  };
 }

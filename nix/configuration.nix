@@ -185,6 +185,10 @@
   # Enable sound with pipewire.
   security = {
     rtkit.enable = true;
+    # /var/db/sudo (lecture tracking) is not preserved across reboots in the
+    # impermanence setup, so disable the one-time lecture to avoid it printing
+    # on every first sudo invocation after boot.
+    sudo.extraConfig = "Defaults lecture = never";
     tpm2 = {
       # https://nixos.org/manual/nixos/stable/#module-security-tpm2-nixosmodule
       enable = true;

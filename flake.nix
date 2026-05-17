@@ -103,7 +103,7 @@
       # Also register home-manager configs for `nix flake check`.
       checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations;
 
-      devShells.${system}.default = import ./nix/devshell.nix { inherit pkgs; };
+      devShells.${system} = import ./nix/devshell.nix { inherit pkgs; };
 
       packages.${system}.disko = pkgs.disko;
     };

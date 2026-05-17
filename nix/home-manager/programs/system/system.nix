@@ -14,6 +14,7 @@
     libcgroup
     lsb-release
     lsof
+    mokutil
     ntfs3g
     nvtopPackages.full
     parted

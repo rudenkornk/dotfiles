@@ -14,7 +14,7 @@ input {
         dwt
         natural-scroll
     }
-    focus-follows-mouse
+ // focus-follows-mouse
 }
 cursor {
     xcursor-theme "Bibata-Original-Amber"

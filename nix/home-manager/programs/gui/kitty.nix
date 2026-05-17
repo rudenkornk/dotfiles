@@ -6,7 +6,7 @@
     themeFile = "Dracula";
     font = {
       name = "JetBrainsMono Nerd Font";
-      size = 11.0;
+      size = 13.0;
     };
     shellIntegration = {
       enableFishIntegration = true;

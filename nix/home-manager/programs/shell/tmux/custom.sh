@@ -11,7 +11,7 @@ export LC_ALL=en_US.UTF-8
 
 main() {
   echo -n "  "
-  df / --block-size G | awk 'NR==2 {printf "%.1fTiB/%.1fTiB  ", $3 / 1024, $2 / 1024}'
+  df /home --block-size G | awk 'NR==2 {printf "%.1fTiB/%.1fTiB  ", $3 / 1024, $2 / 1024}'
 
   echo -n "  "
   if [[ "${XDG_CURRENT_DESKTOP,,}" == *"gnome"* ]]; then

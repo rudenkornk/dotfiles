@@ -9,6 +9,7 @@
     cups
     dbus
     ddcutil
+    e2fsprogs
     fastfetch
     htop-vim
     libcgroup

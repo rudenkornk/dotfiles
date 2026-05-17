@@ -226,6 +226,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    e2fsprogs
     git
     sbctl
     vim

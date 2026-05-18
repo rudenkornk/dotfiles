@@ -6,8 +6,8 @@ input {
             layout "qwerty_rnk,jcuken_rnk"
             options "lv3:ralt_switch"
         }
-        repeat-delay 250
-        repeat-rate 45
+        repeat-delay 200
+        repeat-rate 50
     }
     touchpad {
         tap
@@ -166,7 +166,7 @@ binds {
         move-workspace-to-monitor-right
     }
     Ctrl+Alt+H {
-        set-column-width "-10%"
+        set-column-width "-5%"
     }
     Ctrl+Alt+J {
         set-window-height "+10%"
@@ -175,13 +175,13 @@ binds {
         set-window-height "-10%"
     }
     Ctrl+Alt+L {
-        set-column-width "+10%"
+        set-column-width "+5%"
     }
     Alt+Minus {
-        set-column-width "-10%"
+        set-column-width "-5%"
     }
     Alt+Equal {
-        set-column-width "+10%"
+        set-column-width "+5%"
     }
     Alt+Shift+Minus {
         set-window-height "-10%"

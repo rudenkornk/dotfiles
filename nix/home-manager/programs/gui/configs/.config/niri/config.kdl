@@ -1,5 +1,4 @@
 include "monitors.kdl"
-include "niri-tweaks.kdl"
 input {
     keyboard {
         xkb {
@@ -69,7 +68,7 @@ binds {
     Ctrl+Alt+F {
         spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
     }
-    Ctrl+Alt+E {
+    Ctrl+Alt+Q {
         spawn "noctalia-shell" "ipc" "call" "settings" "toggle"
     }
     Ctrl+Alt+C {
@@ -137,6 +136,9 @@ binds {
     }
     Alt+Shift+A {
         move-column-left-or-to-monitor-left
+    }
+    Ctrl+Alt+E {
+        switch-preset-column-width
     }
     Ctrl+Alt+M {
         consume-or-expel-window-right
@@ -267,12 +269,17 @@ layout {
         active-gradient from="#42ff71" to="#1fd2ff"
     }
     default-column-width {
-        proportion 0.5
+        proportion 0.99
     }
     shadow {
         on
     }
     always-center-single-column
+    center-focused-column "on-overflow"
+    preset-column-widths {
+        proportion 0.5
+        proportion 0.99
+    }
 }
 window-rule {
     geometry-corner-radius 12

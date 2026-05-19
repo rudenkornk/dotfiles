@@ -19,11 +19,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    niri-tweaks = {
-      url = "github:heyoeyo/niri_tweaks";
-      flake = false;
-    };
-
     preservation = {
       url = "github:nix-community/preservation";
     };

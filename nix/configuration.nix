@@ -11,10 +11,10 @@
 {
   imports = [
     host.hardware-configuration
-    ./disk.nix
     inputs.home-manager.nixosModules.default
     inputs.preservation.nixosModules.default
     inputs.disko.nixosModules.disko
+    ./disk.nix
   ];
 
   # This value determines the NixOS release from which the default

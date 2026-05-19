@@ -2,13 +2,6 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
--- keymap setup
-vim.opt.keymap = "rnk-qwerty-jcuken"
-vim.opt.langmap =
-  "ЙЦУКЕНГШЩЗХЪ;QWERTYUIOPÜÅ,ФЫВАПРОЛДЖЭ;ASDFGHJKLÖÄ,ЯЧСМИТЬБЮ;ZXCVBNMØÆ,йцукенгшщзхъ;qwertyuiopüå,фывапролджэ;asdfghjklöä,ячсмитьбю;zxcvbnmøæ"
-vim.opt.iminsert = 0
-vim.opt.imsearch = -1
-
 -- Disable auto-formatting, since it really messes up with 3rd party codebase
 -- with its own different (or absent) formatting rules.
 -- https://github.com/LazyVim/LazyVim/blob/25abbf546d564dc484cf903804661ba12de45507/lua/lazyvim/config/options.lua#L6

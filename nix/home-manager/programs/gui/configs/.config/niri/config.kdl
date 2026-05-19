@@ -75,9 +75,6 @@ binds {
     Ctrl+Alt+C {
         spawn "noctalia-shell" "ipc" "call" "controlCenter" "toggle"
     }
-    Ctrl+Alt+P {
-        spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"
-    }
     Ctrl+Alt+Period {
         spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"
     }

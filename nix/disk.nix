@@ -11,7 +11,7 @@
       fsType = "tmpfs";
       mountOptions = [
         "defaults"
-        "size=8G"
+        "size=${toString (host.disk.tmpfsSizeGiB or ((host.ramGiB or 8) / 2))}G"
         "mode=755"
       ];
     };
@@ -36,7 +36,7 @@
             };
           };
           swap = {
-            size = host.disk.swapSize or "64G";
+            size = "${toString (host.disk.swapSizeGiB or host.ramGiB or 32)}G";
             content = {
               type = "luks";
               name = "swap";

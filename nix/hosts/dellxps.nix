@@ -50,9 +50,9 @@
       };
     };
 
+  ramGiB = 64;
   disk = {
     device = "/dev/nvme1n1";
-    swapSize = "64G";
   };
   monitors = {
     niri = {

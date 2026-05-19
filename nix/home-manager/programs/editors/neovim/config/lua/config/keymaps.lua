@@ -140,6 +140,13 @@
 -- <C-A-y> -- WM reserved.
 -- <C-A-z> -- WM reserved.
 
+-- Keymap setup.
+vim.opt.keymap = "rnk-qwerty-jcuken"
+vim.opt.langmap =
+  "ЙЦУКЕНГШЩЗХЪ;QWERTYUIOPÜÅ,ФЫВАПРОЛДЖЭ;ASDFGHJKLÖÄ,ЯЧСМИТЬБЮ;ZXCVBNMØÆ,йцукенгшщзхъ;qwertyuiopüå,фывапролджэ;asdfghjklöä,ячсмитьбю;zxcvbnmøæ"
+vim.opt.iminsert = 0
+vim.opt.imsearch = -1
+
 vim.keymap.set(
   { "n", "x" },
   "<C-z>",

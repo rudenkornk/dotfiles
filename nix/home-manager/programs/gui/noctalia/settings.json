@@ -623,10 +623,6 @@
       {
         "enabled": true,
         "id": "hyprland"
-      },
-      {
-        "enabled": true,
-        "id": "kitty"
       }
     ],
     "enableUserTheming": false

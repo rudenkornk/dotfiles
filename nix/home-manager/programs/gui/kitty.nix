@@ -1,38 +1,16 @@
 { pkgs, ... }:
 
 {
-  programs.kitty = {
-    enable = true;
-    themeFile = "Dracula";
-    font = {
-      name = "JetBrainsMono Nerd Font";
-      size = 13.0;
-    };
-    shellIntegration = {
-      enableFishIntegration = true;
-      enableBashIntegration = true;
-    };
-    settings = {
-      scrollback_lines = 100000;
-      cursor_blink_interval = 0;
-      cursor_shape = "beam";
-      enable_audio_bell = false;
-      confirm_os_window_close = 0;
-      # https://github.com/kovidgoyal/kitty/issues/1951
-      clipboard_control = "write-clipboard write-primary no-append";
-      hide_window_decorations = true;
-      shell = "${pkgs.lib.getExe pkgs.fish}";
-      background = "#1a1b26"; # Should be in sync with tmux theme.
-    };
+  xdg.configFile = {
+    "kitty/themes".source = "${pkgs.kitty-themes}/share/kitty-themes/themes";
   };
 
   home = {
-    packages =
-      with pkgs;
-      [ fontconfig ]
-      ++ (with pkgs.nerd-fonts; [
-        fira-code
-        jetbrains-mono
-      ]);
+    packages = with pkgs; [
+      kitty
+      fontconfig
+      nerd-fonts.fira-code
+      nerd-fonts.jetbrains-mono
+    ];
   };
 }

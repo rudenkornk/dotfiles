@@ -299,6 +299,10 @@ window-rule {
     open-floating true
 }
 window-rule {
+    match app-id="satty"
+    open-floating true
+}
+window-rule {
     match app-id="org.gnome.Weather"
     open-floating true
 }

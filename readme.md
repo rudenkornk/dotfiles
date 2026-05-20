@@ -1,12 +1,12 @@
 # dotfiles
 
-A NixOS configuration.
+A `NixOS` configuration.
 
 ## Bootstrap
 
-1. In BIOS/UEFI: disable Secure Boot, enable Setup Mode (also called Audit Mode).
+1. In `BIOS`/`UEFI`: disable Secure Boot, enable Setup Mode (also called Audit Mode).
 
-1. Boot live NixOS USB.
+1. Boot live `NixOS` USB.
 
 1. Clone the repo and format disk:
 
@@ -27,14 +27,14 @@ A NixOS configuration.
    sbctl enroll-keys --microsoft --firmware-builtin
    ```
 
-1. Install NixOS (signs boot files automatically):
+1. Install `NixOS` (signs boot files automatically):
 
    ```bash
    nixos-install --flake .#dellxps --root /mnt
    reboot
    ```
 
-1. In BIOS/UEFI: enable Secure Boot.
+1. In `BIOS`/`UEFI`: enable Secure Boot.
 
 ## Showcase
 
@@ -44,7 +44,7 @@ A NixOS configuration.
 
 ## Features
 
-1. **NixOS!**
+1. **`NixOS`!**
 1. **Stable and reproducible**.
 1. **Easily updatable**.
 1. **Secrets inside the repo**.
@@ -57,18 +57,18 @@ A NixOS configuration.
 
 While being decently generic, this config focuses more on some tools rather than others:
 
-1. **Neovim**.
-   `Neovim` config is based on [LazyVim](https://github.com/LazyVim/LazyVim).
+1. **`Neovim`**.
+   `Neovim` config is based on [`LazyVim`](https://github.com/LazyVim/LazyVim).
    It follows all its guidelines and documentation adding tons of useful plugins on top,
    while still being "blazingly fast", thanks to lazy-loading.
-1. **tmux**.
+1. **`tmux`**.
    `tmux` integrates with `Neovim`, which allows to seamlessly use keys for moving around and resizing windows.
-1. **fish**.
+1. **`fish`**.
    Main shell in this config is `fish`, which integrates with interactive `fzf`, `ripgrep` and `bat`.
    There is some support for `bash` though.
-1. **C++**.
+1. **`C++`**.
    Config provides releases of `cmake`, `LLVM` and `GCC` toolchains as well as editor support.
-1. Config also provides some support for **Python**, **LaTeX** and **Lua**.
+1. Config also provides some support for **`Python`**, **`LaTeX`** and **`Lua`**.
 
 ## Maintenance
 

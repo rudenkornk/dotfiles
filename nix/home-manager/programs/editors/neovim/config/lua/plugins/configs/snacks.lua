@@ -89,6 +89,8 @@ local function add_terminal_key(keys_table, key, position, width)
   })
 end
 
+local root_detectors = require("config.root_detectors")
+
 M.keys = {
   {
     "<S-q>",
@@ -104,6 +106,22 @@ M.keys = {
     end,
     mode = { "i", "n" },
     desc = "Lazygit",
+  },
+  {
+    "<leader>e",
+    function()
+      Snacks.explorer({ cwd = (root_detectors.buffer_root(0) or root_detectors.cwd_root(0)) })
+    end,
+    mode = { "n" },
+    desc = "Explorer Snacks (buffer root)",
+  },
+  {
+    "<leader>E",
+    function()
+      Snacks.explorer({ cwd = root_detectors.cwd_root(0) })
+    end,
+    mode = { "n" },
+    desc = "Explorer Snacks (cwd)",
   },
 }
 

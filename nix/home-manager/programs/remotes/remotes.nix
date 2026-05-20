@@ -12,6 +12,7 @@
     samba
     sing-box
     throne
+    qbittorrent
   ];
 
   home = {

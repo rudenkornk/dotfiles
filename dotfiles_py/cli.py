@@ -135,6 +135,7 @@ def syms() -> None:
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/shell/television")
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/system/configs")
     syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/terminals/configs")
+    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/vcs/configs")
 
     # We need to additionally unlink noctalia settings, to prevent noctalia from randomly reloading pinned settings,
     # which were modified in memory, but not yet backuped in nix config.

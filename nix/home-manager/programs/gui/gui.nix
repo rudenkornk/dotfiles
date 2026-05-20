@@ -8,6 +8,7 @@
       libreoffice
       prismlauncher
       telegram-desktop
+      qbittorrent
 
       # Screenshot tools.
       ffmpeg

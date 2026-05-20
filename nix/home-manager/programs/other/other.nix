@@ -8,7 +8,6 @@
       dconf
       dconf-editor
       dos2unix
-      gh
       hyperfine
       stress
       stress-ng

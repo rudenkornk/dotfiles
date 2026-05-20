@@ -1,4 +1,5 @@
-_: {
+{ pkgs, ... }:
+{
   programs.git = {
     enable = true;
     lfs.enable = true;
@@ -149,7 +150,10 @@ _: {
       };
     };
   };
-  home.shellAliases = {
-    g = "git";
+  home = {
+    packages = with pkgs; [ gh ];
+    shellAliases = {
+      g = "git";
+    };
   };
 }

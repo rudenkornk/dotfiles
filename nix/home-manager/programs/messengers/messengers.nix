@@ -1,14 +1,8 @@
 { pkgs, config, ... }:
 
-# GUI apps.
 {
   home = {
-    packages = with pkgs; [
-      libreoffice
-      prismlauncher
-      telegram-desktop
-      qbittorrent
-    ];
+    packages = with pkgs; [ telegram-desktop ];
 
     file = pkgs.locallib.homefiles {
       inherit (config) xdg;

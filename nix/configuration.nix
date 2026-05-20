@@ -202,7 +202,10 @@
 
   users.users = builtins.mapAttrs (name: user: {
     isNormalUser = true;
-    inherit (user) description initialPassword;
+    inherit (user) description;
+
+    # Keeping initialPassword open in case anyone blindly tries this config.
+    initialPassword = "123";
     extraGroups = [
       "docker"
       "i2c"

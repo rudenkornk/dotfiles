@@ -5,8 +5,6 @@
   home = {
     packages = with pkgs; [
       asciinema
-      dconf
-      dconf-editor
       dos2unix
       hyperfine
       stress

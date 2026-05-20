@@ -1,5 +1,12 @@
 { pkgs, ... }:
 {
+  home = {
+    packages = with pkgs; [
+      dconf
+      dconf-editor
+    ];
+  };
+
   programs.gnome-shell = {
     enable = true;
 

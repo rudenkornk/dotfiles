@@ -368,8 +368,8 @@ with lib.hm.gvariant;
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       binding = "<Alt>3";
-      command = "sh -c \"QT_QPA_PLATFORM=xcb flameshot gui --raw --path ~/Downloads/ | wl-copy\"";
-      name = "Flameshot";
+      command = "sh -c 'grim -g \"$(slurp)\" - | satty --filename - '";
+      name = "Screenshot";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {

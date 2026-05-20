@@ -44,3 +44,5 @@ vim.g.clipboard = require("config.clipboard")
 -- https://github.com/LazyVim/LazyVim/blob/25abbf546d564dc484cf903804661ba12de45507/lua/lazyvim/util/root.lua
 -- https://github.com/LazyVim/lazyvim.github.io/blob/5cc96146d96bb61ad915088bc3eec4151643cd6f/docs/news.md?plain=1#L258
 vim.g.root_spec = { ".git", "cwd" }
+
+vim.opt.colorcolumn = "120"

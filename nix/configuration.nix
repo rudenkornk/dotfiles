@@ -218,10 +218,14 @@
       inputs = hm_inputs;
       inherit pkgs host;
     };
-    users = builtins.mapAttrs (
-      name: user: args:
-      import ./home-manager/home.nix (args // { inherit user; })
-    ) users;
+    users = builtins.mapAttrs (name: user: {
+      # `home-manager.extraSpecialArgs` is shared across all users,
+      # so there is no built-in way to inject per-user data that way.
+      # To work around this, we re-export `user` through `_module.args` here,
+      # which makes it available as a regular module argument in home-manager modules.
+      _module.args.user = user;
+      imports = [ ./home-manager/home.nix ];
+    }) users;
     backupCommand = "${pkgs.lib.getExe pkgs.trash-cli}";
   };
 

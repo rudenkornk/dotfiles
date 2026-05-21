@@ -8,5 +8,6 @@
     lftp
     ntp
     qbittorrent
+    wireshark
   ];
 }

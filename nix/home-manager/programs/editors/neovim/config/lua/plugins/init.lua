@@ -14,7 +14,7 @@ return {
   },
   {
     "folke/edgy.nvim", -- Core UI plugin for side windows management.
-    enabled = false, -- weird bugs making terminal and other side windows to unexpectedly exit
+    enabled = false, -- Weird bugs making terminal and other side windows to unexpectedly exit.
     opts = require("plugins.configs.edgy").opts,
   },
   {
@@ -79,7 +79,7 @@ return {
     "nvim-mini/mini.move", -- editor.mini-move
     event = "VeryLazy",
     opts = {
-      -- disable '<M-j>' and '<M-k>' mappings conflicting with dap
+      -- Disable `<M-j>` and `<M-k>` mappings conflicting with dap.
       mappings = { line_down = "", line_up = "" },
     },
   },

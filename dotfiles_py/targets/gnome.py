@@ -145,7 +145,7 @@ class DomainRules:
     def get(self, domain: DConfKey) -> DomainRuleKind:
         _, result = max(
             # Use (cheaper?) tuple `(("", _DomainKind.UNKNOWN),)` instead of
-            # creating a full dict `{"": _DomainKind.UNKNOWN}.items()` for the default value
+            # creating a full dict `{"": _DomainKind.UNKNOWN}.items()` for the default value.
             chain((("", DomainRuleKind.UNKNOWN),), self.domains.items()),
             key=lambda item: (str(domain).startswith(item[0]), len(item[0])),
         )

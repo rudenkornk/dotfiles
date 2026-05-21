@@ -6,7 +6,7 @@ _: final: prev: {
     final.writeShellApplication {
       name = "sops-cached";
 
-      # Packages needed by your script (e.g., sops, jq, etc.)
+      # Packages needed by your script (e.g., sops, jq, etc.).
       runtimeInputs = [
         final.sops
         final.uutils-coreutils-noprefix

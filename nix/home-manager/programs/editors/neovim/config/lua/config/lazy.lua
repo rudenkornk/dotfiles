@@ -13,7 +13,7 @@ require("lazy").setup({
     enabled = false, -- Do not check for plugin updates.
   },
   dev = {
-    path = require("config.nix_managed_plugins"), -- Reuse files from pkgs.vimPlugins.*
+    path = require("config.nix_managed_plugins"), -- Reuse files from `pkgs.vimPlugins`.
     patterns = { "." },
     fallback = true, -- If a plugin isn't found in the linkFarm, Lazy will fall back to downloading it.
   },

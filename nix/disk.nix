@@ -133,7 +133,7 @@
 
         # Skipped directories (commented out with rationale):
 
-        # root is not supposed to be actively used on the machine,
+        # `root` is not supposed to be actively used on the machine,
         # and does not have any state that needs to be preserved.
         # ...except ~/.config/sops, which is preserved specifically above.
         # "/root"
@@ -160,7 +160,7 @@
     };
   };
 
-  # systemd-machine-id-commit.service would fail, but it is not relevant
-  # in this specific setup for a persistent machine-id so we disable it.
+  # `systemd-machine-id-commit.service` would fail, but it is not relevant
+  # in this specific setup for a persistent `machine-id`, so we disable it.
   systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 }

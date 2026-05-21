@@ -18,7 +18,7 @@ for entry in $PATH_ENTRIES
     end
     set erasing $erasing $fish_user_paths[$entry]
 end
-# set --erase --universal does not work for some reason
+# `set --erase --universal` does not work for some reason.
 for element in $fish_user_paths
     if contains $element $erasing
         continue

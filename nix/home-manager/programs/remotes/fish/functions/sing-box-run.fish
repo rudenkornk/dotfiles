@@ -1,7 +1,7 @@
 argparse 'c/config=' -- $argv
 or return 1
 
-# 2. Set the default path
+# 2. Set the default path.
 set -l target_config "@default_config@"
 if set -q _flag_config
     set target_config $_flag_config

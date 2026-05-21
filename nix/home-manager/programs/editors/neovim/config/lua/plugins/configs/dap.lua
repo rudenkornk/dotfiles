@@ -1,7 +1,7 @@
 local M = {}
 
--- Please do not reserve <A-b> and <A-f>
--- These keys are used by the floating terminal
+-- Please do not reserve `<A-b>` and `<A-f>`.
+-- These keys are used by the floating terminal.
 
 M.keys = {
   {

@@ -10,7 +10,7 @@ _: {
     enableNushellIntegration = true;
     settings = {
       gui = {
-        # The number of lines you scroll by when scrolling the main window
+        # The number of lines you scroll by when scrolling the main window.
         scrollHeight = 20;
       };
       keybinding = {
@@ -21,8 +21,8 @@ _: {
           scrollDownMain-alt2 = "<c-f>";
         };
         files = {
-          findBaseCommitForFixup = ""; # Conflicts with universal C-f
-          openStatusFilter = ""; # Conflicts with universal C-b
+          findBaseCommitForFixup = ""; # Conflicts with universal `C-f`.
+          openStatusFilter = ""; # Conflicts with universal `C-b`.
         };
       };
     };

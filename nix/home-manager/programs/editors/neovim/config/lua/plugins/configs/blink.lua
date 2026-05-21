@@ -47,8 +47,8 @@ M.opts = {
         name = "minuet",
         module = "minuet.blink",
         async = true,
-        -- Should match minuet.config.request_timeout * 1000,
-        -- since minuet.config.request_timeout is in seconds
+        -- Should match `minuet.config.request_timeout * 1000`,
+        -- since `minuet.config.request_timeout` is in seconds.
         timeout_ms = 3000,
         score_offset = 0,
       },
@@ -59,8 +59,8 @@ M.opts = {
   },
   completion = {
     list = {
-      -- For some reason enabled auto_insert suddenly closes the completion menu,
-      -- after pressed down "select_next/select_prev" keymaps for ~1000ms.
+      -- For some reason enabled `auto_insert` suddenly closes the completion menu,
+      -- after pressed down `select_next`/`select_prev` keymaps for ~1000ms.
       selection = { auto_insert = false },
       cycle = { from_bottom = false, from_top = false },
     },

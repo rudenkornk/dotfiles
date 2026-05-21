@@ -425,11 +425,11 @@
     "wallpaperChange": ""
   },
   "idle": {
-    "customCommands": "[]",
+    "customCommands": "[{\"name\":\"Lock\",\"timeout\":1800,\"command\":\"gdmflexiserver\",\"resumeCommand\":\"\"}]",
     "enabled": true,
     "fadeDuration": 10,
     "lockCommand": "",
-    "lockTimeout": 1800,
+    "lockTimeout": 0,
     "resumeLockCommand": "",
     "resumeScreenOffCommand": "",
     "resumeSuspendCommand": "",

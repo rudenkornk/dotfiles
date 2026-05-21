@@ -56,8 +56,9 @@ in
   install = pkgs.mkShell {
     packages = with pkgs; [
       disko
-      e2fsprogs
+      e2fsprogs # chattr, lsattr, etc.
       mokutil
+      nixos-install
       sbctl
       vim
     ];

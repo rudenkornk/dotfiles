@@ -7,6 +7,7 @@
     sessionVariables = {
       USERKIND = user.userkind;
       LESSCHARSET = "utf-8";
+      QT_SCALE_FACTOR = "1.5";
     };
 
     file = {

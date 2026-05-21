@@ -213,6 +213,7 @@
       "networkmanager"
       "tss"
       "wheel"
+      "wireshark"
     ];
   }) users;
 
@@ -242,6 +243,12 @@
 
   programs = {
     niri.enable = true;
+
+    wireshark = {
+      enable = true;
+      usbmon.enable = true;
+      dumpcap.enable = true;
+    };
 
     nix-ld = {
       enable = true;

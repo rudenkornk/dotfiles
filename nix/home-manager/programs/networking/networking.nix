@@ -7,5 +7,6 @@
     iputils
     lftp
     ntp
+    qbittorrent
   ];
 }

@@ -11,7 +11,7 @@ return {
     cmd = { "IronRepl", "IronFocus", "IronHide", "IronRestart", "IronAttach", "IronSend", "IronWatch" },
     keys = {
 
-      -- <leader>r* : REPL / kernel session management
+      -- `<leader>r*`: REPL / kernel session management.
       { "<leader>rr", "<cmd>IronRepl<cr>", desc = "Toggle REPL" },
       { "<leader>rn", "<cmd>IronFocus<cr>", desc = "Focus REPL" },
       { "<leader>rh", "<cmd>IronHide<cr>", desc = "Hide REPL" },
@@ -38,7 +38,7 @@ return {
         desc = "Clear REPL",
       },
 
-      -- <leader>k* : send code / execute (k = kernel execution)
+      -- `<leader>k*`: send code / execute (k = kernel execution).
       {
         "<leader>kj",
         function()

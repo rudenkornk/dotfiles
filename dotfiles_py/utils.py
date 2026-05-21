@@ -17,7 +17,7 @@ _logger = logging.getLogger(__name__)
 
 
 def _paths2shell(paths: Sequence[Path]) -> str:
-    # hopefully no one is that crazy to use colon in the path...
+    # Hopefully no one is that crazy to use colon in the path...
     return ":".join([str(p) for p in paths])
 
 

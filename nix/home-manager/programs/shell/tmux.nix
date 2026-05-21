@@ -5,11 +5,11 @@
     enable = true;
 
     # Actually false by default, but let's set it explicitly, to avoid mistakes.
-    # newSession has an adverse side effect: a new session is also created on config reload.
+    # `newSession` has an adverse side effect: a new session is also created on config reload.
     newSession = false;
 
-    # home-manager actually has `sensibleOnTop` option, but for some reason it loads `sensible` at the very top.
-    # After that home-manager **overwrites** same settings with its own defaults.
+    # `home-manager` actually has `sensibleOnTop` option, but for some reason it loads `sensible` at the very top.
+    # After that `home-manager` **overwrites** same settings with its own defaults.
     # That makes resulting tmux.conf hard to read.
     # After some back & forth changes I decided to ditch both `sensibleOnTop` and `sensible` plugin,
     # and just list everything explicitly here.
@@ -28,9 +28,10 @@
     extraConfig = builtins.readFile ./tmux/tmux.conf;
     plugins = with pkgs.tmuxPlugins; [
       {
-        # Quick copy pane contents with tmux-fingers,
+        # Quick copy pane contents with tmux-fingers.
         # Alternatives to tmux-fingers:
-        # CrispyConductor/tmux-copy-toolkit: too much key bindings, hard to configure, poor UX, quickcopy mode enables weird highlighting.
+        # CrispyConductor/tmux-copy-toolkit: too much key bindings, hard to configure, poor UX,
+        # quickcopy mode enables weird highlighting.
         # abhinav/tmux-fastcopy: works great, but flashes screen.
         # fcsonline/tmux-thumbs: flashes screen.
         # tmux-plugins/tmux-copycat: too much key bindings, does not have easy mode.
@@ -59,7 +60,7 @@
         plugin = yank;
         extraConfig = # tmux
           ''
-            set -g @yank_action 'copy-pipe' # or 'copy-pipe-and-cancel' for the default
+            set -g @yank_action 'copy-pipe' # Or 'copy-pipe-and-cancel' for the default.
           '';
       }
       {

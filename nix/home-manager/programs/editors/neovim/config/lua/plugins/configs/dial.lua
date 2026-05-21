@@ -1,6 +1,6 @@
 local M = {}
 
--- credits: https://www.lazyvim.org/extras/editor/dial
+-- Credits: https://www.lazyvim.org/extras/editor/dial
 --
 M.config = function()
   local dial_config = require("dial.config")
@@ -43,7 +43,7 @@ M.config = function()
     "eleven",
     "twelve",
     "thirteen",
-    -- fouteen and others conflict with "four", "six", etc.
+    -- "Fourteen" and others conflict with "four", "six", etc.
   }
   local ordinals = {
     "first",

@@ -160,5 +160,5 @@ vim.keymap.set({ "n" }, "<C-q>", "a<C-^><ESC>", { desc = "Toggle keyboard layout
 
 vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
 
--- mitigate the long clipboard loading issue
+-- Mitigate the long clipboard loading issue.
 vim.g.clipboard = require("config.clipboard")

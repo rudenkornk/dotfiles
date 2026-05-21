@@ -15,13 +15,13 @@ _: {
       ## Press tab to return to the shell and edit.
       enter_accept = false;
 
-      ## Set this to true and Atuin will minimize motion in the UI - timers will not update live, etc.
-      ## Alternatively, set env NO_MOTION=true
+      ## Set this to true and Atuin will minimize motion in the UI — timers will not update live, etc.
+      ## Alternatively, set env `NO_MOTION=true`.
       prefers_reduced_motion = true;
 
-      # Enable sync v2 by default
-      # This ensures that sync v2 is enabled for new installs only
-      # In a later release it will become the default across the board
+      # Enable sync v2 by default.
+      # This ensures that sync v2 is enabled for new installs only.
+      # In a later release it will become the default across the board.
       sync.records = true;
 
       theme.name = "marine";

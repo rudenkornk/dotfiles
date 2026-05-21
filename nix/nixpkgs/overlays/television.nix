@@ -2,7 +2,7 @@
 final: prev:
 let
   # TODO(rudenkornk): remove usage of unstable once updated to nixos-26.05.
-  # Remove broken vendor completion files with unsubstituted placeholders
+  # Remove broken vendor completion files with unsubstituted placeholders.
   #
   # PROBLEM:
   # ========

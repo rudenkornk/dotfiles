@@ -53,7 +53,7 @@ def format_code(*, repo_path: Path, check: bool) -> None:
     run_shell(["mdformat", *git_files(repo_path, ".md"), *check_arg], cwd=repo_path)
     run_shell(["shfmt", *write_arg, *diff_arg, repo_path])
     fish_files = git_files(repo_path, ".fish")
-    # fish_indent is a fish builtin, so we need to invoke a shell and pass everything as one argument.
+    # `fish_indent` is a fish builtin, so we need to invoke a shell and pass everything as one argument.
     run_shell(
         ["fish", "--no-config", "--command", "fish_indent " + " ".join(write_arg + check_arg + fish_files)],
         cwd=repo_path,

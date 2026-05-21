@@ -84,10 +84,10 @@ local M = {}
 -- hj          0.7658%     0.0005%  1.0831%
 -- df          1.1425%     0.0078%  1.6157%
 
--- jk combination conflicts with scrolling in lazygit
--- jj messes up with visual mode
--- js is probably OK, but it conflicts with `json` word.
--- fs is also OK, but conflicts with `fst` (first) word.
+-- `jk` combination conflicts with scrolling in lazygit.
+-- `jj` messes up with visual mode.
+-- `js` is probably OK, but it conflicts with `json` word.
+-- `fs` is also OK, but conflicts with `fst` (first) word.
 M.opts = {
   default_mappings = false,
   timeout = 200,

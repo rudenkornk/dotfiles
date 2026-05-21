@@ -1,6 +1,6 @@
--- Options are automatically loaded before lazy.nvim startup
+-- Options are automatically loaded before lazy.nvim startup.
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
+-- Add any additional options here.
 
 -- Disable auto-formatting, since it really messes up with 3rd party codebase
 -- with its own different (or absent) formatting rules.
@@ -21,7 +21,7 @@ vim.opt.relativenumber = false
 -- https://github.com/LazyVim/LazyVim/blob/25abbf546d564dc484cf903804661ba12de45507/lua/lazyvim/config/options.lua#L112
 vim.wo.wrap = true
 
--- Setup ansible filetype
+-- Setup ansible filetype.
 vim.filetype.add({
   pattern = {
     [".*/roles/.*.yaml"] = "yaml.ansible",
@@ -30,7 +30,7 @@ vim.filetype.add({
   },
 })
 
--- mitigate the long clipboard loading issue
+-- Mitigate the long clipboard loading issue.
 vim.g.clipboard = require("config.clipboard")
 
 local root_detectors = require("config.root_detectors")

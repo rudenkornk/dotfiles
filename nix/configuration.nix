@@ -145,7 +145,7 @@
       drivers = with pkgs; [
         brgenml1lpr
         brlaser # Brother Laser.
-        cnijfilter2 # Canon Pixma devices (Proprietary driver)
+        cnijfilter2 # Canon Pixma devices (Proprietary driver).
         cups-browsed
         cups-filters
         epson-escpr # Epson devices.
@@ -153,7 +153,7 @@
         gutenprint # Wide range of inkjet/laser printers.
         gutenprintBin # Additional, binary-only drivers for some printers.
         hplip # HP Printers.
-        hplipWithPlugin # Drivers for HP printers, with the proprietary plugin, see also Setting up HP printers with proprietary drivers.
+        hplipWithPlugin # Drivers for HP printers with the proprietary plugin.
         brgenml1cupswrapper # More Brother printers (Proprietary drivers).
         postscript-lexmark # Postscript drivers for Lexmark.
         samsung-unified-linux-driver # Proprietary Samsung Drivers.
@@ -247,7 +247,7 @@
       enable = true;
       libraries = with pkgs; [
         # Add any missing dynamic libraries for unpackaged programs
-        # here, NOT in environment.systemPackages
+        # here, NOT in `environment.systemPackages`.
       ];
     };
     # https://github.com/NixOS/nixpkgs/issues/350383#issuecomment-2435727492
@@ -255,7 +255,7 @@
       enable = true;
       binfmt = true;
       package = pkgs.appimage-run.override {
-        # Extra libraries and packages for Appimage run
+        # Extra libraries and packages for `appimage-run`.
         extraPkgs =
           pkgs: with pkgs; [
             libepoxy

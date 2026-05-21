@@ -2,12 +2,14 @@
 
 # Networking tools.
 {
-  home.packages = with pkgs; [
-    iptables
-    iputils
-    lftp
-    ntp
-    qbittorrent
-    wireshark
-  ];
+  home = {
+    packages = with pkgs; [
+      iptables
+      iputils
+      lftp
+      ntp
+      qbittorrent
+      wireshark
+    ];
+  };
 }

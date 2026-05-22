@@ -3,8 +3,8 @@
 let
   plugins = with pkgs.unstable.vimPlugins; [
 
-    async-nvim
     aerial-nvim
+    async-nvim
     baleia-nvim
     better-escape-nvim
     blink-cmp

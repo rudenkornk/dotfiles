@@ -38,7 +38,9 @@ let
     jupytext-nvim
     lazy-nvim
     lazydev-nvim
+    LazyVim
     lean-nvim
+    leap-nvim
     litee-nvim
     lualine-nvim
     luasnip
@@ -137,12 +139,6 @@ let
       name = "FluoroMachine.nvim";
       path = fluoromachine-nvim;
     }
-
-    # TODO: remove this W/A once LazyVim supports all the quirks.
-    # Special treatment for leap, which migrated to new repo and also rewritten some code.
-    # LazyVim seemingly adapted, but for some reason it does not work.
-    pkgs.vimPlugins.leap-nvim # Use old leap.
-    pkgs.vimPlugins.LazyVim # Use old LazyVim.
 
   ];
 

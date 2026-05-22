@@ -49,6 +49,8 @@
     i2c = {
       enable = true;
     };
+
+    firmware = [ pkgs.sof-firmware ];
   };
 
   nix = {

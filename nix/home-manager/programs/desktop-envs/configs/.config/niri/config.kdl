@@ -29,6 +29,9 @@ hotkey-overlay {
     skip-at-startup
 }
 binds {
+    // Free Ctrl+Alt binds:
+    // Ctrl+Alt+P
+    // Ctrl+Alt+Y
     Alt+1 {
         spawn "kitty"
     }

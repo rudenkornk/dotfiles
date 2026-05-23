@@ -25,6 +25,7 @@ environment {
 }
 spawn-at-startup "noctalia-shell"
 spawn-at-startup "kitty"
+spawn-sh-at-startup "sleep 5 && noctalia-shell ipc call powerProfile enableNoctaliaPerformance"
 hotkey-overlay {
     skip-at-startup
 }

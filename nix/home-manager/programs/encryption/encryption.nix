@@ -42,12 +42,4 @@
     };
   };
 
-  programs.fish = {
-    functions = {
-      sops = {
-        body = builtins.readFile ./fish/functions/sops.fish;
-        wraps = "sops";
-      };
-    };
-  };
 }

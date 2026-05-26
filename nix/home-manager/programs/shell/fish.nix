@@ -14,9 +14,9 @@
       };
     };
     interactiveShellInit = ''
-      source ${./fish/conf.d/python.fish}
       source ${./fish/conf.d/shell_utils.fish}
-      source ${./fish/conf.d/ssh_client.fish}
+      set -gx SSH_AUTH_SOCK $HOME/.ssh/agent.sock
+      bash ${./scripts/ssh_client.sh} $SSH_AUTH_SOCK
     '';
     plugins = with pkgs.fishPlugins; [
       {

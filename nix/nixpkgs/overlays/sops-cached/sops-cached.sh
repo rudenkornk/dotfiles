@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+shopt -s nullglob
+
 file="$1"
 suffix="${2:-}"
 

@@ -38,9 +38,14 @@
     "messages_page_up": "pageup,ctrl+b",
     "messages_previous": "ctrl+p",
     "messages_copy": "ctrl+y,<leader>y",
+
     "session_child_cycle": "j,right",
     "session_child_cycle_reverse": "k,left",
     "session_child_first": "<leader>j",
+    "session_delete": "ctrl+x",
     "session_parent": "h,up",
+
+    "input_delete": "ctrl+x,delete,shift+delete",
+    "stash_delete": "ctrl+x",
   },
 }

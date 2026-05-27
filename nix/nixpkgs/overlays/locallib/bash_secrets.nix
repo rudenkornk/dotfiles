@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  sops-cached = pkgs.lib.getExe pkgs.sops-cached;
+  sops-cached = pkgs.lib.getExe pkgs.custom.sops-cached;
 in
 # bash
 ''

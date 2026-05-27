@@ -1,5 +1,4 @@
-# Note: overlays cannot accept `pkgs` as an argument, since
-# it will lead to infinite recursion.
+# See also https://nixcademy.com/posts/mastering-nixpkgs-overlays-techniques-and-best-practice/
 args:
 
 let

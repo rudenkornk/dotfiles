@@ -191,7 +191,7 @@
           "textColor": "none"
         },
         {
-          "displayMode": "alwaysShow",
+          "displayMode": "alwaysHide",
           "iconColor": "none",
           "id": "Network",
           "textColor": "none"

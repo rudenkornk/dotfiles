@@ -3,12 +3,12 @@
 # VPN clients and related tooling.
 {
   home.packages = with pkgs; [
-    ThroneRun
+    custom.openconnect_corp
+    custom.sing-box-run
+    custom.throne-run
     openconnect
-    openconnect_corp
     openvpn
     sing-box
-    sing-box-run
     throne
   ];
 }

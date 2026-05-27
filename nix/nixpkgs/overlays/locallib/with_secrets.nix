@@ -13,7 +13,7 @@ let
   bash_secrets = import ./bash_secrets.nix { inherit pkgs; };
   extra_secrets_loaded = map (secret: ''
     # shellcheck source=/dev/null
-    source "$(${getExe pkgs.sops-cached} ${secret})"
+    source "$(${getExe pkgs.custom.sops-cached} ${secret})"
   '') extraSecrets;
   extra_secrets_script = builtins.concatStringsSep "\n" extra_secrets_loaded;
   pkg_bin_path = if (binary == null) then (getExe pkg) else (getExe' pkg binary);

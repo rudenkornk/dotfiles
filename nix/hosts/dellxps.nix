@@ -188,35 +188,25 @@
   };
   monitors = {
     niri = {
-      "DP-4" = {
-        mode = "3840x2160@59.999";
-        scale = 1;
-        position = {
-          x = 0;
-          y = 0;
-        };
-        external = true;
-        i2c-bus = "/dev/i2c-16";
-      };
-      "DP-6" = {
-        mode = "3840x2160@59.996";
-        scale = 1;
-        position = {
-          x = 3840;
-          y = 0;
-        };
-        external = true;
-        i2c-bus = "/dev/i2c-17";
-      };
       "eDP-1" = {
         mode = "3456x2160@60.001";
         scale = 1.333;
         position = {
           x = 0;
-          y = 2160;
+          y = 0;
         };
         external = false;
         i2c-bus = "/dev/i2c-12";
+      };
+      "DP-6" = {
+        mode = "3840x2160@59.996";
+        scale = 1;
+        position = {
+          x = 0;
+          y = -2160;
+        };
+        external = true;
+        i2c-bus = "/dev/i2c-17";
       };
     };
     noctalia = import ./dellxps/noctalia_monitors.nix;

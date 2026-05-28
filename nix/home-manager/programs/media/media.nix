@@ -1,6 +1,10 @@
 { pkgs, host, ... }:
 
 {
+  home = {
+    packages = with pkgs; [ shotcut ]; # typos: ignore
+  };
+
   programs = {
     obs-studio = {
       enable = true;

@@ -37,3 +37,5 @@ local root_detectors = require("config.root_detectors")
 vim.g.root_spec = { root_detectors.buffer_root, root_detectors.cwd_root }
 
 vim.opt.colorcolumn = "120"
+
+vim.opt.spelllang = { "en", "ru", "la", "de", "fr", "es", "it", "pl" }

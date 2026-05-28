@@ -219,5 +219,6 @@
       __VK_LAYER_NV_optimus = "NVIDIA_only";
     };
     niri.enable = false;
+    cudaSupport = true;
   };
 }

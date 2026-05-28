@@ -98,6 +98,7 @@
       {
         "nvim/site/parser".source = "${treesitterGrammars}/parser/";
         "nvim/site/queries".source = "${treesitterGrammars}/queries/";
+        "nvim/site/spell".source = "${pkgs.custom.vim-spell}/spell/";
 
         # Workaround for missing mason packages in neovim.
         # https://github.com/LazyVim/LazyVim/discussions/6892

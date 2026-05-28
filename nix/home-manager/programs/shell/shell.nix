@@ -41,17 +41,4 @@
   # ctrl-y fzf yazi.
   # ctrl-z undo.
 
-  home.sessionVariables = {
-    FZF_DEFAULT_OPTS =
-      ""
-      + "--ansi "
-      + "--bind ctrl-u:half-page-up,ctrl-d:half-page-down,ctrl-b:preview-page-up,ctrl-f:preview-page-down "
-      + "--border "
-      + "--cycle "
-      + "--height=90% "
-      + "--layout=reverse "
-      + "--marker='*' "
-      + "--multi "
-      + "--preview-window=wrap ";
-  };
 }

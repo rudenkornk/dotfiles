@@ -8,7 +8,6 @@
     dust
     fd
     file
-    fzf
     hexyl
     ripgrep
     rsync

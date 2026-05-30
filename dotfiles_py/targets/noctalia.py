@@ -25,7 +25,7 @@ def _extract_monitors[T: list[Any] | dict[str, Any]](obj: T) -> T:
     iter_obj = obj.copy().items() if isinstance(obj, dict) else enumerate(obj.copy())
     for k, v in iter_obj:
         if k in ("monitors", "lockScreenMonitors"):
-            res[k] = v  # type: ignore[index] # pyright: ignore [reportArgumentType, reportCallIssue]
+            res[k] = v  # type: ignore[call-overload] # pyright: ignore [reportArgumentType, reportCallIssue]
             del obj[k]  # type: ignore[arg-type] # pyright: ignore [reportArgumentType, reportCallIssue]
         elif isinstance(res, dict) and isinstance(v, (list, dict)) and (extracted := _extract_monitors(v)):
             res[k] = extracted  # type: ignore[index]  # pyright: ignore [reportArgumentType, reportCallIssue]

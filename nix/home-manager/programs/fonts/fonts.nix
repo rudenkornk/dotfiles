@@ -3,7 +3,7 @@
 # Fonts & graphics.
 {
   home.packages = with pkgs; [
-    (lib.hiPrio xorg.xvfb)
+    (lib.hiPrio xvfb)
     cm_unicode
     corefonts
     fontconfig

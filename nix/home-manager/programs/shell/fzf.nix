@@ -78,7 +78,10 @@ let
 
   historyPreview = pkgs.writeShellScript "fzf-history-preview" ''
     set -euo pipefail
-    echo "$@" | sed 's/^ *[0-9]* *//' | ${pkgs.bat}/bin/bat --language=bash --color=always --style=plain
+    # This sed relies on specific format enforced in current version of `fzf`.
+    # `fzf` may change it in the future and this preview should be adjusted accordingly.
+    echo "$@" | sed -E 's|[[:blank:]][0-9]+[[:blank:]]| >  |' \
+    | ${pkgs.bat}/bin/bat --language=bash --color=always --style=plain
   '';
 
   # ── ctrl-o: nix-search-tv ────────────────────────────────────────────────
@@ -310,12 +313,5 @@ in
           bind --mode $mode ctrl-x "commandline -f cancel; ${psScript}; echo; commandline -f repaint"
         end
       '';
-  };
-  home = {
-    sessionVariables = {
-      # TODO: enable this when fzf will support FZF_CTRL_R_COMMAND.
-      # Preview option should be change to smth like `--preview='echo {}'`.
-      # FZF_CTRL_R_COMMAND = "history | ${pkgs.bat}/bin/bat --language=bash --color=always --style=plain";
-    };
   };
 }

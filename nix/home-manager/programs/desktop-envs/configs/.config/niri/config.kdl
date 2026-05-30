@@ -38,7 +38,7 @@ binds {
         spawn "kitty"
     }
     Alt+2 {
-        spawn "google-chrome-stable"
+        spawn "firefox"
     }
     Alt+3 {
         spawn-sh "grim -g \"$(slurp)\" - | satty --filename - "

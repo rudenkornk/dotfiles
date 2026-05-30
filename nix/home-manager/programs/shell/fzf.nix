@@ -300,14 +300,16 @@ in
       ];
     };
 
-    fish.interactiveShellInit = ''
-      for mode in default insert
-        bind --mode $mode ctrl-o "commandline -f cancel; ${nsScript}; echo; commandline -f repaint"
-        bind --mode $mode ctrl-q "commandline -f cancel; ${rgScript}; commandline -f repaint"
-        bind --mode $mode ctrl-v "commandline -f cancel; ${tldrScript}; echo; commandline -f repaint"
-        bind --mode $mode ctrl-x "commandline -f cancel; ${psScript}; echo; commandline -f repaint"
-      end
-    '';
+    fish.interactiveShellInit =
+      # fish
+      ''
+        for mode in default insert
+          bind --mode $mode ctrl-o "commandline -f cancel; ${nsScript}; echo; commandline -f repaint"
+          bind --mode $mode ctrl-q "commandline -f cancel; ${rgScript}; commandline -f repaint"
+          bind --mode $mode ctrl-v "commandline -f cancel; ${tldrScript}; echo; commandline -f repaint"
+          bind --mode $mode ctrl-x "commandline -f cancel; ${psScript}; echo; commandline -f repaint"
+        end
+      '';
   };
   home = {
     sessionVariables = {

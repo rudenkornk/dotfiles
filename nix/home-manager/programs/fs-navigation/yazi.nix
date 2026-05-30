@@ -58,5 +58,31 @@ _: {
           bind --mode $mode ctrl-y yazi
         end
       '';
+
+    bash.initExtra =
+      # bash
+      ''
+        bind -x '"\C-y": "yazi"'
+      '';
+
+    zsh.initContent =
+      # zsh
+      ''
+        function _yazi_widget() { yazi; zle reset-prompt }
+        zle -N _yazi_widget
+        bindkey '^y' _yazi_widget
+      '';
+
+    nushell.extraConfig =
+      # nu
+      ''
+        $env.config.keybindings = ($env.config.keybindings | append {
+          name: yazi
+          modifier: control
+          keycode: char_y
+          mode: [emacs, vi_normal, vi_insert]
+          event: { send: ExecuteHostCommand cmd: "yazi" }
+        })
+      '';
   };
 }

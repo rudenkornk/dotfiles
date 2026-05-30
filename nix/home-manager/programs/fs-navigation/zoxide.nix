@@ -4,6 +4,7 @@ _: {
     enableBashIntegration = true;
     enableFishIntegration = true;
     enableNushellIntegration = true;
+    enableZshIntegration = true;
   };
 
   programs.fish = {

@@ -5,6 +5,7 @@ _: {
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableNushellIntegration = true;
+      enableZshIntegration = true;
       settings = {
         mgr = {
           show_hidden = true;

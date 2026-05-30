@@ -5,6 +5,7 @@ _: {
     enableBashIntegration = true;
     enableFishIntegration = true;
     enableNushellIntegration = true;
+    enableZshIntegration = true;
     settings = {
       update_check = false; # Disable automatic update checks.
       storage = "auto"; # Possible values: auto, full, compact.

@@ -318,5 +318,66 @@ in
           bind --mode $mode ctrl-x "commandline -f cancel; ${psScript}; echo; commandline -f repaint"
         end
       '';
+
+    bash.initExtra = # bash
+      ''
+        bind -x '"\C-o": "${nsScript}"'
+        bind -x '"\C-q": "${rgScript}"'
+        bind -x '"\C-v": "${tldrScript}"'
+        bind -x '"\C-x": "${psScript}"'
+      '';
+
+    zsh.initContent =
+      # zsh
+      ''
+        function _fzf_ns_widget() { ${nsScript}; zle reset-prompt }
+        zle -N _fzf_ns_widget
+        bindkey '^o' _fzf_ns_widget
+
+        function _fzf_rg_widget() { ${rgScript}; zle reset-prompt }
+        zle -N _fzf_rg_widget
+        bindkey '^q' _fzf_rg_widget
+
+        function _fzf_tldr_widget() { ${tldrScript}; zle reset-prompt }
+        zle -N _fzf_tldr_widget
+        bindkey '^v' _fzf_tldr_widget
+
+        # ctrl-x is a prefix key in zsh (exchange-point-and-mark / execute-named-cmd)
+        # and overriding it would break zsh line-editing conventions.
+      '';
+
+    nushell.extraConfig = # nu
+      ''
+        $env.config.keybindings = ($env.config.keybindings | append [
+          {
+            name: fzf_ns
+            modifier: control
+            keycode: char_o
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: ExecuteHostCommand cmd: "${nsScript}" }
+          }
+          {
+            name: fzf_rg
+            modifier: control
+            keycode: char_q
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: ExecuteHostCommand cmd: "${rgScript}" }
+          }
+          {
+            name: fzf_tldr
+            modifier: control
+            keycode: char_v
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: ExecuteHostCommand cmd: "${tldrScript}" }
+          }
+          {
+            name: fzf_ps
+            modifier: control
+            keycode: char_x
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: ExecuteHostCommand cmd: "${psScript}" }
+          }
+        ])
+      '';
   };
 }

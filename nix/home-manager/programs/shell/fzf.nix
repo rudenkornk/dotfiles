@@ -71,7 +71,7 @@ let
       --bind "ctrl-q:transform:${rgCycleTransform}" \
       --delimiter : \
       --preview '${rgBatPreview}' \
-      --preview-window 'right:60%:wrap:+{2}+3/3,~3' \
+      --preview-window 'right,60%,wrap,+{2}+3/3,~3' \
       --bind 'ctrl-o:execute(nvim {1} +{2})' \
       --bind 'enter:execute(nvim {1} +{2})'
   '';
@@ -234,6 +234,8 @@ let
   psScript = pkgs.writeShellScript "fzf-ps" ''
     set -euo pipefail
 
+    # Note: alternative layout (`<1(...)` syntax) for `--preview-window` here is required.
+    # Without it, `fzf` ignores custom layout from this CLI and applies defaultOptions for some reason.
     fzf \
       --prompt='${psh1}' \
       --bind "start:reload:${ps1}" \
@@ -244,7 +246,7 @@ let
       --bind "ctrl-v:execute(${pkgs.htop-vim}/bin/htop)" \
       --bind "ctrl-t:execute(${psSignalScript} {})+transform:${psReloadTransform}" \
       --preview "${psPreview} {}" \
-      --preview-window 'down:8:wrap' \
+      --preview-window 'down,8,wrap,<1(down,8,wrap)' \
       --header-lines 1
   '';
 in
@@ -283,7 +285,7 @@ in
         "--layout=reverse"
         "--marker=''"
         "--multi"
-        "--preview-window=right:60%:wrap"
+        "--preview-window='right,60%,wrap,<90(down,60%,wrap)'"
         "--input-label=' Input '"
       ];
 
@@ -291,7 +293,9 @@ in
         "--prompt='  > '"
         "--scheme=history"
         "--preview='${historyPreview} {}'"
-        "--preview-window=down:5:wrap"
+        # Note: alternative layout (`<1(...)` syntax) for `--preview-window` here is required.
+        # Without it, `fzf` ignores custom layout from this CLI and applies defaultOptions for some reason.
+        "--preview-window='down,5,wrap,<1(down,5,wrap)'"
       ];
 
       fileWidgetCommand = fd1;

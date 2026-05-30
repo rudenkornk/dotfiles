@@ -105,7 +105,7 @@
         "nvim/mason/packages/angular-language-server/node_modules/@angular/language-server".source =
           "${pkgs.angular-language-server}/lib";
         "nvim/mason/packages/astro-language-server/node_modules/@astrojs/ts-plugin".source =
-          "${pkgs.astro-language-server}/lib/astro-language-server/packages/ts-plugin/";
+          "${pkgs.astro-language-server}/lib/node_modules/astro-language-server/packages/language-tools/ts-plugin/";
         "nvim/mason/packages/svelte-language-server/node_modules/typescript-svelte-plugin".source =
           "${pkgs.svelte-language-server}/lib/node_modules/svelte-language-server/packages/typescript-plugin/";
         "nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js".source =

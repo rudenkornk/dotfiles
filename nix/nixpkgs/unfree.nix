@@ -30,4 +30,14 @@ builtins.any (prefix: lib.hasPrefix prefix (lib.getName pkg)) [
   "terraform"
   "unrar"
   "vagrant"
+
+  # Vim plugins.
+  # Despite "unfree" status in nixpkgs, most of them just do not have any license due to low maintenance.
+  # nixpkgs is formally correct in classifying them as unfree though.
+  "cmp-emoji"
+  "jupytext.nvim"
+  "litee.nvim"
+  "neotest-dart"
+  "NotebookNavigator.nvim"
+  "nvim-ansible"
 ]

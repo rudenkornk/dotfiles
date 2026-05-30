@@ -9,6 +9,7 @@ _: {
       enableBashIntegration = false;
       enableFishIntegration = true;
       enableNushellIntegration = true;
+      enableZshIntegration = true;
       settings = {
         gui = {
           # The number of lines you scroll by when scrolling the main window.

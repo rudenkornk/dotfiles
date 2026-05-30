@@ -24,6 +24,7 @@ _: {
     enableFishIntegration = true;
     enableBashIntegration = true;
     enableNushellIntegration = false; # Do not replace nushell's ls builtin.
+    enableZshIntegration = true;
     icons = "always";
     extraOptions = [ "--classify" ];
   };

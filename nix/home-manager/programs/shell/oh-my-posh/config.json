@@ -14,7 +14,7 @@
           "type": "shell",
           "style": "plain",
           "foreground": "p:success",
-          "properties": {
+          "options": {
             "mapped_shell_names": {
               "bash": "#!",
               "cmd": " ",
@@ -29,7 +29,7 @@
         },
         {
           "foreground": "#00afff",
-          "properties": {
+          "options": {
             "folder_separator_icon": "/",
             "max_depth": 7,
             "display_root": true,
@@ -41,7 +41,7 @@
         },
         {
           "foreground": "p:success",
-          "properties": { "fetch_status": true },
+          "options": { "fetch_status": true },
           "timeout": 100,
           "style": "plain",
           "template": "{{ .HEAD }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}  ",
@@ -195,7 +195,7 @@
         {
           "foreground": "p:success",
           "foreground_templates": ["{{ if gt .Code 0 }}p:fail{{ end }}"],
-          "properties": {
+          "options": {
             "style": "austin",
             "always_enabled": true
           },

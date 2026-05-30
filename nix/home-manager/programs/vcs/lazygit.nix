@@ -28,5 +28,12 @@ _: {
         };
       };
     };
+    fish.interactiveShellInit =
+      # fish
+      ''
+        for mode in default insert
+          bind --mode $mode ctrl-g lazygit
+        end
+      '';
   };
 }

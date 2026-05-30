@@ -50,5 +50,12 @@ _: {
         ];
       };
     };
+    fish.interactiveShellInit =
+      # fish
+      ''
+        for mode in default insert
+          bind --mode $mode ctrl-y yazi
+        end
+      '';
   };
 }

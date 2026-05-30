@@ -1,8 +1,3 @@
-for mode in default insert
-    bind --mode $mode \cg lazygit
-    bind --mode $mode \cy yazi
-end
-
 # Prevent accidentally closing terminal.
 bind \cd delete-char
 

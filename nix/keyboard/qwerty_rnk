@@ -24,9 +24,9 @@
 //
 // 󰌒     %   ^   -   +   *   |   &   {   }   󰭜   ?   ~   |
 //
-// Ctrl    !   ~   <   =   >   /   (   )   _   :   ;   󰌑
+// Ctrl    !   \   <   =   >   󰌑   (   )   _   :   ;   󰌑
 //
-// 󰘶         ~   ~   󱊷   $   \   [   ]   "   '   `
+// 󰘶         ~   ~   󱊷   $   /   [   ]   "   '   `
 //
 //
 // LEVEL 4:
@@ -34,9 +34,9 @@
 //
 // 󰌒     %   ^   -   +   *   |   5   6   7   󰭜   ?   ~   |
 //
-// Ctrl    !   ~   <   =   >   /   1   2   3   4   ;   󰌑
+// Ctrl    !   \   <   =   >   󰌑   1   2   3   4   ;   󰌑
 //
-// 󰘶         ~   ~   󱊷   .   8   9   0   "   '   ,
+// 󰘶         ~   ~   󱊷   .   9   8   0   "   '   ,
 
 partial alphanumeric_keys
 xkb_symbols "qwerty_rnk" {
@@ -73,11 +73,11 @@ xkb_symbols "qwerty_rnk" {
     key <BKSL> { [         backslash,               bar,             bar,              bar ] };
 
     key <AC01> { [                 a,                 A,          exclam,           exclam ] };
-    key <AC02> { [                 s,                 S,      asciitilde,       asciitilde ] };
+    key <AC02> { [                 s,                 S,       backslash,        backslash ] };
     key <AC03> { [                 d,                 D,            less,             less ] };
     key <AC04> { [                 f,                 F,           equal,            equal ] };
     key <AC05> { [                 g,                 G,         greater,          greater ] };
-    key <AC06> { [                 h,                 H,           slash,            slash ] };
+    key <AC06> { [                 h,                 H,          Return,           Return ] };
     key <AC07> { [                 j,                 J,       parenleft,                1 ] };
     key <AC08> { [                 k,                 K,      parenright,                2 ] };
     key <AC09> { [                 l,                 L,      underscore,                3 ] };
@@ -88,8 +88,8 @@ xkb_symbols "qwerty_rnk" {
     key <AB02> { [                 x,                 X,      asciitilde,       asciitilde ] };
     key <AB03> { [                 c,                 C,          Escape,           Escape ] };
     key <AB04> { [                 v,                 V,          dollar,           period ] };
-    key <AB05> { [                 b,                 B,       backslash,                8 ] };
-    key <AB06> { [                 n,                 N,     bracketleft,                9 ] };
+    key <AB05> { [                 b,                 B,           slash,                9 ] };
+    key <AB06> { [                 n,                 N,     bracketleft,                8 ] };
     key <AB07> { [                 m,                 M,    bracketright,                0 ] };
     key <AB08> { [            oslash,            Oslash,        quotedbl,         quotedbl ] };
     key <AB09> { [                ae,                AE,      apostrophe,       apostrophe ] };

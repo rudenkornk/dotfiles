@@ -24,9 +24,9 @@
 //
 // 󰌒     %   ^   -   +   *   |   &   {   }   󰭜   ?   ~   |
 //
-// Ctrl    !   ~   <   =   >   /   (   )   _   :   ;   󰌑
+// Ctrl    !   \   <   =   >   󰌑   (   )   _   :   ;   󰌑
 //
-// 󰘶         ~   ~   󱊷   $   \   [   ]   "   '   `
+// 󰘶         ~   ~   󱊷   $   /   [   ]   "   '   `
 //
 //
 // LEVEL 4:
@@ -34,9 +34,9 @@
 //
 // 󰌒     %   ^   -   +   *   |   5   6   7   󰭜   ?   ~   |
 //
-// Ctrl    !   ~   <   =   >   /   1   2   3   4   ;   󰌑
+// Ctrl    !   \   <   =   >   󰌑   1   2   3   4   ;   󰌑
 //
-// 󰘶         ~   ~   󱊷   .   8   9   0   "   '   ,
+// 󰘶         ~   ~   󱊷   .   9   8   0   "   '   ,
 
 partial alphanumeric_keys
 xkb_symbols "jcuken_rnk" {
@@ -73,11 +73,11 @@ xkb_symbols "jcuken_rnk" {
     key <BKSL> { [         backslash,               bar,             bar,              bar ] };
 
     key <AC01> { [       Cyrillic_ef,       Cyrillic_EF,          exclam,           exclam ] };
-    key <AC02> { [     Cyrillic_yeru,     Cyrillic_YERU,      asciitilde,       asciitilde ] };
+    key <AC02> { [     Cyrillic_yeru,     Cyrillic_YERU,       backslash,        backslash ] };
     key <AC03> { [       Cyrillic_ve,       Cyrillic_VE,            less,             less ] };
     key <AC04> { [        Cyrillic_a,        Cyrillic_A,           equal,            equal ] };
     key <AC05> { [       Cyrillic_pe,       Cyrillic_PE,         greater,          greater ] };
-    key <AC06> { [       Cyrillic_er,       Cyrillic_ER,           slash,            slash ] };
+    key <AC06> { [       Cyrillic_er,       Cyrillic_ER,          Return,           Return ] };
     key <AC07> { [        Cyrillic_o,        Cyrillic_O,       parenleft,                1 ] };
     key <AC08> { [       Cyrillic_el,       Cyrillic_EL,      parenright,                2 ] };
     key <AC09> { [       Cyrillic_de,       Cyrillic_DE,      underscore,                3 ] };
@@ -88,8 +88,8 @@ xkb_symbols "jcuken_rnk" {
     key <AB02> { [      Cyrillic_che,      Cyrillic_CHE,      asciitilde,       asciitilde ] };
     key <AB03> { [       Cyrillic_es,       Cyrillic_ES,          Escape,           Escape ] };
     key <AB04> { [       Cyrillic_em,       Cyrillic_EM,          dollar,           period ] };
-    key <AB05> { [        Cyrillic_i,        Cyrillic_I,       backslash,                8 ] };
-    key <AB06> { [       Cyrillic_te,       Cyrillic_TE,     bracketleft,                9 ] };
+    key <AB05> { [        Cyrillic_i,        Cyrillic_I,           slash,                9 ] };
+    key <AB06> { [       Cyrillic_te,       Cyrillic_TE,     bracketleft,                8 ] };
     key <AB07> { [ Cyrillic_softsign, Cyrillic_SOFTSIGN,    bracketright,                0 ] };
     key <AB08> { [       Cyrillic_be,       Cyrillic_BE,        quotedbl,         quotedbl ] };
     key <AB09> { [       Cyrillic_yu,       Cyrillic_YU,      apostrophe,       apostrophe ] };

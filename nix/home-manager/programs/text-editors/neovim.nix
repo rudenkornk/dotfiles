@@ -128,6 +128,10 @@
       v = "nvim";
       vd = "nvim -d";
     };
+
+    sessionVariables = {
+      EDITOR = "nvim";
+    };
   };
 
   programs = {

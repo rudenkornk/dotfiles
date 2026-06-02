@@ -306,3 +306,15 @@ window-rule {
         proportion 0.5
     }
 }
+window-rule {
+    match app-id="firefox" title="Picture-in-Picture"
+    default-column-width {
+        proportion 0.2
+    }
+    default-window-height {
+        proportion 0.2
+    }
+    default-floating-position x=30 y=30 relative-to="bottom-right"
+    open-focused false
+    open-floating true
+}

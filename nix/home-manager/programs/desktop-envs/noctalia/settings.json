@@ -425,7 +425,7 @@
     "wallpaperChange": ""
   },
   "idle": {
-    "customCommands": "[{\"name\":\"Lock\",\"timeout\":1800,\"command\":\"gdmflexiserver\",\"resumeCommand\":\"\"}]",
+    "customCommands": "[{\"name\":\"Lock\",\"timeout\":1800,\"command\":\"gdbus call --system --object-path /org/gnome/DisplayManager/LocalDisplayFactory --dest org.gnome.DisplayManager --method org.gnome.DisplayManager.LocalDisplayFactory.CreateTransientDisplay\",\"resumeCommand\":\"\"}]",
     "enabled": true,
     "fadeDuration": 10,
     "lockCommand": "",
@@ -528,7 +528,7 @@
     "powerOptions": [
       {
         "action": "lock",
-        "command": "gdmflexiserver",
+        "command": "gdbus call --system --object-path /org/gnome/DisplayManager/LocalDisplayFactory --dest org.gnome.DisplayManager --method org.gnome.DisplayManager.LocalDisplayFactory.CreateTransientDisplay",
         "countdownEnabled": false,
         "enabled": true,
         "keybind": "L"

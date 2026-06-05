@@ -28,7 +28,15 @@ let
     esac
   '';
 
-  fdBatPreview = "${pkgs.bat}/bin/bat --color=always --style=numbers --line-range :300 {}";
+  fdPreview = pkgs.writeShellScript "fzf-fd-preview" ''
+    set -euo pipefail
+    mime="$(${pkgs.file}/bin/file --mime-type -b -- "$1")"
+    case "$mime" in
+      image/*) ${pkgs.kitty}/bin/kitty +kitten icat --transfer-mode=memory \
+        --stdin=no --place="$FZF_PREVIEW_COLUMNS"x"$FZF_PREVIEW_LINES""@0x0" -- "$1" ;;
+      *) ${pkgs.bat}/bin/bat --color=always --style=numbers --line-range :300 -- "$1" ;;
+    esac
+  '';
 
   # ── ctrl-q: ripgrep search ────────────────────────────────────────────────
 
@@ -302,7 +310,7 @@ in
       fileWidgetCommand = fd1;
       fileWidgetOptions = [
         "--prompt='${h1}'"
-        "--preview='${fdBatPreview}'"
+        "--preview='${fdPreview} {}'"
         "--bind='ctrl-t:transform:${fdCycleTransform}'"
         "--bind='ctrl-o:execute(nvim {})'"
       ];

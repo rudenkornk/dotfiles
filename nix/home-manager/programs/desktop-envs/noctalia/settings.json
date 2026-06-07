@@ -384,7 +384,7 @@
     "iRadiusRatio": 1,
     "keybinds": {
       "keyDown": ["Ctrl+N", "Ctrl+J"],
-      "keyEnter": ["Return", "Ctrl+Return"],
+      "keyEnter": ["Return", "Ctrl+M"],
       "keyEscape": ["Esc", "Ctrl+X"],
       "keyLeft": ["Ctrl+H"],
       "keyRemove": ["Del", "Backspace"],

@@ -1,4 +1,4 @@
-_: final: _: {
+_: final: prev: {
   custom = {
     sops-cached =
       # Simple wrapper over sops, which cache its output in tmpfs /run/user/$id/ dir.
@@ -55,6 +55,8 @@ _: final: _: {
           [ "${final.locallib.secrets + /vpn/beta.json.sops}" ]
           (builtins.readFile ./custom/sing-box-run.sh);
     };
+
+    playwright-cli = import ./custom/playwright-cli.nix final prev;
 
     vim-spell =
       let

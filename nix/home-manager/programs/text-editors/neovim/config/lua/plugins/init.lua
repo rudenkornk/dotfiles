@@ -141,10 +141,6 @@ return {
     "monaqa/dial.nvim", -- editor.dial
     config = require("plugins.configs.dial").config,
   },
-  {
-    "zbirenbaum/copilot.lua", -- ai.copilot
-    enabled = os.getenv("USERKIND") == "default",
-  },
 
   {
     "aserowy/tmux.nvim",

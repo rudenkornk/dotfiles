@@ -19,14 +19,6 @@ M.dependencies = {
   "hrsh7th/cmp-emoji",
 }
 
--- `internet` as an antonym for `intranet`.
-local internet_providers = {
-  copilot = {
-    score_offset = 5,
-  },
-}
-local maybe_internet_providers = os.getenv("USERKIND") == "default" and internet_providers or {}
-
 M.opts = {
   sources = {
     compat = { "emoji", "tmux" },
@@ -37,7 +29,7 @@ M.opts = {
       "buffer",
       "minuet",
     },
-    providers = vim.tbl_extend("error", {
+    providers = {
       tmux = {
         name = "tmux",
         score_offset = -5,
@@ -50,9 +42,9 @@ M.opts = {
         -- Should match `minuet.config.request_timeout * 1000`,
         -- since `minuet.config.request_timeout` is in seconds.
         timeout_ms = 3000,
-        score_offset = 0,
+        score_offset = 10,
       },
-    }, maybe_internet_providers),
+    },
   },
   appearance = {
     kind_icons = kind_icons,

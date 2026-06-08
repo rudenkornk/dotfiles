@@ -1,26 +1,23 @@
 local M = {}
 
 M.opts = {
-  provider = os.getenv("USERKIND") == "corp" and "openai_fim_compatible" or nil,
-  n_completions = 1,
+  provider = "openai_fim_compatible",
+  n_completions = 2,
+  context_window = 8192,
+  request_timeout = 3,
+  throttle = 1500, -- Time to send a new request after the last request was sent.
+  debounce = 300, -- Time to send a request after the last keystroke was hit.
+  virtualtext = {
+    auto_trigger_ft = { "*" },
+  },
+
   provider_options = {
     openai_fim_compatible = {
-      end_point = os.getenv("CORP_LLM_ENDPOINT_COMPLETIONS"),
-      api_key = "CORP_LLM_API_KEY",
-      model = "Qwen2.5-Coder-7B-Instruct-fp8",
-      name = "qwen",
+      api_key = "DEEPSEEK_API_KEY",
+      name = "Deepseek",
       optional = {
-        max_tokens = 2000,
-      },
-      template = {
-        prompt = function(context_before_cursor, context_after_cursor, opts)
-          return "<|fim_prefix|>"
-            .. context_before_cursor
-            .. "<|fim_suffix|>"
-            .. context_after_cursor
-            .. "<|fim_middle|>"
-        end,
-        suffix = false,
+        max_tokens = 512,
+        top_p = 0.9,
       },
     },
   },

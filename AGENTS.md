@@ -1,4 +1,4 @@
-# Copilot Instructions for dotfiles Repository
+# AI Instructions for dotfiles Repository
 
 ## Repository Overview
 

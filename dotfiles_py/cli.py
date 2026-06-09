@@ -124,17 +124,18 @@ def updatekeys() -> None:
 def syms() -> None:
     """Create symlinks in home directory for dotfile configs."""
     xdg_config_home = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+    programs = REPO_PATH / "nix/home-manager/programs"
     syms_target.create_symlinks(
-        source_dir=REPO_PATH / "nix/home-manager/programs/text-editors/neovim/config",
+        source_dir=programs / "text-editors/neovim/config",
         target_dir=xdg_config_home / "nvim",
     )
-    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/ai/configs")
-    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/desktop-envs/configs")
-    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/linters/configs")
-    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/messengers/configs")
-    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/system/configs")
-    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/terminals/configs")
-    syms_target.create_symlinks(source_dir=REPO_PATH / "nix/home-manager/programs/vcs/configs")
+    syms_target.create_symlinks(source_dir=programs / "ai/configs")
+    syms_target.create_symlinks(source_dir=programs / "desktop-envs/configs")
+    syms_target.create_symlinks(source_dir=programs / "linters/configs")
+    syms_target.create_symlinks(source_dir=programs / "messengers/configs")
+    syms_target.create_symlinks(source_dir=programs / "system/configs")
+    syms_target.create_symlinks(source_dir=programs / "terminals/configs")
+    syms_target.create_symlinks(source_dir=programs / "vcs/configs")
 
     # We need to additionally unlink noctalia settings, to prevent noctalia from randomly reloading pinned settings,
     # which were modified in memory, but not yet backuped in nix config.

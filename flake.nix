@@ -88,13 +88,10 @@
       ) hosts;
 
       homeConfigurations = lib.listToAttrs (
-        map (
-          { user, host }:
-          {
-            name = "${user.name}@${host.name}";
-            value = makeHomeConfig { inherit user host; };
-          }
-        ) userHostPairs
+        map ({ user, host }: {
+          name = "${user.name}@${host.name}";
+          value = makeHomeConfig { inherit user host; };
+        }) userHostPairs
       );
       # Also register home-manager configs for `nix flake check`.
       checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations;

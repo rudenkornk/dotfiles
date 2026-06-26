@@ -8,7 +8,6 @@
     (locallib.with_secrets { pkg = codex; })
     (locallib.with_secrets { pkg = cursor-cli; })
     (locallib.with_secrets { pkg = gemini-cli; })
-    (locallib.with_secrets { pkg = github-copilot-cli; })
     (locallib.with_secrets {
       pkg = nur.repos.charmbracelet.crush;
       binary = "crush";

@@ -2,7 +2,10 @@
 
 {
   home = {
-    packages = with pkgs; [ shotcut ]; # typos: ignore
+    packages = with pkgs; [
+      exiftool
+      shotcut # typos: ignore
+    ];
   };
 
   programs = {

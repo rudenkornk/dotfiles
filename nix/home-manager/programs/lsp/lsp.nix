@@ -6,7 +6,6 @@
     angular-language-server
     astro-language-server
     bash-language-server
-    copilot-language-server
     docker-compose-language-service
     dockerfile-language-server
     gitlab-ci-ls

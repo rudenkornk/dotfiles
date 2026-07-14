@@ -38,6 +38,10 @@ _: final: prev: {
           (builtins.readFile ./custom/openconnect_corp.sh);
     };
 
+    corp-pkgs-info = builtins.fromJSON (
+      builtins.readFile (final.locallib.secrets + /corp/packages_info.sops.json)
+    );
+
     throne-run = final.writeShellApplication {
       name = "throne-run";
       runtimeInputs = [ final.throne ];

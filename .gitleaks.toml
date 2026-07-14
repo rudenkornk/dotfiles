@@ -12,3 +12,8 @@ stopwords = [
   "0x59FDA1CE1B84B3FAD89366C027557F056DC33CA5",
   "0x60C317803A41BA51845E371A1E9377A2BA9EF27F",
 ]
+
+[[rules]]
+id = "yandex-net"
+description = "Yandex internal URL"
+regex = '''yandex.net'''

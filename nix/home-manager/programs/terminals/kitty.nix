@@ -3,6 +3,7 @@
 {
   xdg.configFile = {
     "kitty/themes".source = "${pkgs.kitty-themes}/share/kitty-themes/themes";
+    "kitty/kitty.conf".source = ./configs/.config/kitty/kitty.conf;
   };
 
   home = {

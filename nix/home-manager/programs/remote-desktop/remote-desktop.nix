@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  user,
   ...
 }:
 
@@ -31,6 +32,15 @@ in
     sessionVariables = {
       SSH_AUTH_SOCK = "${config.home.homeDirectory}/.ssh/agent.sock";
     };
+  };
+
+  local = {
+    secrets.links =
+      { }
+      // lib.optionalAttrs (user.userkind == "corp") {
+        "${config.home.homeDirectory}/.ssh/corp/config".source =
+          pkgs.locallib.secrets + /corp/ssh_config.sops;
+      };
   };
 
   systemd.user.services.ssh-agent-keys = {

@@ -50,6 +50,23 @@
           enableGraphical = true;
         };
       };
+      environment = {
+        etc = {
+          "ssl/certs/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
+        };
+      };
+      local = {
+        secrets = {
+          links = {
+            "/etc/NetworkManager/system-connections/YTeam.nmconnection".source =
+              pkgs.locallib.secrets + /corp/YTeam.nmconnection.sops;
+            "/run/user/0/secrets/rudenkornk.pem".source = pkgs.locallib.secrets + /corp/rudenkornk.pem.sops;
+          };
+          before = [
+            "NetworkManager.service"
+          ];
+        };
+      };
     };
 
   ramGiB = 32;

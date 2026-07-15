@@ -234,13 +234,15 @@
     backupCommand = "${pkgs.lib.getExe pkgs.trash-cli}";
   };
 
-  environment.systemPackages = with pkgs; [
-    e2fsprogs
-    git
-    sbctl
-    vim
-    wget
-  ];
+  environment = {
+    systemPackages = with pkgs; [
+      e2fsprogs
+      git
+      sbctl
+      vim
+      wget
+    ];
+  };
 
   programs = {
     niri.enable = true;

@@ -46,7 +46,9 @@
     stateVersion = "26.05"; # Did you read the comment?
   };
 
-  xdg.enable = true;
+  xdg = {
+    enable = true;
+  };
 
   fonts.fontconfig.enable = true;
 

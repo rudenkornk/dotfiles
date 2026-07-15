@@ -57,6 +57,7 @@
       hosts = mapAttrs (lib.const import) hostfiles;
       userfiles = pkgs.locallib.get_modules_map ./nix/users;
       users = mapAttrs (lib.const import) userfiles;
+      standalonePackages = pkgs.locallib.get_modules_map ./nix/packages;
 
       userHostPairs = lib.cartesianProduct {
         user = lib.attrsToList users;
@@ -95,6 +96,8 @@
       );
       # Also register home-manager configs for `nix flake check`.
       checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations;
+
+      packages.${system} = mapAttrs (_: path: pkgs.callPackage path { }) standalonePackages;
 
       devShells.${system} = import ./nix/devshell.nix { inherit pkgs; };
     };

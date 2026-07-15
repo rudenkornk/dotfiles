@@ -96,6 +96,9 @@
         # Kept alongside /var/lib/NetworkManager which holds NM's internal state.
         "/etc/NetworkManager/system-connections"
 
+        # TPM pkcs11 database.
+        "/etc/tpm2_pkcs11/"
+
         # System-level caches (cups, fwupd, libvirt, etc.).
         # Kept to avoid re-downloads on every boot; safe to drop if disk space is a concern.
         "/var/cache"

@@ -18,9 +18,13 @@
     custom.playwright-cli
   ];
 
-  # W/A for https://github.com/anomalyco/opencode/issues/16885
-  xdg.dataFile."opencode/opencode.db".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.xdg.dataHome}/opencode/opencode-stable.db";
+  xdg = {
+    dataFile = {
+      # W/A for https://github.com/anomalyco/opencode/issues/16885
+      "opencode/opencode.db".source =
+        config.lib.file.mkOutOfStoreSymlink "${config.xdg.dataHome}/opencode/opencode-stable.db";
+    };
+  };
 
   home.file =
     (pkgs.locallib.homefiles {

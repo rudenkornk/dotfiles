@@ -79,7 +79,7 @@ let
       --bind "ctrl-q:transform:${rgCycleTransform}" \
       --delimiter : \
       --preview '${rgBatPreview}' \
-      --preview-window 'right,60%,wrap,+{2}+3/3,~3' \
+      --preview-window='right,60%,wrap,+{2}+3/3,~3,<90(down,60%,wrap,+{2}+3/3,~3)' \
       --bind 'ctrl-o:execute(nvim {1} +{2})' \
       --bind 'enter:execute(nvim {1} +{2})'
   '';

@@ -9,6 +9,7 @@
     cups
     dbus
     ddcutil
+    dmidecode
     e2fsprogs
     fastfetch
     htop-vim

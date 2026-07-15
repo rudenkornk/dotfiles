@@ -74,6 +74,7 @@
       ];
     };
     wireless = {
+      enableHardening = false; # Allow usage of smart cards and TPM for wifi connections.
       extraConfig = ''
         # Note: this configuration is a no-op due to NetworkManager not passing it to wpa_supplicant.
         # It is only specified here if any future upstream changes fix the problem.
@@ -204,6 +205,10 @@
     fwupd = {
       enable = true;
     };
+
+    pcscd = {
+      enable = true;
+    };
   };
 
   # Enable sound with pipewire.
@@ -267,7 +272,18 @@
       # Secure boot helpers.
       e2fsprogs
       sbctl
+
+      # WIFI with hardware token support.
+      libp11
+      tpm2-pkcs11
     ];
+    etc = {
+      # W/A for p11 tool not finding libtpm2.
+      "pkcs11/modules/libtpm2-pkcs11".text = ''
+        module: /run/current-system/sw/lib/libtpm2_pkcs11.so
+        critical: yes
+      '';
+    };
   };
 
   programs = {

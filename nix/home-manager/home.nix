@@ -55,6 +55,7 @@
 
   imports = [
     ./corp.nix
+    ../modules/secrets/home-manager.nix
   ]
   # We cannot use `pkgs.locallib.get_modules2` in `imports`, because it will result in
   # infinite recursion error.

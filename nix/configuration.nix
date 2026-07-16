@@ -14,6 +14,7 @@
     inputs.home-manager.nixosModules.default
     inputs.preservation.nixosModules.default
     inputs.disko.nixosModules.disko
+    ./modules/secrets/nixos.nix
     ./disk.nix
   ];
 

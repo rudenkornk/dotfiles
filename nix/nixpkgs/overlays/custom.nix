@@ -6,6 +6,8 @@ _: final: prev: {
       final.writeShellApplication {
         name = "sops-cached";
         runtimeInputs = [
+          final.age
+          final.age-plugin-tpm
           final.sops
           final.uutils-coreutils-noprefix
         ];

@@ -30,7 +30,8 @@
         + "f400-f533:w,"
         + "f0001-f1af0:w";
       QT_SCALE_FACTOR = "1.5";
-    };
+    }
+    // (user.extraEnv or { });
 
     file = {
       ".face".source = user.profile_image;

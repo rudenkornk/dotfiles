@@ -1,6 +1,17 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
-# Remote desktop and remote filesystem tools.
+let
+  ssh_keys = {
+    ".ssh" = {
+      source = pkgs.locallib.secrets + /ssh;
+      recursive = true;
+    };
+  };
+  ssh_configs = pkgs.locallib.homefiles {
+    inherit (config) xdg;
+    path = ./configs;
+  };
+in
 {
   home = {
     packages = with pkgs; [
@@ -10,11 +21,6 @@
       samba
     ];
 
-    file = {
-      ".ssh" = {
-        source = pkgs.locallib.secrets + /ssh;
-        recursive = true;
-      };
-    };
+    file = ssh_keys // ssh_configs;
   };
 }

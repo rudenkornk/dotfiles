@@ -98,6 +98,7 @@ files.extend-exclude = ["lazy-lock.json", "*.sops", "*.sops.json", "*.sops.yaml"
 strict = true
 exclude = [
   '^result/',
+  '^__build/',
 ]
 
 [tool.pydocstyle]

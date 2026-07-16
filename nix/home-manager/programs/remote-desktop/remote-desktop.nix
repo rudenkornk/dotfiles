@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   ssh_keys = {
@@ -22,5 +27,32 @@ in
     ];
 
     file = ssh_keys // ssh_configs;
+
+    sessionVariables = {
+      SSH_AUTH_SOCK = "${config.home.homeDirectory}/.ssh/agent.sock";
+    };
+  };
+
+  systemd.user.services.ssh-agent-keys = {
+    Unit = {
+      Description = "SSH agent with sops-decrypted keys";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${lib.getExe (
+        pkgs.writeShellApplication {
+          name = "ssh-client";
+          runtimeInputs = [
+            pkgs.openssh
+            pkgs.sops
+          ];
+          text = builtins.readFile ./scripts/ssh_client.sh;
+        }
+      )}";
+    };
   };
 }

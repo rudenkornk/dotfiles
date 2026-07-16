@@ -20,7 +20,7 @@ _: final: prev: {
         final.custom.sops-cached
       ];
       text =
-        final.lib.replaceStrings [ "@corp_auth@" ] [ "${final.locallib.secrets + /corp_auth.sops.json}" ]
+        final.lib.replaceStrings [ "@corp_auth@" ] [ "${final.locallib.secrets + /corp/auth.sops.json}" ]
           (builtins.readFile ./custom/ldaps.sh);
     };
 
@@ -32,7 +32,7 @@ _: final: prev: {
         final.custom.sops-cached
       ];
       text =
-        final.lib.replaceStrings [ "@corp_auth@" ] [ "${final.locallib.secrets + /corp_auth.sops.json}" ]
+        final.lib.replaceStrings [ "@corp_auth@" ] [ "${final.locallib.secrets + /corp/auth.sops.json}" ]
           (builtins.readFile ./custom/openconnect_corp.sh);
     };
 

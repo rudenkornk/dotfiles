@@ -1,7 +1,15 @@
-_: {
+{ pkgs, ... }: {
   programs = {
     yazi = {
       enable = true;
+      package = pkgs.yazi.overrideAttrs (old: {
+        # Yazi ships a `ya` CLI binary that may collide with other popular tools.
+        # `pkgs.yazi` is a `runCommand` wrapper, so its `buildCommand` must be extended
+        # (`postBuild`/`postInstall` are not run by `runCommand`).
+        buildCommand = (old.buildCommand or "") + ''
+          rm -f "$out/bin/ya"
+        '';
+      });
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableNushellIntegration = true;

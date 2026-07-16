@@ -5,4 +5,7 @@
   email = "rudenkornk@gmail.com";
   userkind = "corp";
   profile_image = ./rudenkornk_corp/profile.jpg;
+  extraEnv = {
+    YA_USER = "rudenkornk";
+  };
 }

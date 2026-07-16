@@ -45,6 +45,7 @@ let
     + "--column "
     + "--line-number "
     + "--no-heading "
+    + "--smart-case "
     + "--follow "
     + "--colors 'match:fg:white' "
     + "--colors 'path:fg:blue' "

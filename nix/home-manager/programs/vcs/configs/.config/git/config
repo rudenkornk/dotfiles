@@ -80,7 +80,7 @@
   autoStash = true
 
 [merge]
-  conflictStyle = "zdiff3" # Not supported on old git versions.
+  conflictStyle = "merge" # zdiff3 is confidered the best, but I prefer default one.
 
 [rerere]
   # Very helpful when rebasing a merge commit.

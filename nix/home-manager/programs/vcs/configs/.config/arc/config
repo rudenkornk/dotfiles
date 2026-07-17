@@ -1,0 +1,27 @@
+# Configuration for arc -- exotic VCS from yandex.
+[alias]
+  bl = blame
+  br = branch -vv
+  ck = checkout
+  cm = commit
+  cma = commit --all --message 'a' # Commit all.
+  cmd = commit --amend
+  cmm = commit --amend
+  cms = commit --message 's' # Commit staged.
+  cp = cherry-pick
+  df = diff
+  ft = fetch
+  l = log
+  lg = log --graph
+  ll = log --oneline
+  llg = log --oneline --graph
+  ls = log --stat
+  mb = merge-base
+  p = push
+  pf = push --force
+  rb = rebase
+  rbi = rebase --interactive HEAD~26
+  rh = reset --hard
+  sg = diff --staged
+  sh = show
+  st = status

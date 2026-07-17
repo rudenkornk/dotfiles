@@ -9,6 +9,11 @@ M.opts = {
   debounce = 300, -- Time to send a request after the last keystroke was hit.
   virtualtext = {
     auto_trigger_ft = { "*" },
+    keymap = {
+      accept_line = "<A-f>",
+      -- Cycle to next/prev completion item, or manually invoke completion.
+      prev = "<A-b>",
+    },
   },
 
   provider_options = {

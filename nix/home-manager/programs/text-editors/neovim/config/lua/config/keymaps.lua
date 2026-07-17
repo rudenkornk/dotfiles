@@ -8,16 +8,16 @@
 -- <C-d> -- scroll down half page.
 -- <C-e> -- scroll up lines.
 -- <C-f> -- scroll down page.
--- <C-g> -- ???
+-- <C-g> -- lazygit.
 -- <C-h> -- pane navigation.
 -- <C-i> -- go forward.
 -- <C-j> -- pane navigation.
 -- <C-k> -- pane navigation.
 -- <C-l> -- pane navigation.
 -- <C-m> -- open terminal.
--- <C-n> -- ???
+-- <C-n> -- next.
 -- <C-o> -- go back.
--- <C-p> -- ???
+-- <C-p> -- prev.
 -- <C-q> -- change input lang.
 -- <C-r> -- redo.
 -- <C-s> -- tmux reserved.
@@ -60,11 +60,11 @@
 -- <S-z> --
 
 -- <A-a> --
--- <A-b> -- prev word (terminal).
+-- <A-b> -- prev virtual text (insert), prev word (terminal).
 -- <A-c> -- dap continue.
 -- <A-d> -- dap down.
 -- <A-e> -- dap pause (normal, dap terminal), open in editor (terminal).
--- <A-f> -- next word (terminal).
+-- <A-f> -- accept virtual text (insert), next word (terminal).
 -- <A-g> -- dap restart.
 -- <A-h> -- WM reserved (previously dedent code).
 -- <A-i> -- dap step into.

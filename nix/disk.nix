@@ -125,6 +125,7 @@
         # /var/lib/misc             -- catch-all for daemons (e.g. dnsmasq, dhcpd).
         # /var/lib/NetworkManager   -- NM internal state: secret_key, seen-bssids, connection timestamps.
         # /var/lib/nixos            -- NixOS UID/GID assignment tables; critical to persist.
+        # /var/lib/osquery          -- osquery monitoring database.
         # /var/lib/power-profiles-daemon -- Power profile selection and platform action states.
         # /var/lib/private          -- Real backing store for services using DynamicUser=yes and StateDirectory=.
         # /var/lib/sbctl            -- Secure Boot signing keys.

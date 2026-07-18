@@ -236,11 +236,14 @@
 
   environment = {
     systemPackages = with pkgs; [
-      e2fsprogs
+      # Bare minimal devset.
       git
-      sbctl
       vim
       wget
+
+      # Secure boot helpers.
+      e2fsprogs
+      sbctl
     ];
   };
 

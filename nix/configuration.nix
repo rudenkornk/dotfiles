@@ -74,6 +74,17 @@
       ];
     };
   };
+  local = {
+    secrets = {
+      links = {
+        "/etc/NetworkManager/system-connections/" = {
+          source = pkgs.locallib.secrets + /nmconnections;
+          recursive = true;
+        };
+      };
+      before = [ "NetworkManager.service" ];
+    };
+  };
 
   time.timeZone = "Europe/Moscow";
 

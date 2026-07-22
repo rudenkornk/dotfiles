@@ -12,14 +12,17 @@ if test -n "$NVIM" && test -n "$MYVIMRC"
     set --unexport http_proxy
     set --unexport https_proxy
 
+    set --unexport ANTHROPIC_API_KEY
+    set --unexport CODESTRAL_API_KEY
+    set --unexport DEEPSEEK_API_KEY
+    set --unexport GEMINI_API_KEY
+    set --unexport GITHUB_API_KEY
+    set --unexport MORPH_API_KEY
     set --unexport OPENAI_API_KEY
     set --unexport OPENAI_BASE_URL
     set --unexport OPENAI_MODEL
-    set --unexport GEMINI_API_KEY
-    set --unexport CODESTRAL_API_KEY
-    set --unexport DEEPSEEK_API_KEY
+    set --unexport OPENROUTER_API_KEY
     set --unexport TAVILY_API_KEY
-    set --unexport MORPH_API_KEY
 
     set --unexport CORP_LLM_API_KEY
     set --unexport CORP_LLM_ENDPOINT_COMPLETIONS

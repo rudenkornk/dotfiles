@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
     symlink="$2"
     shift 2
     ;;
-  --recurse)
+  --recursive)
     recursive=true
     shift
     ;;

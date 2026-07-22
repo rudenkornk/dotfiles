@@ -25,16 +25,24 @@
     };
   };
 
+  programs = lib.optionalAttrs (user.userkind == "corp") {
+    fish = {
+      interactiveShellInit =
+        # fish
+        ''
+          source "$(${pkgs.lib.getExe pkgs.custom.sops-cached} ${
+            pkgs.locallib.secrets + /corp/tokens.sh.sops
+          })"
+        '';
+    };
+  };
+
   local = lib.optionalAttrs (user.userkind == "corp") {
     secrets.links =
       let
         home = config.home.homeDirectory;
       in
       {
-        "${home}/.arc/token".source = pkgs.locallib.secrets + /corp/token.sops;
-        "${home}/.mcp/token".source = pkgs.locallib.secrets + /corp/token.sops;
-        "${home}/.ya_token".source = pkgs.locallib.secrets + /corp/token.sops;
-
         "${home}/.itsme/config.yaml".source = pkgs.locallib.secrets + /corp/config.yaml.sops;
         "${home}/.itsme/initial_ovpn.conf".source = pkgs.locallib.secrets + /corp/initial_ovpn.conf.sops;
         "${home}/.itsme/openvpn.conf".source = pkgs.locallib.secrets + /corp/openvpn.conf.sops;

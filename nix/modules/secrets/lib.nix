@@ -40,7 +40,7 @@
         "${lib.getExe pkgs.custom.sops-cached} "
         + "--retry "
         + "--symlink ${lib.escapeShellArg target} "
-        + "${lib.optionalString v.recursive " --recurse"} "
+        + "${lib.optionalString v.recursive " --recursive"} "
         + "${lib.escapeShellArg v.source} ";
     in
     pkgs.writeShellApplication {

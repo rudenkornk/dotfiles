@@ -9,8 +9,10 @@
 {
   home = lib.optionalAttrs (user.userkind == "corp") {
     sessionVariables = {
-      NODE_EXTRA_CA_CERTS = "${config.xdg.dataHome}/corp-certificates/YandexInternalRootCA.crt";
-      NSS_DEFAULT_SSL_DIR = "${config.xdg.dataHome}/corp-certificates/";
+      # CURL_CA_BUNDLE mess up with curl, blocking other non-copr requests.
+      # CURL_CA_BUNDLE = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
+      NODE_EXTRA_CA_CERTS = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
+      NSS_DEFAULT_SSL_DIR = "${config.xdg.dataHome}/ca-certificates/";
     };
 
     file = {
@@ -20,7 +22,7 @@
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {
     dataFile = {
-      "corp-certificates/YandexInternalRootCA.crt".source =
+      "ca-certificates/YandexInternalRootCA.crt".source =
         pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt;
     };
   };

@@ -110,5 +110,5 @@ To install them run:
 ```bash
 sops --decrypt nix/secrets/corp/packages_info.sops.json | sponge nix/secrets/corp/packages_info.sops.json
 nix profile add .#<pkg>
-git checkout nix/secrets/corp/packages_info.json
+git checkout nix/secrets/corp/packages_info.sops.json
 ```

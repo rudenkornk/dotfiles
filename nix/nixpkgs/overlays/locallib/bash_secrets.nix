@@ -14,6 +14,10 @@ in
     # shellcheck source=/dev/null
     source "$(${sops-cached} ${pkgs.locallib.secrets + /keys.sh.sops})"
     # shellcheck source=/dev/null
+    source "$(${sops-cached} ${pkgs.locallib.secrets + /proxy.sh.sops})"
+    # shellcheck source=/dev/null
     source "$(${sops-cached} ${pkgs.locallib.secrets + /corp/keys.sh.sops})"
+    # shellcheck source=/dev/null
+    source "$(${sops-cached} ${pkgs.locallib.secrets + /corp/proxy.sh.sops})"
   fi
 ''

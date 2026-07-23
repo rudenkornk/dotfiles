@@ -27,6 +27,13 @@
 
     nix-search-tv = {
       enable = true;
+      settings.indexes = [
+        "home-manager"
+        "nixos"
+        "nixpkgs"
+        "noogle"
+        "nur"
+      ];
     };
   };
 }

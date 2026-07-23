@@ -267,6 +267,7 @@ in
         "home-manager"
         "nixos"
         "nixpkgs"
+        "noogle"
         "nur"
       ];
     };

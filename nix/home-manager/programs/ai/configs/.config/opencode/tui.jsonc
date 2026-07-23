@@ -2,50 +2,64 @@
   "$schema": "https://opencode.ai/tui.json",
   "keybinds": {
     // ctrl-a move to start of current line.
-    // ctrl-b messages_page_up (previously move cursor back one character).
+    // ctrl-b move cursor back one character.
     // ctrl-c interrupt process.
-    // ctrl-d LEADER (previously delete character under cursor).
+    // ctrl-d (half) page down.
     // ctrl-e move to end of current line.
-    // ctrl-f messages_page_down (previously move cursor forward one character).
-    // ctrl-g messages_first.
+    // ctrl-f move cursor forward one character.
+    // ctrl-g toggle tool details.
     // ctrl-h tmux reserved.
     // ctrl-i shell reserved.
     // ctrl-j tmux reserved.
     // ctrl-k tmux reserved.
     // ctrl-l tmux reserved.
     // ctrl-m shell reserved.
-    // ctrl-n messages_next.
+    // ctrl-n move cursor to next line.
     // ctrl-o command list.
-    // ctrl-p messages_previous (previously command list).
+    // ctrl-p move cursor to upper line.
     // ctrl-q
-    // ctrl-r
+    // ctrl-r rename session.
     // ctrl-s tmux reserved.
     // ctrl-t model variants.
-    // ctrl-u previously delete all to the left.
-    // ctrl-v
+    // ctrl-u (half) page up.
+    // ctrl-v paste.
     // ctrl-w delete one word to the left.
-    // ctrl-x
-    // ctrl-y messages_copy.
+    // ctrl-x leader key.
+    // ctrl-y scroll up one line.
     // ctrl-z suspend.
 
-    "leader": "ctrl+d",
     "editor_open": "alt+e",
     "app_exit": "ctrl+c,<leader>q",
 
+    "tool_details": "ctrl+g",
+    "display_thinking": "alt+g",
+
     "command_list": "ctrl+o",
-    "messages_next": "ctrl+n",
-    "messages_page_down": "pagedown,ctrl+f",
-    "messages_page_up": "pageup,ctrl+b",
-    "messages_previous": "ctrl+p",
-    "messages_copy": "ctrl+y,<leader>y",
+    "messages_first": "home",
+    "messages_half_page_down": "ctrl+d",
+    "messages_half_page_up": "ctrl+u",
+    "messages_line_up": "ctrl+y",
 
-    "session_child_cycle": "j,right",
-    "session_child_cycle_reverse": "k,left",
+    "session_child_cycle": "l,right",
+    "session_child_cycle_reverse": "h,left",
     "session_child_first": "<leader>j",
-    "session_delete": "ctrl+x",
-    "session_parent": "h,up",
+    "session_delete": "ctrl+shift+d",
+    "session_parent": "k,up",
 
-    "input_delete": "ctrl+x,delete,shift+delete",
-    "stash_delete": "ctrl+x",
+    "input_delete": "delete,shift+delete",
+    "input_delete_to_line_start": "none",
+    "input_move_up": "ctrl+p,up",
+    "input_move_down": "ctrl+n,down",
+    "input_visual_line_end": "none",
+
+    "input_newline": "return,shift+return",
+    "input_submit": "ctrl+return",
+    "stash_delete": "ctrl+shift+d",
+
+    "history_previous": "ctrl+p,up",
+    "history_next": "ctrl+n,down",
+
+    "dialog.select.page_up": "ctrl+u,pageup",
+    "dialog.select.page_down": "ctrl+d,pagedown",
   },
 }

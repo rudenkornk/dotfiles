@@ -6,7 +6,9 @@
       "context": "Global",
       "bindings": {
         "ctrl+t": "app:toggleTodos",
-        "ctrl+o": "app:toggleTranscript",
+        "ctrl+o": null,
+        "ctrl+g": "app:toggleTranscript",
+        "ctrl+x q": "app:exit",
         "ctrl+shift+b": "app:toggleBrief",
         "ctrl+shift+o": "app:toggleTeammatePreview",
         "ctrl+r": "history:search"
@@ -16,15 +18,16 @@
       "context": "Chat",
       "bindings": {
         "escape": "chat:cancel",
-        "ctrl+l": "chat:clearInput",
+        "ctrl+g": null,
         "cmd+k": "chat:clearScreen",
         "ctrl+x ctrl+k": "chat:killAgents",
         "shift+tab": "chat:cycleMode",
         "meta+p": "chat:modelPicker",
         "meta+o": "chat:fastMode",
         "meta+t": "chat:thinkingToggle",
-        "enter": "chat:submit",
-        "ctrl+j": "chat:newline",
+        "ctrl+enter": "chat:submit",
+        "meta+enter": "chat:submit",
+        "enter": "chat:newline",
         "ctrl+p": "history:previous",
         "ctrl+n": "history:next",
         "up": "history:previous",
@@ -34,8 +37,9 @@
         "ctrl+shift+-": "chat:undo",
         "ctrl+shift+_": "chat:undo",
         "ctrl+x ctrl+e": "chat:externalEditor",
-        "ctrl+g": "chat:externalEditor",
-        "ctrl+s": "chat:stash",
+        "meta+e": "chat:externalEditor",
+        "ctrl+s": null,
+        "meta+s": "chat:stash",
         "ctrl+v": "chat:imagePaste",
         "space": "voice:pushToTalk"
       }
@@ -111,6 +115,9 @@
         "escape": "transcript:exit",
         "q": "transcript:exit",
         "ctrl+u": "scroll:halfPageUp",
+        "ctrl+y": "scroll:lineUp",
+        "u": "scroll:halfPageUp",
+        "d": "scroll:halfPageDown",
         "ctrl+b": "scroll:fullPageUp",
         "ctrl+f": "scroll:fullPageDown",
         "ctrl+n": "scroll:lineDown",
@@ -134,7 +141,8 @@
         "escape": "historySearch:accept",
         "tab": "historySearch:accept",
         "enter": "historySearch:execute",
-        "ctrl+s": "historySearch:cycleScope"
+        "ctrl+s": null,
+        "meta+s": "historySearch:cycleScope"
       }
     },
     {
@@ -156,8 +164,9 @@
         "pageup": "scroll:pageUp",
         "pagedown": "scroll:pageDown",
         "ctrl+u": "scroll:halfPageUp",
-        "ctrl+b": "scroll:pageUp",
-        "ctrl+f": "scroll:pageDown",
+        "ctrl+y": "scroll:lineUp",
+        "ctrl+b": "scroll:fullPageUp",
+        "ctrl+f": "scroll:fullPageDown",
         "wheelup": "scroll:lineUp",
         "wheeldown": "scroll:lineDown",
         "ctrl+home": "scroll:top",
@@ -227,10 +236,10 @@
       "context": "DiffDialog",
       "bindings": {
         "escape": "diff:dismiss",
-        "ctrl+h": "diff:previousSource",
-        "ctrl+l": "diff:nextSource",
-        "ctrl+k": "diff:previousFile",
-        "ctrl+j": "diff:nextFile",
+        "ctrl+b": "diff:previousSource",
+        "ctrl+f": "diff:nextSource",
+        "ctrl+p": "diff:previousFile",
+        "ctrl+n": "diff:nextFile",
         "left": "diff:previousSource",
         "right": "diff:nextSource",
         "up": "diff:previousFile",
@@ -241,8 +250,8 @@
     {
       "context": "ModelPicker",
       "bindings": {
-        "left": "modelPicker:decreaseEffort",
-        "right": "modelPicker:increaseEffort",
+        "h": "modelPicker:decreaseEffort",
+        "l": "modelPicker:increaseEffort",
         "d": "modelPicker:setAsDefault"
       }
     },

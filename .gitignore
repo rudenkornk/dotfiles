@@ -23,3 +23,4 @@ credentials.yaml
 !*.secret
 .aider*
 /result
+/nix/secrets/corp/packages_info.json

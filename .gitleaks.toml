@@ -14,6 +14,6 @@ stopwords = [
 ]
 
 [[rules]]
-id = "yandex-net"
+id = "yandex-internal"
 description = "Yandex internal URL"
-regex = '''yandex.net'''
+regex = '''yandex.net|yandex-team.ru'''

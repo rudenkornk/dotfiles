@@ -168,21 +168,8 @@
     printing = {
       enable = true;
       drivers = with pkgs; [
-        brgenml1lpr
-        brlaser # Brother Laser.
-        cnijfilter2 # Canon Pixma devices (Proprietary driver).
         cups-browsed
         cups-filters
-        epson-escpr # Epson devices.
-        epson-escpr2 # Newer Epson devices.
-        gutenprint # Wide range of inkjet/laser printers.
-        gutenprintBin # Additional, binary-only drivers for some printers.
-        hplip # HP Printers.
-        hplipWithPlugin # Drivers for HP printers with the proprietary plugin.
-        brgenml1cupswrapper # More Brother printers (Proprietary drivers).
-        postscript-lexmark # Postscript drivers for Lexmark.
-        samsung-unified-linux-driver # Proprietary Samsung Drivers.
-        splix # Drivers for printers supporting SPL (Samsung Printer Language).
       ];
 
       # Security issues?

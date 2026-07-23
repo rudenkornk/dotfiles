@@ -155,7 +155,7 @@
       files = [
         # Stable machine identity used by systemd, D-Bus, and journalctl.
         # Without this a new ID is generated each boot; journalctl cannot correlate
-        # logs across boots and some services derive unstable IDs. Must be in initrd.
+        # logs across boots and some services derive volatile IDs. Must be in initrd.
         {
           file = "/etc/machine-id";
           inInitrd = true;

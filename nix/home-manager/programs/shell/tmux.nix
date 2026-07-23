@@ -64,7 +64,7 @@
           '';
       }
       {
-        plugin = pkgs.unstable.tmuxPlugins.ukiyo;
+        plugin = pkgs.tmuxPlugins.ukiyo;
         extraConfig = # tmux
           ''
             set -g @ukiyo-theme 'tokyonight/night'

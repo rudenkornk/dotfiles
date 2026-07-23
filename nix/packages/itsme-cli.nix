@@ -31,4 +31,10 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     mv usr/bin/itsme-cli $out/bin
   '';
+
+  meta = {
+    inherit (info) description homepage;
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "splitty";
+  };
 }

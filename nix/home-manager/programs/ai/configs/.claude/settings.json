@@ -1,0 +1,10 @@
+{
+  "model": "sonnet",
+  "worktree": {
+    "baseRef": "head"
+  },
+  "effortLevel": "high",
+  "theme": "dark",
+  "editorMode": "normal",
+  "skipAutoPermissionPrompt": true
+}

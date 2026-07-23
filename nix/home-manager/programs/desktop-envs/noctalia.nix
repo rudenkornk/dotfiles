@@ -13,7 +13,7 @@ in
 {
   home = {
     packages = with pkgs; [
-      unstable.noctalia-shell
+      noctalia-shell
       # https://docs.noctalia.dev/v4/getting-started/installation/#dependencies-explained
       bluez # Bluetooth support.
       brightnessctl # Brightness control.

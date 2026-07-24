@@ -9,10 +9,7 @@ shopt -s nullglob
 # Setting the locale; some users have issues with different locales, this forces the correct one.
 export LC_ALL=en_US.UTF-8
 
-main() {
-  echo -n "  "
-  df /home --block-size G | awk 'NR==2 {printf "%.1fTiB/%.1fTiB  ", $3 / 1024, $2 / 1024}'
-
+display_keyboard_layout() {
   echo -n "  "
   if [[ "${XDG_CURRENT_DESKTOP,,}" == *"gnome"* ]]; then
     gsettings get org.gnome.desktop.input-sources mru-sources | python3 -c "import sys, ast; print(ast.literal_eval(sys.stdin.read())[0][1])"
@@ -21,6 +18,13 @@ main() {
   else
     localectl status | grep -oP "X11 Layout:\s*\K.*"
   fi
+}
+
+main() {
+  echo -n "  "
+  df /home --block-size G | awk 'NR==2 {printf "%.1fTiB/%.1fTiB  ", $3 / 1024, $2 / 1024}'
+
+  # display_keyboard_layout
 
   sleep 0.1
 }

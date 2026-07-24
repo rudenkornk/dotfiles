@@ -5,3 +5,28 @@ fullscreen = false
 initial-tool = "rectangle"
 output-filename = "~/Downloads/screenshots/%Y-%m-%d_%H-%M-%S.png"
 save-after-copy = true
+annotation-size-factor = 1
+
+[keybinds]
+pointer = "w"
+crop = "c"      # Default.
+brush = "b"     # Default.
+line = "s"
+arrow = "z"     # Default.
+rectangle = "r" # Default.
+ellipse = "e"   # Default.
+text = "t"      # Default.
+marker = "f"
+blur = "d"
+highlight = "g" # Default.
+
+[color-palette]
+palette = [
+  # RRGGBBAA format, where AA is the alpha channel
+  # (00 is fully transparent, ff is fully opaque).
+  "#f0932bff",
+  "#eb4d4bff",
+  "#6ab04cff",
+  "#22a6b3ff",
+  "#130f40FF",
+]

@@ -2,16 +2,17 @@
 
 ## Repository Overview
 
-This is a **NixOS configuration repository** (~640KiB, 130 files) that provides a complete, reproducible personal machine setup.
+This is a **NixOS configuration repository** (~5MiB, ~247 tracked files) that provides a complete, reproducible personal machine setup.
 The repository focuses on configuring development tools including Neovim (LazyVim-based), tmux, fish shell, and support for C++, Python, LaTeX, and Lua development.
 
 **Key Technologies:**
 
-- **NixOS/Nix Flakes**: Primary configuration system (21 .nix files)
-- **Python 3.13**: CLI tooling and automation (8 .py files in `dotfiles_py/`)
+- **NixOS/Nix Flakes**: Primary configuration system (91 .nix files)
+- **Python 3.13**: CLI tooling and automation (12 .py files in `dotfiles_py/`)
 - **Home Manager**: User environment configuration
-- **Languages**: Shell scripts (.sh, .fish), Lua configs (21 files), Nix expressions
+- **Languages**: Shell scripts (.sh, .fish), Lua configs (23 files), Nix expressions
 - **Package Management**: Nix flakes
+- **Secrets**: sops + age, stored encrypted directly in the repo
 
 ## Build and Validation Commands
 
@@ -26,10 +27,16 @@ nix develop
 This command:
 
 - Takes ~10-60 seconds on first run (may fetch packages from cache.nixos.org)
-- Activates the virtual environment automatically
 - Provides all necessary tools: python313, formatters, linters, and more
+- Generates a `__build/dotfiles` wrapper and puts it on `PATH`, so `dotfiles` invokes the local CLI
 
-**CRITICAL:** Do NOT run `uv sync` manually. The `nix develop` shell hook handles python env automatically.
+**CRITICAL:** Do NOT run `uv sync` or `pip install` manually. The `nix develop` shell hook wires up the Python env automatically.
+
+There is also a bootstrap-only shell used from a NixOS live USB (provides `disko`, `sbctl`, `nixos-install`):
+
+```bash
+nix develop .#install
+```
 
 ### Primary Commands
 
@@ -41,7 +48,7 @@ All commands below assume you're inside `nix develop`:
    dotfiles format --check
    ```
 
-   Runs formatters in check mode: statix, nixfmt, ruff, mdformat, shfmt, fish_indent, prettier, stylua.
+   Runs formatters in check mode: statix, nixfmt, ruff, mdformat, shfmt, fish_indent, prettier, stylua, kdlfmt.
 
 1. **Format (Apply)** (~1-2 seconds):
 
@@ -49,7 +56,7 @@ All commands below assume you're inside `nix develop`:
    dotfiles format
    ```
 
-   Same formatters as above, but applies changes.
+   Same formatters as above, but applies changes (also runs `ruff check --fix --unsafe-fixes`).
 
 1. **Lint** (~7-8 seconds):
 
@@ -59,14 +66,14 @@ All commands below assume you're inside `nix develop`:
 
    Runs comprehensive linting:
 
-   - `gitleaks git`: Checks entire git history for leaked credentials (scans 1344 commits, ~2MB in 198ms)
-   - `statix check`: Nix linter
-   - `mypy`: Python type checking (strict mode)
-   - `ruff check`: Python linter
-   - `yamllint --strict`: YAML linting for `.github/` directory
-   - `shellcheck`: Shell script linting (6 .sh files)
-   - `markdownlint`: Markdown linting (note: command name is `markdownlint-cli2`)
-   - `typos`: Spell checking
+   - `gitleaks git`: Checks entire git history for leaked credentials (~1862 commits at time of writing).
+   - `statix check`: Nix linter.
+   - `mypy`: Python type checking (strict mode).
+   - `ruff check`: Python linter.
+   - `yamllint --strict`: YAML linting for the `.github/` directory.
+   - `shellcheck`: Shell script linting (tracked `.sh` files).
+   - `typos`: Spell checking.
+   - `markdownlint-cli2`: Markdown linting (the binary ships in the dev shell and is invoked directly).
 
 1. **Flake Check** (~10 seconds):
 
@@ -74,7 +81,9 @@ All commands below assume you're inside `nix develop`:
    nix flake check
    ```
 
-   Validates flake structure and evaluates NixOS/Home Manager configurations for `dellxps` host and two users.
+   Validates flake structure and evaluates every NixOS and Home Manager configuration.
+   Home Manager configs are the cartesian product of users (`rudenkornk`, `rudenkornk_corp`) and hosts (`dellxps`, `thinkpad`),
+   registered as checks so `nix flake check` builds each `user@host` activation package.
 
 1. **Git Hooks Setup**:
 
@@ -82,18 +91,19 @@ All commands below assume you're inside `nix develop`:
    dotfiles hooks
    ```
 
-   Symlinks pre-commit hook that prevents committing sensitive files (ssh keys, vpn configs, credentials).
+   Symlinks a pre-commit hook that prevents committing sensitive files (ssh keys, vpn configs, credentials).
 
 ### CI Pipeline
 
-The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs and main branch pushes:
+The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs to `main` and on `main` pushes:
 
 ```yaml
-  - nix flake check --no-build
-  - nix develop --command dotfiles format --check
-  - nix develop --command dotfiles lint
+- nix flake check --no-build
+- nix develop --command dotfiles format --check
+- nix develop --command dotfiles lint
 ```
 
+CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential scan can run.
 **ALWAYS replicate these three commands locally before committing** to avoid CI failures.
 
 ## Known Issues and Workarounds
@@ -104,11 +114,6 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
    - If git history is shallow, `dotfiles lint` will fail with "Looks like git history is shallow and credential check cannot be performed."
    - **Workaround**: Ensure you have the full git history (`git fetch --unshallow` if needed).
 
-1. **Missing Markdownlint Binary**:
-
-   - For some reason even after entering `nix develop`, `markdownlint-cli2` binary is missing in the shell.
-   - To work around this, run `nix-shell -p markdownlint-cli2` to enter a shell with `markdownlint-cli2` available.
-
 1. **Path Dependencies**:
 
    - All tools (nixfmt, ruff, mypy, etc.) must be available in the `nix develop` environment.
@@ -118,69 +123,79 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
 
 ### Root Directory Files
 
-- `flake.nix`: Nix flake defining NixOS configs, Home Manager configs, and dev shell
-- `flake.lock`: Locked dependency versions (nixpkgs 26.05, home-manager)
-- `pyproject.toml`: Python project config with dependencies, ruff/mypy/black/pylint settings
-- `readme.md`: User-facing documentation with bootstrap instructions
-- `manual_tests.md`: Interactive test scenarios (fzf, tmux)
-- `license.md`: MIT license
+- `flake.nix`: Nix flake defining `nixosConfigurations` (per host), `homeConfigurations` (per `user@host` pair), standalone `packages`, and dev shells.
+- `flake.lock`: Locked dependency versions (nixpkgs 26.05, home-manager release-26.05, plus nixpkgs_unstable, nur, nixos-hardware, preservation, disko).
+- `pyproject.toml`: Python project config with dependencies and ruff/mypy settings.
+- `readme.md`: User-facing documentation with bootstrap and recovery instructions.
+- `history.md`: Narrative history of the repository's evolution.
+- `license.md`: MIT license.
 
 ### Configuration Files
 
-- `.editorconfig`: Code style (2-space indents for .sh, 120 char line length for .yaml)
-- `.gitleaks.toml`: Credential leak detection config with allowlists
-- `.yamllint.yaml`: YAML linting rules (120 char max, document-start disabled)
-- `.markdownlint.yaml`: Markdown rules (180 char line length, MD033/MD024/MD025 disabled)
-- `.prettierrc.json`: Empty (uses defaults)
-- `.prettierignore`: Ignores lazy-lock.json, lazyvim.json, \_\_build\_\_, \_\_artifacts\_\_, .venv
-- `.stylua.toml`: Lua formatter config (2-space indents)
-- `.luarc.json`: Lua LSP config for Neovim development
+- `.editorconfig`: Code style (2-space indents for `.sh`, 120 char line length for `.yaml`).
+- `.gitleaks.toml`: Credential leak detection config with allowlists.
+- `.yamllint.yaml`: YAML linting rules (120 char max, document-start disabled).
+- `.markdownlint.yaml`: Markdown rules (180 char line length, MD033/MD024/MD025 disabled).
+- `.prettierrc.json`: Empty (uses defaults).
+- `.prettierignore`: Ignores lazy-lock.json, lazyvim.json, \_\_build\_\_, \_\_artifacts\_\_, .venv, and `*.md` (markdown is handled by mdformat/markdownlint).
+- `.stylua.toml`: Lua formatter config (2-space indents).
+- `.luarc.json`: Lua LSP config for Neovim development.
+- `.sops.yaml`: sops rules mapping age recipients to encrypted secret paths.
 
 ### Python CLI (`dotfiles_py/`)
 
-**Entry point**: `dotfiles_py/cli.py` defines typer app with commands:
+**Entry point**: `dotfiles_py/__main__.py` runs the typer app in `dotfiles_py/cli.py`, which defines commands:
 
-- `lint`: Runs all linters (see Build Commands above)
-- `format`: Runs all formatters with `--check` flag option
-- `hooks`: Sets up git hooks from `dotfiles_py/data/hooks/`
-- `gnome`: Regenerates GNOME dconf settings from rules
-- `password`: Generates random passwords
+- `lint`: Runs all linters (see Build Commands above).
+- `format`: Runs all formatters, with a `--check`/`-c` flag.
+- `hooks`: Sets up git hooks from `dotfiles_py/data/hooks/`.
+- `gui`: Regenerates GNOME dconf settings and Noctalia settings from rules.
+- `updatekeys`: Re-encrypts sops secrets when age recipients change.
+- `syms`: Symlinks dotfile configs (nvim, ai, desktop-envs, linters, messengers, remote-desktop, system, terminals, vcs) into the home directory.
+- `password`: Generates random passwords.
 
 **Key modules**:
 
-- `cli.py`: Main CLI app, command definitions, logging setup
-- `utils.py`: Shell command runner, retry decorator, makelike decorator, YAML utilities
-- `targets/lint.py`: Lint and format implementations
-- `targets/hooks.py`: Git hooks symlinking logic
-- `targets/gnome.py`: GNOME configuration generation
+- `cli.py`: Main CLI app, command definitions, logging setup.
+- `utils.py`: Shell command runner, git-file helpers, retry/makelike decorators, YAML utilities.
+- `targets/lint.py`: Lint and format implementations.
+- `targets/hooks.py`: Git hooks symlinking logic.
+- `targets/gnome.py`: GNOME dconf configuration generation.
+- `targets/noctalia.py`: Noctalia shell settings generation.
+- `targets/secrets.py`: sops age-key rotation.
+- `targets/syms.py`: Symlink materialization for configs.
 
 **Data files**:
 
-- `dotfiles_py/data/hooks/pre-commit`: Pre-commit hook preventing sensitive file commits
-- `dotfiles_py/data/scripts/`: Utility shell scripts (google_takeout.sh, nvim_time.sh, etc.)
+- `dotfiles_py/data/hooks/pre-commit`: Pre-commit hook preventing sensitive file commits.
+- `dotfiles_py/data/scripts/`: Utility shell scripts (google_takeout.sh, nvim_time.sh, select_nvim.sh, colors.sh).
 
 ### Nix Configuration (`nix/`)
 
 **Structure**:
 
-- `nix/configuration.nix`: NixOS system configuration (boot, networking, users, desktop, VPN, sops secrets)
-- `nix/hosts/dellxps/hardware-configuration.nix`: Hardware-specific config
-- `nix/home-manager/home.nix`: Home Manager config importing all program configs
-- `nix/home-manager/programs/`: Individual program configs (atuin, bash, docker, eza, fish, git, kitty, lazygit, mypy, neovim, oh-my-posh, ruff, tmux, yazi, zoxide)
-- `nix/home-manager/dconf/`: GNOME settings (settings.nix, rules.yaml)
-- `nix/home-manager/configs/`: Dotfiles symlinked to home directory
-- `nix/keyboard/`: Custom keyboard layouts (qwerty_rnk, jcuken_rnk)
-- `nix/secrets/`: Encrypted secrets (SSH keys, VPN configs) using sops
+- `nix/configuration.nix`: Shared NixOS system configuration (boot, networking, users, desktop, VPN, sops secrets).
+- `nix/hosts/`: Per-machine definitions (`dellxps.nix`, `thinkpad.nix`); hardware config is inlined per host, plus host subdirs (e.g. `dellxps/noctalia_monitors.nix`).
+- `nix/users/`: Per-user definitions (`rudenkornk.nix`, `rudenkornk_corp.nix`) with profile images.
+- `nix/home-manager/home.nix`: Home Manager entry point importing all program modules.
+- `nix/home-manager/programs/`: One `<name>.nix` module per program or category, with a sibling `<name>/` directory holding
+  that program's configs, scripts, and dotfiles. Categories include shell, terminals, text-editors (neovim), toolchains, lsp,
+  linters, debuggers, desktop-envs, ai, vcs, browsers, messengers, media, networking, vpn, remote-desktop, and virtualization.
+- `nix/packages/`: Standalone packages installed outside the main config (`arc`, `itsme-cli`, `openvpn-ya`, `skotty`, `splitty`, `ya`).
+- `nix/modules/secrets/`: sops secrets modules (`nixos.nix`, `home-manager.nix`, `lib.nix`).
+- `nix/nixpkgs/`: Overlays (`custom`, `locallib`, `sops`) and `unfree.nix`.
+- `nix/keyboard/`: Custom keyboard layouts (`qwerty_rnk`, `jcuken_rnk`).
+- `nix/secrets/`: Encrypted secrets (`corp`, `nmconnections`, `ssh`, `vpn`) using sops.
+- `nix/devshell.nix`: Definitions of the `default` and `install` dev shells.
 
 **Key Nix Patterns**:
 
-- Uses NixOS 26.05 (stable channel)
-- Home Manager manages user environment for `rudenkornk` and `rudenkornk_corp` users
-- Secrets encrypted with sops and age
-- Custom keyboard layouts via xkb
-- Fish shell is primary shell (11 .fish files)
-- Neovim config based on LazyVim
-- NOTE: WHEN ADDING NEW NIX OR CONFIG FILE, ADD IT TO GIT STAGING AREA. OTHERWISE NIX WILL NOT SEE IT.
+- Uses NixOS 26.05 (stable channel), with `nixpkgs_unstable` available as a separate input.
+- Home Manager builds a config for every `user@host` pair (`rudenkornk` / `rudenkornk_corp` × `dellxps` / `thinkpad`).
+- Secrets are encrypted with sops and age; config still evaluates even when secrets are not decrypted.
+- Custom keyboard layouts via xkb.
+- Fish is the primary shell; Neovim config is based on LazyVim.
+- NOTE: WHEN ADDING A NEW NIX OR CONFIG FILE, ADD IT TO THE GIT STAGING AREA. OTHERWISE NIX WILL NOT SEE IT.
 
 ### Important File Locations
 
@@ -188,8 +203,8 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs a
 - Nix configs: `nix/{configuration.nix,home-manager/home.nix,home-manager/programs/*.nix}`
 - Git hooks: `dotfiles_py/data/hooks/pre-commit`
 - CI workflow: `.github/workflows/workflow.yml`
-- Format configs: `.editorconfig`, `.prettierrc.json`, `.stylua.toml`, `pyproject.toml` (ruff/black/isort sections)
-- Lint configs: `.yamllint.yaml`, `.markdownlint.yaml`, `.gitleaks.toml`, `pyproject.toml` (mypy/ruff/pylint sections)
+- Format configs: `.editorconfig`, `.prettierrc.json`, `.stylua.toml`, `pyproject.toml` (ruff sections)
+- Lint configs: `.yamllint.yaml`, `.markdownlint.yaml`, `.gitleaks.toml`, `pyproject.toml` (mypy/ruff sections)
 
 ## Validation Steps
 
@@ -217,6 +232,7 @@ If making Nix changes:
 - **Markdown**: 180 char line length, HTML allowed
 - **YAML**: 120 char line length, no document-start
 - **Lua**: stylua (2-space indents)
+- **KDL**: kdlfmt
 
 ## Comment & Markdown Style Guidelines
 
@@ -338,4 +354,4 @@ These instructions are comprehensive and tested. Only search for additional info
 - You encounter an error not documented here
 - You need details about code not covered in the structure section
 
-When you encounter the documented issues (gitleaks shallow history, markdownlint naming), apply the documented workarounds rather than investigating alternatives.
+When you encounter the documented gitleaks shallow-history issue, apply the documented workaround rather than investigating alternatives.

@@ -7,9 +7,9 @@ in
 ''
   if [[ "$USERKIND" == "default" ]]; then
     # shellcheck source=/dev/null
-    source "$(${sops-cached} ${pkgs.locallib.secrets + /proxy.sh.sops})"
-    # shellcheck source=/dev/null
     source "$(${sops-cached} ${pkgs.locallib.secrets + /keys.sh.sops})"
+    # shellcheck source=/dev/null
+    source "$(${sops-cached} ${pkgs.locallib.secrets + /proxy.sh.sops})"
   elif [[ "$USERKIND" == "corp" ]]; then
     # shellcheck source=/dev/null
     source "$(${sops-cached} ${pkgs.locallib.secrets + /keys.sh.sops})"

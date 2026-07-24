@@ -1,4 +1,6 @@
 !.config
+!.claude
+!.opencode
 .ansible
 .bun
 .cache

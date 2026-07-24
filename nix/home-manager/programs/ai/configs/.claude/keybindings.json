@@ -73,7 +73,8 @@
         "w": "settings:periodWeek",
         "t": "settings:sortByTokens",
         "ctrl+u": "scroll:halfPageUp",
-        "ctrl+f": "scroll:pageDown"
+        "ctrl+f": "scroll:halfPageDown",
+        "ctrl+b": "scroll:halfPageUp"
       }
     },
     {
@@ -118,8 +119,8 @@
         "ctrl+y": "scroll:lineUp",
         "u": "scroll:halfPageUp",
         "d": "scroll:halfPageDown",
-        "ctrl+b": "scroll:fullPageUp",
-        "ctrl+f": "scroll:fullPageDown",
+        "ctrl+b": "scroll:halfPageUp",
+        "ctrl+f": "scroll:halfPageDown",
         "ctrl+n": "scroll:lineDown",
         "ctrl+p": "scroll:lineUp",
         "g": "scroll:top",
@@ -165,8 +166,8 @@
         "pagedown": "scroll:pageDown",
         "ctrl+u": "scroll:halfPageUp",
         "ctrl+y": "scroll:lineUp",
-        "ctrl+b": "scroll:fullPageUp",
-        "ctrl+f": "scroll:fullPageDown",
+        "ctrl+b": "scroll:halfPageUp",
+        "ctrl+f": "scroll:halfPageDown",
         "wheelup": "scroll:lineUp",
         "wheeldown": "scroll:lineDown",
         "ctrl+home": "scroll:top",

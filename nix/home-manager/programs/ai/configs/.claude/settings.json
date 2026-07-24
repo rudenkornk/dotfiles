@@ -3,6 +3,10 @@
   "worktree": {
     "baseRef": "head"
   },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  },
   "effortLevel": "high",
   "theme": "dark",
   "editorMode": "normal",

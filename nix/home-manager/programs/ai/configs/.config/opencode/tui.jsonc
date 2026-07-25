@@ -5,7 +5,7 @@
     // ctrl-b move cursor back one character.
     // ctrl-c interrupt process.
     // ctrl-d (half) page down.
-    // ctrl-e move to end of current line.
+    // ctrl-e scroll one line up (previously move to end of current line).
     // ctrl-f move cursor forward one character.
     // ctrl-g toggle tool details.
     // ctrl-h tmux reserved.
@@ -38,6 +38,7 @@
     "messages_first": "home",
     "messages_half_page_down": "ctrl+d",
     "messages_half_page_up": "ctrl+u",
+    "messages_line_down": "ctrl+e",
     "messages_line_up": "ctrl+y",
 
     "session_child_cycle": "l,right",
@@ -51,6 +52,7 @@
     "input_move_up": "ctrl+p,up",
     "input_move_down": "ctrl+n,down",
     "input_visual_line_end": "none",
+    "input_line_end": "none",
 
     "input_newline": "return,shift+return",
     "input_submit": "ctrl+return",

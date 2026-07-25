@@ -1,11 +1,27 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": false,
+  "subagent_depth": 2,
+  "permission": {
+    "external_directory": {
+      "*": "ask",
+      "~/projects/dotfiles/**": "allow",
+
+      "/run/user/*/secrets/*": "deny",
+      "~/.config/sops/*": "deny",
+      "~/.gnupg/*": "deny",
+      "~/.pki/*": "deny",
+      "~/.local/share/keyrings/*": "deny",
+      "~/.local/share/TelegramDesktop/*": "deny",
+      "~/.config/mozilla/*": "deny",
+      "~/.config/google-chrome/*": "deny",
+    },
+  },
   "lsp": {},
   "mcp": {
     "nixos": {
       "type": "local",
-      "command": ["nix", "run", "github:utensils/mcp-nixos", "--"],
+      "command": ["mcp-nixos"],
     },
   },
   "provider": {},

@@ -10,5 +10,41 @@
   "effortLevel": "high",
   "theme": "dark",
   "editorMode": "normal",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "permissions": {
+    "allow": ["Read(~/projects/dotfiles/**)"],
+    "deny": [
+      "Read(//run/user/*/secrets/**)",
+      "Edit(//run/user/*/secrets/**)",
+      "Write(//run/user/*/secrets/**)",
+
+      "Read(~/.config/sops/**)",
+      "Edit(~/.config/sops/**)",
+      "Write(~/.config/sops/**)",
+
+      "Read(~/.gnupg/**)",
+      "Edit(~/.gnupg/**)",
+      "Write(~/.gnupg/**)",
+
+      "Read(~/.pki/**)",
+      "Edit(~/.pki/**)",
+      "Write(~/.pki/**)",
+
+      "Read(~/.local/share/keyrings/**)",
+      "Edit(~/.local/share/keyrings/**)",
+      "Write(~/.local/share/keyrings/**)",
+
+      "Read(~/.local/share/TelegramDesktop/**)",
+      "Edit(~/.local/share/TelegramDesktop/**)",
+      "Write(~/.local/share/TelegramDesktop/**)",
+
+      "Read(~/.config/mozilla/**)",
+      "Edit(~/.config/mozilla/**)",
+      "Write(~/.config/mozilla/**)",
+
+      "Read(~/.config/google-chrome/**)",
+      "Edit(~/.config/google-chrome/**)",
+      "Write(~/.config/google-chrome/**)"
+    ]
+  }
 }

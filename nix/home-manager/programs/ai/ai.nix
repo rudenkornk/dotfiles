@@ -21,6 +21,7 @@
     (locallib.with_secrets { pkg = unstable.opencode; })
     (locallib.with_secrets { pkg = qwen-code; })
 
+    mcp-nixos
     custom.playwright-cli
   ];
 

@@ -168,15 +168,15 @@ if [ -n "$rate_5h" ] || [ -n "$rate_7d" ]; then
   fi
 fi
 
-printf "${BOLD}${CYAN}%s%s%s${RESET}  ${DIM}dir:${RESET} %s  ${DIM}session:${RESET} %s\n" \
+printf "${BOLD}${CYAN}%s%s%s${RESET}  ${DIM}dir:${RESET} %s  ${DIM}session:${RESET} %s  ${DIM}cost:${RESET} %s\n" \
   "$thinking_icon" \
   "$model" \
   "$effort_display" \
   "$cwd_name" \
-  "$duration"
+  "$duration" \
+  "$cost_display"
 
-printf "${DIM}cost:${RESET} %s  ${DIM}ctx:${RESET} %b  ${DIM}cache:${RESET} %sk%b" \
-  "$cost_display" \
+printf "${DIM}ctx:${RESET} %b  ${DIM}cache:${RESET} %sk%b" \
   "$ctx_display" \
   "$cache_k" \
   "$limits_display"

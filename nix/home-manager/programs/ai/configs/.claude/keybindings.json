@@ -6,8 +6,11 @@
       "context": "Global",
       "bindings": {
         "ctrl+t": "app:toggleTodos",
-        "ctrl+o": "app:toggleTranscript",
+        "ctrl+o": null,
+        "ctrl+g": "app:toggleTranscript",
+        "ctrl+x q": "app:exit",
         "ctrl+shift+b": "app:toggleBrief",
+        "ctrl+shift+o": "app:toggleTeammatePreview",
         "ctrl+r": "history:search",
         "ctrl+]": "app:openArtifact"
       }
@@ -16,7 +19,7 @@
       "context": "Chat",
       "bindings": {
         "escape": "chat:cancel",
-        "ctrl+l": "chat:clearInput",
+        "ctrl+g": null,
         "cmd+k": "chat:clearScreen",
         "ctrl+x ctrl+k": "chat:killAgents",
         "shift+tab": "chat:cycleMode",
@@ -24,8 +27,11 @@
         "meta+o": "chat:fastMode",
         "meta+t": "chat:thinkingToggle",
         "meta+w": "chat:workflowKeywordToggle",
-        "enter": "chat:submit",
-        "ctrl+j": "chat:newline",
+        "ctrl+enter": "chat:submit",
+        "meta+enter": "chat:submit",
+        "enter": "chat:newline",
+        "ctrl+p": "history:previous",
+        "ctrl+n": "history:next",
         "up": "history:previous",
         "down": "history:next",
         "ctrl+_": "chat:undo",
@@ -33,8 +39,9 @@
         "ctrl+shift+-": "chat:undo",
         "ctrl+shift+_": "chat:undo",
         "ctrl+x ctrl+e": "chat:externalEditor",
-        "ctrl+g": "chat:externalEditor",
-        "ctrl+s": "chat:stash",
+        "meta+e": "chat:externalEditor",
+        "ctrl+s": null,
+        "meta+s": "chat:stash",
         "ctrl+v": "chat:imagePaste",
         "space": "voice:pushToTalk"
       }
@@ -44,6 +51,8 @@
       "bindings": {
         "tab": "autocomplete:accept",
         "escape": "autocomplete:dismiss",
+        "ctrl+p": "autocomplete:previous",
+        "ctrl+n": "autocomplete:next",
         "up": "autocomplete:previous",
         "down": "autocomplete:next"
       }
@@ -59,13 +68,14 @@
         "ctrl+p": "select:previous",
         "ctrl+n": "select:next",
         "space": "select:accept",
-        "enter": "select:accept",
+        "enter": "settings:close",
         "/": "settings:search",
         "r": "settings:retry",
         "d": "settings:periodDay",
         "w": "settings:periodWeek",
         "t": "settings:sortByTokens",
-        "ctrl+u": "scroll:halfPageUp"
+        "ctrl+u": "scroll:halfPageUp",
+        "ctrl+v": "scroll:halfPageDown"
       }
     },
     {
@@ -81,6 +91,8 @@
         "n": "confirm:no",
         "enter": "confirm:yes",
         "escape": "confirm:no",
+        "ctrl+p": "confirm:previous",
+        "ctrl+n": "confirm:next",
         "up": "confirm:previous",
         "down": "confirm:next",
         "tab": "confirm:nextField",
@@ -101,12 +113,14 @@
     {
       "context": "Transcript",
       "bindings": {
-        "ctrl+e": "transcript:toggleShowAll",
+        "ctrl+g": "transcript:toggleShowAll",
         "escape": "transcript:exit",
         "q": "transcript:exit",
         "ctrl+u": "scroll:halfPageUp",
         "ctrl+b": "scroll:fullPageUp",
         "ctrl+f": "scroll:fullPageDown",
+        "ctrl+e": "scroll:lineDown",
+        "ctrl+y": "scroll:lineUp",
         "ctrl+n": "scroll:lineDown",
         "ctrl+p": "scroll:lineUp",
         "g": "scroll:top",
@@ -128,7 +142,8 @@
         "escape": "historySearch:accept",
         "tab": "historySearch:accept",
         "enter": "historySearch:execute",
-        "ctrl+s": "historySearch:cycleScope"
+        "ctrl+s": null,
+        "meta+s": "historySearch:cycleScope"
       }
     },
     {
@@ -150,6 +165,10 @@
       "bindings": {
         "pageup": "scroll:pageUp",
         "pagedown": "scroll:pageDown",
+        "ctrl+u": "scroll:halfPageUp",
+        "ctrl+v": "scroll:halfPageDown",
+        "ctrl+e": "scroll:lineDown",
+        "ctrl+y": "scroll:lineUp",
         "wheelup": "scroll:lineUp",
         "wheeldown": "scroll:lineDown",
         "ctrl+home": "scroll:top",
@@ -219,6 +238,10 @@
       "context": "DiffDialog",
       "bindings": {
         "escape": "diff:dismiss",
+        "ctrl+p": "diff:previousFile",
+        "ctrl+n": "diff:nextFile",
+        "h": "diff:previousSource",
+        "l": "diff:nextSource",
         "left": "diff:previousSource",
         "right": "diff:nextSource",
         "up": "diff:previousFile",
@@ -226,8 +249,12 @@
         "enter": "diff:viewDetails",
         "j": "diff:nextFile",
         "k": "diff:previousFile",
+        "ctrl+u": "scroll:pageUp",
+        "ctrl+v": "scroll:pageDown",
         "pageup": "scroll:pageUp",
         "pagedown": "scroll:pageDown",
+        "ctrl+f": "scroll:fullPageDown",
+        "ctrl+b": "scroll:fullPageUp",
         "space": "scroll:fullPageDown",
         "shift+space": "scroll:fullPageUp",
         "b": "scroll:fullPageUp",
@@ -240,9 +267,9 @@
     {
       "context": "ModelPicker",
       "bindings": {
-        "left": "modelPicker:decreaseEffort",
-        "right": "modelPicker:increaseEffort",
-        "s": "modelPicker:thisSessionOnly"
+        "h": "modelPicker:decreaseEffort",
+        "l": "modelPicker:increaseEffort",
+        "d": "modelPicker:setAsDefault"
       }
     },
     {
@@ -254,6 +281,8 @@
         "k": "select:previous",
         "ctrl+n": "select:next",
         "ctrl+p": "select:previous",
+        "ctrl+u": "select:pageUp",
+        "ctrl+v": "select:pageDown",
         "pageup": "select:pageUp",
         "pagedown": "select:pageDown",
         "home": "select:first",

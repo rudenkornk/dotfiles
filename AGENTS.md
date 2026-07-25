@@ -197,6 +197,44 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - Fish is the primary shell; Neovim config is based on LazyVim.
 - NOTE: WHEN ADDING A NEW NIX OR CONFIG FILE, ADD IT TO THE GIT STAGING AREA. OTHERWISE NIX WILL NOT SEE IT.
 
+## Secrets Management
+
+**Tools**: sops + age. No community `sops-nix` — the repo uses a custom `local.secrets` module.
+
+**Age keys**: Three recipients in `.sops.yaml`: one regular key, two TPM-bound via `age-plugin-tpm` (one per laptop).
+TPM-bound keys ensure secrets decrypt only on the physical host.
+Private keys live in `~/.config/sops/` and `/root/.config/sops/`, preserved across reboots by the `preservation` module in `disk.nix`.
+
+**Decryption**: Both paths use `sops-cached` (`nix/nixpkgs/overlays/custom/sops-cached.sh`),
+which decrypts `.sops` files into `/run/user/$UID/secrets/` (tmpfs),
+caches results (avoiding costly TPM re-decryption), and optionally creates symlinks to target paths.
+
+1. **Systemd services at startup** — a custom module (`nix/modules/secrets/`) generates two `decrypt-secrets.service` oneshots:
+
+   - System-level (as root, at boot) — decrypts secrets listed in `local.secrets.links` before NetworkManager and osquery start.
+   - User-level (at login) — decrypts user secrets (itsme VPN, SSH, opencode auth) before `default.target`.
+     Both produce symlinks-from-tmpfs, so programs read decrypted files at their normal paths.
+
+1. **On-demand via `with_secrets` wrapper** — `bash_secrets.nix` sources `keys.sh.sops` and `proxy.sh.sops` using `sops-cached`,
+   injecting API keys, tokens, and proxy settings into the shell environment.
+   `with_secrets` (`nix/nixpkgs/overlays/locallib/with_secrets.nix`) wraps any binary with these env vars at launch.
+   Used by all AI CLI tools (`ai.nix`) and Neovim (`extraWrapperArgs`).
+
+   Additionally, fish shell sources `tokens.sh.sops` at startup (`corp.nix`), and the SSH agent decrypts `~/.ssh/*.sops` on demand (`ssh_client.sh`).
+
+**Key files**:
+
+- `.sops.yaml` — age recipients and encryption rules.
+- `nix/modules/secrets/{lib,nixos,home-manager}.nix` — the custom secrets module.
+- `nix/nixpkgs/overlays/custom/sops-cached.sh` — decryption engine.
+- `nix/nixpkgs/overlays/locallib/with_secrets.nix` — wraps binaries with secret env vars.
+- `nix/nixpkgs/overlays/locallib/bash_secrets.nix` — shell snippet sourcing `keys.sh.sops`/`proxy.sh.sops`.
+- `nix/nixpkgs/overlays/sops/sops.sh` — network-isolated vim for editing secrets.
+- `dotfiles_py/targets/secrets.py` — `dotfiles updatekeys` re-encrypts all `.sops` files.
+
+**Security layers**: pre-commit hook blocks plaintext private keys/VPN configs, gitleaks scans full history for credentials,
+AI tools are denied access to secrets dirs, sops editor runs with `unshare --net` and vim in restricted mode.
+
 ### Important File Locations
 
 - Python source: `dotfiles_py/{cli.py,utils.py,targets/*.py}`

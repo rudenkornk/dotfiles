@@ -102,13 +102,13 @@ def hooks() -> None:
 @utils.typer_exit()
 def gui() -> None:
     """Regenerate gnome & noctalia settings."""
-    domain_rules_path = REPO_PATH / "nix/home-manager/programs/desktop-envs/dconf/rules.yaml"
-    nix_path = REPO_PATH / "nix/home-manager/programs/desktop-envs/dconf.nix"
+    domain_rules_path = REPO_PATH / "modules/desktop-envs/_dconf/rules.yaml"
+    nix_path = REPO_PATH / "modules/desktop-envs/_dconf/settings.nix"
     rules = gnome_target.DomainRules.load(domain_rules_path)
     gnome_target.gnome_config(rules=rules, nix_path=nix_path)
 
-    noctalia_settings = REPO_PATH / "nix/home-manager/programs/desktop-envs/noctalia/settings.json"
-    monitor_settings = REPO_PATH / f"nix/hosts/{platform.node()}/noctalia_monitors.nix"
+    noctalia_settings = REPO_PATH / "modules/desktop-envs/_noctalia/settings.json"
+    monitor_settings = REPO_PATH / f"modules/hosts/_{platform.node()}/noctalia_monitors.nix"
     noctalia_target.noctalia_config(settings_path=noctalia_settings, monitor_settings_path=monitor_settings)
 
 
@@ -124,19 +124,19 @@ def updatekeys() -> None:
 def syms() -> None:
     """Create symlinks in home directory for dotfile configs."""
     xdg_config_home = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
-    programs = REPO_PATH / "nix/home-manager/programs"
+    programs = REPO_PATH / "modules"
     syms_target.create_symlinks(
-        source_dir=programs / "text-editors/neovim/config",
+        source_dir=programs / "text-editors/_neovim/config",
         target_dir=xdg_config_home / "nvim",
     )
-    syms_target.create_symlinks(source_dir=programs / "ai/configs")
-    syms_target.create_symlinks(source_dir=programs / "desktop-envs/configs")
-    syms_target.create_symlinks(source_dir=programs / "linters/configs")
-    syms_target.create_symlinks(source_dir=programs / "messengers/configs")
-    syms_target.create_symlinks(source_dir=programs / "remote-desktop/configs")
-    syms_target.create_symlinks(source_dir=programs / "system/configs")
-    syms_target.create_symlinks(source_dir=programs / "terminals/configs")
-    syms_target.create_symlinks(source_dir=programs / "vcs/configs")
+    syms_target.create_symlinks(source_dir=programs / "ai/_configs")
+    syms_target.create_symlinks(source_dir=programs / "desktop-envs/_configs")
+    syms_target.create_symlinks(source_dir=programs / "linters/_configs")
+    syms_target.create_symlinks(source_dir=programs / "messengers/_configs")
+    syms_target.create_symlinks(source_dir=programs / "remote-desktop/_configs")
+    syms_target.create_symlinks(source_dir=programs / "system/_configs")
+    syms_target.create_symlinks(source_dir=programs / "terminals/_configs")
+    syms_target.create_symlinks(source_dir=programs / "vcs/_configs")
 
     # We need to additionally unlink noctalia settings, to prevent noctalia from randomly reloading pinned settings,
     # which were modified in memory, but not yet backuped in nix config.

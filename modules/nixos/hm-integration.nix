@@ -9,17 +9,9 @@ in
 
     home-manager = {
       useGlobalPkgs = true;
-      extraSpecialArgs = {
-        inputs = { };
-        host = config.local.host;
-      };
-      users = builtins.mapAttrs (name: user: {
-        # `home-manager.extraSpecialArgs` is shared across all users,
-        # so there is no built-in way to inject per-user data that way.
-        # To work around this, we re-export `user` through `_module.args` here,
-        # which makes it available as a regular module argument in home-manager modules.
-        _module.args.user = user;
-        imports = [ ../../nix/home-manager/home.nix ];
+      sharedModules = [ { local.host = config.local.host; } ];
+      users = builtins.mapAttrs (name: _: {
+        imports = [ flakeCfg.flake.modules.homeManager."user-${name}" ];
       }) flakeCfg.flake.meta.users;
       backupCommand = "${pkgs.lib.getExe pkgs.trash-cli}";
     };

@@ -22,7 +22,7 @@
         # System-wide htop defaults. htop reads `/etc/htoprc` when a user has no
         # `~/.config/htop/htoprc`. Regular users get their own via home-manager,
         # so this covers root and any other config-less account.
-        "htoprc".source = ../../nix/home-manager/programs/system/configs/.config/htop/htoprc;
+        "htoprc".source = ../system/_configs/.config/htop/htoprc;
       };
     };
 

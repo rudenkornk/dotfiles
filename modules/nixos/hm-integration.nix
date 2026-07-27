@@ -8,9 +8,9 @@ in
     imports = [ inputs.home-manager.nixosModules.default ];
 
     home-manager = {
+      useGlobalPkgs = true;
       extraSpecialArgs = {
         inputs = { };
-        inherit pkgs;
         host = config.local.host;
       };
       users = builtins.mapAttrs (name: user: {

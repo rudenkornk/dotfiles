@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
   ignoreFile = toString ./fzf/ignore;
@@ -10,7 +10,7 @@ let
 
   # ── ctrl-t: fd search ────────────────────────────────────────────────
 
-  fdCommon = "${pkgs.fd}/bin/fd --type file --follow --color always";
+  fdCommon = "${lib.getExe pkgs.fd} --type file --follow --color always";
   fd1 = "${fdCommon} --no-hidden --ignore --ignore-file ${ignoreFile}";
   fd2 = "${fdCommon} --hidden --ignore --ignore-file ${ignoreFile}";
   fd3 = "${fdCommon} --hidden --no-ignore --ignore-file ${ignoreFile}";
@@ -30,18 +30,18 @@ let
 
   fdPreview = pkgs.writeShellScript "fzf-fd-preview" ''
     set -euo pipefail
-    mime="$(${pkgs.file}/bin/file --mime-type -b -- "$1")"
+    mime="$(${lib.getExe pkgs.file} --mime-type -b -- "$1")"
     case "$mime" in
-      image/*) ${pkgs.kitty}/bin/kitty +kitten icat --transfer-mode=memory \
+      image/*) ${lib.getExe pkgs.kitty} +kitten icat --transfer-mode=memory \
         --stdin=no --place="$FZF_PREVIEW_COLUMNS"x"$FZF_PREVIEW_LINES""@0x0" -- "$1" ;;
-      *) ${pkgs.bat}/bin/bat --color=always --style=numbers --line-range :300 -- "$1" ;;
+      *) ${lib.getExe pkgs.bat} --color=always --style=numbers --line-range :300 -- "$1" ;;
     esac
   '';
 
   # ── ctrl-q: ripgrep search ────────────────────────────────────────────────
 
   rgCommon =
-    "${pkgs.ripgrep}/bin/rg "
+    "${lib.getExe pkgs.ripgrep} "
     + "--column "
     + "--line-number "
     + "--no-heading "
@@ -67,12 +67,12 @@ let
     esac
   '';
 
-  rgBatPreview = "${pkgs.bat}/bin/bat --color=always --style=numbers --highlight-line {2} {1}";
+  rgBatPreview = "${lib.getExe pkgs.bat} --color=always --style=numbers --highlight-line {2} {1}";
 
   rgScript = pkgs.writeShellScript "fzf-rg" ''
     set -euo pipefail
 
-    ${pkgs.fzf}/bin/fzf \
+    ${lib.getExe pkgs.fzf} \
       --disabled \
       --prompt='${h1}' \
       --bind "start:reload:${rg1} -- {q} || true" \
@@ -90,22 +90,22 @@ let
     # This sed relies on specific format enforced in current version of `fzf`.
     # `fzf` may change it in the future and this preview should be adjusted accordingly.
     echo "$@" | sed -E 's|[[:blank:]][0-9]+[[:blank:]]| >  |' \
-    | ${pkgs.bat}/bin/bat --language=bash --color=always --style=plain
+    | ${lib.getExe pkgs.bat} --language=bash --color=always --style=plain
   '';
 
   # ── ctrl-o: nix-search-tv ────────────────────────────────────────────────
 
-  nsBin = "${pkgs.nix-search-tv}/bin/nix-search-tv";
+  nsBin = "${lib.getExe pkgs.nix-search-tv}";
 
   nsScript = pkgs.writeShellScript "fzf-ns" ''
     set -euo pipefail
 
-    ${pkgs.fzf}/bin/fzf \
+    ${lib.getExe pkgs.fzf} \
       --prompt='  > ' \
       --scheme=history \
       --bind "start:reload:${nsBin} print" \
-      --bind "ctrl-v:execute-silent(${pkgs.xdg-utils}/bin/xdg-open \$(${nsBin} source {}) 2>/dev/null || true)" \
-      --bind "ctrl-o:execute-silent(${pkgs.xdg-utils}/bin/xdg-open \$(${nsBin} homepage {}) 2>/dev/null || true)" \
+      --bind "ctrl-v:execute-silent(${lib.getExe' pkgs.xdg-utils "xdg-open"} \$(${nsBin} source {}) 2>/dev/null || true)" \
+      --bind "ctrl-o:execute-silent(${lib.getExe' pkgs.xdg-utils "xdg-open"} \$(${nsBin} homepage {}) 2>/dev/null || true)" \
       --preview "${nsBin} preview {}"
   '';
 
@@ -114,10 +114,10 @@ let
   tldrScript = pkgs.writeShellScript "fzf-tldr" ''
     set -euo pipefail
 
-    ${pkgs.fzf}/bin/fzf \
+    ${lib.getExe pkgs.fzf} \
       --prompt='  > ' \
-      --bind "start:reload:${pkgs.tealdeer}/bin/tldr --list" \
-      --preview "${pkgs.tealdeer}/bin/tldr {} | ${pkgs.bat}/bin/bat --style=plain --color=always --language=markdown"
+      --bind "start:reload:${lib.getExe pkgs.tealdeer} --list" \
+      --preview "${lib.getExe pkgs.tealdeer} {} | ${lib.getExe pkgs.bat} --style=plain --color=always --language=markdown"
   '';
 
   # ── ctrl-x: process search ────────────────────────────────────────────────
@@ -127,7 +127,7 @@ let
   psAbsPathFilter = "sed -E 's| (/[^ ]*/)| |'";
   # --language=conf colors only several few lines for some reason.
   # --language=log works well, but is very slow.
-  psBat = "${pkgs.bat}/bin/bat --language=bat --color=always --style=plain";
+  psBat = "${lib.getExe pkgs.bat} --language=bat --color=always --style=plain";
   # `--ppid 2 -p 2 --deselect` filters out kernel processes.
   psCommon = "ps --ppid 2 -p 2 --deselect -o ${psFormat}";
 
@@ -218,7 +218,7 @@ let
       '30  SIGPWR      power failure' \
       '31  SIGSYS      bad system call')"
 
-    choice="$(printf '%s\n' "$signals" | ${pkgs.fzf}/bin/fzf --prompt="signal > pid $pid > " --no-multi)" || exit 0
+    choice="$(printf '%s\n' "$signals" | ${lib.getExe pkgs.fzf} --prompt="signal > pid $pid > " --no-multi)" || exit 0
     sig="$(printf '%s' "$choice" | awk '{print $1}')"
     kill "-$sig" "$pid"
   '';
@@ -231,13 +231,13 @@ let
     done
     for line in "$@"; do
       ${psPidScript} "$line"
-    done | ${pkgs.wl-clipboard}/bin/wl-copy --primary --trim-newline
+    done | ${lib.getExe' pkgs.wl-clipboard "wl-copy"} --primary --trim-newline
   '';
 
   psHtopScript = pkgs.writeShellScript "fzf-ps-htop" ''
     set -euo pipefail
     pids="$(for line in "$@"; do ${psPidScript} "$line"; done | paste -sd,)"
-    ${pkgs.htop-vim}/bin/htop --pid "$pids"
+    ${lib.getExe pkgs.htop-vim} --pid "$pids"
   '';
 
   psScript = pkgs.writeShellScript "fzf-ps" ''
@@ -252,7 +252,7 @@ let
       --bind "ctrl-r:transform:${psReloadTransform}" \
       --bind "enter:become(${psEnterScript} {+})" \
       --bind "ctrl-o:execute(${psHtopScript} {+})" \
-      --bind "ctrl-v:execute(${pkgs.htop-vim}/bin/htop)" \
+      --bind "ctrl-v:execute(${lib.getExe pkgs.htop-vim})" \
       --bind "ctrl-t:execute(${psSignalScript} {})+transform:${psReloadTransform}" \
       --preview "${psPreview} {}" \
       --preview-window 'down,8,wrap,<1(down,8,wrap)' \

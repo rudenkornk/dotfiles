@@ -270,6 +270,10 @@
         module: /run/current-system/sw/lib/libtpm2_pkcs11.so
         critical: yes
       '';
+      # System-wide htop defaults. htop reads `/etc/htoprc` when a user has no
+      # `~/.config/htop/htoprc`. Regular users get their own via home-manager,
+      # so this covers root and any other config-less account.
+      "htoprc".source = ./home-manager/programs/system/configs/.config/htop/htoprc;
     };
   };
 

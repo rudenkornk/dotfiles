@@ -177,7 +177,7 @@
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${pkgs.alsa-utils}/bin/amixer -c sofhdadsp cset name='Bass Speaker Playback Switch' off,off";
+          ExecStart = "${lib.getExe' pkgs.alsa-utils "amixer"} -c sofhdadsp cset name='Bass Speaker Playback Switch' off,off";
         };
       };
     };

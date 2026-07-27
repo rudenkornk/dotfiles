@@ -86,18 +86,47 @@ else
   duration="${minutes}m"
 fi
 
-# Prints `pct` as an integer percentage: green below `warn_at` percent, yellow below `crit_at`, red otherwise.
+# Prints `display_text` colored by `metric`: green below `warn_at`, yellow below `crit_at`, red otherwise.
 color_pct() {
-  local pct="$1" warn_at="$2" crit_at="$3"
-  local pct_int
-  pct_int=$(printf "%.0f" "$pct")
-  if [ "$pct_int" -lt "$warn_at" ]; then
-    printf "${GREEN}%s%%${RESET}" "$pct_int"
-  elif [ "$pct_int" -lt "$crit_at" ]; then
-    printf "${YELLOW}%s%%${RESET}" "$pct_int"
+  local display_text="$1" metric="$2" warn_at="$3" crit_at="$4"
+  local metric_int
+  metric_int=$(printf "%.0f" "$metric")
+  if [ "$metric_int" -lt "$warn_at" ]; then
+    printf "${GREEN}%s${RESET}" "$display_text"
+  elif [ "$metric_int" -lt "$crit_at" ]; then
+    printf "${YELLOW}%s${RESET}" "$display_text"
   else
-    printf "${RED}%s%%${RESET}" "$pct_int"
+    printf "${RED}%s${RESET}" "$display_text"
   fi
+}
+
+# Colors a rate-limit percentage by consumption speed.
+# I.e. "how much limits were credited from remaining time."
+# m = (used_frac - elapsed/period) / ((remaining+60s)/period);
+# m<=0 green, m<=0.30 yellow, else red.
+# The +60s prevents division by zero when remaining reaches 0 at the moment of reset.
+color_rate() {
+  local used_pct="$1" reset_epoch="$2" period_secs="$3"
+  local used_pct_int
+  used_pct_int=$(printf "%.0f" "$used_pct")
+  case "$reset_epoch" in
+  '' | *[!0-9]*)
+    printf "%s%%" "$used_pct_int"
+    return 0
+    ;;
+  esac
+  local m_pct
+  m_pct=$(awk -v used="$used_pct" -v reset="$reset_epoch" \
+    -v now="$now" -v period="$period_secs" '
+    BEGIN {
+      remaining = reset - now
+      if (remaining < 0) remaining = 0
+      elapsed = period - remaining
+      if (elapsed < 0) elapsed = 0
+      m = (used / 100 - elapsed / period) / ((remaining + 60) / period)
+      printf "%.0f", m * 100
+    }')
+  color_pct "${used_pct_int}%" "$m_pct" 0 30
 }
 
 # Context window.
@@ -112,7 +141,7 @@ fi
 
 if [ -n "$used_pct" ] && [ "$used_pct" != "0" ]; then
   ctx_k_used=$((total_input / 1000))
-  ctx_display="${ctx_k_used}k/${ctx_k}k $(color_pct "$used_pct" 50 80)"
+  ctx_display="${ctx_k_used}k/${ctx_k}k $(color_pct "${used_pct}%" "$used_pct" 50 80)"
 else
   ctx_display="0k/${ctx_k}k 0%"
 fi
@@ -150,12 +179,12 @@ if [ -n "$rate_5h" ] || [ -n "$rate_7d" ]; then
   part_5h=""
   part_7d=""
   if [ -n "$rate_5h" ]; then
-    part_5h="5h:$(color_pct "$rate_5h" 75 90)"
+    part_5h="5h:$(color_rate "$rate_5h" "$reset_5h" 18000)"
     left_5h=$(fmt_reset "$reset_5h")
     [ -n "$left_5h" ] && part_5h="${part_5h}${DIM} (${left_5h})${RESET}"
   fi
   if [ -n "$rate_7d" ]; then
-    part_7d="7d:$(color_pct "$rate_7d" 75 90)"
+    part_7d="7d:$(color_rate "$rate_7d" "$reset_7d" 604800)"
     left_7d=$(fmt_reset "$reset_7d")
     [ -n "$left_7d" ] && part_7d="${part_7d}${DIM} (${left_7d})${RESET}"
   fi

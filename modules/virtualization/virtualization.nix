@@ -1,5 +1,5 @@
 {
-  flake.modules.homeManager.base = { pkgs, get_modules, ... }:
+  flake.modules.homeManager.base = { pkgs, ... }:
   # Virtualization & containerization tools.
   {
     home.packages = with pkgs; [

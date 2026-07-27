@@ -6,9 +6,9 @@
     _module.args.pkgs = import inputs.nixpkgs {
       localSystem = system;
       config = {
-        allowUnfreePredicate = import ../../nix/nixpkgs/unfree.nix { inherit (inputs.nixpkgs) lib; };
+        allowUnfreePredicate = import ./_nixpkgs/unfree.nix { inherit (inputs.nixpkgs) lib; };
       };
-      overlays = import ../../nix/nixpkgs/overlays.nix { inherit inputs; };
+      overlays = import ./_nixpkgs/overlays.nix { inherit inputs; };
     };
   };
 }

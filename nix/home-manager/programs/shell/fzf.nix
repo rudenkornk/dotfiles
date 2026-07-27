@@ -237,7 +237,7 @@ let
   psHtopScript = pkgs.writeShellScript "fzf-ps-htop" ''
     set -euo pipefail
     pids="$(for line in "$@"; do ${psPidScript} "$line"; done | paste -sd,)"
-    ${lib.getExe pkgs.htop-vim} --pid "$pids"
+    sudo ${lib.getExe pkgs.htop-vim} --pid "$pids"
   '';
 
   psScript = pkgs.writeShellScript "fzf-ps" ''
@@ -252,7 +252,7 @@ let
       --bind "ctrl-r:transform:${psReloadTransform}" \
       --bind "enter:become(${psEnterScript} {+})" \
       --bind "ctrl-o:execute(${psHtopScript} {+})" \
-      --bind "ctrl-v:execute(${lib.getExe pkgs.htop-vim})" \
+      --bind "ctrl-v:execute(sudo ${lib.getExe pkgs.htop-vim})" \
       --bind "ctrl-t:execute(${psSignalScript} {})+transform:${psReloadTransform}" \
       --preview "${psPreview} {}" \
       --preview-window 'down,8,wrap,<1(down,8,wrap)' \

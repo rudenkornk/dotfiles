@@ -108,7 +108,7 @@ Some packages are not included into main config due to their volatile and restri
 To install them run:
 
 ```bash
-sops --decrypt nix/secrets/corp/packages_info.sops.json | sponge nix/secrets/corp/packages_info.sops.json
+sops --decrypt secrets/corp/packages_info.sops.json | sponge secrets/corp/packages_info.sops.json
 nix profile add .#<pkg>
-git checkout nix/secrets/corp/packages_info.sops.json
+git checkout secrets/corp/packages_info.sops.json
 ```

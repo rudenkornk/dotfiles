@@ -185,7 +185,7 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - `nix/modules/secrets/`: sops secrets modules (`nixos.nix`, `home-manager.nix`, `lib.nix`).
 - `nix/nixpkgs/`: Overlays (`custom`, `locallib`, `sops`) and `unfree.nix`.
 - `nix/keyboard/`: Custom keyboard layouts (`qwerty_rnk`, `jcuken_rnk`).
-- `nix/secrets/`: Encrypted secrets (`corp`, `nmconnections`, `ssh`, `vpn`) using sops.
+- `secrets/`: Encrypted secrets (`corp`, `nmconnections`, `ssh`, `vpn`) using sops.
 - `nix/devshell.nix`: Definitions of the `default` and `install` dev shells.
 
 **Key Nix Patterns**:

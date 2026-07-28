@@ -10,7 +10,7 @@
 {
   home.packages = with pkgs; [
     (locallib.with_secrets { pkg = aider-chat-full; })
-    (locallib.with_secrets { pkg = claude-code; })
+    (locallib.with_secrets { pkg = unstable.claude-code; })
     (locallib.with_secrets { pkg = codex; })
     (locallib.with_secrets { pkg = cursor-cli; })
     (locallib.with_secrets { pkg = gemini-cli; })

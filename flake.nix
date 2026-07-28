@@ -13,6 +13,10 @@
     import-tree = {
       url = "github:vic/import-tree";
     };
+    nix-wrapper-modules = {
+      url = "github:BirdeeHub/nix-wrapper-modules";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nur = {
       url = "github:nix-community/nur";
       inputs.nixpkgs.follows = "nixpkgs";

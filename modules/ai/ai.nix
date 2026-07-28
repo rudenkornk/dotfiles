@@ -1,65 +1,52 @@
+# CLI AI tools, wrapped with runtime secret injection.
+{ config, ... }:
+let
+  flakeCfg = config;
+  ailib = import ./_lib.nix;
+in
 {
-  flake.modules.homeManager.base =
-    {
-      pkgs,
-      config,
-      lib,
-      ...
-    }:
-    # CLI AI tools.
-    {
-      home.packages = with pkgs; [
-        (locallib.with_secrets { pkg = aider-chat-full; })
-        (locallib.with_secrets { pkg = claude-code; })
-        (locallib.with_secrets { pkg = codex; })
-        (locallib.with_secrets { pkg = cursor-cli; })
-        (locallib.with_secrets { pkg = gemini-cli; })
-        (locallib.with_secrets {
-          pkg = nur.repos.charmbracelet.crush;
-          binary = "crush";
-        })
-        (locallib.with_secrets { pkg = unstable.opencode; })
-        (locallib.with_secrets { pkg = qwen-code; })
-
-        mcp-nixos
-        custom.playwright-cli
-      ];
-
-      xdg = {
-        configFile =
-          { }
-          // lib.optionalAttrs (config.local.user.userkind == "default") {
-            "opencode/opencode.jsonc".source = ./opencode.jsonc;
-          };
-
-        dataFile = {
-          # W/A for https://github.com/anomalyco/opencode/issues/16885
-          "opencode/opencode.db".source =
-            config.lib.file.mkOutOfStoreSymlink "${config.xdg.dataHome}/opencode/opencode-stable.db";
-        };
+  flake = {
+    wrappers = {
+      aider-chat-full = ailib.mkSecretTool { package = pkgs: pkgs.aider-chat-full; };
+      codex = ailib.mkSecretTool { package = pkgs: pkgs.codex; };
+      cursor-cli = ailib.mkSecretTool { package = pkgs: pkgs.cursor-cli; };
+      gemini-cli = ailib.mkSecretTool { package = pkgs: pkgs.gemini-cli; };
+      crush = ailib.mkSecretTool {
+        package = pkgs: pkgs.nur.repos.charmbracelet.crush;
+        binName = "crush";
       };
-
-      local = {
-        secrets.links =
-          { }
-          // lib.optionalAttrs (config.local.user.userkind == "corp") {
-            "${config.xdg.dataHome}/opencode/auth.json".source =
-              pkgs.locallib.secrets + /corp/opencode.auth.json.sops;
-            "${config.xdg.configHome}/opencode/opencode.jsonc".source =
-              pkgs.locallib.secrets + /corp/opencode.jsonc.sops;
-          };
-      };
-
-      home.file =
-        (pkgs.locallib.homefiles {
-          inherit (config) xdg;
-          path = ./_configs;
-        })
-        // {
-          ".agents/skills/playwright-cli" = {
-            source = "${pkgs.custom.playwright-cli}/share/skills/playwright-cli";
-            recursive = true;
-          };
-        };
+      qwen-code = ailib.mkSecretTool { package = pkgs: pkgs.qwen-code; };
     };
+
+    modules.homeManager.base =
+      { config, pkgs, ... }:
+      let
+        wrapped = name: flakeCfg.flake.packages.${pkgs.stdenv.hostPlatform.system}.${name};
+      in
+      {
+        home.packages = [
+          (wrapped "aider-chat-full")
+          (wrapped "codex")
+          (wrapped "cursor-cli")
+          (wrapped "gemini-cli")
+          (wrapped "crush")
+          (wrapped "qwen-code")
+
+          pkgs.mcp-nixos
+          pkgs.custom.playwright-cli
+        ];
+
+        home.file =
+          (pkgs.locallib.homefiles {
+            inherit (config) xdg;
+            path = ./_configs;
+          })
+          // {
+            ".agents/skills/playwright-cli" = {
+              source = "${pkgs.custom.playwright-cli}/share/skills/playwright-cli";
+              recursive = true;
+            };
+          };
+      };
+  };
 }

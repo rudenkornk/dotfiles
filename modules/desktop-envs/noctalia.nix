@@ -20,7 +20,8 @@
           cliphist # Clipboard history support.
           ddcutil # Brightness control for external monitors.
           evolution-data-server # Calendar events.
-          git # Update checking and the plugin system.
+          # NOTE: git (needed for update checking and the plugin system) comes
+          # wrapped with its config from `modules/vcs/git.nix`.
           imagemagick # Template processing & wallpaper resizing.
           power-profiles-daemon # Power profile selection.
           python3 # Template processing & calendar events.

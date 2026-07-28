@@ -10,7 +10,7 @@
       nushell
       oh-my-posh
       powershell
-      tmux
+      # NOTE: tmux comes wrapped with its config from `tmux.nix`.
     ];
 
     # Control keys:

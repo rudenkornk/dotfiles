@@ -1,62 +1,88 @@
+# lazygit, wrapped with its config baked in (LG_CONFIG_FILE); home-manager only
+# provides the shell integrations and ctrl-g bindings.
+{ config, ... }:
+let
+  flakeCfg = config;
+in
 {
-  flake.modules.homeManager.base = _: {
-    programs = {
-      lazygit = {
-        enable = true;
-        enableBashIntegration = true;
-        enableFishIntegration = true;
-        enableNushellIntegration = true;
-        enableZshIntegration = true;
-        settings = {
-          gui = {
-            # The number of lines you scroll by when scrolling the main window.
-            scrollHeight = 20;
-          };
-          keybinding = {
-            universal = {
-              prevPage = "<c-u>";
-              nextPage = "<c-d>";
-              scrollUpMain-alt2 = "<c-b>";
-              scrollDownMain-alt2 = "<c-f>";
+  flake = {
+    wrappers.lazygit =
+      {
+        config,
+        wlib,
+        pkgs,
+        ...
+      }:
+      {
+        imports = [ wlib.modules.default ];
+        package = pkgs.lazygit;
+        env.LG_CONFIG_FILE = config.constructFiles.generatedConfig.path;
+        constructFiles.generatedConfig = {
+          relPath = "lazygit-config.yml";
+          # JSON is a subset of YAML, which spares a toYAML generator here.
+          content = builtins.toJSON {
+            gui = {
+              # The number of lines you scroll by when scrolling the main window.
+              scrollHeight = 20;
             };
-            files = {
-              findBaseCommitForFixup = ""; # Conflicts with universal `C-f`.
-              openStatusFilter = ""; # Conflicts with universal `C-b`.
+            keybinding = {
+              universal = {
+                prevPage = "<c-u>";
+                nextPage = "<c-d>";
+                scrollUpMain-alt2 = "<c-b>";
+                scrollDownMain-alt2 = "<c-f>";
+              };
+              files = {
+                findBaseCommitForFixup = ""; # Conflicts with universal `C-f`.
+                openStatusFilter = ""; # Conflicts with universal `C-b`.
+              };
             };
           };
         };
       };
-      fish.interactiveShellInit =
-        # fish
-        ''
-          for mode in default insert
-            bind --mode $mode ctrl-g lazygit
-          end
-        '';
 
-      bash.initExtra =
-        # bash
-        ''
-          bind -x '"\C-g": "lazygit"'
-        '';
+    modules.homeManager.base = { pkgs, ... }: {
+      programs = {
+        lazygit = {
+          enable = true;
+          package = flakeCfg.flake.packages.${pkgs.stdenv.hostPlatform.system}.lazygit;
+          enableBashIntegration = true;
+          enableFishIntegration = true;
+          enableNushellIntegration = true;
+          enableZshIntegration = true;
+        };
+        fish.interactiveShellInit =
+          # fish
+          ''
+            for mode in default insert
+              bind --mode $mode ctrl-g lazygit
+            end
+          '';
 
-      zsh.initContent =
-        # zsh
-        ''
-          # ctrl-g is the abort key in zsh (cancel current operation) and should not be overridden.
-        '';
+        bash.initExtra =
+          # bash
+          ''
+            bind -x '"\C-g": "lazygit"'
+          '';
 
-      nushell.extraConfig =
-        # nu
-        ''
-          $env.config.keybindings = ($env.config.keybindings | append {
-            name: lazygit
-            modifier: control
-            keycode: char_g
-            mode: [emacs, vi_normal, vi_insert]
-            event: { send: ExecuteHostCommand cmd: "lazygit" }
-          })
-        '';
+        zsh.initContent =
+          # zsh
+          ''
+            # ctrl-g is the abort key in zsh (cancel current operation) and should not be overridden.
+          '';
+
+        nushell.extraConfig =
+          # nu
+          ''
+            $env.config.keybindings = ($env.config.keybindings | append {
+              name: lazygit
+              modifier: control
+              keycode: char_g
+              mode: [emacs, vi_normal, vi_insert]
+              event: { send: ExecuteHostCommand cmd: "lazygit" }
+            })
+          '';
+      };
     };
   };
 }

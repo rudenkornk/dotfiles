@@ -1,5 +1,4 @@
 import logging
-import os
 import platform
 import secrets
 import string
@@ -15,7 +14,6 @@ from .targets import hooks as hooks_target
 from .targets import lint as lint_target
 from .targets import noctalia as noctalia_target
 from .targets import secrets as secrets_target
-from .targets import syms as syms_target
 
 _logger = logging.getLogger(__name__)
 
@@ -117,30 +115,6 @@ def gui() -> None:
 def updatekeys() -> None:
     """Update AGE keys in project secrets if recipients have changed."""
     secrets_target.updatekeys(repo_path=REPO_PATH)
-
-
-@app.command()
-@utils.typer_exit()
-def syms() -> None:
-    """Create symlinks in home directory for dotfile configs."""
-    xdg_config_home = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
-    programs = REPO_PATH / "modules"
-    syms_target.create_symlinks(
-        source_dir=programs / "text-editors/_neovim/config",
-        target_dir=xdg_config_home / "nvim",
-    )
-    syms_target.create_symlinks(source_dir=programs / "ai/_configs")
-    syms_target.create_symlinks(source_dir=programs / "desktop-envs/_configs")
-    syms_target.create_symlinks(source_dir=programs / "linters/_configs")
-    syms_target.create_symlinks(source_dir=programs / "messengers/_configs")
-    syms_target.create_symlinks(source_dir=programs / "remote-desktop/_configs")
-    syms_target.create_symlinks(source_dir=programs / "system/_configs")
-    syms_target.create_symlinks(source_dir=programs / "terminals/_configs")
-    syms_target.create_symlinks(source_dir=programs / "vcs/_configs")
-
-    # We need to additionally unlink noctalia settings, to prevent noctalia from randomly reloading pinned settings,
-    # which were modified in memory, but not yet backuped in nix config.
-    syms_target.materialize_symlink(xdg_config_home / "noctalia/settings.json")
 
 
 @app.command()

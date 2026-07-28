@@ -12,6 +12,10 @@
     in
     {
       home = {
+        # Noctalia mutates its settings at runtime, so the merged settings are
+        # copied into place as a regular writable file instead of a store
+        # symlink (see `home.activation` below). Runtime changes survive until
+        # the next activation; `dotfiles gui` captures them back into the repo.
         packages = with pkgs; [
           noctalia-shell
           # https://docs.noctalia.dev/v4/getting-started/installation/#dependencies-explained
@@ -31,15 +35,15 @@
         ];
       };
 
-      xdg = {
-        configFile = {
-          "noctalia/settings.json".source =
-            let
-              main_settings = fromJSON (readFile ./_noctalia/settings.json);
-              nix_settings = lib.recursiveUpdate main_settings (config.local.host.monitors.noctalia or { });
-            in
-            toJson "noctalia-settings.json" nix_settings;
-        };
-      };
+      home.activation.noctaliaSettings =
+        let
+          main_settings = fromJSON (readFile ./_noctalia/settings.json);
+          nix_settings = lib.recursiveUpdate main_settings (config.local.host.monitors.noctalia or { });
+          settingsFile = toJson "noctalia-settings.json" nix_settings;
+        in
+        lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          run mkdir -p "${config.xdg.configHome}/noctalia"
+          run install -m 0644 ${settingsFile} "${config.xdg.configHome}/noctalia/settings.json"
+        '';
     };
 }

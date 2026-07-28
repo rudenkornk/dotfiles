@@ -2,13 +2,14 @@
 
 ## Repository Overview
 
-This is a **NixOS configuration repository** (~5MiB, ~247 tracked files) that provides a complete, reproducible personal machine setup.
+This is a **NixOS configuration repository** (~5MiB, ~270 tracked files) that provides a complete, reproducible personal machine setup.
 The repository focuses on configuring development tools including Neovim (LazyVim-based), tmux, fish shell, and support for C++, Python, LaTeX, and Lua development.
 
 **Key Technologies:**
 
-- **NixOS/Nix Flakes**: Primary configuration system (91 .nix files)
-- **Python 3.13**: CLI tooling and automation (12 .py files in `dotfiles_py/`)
+- **NixOS/Nix Flakes**: Primary configuration system (~115 .nix files), organized with the dendritic pattern (flake-parts + import-tree)
+- **nix-wrapper-modules** (BirdeeHub): Bakes program configs into wrapped packages exposed as `flake.wrappers.*`
+- **Python 3.13**: CLI tooling and automation (~10 .py files in `dotfiles_py/`)
 - **Home Manager**: User environment configuration
 - **Languages**: Shell scripts (.sh, .fish), Lua configs (23 files), Nix expressions
 - **Package Management**: Nix flakes
@@ -83,7 +84,7 @@ All commands below assume you're inside `nix develop`:
 
    Validates flake structure and evaluates every NixOS and Home Manager configuration.
    Home Manager configs are the cartesian product of users (`rudenkornk`, `rudenkornk_corp`) and hosts (`dellxps`, `thinkpad`),
-   registered as checks so `nix flake check` builds each `user@host` activation package.
+   registered as checks in `modules/meta/home-configurations.nix` so `nix flake check` builds each `user@host` activation package.
 
 1. **Git Hooks Setup**:
 
@@ -123,8 +124,10 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 
 ### Root Directory Files
 
-- `flake.nix`: Nix flake defining `nixosConfigurations` (per host), `homeConfigurations` (per `user@host` pair), standalone `packages`, and dev shells.
-- `flake.lock`: Locked dependency versions (nixpkgs 26.05, home-manager release-26.05, plus nixpkgs_unstable, nur, nixos-hardware, preservation, disko).
+- `flake.nix`: Just the inputs plus `outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);`.
+  All actual outputs (`nixosConfigurations`, `homeConfigurations`, `packages`, dev shells, wrappers) are contributed by modules under `modules/`.
+- `flake.lock`: Locked dependency versions (nixpkgs 26.05, home-manager release-26.05, flake-parts, import-tree, nix-wrapper-modules,
+  plus nixpkgs_unstable, nur, nixos-hardware, preservation, disko).
 - `pyproject.toml`: Python project config with dependencies and ruff/mypy settings.
 - `readme.md`: User-facing documentation with bootstrap and recovery instructions.
 - `history.md`: Narrative history of the repository's evolution.
@@ -149,9 +152,9 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - `lint`: Runs all linters (see Build Commands above).
 - `format`: Runs all formatters, with a `--check`/`-c` flag.
 - `hooks`: Sets up git hooks from `dotfiles_py/data/hooks/`.
-- `gui`: Regenerates GNOME dconf settings and Noctalia settings from rules.
+- `gui`: Regenerates `modules/desktop-envs/_dconf/settings.nix` from `modules/desktop-envs/_dconf/rules.yaml`,
+  plus `modules/desktop-envs/_noctalia/settings.json` and `modules/hosts/_<hostname>/noctalia_monitors.nix`.
 - `updatekeys`: Re-encrypts sops secrets when age recipients change.
-- `syms`: Symlinks dotfile configs (nvim, ai, desktop-envs, linters, messengers, remote-desktop, system, terminals, vcs) into the home directory.
 - `password`: Generates random passwords.
 
 **Key modules**:
@@ -163,30 +166,66 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - `targets/gnome.py`: GNOME dconf configuration generation.
 - `targets/noctalia.py`: Noctalia shell settings generation.
 - `targets/secrets.py`: sops age-key rotation.
-- `targets/syms.py`: Symlink materialization for configs.
 
 **Data files**:
 
 - `dotfiles_py/data/hooks/pre-commit`: Pre-commit hook preventing sensitive file commits.
 - `dotfiles_py/data/scripts/`: Utility shell scripts (google_takeout.sh, nvim_time.sh, select_nvim.sh, colors.sh).
 
-### Nix Configuration (`nix/`)
+### Nix Configuration (`modules/`)
+
+The flake follows the **dendritic pattern**: import-tree loads every `.nix` file under `modules/` as a flake-parts module.
+Feature modules contribute pieces to `flake.modules.nixos.base` and/or `flake.modules.homeManager.base`
+(flake-parts `flake.modules.<class>.<name>` options with per-class type checking).
+One file covers one feature across classes: e.g. `modules/vcs/git.nix` defines both the git wrapper and the home-manager part.
+Paths with an underscore-prefixed component (e.g. `_configs/`, `_neovim/`, `modules/meta/_nixpkgs/`) are skipped by import-tree
+and hold assets, helper nix files, and generated files.
 
 **Structure**:
 
-- `nix/configuration.nix`: Shared NixOS system configuration (boot, networking, users, desktop, VPN, sops secrets).
-- `nix/hosts/`: Per-machine definitions (`dellxps.nix`, `thinkpad.nix`); hardware config is inlined per host, plus host subdirs (e.g. `dellxps/noctalia_monitors.nix`).
-- `nix/users/`: Per-user definitions (`rudenkornk.nix`, `rudenkornk_corp.nix`) with profile images.
-- `nix/home-manager/home.nix`: Home Manager entry point importing all program modules.
-- `nix/home-manager/programs/`: One `<name>.nix` module per program or category, with a sibling `<name>/` directory holding
-  that program's configs, scripts, and dotfiles. Categories include shell, terminals, text-editors (neovim), toolchains, lsp,
-  linters, debuggers, desktop-envs, ai, vcs, browsers, messengers, media, networking, vpn, remote-desktop, and virtualization.
-- `nix/packages/`: Standalone packages installed outside the main config (`arc`, `itsme-cli`, `openvpn-ya`, `skotty`, `splitty`, `ya`).
-- `nix/modules/secrets/`: sops secrets modules (`nixos.nix`, `home-manager.nix`, `lib.nix`).
-- `nix/nixpkgs/`: Overlays (`custom`, `locallib`, `sops`) and `unfree.nix`.
-- `nix/keyboard/`: Custom keyboard layouts (`qwerty_rnk`, `jcuken_rnk`).
-- `secrets/`: Encrypted secrets (`corp`, `nmconnections`, `ssh`, `vpn`) using sops.
-- `nix/devshell.nix`: Definitions of the `default` and `install` dev shells.
+- `modules/meta/`: The flake's backbone:
+  - `base.nix`: `systems` plus imports of the flake-parts `modules` and nix-wrapper-modules `wrappers` flake modules.
+  - `meta.nix`: `flake.meta.hosts` / `flake.meta.users` options holding plain host/user metadata.
+  - `pkgs.nix`: The one shared nixpkgs instance with overlays, set via `perSystem._module.args.pkgs`.
+  - `host-user-options.nix`: `local.host` / `local.user` options that replaced all `specialArgs` plumbing.
+  - `home-configurations.nix`: Standalone `homeConfigurations` for the user×host cartesian product, each registered as a flake check.
+  - `devshell.nix`: Definitions of the `default` and `install` dev shells.
+  - `_nixpkgs/`: Overlays (`locallib` with `homefiles`/`secrets`, `custom` with sops-cached and friends, nur, sops, unstable, vim-plugins, ...) and the unfree predicate.
+    Overlays are listed explicitly in `overlays.nix` and applied alphabetically.
+- `modules/hosts/{dellxps,thinkpad}.nix`: Per host: `flake.meta.hosts.<name>` (data), `flake.modules.nixos.host-<name>` (hardware) and `flake.nixosConfigurations.<name>`.
+  Per-host generated assets live in `modules/hosts/_<hostname>/` (e.g. `noctalia_monitors.nix`).
+- `modules/users/{rudenkornk,rudenkornk_corp}.nix`: `flake.meta.users.<name>` plus the aggregate `flake.modules.homeManager.user-<name>`,
+  which imports the base and sets `local.user`; `hm-core.nix` holds the home basics.
+  `modules/corp/corp-user.nix` holds corp-only home config gated by `lib.mkIf (config.local.user.userkind == "corp")`.
+- `modules/nixos/*.nix`: The decomposed NixOS system config: boot, disk (impermanence), desktop, audio, networking (incl. NetworkManager secrets),
+  hardware-tokens (TPM), printing, users, hm-integration (embeds home-manager per user via the user aggregates),
+  programs, virtualization, i18n, and base (stateVersion).
+  All of `environment.systemPackages` stays in `programs.nix` by design, to keep the list order (and thus the system-path derivation) stable.
+  `_keyboard/` holds the custom keyboard layouts (`qwerty_rnk`, `jcuken_rnk`).
+- `modules/secrets/`: `secrets.nix` wires `_impl/{lib,nixos,home-manager}.nix` (the `local.secrets` decrypt-secrets systemd oneshots) into both classes;
+  `_fragments/secret-env.nix` is a wrapper-module fragment sourcing sops-encrypted keys/proxy env at program launch.
+- `modules/packages/packages.nix` plus `_src/*.nix`: Standalone corp packages (`arc`, `itsme-cli`, `openvpn-ya`, `skotty`, `splitty`, `ya`) as explicit `perSystem` callPackages.
+- Everything else (`modules/ai/`, `modules/shell/`, `modules/text-editors/`, `modules/desktop-envs/`, ...): One directory per feature category,
+  with underscore-prefixed sibling dirs holding that feature's configs, scripts, and dotfiles.
+- `secrets/`: Encrypted secrets (`corp`, `nmconnections`, `ssh`, `vpn`, key/proxy env files) at the repo top level, using sops.
+
+**Wrapped programs (nix-wrapper-modules)**:
+
+`flake.wrappers.<name>` entries are auto-exposed as flake packages, so each is runnable via `nix run .#<name>`:
+
+- AI CLI tools with runtime secret env: `claude-code`, `opencode`, `aider-chat-full`, `codex`, `cursor-cli`, `gemini-cli`, `crush`, `qwen-code`.
+- `fish`: All shell config baked: plugins (autopair, puffer), aliases, functions,
+  and per-feature `vendor_conf.d` snippets contributed cross-module via `flake.wrappers.fish`.
+- `tmux`: Full config plus plugins.
+- `git`: Identity-free package; each home installs a per-user re-wrap with the `[user]` section from `flake.meta`.
+- `kitty`: Config plus theme.
+- `nvim`: LazyVim lua config, lazy-nvim, lua env, python3/node provider hosts; treesitter/spell/mason data stay as `xdg.dataFile` links.
+- `htop` (htop-vim plus htoprc via `$HTOPRC`), `yazi` (settings and keymap), `lazygit` (config via `$LG_CONFIG_FILE`).
+- `fzf-rg`/`fzf-ns`/`fzf-tldr`/`fzf-ps`: Standalone fzf tools.
+
+Home-manager still manages the rest: bash/zsh/nushell, desktop-envs (dconf generated at `modules/desktop-envs/_dconf/settings.nix`, niri,
+noctalia — its `settings.json` is written by a `home.activation` copy so the app can mutate it), fonts, browsers, package lists,
+systemd user services, and secret links.
 
 **Key Nix Patterns**:
 
@@ -197,39 +236,49 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - Fish is the primary shell; Neovim config is based on LazyVim.
 - NOTE: WHEN ADDING A NEW NIX OR CONFIG FILE, ADD IT TO THE GIT STAGING AREA. OTHERWISE NIX WILL NOT SEE IT.
 
+**Dendritic module rules**:
+
+- Every `.nix` file under `modules/` MUST be a valid flake-parts module — import-tree loads all of them unconditionally.
+- Paths with an underscore-prefixed component are skipped by import-tree; put assets, helper nix files, and generated files there.
+- Wrapped programs live in `flake.wrappers.*` and double as flake packages, so each is runnable via `nix run .#<name>`.
+- `local.host` / `local.user` options and `flake.meta.{hosts,users}` replace `specialArgs`; feature modules read metadata from them.
+
 ## Secrets Management
 
 **Tools**: sops + age. No community `sops-nix` — the repo uses a custom `local.secrets` module.
 
 **Age keys**: Three recipients in `.sops.yaml`: one regular key, two TPM-bound via `age-plugin-tpm` (one per laptop).
 TPM-bound keys ensure secrets decrypt only on the physical host.
-Private keys live in `~/.config/sops/` and `/root/.config/sops/`, preserved across reboots by the `preservation` module in `disk.nix`.
+Private keys live in `~/.config/sops/` and `/root/.config/sops/`,
+preserved across reboots by the `preservation` module in `modules/nixos/disk.nix`.
 
-**Decryption**: Both paths use `sops-cached` (`nix/nixpkgs/overlays/custom/sops-cached.sh`),
+**Decryption**: Both paths use `sops-cached` (`modules/meta/_nixpkgs/overlays/custom/sops-cached.sh`),
 which decrypts `.sops` files into `/run/user/$UID/secrets/` (tmpfs),
 caches results (avoiding costly TPM re-decryption), and optionally creates symlinks to target paths.
 
-1. **Systemd services at startup** — a custom module (`nix/modules/secrets/`) generates two `decrypt-secrets.service` oneshots:
+1. **Systemd services at startup** — a custom module (`modules/secrets/_impl/`) generates two `decrypt-secrets.service` oneshots:
 
    - System-level (as root, at boot) — decrypts secrets listed in `local.secrets.links` before NetworkManager and osquery start.
    - User-level (at login) — decrypts user secrets (itsme VPN, SSH, opencode auth) before `default.target`.
      Both produce symlinks-from-tmpfs, so programs read decrypted files at their normal paths.
 
-1. **On-demand via `with_secrets` wrapper** — `bash_secrets.nix` sources `keys.sh.sops` and `proxy.sh.sops` using `sops-cached`,
-   injecting API keys, tokens, and proxy settings into the shell environment.
-   `with_secrets` (`nix/nixpkgs/overlays/locallib/with_secrets.nix`) wraps any binary with these env vars at launch.
-   Used by all AI CLI tools (`ai.nix`) and Neovim (`extraWrapperArgs`).
+1. **At program launch via the `secret-env` wrapper fragment** — `modules/secrets/_fragments/secret-env.nix` sources
+   `keys.sh.sops` and `proxy.sh.sops` (plus corp variants) using `sops-cached`, dispatched on the runtime `$USERKIND`,
+   injecting API keys, tokens, and proxy settings into the program environment.
+   It is the successor of the removed `locallib.with_secrets` / `locallib.bash_secrets`
+   and is imported by the wrapper modules of all AI CLI tools and Neovim.
 
-   Additionally, fish shell sources `tokens.sh.sops` at startup (`corp.nix`), and the SSH agent decrypts `~/.ssh/*.sops` on demand (`ssh_client.sh`).
+   Additionally, the wrapped fish sources `tokens.sh.sops` at startup for corp users (`modules/corp/corp-user.nix`),
+   and the SSH agent decrypts `~/.ssh/*.sops` on demand (`modules/remote-desktop/_scripts/ssh_client.sh`).
 
 **Key files**:
 
 - `.sops.yaml` — age recipients and encryption rules.
-- `nix/modules/secrets/{lib,nixos,home-manager}.nix` — the custom secrets module.
-- `nix/nixpkgs/overlays/custom/sops-cached.sh` — decryption engine.
-- `nix/nixpkgs/overlays/locallib/with_secrets.nix` — wraps binaries with secret env vars.
-- `nix/nixpkgs/overlays/locallib/bash_secrets.nix` — shell snippet sourcing `keys.sh.sops`/`proxy.sh.sops`.
-- `nix/nixpkgs/overlays/sops/sops.sh` — network-isolated vim for editing secrets.
+- `secrets/` — the encrypted secrets themselves, at the repo top level.
+- `modules/secrets/secrets.nix` — wires the custom secrets module (`_impl/{lib,nixos,home-manager}.nix`) into both classes.
+- `modules/meta/_nixpkgs/overlays/custom/sops-cached.sh` — decryption engine.
+- `modules/secrets/_fragments/secret-env.nix` — wrapper fragment sourcing `keys.sh.sops`/`proxy.sh.sops` at program launch.
+- `modules/meta/_nixpkgs/overlays/sops/sops.sh` — network-isolated vim for editing secrets.
 - `dotfiles_py/targets/secrets.py` — `dotfiles updatekeys` re-encrypts all `.sops` files.
 
 **Security layers**: pre-commit hook blocks plaintext private keys/VPN configs, gitleaks scans full history for credentials,
@@ -238,7 +287,7 @@ AI tools are denied access to secrets dirs, sops editor runs with `unshare --net
 ### Important File Locations
 
 - Python source: `dotfiles_py/{cli.py,utils.py,targets/*.py}`
-- Nix configs: `nix/{configuration.nix,home-manager/home.nix,home-manager/programs/*.nix}`
+- Nix configs: `modules/**/*.nix` (flake-parts modules; e.g. `modules/meta/`, `modules/nixos/`, `modules/hosts/`)
 - Git hooks: `dotfiles_py/data/hooks/pre-commit`
 - CI workflow: `.github/workflows/workflow.yml`
 - Format configs: `.editorconfig`, `.prettierrc.json`, `.stylua.toml`, `pyproject.toml` (ruff sections)

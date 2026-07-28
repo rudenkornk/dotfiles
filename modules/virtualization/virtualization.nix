@@ -1,4 +1,9 @@
 {
+  flake.wrappers.fish.shellAliases = {
+    d = "docker";
+    p = "podman";
+  };
+
   flake.modules.homeManager.base = { pkgs, ... }:
   # Virtualization & containerization tools.
   {

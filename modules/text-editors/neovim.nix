@@ -1,4 +1,19 @@
 {
+  flake.wrappers.fish =
+    { pkgs, ... }:
+    let
+      fishlib = import ../shell/_fish/lib.nix;
+    in
+    {
+      shellAliases = {
+        v = "nvim";
+        vd = "nvim -d";
+      };
+      plugins = [
+        (fishlib.mkSnippet pkgs "60-neovim" (builtins.readFile ./_neovim/fish/conf.d/neovim.fish))
+      ];
+    };
+
   flake.modules.homeManager.base = { pkgs, config, ... }:
   # See also https://github.com/LazyVim/LazyVim/discussions/1972
   {
@@ -135,9 +150,6 @@
     };
 
     programs = {
-      fish = {
-        interactiveShellInit = builtins.readFile ./_neovim/fish/conf.d/neovim.fish;
-      };
       bash = {
         initExtra = builtins.readFile ./_neovim/bash/init_extra.sh;
       };

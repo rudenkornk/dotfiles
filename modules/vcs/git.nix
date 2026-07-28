@@ -16,6 +16,11 @@ in
       configFile.content = builtins.readFile ./_configs/.config/git/config;
     };
 
+    wrappers.fish.shellAliases = {
+      g = "git";
+      a = "arc";
+    };
+
     modules.homeManager.base = { config, pkgs, ... }: {
       home = {
         packages = with pkgs; [

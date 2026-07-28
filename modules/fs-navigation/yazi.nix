@@ -64,24 +64,40 @@ in
       };
     };
 
+    wrappers.fish =
+      { pkgs, ... }:
+      let
+        fishlib = import ../shell/_fish/lib.nix;
+      in
+      {
+        plugins = [
+          (fishlib.mkSnippet pkgs "57-yazi" ''
+            for mode in default insert
+              bind --mode $mode ctrl-y yazi
+            end
+
+            function y
+              set -l tmp (mktemp -t "yazi-cwd.XXXXX")
+              command yazi $argv --cwd-file="$tmp"
+              if read cwd <"$tmp"; and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+                builtin cd -- "$cwd"
+              end
+              rm -f -- "$tmp"
+            end
+          '')
+        ];
+      };
+
     modules.homeManager.base = { pkgs, ... }: {
       programs = {
         yazi = {
           enable = true;
           package = flakeCfg.flake.packages.${pkgs.stdenv.hostPlatform.system}.yazi;
           enableBashIntegration = true;
-          enableFishIntegration = true;
+          enableFishIntegration = false; # Handled by the wrapped fish snippet.
           enableNushellIntegration = true;
           enableZshIntegration = true;
         };
-        fish.interactiveShellInit =
-          # fish
-          ''
-            for mode in default insert
-              bind --mode $mode ctrl-y yazi
-            end
-          '';
-
         bash.initExtra =
           # bash
           ''

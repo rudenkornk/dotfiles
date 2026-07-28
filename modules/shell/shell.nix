@@ -6,7 +6,7 @@
       atuin
       bash-completion
       carapace
-      fish
+      # NOTE: fish comes wrapped with its config from `fish.nix`.
       nushell
       oh-my-posh
       powershell

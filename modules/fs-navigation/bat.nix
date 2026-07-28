@@ -1,4 +1,8 @@
 {
+  flake.wrappers.fish.shellAliases = {
+    b = "bat";
+  };
+
   flake.modules.homeManager.base = _: {
     programs.bat = {
       enable = true;

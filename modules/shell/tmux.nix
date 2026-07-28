@@ -25,7 +25,7 @@ in
       mouse = true;
       baseIndex = 1;
       terminal = "tmux-256color";
-      shell = "${pkgs.lib.getExe pkgs.fish}";
+      shell = "${pkgs.lib.getExe flakeCfg.flake.packages.${pkgs.stdenv.hostPlatform.system}.fish}";
       prefix = "C-s";
 
       # Defaults of the wrapper module which would deviate from the previous
@@ -99,6 +99,17 @@ in
       configAfter = builtins.readFile ./_tmux/tmux.conf;
     };
 
+    wrappers.fish =
+      { pkgs, ... }:
+      let
+        fishlib = import ./_fish/lib.nix;
+      in
+      {
+        plugins = [
+          (fishlib.mkSnippet pkgs "70-tmux-attach" (builtins.readFile ./_tmux/fish/conf.d/tmux.fish))
+        ];
+      };
+
     modules.homeManager.base = { pkgs, ... }: {
       home.packages = [ flakeCfg.flake.packages.${pkgs.stdenv.hostPlatform.system}.tmux ];
 
@@ -108,9 +119,6 @@ in
         };
       };
 
-      programs.fish = {
-        interactiveShellInit = builtins.readFile ./_tmux/fish/conf.d/tmux.fish;
-      };
     };
   };
 }

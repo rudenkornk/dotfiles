@@ -7,6 +7,26 @@ in
 {
   perSystem = { pkgs, ... }: { packages = import ./_fzf/scripts.nix { inherit pkgs; }; };
 
+  flake.wrappers.fish =
+    { pkgs, lib, ... }:
+    let
+      fishlib = import ./_fish/lib.nix;
+      tool = name: lib.getExe flakeCfg.flake.packages.${pkgs.stdenv.hostPlatform.system}.${name};
+    in
+    {
+      plugins = [
+        (fishlib.mkSnippet pkgs "55-fzf" ''
+          ${lib.getExe pkgs.fzf} --fish | source
+          for mode in default insert
+            bind --mode $mode ctrl-o "commandline -f cancel; ${tool "fzf-ns"}; echo; commandline -f repaint"
+            bind --mode $mode ctrl-q "commandline -f cancel; ${tool "fzf-rg"}; commandline -f repaint"
+            bind --mode $mode ctrl-v "commandline -f cancel; ${tool "fzf-tldr"}; echo; commandline -f repaint"
+            bind --mode $mode ctrl-x "commandline -f cancel; ${tool "fzf-ps"}; echo; commandline -f repaint"
+          end
+        '')
+      ];
+    };
+
   flake.modules.homeManager.base =
     { pkgs, lib, ... }:
     let
@@ -76,7 +96,7 @@ in
         fzf = {
           enable = true;
           enableBashIntegration = true;
-          enableFishIntegration = true;
+          enableFishIntegration = false; # Handled by the wrapped fish snippet.
           enableZshIntegration = true;
 
           defaultOptions = [
@@ -113,17 +133,6 @@ in
             "--bind='ctrl-o:execute(nvim {})'"
           ];
         };
-
-        fish.interactiveShellInit =
-          # fish
-          ''
-            for mode in default insert
-              bind --mode $mode ctrl-o "commandline -f cancel; ${nsScript}; echo; commandline -f repaint"
-              bind --mode $mode ctrl-q "commandline -f cancel; ${rgScript}; commandline -f repaint"
-              bind --mode $mode ctrl-v "commandline -f cancel; ${tldrScript}; echo; commandline -f repaint"
-              bind --mode $mode ctrl-x "commandline -f cancel; ${psScript}; echo; commandline -f repaint"
-            end
-          '';
 
         bash.initExtra = # bash
           ''

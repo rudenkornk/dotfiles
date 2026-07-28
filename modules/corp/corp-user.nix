@@ -3,6 +3,23 @@
 # structure static, which is required now that the condition itself comes
 # from the `local.user` option.
 {
+  # The corp shell tokens are sourced by the wrapped fish, guarded by the
+  # runtime $USERKIND (the wrapper serves all userkinds).
+  flake.wrappers.fish =
+    { pkgs, lib, ... }:
+    let
+      fishlib = import ../shell/_fish/lib.nix;
+    in
+    {
+      plugins = [
+        (fishlib.mkSnippet pkgs "40-corp-tokens" ''
+          if test "$USERKIND" = corp
+            source "$(${lib.getExe pkgs.custom.sops-cached} ${pkgs.locallib.secrets + /corp/tokens.sh.sops})"
+          end
+        '')
+      ];
+    };
+
   flake.modules.homeManager.base =
     {
       config,
@@ -29,18 +46,6 @@
           dataFile = {
             "ca-certificates/YandexInternalRootCA.crt".source =
               pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt;
-          };
-        };
-
-        programs = {
-          fish = {
-            interactiveShellInit =
-              # fish
-              ''
-                source "$(${pkgs.lib.getExe pkgs.custom.sops-cached} ${
-                  pkgs.locallib.secrets + /corp/tokens.sh.sops
-                })"
-              '';
           };
         };
 

@@ -12,7 +12,7 @@
   "editorMode": "normal",
   "skipAutoPermissionPrompt": true,
   "permissions": {
-    "allow": ["Read(~/projects/dotfiles/**)"],
+    "allow": ["Read(~/projects/dotfiles/**)", "Read(~/projects/arcadia/**)"],
     "deny": [
       "Read(//run/user/*/secrets/**)",
       "Edit(//run/user/*/secrets/**)",

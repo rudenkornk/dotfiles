@@ -6,6 +6,7 @@
     "external_directory": {
       "*": "ask",
       "~/projects/dotfiles/**": "allow",
+      "~/projects/arcadia/**": "allow",
 
       "/run/user/*/secrets/*": "deny",
       "~/.config/sops/*": "deny",

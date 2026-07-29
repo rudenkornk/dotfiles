@@ -52,11 +52,32 @@
       };
       services = {
         # Security spyware for corporate machine.
+        # Here are several ways to check `osquery` health locally:
+        # 1. Show logs from the service itself.
+        #    Only works if `--verbose` flag is set!
+        #    ```bash
+        #    journalctl -u osqueryd.service -f
+        #    ```
+        #
+        # 2. Show sent bytes to the remote server (must be increasing value):
+        #    ```bash
+        #    watch -n 5 'systemctl show osqueryd -p IPEgressBytes'
+        #    ```
+        #
+        # 3. Show number of unsent entries from local monitoring database (should be low, <100):
+        #    ```bash
+        #    sudo sh -c '
+        #      osqueryd=$(systemctl cat osqueryd | sed -n "s/^ExecStart=\([^ ]*\).*/\1/p")
+        #      cp -a /var/lib/osquery/osquery.db /var/tmp/osq-copy.db
+        #      "$osqueryd" --database_path /var/tmp/osq-copy.db --database_dump 2>/dev/null | grep -c "^logs\[tls_r_"
+        #      rm -rf /var/tmp/osq-copy.db'
+        #    ```
         osquery = {
           enable = true;
           flags = {
             # Main flags.
             # tls_hostname = <encrypted in EnvironmentFile>;
+            fromenv = "tls_hostname";
             tls_server_certs = "${pkgs.locallib.secrets + /corp/allCAs.pem}";
             disable_audit = "false";
             disable_extensions = "true";
@@ -85,12 +106,14 @@
             distributed_tls_write_endpoint = "/api/v1/osquery/distributed/write";
 
             # Logging/results flags.
-            logger_plugin = "tls";
+            logger_plugin = "tls,filesystem"; # Also save logs locally with `filesystem` plugin.
+            logger_rotate = "true";
             # logger_path="/var/log/osquery"; # Already set to this path.
             logger_tls_endpoint = "/logger";
             logger_min_status = "10";
             logger_min_stderr = "10";
             stderrthreshold = "3";
+            verbose = "true"; # See problematic tls issues locally.
           };
         };
       };
@@ -102,6 +125,7 @@
               ReadOnlyPaths = [ "/" ];
               ReadWritePaths = [
                 "/var/lib/osquery"
+                "/var/log/osquery"
                 "/run"
               ];
 

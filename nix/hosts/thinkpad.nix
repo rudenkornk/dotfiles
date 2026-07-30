@@ -204,5 +204,6 @@
         i2c-bus = "/dev/i2c-12";
       };
     };
+    noctalia = import ./thinkpad/noctalia_monitors.nix;
   };
 }

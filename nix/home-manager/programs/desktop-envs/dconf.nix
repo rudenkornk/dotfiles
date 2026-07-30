@@ -352,6 +352,10 @@ with lib.hm.gvariant;
       night-mode = false;
     };
 
+    "org/gnome/portal/filechooser/firefox" = {
+      last-folder-path = "/home/rudenkornk_corp/Downloads";
+    };
+
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = false;
       night-light-schedule-automatic = false;

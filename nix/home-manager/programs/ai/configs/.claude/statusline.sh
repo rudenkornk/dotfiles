@@ -91,9 +91,9 @@ color_pct() {
   local display_text="$1" metric="$2" warn_at="$3" crit_at="$4"
   local metric_int
   metric_int=$(printf "%.0f" "$metric")
-  if [ "$metric_int" -lt "$warn_at" ]; then
+  if [ "$metric_int" -le "$warn_at" ]; then
     printf "${GREEN}%s${RESET}" "$display_text"
-  elif [ "$metric_int" -lt "$crit_at" ]; then
+  elif [ "$metric_int" -le "$crit_at" ]; then
     printf "${YELLOW}%s${RESET}" "$display_text"
   else
     printf "${RED}%s${RESET}" "$display_text"
@@ -130,7 +130,7 @@ fmt_duration() {
 # `onpace%` is the elapsed fraction of the period, i.e. the consumption you'd expect if perfectly paced.
 # The percent pair is colored by consumption speed:
 # m = (used_frac - elapsed/period) / ((remaining+60s)/period);
-# m<0 green, m<0.30 yellow, else red.
+# m<=0 green, m<=0.30 yellow, else red.
 # The +60s prevents division by zero when remaining reaches 0 at the moment of reset.
 limit_part() {
   local used_pct="$1" reset_epoch="$2" period_secs="$3" total_label="$4"

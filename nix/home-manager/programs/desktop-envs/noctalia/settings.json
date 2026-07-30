@@ -434,9 +434,9 @@
     "resumeScreenOffCommand": "",
     "resumeSuspendCommand": "",
     "screenOffCommand": "",
-    "screenOffTimeout": 0,
+    "screenOffTimeout": 3600,
     "suspendCommand": "",
-    "suspendTimeout": 3600
+    "suspendTimeout": 0
   },
   "location": {
     "analogClockInCalendar": false,

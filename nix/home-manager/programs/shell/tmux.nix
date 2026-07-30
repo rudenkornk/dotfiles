@@ -14,7 +14,7 @@
     # After some back & forth changes I decided to ditch both `sensibleOnTop` and `sensible` plugin,
     # and just list everything explicitly here.
     escapeTime = 0; # Address vim mode switching delay (http://superuser.com/a/252717/65504).
-    historyLimit = 50000; # Scrollback buffer size.
+    historyLimit = 100000; # Scrollback buffer size.
     # Emacs key bindings in tmux command prompt (prefix + :) are better than vi keys, even for vim users.
     keyMode = "emacs";
     focusEvents = true;

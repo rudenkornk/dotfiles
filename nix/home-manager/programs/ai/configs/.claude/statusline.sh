@@ -100,66 +100,19 @@ color_pct() {
   fi
 }
 
-# Colors a rate-limit percentage by consumption speed.
-# I.e. "how much limits were credited from remaining time."
-# m = (used_frac - elapsed/period) / ((remaining+60s)/period);
-# m<=0 green, m<=0.30 yellow, else red.
-# The +60s prevents division by zero when remaining reaches 0 at the moment of reset.
-color_rate() {
-  local used_pct="$1" reset_epoch="$2" period_secs="$3"
-  local used_pct_int
-  used_pct_int=$(printf "%.0f" "$used_pct")
-  case "$reset_epoch" in
-  '' | *[!0-9]*)
-    printf "%s%%" "$used_pct_int"
-    return 0
-    ;;
-  esac
-  local m_pct
-  m_pct=$(awk -v used="$used_pct" -v reset="$reset_epoch" \
-    -v now="$now" -v period="$period_secs" '
-    BEGIN {
-      remaining = reset - now
-      if (remaining < 0) remaining = 0
-      elapsed = period - remaining
-      if (elapsed < 0) elapsed = 0
-      m = (used / 100 - elapsed / period) / ((remaining + 60) / period)
-      printf "%.0f", m * 100
-    }')
-  color_pct "${used_pct_int}%" "$m_pct" 0 30
-}
-
-# Context window.
-ctx_k=$((ctx_size / 1000))
-# `cache_read` is the number of tokens served from cache in the current request.
-cache_k=$((cache_read / 1000))
-
-# If `used_percentage` is absent but token counts are known, compute it ourselves.
-if [ -z "$used_pct" ] && [ "$ctx_size" -gt 0 ] && [ "$total_input" -gt 0 ]; then
-  used_pct=$((total_input * 100 / ctx_size))
-fi
-
-if [ -n "$used_pct" ] && [ "$used_pct" != "0" ]; then
-  ctx_k_used=$((total_input / 1000))
-  ctx_display="${ctx_k_used}k/${ctx_k}k $(color_pct "${used_pct}%" "$used_pct" 50 80)"
-else
-  ctx_display="0k/${ctx_k}k 0%"
-fi
-
-fmt_reset() {
-  local reset_epoch="$1"
-  case "$reset_epoch" in '' | *[!0-9]*) return 0 ;; esac
-  local remaining h m
-  remaining=$((reset_epoch - now))
-  [ "$remaining" -le 0 ] && {
+# Formats a duration in seconds as a compact human string.
+# Beyond 9 hours, minute precision is noise, so show hours (or days) only.
+fmt_duration() {
+  local secs="$1"
+  [ "$secs" -le 0 ] && {
     printf "0s"
     return 0
   }
-  h=$((remaining / 3600))
-  m=$(((remaining % 3600) / 60))
-  local d=$((h / 24))
-  local hr=$((h % 24))
-  # Beyond 9 hours, minute precision is noise, so show hours only.
+  local h m d hr
+  h=$((secs / 3600))
+  m=$(((secs % 3600) / 60))
+  d=$((h / 24))
+  hr=$((h % 24))
   if [ "$d" -gt 0 ]; then
     printf "%dd%dh" "$d" "$hr"
   elif [ "$h" -gt 9 ]; then
@@ -169,25 +122,68 @@ fmt_reset() {
   elif [ "$m" -gt 0 ]; then
     printf "%dm" "$m"
   else
-    printf "%ds" "$remaining"
+    printf "%ds" "$secs"
   fi
 }
+
+# Renders one rate-limit window as `consumed%/onpace% (elapsed/total)`, where
+# `onpace%` is the elapsed fraction of the period, i.e. the consumption you'd expect if perfectly paced.
+# The percent pair is colored by consumption speed:
+# m = (used_frac - elapsed/period) / ((remaining+60s)/period);
+# m<0 green, m<0.30 yellow, else red.
+# The +60s prevents division by zero when remaining reaches 0 at the moment of reset.
+limit_part() {
+  local used_pct="$1" reset_epoch="$2" period_secs="$3" total_label="$4"
+  local used_pct_int
+  used_pct_int=$(printf "%.0f" "$used_pct")
+  # Without a reset timestamp we can compute neither pace nor elapsed time.
+  case "$reset_epoch" in
+  '' | *[!0-9]*)
+    printf "%s%%" "$used_pct_int"
+    return 0
+    ;;
+  esac
+  local vals m_pct onpace_pct elapsed_secs
+  vals=$(awk -v used="$used_pct" -v reset="$reset_epoch" \
+    -v now="$now" -v period="$period_secs" '
+    BEGIN {
+      remaining = reset - now
+      if (remaining < 0) remaining = 0
+      elapsed = period - remaining
+      if (elapsed < 0) elapsed = 0
+      m = (used / 100 - elapsed / period) / ((remaining + 60) / period)
+      printf "%.0f %.0f %d", m * 100, elapsed / period * 100, elapsed
+    }')
+  read -r m_pct onpace_pct elapsed_secs <<<"$vals"
+  local pct_display
+  pct_display=$(color_pct "${used_pct_int}%/${onpace_pct}%" "$m_pct" 0 30)
+  printf "%s (%s/%s)" "$pct_display" "$(fmt_duration "$elapsed_secs")" "$total_label"
+}
+
+# Context window.
+ctx_k=$((ctx_size / 1000))
+# `cache_read` is the number of tokens served from cache in the current request.
+cache_k=$((cache_read / 1000))
+
+# If `used_percentage` is absent but token counts are known, compute it ourselves; otherwise treat it as 0.
+if [ -z "$used_pct" ]; then
+  if [ "$ctx_size" -gt 0 ] && [ "$total_input" -gt 0 ]; then
+    used_pct=$((total_input * 100 / ctx_size))
+  else
+    used_pct=0
+  fi
+fi
+
+ctx_k_used=$((total_input / 1000))
+ctx_display="$(color_pct "${used_pct}%" "$used_pct" 50 80) (${ctx_k_used}k/${ctx_k}k)"
 
 # Rate limits are reported in subscription mode only — the field is absent in API mode.
 limits_display=""
 if [ -n "$rate_5h" ] || [ -n "$rate_7d" ]; then
   part_5h=""
   part_7d=""
-  if [ -n "$rate_5h" ]; then
-    part_5h="5h:$(color_rate "$rate_5h" "$reset_5h" 18000)"
-    left_5h=$(fmt_reset "$reset_5h")
-    [ -n "$left_5h" ] && part_5h="${part_5h}${DIM} (${left_5h})${RESET}"
-  fi
-  if [ -n "$rate_7d" ]; then
-    part_7d="7d:$(color_rate "$rate_7d" "$reset_7d" 604800)"
-    left_7d=$(fmt_reset "$reset_7d")
-    [ -n "$left_7d" ] && part_7d="${part_7d}${DIM} (${left_7d})${RESET}"
-  fi
+  [ -n "$rate_5h" ] && part_5h=$(limit_part "$rate_5h" "$reset_5h" 18000 "5h")
+  [ -n "$rate_7d" ] && part_7d=$(limit_part "$rate_7d" "$reset_7d" 604800 "7d")
   if [ -n "$part_5h" ] && [ -n "$part_7d" ]; then
     limits_display="  ${DIM}limits:${RESET} ${part_5h}  ${part_7d}"
   elif [ -n "$part_5h" ]; then

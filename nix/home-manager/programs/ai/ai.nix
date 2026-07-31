@@ -32,11 +32,7 @@
         "opencode/opencode.jsonc".source = ./opencode.jsonc;
       };
 
-    dataFile = {
-      # W/A for https://github.com/anomalyco/opencode/issues/16885
-      "opencode/opencode.db".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.xdg.dataHome}/opencode/opencode-stable.db";
-    };
+    dataFile = { };
   };
 
   local = {

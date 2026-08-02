@@ -67,6 +67,9 @@
     hostName = host.name;
     networkmanager = {
       enable = true;
+      # Hand DNS to systemd-resolved (enabled below) so NetworkManager connections
+      # get per-link split-DNS.
+      dns = "systemd-resolved";
       plugins = with pkgs; [
         networkmanager-openconnect
         networkmanager-openvpn
@@ -158,6 +161,11 @@
         };
       };
     };
+
+    # System DNS resolver, providing per-link split-DNS for VPN connections.
+    # Docker ignores the 127.0.0.53 stub in resolv.conf and falls back to public DNS,
+    # so containers needing internal names may require explicit `daemon.json` dns.
+    resolved.enable = true;
 
     # https://wiki.nixos.org/wiki/Printing
     avahi = {

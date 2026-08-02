@@ -16,6 +16,7 @@
         # p16v actually, p15v is the closest one available in the list.
         inputs.nixos-hardware.nixosModules.lenovo-thinkpad-p15v-intel-gen3
         ./thinkpad/osquery.nix
+        ./thinkpad/splitty.nix
       ];
 
       boot = {

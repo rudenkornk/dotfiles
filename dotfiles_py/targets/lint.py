@@ -1,5 +1,7 @@
 import logging
+import subprocess
 from collections.abc import Sequence
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -34,10 +36,33 @@ def _linters(repo_path: Path) -> list[Sequence[str | Path]]:
     ]
 
 
+def _run_linter(argv: Sequence[str | Path], repo_path: Path) -> subprocess.CompletedProcess[str]:
+    # Capture output so concurrently-running linters do not interleave their streams.
+    return run_shell(argv, cwd=repo_path, capture_output=True, check=False)
+
+
 def lint_code(*, repo_path: Path) -> None:
     _ensure_full_history()
-    for argv in _linters(repo_path):
-        run_shell(argv, cwd=repo_path)
+    linters = _linters(repo_path)
+
+    # The linters are independent and read-only, so we run them concurrently.
+    with ThreadPoolExecutor(max_workers=len(linters)) as executor:
+        results = executor.map(lambda argv: (argv, _run_linter(argv, repo_path)), linters)
+
+    failures: list[str] = []
+    for argv, result in results:
+        name = str(argv[0])
+        output = (result.stdout + result.stderr).strip()
+        if output:
+            _logger.info(f"----- {name} -----")
+            # Indent each line so the grouped output stands out from the log lines.
+            print("\n".join("    " + line for line in output.splitlines()))  # noqa: T201
+        if result.returncode:
+            failures.append(name)
+
+    if failures:
+        msg = f"Linters reported problems: {', '.join(failures)}"
+        raise RuntimeError(msg)
 
 
 @dataclass(frozen=True)

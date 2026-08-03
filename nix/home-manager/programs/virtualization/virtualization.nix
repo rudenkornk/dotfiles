@@ -1,4 +1,4 @@
-{ pkgs, get_modules, ... }:
+{ pkgs, ... }:
 
 # Virtualization & containerization tools.
 {

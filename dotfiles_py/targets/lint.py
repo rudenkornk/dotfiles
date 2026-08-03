@@ -14,8 +14,9 @@ def _check_leaked_credentials(repo_path: Path) -> None:
     first_commit = "78946fc7d7e562042c62d589b331abf222c688e7"
 
     if run_shell(["git", "cat-file", "-e", first_commit], check=False).returncode:
-        _logger.error("Looks like git history is shallow and credential check cannot be performed.")
-        raise RuntimeError
+        msg = "Looks like git history is shallow and credential check cannot be performed."
+        _logger.error(msg)
+        raise RuntimeError(msg)
 
     run_shell(["gitleaks", "git"], cwd=repo_path)
 

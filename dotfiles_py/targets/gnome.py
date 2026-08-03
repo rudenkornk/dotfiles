@@ -174,8 +174,9 @@ def _substitute_home(content: str, home: Path) -> str:
 
 
 def _generate_nix_settings(entries: DConf, nix_path: Path) -> None:
-    with NamedTemporaryFile(delete=False) as temp_file:
-        Path(temp_file.name).write_text(entries.dump_dconf())
+    with NamedTemporaryFile("w") as temp_file:
+        temp_file.write(entries.dump_dconf())
+        temp_file.flush()
         run_shell(["dconf2nix", "--input", temp_file.name, "--output", nix_path, "--emoji"])
     nix_path.write_text(_substitute_home(nix_path.read_text(), Path.home()))
 

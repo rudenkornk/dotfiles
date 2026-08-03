@@ -9,7 +9,7 @@ import sys
 from dataclasses import dataclass, field
 from enum import Enum
 
-HIGH_PRIO_CMDS = {"vim", "nvim", "opencode"}
+HIGH_PRIO_CMDS = {"vim", "nvim", "opencode", "claude"}
 
 
 class Direction(Enum):

@@ -35,6 +35,6 @@ stdenv.mkDerivation {
   meta = {
     inherit (info) description homepage;
     platforms = [ "x86_64-linux" ];
-    mainProgram = "splitty";
+    mainProgram = "itsme-cli";
   };
 }

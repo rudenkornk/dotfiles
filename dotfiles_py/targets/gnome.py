@@ -161,10 +161,23 @@ def _generate_ansible_vars(entries: DConf, vars_path: Path) -> None:
     yaml_write(vars_path, ansible_vars, yaml)
 
 
+def _substitute_home(content: str, home: Path) -> str:
+    # Paths under the user's home are baked as absolute literals by `dconf dump`.
+    # Rewrite them to a `config.home.homeDirectory` interpolation so the generated
+    # file stays user-agnostic (it is imported by every user profile).
+    home_str = str(home)
+    if home_str not in content:
+        return content
+    content = content.replace(home_str, "${config.home.homeDirectory}")
+    # dconf2nix emits `{ lib, ... }:`; expose `config` so the interpolation resolves.
+    return content.replace("{ lib, ... }:", "{ lib, config, ... }:", 1)
+
+
 def _generate_nix_settings(entries: DConf, nix_path: Path) -> None:
     with NamedTemporaryFile(delete=False) as temp_file:
         Path(temp_file.name).write_text(entries.dump_dconf())
         run_shell(["dconf2nix", "--input", temp_file.name, "--output", nix_path, "--emoji"])
+    nix_path.write_text(_substitute_home(nix_path.read_text(), Path.home()))
 
 
 def gnome_config(*, rules: DomainRules, nix_path: Path) -> None:

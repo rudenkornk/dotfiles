@@ -1,5 +1,5 @@
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
-{ lib, ... }:
+{ lib, config, ... }:
 
 with lib.hm.gvariant;
 
@@ -353,7 +353,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/portal/filechooser/firefox" = {
-      last-folder-path = "/home/rudenkornk_corp/Downloads";
+      last-folder-path = "${config.home.homeDirectory}/Downloads";
     };
 
     "org/gnome/settings-daemon/plugins/color" = {

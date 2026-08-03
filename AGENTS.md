@@ -2,12 +2,12 @@
 
 ## Repository Overview
 
-This is a **NixOS configuration repository** (~5MiB, ~247 tracked files) that provides a complete, reproducible personal machine setup.
+This is a **NixOS configuration repository** (~5MiB, ~250 tracked files) that provides a complete, reproducible personal machine setup.
 The repository focuses on configuring development tools including Neovim (LazyVim-based), tmux, fish shell, and support for C++, Python, LaTeX, and Lua development.
 
 **Key Technologies:**
 
-- **NixOS/Nix Flakes**: Primary configuration system (91 .nix files)
+- **NixOS/Nix Flakes**: Primary configuration system (~95 .nix files)
 - **Python 3.13**: CLI tooling and automation (12 .py files in `dotfiles_py/`)
 - **Home Manager**: User environment configuration
 - **Languages**: Shell scripts (.sh, .fish), Lua configs (23 files), Nix expressions
@@ -58,7 +58,7 @@ All commands below assume you're inside `nix develop`:
 
    Same formatters as above, but applies changes (also runs `ruff check --fix --unsafe-fixes`).
 
-1. **Lint** (~7-8 seconds):
+1. **Lint** (~1-2 seconds; the independent linters run in parallel):
 
    ```bash
    dotfiles lint
@@ -66,7 +66,7 @@ All commands below assume you're inside `nix develop`:
 
    Runs comprehensive linting:
 
-   - `gitleaks git`: Checks entire git history for leaked credentials (~1862 commits at time of writing).
+   - `gitleaks git`: Checks entire git history for leaked credentials (~1900 commits at time of writing).
    - `statix check`: Nix linter.
    - `mypy`: Python type checking (strict mode).
    - `ruff check`: Python linter.
@@ -249,7 +249,7 @@ AI tools are denied access to secrets dirs, sops editor runs with `unshare --net
 Before submitting changes:
 
 1. **Format**: `nix develop --command dotfiles format`
-1. **Lint**: `nix develop --command dotfiles lint` (takes ~7-8 seconds)
+1. **Lint**: `nix develop --command dotfiles lint` (takes ~1-2 seconds; linters run in parallel)
 1. **Flake Check**: `nix flake check` (takes ~10 seconds)
 
 If making Python changes:

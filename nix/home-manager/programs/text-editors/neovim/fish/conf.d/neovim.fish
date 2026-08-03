@@ -6,6 +6,7 @@
 # Thus, we need to unset this variables.
 # Since HTTP(S)_PROXY are common vars, we would like to unset them only if
 # they were specifically set for neovim.
+# Keep this unset list in sync with bash/init_extra.sh.
 if test -n "$NVIM" && test -n "$MYVIMRC"
     set --unexport HTTP_PROXY
     set --unexport HTTPS_PROXY

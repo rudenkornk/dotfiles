@@ -1,3 +1,15 @@
+# Custom secrets module, deliberately kept instead of the community sops-nix module (evaluated 2026-08).
+# Rationale:
+# - Decryption failures must be non-fatal: with a missing age key this module still activates cleanly,
+#   whereas sops-nix fails `home-manager switch` outright and makes `nixos-rebuild switch` exit non-zero,
+#   with no supported "continue without secrets" mode.
+# - sops-nix has no decryption cache and re-decrypts on every activation and login,
+#   currently even once per secret rather than per file (Mic92/sops-nix#956),
+#   which is prohibitively slow with TPM-bound age keys; `sops-cached` decrypts each file once per boot.
+# - Launch-time env injection (`with_secrets`, `bash_secrets`) has no sops-nix equivalent,
+#   so most of the custom machinery would survive a migration anyway.
+# - sops-nix age plugin support (required for the TPM keys) is young and unproven:
+#   merged 2026-01, absent from the README, with no public `age-plugin-tpm` usage reports.
 { lib, pkgs }:
 
 {

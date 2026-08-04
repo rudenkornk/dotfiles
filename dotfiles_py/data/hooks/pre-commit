@@ -1,24 +1,71 @@
 #!/usr/bin/env bash
 
-changed=$(git diff --cached --name-only)
-regex="(\
-rsa|\
-ed25519|\
-ed25519_sk|\
-ecdsa|\
-ecdsa_sk|\
-ovpn|\
-auth|\
-amnezia|\
-xray|\
-socks|\
-credentials.json|\
-private.gpg\
+set -euo pipefail
+
+# Layer 1: filename checks.
+# Every secret under nix/secrets/ is sops-encrypted and has `.sops` in its basename,
+# so any staged file there without it is plaintext by construction.
+# Known public files (public keys, CA certificates, helper scripts) are allowlisted explicitly.
+public_regex="(\
+\.pub|\
+\.crt|\
+allCAs\.pem|\
+manual_install\.sh|\
+\.keep\
 )\$"
 
-secrets=$(echo "$changed" | grep --perl-regex "$regex")
-if [[ -n "$secrets" ]]; then
-	echo "Refusing to commit potentially sensitive info. Detected files:"
-	echo "$secrets"
+# Outside nix/secrets/, match classic secret-bearing filenames.
+# These cover exactly the cases the gitleaks content scan below cannot see:
+# binary containers (.p12, .pfx, .ppk) produce no diff text at all,
+# and wifi PSKs (.nmconnection) or OpenVPN static keys carry no header or keyword its default rules recognize.
+secret_name_regex="(\
+(^|/)id_rsa(_sk)?|\
+(^|/)id_dsa(_sk)?|\
+(^|/)id_ecdsa(_sk)?|\
+(^|/)id_ed25519(_sk)?|\
+(^|/)private\.gpg|\
+\.rsa|\
+\.key|\
+\.ppk|\
+\.p12|\
+\.pfx|\
+\.nmconnection|\
+\.ovpn\
+)\$"
+
+# `--diff-filter=ACMR` keeps only added, copied, modified, and renamed files:
+# deletions have no staged content and must not block the commit.
+mapfile -t staged < <(git diff --cached --name-only --diff-filter=ACMR)
+
+plaintext=()
+for file in "${staged[@]}"; do
+	if [[ "$file" == nix/secrets/* ]]; then
+		[[ "$(basename "$file")" == *.sops* ]] && continue
+		[[ "$file" =~ $public_regex ]] && continue
+		plaintext+=("$file")
+	elif [[ "$file" =~ $secret_name_regex ]]; then
+		plaintext+=("$file")
+	fi
+done
+
+if ((${#plaintext[@]})); then
+	echo "Refusing to commit files that look like plaintext secrets:"
+	printf '%s\n' "${plaintext[@]}"
 	exit 1
+fi
+
+# Layer 2: content scan of the staged diff, catching secrets pasted outside nix/secrets/.
+# `gitleaks protect` is deprecated since v8.19 and `gitleaks git --staged --pre-commit`
+# has a known bug of scanning the full history instead of only the staged changes,
+# so pipe the staged diff through `gitleaks stdin` instead.
+# `--no-ext-diff` forces plain diff output even if an external diff driver is configured.
+# `--redact` keeps the secret values themselves out of the terminal scrollback.
+if command -v gitleaks >/dev/null; then
+	if ! git diff --cached --no-ext-diff | gitleaks stdin --redact --no-banner; then
+		echo "Refusing to commit: gitleaks found potential secrets in the staged diff."
+		exit 1
+	fi
+else
+	# gitleaks comes from home-manager (linters.nix), but may be missing on a fresh or bootstrap system.
+	echo "warning: gitleaks not found on PATH; skipping staged content scan" >&2
 fi

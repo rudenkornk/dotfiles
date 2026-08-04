@@ -49,6 +49,12 @@ in
         chmod +x __build/dotfiles
         export PATH="$PWD/__build:$PATH"
 
+        # Hook setup is an idempotent symlink refresh, so it is safe to run on every shell entry.
+        # Worktrees are skipped (`.git` is a file there); they share the main checkout's hooks anyway.
+        if [ -d .git ]; then
+          dotfiles --log-level warning hooks
+        fi
+
         echo "Welcome to the project devshell!"
       '';
   };

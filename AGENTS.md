@@ -29,6 +29,7 @@ This command:
 - Takes ~10-60 seconds on first run (may fetch packages from cache.nixos.org)
 - Provides all necessary tools: python313, formatters, linters, and more
 - Generates a `__build/dotfiles` wrapper and puts it on `PATH`, so `dotfiles` invokes the local CLI
+- Installs the git pre-commit hook (equivalent to `dotfiles hooks`; skipped in git worktrees, which share the main checkout's hooks)
 
 **CRITICAL:** Do NOT run `uv sync` or `pip install` manually. The `nix develop` shell hook wires up the Python env automatically.
 
@@ -91,7 +92,8 @@ All commands below assume you're inside `nix develop`:
    dotfiles hooks
    ```
 
-   Symlinks a pre-commit hook that prevents committing sensitive files (ssh keys, vpn configs, credentials).
+   Symlinks a pre-commit hook that refuses plaintext secrets by filename and scans the staged diff with gitleaks.
+   Runs automatically on `nix develop` entry, so the manual command is only needed outside the dev shell.
 
 ### CI Pipeline
 

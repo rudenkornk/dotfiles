@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Install nix
-        uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
+        uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # v31
       - name: Flake check
         run: nix flake check --no-build
       - name: Check format

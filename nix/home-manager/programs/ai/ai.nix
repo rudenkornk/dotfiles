@@ -1,10 +1,4 @@
-{
-  pkgs,
-  config,
-  lib,
-  user,
-  ...
-}:
+{ pkgs, config, ... }:
 
 # CLI AI tools.
 {
@@ -26,24 +20,11 @@
   ];
 
   xdg = {
-    configFile =
-      { }
-      // lib.optionalAttrs (user.userkind == "default") {
-        "opencode/opencode.jsonc".source = ./opencode.jsonc;
-      };
+    configFile = {
+      "opencode/opencode.jsonc".source = ./opencode.jsonc;
+    };
 
     dataFile = { };
-  };
-
-  local = {
-    secrets.links =
-      { }
-      // lib.optionalAttrs (user.userkind == "corp") {
-        "${config.xdg.dataHome}/opencode/auth.json".source =
-          pkgs.locallib.secrets + /corp/opencode.auth.json.sops;
-        "${config.xdg.configHome}/opencode/opencode.jsonc".source =
-          pkgs.locallib.secrets + /corp/opencode.jsonc.sops;
-      };
   };
 
   home.file =

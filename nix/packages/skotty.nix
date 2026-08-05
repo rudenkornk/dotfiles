@@ -4,11 +4,11 @@
   fetchurl,
   autoPatchelfHook,
   dpkg,
-  custom,
+  corp,
 }:
 
 let
-  info = custom.corp-pkgs-info.skotty;
+  info = corp.pkgs-info.skotty;
 in
 stdenv.mkDerivation {
   pname = "skotty";

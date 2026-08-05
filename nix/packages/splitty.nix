@@ -5,11 +5,11 @@
   autoPatchelfHook,
   makeBinaryWrapper,
   zstd,
-  custom,
+  corp,
 }:
 
 let
-  info = custom.corp-pkgs-info.splitty;
+  info = corp.pkgs-info.splitty;
 in
 stdenv.mkDerivation {
   pname = "splitty";

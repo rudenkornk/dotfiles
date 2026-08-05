@@ -2,7 +2,7 @@
 #
 # Two things this service cannot assume are present at start:
 #
-#   1. The binary. Its recipe (`nix/packages/splitty.nix`) reads encrypted `corp-pkgs-info`,
+#   1. The binary. Its recipe (`nix/packages/splitty.nix`) reads encrypted `corp.pkgs-info`,
 #      so it only builds from a working tree with decrypted secrets and is installed manually:
 #      ```bash
 #      sudo nix build --profile /nix/var/nix/profiles/splitty ~/projects/dotfiles#splitty

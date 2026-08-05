@@ -5,11 +5,11 @@
   autoPatchelfHook,
   makeBinaryWrapper,
   fuse,
-  custom,
+  corp,
 }:
 
 let
-  info = custom.corp-pkgs-info.arc;
+  info = corp.pkgs-info.arc;
 in
 stdenv.mkDerivation {
   pname = "arc";

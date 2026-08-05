@@ -8,6 +8,12 @@
 
 {
   home = lib.optionalAttrs (user.userkind == "corp") {
+    packages = with pkgs; [
+      corp.ldaps
+      corp.openconnect-run
+      corp.openvpn-run
+    ];
+
     sessionVariables = {
       # CURL_CA_BUNDLE mess up with curl, blocking other non-copr requests.
       # CURL_CA_BUNDLE = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
@@ -21,6 +27,12 @@
   };
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {
+    configFile = {
+      # `ai.nix` installs the default opencode config unconditionally.
+      # Disable it here so the encrypted corp config from `local.secrets.links` owns this path.
+      "opencode/opencode.jsonc".enable = false;
+    };
+
     dataFile = {
       "ca-certificates/YandexInternalRootCA.crt".source =
         pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt;
@@ -45,6 +57,13 @@
         home = config.home.homeDirectory;
       in
       {
+        "${home}/.ssh/corp/config".source = pkgs.locallib.secrets + /corp/ssh_config.sops;
+
+        "${config.xdg.dataHome}/opencode/auth.json".source =
+          pkgs.locallib.secrets + /corp/opencode.auth.json.sops;
+        "${config.xdg.configHome}/opencode/opencode.jsonc".source =
+          pkgs.locallib.secrets + /corp/opencode.jsonc.sops;
+
         "${home}/.itsme/config.yaml".source = pkgs.locallib.secrets + /corp/config.yaml.sops;
         "${home}/.itsme/initial_ovpn.conf".source = pkgs.locallib.secrets + /corp/initial_ovpn.conf.sops;
         "${home}/.itsme/openvpn.conf".source = pkgs.locallib.secrets + /corp/openvpn.conf.sops;

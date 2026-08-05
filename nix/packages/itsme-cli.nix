@@ -3,11 +3,11 @@
   fetchurl,
   autoPatchelfHook,
   binutils,
-  custom,
+  corp,
 }:
 
 let
-  info = custom.corp-pkgs-info.itsme-cli;
+  info = corp.pkgs-info.itsme-cli;
 in
 stdenv.mkDerivation {
   name = "itsme-cli";

@@ -14,53 +14,6 @@ _: final: prev: {
         text = builtins.readFile ./custom/sops-cached.sh;
       };
 
-    ldaps = final.writeShellApplication {
-      name = "ldaps";
-      runtimeInputs = [
-        final.jq
-        final.openldap
-        final.custom.sops-cached
-      ];
-      text =
-        final.lib.replaceStrings [ "@corp_auth@" ] [ "${final.locallib.secrets + /corp/auth.sops.json}" ]
-          (builtins.readFile ./custom/ldaps.sh);
-    };
-
-    openconnect_corp = final.writeShellApplication {
-      name = "openconnect_corp";
-      runtimeInputs = [
-        final.jq
-        final.openconnect
-        final.custom.sops-cached
-      ];
-      text =
-        final.lib.replaceStrings [ "@corp_auth@" ] [ "${final.locallib.secrets + /corp/auth.sops.json}" ]
-          (builtins.readFile ./custom/openconnect_corp.sh);
-    };
-
-    openvpn_corp = final.writeShellApplication {
-      name = "openvpn_corp";
-      runtimeInputs = [
-        final.openvpn
-        final.gnused
-        final.socat
-        final.uutils-coreutils-noprefix
-        final.custom.sops-cached
-      ];
-      text =
-        final.lib.replaceStrings
-          [ "@corp_pins@" "@openvpn_config@" ]
-          [
-            "${final.locallib.secrets + /corp/pins.txt.sops}"
-            "${final.locallib.secrets + /corp/openvpn.conf.sops}"
-          ]
-          (builtins.readFile ./custom/openvpn_corp.sh);
-    };
-
-    corp-pkgs-info = builtins.fromJSON (
-      builtins.readFile (final.locallib.secrets + /corp/packages_info.sops.json)
-    );
-
     throne-run = final.writeShellApplication {
       name = "throne-run";
       runtimeInputs = [ final.throne ];

@@ -9,7 +9,7 @@ fi
 
 config=$(sops-cached --retry @openvpn_config@)
 
-rundir=$(mktemp --directory "/run/user/$(id --user)/openvpn_corp.XXXXXXXX")
+rundir=$(mktemp --directory "/run/user/$(id --user)/openvpn-corp-run.XXXXXXXX")
 sock="$rundir/management.sock"
 fifo="$rundir/agent.fifo"
 mkfifo "$fifo"

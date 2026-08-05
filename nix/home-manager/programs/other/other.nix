@@ -5,7 +5,6 @@
   home = {
     packages = with pkgs; [
       asciinema
-      custom.ldaps
       dos2unix
       hyperfine
       openldap

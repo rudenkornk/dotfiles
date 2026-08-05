@@ -34,15 +34,6 @@ in
     };
   };
 
-  local = {
-    secrets.links =
-      { }
-      // lib.optionalAttrs (user.userkind == "corp") {
-        "${config.home.homeDirectory}/.ssh/corp/config".source =
-          pkgs.locallib.secrets + /corp/ssh_config.sops;
-      };
-  };
-
   systemd.user.services.ssh-agent-keys = {
     Unit = {
       Description = "SSH agent with sops-decrypted keys";

@@ -4,11 +4,11 @@
   fetchurl,
   makeBinaryWrapper,
   fuse,
-  custom,
+  corp,
 }:
 
 let
-  info = custom.corp-pkgs-info.ya;
+  info = corp.pkgs-info.ya;
 in
 stdenv.mkDerivation {
   pname = "ya";

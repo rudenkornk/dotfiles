@@ -73,7 +73,7 @@ binds {
     Ctrl+Alt+F {
         spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
     }
-    Ctrl+Alt+Q {
+    Ctrl+Alt+V {
         spawn "noctalia-shell" "ipc" "call" "settings" "toggle"
     }
     Ctrl+Alt+C {
@@ -210,14 +210,11 @@ binds {
     Alt+Shift+Equal {
         set-window-height "+10%"
     }
-    Ctrl+Alt+G {
+    Ctrl+Alt+Q {
         toggle-window-floating
     }
-    Ctrl+Alt+V {
-        center-column
-    }
     Ctrl+Alt+R {
-        maximize-column
+        center-column
     }
     Ctrl+Alt+T {
         maximize-window-to-edges

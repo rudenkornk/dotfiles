@@ -4,6 +4,7 @@
 {
   home.packages = with pkgs; [
     angular-language-server
+    ansible-language-server
     astro-language-server
     bash-language-server
     docker-compose-language-service
@@ -31,7 +32,6 @@
     vscode-extensions.elixir-lsp.vscode-elixir-ls
     vscode-extensions.gleam.gleam
     vscode-extensions.mathiasfrohlich.kotlin
-    vscode-extensions.redhat.ansible
     vscode-js-debug
     vscode-langservers-extracted
     vtsls

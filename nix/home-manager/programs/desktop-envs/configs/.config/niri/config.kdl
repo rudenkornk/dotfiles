@@ -94,6 +94,23 @@ binds {
     Ctrl+Alt+0 {
         spawn "noctalia-shell" "ipc" "call" "plugin:noctalia-calculator" "toggle"
     }
+    // M-hjkl only navigates niri windows and deliberately does not descend into tmux panes or nvim splits.
+    // Unifying it with the terminal's C-hjkl navigation was analyzed and rejected for the following reasons.
+    // Seamless tmux<->nvim hops rely on three primitives:
+    // 1. Keys forwarded down in-band (`send-keys` into the pane pty).
+    // 2. State inspected via IPC (nvim parses `display-message -p '#{window_layout}'` to detect a pane at the edge).
+    // 3. Actions driven via IPC (nvim runs `select-pane` over the tmux socket).
+    // There is no key ping-pong between the layers.
+    // Niri lacks the first two primitives at its hop: binds are global with no `if-shell` equivalent,
+    // and a Wayland compositor cannot forward a captured key to the focused client.
+    // Emulating this requires a `spawn-sh` script on every press
+    // (`niri msg` + `kitten @ send-key` with remote control),
+    // which costs 10-50ms of latency on all M-hjkl presses system-wide, races on key repeat,
+    // and dead keys in windows without a cooperating leaf app (plain shell, ssh without tmux, full-screen TUIs).
+    // A third bounce-up level would also be required:
+    // tmux at the edge must call `niri msg` via `#{pane_at_*}` flags,
+    // nvim needs a custom at-edge fallback (e.g. smart-splits.nvim `at_edge`),
+    // and `$NIRI_SOCKET` must be resolved dynamically, because the tmux server outlives niri sessions.
     Alt+H {
         focus-column-or-monitor-left
     }

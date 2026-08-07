@@ -9,6 +9,7 @@
     gleam
     go
     jq
+    lean4
     lua5_4
     molecule
     nodejs

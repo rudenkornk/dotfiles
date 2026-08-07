@@ -4,12 +4,12 @@
   br = branch -vv
   ck = checkout
   cm = commit
-  cma = commit --all --message 'a' # Commit all.
+  cma = commit --all --message a # Commit all.
   cmd = commit --amend
   cmm = commit --amend
-  cms = commit --message 's' # Commit staged.
+  cms = commit --message s # Commit staged.
   cp = cherry-pick
-  df = diff
+  df = diff --relative=.
   ft = fetch
   l = log
   lg = log --graph
@@ -22,6 +22,6 @@
   rb = rebase
   rbi = rebase --interactive HEAD~26
   rh = reset --hard
-  sg = diff --staged
+  sg = diff --staged --relative=.
   sh = show
   st = status

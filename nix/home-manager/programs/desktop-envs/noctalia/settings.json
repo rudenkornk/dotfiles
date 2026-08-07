@@ -367,7 +367,7 @@
   "general": {
     "allowPanelsOnScreenWithoutBar": true,
     "allowPasswordWithFprintd": true,
-    "animationDisabled": false,
+    "animationDisabled": true,
     "animationSpeed": 2,
     "autoStartAuth": false,
     "avatarImage": "~/.face",

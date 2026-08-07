@@ -104,6 +104,7 @@ return {
   {
     "folke/sidekick.nvim", -- ai.sidekick
     keys = require("plugins.configs.sidekick").keys,
+    opts = require("plugins.configs.sidekick").opts,
   },
   {
     "ggandor/flit.nvim", -- editor.leap

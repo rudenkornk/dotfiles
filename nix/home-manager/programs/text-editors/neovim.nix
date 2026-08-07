@@ -8,6 +8,7 @@
       enable = true;
       defaultEditor = true;
       withNodeJs = true;
+      withPerl = true;
       withPython3 = true;
       withRuby = true;
 
@@ -59,27 +60,16 @@
           sympy
         ];
 
-      extraPackages =
-        (with pkgs.perlPackages; [
-          Appcpanminus
-          ArchiveTar
-          FileHomeDir
-          Graph
-          LogLog4perl
-          NeovimExt
-          UnicodeString
-          YAMLTiny
-        ])
-
-        # Other tools.
-        ++ (with pkgs; [
-          ghostscript
-          imagemagick
-          lua51Packages.luarocks
-          tree-sitter
-          virtualenv
-          websocat # For typst.
-        ]);
+      # The perl provider is wired up by `withPerl` above, which builds its own perl env
+      # with `Neovim::Ext`. No perl packages are needed here.
+      extraPackages = with pkgs; [
+        ghostscript
+        imagemagick
+        lua51Packages.luarocks
+        tree-sitter
+        virtualenv
+        websocat # For typst.
+      ];
     };
   };
 

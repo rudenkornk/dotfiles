@@ -1,6 +1,13 @@
 { pkgs, config, ... }:
 
 # CLI AI tools.
+
+let
+  skills = {
+    ast-grep = "${pkgs.custom.ast-grep-skill}/share/skills/ast-grep";
+    playwright-cli = "${pkgs.custom.playwright-cli}/share/skills/playwright-cli";
+  };
+in
 {
   home.packages = with pkgs; [
     (locallib.with_secrets { pkg = aider-chat-full; })
@@ -32,10 +39,15 @@
       inherit (config) xdg;
       path = ./configs;
     })
-    // {
-      ".agents/skills/playwright-cli" = {
-        source = "${pkgs.custom.playwright-cli}/share/skills/playwright-cli";
+    # Claude Code and OpenCode read `~/.claude/skills`, Codex reads `~/.codex/skills`.
+    // (pkgs.lib.concatMapAttrs (name: source: {
+      ".claude/skills/${name}" = {
+        inherit source;
         recursive = true;
       };
-    };
+      ".codex/skills/${name}" = {
+        inherit source;
+        recursive = true;
+      };
+    }) skills);
 }

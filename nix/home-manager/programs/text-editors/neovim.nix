@@ -83,6 +83,11 @@
 
       "nvim/lua/config/nix_managed_plugins.lua".text = # Comment preventing fold.
         ''return "${import ./neovim/plugins.nix { inherit pkgs; }}"'';
+
+      # `snacks.picker` loads sqlite3 through luajit ffi. There is no global library path on NixOS,
+      # so we hand it the absolute path to `libsqlite3.so`. Otherwise it falls back to file storage.
+      "nvim/lua/config/nix_sqlite.lua".text = # Comment preventing fold.
+        ''return "${pkgs.sqlite.out}/lib/libsqlite3.so"'';
     };
 
     dataFile =

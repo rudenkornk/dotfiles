@@ -18,6 +18,10 @@ end
 M.opts = {
   picker = {
     hidden = true,
+    db = {
+      -- Absolute path to `libsqlite3.so`, injected by nix. Enables sqlite-backed frecency and history.
+      sqlite3_path = require("config.nix_sqlite"),
+    },
     sources = {
       explorer = {
         ignored = true,

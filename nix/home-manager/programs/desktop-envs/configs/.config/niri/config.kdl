@@ -25,7 +25,6 @@ environment {
 }
 spawn-at-startup "noctalia-shell"
 spawn-at-startup "kitty"
-spawn-sh-at-startup "sleep 5 && noctalia-shell ipc call powerProfile enableNoctaliaPerformance"
 spawn-sh-at-startup "sleep 5 && noctalia-shell ipc call darkMode setLight"
 hotkey-overlay {
     skip-at-startup
@@ -87,6 +86,9 @@ binds {
     }
     Ctrl+Alt+B {
         spawn "noctalia-shell" "ipc" "call" "notifications" "toggleHistory"
+    }
+    Ctrl+Alt+G {
+        spawn "noctalia-shell" "ipc" "call" "notifications" "toggleDND"
     }
     Ctrl+Alt+Z {
         spawn "noctalia-shell" "ipc" "call" "calendar" "toggle"

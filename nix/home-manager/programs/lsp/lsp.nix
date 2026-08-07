@@ -11,6 +11,7 @@
     dockerfile-language-server
     gitlab-ci-ls
     gopls
+    haskell-language-server
     helm-ls
     kotlin-language-server
     lua-language-server

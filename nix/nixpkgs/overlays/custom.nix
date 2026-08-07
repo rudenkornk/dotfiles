@@ -39,5 +39,38 @@ _: final: prev: {
     playwright-cli = import ./custom/playwright-cli.nix final prev;
 
     vim-spell = import ./custom/vim-spell.nix final prev;
+
+    tmux-agent-status =
+      let
+        runtimeInputs = [
+          final.gawk
+          final.procps
+          final.tmux
+          final.uutils-coreutils-noprefix
+        ];
+        tmux-agent-label = final.writeShellApplication {
+          name = "tmux-agent-label";
+          inherit runtimeInputs;
+          text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-label.sh;
+        };
+        tmux-agent-status = final.writeShellApplication {
+          name = "tmux-agent-status";
+          inherit runtimeInputs;
+          text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-status.sh;
+        };
+        tmux-agent-install-format = final.writeShellApplication {
+          name = "tmux-agent-install-format";
+          inherit runtimeInputs;
+          text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-install-format.sh;
+        };
+      in
+      final.symlinkJoin {
+        name = "tmux-agent-status";
+        paths = [
+          tmux-agent-label
+          tmux-agent-status
+          tmux-agent-install-format
+        ];
+      };
   };
 }

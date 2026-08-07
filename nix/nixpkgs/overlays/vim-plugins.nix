@@ -1,6 +1,15 @@
 _: final: prev: {
   unstable = prev.unstable // {
     vimPlugins = prev.unstable.vimPlugins // {
+      # The healthcheck crashes on neovim >= 0.11, which renamed the `vim.health.report_*` API.
+      # Upstream still uses the old names, and only `health.lua` is affected, so patch it in place.
+      # https://github.com/GCBallesteros/jupytext.nvim
+      jupytext-nvim = prev.unstable.vimPlugins.jupytext-nvim.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          substituteInPlace lua/jupytext/health.lua --replace-fail "vim.health.report_" "vim.health."
+        '';
+      });
+
       # TODO(rudenkornk): remove this overlay once LazyVim supports all the quirks.
       # Special treatment for leap, which migrated to new repo and also rewritten some code.
       # LazyVim seemingly adapted, but for some reason it does not work.

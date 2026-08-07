@@ -109,7 +109,7 @@
         "nvim/mason/packages/svelte-language-server/node_modules/typescript-svelte-plugin".source =
           "${pkgs.svelte-language-server}/lib/node_modules/svelte-language-server/packages/typescript-plugin/";
         "nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js".source =
-          "${pkgs.vscode-js-debug}/lib/node_modules/js-debug/src/dapDebugServer.ts";
+          "${pkgs.vscode-js-debug}/lib/node_modules/js-debug/dist/src/dapDebugServer.js";
         "nvim/mason/packages/vue-language-server/node_modules/@vue/language-server".source =
           "${pkgs.vue-language-server}/lib/language-tools/packages/language-server";
       };

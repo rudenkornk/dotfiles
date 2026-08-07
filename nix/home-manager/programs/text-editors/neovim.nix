@@ -11,6 +11,13 @@
       withPython3 = true;
       withRuby = true;
 
+      # We manage `init.lua` ourselves via the recursive `xdg.configFile."nvim"` below.
+      # Without this, our `config/init.lua` clobbers the one home-manager generates,
+      # which carries the `extraLuaPackages` `package.path`/`cpath` bootstrap and the provider host vars,
+      # so `require("jsregexp")` and the Node provider break.
+      # With this set, home-manager loads that bootstrap through a wrapper `--cmd` instead.
+      sideloadInitLua = true;
+
       plugins = [ pkgs.unstable.vimPlugins.lazy-nvim ]; # Only lazy-nvim itself is loaded as a Neovim plugin.
 
       extraWrapperArgs = [

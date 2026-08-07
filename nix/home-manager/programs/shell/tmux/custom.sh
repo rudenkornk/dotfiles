@@ -21,8 +21,14 @@ display_keyboard_layout() {
 }
 
 main() {
-  echo -n "  "
-  df /home --block-size G | awk 'NR==2 {printf "%.1fTiB/%.1fTiB  ", $3 / 1024, $2 / 1024}'
+  short=false
+
+  echo -n " "
+  if [ "$short" = true ]; then
+    df /home --block-size G | awk 'NR==2 {printf "%.1fT", $3 / 1024}'
+  else
+    df /home --block-size G | awk 'NR==2 {printf "%.1fTiB/%.1fTiB  ", $3 / 1024, $2 / 1024}'
+  fi
 
   # display_keyboard_layout
 

@@ -1,0 +1,45 @@
+{
+  "hooks": {
+    "BeforeModel": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running --emit-json"
+          }
+        ]
+      }
+    ],
+    "BeforeTool": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running --emit-json"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state waiting --emit-json"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state done --emit-json"
+          }
+        ]
+      }
+    ]
+  }
+}

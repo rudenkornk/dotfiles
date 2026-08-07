@@ -119,6 +119,7 @@
 
   home = {
     packages = with pkgs; [
+      inotify-tools # Faster LSP file watching than the libuv fallback.
       sqlite
       vim
       wl-clipboard

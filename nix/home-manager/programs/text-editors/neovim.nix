@@ -94,7 +94,11 @@
       in
       {
         "nvim/site/parser".source = "${treesitterGrammars}/parser/";
-        "nvim/site/queries".source = "${treesitterGrammars}/queries/";
+        # Queries come from the plugin, not the grammar derivations. The latter omit the
+        # inheritance-only base modules (`ecma`, `jsx`, `html_tags`), so every language whose
+        # query does `; inherits: ecma` (javascript, typescript, tsx, vue, svelte, ...) fails to load.
+        # The plugin ships the complete curated set; it is identical to the grammar queries otherwise.
+        "nvim/site/queries".source = "${pkgs.unstable.vimPlugins.nvim-treesitter}/runtime/queries/";
         "nvim/site/spell".source = "${pkgs.custom.vim-spell}/spell/";
 
         # Workaround for missing mason packages in neovim.

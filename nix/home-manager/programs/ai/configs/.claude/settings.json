@@ -36,5 +36,69 @@
       "Read(~/.config/google-chrome/**)",
       "Edit(~/.config/google-chrome/**)"
     ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt|idle_prompt|elicitation_dialog|agent_needs_input",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state waiting"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state done"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state error"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state clear"
+          }
+        ]
+      }
+    ]
   }
 }

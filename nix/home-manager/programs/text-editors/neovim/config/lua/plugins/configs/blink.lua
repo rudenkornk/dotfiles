@@ -2,9 +2,9 @@ local M = {}
 
 local kind_icons = {
   claude = " ",
-  openai = " ",
+  openai = " ",
   codestral = "󰬔 ",
-  gemini = " ",
+  gemini = " ",
   Groq = "",
   Openrouter = "󱂇 ",
   Ollama = "󰳆 ",

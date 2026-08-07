@@ -72,10 +72,10 @@
             set -g pane-active-border-style fg=#80f0ff,bg=#1a1b26
 
 
-            set -g @ukiyo-plugins "network-bandwidth cpu-usage ram-usage custom:${./tmux/custom.sh} ssh-session"
+            set -g @ukiyo-plugins "ssh-session"
             set -g @ukiyo-show-powerline true
 
-            set -g @ukiyo-left-icon "#(date '+%d.%m.%y %R (%a)')"
+            set -g @ukiyo-left-icon "session"
 
             set -g @ukiyo-custom-plugin-colors "info bg_pane"
 

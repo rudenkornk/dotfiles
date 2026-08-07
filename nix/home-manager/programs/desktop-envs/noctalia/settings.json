@@ -171,6 +171,28 @@
           "textColor": "none"
         },
         {
+          "compactMode": false,
+          "diskPath": "/persistent",
+          "iconColor": "none",
+          "id": "SystemMonitor",
+          "showCpuCores": false,
+          "showCpuFreq": false,
+          "showCpuTemp": false,
+          "showCpuUsage": true,
+          "showDiskAvailable": false,
+          "showDiskUsage": true,
+          "showDiskUsageAsPercent": false,
+          "showGpuTemp": false,
+          "showLoadAverage": false,
+          "showMemoryAsPercent": false,
+          "showMemoryUsage": true,
+          "showNetworkStats": true,
+          "showSwapUsage": false,
+          "textColor": "none",
+          "useMonospaceFont": true,
+          "usePadding": true
+        },
+        {
           "applyToAllMonitors": false,
           "displayMode": "alwaysShow",
           "iconColor": "none",

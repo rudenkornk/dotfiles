@@ -79,6 +79,23 @@ status="$(tmux show-option -wqv -t "$win" @agent_status 2>/dev/null || true)"
 # started later in this window does not inherit its predecessor's state.
 if [ -z "$icon" ]; then
   [ -z "$status" ] || tmux set-option -wu -t "$win" @agent_status 2>/dev/null || true
+  # `@agent_name_user` is the ownership marker set by tmux-agent-name on its first attempt:
+  # absent means the window's name was never touched and is not ours to manage.
+  # Present means restore the saved tab name (or re-enable auto-naming for the
+  # `<automatic>` sentinel, which must match tmux-agent-name) and drop all naming state.
+  user_name="$(tmux show-option -wqv -t "$win" @agent_name_user 2>/dev/null || true)"
+  if [ -n "$user_name" ]; then
+    tmux set-option -wu -t "$win" @agent_named 2>/dev/null || true
+    tmux set-option -wu -t "$win" @agent_name_material 2>/dev/null || true
+    tmux set-option -wu -t "$win" @agent_name_refresh 2>/dev/null || true
+    tmux set-option -wu -t "$win" @agent_name_tries 2>/dev/null || true
+    tmux set-option -wu -t "$win" @agent_name_user 2>/dev/null || true
+    if [ "$user_name" = "<automatic>" ]; then
+      tmux set-option -w -t "$win" automatic-rename on 2>/dev/null || true
+    else
+      tmux rename-window -t "$win" "$user_name" 2>/dev/null || true
+    fi
+  fi
   exit 0
 fi
 

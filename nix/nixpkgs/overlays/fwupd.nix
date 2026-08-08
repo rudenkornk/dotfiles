@@ -40,6 +40,9 @@
 #     (signing + placing the binary) but relies on a runtime variable that fwupd
 #     does not actually read —
 #     the only way to close this gap is to teach fwupd about that variable.
+#
+# Will be fixed in https://github.com/NixOS/nixpkgs/pull/524756
+
 _: final: prev: {
   fwupd = prev.fwupd.overrideAttrs (oldAttrs: {
     postPatch = (oldAttrs.postPatch or "") + ''

@@ -3,7 +3,8 @@
 #
 # The single entry point for all naming material: callers either push text they consider
 # a good task description, or ask the script to pull the agent-authored pane title.
-# The script owns the whole update sequence: state checks, the model call, sanitizing and the rename.
+# The name is distilled from that material locally (the summary is already the running agent's
+# own generation, so no external model is involved); the script owns the whole update sequence.
 #
 # Usage: tmux-agent-name set --source <kind> [options]
 #   --source title:      Pull the agent-authored pane title (the terminal summary channel).
@@ -18,21 +19,16 @@
 #   --emit-json: Print `{}` on exit for hook runners that expect JSON output (e.g. Gemini).
 #
 # Per-window state:
-#   @agent_named:         `pending` while a model call is in flight, then the chosen name.
-#   @agent_name_material: The material text the current name was derived from.
+#   @agent_name_material: The material the current name was derived from; dedupes re-fires.
 #   @agent_name_refresh:  Whether the name may still be updated; unset means true.
 #                         Stable sources (title, summary) keep it true and re-fire on change,
 #                         noisy ones (prompt, transcript) set it to false, locking the name.
-#   @agent_name_tries:    Failed model calls for the current material.
-#   @agent_name_user:     The tab name the window had before the first naming attempt
+#   @agent_name_user:     The tab name the window had before the first rename
 #                         (or the `<automatic>` sentinel when it was auto-named).
 #                         Doubles as the ownership marker: tmux-agent-label restores from it
 #                         and drops all of the state above when the agent exits.
 set -euo pipefail
 
-# How many failed model calls to tolerate per material before giving up on it.
-max_tries=3
-model=openrouter/auto
 # Must match the sentinel in tmux-agent-label.
 automatic_sentinel="<automatic>"
 
@@ -162,18 +158,50 @@ if [ -z "$material" ]; then
   exit 0
 fi
 
-named="$(tmux show-option -wqv -t "$win" @agent_named 2>/dev/null || true)"
 flag="$(tmux show-option -wqv -t "$win" @agent_name_refresh 2>/dev/null || true)"
 last="$(tmux show-option -wqv -t "$win" @agent_name_material 2>/dev/null || true)"
-if [ "$named" = "pending" ] || [ "$flag" = "false" ] || [ "$material" = "$last" ]; then
+if [ "$flag" = "false" ] || [ "$material" = "$last" ]; then
   finish
   exit 0
 fi
 
-# Take the lock before going async, so concurrent callers cannot double-fire.
-tmux set-option -w -t "$win" @agent_named pending 2>/dev/null || true
+# Distill a two-word tab name from the material. `stop` holds the words that carry no task
+# identity - articles, prepositions, and the generic verbs summaries open with - one arg each
+# so the whole-word matching below has clean boundaries.
+stop=" $(printf '%s ' \
+  a an the to in on of for and or with from into via new my this that is are be \
+  add adds added adding fix fixes fixed fixing update updates updated updating \
+  use uses used using make makes made making set sets setting \
+  create creates created creating investigate investigates investigated investigating \
+  analyze analyzes analyzed analyzing debug debugs debugged debugging \
+  refactor refactors refactored refactoring implement implements implemented implementing \
+  rewrite rewrites rewrote rewriting support supports supported supporting \
+  enable enables enabled enabling allow allows allowed allowing \
+  build builds built building run runs ran running \
+  check checks checked checking test tests tested testing)"
 
-# On the first attempt, remember the tab name the user had, so it can be restored on agent exit.
+# Lowercase, then split on anything that is not an identifier char (keeps foo_bar and foo-bar whole).
+words="$(printf '%s' "$material" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_-' ' ')"
+
+# Keep the first two distinctive (non-stopword) tokens.
+name=""
+count=0
+for token in $words; do
+  case "$stop" in *" $token "*) continue ;; esac
+  name="$name $token"
+  count=$((count + 1))
+  [ "$count" -ge 2 ] && break
+done
+# An all-stopword summary falls back to its first two tokens verbatim.
+[ -n "$name" ] || name="$words"
+name="$(printf '%s' "$name" | tr -s ' ' '\n' | grep -m2 . | paste -sd- - | cut -c1-25 || true)"
+
+if [ -z "$name" ]; then
+  finish
+  exit 0
+fi
+
+# On the first rename, remember the tab name the user had, so it can be restored on agent exit.
 # A window-level `automatic-rename off` means the current name is a manual one worth keeping;
 # otherwise the window was auto-named and the sentinel says "hand naming back to tmux".
 if [ -z "$(tmux show-option -wqv -t "$win" @agent_name_user 2>/dev/null || true)" ]; then
@@ -185,52 +213,10 @@ if [ -z "$(tmux show-option -wqv -t "$win" @agent_name_user 2>/dev/null || true)
   tmux set-option -w -t "$win" @agent_name_user "$user_name" 2>/dev/null || true
 fi
 
-# The model call runs in the background, so a hook caller never delays its agent.
-(
-  # The router may land on reasoning models, which need a generous `max_tokens` to leave room
-  # for their thinking (an empty answer otherwise); only a few answer tokens are actually generated.
-  body="$(jq -n --arg m "$model" --arg t "$material" '{
-    model: $m,
-    max_tokens: 2000,
-    reasoning: {enabled: false},
-    messages: [{
-      role: "user",
-      content: ("Reply with EXACTLY TWO words most distinctively describing the task. "
-        + "No punctuation, no explanation. Task description: " + $t)
-    }]
-  }')"
-
-  # Latency is spiky, especially on free-pool models: usually seconds, sometimes closer to a minute.
-  name="$(curl -sS --max-time 90 https://openrouter.ai/api/v1/chat/completions \
-    -H "Authorization: Bearer ${OPENROUTER_API_KEY:-}" \
-    -H 'Content-Type: application/json' \
-    -d "$body" | jq -r '.choices[0].message.content // empty' || true)"
-
-  # Keep only the first two words, hyphen-joined, and strip whatever decoration the model added.
-  name="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_-' '\n' | grep -m2 . | paste -sd- - || true)"
-  name="${name:0:25}"
-
-  if [ -n "$name" ]; then
-    # `rename-window` also flips this window's automatic-rename off, so the name sticks.
-    tmux rename-window -t "$win" "$name" 2>/dev/null || true
-    tmux set-option -w -t "$win" @agent_named "$name" 2>/dev/null || true
-    tmux set-option -w -t "$win" @agent_name_material "$material" 2>/dev/null || true
-    tmux set-option -w -t "$win" @agent_name_refresh "$refresh" 2>/dev/null || true
-    tmux set-option -wu -t "$win" @agent_name_tries 2>/dev/null || true
-  else
-    # Models flake; release the lock so the caller may retry, but only a few times per material.
-    # On give-up the material is marked consumed anyway, so a later change starts fresh.
-    tries="$(tmux show-option -wqv -t "$win" @agent_name_tries 2>/dev/null || true)"
-    tries=$((${tries:-0} + 1))
-    if [ "$tries" -ge "$max_tries" ]; then
-      tmux set-option -w -t "$win" @agent_name_material "$material" 2>/dev/null || true
-      tmux set-option -wu -t "$win" @agent_name_tries 2>/dev/null || true
-    else
-      tmux set-option -w -t "$win" @agent_name_tries "$tries" 2>/dev/null || true
-    fi
-    tmux set-option -wu -t "$win" @agent_named 2>/dev/null || true
-  fi
-) </dev/null >/dev/null 2>&1 &
+# `rename-window` also flips this window's automatic-rename off, so the name sticks.
+tmux rename-window -t "$win" "$name" 2>/dev/null || true
+tmux set-option -w -t "$win" @agent_name_material "$material" 2>/dev/null || true
+tmux set-option -w -t "$win" @agent_name_refresh "$refresh" 2>/dev/null || true
 
 finish
 exit 0

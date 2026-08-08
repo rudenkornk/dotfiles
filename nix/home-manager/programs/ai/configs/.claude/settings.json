@@ -66,6 +66,10 @@
           {
             "type": "command",
             "command": "tmux-agent-status set --state waiting"
+          },
+          {
+            "type": "command",
+            "command": "tmux-agent-name set --source title"
           }
         ]
       }
@@ -76,6 +80,10 @@
           {
             "type": "command",
             "command": "tmux-agent-status set --state done"
+          },
+          {
+            "type": "command",
+            "command": "tmux-agent-name set --source title"
           }
         ]
       }

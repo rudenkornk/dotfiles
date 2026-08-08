@@ -41,6 +41,11 @@ export const AgentStatus: Plugin = async ({ $ }) => {
   // Remember the error and let it survive that one idle; any new activity clears it.
   let errored = false;
 
+  // opencode AI-generates a session title (shown in its session list) and re-emits
+  // `session.updated` on every session change; forward the title as naming material
+  // only when it actually changed, so we do not spawn a process per event.
+  let lastTitle = "";
+
   return {
     event: async ({ event }) => {
       // `question.*` events are runtime-only and absent from the SDK's typed
@@ -85,6 +90,15 @@ export const AgentStatus: Plugin = async ({ $ }) => {
           if (name === "MessageAbortedError") break;
           errored = true;
           setState("error");
+          break;
+        }
+        case "session.updated": {
+          const title = (props as { info?: { title?: string } } | undefined)
+            ?.info?.title;
+          if (title && title !== lastTitle) {
+            lastTitle = title;
+            await $`tmux-agent-name set --source summary --text ${title}`;
+          }
           break;
         }
       }

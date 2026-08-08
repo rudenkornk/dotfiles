@@ -34,7 +34,6 @@
     "lazyvim.plugins.extras.lang.git",
     "lazyvim.plugins.extras.lang.gleam",
     "lazyvim.plugins.extras.lang.go",
-    "lazyvim.plugins.extras.lang.haskell",
     "lazyvim.plugins.extras.lang.helm",
     "lazyvim.plugins.extras.lang.java",
     "lazyvim.plugins.extras.lang.json",

@@ -28,8 +28,6 @@ let
     gitsigns-nvim
     grug-far-nvim
     gruvbox-nvim
-    haskell-snippets-nvim
-    haskell-tools-nvim
     helm-ls-nvim
     inc-rename-nvim
     iron-nvim
@@ -62,7 +60,6 @@ let
     neotest-go
     neotest-golang
     neotest-gtest
-    neotest-haskell
     neotest-pest
     neotest-phpunit
     neotest-python

@@ -67,13 +67,10 @@ _: final: prev: {
           inherit runtimeInputs;
           text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-install-format.sh;
         };
-        # Wrapped with `with_secrets` to access API keys for AI agent calls.
-        tmux-agent-name = final.locallib.with_secrets {
-          pkg = final.writeShellApplication {
-            name = "tmux-agent-name";
-            inherit runtimeInputs;
-            text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-name.sh;
-          };
+        tmux-agent-name = final.writeShellApplication {
+          name = "tmux-agent-name";
+          inherit runtimeInputs;
+          text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-name.sh;
         };
       in
       final.symlinkJoin {

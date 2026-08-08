@@ -22,7 +22,7 @@
     // ctrl-s tmux reserved.
     // ctrl-t model variants.
     // ctrl-u (half) page up.
-    // ctrl-v paste.
+    // ctrl-v (half) page down (previously paste, remapped to match quirky claude mappings).
     // ctrl-w delete one word to the left.
     // ctrl-x leader key.
     // ctrl-y scroll up one line.
@@ -36,7 +36,7 @@
 
     "command_list": "ctrl+o",
     "messages_first": "home",
-    "messages_half_page_down": "ctrl+d",
+    "messages_half_page_down": "ctrl+d,ctrl+v",
     "messages_half_page_up": "ctrl+u",
     "messages_line_down": "ctrl+e",
     "messages_line_up": "ctrl+y",
@@ -53,6 +53,7 @@
     "input_move_down": "ctrl+n,down",
     "input_visual_line_end": "none",
     "input_line_end": "none",
+    "input_paste": "none",
 
     "input_newline": "return,shift+return",
     "input_submit": "ctrl+return",

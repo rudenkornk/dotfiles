@@ -43,7 +43,11 @@ _: final: prev: {
     tmux-agent-status =
       let
         runtimeInputs = [
+          final.curl
           final.gawk
+          final.gnugrep
+          final.gnused
+          final.jq
           final.procps
           final.tmux
           final.uutils-coreutils-noprefix
@@ -63,6 +67,14 @@ _: final: prev: {
           inherit runtimeInputs;
           text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-install-format.sh;
         };
+        # Wrapped with `with_secrets` to access API keys for AI agent calls.
+        tmux-agent-name = final.locallib.with_secrets {
+          pkg = final.writeShellApplication {
+            name = "tmux-agent-name";
+            inherit runtimeInputs;
+            text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-name.sh;
+          };
+        };
       in
       final.symlinkJoin {
         name = "tmux-agent-status";
@@ -70,6 +82,7 @@ _: final: prev: {
           tmux-agent-label
           tmux-agent-status
           tmux-agent-install-format
+          tmux-agent-name
         ];
       };
   };

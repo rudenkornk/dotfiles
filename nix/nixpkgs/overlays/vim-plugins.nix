@@ -28,6 +28,43 @@ _: final: prev: {
           "lazyvim.plugins.extras.lang.typescript"
         ];
       });
+      # nixpkgs generates `nvim-treesitter` grammars through the intermediary `nurr` repo,
+      # which lags a few hours behind the plugin itself.
+      # The current unstable snapshot caught this window for the `diff` grammar:
+      # it is built at an old revision without the `change` node,
+      # while the plugin queries already reference it,
+      # so every diff buffer (e.g. a commit message) fails to highlight.
+      # Pin the grammar to the revision from the plugin's `lua/nvim-treesitter/parsers.lua`.
+      # The assert fails the evaluation as soon as nixpkgs bumps the grammar,
+      # forcing a re-check of the pin instead of silently applying a by-then-outdated version.
+      # TODO(rudenkornk): remove this overlay once https://github.com/NixOS/nixpkgs/pull/547258
+      # reaches the unstable channel.
+      nvim-treesitter =
+        let
+          base = prev.unstable.vimPlugins.nvim-treesitter;
+          brokenVersion = "0.0.0+rev=7d20331";
+          fixedDiff = base.builtGrammars.diff.overrideAttrs (_: {
+            version = "0.0.0+rev=1a24d30";
+            src = final.fetchFromGitHub {
+              owner = "tree-sitter-grammars";
+              repo = "tree-sitter-diff";
+              rev = "1a24d30d9b2b0bbf8420e229164462f410fb3ad0";
+              hash = "sha256-GmnHPkdF9MpEyP3CGsGMgiptjemrD5BaU9f6fiGGjJ8=";
+            };
+          });
+          fixedGrammars = map (g: if g.language or null == "diff" then fixedDiff else g) base.allGrammars;
+        in
+        assert final.lib.assertMsg (base.builtGrammars.diff.version == brokenVersion) ''
+          nixpkgs bumped the nvim-treesitter `diff` grammar from ${brokenVersion}
+          to ${base.builtGrammars.diff.version}.
+          The pinned override is now stale: check whether the new grammar matches the plugin queries
+          and drop (or update) this overlay.'';
+        base.overrideAttrs (old: {
+          passthru = old.passthru or { } // {
+            withAllGrammars = base.withPlugins (_: fixedGrammars);
+          };
+        });
+
       leap-nvim = prev.unstable.vimPlugins.leap-nvim.overrideAttrs (_: {
         version = "2025-11-21";
         src = final.fetchFromGitHub {

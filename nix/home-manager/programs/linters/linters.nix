@@ -13,13 +13,11 @@
     cmake-lint
     cpplint
     eslint
-    fourmolu
     ghalint
     gitleaks
     gitlint
     gofumpt
     golangci-lint
-    haskellPackages.cabal-fmt
     isort
     kdlfmt
     ktlint

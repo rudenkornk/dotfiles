@@ -48,6 +48,8 @@ _: final: prev: {
           final.gnugrep
           final.gnused
           final.jq
+          final.libnotify
+          final.niri
           final.procps
           final.tmux
           final.uutils-coreutils-noprefix

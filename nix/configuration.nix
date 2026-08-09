@@ -201,6 +201,11 @@
       enable = true;
     };
 
+    # Fingerprint.
+    fprintd = {
+      enable = true;
+    };
+
     pcscd = {
       enable = true;
     };
@@ -209,6 +214,9 @@
   # Enable sound with pipewire.
   security = {
     rtkit.enable = true;
+    # Enabling fprintd defaults fprintAuth to true for all PAM services.
+    # Keep terminal sudo password-only.
+    pam.services.sudo.fprintAuth = false;
     # /var/db/sudo (lecture tracking) is not preserved across reboots in the
     # impermanence setup, so disable the one-time lecture to avoid it printing
     # on every first sudo invocation after boot.

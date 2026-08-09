@@ -6,13 +6,20 @@ set -euo pipefail
 win="${1:-}"
 [ -n "$win" ] || exit 0
 
+# Map one candidate executable token (see subtree_exes) to the agent's identity glyph.
 match_agent() {
-  case "$1" in
-  *cursor-agent*) printf '#[fg=#dadada] #[fg=default]' ;;
-  *claude*) printf '#[fg=#d97757] #[fg=default]' ;;
-  *codex*) printf '#[fg=#10a37f] #[fg=default]' ;;
-  *gemini*) printf '#[fg=#4796e3] #[fg=default]' ;;
-  *opencode*) printf '#[fg=#9aa5ce]󱞟 #[fg=default]' ;;
+  local base="${1##*/}"
+  base="${base#.}"
+  base="${base%-wrapped}"
+  base="${base%.js}"
+  base="${base%.mjs}"
+  base="${base%.cjs}"
+  case "$base" in
+  cursor-agent) printf '#[fg=#dadada] #[fg=default]' ;;
+  claude) printf '#[fg=#d97757] #[fg=default]' ;;
+  codex) printf '#[fg=#10a37f] #[fg=default]' ;;
+  gemini) printf '#[fg=#4796e3] #[fg=default]' ;;
+  opencode) printf '#[fg=#9aa5ce]󱞟 #[fg=default]' ;;
   *) : ;;
   esac
 }
@@ -30,9 +37,13 @@ render_status() {
   esac
 }
 
-# Print the command lines of the process subtree rooted at $1 (inclusive),
-# found via a breadth-first walk over a single ps snapshot.
-subtree_args() {
+# Print candidate executable tokens, one per line, for the process subtree rooted at $1
+# (inclusive), found via a breadth-first walk over a single ps snapshot.
+# Each process contributes its argv[0], plus the script path (the first non-option
+# argument) when argv[0] is a script interpreter - which is how gemini runs
+# (`node --no-warnings=... .../gemini.js`). File arguments of ordinary programs
+# (an editor opening `~/.claude/settings.json`) are deliberately never emitted.
+subtree_exes() {
   local root="$1" snap pids frontier next kids k
   [ -n "$root" ] || return 0
   snap="$(ps -eo pid=,ppid=,args= 2>/dev/null || true)"
@@ -55,20 +66,28 @@ subtree_args() {
     frontier="$next"
   done
 
-  printf '%s\n' "$snap" | awk -v ids="$pids" 'index(ids, " " $1 " ") { $1=""; $2=""; print }'
+  printf '%s\n' "$snap" | awk -v ids="$pids" 'index(ids, " " $1 " ") {
+    print $3
+    base = $3
+    sub(".*/", "", base)
+    if (base ~ /^(node|bun|deno|python[0-9.]*)$/)
+      for (i = 4; i <= NF; i++) if ($i !~ /^-/) { print $i; break }
+  }'
 }
 
 # Identity glyph for a whole window: first agent found across any of its panes.
 # Keying on the window (not the active pane) shows the icon regardless of focus.
 detect_window() {
-  local w="$1" pid out
+  local w="$1" pid tok out
   while read -r pid; do
     [ -n "$pid" ] || continue
-    out="$(match_agent "$(subtree_args "$pid")")"
-    if [ -n "$out" ]; then
-      printf '%s' "$out"
-      return 0
-    fi
+    while read -r tok; do
+      out="$(match_agent "$tok")"
+      if [ -n "$out" ]; then
+        printf '%s' "$out"
+        return 0
+      fi
+    done < <(subtree_exes "$pid")
   done < <(tmux list-panes -t "$w" -F '#{pane_pid}' 2>/dev/null || true)
 }
 

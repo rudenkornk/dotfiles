@@ -11,10 +11,14 @@ in
 {
   home.packages = with pkgs; [
     (locallib.with_secrets { pkg = aider-chat-full; })
-    (locallib.with_secrets { pkg = unstable.claude-code; })
-    (locallib.with_secrets { pkg = unstable.codex; })
+    (locallib.with_secrets { pkg = amazon-q-cli; })
     (locallib.with_secrets { pkg = cursor-cli; })
     (locallib.with_secrets { pkg = gemini-cli; })
+    (locallib.with_secrets { pkg = github-copilot-cli; })
+    (locallib.with_secrets { pkg = grok-cli; })
+    (locallib.with_secrets { pkg = pi-coding-agent; })
+    (locallib.with_secrets { pkg = unstable.claude-code; })
+    (locallib.with_secrets { pkg = unstable.codex; })
     (locallib.with_secrets {
       pkg = nur.repos.charmbracelet.crush;
       binary = "crush";

@@ -63,6 +63,36 @@
         ]
       }
     ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running"
+          },
+          {
+            "type": "command",
+            "command": "tmux-agent-name set --source title"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state done"
+          },
+          {
+            "type": "command",
+            "command": "tmux-agent-name set --source title"
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "permission_prompt|idle_prompt|elicitation_dialog|agent_needs_input",

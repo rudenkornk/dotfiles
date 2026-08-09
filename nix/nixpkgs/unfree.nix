@@ -29,6 +29,7 @@ builtins.any (prefix: lib.hasPrefix prefix (lib.getName pkg)) [
   # Generic apps.
   "corefonts"
   "google-chrome"
+  "packer"
   "terraform"
   "unrar"
   "vagrant"

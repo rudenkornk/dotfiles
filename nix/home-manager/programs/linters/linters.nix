@@ -26,6 +26,7 @@
     markdownlint-cli2
     mypy
     nixfmt
+    packer
     phpPackages.php-cs-fixer
     prettier
     pylint

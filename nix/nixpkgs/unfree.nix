@@ -17,12 +17,14 @@ builtins.any (prefix: lib.hasPrefix prefix (lib.getName pkg)) [
   "samsung-unified-linux-driver"
 
   # AI.
+  "amazon-q-"
   "claude-"
   "copilot-"
   "crush"
   "cursor-"
   "gemini-"
   "github-"
+  "grok-"
 
   # Generic apps.
   "corefonts"

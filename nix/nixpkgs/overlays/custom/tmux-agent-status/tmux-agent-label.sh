@@ -23,7 +23,7 @@ render_status() {
   local color="${2:-default}"
   case "$1" in
   running) printf '#[fg=%s]#[fg=default]' "$color" ;;
-  waiting) printf '#[fg=#f5680a]⏸ #[fg=default]' ;;
+  waiting) printf '#[fg=#ffba0a]⏸ #[fg=default]' ;;
   done) printf '#[fg=#9ece6a]󰸞 #[fg=default]' ;;
   error) printf '#[fg=#db4b4b] #[fg=default]' ;;
   *) : ;;

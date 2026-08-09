@@ -77,18 +77,23 @@
         networkmanager-ssh
       ];
     };
-    wireless = {
-      enableHardening = false; # Allow usage of smart cards and TPM for wifi connections.
-      extraConfig = ''
-        # Note: this configuration is a no-op due to NetworkManager not passing it to wpa_supplicant.
-        # It is only specified here if any future upstream changes fix the problem.
-        # See `./nix/nixpkgs/overlays/wpa_supplicant.nix` in this repo for details.
+    # Allow usage of smart cards and TPM for wifi connections.
+    # A pending nixpkgs change (branch `nixos-wireless-pkcs11-engine`) pokes the required
+    # holes in the hardened service instead, allowing to re-enable hardening once it lands.
+    wireless.enableHardening = false;
+  };
 
-        # Hint wpa_supplicant on where to search for hardware-keys providers.
-        pkcs11_engine_path=/run/current-system/sw/lib/engines/pkcs11.so
-        pkcs11_module_path=/run/current-system/sw/lib/libtpm2_pkcs11.so
-      '';
-    };
+  systemd.services.wpa_supplicant.environment = {
+    # OpenSSL's dynamic engine loader only searches OpenSSL's own store path,
+    # which does not contain the `pkcs11` engine (it is built separately, in `libp11`),
+    # so `ENGINE_by_id("pkcs11")` fails unless the search path is redirected to `libp11`.
+    # Backport of `networking.wireless.pkcs11.enable` pending in nixpkgs
+    # (branch `nixos-wireless-pkcs11-engine`).
+    # See `./nix/nixpkgs/overlays/libp11.nix` for the whole picture.
+    OPENSSL_ENGINES = "${pkgs.lib.getLib pkgs.libp11}/lib/engines";
+    # `security.tpm2.tctiEnvironment` exports this variable only to login shells,
+    # not to systemd units, so mirror it here for the TPM2 PKCS#11 module.
+    inherit (config.environment.variables) TPM2_PKCS11_TCTI;
   };
   local = {
     secrets = {
@@ -291,10 +296,13 @@
       tpm2-pkcs11
     ];
     etc = {
-      # W/A for p11 tool not finding libtpm2.
-      "pkcs11/modules/libtpm2-pkcs11".text = ''
-        module: /run/current-system/sw/lib/libtpm2_pkcs11.so
-        critical: yes
+      # Register the TPM2 module with p11-kit, so that PKCS#11 consumers going through
+      # the p11-kit proxy (the OpenSSL `pkcs11` engine, Firefox, `p11tool`) discover the
+      # TPM2 token without per-application module path configuration.
+      # Backport of a pending `security.tpm2` change in nixpkgs (branch `nixos-tpm2-p11-kit-module`).
+      # See `./nix/nixpkgs/overlays/libp11.nix` for the whole picture.
+      "pkcs11/modules/tpm2_pkcs11.module".text = ''
+        module: ${pkgs.lib.getLib config.security.tpm2.pkcs11.package}/lib/libtpm2_pkcs11.so
       '';
       # System-wide htop defaults. htop reads `/etc/htoprc` when a user has no
       # `~/.config/htop/htoprc`. Regular users get their own via home-manager,

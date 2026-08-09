@@ -386,6 +386,15 @@ they fit within 120 characters. A sentence must never be split across a line bou
 -- whereas I need a root of entire project.
 ```
 
+## Commit Message Style
+
+Commit messages must be short.
+In ~95% of cases the message is only the title (`type(scope): summary`, as in the existing history) — no body at all.
+
+A small body is allowed only for notes about git ordering and implementation plans rather than about the code itself —
+e.g. "Preparation for the upcoming change...", or how this commit relates to neighboring patches in a series.
+All information related to the code itself MUST live in the code (comments, docs), not in the commit message.
+
 ## Trust These Instructions
 
 These instructions are comprehensive and tested. Only search for additional information if:

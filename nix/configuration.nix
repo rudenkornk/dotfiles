@@ -232,22 +232,24 @@
     };
   };
 
-  users.users = builtins.mapAttrs (name: user: {
-    isNormalUser = true;
-    inherit (user) description;
+  users = {
+    users = builtins.mapAttrs (name: user: {
+      isNormalUser = true;
+      inherit (user) description;
 
-    # Keeping initialPassword open in case anyone blindly tries this config.
-    initialPassword = "123";
-    extraGroups = [
-      "docker"
-      "i2c"
-      "libvirtd"
-      "networkmanager"
-      "tss"
-      "wheel"
-      "wireshark"
-    ];
-  }) users;
+      # Keeping initialPassword open in case anyone blindly tries this config.
+      initialPassword = "123";
+      extraGroups = [
+        "docker"
+        "i2c"
+        "libvirtd"
+        "networkmanager"
+        "tss"
+        "wheel"
+        "wireshark"
+      ];
+    }) users;
+  };
 
   home-manager = {
     extraSpecialArgs = {

@@ -97,6 +97,7 @@ files.extend-exclude = [
   "*.sops",
   "*.sops.json",
   "*.sops.yaml",
+  "hashedPasswordFile",
   "lazy-lock.json",
 ]
 

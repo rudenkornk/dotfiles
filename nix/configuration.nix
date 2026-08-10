@@ -121,11 +121,41 @@
         "-/run/pcscd"
         "-/etc/tpm2_pkcs11"
       ];
+      # TEMPORARY, for testing the hardened token access: the wifi profile references its
+      # client certificate at root's sops-cached path, which the sandbox cannot see.
+      # The read access is a three-piece construction, tested outside the service
+      # with a sandbox replica (see `wpa-supplicant-cert-access` below for the third piece):
+      # 1. The bind makes the certificate symlink and its decrypted target visible.
+      # 2. `ProtectHome=true` would plant an inaccessible mask over `/run/user`
+      #    and systemd silently drops bind mounts nested under a masked path,
+      #    so it is lowered to "read-only", which masks without dropping the bind.
+      # The durable fix is embedding the certificate as a `data:;base64,` blob
+      # in the connection profile, making all of this unnecessary.
+      BindReadOnlyPaths = [ "-/run/user/0/secrets" ];
+      ProtectHome = pkgs.lib.mkForce "read-only";
       DeviceAllow = [ "/dev/tpmrm0 rw" ];
       # The TPM resource manager device node is owned by the tss group
       # (see the udev rules in the `security.tpm2` module).
       SupplementaryGroups = [ config.security.tpm2.tssGroup ];
     };
+  };
+  # TEMPORARY, third piece of the certificate access above: group-grant the decrypted
+  # certificate to the service user.
+  # A separate unsandboxed oneshot because privileged ("+") `ExecStartPre` commands of the
+  # service itself still run inside its mount namespace, where the grant target is read-only.
+  # The ordering also closes the boot race: the service waits for the grant,
+  # which in turn waits for the decryption.
+  systemd.services.wpa-supplicant-cert-access = {
+    wants = [ "decrypt-secrets.service" ];
+    after = [ "decrypt-secrets.service" ];
+    wantedBy = [ "wpa_supplicant.service" ];
+    before = [ "wpa_supplicant.service" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      cert=$(${pkgs.coreutils}/bin/readlink --canonicalize /run/user/0/secrets/rudenkornk.pem)
+      ${pkgs.coreutils}/bin/chown root:wpa_supplicant "$cert"
+      ${pkgs.coreutils}/bin/chmod 0640 "$cert"
+    '';
   };
   local = {
     secrets = {

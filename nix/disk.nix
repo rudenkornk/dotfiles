@@ -116,6 +116,7 @@
         # /var/lib/containers       -- Rootful Podman container images and volumes.
         # /var/lib/cups             -- Printer configurations (PPD driver files).
         # /var/lib/docker           -- Docker container images, volumes, and container metadata.
+        # /var/lib/fprint           -- fingerprints storage.
         # /var/lib/fwupd            -- Firmware update history (pending.db) and LVFS metadata cache.
         # /var/lib/geoclue          -- Geolocation cache.
         # /var/lib/gnome-remote-desktop  -- Self-signed TLS/RDP certificates and state.ini.

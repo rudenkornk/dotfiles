@@ -27,7 +27,7 @@ A `NixOS` configuration.
    sbctl enroll-keys --microsoft --firmware-builtin
    ```
 
-1. Install `NixOS` (signs boot files automatically):
+1. Install `NixOS`:
 
    ```bash
    nixos-install --flake .#dellxps --root /mnt
@@ -35,6 +35,15 @@ A `NixOS` configuration.
    ```
 
 1. In `BIOS`/`UEFI`: enable Secure Boot.
+
+1. After booting and login, put `AGE` secret keys to
+   `~/.config/sops/age/keys.txt` and `/root/.config/sops/age/keys.txt`.
+
+1. Enroll new fingerprints for convenient login and `sudo`:
+
+   ```bash
+   sudo fprintd-enroll "$USER"
+   ```
 
 ## Showcase
 

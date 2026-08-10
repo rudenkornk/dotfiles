@@ -214,9 +214,9 @@
   # Enable sound with pipewire.
   security = {
     rtkit.enable = true;
-    # Enabling fprintd defaults fprintAuth to true for all PAM services.
-    # Keep terminal sudo password-only.
-    pam.services.sudo.fprintAuth = false;
+    # Right now fingerprints on linux is a security theater.
+    # Still better than typing a long password every time though.
+    pam.services.sudo.fprintAuth = true;
     # /var/db/sudo (lecture tracking) is not preserved across reboots in the
     # impermanence setup, so disable the one-time lecture to avoid it printing
     # on every first sudo invocation after boot.
@@ -233,12 +233,12 @@
   };
 
   users = {
+    mutableUsers = false;
     users = builtins.mapAttrs (name: user: {
       isNormalUser = true;
       inherit (user) description;
 
-      # Keeping initialPassword open in case anyone blindly tries this config.
-      initialPassword = "123";
+      hashedPassword = pkgs.lib.fileContents (pkgs.locallib.secrets + /hashedPasswordFile);
       extraGroups = [
         "docker"
         "i2c"

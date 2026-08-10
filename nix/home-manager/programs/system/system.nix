@@ -26,6 +26,7 @@
     sbctl
     sof-firmware
     sysstat
+    usbutils
   ];
 
   home.file = pkgs.locallib.homefiles {

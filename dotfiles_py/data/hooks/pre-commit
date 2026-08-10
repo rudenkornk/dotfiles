@@ -11,6 +11,7 @@ public_regex="(\
 \.keep|\
 \.pub|\
 allCAs\.pem|\
+hashedPasswordFile|\
 manual_install\.sh\
 )\$"
 

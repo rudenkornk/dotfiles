@@ -7,11 +7,11 @@ set -euo pipefail
 # so any staged file there without it is plaintext by construction.
 # Known public files (public keys, CA certificates, helper scripts) are allowlisted explicitly.
 public_regex="(\
-\.pub|\
 \.crt|\
+\.keep|\
+\.pub|\
 allCAs\.pem|\
-manual_install\.sh|\
-\.keep\
+manual_install\.sh\
 )\$"
 
 # Outside nix/secrets/, match classic secret-bearing filenames.
@@ -19,18 +19,18 @@ manual_install\.sh|\
 # binary containers (.p12, .pfx, .ppk) produce no diff text at all,
 # and wifi PSKs (.nmconnection) or OpenVPN static keys carry no header or keyword its default rules recognize.
 secret_name_regex="(\
-(^|/)id_rsa(_sk)?|\
 (^|/)id_dsa(_sk)?|\
 (^|/)id_ecdsa(_sk)?|\
 (^|/)id_ed25519(_sk)?|\
+(^|/)id_rsa(_sk)?|\
 (^|/)private\.gpg|\
-\.rsa|\
 \.key|\
-\.ppk|\
+\.nmconnection|\
+\.ovpn|\
 \.p12|\
 \.pfx|\
-\.nmconnection|\
-\.ovpn\
+\.ppk|\
+\.rsa\
 )\$"
 
 # `--diff-filter=ACMR` keeps only added, copied, modified, and renamed files:

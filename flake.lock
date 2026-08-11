@@ -99,7 +99,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_unstable": {
+    "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1786106723,
         "narHash": "sha256-zDSUbpoeo/9ZmD2+wXnzxoo1+uhL8vxc0b8yuYMKYq0=",
@@ -157,7 +157,7 @@
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs_unstable": "nixpkgs_unstable",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
         "preservation": "preservation"
       }

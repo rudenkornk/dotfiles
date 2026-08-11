@@ -23,5 +23,5 @@
   rbi = rebase --interactive HEAD~26
   rh = reset --hard
   sg = diff --staged --relative=.
-  sh = show
+  sh = show --relative=.
   st = status

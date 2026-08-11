@@ -16,7 +16,7 @@ match_agent() {
   base="${base%.cjs}"
   case "$base" in
   cursor-agent) printf '#[fg=#dadada] #[fg=default]' ;;
-  claude) printf '#[fg=#d97757] #[fg=default]' ;;
+  claude) printf '#[fg=#d97757] #[fg=default]' ;;
   codex) printf '#[fg=#10a37f] #[fg=default]' ;;
   gemini) printf '#[fg=#4796e3] #[fg=default]' ;;
   opencode) printf '#[fg=#9aa5ce]󱞟 #[fg=default]' ;;

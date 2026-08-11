@@ -10,8 +10,10 @@
     packages = with pkgs; [
       kitty
       fontconfig
-      nerd-fonts.fira-code
-      nerd-fonts.jetbrains-mono
+      # TODO: consider removing unstable after 26.11
+      # Here it is used for some newly-added glyphs.
+      unstable.nerd-fonts.fira-code
+      unstable.nerd-fonts.jetbrains-mono
     ];
   };
 }

@@ -1,7 +1,7 @@
 local M = {}
 
 local kind_icons = {
-  claude = " ",
+  claude = " ",
   openai = " ",
   codestral = "󰬔 ",
   gemini = " ",

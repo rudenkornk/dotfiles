@@ -3,7 +3,7 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-26.05";
     };
-    nixpkgs_unstable = {
+    nixpkgs-unstable = {
       url = "github:nixos/nixpkgs/nixos-unstable";
     };
     nur = {

@@ -1,14 +1,4 @@
 {
-  "worktree": {
-    "baseRef": "head"
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
-  },
-  "theme": "dark",
-  "editorMode": "normal",
-  "skipAutoPermissionPrompt": true,
   "permissions": {
     "allow": ["Read(~/projects/dotfiles/**)", "Read(~/projects/arcadia/**)"],
     "deny": [
@@ -142,5 +132,15 @@
         ]
       }
     ]
-  }
+  },
+  "worktree": {
+    "baseRef": "head"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  },
+  "theme": "dark",
+  "editorMode": "normal",
+  "skipAutoPermissionPrompt": true
 }

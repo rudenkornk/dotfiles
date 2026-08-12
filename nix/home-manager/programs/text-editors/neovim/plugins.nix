@@ -8,6 +8,7 @@ let
     baleia-nvim
     better-escape-nvim
     blink-cmp
+    blink-cmp-env
     blink-compat
     bufferline-nvim
     clangd_extensions-nvim

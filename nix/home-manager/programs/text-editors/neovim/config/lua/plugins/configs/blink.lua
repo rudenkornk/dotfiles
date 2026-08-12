@@ -16,6 +16,7 @@ local kind_icons = {
 M.dependencies = {
   "Saghen/blink.compat",
   "andersevenrud/cmp-tmux",
+  "bydlw98/blink-cmp-env",
   "hrsh7th/cmp-emoji",
 }
 
@@ -28,8 +29,13 @@ M.opts = {
       "snippets",
       "buffer",
       "minuet",
+      "env",
     },
     providers = {
+      env = {
+        name = "Env",
+        module = "blink-cmp-env",
+      },
       buffer = {
         score_offset = -10,
       },

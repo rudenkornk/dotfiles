@@ -14,6 +14,7 @@ local kind_icons = {
 }
 
 M.dependencies = {
+  "Kaiser-Yang/blink-cmp-dictionary",
   "Saghen/blink.compat",
   "andersevenrud/cmp-tmux",
   "bydlw98/blink-cmp-env",
@@ -30,8 +31,18 @@ M.opts = {
       "buffer",
       "minuet",
       "env",
+      "dictionary",
     },
     providers = {
+      dictionary = {
+        name = "Dict",
+        module = "blink-cmp-dictionary",
+        min_keyword_length = 4, -- Start matching with 4+ letters.
+        score_offset = -40,
+        opts = {
+          dictionary_files = { vim.env.WORDLIST },
+        },
+      },
       env = {
         name = "Env",
         module = "blink-cmp-env",

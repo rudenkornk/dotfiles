@@ -168,17 +168,38 @@ fi
 # Distill a two-word tab name from the material. `stop` holds the words that carry no task
 # identity - articles, prepositions, and the generic verbs summaries open with - one arg each
 # so the whole-word matching below has clean boundaries.
-stop=" $(printf '%s ' \
-  a an the to in on of for and or with from into via new my this that is are be \
-  add adds added adding fix fixes fixed fixing update updates updated updating \
-  use uses used using make makes made making set sets setting \
-  create creates created creating investigate investigates investigated investigating \
-  analyze analyzes analyzed analyzing debug debugs debugged debugging \
-  refactor refactors refactored refactoring implement implements implemented implementing \
-  rewrite rewrites rewrote rewriting support supports supported supporting \
-  enable enables enabled enabling allow allows allowed allowing \
-  build builds built building run runs ran running \
-  check checks checked checking test tests tested testing)"
+stop=" $(
+  printf '%s ' \
+    a an the \
+    and or \
+    for from in into of on to via with \
+    is are be was were will should \
+    my this that \
+    new old \
+    \
+    add adds added adding \
+    allow allows allowed allowing \
+    analyze analyzes analyzed analyzing \
+    build builds built building \
+    check checks checked checking \
+    create creates created creating \
+    debug debugs debugged debugging \
+    enable enables enabled enabling \
+    fix fixes fixed fixing \
+    implement implements implemented implementing \
+    investigate investigates investigated investigating \
+    make makes made making \
+    refactor refactors refactored refactoring \
+    research researches researched researching \
+    rewrite rewrites rewrote rewriting \
+    run runs ran running \
+    set sets setting \
+    support supports supported supporting \
+    test tests tested testing \
+    update updates updated updating \
+    use uses used using \
+    :
+)"
 
 # Lowercase, then split on anything that is not an identifier char (keeps foo_bar and foo-bar whole).
 words="$(printf '%s' "$material" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_-' ' ')"

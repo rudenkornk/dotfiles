@@ -39,6 +39,7 @@ M.opts = {
         module = "blink-cmp-dictionary",
         min_keyword_length = 4, -- Start matching with 4+ letters.
         score_offset = -40,
+        max_items = 5,
         opts = {
           dictionary_files = { vim.env.WORDLIST },
         },
@@ -46,13 +47,16 @@ M.opts = {
       env = {
         name = "Env",
         module = "blink-cmp-env",
+        max_items = 5,
       },
       buffer = {
         score_offset = -10,
+        max_items = 5,
       },
       tmux = {
         name = "tmux",
         score_offset = -30,
+        max_items = 5,
         opts = { label = " ", all_panes = true },
       },
       minuet = {

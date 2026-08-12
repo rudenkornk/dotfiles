@@ -30,9 +30,12 @@ M.opts = {
       "minuet",
     },
     providers = {
+      buffer = {
+        score_offset = -10,
+      },
       tmux = {
         name = "tmux",
-        score_offset = -5,
+        score_offset = -30,
         opts = { label = " ", all_panes = true },
       },
       minuet = {

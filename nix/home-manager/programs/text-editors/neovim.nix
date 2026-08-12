@@ -138,6 +138,7 @@
 
     sessionVariables = {
       EDITOR = "nvim";
+      WORDLIST = "${pkgs.scowl}/share/dict/words.txt"; # English word list for generic text completion.
     };
   };
 

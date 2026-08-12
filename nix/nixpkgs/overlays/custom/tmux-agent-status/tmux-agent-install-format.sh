@@ -39,8 +39,5 @@ inject() {
   tmux set-option -g "$opt" "$out"
 }
 
-# No server / not in tmux: nothing to do.
-tmux has-session 2>/dev/null || exit 0
-
 inject window-status-format
 inject window-status-current-format

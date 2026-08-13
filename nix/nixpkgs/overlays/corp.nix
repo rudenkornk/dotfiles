@@ -31,6 +31,7 @@ _: final: prev: {
         final.gnused
         final.socat
         final.uutils-coreutils-noprefix
+        final.tmux
         final.custom.sops-cached
       ];
       text =

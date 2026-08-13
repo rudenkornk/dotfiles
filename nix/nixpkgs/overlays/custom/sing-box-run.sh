@@ -25,4 +25,9 @@ cmd="sing-box run --config <(sops --decrypt '$target_config') --directory /tmp/s
 
 echo "Command: $cmd"
 
+if [[ -n ${TMUX_PANE:-} ]]; then
+  tmux rename-window -t "$TMUX_PANE" sing-box
+  tmux move-window -s "$TMUX_PANE" -t :100 || true
+fi
+
 sudo bash -c "$cmd"

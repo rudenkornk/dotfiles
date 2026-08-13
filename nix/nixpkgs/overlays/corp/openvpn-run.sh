@@ -43,6 +43,11 @@ trap 'rm -rf "$rundir"' EXIT
   }
 ) &
 
+if [[ -n ${TMUX_PANE:-} ]]; then
+  tmux rename-window -t "$TMUX_PANE" vpn-corp
+  tmux move-window -s "$TMUX_PANE" -t :100 || true
+fi
+
 # Resolve the pkcs11-enabled openvpn from this wrapper's PATH and pass its absolute path to sudo,
 # so the result does not depend on root's PATH.
 # Management flags come after `--config`, so they win over any `management` directive inside the config.

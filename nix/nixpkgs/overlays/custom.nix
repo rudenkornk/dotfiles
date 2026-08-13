@@ -37,6 +37,8 @@ _: final: prev: {
 
     ast-grep-skill = import ./custom/ast-grep-skill.nix final prev;
 
+    i-have-adhd-skill = import ./custom/i-have-adhd-skill.nix final prev;
+
     playwright-cli = import ./custom/playwright-cli.nix final prev;
 
     vim-spell = import ./custom/vim-spell.nix final prev;

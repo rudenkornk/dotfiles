@@ -5,6 +5,7 @@
 let
   skills = {
     ast-grep = "${pkgs.custom.ast-grep-skill}/share/skills/ast-grep";
+    ast-grep-outline = "${pkgs.custom.ast-grep-skill}/share/skills/ast-grep-outline";
     playwright-cli = "${pkgs.custom.playwright-cli}/share/skills/playwright-cli";
   };
 in

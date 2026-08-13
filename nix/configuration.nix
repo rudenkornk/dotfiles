@@ -214,9 +214,15 @@
   # Enable sound with pipewire.
   security = {
     rtkit.enable = true;
-    # Right now fingerprints on linux is a security theater.
-    # Still better than typing a long password every time though.
-    pam.services.sudo.fprintAuth = true;
+    pam = {
+      services = {
+        sudo = {
+          # Right now fingerprints on linux is a security theater.
+          # Still better than typing a long password every time though.
+          fprintAuth = true;
+        };
+      };
+    };
     # /var/db/sudo (lecture tracking) is not preserved across reboots in the
     # impermanence setup, so disable the one-time lecture to avoid it printing
     # on every first sudo invocation after boot.

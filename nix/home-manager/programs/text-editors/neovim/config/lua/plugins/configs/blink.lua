@@ -42,6 +42,15 @@ M.opts = {
         max_items = 5,
         opts = {
           dictionary_files = { vim.env.WORDLIST },
+          -- Fix for weird spurious bug where complete items appear in one line with
+          -- `^@` chars in cmp menu and make `vim.fn.strchars` fail with `E976`.
+          separate_output = function(output)
+            local words = {}
+            for word in output:gmatch("[^%z\r\n]+") do
+              words[#words + 1] = word
+            end
+            return words
+          end,
         },
       },
       env = {

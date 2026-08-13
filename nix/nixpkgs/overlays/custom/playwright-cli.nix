@@ -4,26 +4,25 @@ final: prev:
 
 final.buildNpmPackage {
   pname = "playwright-cli";
-  version = "0.1.13";
+  version = "0.1.18";
 
   src = final.fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-cli";
-    rev = "v0.1.13";
-    hash = "sha256-hHK/GR5Drlt+e0L9kyNmn+ht1PCrVH6WrVbxGB1Wsxg=";
+    rev = "v0.1.18";
+    hash = "sha256-E/AzDJhD12PWSaA3iRY+hloPsSWnAw18gTa/ItVhr3E=";
   };
 
-  npmDepsHash = "sha256-Ulp6IttsZcOOA7LaYDpVKkBYbe2j4RFG8lJARWifOSk=";
+  npmDepsHash = "sha256-3kqiQvGtZfsmLHVWeCSM1yOYb+ws2x1vMPC1OuvrKAI=";
 
   dontNpmBuild = true;
 
   nativeBuildInputs = [ final.makeBinaryWrapper ];
 
   postInstall = ''
-    # Copy skill files from playwright-core to a clean accessible path.
+    # Copy skill files to a clean accessible path.
     mkdir -p $out/share/skills
-    cp -r $out/lib/node_modules/@playwright/cli/node_modules/playwright-core/lib/tools/cli-client/skill \
-      $out/share/skills/playwright-cli
+    cp -r $out/lib/node_modules/@playwright/cli/skills/playwright-cli $out/share/skills/playwright-cli
 
     # Generate config JSON with the chromium binary path resolved at build time.
     chromium_dir=$(ls "${final.playwright-driver.browsers}" | grep '^chromium-' | head -1)
@@ -65,7 +64,7 @@ final.buildNpmPackage {
   meta = {
     description = "Playwright CLI for browser automation from coding agents";
     homepage = "https://github.com/microsoft/playwright-cli";
-    changelog = "https://github.com/microsoft/playwright-cli/releases/tag/v0.1.13";
+    changelog = "https://github.com/microsoft/playwright-cli/releases/tag/v0.1.18";
     license = final.lib.licenses.asl20;
     platforms = final.lib.platforms.linux;
     mainProgram = "playwright-cli";

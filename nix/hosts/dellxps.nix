@@ -14,7 +14,6 @@
       imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
         inputs.nixos-hardware.nixosModules.dell-xps-15-9510-nvidia
-        ./dellxps/pipewire.nix
       ];
 
       boot = {

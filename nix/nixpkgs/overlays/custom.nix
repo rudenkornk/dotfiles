@@ -26,6 +26,7 @@ _: final: prev: {
         final.bash
         final.sing-box
         final.sops
+        final.tmux
       ];
       text =
         final.lib.replaceStrings

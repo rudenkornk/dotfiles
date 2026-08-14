@@ -43,6 +43,10 @@
         kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
       };
 
+      # `lenovo-thinkpad-p15v-intel-gen3` unconditionally imports the NVIDIA PRIME and Turing modules,
+      # even though this machine (p16v) does not have nvidia gpu.
+      services.xserver.videoDrivers = [ "modesetting" ];
+
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
       hardware = {
         cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

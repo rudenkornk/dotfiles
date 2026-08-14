@@ -160,7 +160,12 @@
     # System DNS resolver, providing per-link split-DNS for VPN connections.
     # Docker ignores the 127.0.0.53 stub in resolv.conf and falls back to public DNS,
     # so containers needing internal names may require explicit `daemon.json` dns.
-    resolved.enable = true;
+    resolved = {
+      enable = true;
+      # Avahi below already answers multicast DNS, and two stacks on one host make `.local` lookups unreliable,
+      # which avahi reports as "Detected another IPv4/IPv6 mDNS stack running on this host" at every boot.
+      settings.Resolve.MulticastDNS = "no";
+    };
 
     # https://wiki.nixos.org/wiki/Printing
     avahi = {

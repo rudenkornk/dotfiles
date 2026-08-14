@@ -395,6 +395,14 @@ A small body is allowed only for notes about git ordering and implementation pla
 e.g. "Preparation for the upcoming change...", or how this commit relates to neighboring patches in a series.
 All information related to the code itself MUST live in the code (comments, docs), not in the commit message.
 
+### Exception: commits that delete code
+
+When a commit removes code — especially a workaround that is no longer needed — the rule above inverts.
+Deleted code has nowhere to live, so leaving behind a ghost comment describing what used to be there
+and why it went away just trades one piece of dead weight for another.
+Delete the code cleanly and put the explanation in the commit body instead, where `git log` and `git blame` will surface it
+for whoever wonders why the workaround disappeared.
+
 ## Trust These Instructions
 
 These instructions are comprehensive and tested. Only search for additional information if:

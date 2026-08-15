@@ -36,13 +36,13 @@ A `NixOS` configuration.
 
 1. In `BIOS`/`UEFI`: enable Secure Boot.
 
-1. After booting and login, put `AGE` secret keys to
-   `~/.config/sops/age/keys.txt` and `/root/.config/sops/age/keys.txt`.
-
-1. Enroll new fingerprints for convenient login and `sudo`:
+1. After booting and login, enroll fingerprints and provision `AGE` secret keys:
 
    ```bash
    sudo fprintd-enroll "$USER"
+
+   git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
+   nix develop --command dotfiles bootstrap-crypto
    ```
 
 ## Showcase

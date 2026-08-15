@@ -153,6 +153,9 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - `hooks`: Sets up git hooks from `dotfiles_py/data/hooks/`.
 - `gui`: Regenerates GNOME dconf settings and Noctalia settings from rules.
 - `updatekeys`: Re-encrypts sops secrets when age recipients change.
+- `bootstrap-crypto`: Provisions AGE keys on a fresh machine: verifies a pasted key against repo secrets,
+  optionally generates and registers a TPM key (re-encrypting and committing secrets),
+  and installs the TPM identity into user and root `keys.txt`.
 - `syms`: Symlinks dotfile configs (nvim, ai, desktop-envs, linters, messengers, remote-desktop, system, terminals, vcs) into the home directory.
 - `password`: Generates random passwords.
 
@@ -164,7 +167,7 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - `targets/hooks.py`: Git hooks symlinking logic.
 - `targets/gnome.py`: GNOME dconf configuration generation.
 - `targets/noctalia.py`: Noctalia shell settings generation.
-- `targets/secrets.py`: sops age-key rotation.
+- `targets/secrets.py`: sops age-key rotation and fresh-machine AGE key provisioning.
 - `targets/syms.py`: Symlink materialization for configs.
 
 **Data files**:

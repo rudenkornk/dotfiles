@@ -61,6 +61,7 @@ def _bootstrap_crypto(*, repo_path: Path, tmp: Path) -> None:
         return
 
     _install_identity(identity_file=identity_file, tmp=tmp)
+    _switch_origin_to_ssh(repo_path)
     _logger.info("Done: this machine now decrypts repo secrets with TPM key.")
 
 
@@ -202,6 +203,23 @@ def _configure_sops_yaml_style(yaml: YAML) -> None:
     # sequences indented under their key with a two-space dash offset, and booleans capitalized.
     yaml.indent(mapping=2, sequence=4, offset=2)
     yaml.representer.add_representer(bool, _represent_capitalized_bool)
+
+
+def _switch_origin_to_ssh(repo_path: Path) -> None:
+    # The bootstrap flow clones anonymously over https; once the SSH keys are provisioned,
+    # the remote can switch to ssh so that pushing works.
+    https_prefix = "https://github.com/"
+    result = run_shell(["git", "remote", "get-url", "origin"], capture_output=True, check=False, cwd=repo_path)
+    if result.returncode != 0:
+        _logger.warning("No 'origin' remote found, skipping the switch to ssh.")
+        return
+    url = result.stdout.strip()
+    if not url.startswith(https_prefix):
+        _logger.info(f"Origin '{url}' is not an https github url, leaving it as is.")
+        return
+    ssh_url = "git@github.com:" + url.removeprefix(https_prefix).removesuffix(".git") + ".git"
+    run_shell(["git", "remote", "set-url", "origin", ssh_url], cwd=repo_path)
+    _logger.info(f"Switched the 'origin' remote to {ssh_url}.")
 
 
 def _commit_recipient_change(repo_path: Path) -> None:

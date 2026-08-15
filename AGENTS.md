@@ -403,6 +403,12 @@ and why it went away just trades one piece of dead weight for another.
 Delete the code cleanly and put the explanation in the commit body instead, where `git log` and `git blame` will surface it
 for whoever wonders why the workaround disappeared.
 
+### Refactoring commits come first
+
+If a patch requires changes in existing code — extracting a helper, extending a function signature,
+moving things around — commit that refactoring separately, before the commit that builds on it.
+The refactoring commit must not change behavior; the main commit then contains only the new functionality.
+
 ## Trust These Instructions
 
 These instructions are comprehensive and tested. Only search for additional information if:

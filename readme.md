@@ -42,7 +42,7 @@ A `NixOS` configuration.
    sudo fprintd-enroll "$USER"
 
    git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
-   nix develop --command dotfiles bootstrap-crypto
+   nix run . -- bootstrap-crypto
    ```
 
 ## Showcase
@@ -109,6 +109,12 @@ reboot
 nix develop
 dotfiles format --check
 dotfiles lint
+```
+
+Or without entering the dev shell:
+
+```bash
+nix run . -- lint
 ```
 
 ## Installing standalone packages

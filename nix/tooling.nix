@@ -24,6 +24,10 @@ let
     dconf
     dconf2nix
 
+    # Secrets tooling for `updatekeys` and `bootstrap-crypto`.
+    age-plugin-tpm
+    sops
+
     # Format & lint tools.
     fish
     git
@@ -41,6 +45,22 @@ let
     typos
     yamllint
   ];
+
+  # Only the CLI sources, so unrelated repo changes do not rebuild the package.
+  cliSrc = pkgs.lib.fileset.toSource {
+    root = ../.;
+    fileset = ../dotfiles_py;
+  };
+
+  dotfiles = pkgs.writeShellApplication {
+    name = "dotfiles";
+    runtimeInputs = tools ++ [ pyEnv ];
+    text = ''
+      # `mypy` resolves the CLI's third-party imports through PYTHONPATH, so expose the python env there too.
+      export PYTHONPATH="${cliSrc}:${pyEnv}/${python.sitePackages}''${PYTHONPATH:+:$PYTHONPATH}"
+      exec python3 -m dotfiles_py "$@"
+    '';
+  };
 in
 {
   devShells = {
@@ -88,5 +108,12 @@ in
           echo 'After that `disko`, `sbctl` and `nixos-install` can be used to install or recover the system.'
         '';
     };
+  };
+
+  packages = { inherit dotfiles; };
+
+  apps.default = {
+    type = "app";
+    program = pkgs.lib.getExe dotfiles;
   };
 }

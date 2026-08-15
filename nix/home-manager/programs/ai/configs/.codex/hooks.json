@@ -1,0 +1,94 @@
+{
+  "description": "Tmux tab status and naming integration for Codex.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running --emit-json"
+          },
+          {
+            "type": "command",
+            "command": "tmux-agent-name set --source prompt --emit-json"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^request_user_input$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state waiting --emit-json"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state waiting --emit-json"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running --emit-json"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running --emit-json"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state running --emit-json"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state done --emit-json"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-status set --state clear --emit-json"
+          }
+        ]
+      }
+    ]
+  }
+}

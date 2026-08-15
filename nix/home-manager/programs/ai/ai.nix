@@ -43,9 +43,8 @@ in
         inherit source;
         recursive = true;
       };
-      ".codex/skills/${name}" = {
-        inherit source;
-        recursive = true;
-      };
+      # Codex ignores symlinked `SKILL.md` files, but follows symlinked skill directories,
+      # thus omitting `recursive = true` here.
+      ".codex/skills/${name}".source = source;
     }) skills);
 }

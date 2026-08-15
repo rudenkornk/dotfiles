@@ -1,0 +1,28 @@
+model = "gpt-5.6-sol"
+personality = "pragmatic"
+model_reasoning_effort = "xhigh"
+web_search = "indexed"
+approval_policy = "on-request"
+approvals_reviewer = "auto_review"
+default_permissions = "development"
+
+[permissions.development]
+extends = ":workspace"
+
+[permissions.development.filesystem]
+glob_scan_max_depth = 3
+"/run/user/*/secrets/*" = "deny"
+"~/.config/sops" = "deny"
+"~/.gnupg" = "deny"
+"~/.pki" = "deny"
+"~/.local/share/keyrings" = "deny"
+"~/.local/share/TelegramDesktop" = "deny"
+"~/.config/mozilla" = "deny"
+"~/.config/google-chrome" = "deny"
+
+[permissions.development.workspace_roots]
+"~/projects/dotfiles" = true
+"~/projects/arcadia" = true
+
+[mcp_servers.nixos]
+command = "mcp-nixos"

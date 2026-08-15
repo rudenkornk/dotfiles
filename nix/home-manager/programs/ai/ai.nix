@@ -20,7 +20,12 @@ in
     (locallib.with_secrets { pkg = grok-cli; })
     (locallib.with_secrets { pkg = pi-coding-agent; })
     (locallib.with_secrets { pkg = unstable.claude-code; })
-    (locallib.with_secrets { pkg = unstable.codex; })
+    (locallib.with_secrets {
+      pkg = unstable.codex;
+      extraScript = ''
+        set -- --profile nixos "$@"
+      '';
+    })
     (locallib.with_secrets {
       pkg = nur.repos.charmbracelet.crush;
       binary = "crush";

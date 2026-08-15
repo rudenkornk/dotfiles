@@ -121,6 +121,13 @@ def updatekeys() -> None:
 
 @app.command()
 @utils.typer_exit()
+def bootstrap_crypto() -> None:
+    """Provision AGE keys on a fresh machine: verify a pasted key, then register a machine-local TPM key."""
+    secrets_target.bootstrap_crypto(repo_path=REPO_PATH)
+
+
+@app.command()
+@utils.typer_exit()
 def syms() -> None:
     """Create symlinks in home directory for dotfile configs."""
     xdg_config_home = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))

@@ -1,5 +1,7 @@
 !.config
 !.claude
+!.codex
+!.gemini
 !.opencode
 .ansible
 .bun

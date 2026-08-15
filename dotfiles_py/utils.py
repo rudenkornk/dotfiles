@@ -9,6 +9,7 @@ from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from typing import Any, ClassVar, Concatenate, overload
 
+import click
 import typer
 from rich.logging import RichHandler
 from ruamel.yaml import YAML
@@ -317,8 +318,13 @@ def typer_exit[**P, R](
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             try:
                 return func(*args, **kwargs)
+            except (click.exceptions.Exit, click.Abort, click.ClickException):
+                # Click's own control-flow exceptions subclass the generic ones,
+                # but they already carry proper rendering and exit codes, so click's main loop must see them untouched.
+                raise
             except exceptions as exc:
-                _logger.error(str(exc))  # noqa: TRY400
+                _logger.debug("Traceback:", exc_info=exc)
+                _logger.error(str(exc) or type(exc).__name__)  # noqa: TRY400
                 raise typer.Exit(code) from exc
 
         return wrapper

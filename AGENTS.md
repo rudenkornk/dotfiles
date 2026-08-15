@@ -155,7 +155,8 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - `updatekeys`: Re-encrypts sops secrets when age recipients change.
 - `bootstrap-crypto`: Provisions AGE keys on a fresh machine: verifies a pasted key against repo secrets,
   optionally generates and registers a TPM key (re-encrypting and committing secrets),
-  installs the TPM identity into user and root `keys.txt`, and switches the repo `origin` from https to ssh.
+  installs the TPM identity into user and root `keys.txt`, restarts the secret decryption services,
+  and switches the repo `origin` from https to ssh.
 - `syms`: Symlinks dotfile configs (nvim, ai, desktop-envs, linters, messengers, remote-desktop, system, terminals, vcs) into the home directory.
 - `password`: Generates random passwords.
 

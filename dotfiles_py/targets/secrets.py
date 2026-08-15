@@ -61,6 +61,7 @@ def _bootstrap_crypto(*, repo_path: Path, tmp: Path) -> None:
         return
 
     _install_identity(identity_file=identity_file, tmp=tmp)
+    _restart_secret_services()
     _switch_origin_to_ssh(repo_path)
     _logger.info("Done: this machine now decrypts repo secrets with TPM key.")
 
@@ -203,6 +204,19 @@ def _configure_sops_yaml_style(yaml: YAML) -> None:
     # sequences indented under their key with a two-space dash offset, and booleans capitalized.
     yaml.indent(mapping=2, sequence=4, offset=2)
     yaml.representer.add_representer(bool, _represent_capitalized_bool)
+
+
+def _restart_secret_services() -> None:
+    # On a fresh machine these services have already run without keys at boot,
+    # so re-run them to bring secrets online without a reboot.
+    commands = [
+        ["systemctl", "--user", "restart", "ssh-agent-keys.service"],
+        ["systemctl", "--user", "restart", "decrypt-secrets.service"],
+        ["sudo", "systemctl", "restart", "decrypt-secrets.service"],
+    ]
+    for command in commands:
+        if run_shell(command, check=False).returncode != 0:
+            _logger.warning(f"'{' '.join(command)}' failed; this will fix itself on the next boot.")
 
 
 def _switch_origin_to_ssh(repo_path: Path) -> None:

@@ -20,11 +20,8 @@ from .targets import syms as syms_target
 _logger = logging.getLogger(__name__)
 
 
-REPO_PATH = Path(__file__).parent.parent
-DOTPY_PATH = Path(__file__).parent
-ARTIFACTS_PATH = REPO_PATH / "__artifacts__"
+REPO_PATH = utils.repo_path()
 DATA_PATH = Path(__file__).parent / "data"
-SCRIPTS_PATH = DATA_PATH / "scripts"
 
 app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},

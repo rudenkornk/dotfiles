@@ -170,6 +170,23 @@ def git_files(repo_path: Path, *ext: str) -> list[str]:
     ).stdout.splitlines()
 
 
+@functools.cache
+def repo_path() -> Path:
+    # The CLI may run from a Nix store copy, so the repo location cannot be derived from `__file__`;
+    # resolve it from the current directory instead.
+    result = run_shell(
+        ["git", "rev-parse", "--show-toplevel"], capture_output=True, check=False, loglevel=logging.DEBUG
+    )
+    if result.returncode != 0:
+        msg = "Not inside a git repository, run this command from within the dotfiles repo checkout."
+        raise RuntimeError(msg)
+    root = Path(result.stdout.strip())
+    if not (root / "dotfiles_py").is_dir():
+        msg = f"{root} does not look like the dotfiles repository."
+        raise RuntimeError(msg)
+    return root
+
+
 def sha1(path: Path) -> str:
     with path.open("rb") as f:
         digest = hashlib.file_digest(f, "sha1")

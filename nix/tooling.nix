@@ -2,11 +2,10 @@
 
 let
   python = pkgs.python313;
-  pythonPkgs = python.pkgs;
 
-  # Python libraries of the `dotfiles` CLI itself, plus the markdown formatter:
+  # Python env with libraries of the `dotfiles` CLI itself, plus the markdown formatter:
   # `mdformat` and its plugins must live in the same python env to see each other.
-  pythonLibs =
+  pyEnv = python.withPackages (
     ps: with ps; [
       click
       rich
@@ -16,7 +15,8 @@ let
       mdformat
       mdformat-beautysh
       mdformat-gfm
-    ];
+    ]
+  );
 
   # Tools the `dotfiles` CLI shells out to, shared between the dev shell and the CLI package.
   tools = with pkgs; [
@@ -45,13 +45,13 @@ in
 {
   devShells = {
     default = pkgs.mkShell {
-      # Bootstrap python & python library dependencies.
-      packages = [ python ] ++ pythonLibs pythonPkgs ++ tools;
+      packages = [ pyEnv ] ++ tools;
 
       shellHook =
         # bash
         ''
-          export PYTHONPATH="$PWD/src:$PWD:$PYTHONPATH"
+          # `mypy` resolves the CLI's third-party imports through PYTHONPATH, so expose the python env there too.
+          export PYTHONPATH="$PWD/src:$PWD:${pyEnv}/${python.sitePackages}:$PYTHONPATH"
           mkdir --parents __build
           echo -e '#!/usr/bin/env bash\n\npython3 -m dotfiles_py "$@"' > __build/dotfiles
           chmod +x __build/dotfiles

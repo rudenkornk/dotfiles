@@ -24,5 +24,15 @@ glob_scan_max_depth = 3
 "~/projects/dotfiles" = true
 "~/projects/arcadia" = true
 
+[tui]
+status_line = [
+  "model-with-reasoning",
+  "approval-mode",
+  "context-used",
+  "current-dir",
+  "five-hour-limit",
+  "weekly-limit",
+]
+
 [mcp_servers.nixos]
 command = "mcp-nixos"

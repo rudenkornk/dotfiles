@@ -65,6 +65,7 @@ def shell_command(
 def run_shell(  # noqa: PLR0913
     cmd: Sequence[str | Path],
     *,
+    env: Mapping[str, str | Path] | None = None,
     extra_env: Mapping[str, str | Path] | None = None,
     extra_paths: Sequence[Path] | None = None,
     capture_output: bool = False,
@@ -75,17 +76,18 @@ def run_shell(  # noqa: PLR0913
     extra_env = dict(extra_env) if extra_env is not None else {}
     extra_paths = list(extra_paths) if extra_paths is not None else []
 
-    env = os.environ.copy()
-    env.update({k: str(v) for k, v in extra_env.items()})
+    # `env` replaces the inherited environment entirely, while `extra_env` is layered on top of either base.
+    run_env = os.environ.copy() if env is None else {k: str(v) for k, v in env.items()}
+    run_env.update({k: str(v) for k, v in extra_env.items()})
 
     if extra_paths:
         new_path = _paths2shell(extra_paths).strip()
         if not new_path:
             msg = f"PATH is empty, cannot add extra_paths {extra_paths}"
             raise ValueError(msg)
-        if "PATH" in env and env["PATH"].strip():
-            new_path += ":" + env["PATH"]
-        env["PATH"] = new_path
+        if "PATH" in run_env and run_env["PATH"].strip():
+            new_path += ":" + run_env["PATH"]
+        run_env["PATH"] = new_path
 
     print_cmd = shell_command(
         cmd,
@@ -97,7 +99,7 @@ def run_shell(  # noqa: PLR0913
     _logger.log(loglevel, f"[RUNNING IN SHELL]: {print_cmd}")
     return subprocess.run(  # noqa: S603
         cmd,
-        env=env,
+        env=run_env,
         check=check,
         capture_output=capture_output,
         text=True,

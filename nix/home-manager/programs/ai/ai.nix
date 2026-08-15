@@ -32,14 +32,6 @@ in
     custom.playwright-cli
   ];
 
-  xdg = {
-    configFile = {
-      "opencode/opencode.jsonc".source = ./opencode.jsonc;
-    };
-
-    dataFile = { };
-  };
-
   home.file =
     (pkgs.locallib.homefiles {
       inherit (config) xdg;

@@ -34,5 +34,38 @@ status_line = [
   "weekly-limit",
 ]
 
+[tui.keymap.global]
+open_external_editor = "alt-e"
+open_transcript = "ctrl-g"
+toggle_fast_mode = "alt-o"
+
+[tui.keymap.composer]
+submit = "ctrl-enter"
+
+[tui.keymap.editor]
+insert_newline = ["enter", "shift-enter"]
+move_down = ["ctrl-n", "down"]
+move_up = ["ctrl-p", "up"]
+
+[tui.keymap.list]
+jump_bottom = "end"
+jump_top = "home"
+move_down = ["ctrl-n", "down", "j"]
+move_left = ["left", "h"]
+move_right = ["right", "l"]
+move_up = ["ctrl-p", "up", "k"]
+page_down = ["ctrl-d", "ctrl-v", "page-down"]
+page_up = ["ctrl-u", "page-up"]
+
+[tui.keymap.pager]
+half_page_down = ["ctrl-d", "ctrl-v"]
+half_page_up = "ctrl-u"
+jump_bottom = ["shift-g", "end"]
+jump_top = ["g", "home"]
+page_down = ["ctrl-f", "page-down", "space"]
+page_up = ["ctrl-b", "page-up", "shift-space", "b"]
+scroll_down = ["ctrl-e", "ctrl-n", "down", "j"]
+scroll_up = ["ctrl-y", "ctrl-p", "up", "k"]
+
 [mcp_servers.nixos]
 command = "mcp-nixos"

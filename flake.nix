@@ -98,7 +98,10 @@
       # Also register home-manager configs for `nix flake check`.
       checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations;
 
-      packages.${system} = mapAttrs (_: path: pkgs.callPackage path { }) standalonePackages;
+      packages.${system} =
+        mapAttrs (_: path: pkgs.callPackage path { }) standalonePackages // tooling.packages;
+
+      apps.${system} = tooling.apps;
 
       devShells.${system} = tooling.devShells;
     };

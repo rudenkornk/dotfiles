@@ -41,7 +41,8 @@ nix develop .#install
 
 ### Primary Commands
 
-All commands below assume you're inside `nix develop`:
+All commands below assume you're inside `nix develop`.
+Each of them can also run without the dev shell via `nix run . -- <command>`.
 
 1. **Format Check** (~1-2 seconds):
 
@@ -101,8 +102,8 @@ The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs t
 
 ```yaml
 - nix flake check --no-build
-- nix develop --command dotfiles format --check
-- nix develop --command dotfiles lint
+- nix run . -- format --check
+- nix run . -- lint
 ```
 
 CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential scan can run.
@@ -125,7 +126,8 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 
 ### Root Directory Files
 
-- `flake.nix`: Nix flake defining `nixosConfigurations` (per host), `homeConfigurations` (per `user@host` pair), standalone `packages`, and dev shells.
+- `flake.nix`: Nix flake defining `nixosConfigurations` (per host), `homeConfigurations` (per `user@host` pair), standalone `packages`,
+  the `dotfiles` CLI package with its default `nix run` app, and dev shells.
 - `flake.lock`: Locked dependency versions (nixpkgs 26.05, home-manager release-26.05, plus nixpkgs_unstable, nur, nixos-hardware, preservation, disko).
 - `pyproject.toml`: Python project config with dependencies and ruff/mypy settings.
 - `readme.md`: User-facing documentation with bootstrap and recovery instructions.
@@ -192,7 +194,7 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - `nix/nixpkgs/`: Overlays (`custom`, `locallib`, `sops`) and `unfree.nix`.
 - `nix/keyboard/`: Custom keyboard layouts (`qwerty_rnk`, `jcuken_rnk`).
 - `nix/secrets/`: Encrypted secrets (`corp`, `nmconnections`, `ssh`, `vpn`) using sops.
-- `nix/devshell.nix`: Definitions of the `default` and `install` dev shells.
+- `nix/tooling.nix`: The `dotfiles` CLI package and its default flake app, plus the `default` and `install` dev shells.
 
 **Key Nix Patterns**:
 

@@ -24,9 +24,9 @@ jobs:
       - name: Flake check
         run: nix flake check --no-build
       - name: Check format
-        run: nix develop --command dotfiles format --check
+        run: nix run . -- format --check
       - name: Lint
-        run: nix develop --command dotfiles lint
+        run: nix run . -- lint
 
 name: dotfiles workflow
 

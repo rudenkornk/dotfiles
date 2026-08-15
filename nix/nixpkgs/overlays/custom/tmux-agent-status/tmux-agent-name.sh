@@ -173,20 +173,24 @@ stop=" $(
     a an the \
     and or \
     for from in into of on to via with \
-    is are be was were will should \
-    my this that \
-    new old \
+    can could "do" does did is are be was were will would should \
+    i ll me my our ours us we you your yours \
+    it its that this these those they them their theirs \
+    new no now old please yes \
     \
     add adds added adding \
     allow allows allowed allowing \
+    amend amends amended amending \
     analyze analyzes analyzed analyzing \
     build builds built building \
     check checks checked checking \
+    compare compares compared comparing \
     create creates created creating \
     debug debugs debugged debugging \
     enable enables enabled enabling \
     fix fixes fixed fixing \
     implement implements implemented implementing \
+    inspect inspects inspected inspecting \
     investigate investigates investigated investigating \
     make makes made making \
     refactor refactors refactored refactoring \
@@ -196,8 +200,10 @@ stop=" $(
     set sets setting \
     support supports supported supporting \
     test tests tested testing \
+    trace traces traced tracing \
     update updates updated updating \
     use uses used using \
+    verify verifies verified verifying \
     :
 )"
 

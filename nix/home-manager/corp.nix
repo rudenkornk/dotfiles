@@ -23,16 +23,13 @@
 
     file = {
       ".itsme/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
+      # `ai.nix` installs the default opencode config unconditionally.
+      # Disable it here so the encrypted corp config from `local.secrets.links` owns this path.
+      "${config.xdg.configHome}/opencode/opencode.jsonc".enable = false;
     };
   };
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {
-    configFile = {
-      # `ai.nix` installs the default opencode config unconditionally.
-      # Disable it here so the encrypted corp config from `local.secrets.links` owns this path.
-      "opencode/opencode.jsonc".enable = false;
-    };
-
     dataFile = {
       "ca-certificates/YandexInternalRootCA.crt".source =
         pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt;

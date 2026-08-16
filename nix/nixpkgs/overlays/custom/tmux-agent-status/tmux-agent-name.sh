@@ -140,12 +140,11 @@ prompt)
 codex-transcript)
   [ -n "$path" ] || usage_error "--source codex-transcript requires --path"
   [ -r "$path" ] || usage_error "transcript is not readable: ${path}"
-  # Transcripts are JSONL; prefer the latest summary entry, else the latest plain user message.
-  # The format is undocumented, so this is best-effort.
-  material="$(jq -rs '[.[] | select(.type == "summary") | .summary] | last // empty' "$path" 2>/dev/null || true)"
-  [ -n "$material" ] ||
-    material="$(jq -rs '[.[] | select(.type == "user") | .message.content | strings] | last // empty' \
-      "$path" 2>/dev/null || true)"
+  # The extraction program lives in a sibling `.jq` file; the nix build substitutes its store path.
+  # Falling back to the path next to this script keeps the raw source runnable outside nix.
+  transcript_jq="@codex_transcript_jq@"
+  [ -r "$transcript_jq" ] || transcript_jq="$(dirname "${BASH_SOURCE[0]}")/codex-transcript.jq"
+  material="$(jq -rs --from-file "$transcript_jq" "$path" 2>/dev/null || true)"
   refresh="false"
   ;;
 *) usage_error "unknown --source: '${source_kind}'" ;;

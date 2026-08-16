@@ -114,7 +114,8 @@ export const AgentStatus: Plugin = async ({ $ }) => {
             | { sessionID?: string; status?: { type?: string } }
             | undefined;
           if (!info?.sessionID) break;
-          if (info.status?.type === "busy") {
+          // A scheduled retry after a provider hiccup is still work in progress, not a pause.
+          if (info.status?.type === "busy" || info.status?.type === "retry") {
             activeSessions.add(info.sessionID);
             // Fresh work supersedes this session's previous failure. Other sessions keep theirs.
             failedSessions.delete(info.sessionID);
@@ -148,7 +149,9 @@ export const AgentStatus: Plugin = async ({ $ }) => {
           addInteraction("permission", props);
           refreshState();
           break;
+        // A question is resolved either by an answer or by a dismissal; both end the pause.
         case "question.replied":
+        case "question.rejected":
           removeInteraction("question", props);
           refreshState();
           break;

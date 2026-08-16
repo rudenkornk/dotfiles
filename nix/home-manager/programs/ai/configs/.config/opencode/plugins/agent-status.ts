@@ -68,9 +68,9 @@ export const AgentStatus: Plugin = async ({ $ }) => {
           break;
         }
         // The agent is blocked on interactive input: a question prompt
-        // (`question.asked`) or a tool-approval request (`permission.updated`).
+        // (`question.asked`) or a tool-approval request (`permission.asked`).
         case "question.asked":
-        case "permission.updated":
+        case "permission.asked":
           setState("waiting");
           break;
         case "question.replied":

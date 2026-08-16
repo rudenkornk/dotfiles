@@ -23,16 +23,24 @@ def _ensure_full_history() -> None:
         raise RuntimeError(msg)
 
 
-def _linters(repo_path: Path) -> list[Sequence[str | Path]]:
+@dataclass(frozen=True)
+class Linter:
+    argv: Sequence[str | Path]
+    # Return codes treated as success; a linter may reserve some non-zero codes
+    # for conditions that are not lint findings.
+    ok_returncodes: Sequence[int] = (0,)
+
+
+def _linters(repo_path: Path) -> list[Linter]:
     return [
-        ["gitleaks", "git"],
-        ["statix", "check", repo_path],
-        ["mypy", repo_path],
-        ["ruff", "check"],
-        ["yamllint", "--strict", repo_path / ".github"],
-        ["shellcheck", *git_files(repo_path, ".sh")],
-        ["typos"],
-        ["markdownlint-cli2", "."],
+        Linter(["gitleaks", "git"]),
+        Linter(["statix", "check", repo_path]),
+        Linter(["mypy", repo_path]),
+        Linter(["ruff", "check"]),
+        Linter(["yamllint", "--strict", repo_path / ".github"]),
+        Linter(["shellcheck", *git_files(repo_path, ".sh")]),
+        Linter(["typos"]),
+        Linter(["markdownlint-cli2", "."]),
     ]
 
 
@@ -47,17 +55,17 @@ def lint_code(*, repo_path: Path) -> None:
 
     # The linters are independent and read-only, so we run them concurrently.
     with ThreadPoolExecutor(max_workers=len(linters)) as executor:
-        results = executor.map(lambda argv: (argv, _run_linter(argv, repo_path)), linters)
+        results = executor.map(lambda linter: (linter, _run_linter(linter.argv, repo_path)), linters)
 
     failures: list[str] = []
-    for argv, result in results:
-        name = str(argv[0])
+    for linter, result in results:
+        name = str(linter.argv[0])
         output = (result.stdout + result.stderr).strip()
         if output:
             _logger.info(f"----- {name} -----")
             # Indent each line so the grouped output stands out from the log lines.
             print("\n".join("    " + line for line in output.splitlines()))  # noqa: T201
-        if result.returncode:
+        if result.returncode not in linter.ok_returncodes:
             failures.append(name)
 
     if failures:

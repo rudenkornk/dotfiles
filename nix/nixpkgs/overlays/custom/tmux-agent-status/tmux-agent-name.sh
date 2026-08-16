@@ -144,14 +144,14 @@ codex-transcript)
     # Falling back to the path next to this script keeps the raw source runnable outside nix.
     transcript_jq="@codex_transcript_jq@"
     [ -r "$transcript_jq" ] || transcript_jq="$(dirname "${BASH_SOURCE[0]}")/codex-transcript.jq"
-    material="$(jq -rs --from-file "$transcript_jq" "$path" 2>/dev/null || true)"
+    material="$(jq -Rrs --from-file "$transcript_jq" "$path" 2>/dev/null || true)"
   fi
   refresh="false"
   ;;
 *) usage_error "unknown --source: '${source_kind}'" ;;
 esac
 
-# Cap the material, so a huge pasted prompt cannot bloat the model call.
+# Cap the material, so a huge prompt or agent response cannot bloat per-window state.
 material="$(printf '%s' "$material" | head -c 500)"
 if [ -z "$material" ]; then
   finish

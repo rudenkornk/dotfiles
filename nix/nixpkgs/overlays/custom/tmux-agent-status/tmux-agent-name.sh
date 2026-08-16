@@ -10,7 +10,7 @@
 #   --source title:      Pull the agent-authored pane title (the terminal summary channel).
 #   --source summary:    An AI-generated summary passed explicitly with --text.
 #   --source prompt:     A user prompt, from --text or from hook JSON on stdin (`prompt` field).
-#   --source codex-transcript: Best-effort extraction from the Codex transcript file passed with --path.
+#   --source codex-transcript: Best-effort extraction from the Codex transcript given with --path or hook JSON.
 #
 # Options:
 #   --window <id> / --pane <id>: Target window and pane; by default derived from $TMUX_PANE,
@@ -138,13 +138,14 @@ prompt)
   refresh="false"
   ;;
 codex-transcript)
-  [ -n "$path" ] || usage_error "--source codex-transcript requires --path"
-  [ -r "$path" ] || usage_error "transcript is not readable: ${path}"
-  # The extraction program lives in a sibling `.jq` file; the nix build substitutes its store path.
-  # Falling back to the path next to this script keeps the raw source runnable outside nix.
-  transcript_jq="@codex_transcript_jq@"
-  [ -r "$transcript_jq" ] || transcript_jq="$(dirname "${BASH_SOURCE[0]}")/codex-transcript.jq"
-  material="$(jq -rs --from-file "$transcript_jq" "$path" 2>/dev/null || true)"
+  [ -n "$path" ] || path="$(printf '%s' "$stdin_json" | jq -r '.transcript_path // empty' 2>/dev/null || true)"
+  if [ -n "$path" ] && [ -r "$path" ]; then
+    # The extraction program lives in a sibling `.jq` file; the nix build substitutes its store path.
+    # Falling back to the path next to this script keeps the raw source runnable outside nix.
+    transcript_jq="@codex_transcript_jq@"
+    [ -r "$transcript_jq" ] || transcript_jq="$(dirname "${BASH_SOURCE[0]}")/codex-transcript.jq"
+    material="$(jq -rs --from-file "$transcript_jq" "$path" 2>/dev/null || true)"
+  fi
   refresh="false"
   ;;
 *) usage_error "unknown --source: '${source_kind}'" ;;

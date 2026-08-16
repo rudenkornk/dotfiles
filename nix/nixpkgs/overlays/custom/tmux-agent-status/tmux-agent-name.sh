@@ -10,7 +10,7 @@
 #   --source title:      Pull the agent-authored pane title (the terminal summary channel).
 #   --source summary:    An AI-generated summary passed explicitly with --text.
 #   --source prompt:     A user prompt, from --text or from hook JSON on stdin (`prompt` field).
-#   --source transcript: Best-effort extraction from the transcript file passed with --path.
+#   --source codex-transcript: Best-effort extraction from the Codex transcript file passed with --path.
 #
 # Options:
 #   --window <id> / --pane <id>: Target window and pane; by default derived from $TMUX_PANE,
@@ -22,7 +22,7 @@
 #   @agent_name_material: The material the current name was derived from; dedupes re-fires.
 #   @agent_name_refresh:  Whether the name may still be updated; unset means true.
 #                         Stable sources (title, summary) keep it true and re-fire on change,
-#                         noisy ones (prompt, transcript) set it to false, locking the name.
+#                         noisy ones (prompt, codex-transcript) set it to false, locking the name.
 #   @agent_name_user:     The tab name the window had before the first rename
 #                         (or the `<automatic>` sentinel when it was auto-named).
 #                         Doubles as the ownership marker: tmux-agent-label restores from it
@@ -137,8 +137,8 @@ prompt)
   [ -n "$material" ] || material="$(printf '%s' "$stdin_json" | jq -r '.prompt // empty' 2>/dev/null || true)"
   refresh="false"
   ;;
-transcript)
-  [ -n "$path" ] || usage_error "--source transcript requires --path"
+codex-transcript)
+  [ -n "$path" ] || usage_error "--source codex-transcript requires --path"
   [ -r "$path" ] || usage_error "transcript is not readable: ${path}"
   # Transcripts are JSONL; prefer the latest summary entry, else the latest plain user message.
   # The format is undocumented, so this is best-effort.

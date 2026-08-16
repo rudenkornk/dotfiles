@@ -1,0 +1,18 @@
+{
+  "onlyCurrentModel": true,
+  "minIntervalMs": 30000,
+  "formatStyle": "allWindows",
+  "percentDisplayMode": "used",
+  "resetTimeDecimals": 2,
+
+  "sessionTokenScope": "tree",
+
+  "enableToast": false,
+  "tuiCompactStatus": {
+    "enabled": true,
+    "suppressWhenNativeProviderQuota": false,
+  },
+  "tuiPromptBar": {
+    "enabled": true,
+  },
+}

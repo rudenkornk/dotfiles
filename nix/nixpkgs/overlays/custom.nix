@@ -75,7 +75,11 @@ _: final: prev: {
         tmux-agent-name = final.writeShellApplication {
           name = "tmux-agent-name";
           inherit runtimeInputs;
-          text = builtins.readFile ./custom/tmux-agent-status/tmux-agent-name.sh;
+          text =
+            final.lib.replaceStrings
+              [ "@codex_transcript_jq@" ]
+              [ "${./custom/tmux-agent-status/codex-transcript.jq}" ]
+              (builtins.readFile ./custom/tmux-agent-status/tmux-agent-name.sh);
         };
       in
       final.symlinkJoin {

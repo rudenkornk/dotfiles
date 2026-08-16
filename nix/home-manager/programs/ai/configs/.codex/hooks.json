@@ -1,21 +1,36 @@
 {
   "description": "Tmux tab status and naming integration for Codex.",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-name set --source codex-transcript --emit-json"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "tmux-agent-status set --state running --emit-json"
-          },
-          {
-            "type": "command",
-            "command": "tmux-agent-name set --source prompt --emit-json"
           }
         ]
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tmux-agent-name set --source codex-transcript --emit-json"
+          }
+        ]
+      },
       {
         "matcher": "^request_user_input$",
         "hooks": [
@@ -76,6 +91,10 @@
           {
             "type": "command",
             "command": "tmux-agent-status set --state done --emit-json"
+          },
+          {
+            "type": "command",
+            "command": "tmux-agent-name set --source codex-transcript --emit-json"
           }
         ]
       }

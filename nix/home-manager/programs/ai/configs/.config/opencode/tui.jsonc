@@ -44,7 +44,7 @@
     "session_child_cycle": "l,right",
     "session_child_cycle_reverse": "h,left",
     "session_child_first": "<leader>j",
-    "session_delete": "ctrl+shift+d",
+    "session_delete": "ctrl+x",
     "session_parent": "k,up",
 
     "input_delete": "delete,shift+delete",
@@ -57,7 +57,7 @@
 
     "input_newline": "return,shift+return",
     "input_submit": "ctrl+return",
-    "stash_delete": "ctrl+shift+d",
+    "stash_delete": "ctrl+x",
 
     "history_previous": "ctrl+p,up",
     "history_next": "ctrl+n,down",

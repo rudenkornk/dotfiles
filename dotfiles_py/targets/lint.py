@@ -41,6 +41,15 @@ def _linters(repo_path: Path) -> list[Linter]:
         Linter(["shellcheck", *git_files(repo_path, ".sh")]),
         Linter(["typos"]),
         Linter(["markdownlint-cli2", "."]),
+        # `jq` has no compile-only mode, so its programs are linted by running them on null input:
+        # a broken program fails to compile (exit 3), while a healthy one either succeeds
+        # or reports a runtime error about the unexpected null (exit 5).
+        # `.jq` files are lint-only: the sole formatter candidate, `jqfmt`,
+        # strips comments and silently drops `def` statements.
+        *[
+            Linter(["jq", "--null-input", "--from-file", jq_file], ok_returncodes=(0, 5))
+            for jq_file in git_files(repo_path, ".jq")
+        ],
     ]
 
 

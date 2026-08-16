@@ -32,6 +32,7 @@ let
     fish
     git
     gitleaks
+    jq
     kdlfmt
     markdownlint-cli2
     mypy

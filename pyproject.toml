@@ -92,11 +92,13 @@ default.extend-ignore-re = [
   "(?Rm)^.*(#|//|<!--)\\s*typos:\\s*ignore",
   "(?s)(#|//|<!--)\\s*typos:\\s*off.*?(#|//|<!--)\\s*typos:\\s*on",
 ]
+default.extend-words = { facter = "facter" }
 files.extend-exclude = [
   "*.klc",
   "*.sops",
   "*.sops.json",
   "*.sops.yaml",
+  "facter.json",
   "hashedPasswordFile",
   "lazy-lock.json",
 ]

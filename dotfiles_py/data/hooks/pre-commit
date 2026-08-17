@@ -62,8 +62,10 @@ fi
 # `--no-ext-diff` forces plain diff output even if an external diff driver is configured.
 # `--redact` keeps the secret values themselves out of the terminal scrollback.
 if command -v gitleaks >/dev/null; then
-	if ! git diff --cached --no-ext-diff | gitleaks stdin --redact --no-banner; then
+	if ! gitleaks git --staged --redact --no-banner --verbose; then
 		echo "Refusing to commit: gitleaks found potential secrets in the staged diff."
+		# shellcheck disable=SC2016
+		echo 'See with `gitleaks git -v --staged`'
 		exit 1
 	fi
 else

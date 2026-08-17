@@ -22,7 +22,7 @@
         "ctrl+g": null,
         "cmd+k": "chat:clearScreen",
         "ctrl+x ctrl+k": "chat:killAgents",
-        "tab": "chat:cycleMode",
+        "shift+tab": "chat:cycleMode",
         "meta+p": "chat:modelPicker",
         "meta+o": "chat:fastMode",
         "meta+t": "chat:thinkingToggle",

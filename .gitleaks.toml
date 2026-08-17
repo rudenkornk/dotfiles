@@ -13,7 +13,35 @@ stopwords = [
   "0x60C317803A41BA51845E371A1E9377A2BA9EF27F",
 ]
 
+# Note: gitleaks assumes that actual secret part of a regex match is N-th capture group,
+# which by default is `secretGroup = 1`.
+# If regex does not have capture groups then entire match considered a secret.
+
 [[rules]]
 id = "yandex-internal"
 description = "Yandex internal URL"
 regex = '''yandex.net|yandex-team.ru'''
+
+[[rules]]
+id = "facter-serial-number"
+description = "Hardware serial number in a nixos-facter report"
+path = '''facter[^/]*\.json'''
+regex = '''"serial"\s*:\s*(.+)'''
+
+[[rules]]
+id = "facter-by-id-device-name"
+description = "Stable device name embedding a serial number in a nixos-facter report"
+path = '''facter[^/]*\.json'''
+regex = '''/by-(?:id|uuid|partuuid|partlabel|label)/(.+)'''
+
+[[rules]]
+id = "facter-mac-address"
+description = "MAC address in a nixos-facter report"
+path = '''facter[^/]*\.json'''
+regex = '''\b(?:[0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}\b'''
+
+[[rules]]
+id = "facter-uuid"
+description = "UUID in a nixos-facter report"
+path = '''facter[^/]*\.json'''
+regex = '''\b[0-9A-Fa-f]{8}-(?:[0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}\b'''

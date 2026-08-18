@@ -1,5 +1,6 @@
 /__build*
 /__artifacts*
+/.direnv
 __pycache__
 
 /node_modules

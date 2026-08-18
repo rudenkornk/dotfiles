@@ -83,8 +83,6 @@ in
           if [ -d .git ]; then
             dotfiles --log-level warning hooks
           fi
-
-          echo "Welcome to the project devshell!"
         '';
     };
 

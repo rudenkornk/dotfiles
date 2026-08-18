@@ -73,6 +73,43 @@ class MergeConfigTest(unittest.TestCase):
             },
         )
 
+    def test_json_merges_multiple_sources_in_order(self) -> None:
+        source1 = self.write(
+            "source1.json",
+            json.dumps({"nested": {"one": 1, "shared": "one"}, "list": [1]}),
+        )
+        source2 = self.write(
+            "source2.json",
+            json.dumps({"nested": {"two": 2, "shared": "two"}, "list": [2]}),
+        )
+        source3 = self.write(
+            "source3.json",
+            json.dumps({"nested": {"three": 3, "shared": "three"}}),
+        )
+        target = self.write(
+            "target.json",
+            json.dumps({"targetOnly": True, "nested": {"target": 0, "shared": "target"}}),
+        )
+
+        self.run_merge(
+            "json",
+            "--source",
+            str(source1),
+            str(source2),
+            str(source3),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(
+            json.loads(target.read_text()),
+            {
+                "targetOnly": True,
+                "nested": {"target": 0, "one": 1, "two": 2, "three": 3, "shared": "three"},
+                "list": [2],
+            },
+        )
+
     def test_json_creates_missing_target(self) -> None:
         source = self.write("source.json", '{"managed": true}')
         target = self.directory / "missing" / "target.json"
@@ -92,14 +129,23 @@ class MergeConfigTest(unittest.TestCase):
         self.assertEqual(target.read_bytes(), before)
         self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
 
-    def test_json_rejects_hard_linked_source_and_target(self) -> None:
-        source = self.write("source.json", '{"managed": true}\n')
+    def test_json_rejects_target_used_as_any_source(self) -> None:
+        source1 = self.write("source1.json", '{"first": true}\n')
+        source2 = self.write("source2.json", '{"managed": true}\n')
         target = self.directory / "target.json"
-        target.hardlink_to(source)
+        target.hardlink_to(source2)
 
-        self.run_merge("json", "--source", str(source), "--target", str(target), success=False)
+        self.run_merge(
+            "json",
+            "--source",
+            str(source1),
+            str(source2),
+            "--target",
+            str(target),
+            success=False,
+        )
 
-        self.assertEqual(source.read_text(), '{"managed": true}\n')
+        self.assertEqual(source2.read_text(), '{"managed": true}\n')
 
     def test_json_is_idempotent_and_preserves_existing_mode(self) -> None:
         source = self.write("source.json", '{"managed": true}')
@@ -123,6 +169,27 @@ class MergeConfigTest(unittest.TestCase):
         self.assertEqual(
             target.read_text(),
             "local=true\n# BEGIN NIX MANAGED BLOCK\nmanaged=true\n# END NIX MANAGED BLOCK\n",
+        )
+
+    def test_block_concatenates_multiple_sources_with_newlines(self) -> None:
+        source1 = self.write("source1", "first")
+        source2 = self.write("source2", "second\n")
+        source3 = self.write("source3", "third")
+        target = self.write("target.conf", "local=true\n")
+
+        self.run_merge(
+            "block",
+            "--source",
+            str(source1),
+            str(source2),
+            str(source3),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(
+            target.read_text(),
+            "local=true\n# BEGIN NIX MANAGED BLOCK\nfirst\nsecond\n\nthird\n# END NIX MANAGED BLOCK\n",
         )
 
     def test_block_replaces_old_block_at_its_position_without_regex(self) -> None:

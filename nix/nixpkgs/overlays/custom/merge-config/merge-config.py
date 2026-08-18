@@ -200,23 +200,23 @@ def _write_target(path: Path, content: str, previous: str) -> None:
         path.write_text(content, encoding="utf-8")
 
 
-def _run_json(source: Path, target: Path) -> None:
-    source_text = source.read_text(encoding="utf-8")
+def _run_json(sources: Sequence[Path], target: Path) -> None:
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
-    source_object = _load_json_object(source_text, source)
-    target_object = _load_json_object(target_text, target) if target_text.strip() else {}
-    result = _merge_json_objects(target_object, source_object)
+    result = _load_json_object(target_text, target) if target_text.strip() else {}
+    for source in sources:
+        source_object = _load_json_object(source.read_text(encoding="utf-8"), source)
+        result = _merge_json_objects(result, source_object)
     _write_target(target, json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n", target_text)
 
 
-def _run_block(source: Path, target: Path, marker: str | None, insert_after: str) -> None:
+def _run_block(sources: Sequence[Path], target: Path, marker: str | None, insert_after: str) -> None:
     try:
         pattern = re.compile(insert_after) if insert_after else None
     except re.error as error:
         msg = f"invalid --insert-after regular expression: {error}"
         raise MergeError(msg) from error
 
-    source_text = source.read_text(encoding="utf-8")
+    source_text = "\n".join(source.read_text(encoding="utf-8") for source in sources)
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
     result = _merge_block(source_text, target_text, target, marker, pattern)
     _write_target(target, result, target_text)
@@ -227,13 +227,13 @@ def _parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     json_parser = subparsers.add_parser("json", help="Recursively merge JSON objects.")
-    json_parser.add_argument("--source", required=True, type=Path)
+    json_parser.add_argument("--source", nargs="+", required=True, type=Path)
     json_parser.add_argument("--target", required=True, type=Path)
 
     block_parser = subparsers.add_parser("block", help="Insert or replace a marker-delimited text block.")
     block_parser.add_argument("--insert-after", default="", metavar="REGEX")
     block_parser.add_argument("--marker", metavar="TEMPLATE")
-    block_parser.add_argument("--source", required=True, type=Path)
+    block_parser.add_argument("--source", nargs="+", required=True, type=Path)
     block_parser.add_argument("--target", required=True, type=Path)
     return parser
 
@@ -241,18 +241,18 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = _parser()
     arguments = parser.parse_args(argv)
-    source = cast("Path", arguments.source)
+    sources = cast("list[Path]", arguments.source)
     target = cast("Path", arguments.target)
 
     try:
-        if target.exists() and source.samefile(target):
+        if target.exists() and any(source.samefile(target) for source in sources):
             msg = "source and target must be different files"
             raise MergeError(msg)  # noqa: TRY301
         target.parent.mkdir(parents=True, exist_ok=True)
         if arguments.command == "json":
-            _run_json(source, target)
+            _run_json(sources, target)
         else:
-            _run_block(source, target, cast("str | None", arguments.marker), cast("str", arguments.insert_after))
+            _run_block(sources, target, cast("str | None", arguments.marker), cast("str", arguments.insert_after))
     except (MergeError, OSError, ValueError) as error:
         sys.stderr.write(f"merge-config: {error}\n")
         return 1

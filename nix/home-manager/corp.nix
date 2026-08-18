@@ -56,8 +56,6 @@
       {
         "${home}/.ssh/corp/config".source = pkgs.locallib.secrets + /corp/ssh_config.sops;
 
-        "${config.xdg.dataHome}/opencode/auth.json".source =
-          pkgs.locallib.secrets + /corp/opencode.auth.json.sops;
         "${config.xdg.configHome}/opencode/opencode.jsonc".source =
           pkgs.locallib.secrets + /corp/opencode.jsonc.sops;
 

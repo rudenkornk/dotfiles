@@ -31,10 +31,32 @@ done
 arg="$1"
 arg="${arg%/}"
 
+get_decrypted_name() {
+  local -r file="$1"
+  local normalized_name
+  local stem
+  local extension
+  normalized_name=$(basename "$file")
+  if [[ "$normalized_name" == *.sops ]]; then
+    normalized_name="${normalized_name%.sops}"
+  elif [[ "${normalized_name%.*}" == *.sops ]]; then
+    extension=".${normalized_name##*.}"
+    normalized_name="${normalized_name%.*}"
+    normalized_name="${normalized_name%.sops}$extension"
+  fi
+  stem="${normalized_name%.*}"
+  extension="${normalized_name#"$stem"}"
+  if [[ -z "$stem" || "$extension" = "." ]]; then
+    stem="$normalized_name"
+    extension=""
+  fi
+  printf '%s_%s_decrypted%s\n' "$stem" "$(sha1sum "$file" | head -c 10)" "$extension"
+}
+
 decrypt_file() {
   local -r file="$1"
   local -r symlink_target="${2:-}"
-  local -r decrypted_name=$(basename "$file")_$(sha1sum "$file" | head -c 10)_decrypted
+  local -r decrypted_name=$(get_decrypted_name "$file")
   local -r decrypted=/run/user/"$(id --user)"/secrets/"$decrypted_name"
   local -r failed="$decrypted.failed"
   local temporary_decrypted

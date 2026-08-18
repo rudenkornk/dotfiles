@@ -1,12 +1,14 @@
 # ruff: noqa: INP001, PT009
 
 import json
+import os
 import stat
 import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from textwrap import dedent
 
 PROGRAM = Path(__file__).with_name("merge-config.py")
 
@@ -16,12 +18,48 @@ class MergeConfigTest(unittest.TestCase):
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary_directory.cleanup)
         self.directory = Path(self.temporary_directory.name)
+        self.bin_directory = self.directory / "bin"
+        self.bin_directory.mkdir()
+        self.decrypt_log = self.directory / "decrypt.log"
+        sops_cached = self.bin_directory / "sops-cached"
+        sops_cached.write_text(
+            dedent(
+                """\
+                #!{python}
+                import json
+                import os
+                import sys
+                from pathlib import Path
+
+                arguments = sys.argv[1:]
+                source = Path(arguments[-1])
+                with Path(os.environ["MERGE_CONFIG_DECRYPT_LOG"]).open("a", encoding="utf-8") as log:
+                {spaces}log.write(json.dumps(arguments) + "\\n")
+                if "fail" in source.name:
+                {spaces}print("fake decryption failure", file=sys.stderr)
+                {spaces}print("/dev/null")
+                {spaces}sys.exit(19)
+                name = source.name.replace(".sops.", ".", 1)
+                if name.endswith(".sops"):
+                {spaces}name = name.removesuffix(".sops")
+                logical_path = Path(name)
+                decrypted = source.with_name(logical_path.stem + "_decrypted" + logical_path.suffix)
+                decrypted.write_bytes(source.read_bytes())
+                print(decrypted)
+                """
+            ).format(python=sys.executable, spaces=" " * 4)
+        )
+        sops_cached.chmod(0o755)
 
     def run_merge(self, *arguments: str, success: bool = True) -> subprocess.CompletedProcess[str]:
+        environment = os.environ.copy()
+        environment["MERGE_CONFIG_DECRYPT_LOG"] = str(self.decrypt_log)
+        environment["PATH"] = f"{self.bin_directory}:{environment['PATH']}"
         result = subprocess.run(  # noqa: S603
             [sys.executable, PROGRAM, *arguments],
             check=False,
             capture_output=True,
+            env=environment,
             text=True,
         )
         if success:
@@ -34,6 +72,11 @@ class MergeConfigTest(unittest.TestCase):
         path = self.directory / name
         path.write_text(content)
         return path
+
+    def decrypt_invocations(self) -> list[list[str]]:
+        if not self.decrypt_log.exists():
+            return []
+        return [json.loads(line) for line in self.decrypt_log.read_text().splitlines()]
 
     def test_json_recursively_merges_objects_and_replaces_other_values(self) -> None:
         source = self.write(
@@ -109,6 +152,89 @@ class MergeConfigTest(unittest.TestCase):
                 "list": [2],
             },
         )
+
+    def test_json_decrypts_supported_source_names_in_order(self) -> None:
+        source1 = self.write("source1.json", '{"shared": "plain", "plain": true}')
+        source2 = self.write("source2.sops.json", '{"shared": "infix", "infix": true}')
+        source3 = self.write("source3.json.sops", '{"shared": "suffix", "suffix": true}')
+        target = self.write("target.json", '{"shared": "target"}')
+        target.chmod(0o640)
+
+        self.run_merge(
+            "json",
+            "--source",
+            str(source1),
+            str(source2),
+            str(source3),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(
+            json.loads(target.read_text()),
+            {"shared": "suffix", "plain": True, "infix": True, "suffix": True},
+        )
+        self.assertEqual(self.decrypt_invocations(), [[str(source2)], [str(source3)]])
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o600)
+
+    def test_json_forwards_retry_decrypt(self) -> None:
+        source = self.write("source.sops.json", '{"managed": true}')
+        target = self.directory / "target.json"
+
+        self.run_merge(
+            "json",
+            "--retry-decrypt",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(self.decrypt_invocations(), [["--retry", str(source)]])
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o600)
+
+    def test_json_decryption_failure_preserves_target(self) -> None:
+        source = self.write("fail.sops.json", '{"managed": true}')
+        target = self.write("target.json", '{"existing": true}\n')
+        before = target.read_bytes()
+
+        result = self.run_merge("json", "--source", str(source), "--target", str(target), success=False)
+
+        self.assertIn("fake decryption failure", result.stderr)
+        self.assertEqual(target.read_bytes(), before)
+
+    def test_json_suppresses_decryption_failure(self) -> None:
+        failed = self.write("fail.sops.json", '{"failed": true}')
+        source = self.write("source.sops.json", '{"managed": true}')
+        target = self.write("target.json", '{"existing": true}')
+
+        self.run_merge(
+            "json",
+            "--suppress-decrypt-errors",
+            "--source",
+            str(failed),
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(json.loads(target.read_text()), {"existing": True, "managed": True})
+
+    def test_json_merges_empty_input_when_all_decryptions_fail(self) -> None:
+        source = self.write("fail.sops.json", '{"failed": true}')
+        target = self.directory / "target.json"
+
+        self.run_merge(
+            "json",
+            "--suppress-decrypt-errors",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(target.read_text(), "{}\n")
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o600)
 
     def test_json_creates_missing_target(self) -> None:
         source = self.write("source.json", '{"managed": true}')
@@ -230,6 +356,44 @@ class MergeConfigTest(unittest.TestCase):
             target.read_text(),
             "before\n# BEGIN NIX MANAGED BLOCK\nfirst\nsecond\nthird\n# END NIX MANAGED BLOCK\nafter\n",
         )
+
+    def test_block_decrypts_yaml_source(self) -> None:
+        source = self.write("source.sops.yaml", "managed: true\n")
+        target = self.write("target.yaml", "local: true\n")
+
+        self.run_merge("block", "--source", str(source), "--target", str(target))
+
+        self.assertEqual(
+            target.read_text(),
+            "local: true\n# BEGIN NIX MANAGED BLOCK\nmanaged: true\n# END NIX MANAGED BLOCK\n",
+        )
+
+    def test_block_merges_empty_input_when_all_decryptions_fail(self) -> None:
+        source = self.write("fail.sops.yaml", "managed: true\n")
+        target = self.write("target.yaml", "local: true\n")
+
+        self.run_merge(
+            "block",
+            "--suppress-decrypt-errors",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(
+            target.read_text(),
+            "local: true\n# BEGIN NIX MANAGED BLOCK\n# END NIX MANAGED BLOCK\n",
+        )
+
+    def test_block_treats_other_sops_suffixes_as_plaintext(self) -> None:
+        source = self.write("source.sops.yml", "managed: true\n")
+        target = self.write("target.yaml", "local: true\n")
+
+        self.run_merge("block", "--source", str(source), "--target", str(target))
+
+        self.assertEqual(self.decrypt_invocations(), [])
+        self.assertIn("managed: true\n", target.read_text())
 
     def test_block_replaces_old_block_at_its_position_without_regex(self) -> None:
         source = self.write("source", "new\n")

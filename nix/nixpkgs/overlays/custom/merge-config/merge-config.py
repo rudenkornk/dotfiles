@@ -3,6 +3,8 @@
 import argparse
 import json
 import re
+import stat
+import subprocess
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -13,6 +15,7 @@ type JsonObject = dict[str, JsonValue]
 
 MARKER_PLACEHOLDER = "{mark}"
 MARKER_TEXT = "NIX MANAGED BLOCK"
+ENCRYPTED_SUFFIXES = (".sops", ".sops.json", ".sops.yaml")
 LINE_MARKERS = {
     ".bash": "#",
     ".c": "//",
@@ -71,6 +74,47 @@ BASENAME_MARKERS = {
 
 class MergeError(Exception):
     pass
+
+
+def _is_encrypted(path: Path) -> bool:
+    return path.name.endswith(ENCRYPTED_SUFFIXES)
+
+
+def _decrypt_source(path: Path, *, retry: bool, suppress_errors: bool) -> Path | None:
+    command = ["sops-cached"]
+    if retry:
+        command.append("--retry")
+    command.append(str(path))
+    result = subprocess.run(  # noqa: S603
+        command,
+        check=not suppress_errors,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return None
+
+    output_lines = result.stdout.splitlines()
+    if len(output_lines) != 1 or not output_lines[0]:
+        msg = f"sops-cached returned an invalid decrypted path for {path}"
+        raise MergeError(msg)
+    decrypted = Path(output_lines[0])
+    if not decrypted.is_file():
+        msg = f"sops-cached returned a missing decrypted file for {path}: {decrypted}"
+        raise MergeError(msg)
+    return decrypted
+
+
+def _resolve_sources(sources: Sequence[Path], *, retry: bool, suppress_errors: bool) -> list[Path]:
+    resolved = []
+    for source in sources:
+        if not _is_encrypted(source):
+            resolved.append(source)
+            continue
+        decrypted = _decrypt_source(source, retry=retry, suppress_errors=suppress_errors)
+        if decrypted is not None:
+            resolved.append(decrypted)
+    return resolved
 
 
 def _load_json_object(text: str, path: Path) -> JsonObject:
@@ -218,21 +262,48 @@ def _merge_block(
     return "".join(lines)
 
 
-def _write_target(path: Path, content: str, previous: str) -> None:
-    if content != previous:
-        path.write_text(content, encoding="utf-8")
+def _write_target(path: Path, content: str, previous: str, *, private: bool) -> None:
+    target_perms = 0o644 if not path.exists() else stat.S_IMODE(path.stat().st_mode)
+
+    if private:
+        target_perms &= 0o700
+
+    if not path.exists():
+        path.touch(target_perms)
+
+    current_perms = stat.S_IMODE(path.stat().st_mode)
+
+    if (target_perms & current_perms) != current_perms:
+        path.chmod(target_perms)
+
+    if content == previous:
+        return
+
+    path.write_text(content, encoding="utf-8")
 
 
-def _run_json(sources: Sequence[Path], target: Path) -> None:
+def _run_json(sources: Sequence[Path], target: Path, *, private_target: bool) -> None:
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
     result = _load_json_object(target_text, target) if target_text.strip() else {}
     for source in sources:
         source_object = _load_json_object(source.read_text(encoding="utf-8"), source)
         result = _merge_json_objects(result, source_object)
-    _write_target(target, json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n", target_text)
+    _write_target(
+        target,
+        json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n",
+        target_text,
+        private=private_target,
+    )
 
 
-def _run_block(sources: Sequence[Path], target: Path, marker: str | None, insert_after: str) -> None:
+def _run_block(
+    sources: Sequence[Path],
+    target: Path,
+    marker: str | None,
+    insert_after: str,
+    *,
+    private_target: bool,
+) -> None:
     try:
         pattern = re.compile(insert_after) if insert_after else None
     except re.error as error:
@@ -242,7 +313,18 @@ def _run_block(sources: Sequence[Path], target: Path, marker: str | None, insert
     source_text = _merge_block_sources(sources, pattern)
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
     result = _merge_block(source_text, target_text, target, marker, pattern)
-    _write_target(target, result, target_text)
+    _write_target(target, result, target_text, private=private_target)
+
+
+def _add_common_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--retry-decrypt", action="store_true", help="Retry cached decryption failures.")
+    parser.add_argument("--source", nargs="+", required=True, type=Path)
+    parser.add_argument(
+        "--suppress-decrypt-errors",
+        action="store_true",
+        help="Skip sources that fail to decrypt.",
+    )
+    parser.add_argument("--target", required=True, type=Path)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -250,14 +332,12 @@ def _parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     json_parser = subparsers.add_parser("json", help="Recursively merge JSON objects.")
-    json_parser.add_argument("--source", nargs="+", required=True, type=Path)
-    json_parser.add_argument("--target", required=True, type=Path)
+    _add_common_arguments(json_parser)
 
     block_parser = subparsers.add_parser("block", help="Insert or replace a marker-delimited text block.")
     block_parser.add_argument("--insert-after", default="", metavar="REGEX")
     block_parser.add_argument("--marker", metavar="TEMPLATE")
-    block_parser.add_argument("--source", nargs="+", required=True, type=Path)
-    block_parser.add_argument("--target", required=True, type=Path)
+    _add_common_arguments(block_parser)
     return parser
 
 
@@ -266,16 +346,33 @@ def main(argv: Sequence[str] | None = None) -> int:
     arguments = parser.parse_args(argv)
     sources = cast("list[Path]", arguments.source)
     target = cast("Path", arguments.target)
+    private_target = any(_is_encrypted(source) for source in sources)
 
     try:
-        if target.exists() and any(source.samefile(target) for source in sources):
+        original_sources = sources
+        sources = _resolve_sources(
+            sources,
+            retry=cast("bool", arguments.retry_decrypt),
+            suppress_errors=cast("bool", arguments.suppress_decrypt_errors),
+        )
+        if target.exists() and any(source.samefile(target) for source in [*original_sources, *sources]):
             msg = "source and target must be different files"
             raise MergeError(msg)  # noqa: TRY301
         target.parent.mkdir(parents=True, exist_ok=True)
         if arguments.command == "json":
-            _run_json(sources, target)
+            _run_json(sources, target, private_target=private_target)
         else:
-            _run_block(sources, target, cast("str | None", arguments.marker), cast("str", arguments.insert_after))
+            _run_block(
+                sources,
+                target,
+                cast("str | None", arguments.marker),
+                cast("str", arguments.insert_after),
+                private_target=private_target,
+            )
+    except subprocess.CalledProcessError as error:
+        detail = error.stderr.strip()
+        sys.stderr.write(f"merge-config: {detail or error}\n")
+        return 1
     except (MergeError, OSError, ValueError) as error:
         sys.stderr.write(f"merge-config: {error}\n")
         return 1

@@ -1,40 +1,32 @@
 {
   name = "dellxps";
-  hardware-configuration =
-    { config, lib, pkgs, inputs, modulesPath, ... }:
+  hardware-configuration = { inputs, ... }:
 
   {
-    imports = [
-      (modulesPath + "/installer/scan/not-detected.nix")
-      inputs.nixos-hardware.nixosModules.dell-xps-15-9510-nvidia
-    ];
+    imports = [ inputs.nixos-hardware.nixosModules.dell-xps-15-9510-nvidia ];
 
     boot = {
-      initrd = {
-        availableKernelModules = [
-          "nvme"
-          "rtsx_pci_sdmmc"
-          "sd_mod"
-          "thunderbolt"
-          "usb_storage"
-          "vmd"
-          "xhci_pci"
-        ];
-        kernelModules = [ ];
-      };
-
       kernel = {
         sysctl = {
           "vm.swappiness" = 10; # Plenty of RAM allows reducing swap usage.
         };
       };
-      kernelModules = [ "kvm-intel" ];
-      extraModulePackages = [ ];
     };
 
-    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     hardware = {
-      cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+      facter = {
+        reportPath = ./dellxps/facter.json;
+        detected = {
+          # NetworkManager manages all interfaces itself, whereas facter's per-interface
+          # `useDHCP = true` defaults would additionally enable dhcpcd as a second DHCP client.
+          dhcp.enable = false;
+          # The report records the proprietary `nvidia` driver for the discrete GPU,
+          # and the facter graphics module would put it into `boot.initrd.kernelModules`,
+          # which breaks the regular nvidia driver setup. Pin early KMS to the iGPU only.
+          # See https://github.com/NixOS/nixpkgs/issues/485579
+          boot.graphics.kernelModules = [ "i915" ];
+        };
+      };
 
       logitech.wireless = {
         enable = true;

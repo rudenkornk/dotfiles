@@ -34,7 +34,7 @@ class Linter:
 def _linters(repo_path: Path) -> list[Linter]:
     return [
         Linter(["gitleaks", "git"]),
-        Linter(["statix", "check", repo_path]),
+        Linter(["statix", "check"]),  # NOTE: `statix` respects `.gitignore` only with no or relative path.
         Linter(["mypy", repo_path]),
         Linter(["ruff", "check"]),
         Linter(["yamllint", "--strict", repo_path / ".github"]),
@@ -97,12 +97,13 @@ def _formatters(repo_path: Path, *, check: bool) -> list[Formatter]:
     write_arg = ["--write"] if not check else []
     fish_files = git_files(repo_path, ".fish")
     return [
-        Formatter(["statix", "fix", *dry_run_arg, repo_path], stdout_is_error=check),
+        # NOTE: `statix` respects `.gitignore` only with no or relative path.
+        Formatter(["statix", "fix", *dry_run_arg], stdout_is_error=check),
         Formatter(["nixfmt", "--verify", "--strict", *check_arg, *git_files(repo_path, ".nix")]),
         Formatter(["ruff", "format", *check_arg]),
         Formatter(["ruff", "check", "--fix", "--unsafe-fixes", *diff_arg]),
         Formatter(["mdformat", *git_files(repo_path, ".md"), *check_arg]),
-        Formatter(["shfmt", *write_arg, *diff_arg, repo_path]),
+        Formatter(["shfmt", *write_arg, *diff_arg, *git_files(repo_path, ".sh")]),  # NOTE: `shfmt` ignores .gitignore.
         Formatter(["prettier", *write_arg, repo_path, *check_arg]),
         Formatter(["stylua", repo_path, *check_arg]),
         Formatter(["kdlfmt", "format" if not check else "check", *git_files(repo_path, ".kdl")]),

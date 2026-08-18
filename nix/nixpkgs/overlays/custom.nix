@@ -39,6 +39,8 @@ _: final: prev: {
 
     i-have-adhd-skill = import ./custom/i-have-adhd-skill.nix final prev;
 
+    merge-config = import ./custom/merge-config final prev;
+
     playwright-cli = import ./custom/playwright-cli.nix final prev;
 
     vim-spell = import ./custom/vim-spell.nix final prev;

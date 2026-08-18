@@ -106,6 +106,7 @@ strict = true
 exclude = [
   '^result/',
   '^__build/',
+  '^\.direnv/',
 ]
 
 [tool.pydocstyle]

@@ -285,7 +285,56 @@ If making Nix changes:
 These rules apply to comments in all source files (Python, Lua, Nix, shell, etc.) as well as to prose text in
 Markdown files.
 
-### Rule 1: Comments are prose
+### Rule 1: Comment only what the code cannot say
+
+Preferably do not comment new code at all.
+Add a comment only in the exceptional case where it is not obvious from the code why something is built the way it is.
+Never document external tools: whoever wonders what a tool does will look it up
+and get a better answer than any paraphrase kept in this repo.
+
+Prefer comments that are short, inlined and precise.
+Multiline comments placed above the code are acceptable,
+but only when they describe actual specifics of this project and its unobvious quirks.
+
+**Bad** — explains `nix-direnv` itself, which is what its own documentation is for:
+
+```diff
++    # Caches `nix develop` environments in `.direnv` and keeps them alive with GC roots,
++    # so entering a project directory does not re-evaluate the flake.
++    nix-direnv.enable = true;
+```
+
+**Good:**
+
+```diff
++    nix-direnv.enable = true;
+```
+
+**Bad** — an obscure change with no comment at all, which leaves room for an accidental revert
+and for re-discovering the problem it fixes:
+
+```diff
+-        Linter(["statix", "check", repo_path]),
++        Linter(["statix", "check"]),
+```
+
+**Bad** — better, but too wordy, and it breaks up the structure of the surrounding code:
+
+```diff
+-        Linter(["statix", "check", repo_path]),
++        # `statix` drops its `.gitignore` filtering when given an absolute path,
++        # so it is left with its default target, the current directory.
++        Linter(["statix", "check"]),
+```
+
+**Good:**
+
+```diff
+-        Linter(["statix", "check", repo_path]),
++        Linter(["statix", "check"]),  # NOTE: `statix` respects `.gitignore` only with no or relative path.
+```
+
+### Rule 2: Comments are prose
 
 Comments and Markdown prose should be treated as continuous text formatted as paragraphs, with proper punctuation
 and capitalization. Even a single-sentence comment must start with a capital letter and end with punctuation
@@ -330,7 +379,7 @@ mode = { "i", "n", "t" },
 { "folke/tokyonight.nvim", opts = { style = "night" } }, -- moon, storm, night, day   ← not a sentence
 ```
 
-### Rule 2: Line length ≤ 120 characters
+### Rule 3: Line length ≤ 120 characters
 
 No comment line may exceed 120 characters. When a sentence does not fit, split it at a meaningful boundary —
 after a comma, or before a conjunction such as "and", "or", "which". A sentence that fits within 120 chars
@@ -363,7 +412,7 @@ may still be split across lines.
 -- sub-project, whereas I need a root of entire project.   ← split at a bad boundary
 ```
 
-### Rule 3: One sentence per line (generally)
+### Rule 4: One sentence per line (generally)
 
 Different sentences should generally each start on their own line. Two short sentences may share a line if together
 they fit within 120 characters. A sentence must never be split across a line boundary with another sentence mixed in.

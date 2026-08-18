@@ -138,6 +138,7 @@ def syms() -> None:
     syms_target.create_symlinks(source_dir=programs / "linters/configs")
     syms_target.create_symlinks(source_dir=programs / "messengers/configs")
     syms_target.create_symlinks(source_dir=programs / "remote-desktop/configs")
+    syms_target.create_symlinks(source_dir=programs / "shell/configs")
     syms_target.create_symlinks(source_dir=programs / "system/configs")
     syms_target.create_symlinks(source_dir=programs / "terminals/configs")
     syms_target.create_symlinks(source_dir=programs / "vcs/configs")

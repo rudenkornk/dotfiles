@@ -51,12 +51,6 @@ in
         echo "${config_file} is missing: config was not decrypted, check decrypt-secrets.service." >&2
         exit 1
       fi
-      # `sops-cached` writes this exact marker instead of content when decryption fails.
-      read -r first_line <${config_file} || true
-      if [[ "$first_line" == "# decryption failed" ]]; then
-        echo "${config_file} failed to decrypt (TPM locked or secrets absent), check decrypt-secrets.service." >&2
-        exit 1
-      fi
       for candidate in ${toString candidates}; do
         if [[ -x "$candidate" ]]; then
           exec "$candidate" start --config ${config_file}

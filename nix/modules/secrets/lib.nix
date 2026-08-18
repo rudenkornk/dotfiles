@@ -57,15 +57,13 @@
         "${lib.getExe pkgs.custom.sops-cached} "
         + "--retry "
         + "--symlink ${lib.escapeShellArg target} "
-        + "${lib.optionalString v.recursive " --recursive"} "
-        + "${lib.escapeShellArg v.source} ";
+        + "${lib.optionalString v.recursive "--recursive "}"
+        + "${lib.escapeShellArg v.source} || true";
     in
     pkgs.writeShellApplication {
       name = "decrypt-secrets";
       runtimeInputs = [ pkgs.custom.sops-cached ];
       text = ''
-        # Attempt to decrypt all secrets even if some fail.
-        set +o errexit
         echo "Decrypting secrets..."
 
       ''

@@ -1,10 +1,12 @@
 # shellcheck shell=bash
 
 shopt -s nullglob
+umask 077
 
 retry=false
 symlink=""
 recursive=false
+has_failures=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -34,23 +36,43 @@ decrypt_file() {
   local -r symlink_target="${2:-}"
   local -r decrypted_name=$(basename "$file")_$(sha1sum "$file" | head -c 10)_decrypted
   local -r decrypted=/run/user/"$(id --user)"/secrets/"$decrypted_name"
+  local -r failed="$decrypted.failed"
+  local temporary_decrypted
+  local error_output
+  local status
 
-  if [[ -f "$decrypted" && "$retry" = true ]]; then
-    read -r first_line <"$decrypted"
-    if [[ "$first_line" = "# decryption failed" ]]; then
-      rm -- "$decrypted"
+  if [[ -f "$failed" && "$retry" = true ]]; then
+    rm -- "$failed"
+  fi
+
+  if [[ ! -f "$decrypted" && ! -f "$failed" ]]; then
+    mkdir --parents "$(dirname "$decrypted")"
+    temporary_decrypted=$(mktemp "$decrypted.XXXXXX")
+    error_output=$(mktemp "$failed.XXXXXX")
+    if sops --decrypt "$file" >"$temporary_decrypted" 2>"$error_output"; then
+      mv -- "$temporary_decrypted" "$decrypted"
+      rm -- "$error_output"
+      echo "$file is decrypted and cached." >&2
+    else
+      status=$?
+      rm -- "$temporary_decrypted"
+      {
+        printf 'Decryption failed with exit status %d.\n' "$status"
+        printf 'Reproduce with: sops --decrypt %q\n' "$file"
+        printf '\nSops stderr:\n'
+        cat "$error_output"
+      } >"$failed"
+      rm -- "$error_output"
+      echo "$file is failed to decrypt." >&2
     fi
   fi
 
-  if [[ ! -f "$decrypted" ]]; then
-    mkdir --parents "$(dirname "$decrypted")"
-    touch "$decrypted" && chmod 600 "$decrypted"
-    if sops --decrypt "$file" >"$decrypted"; then
-      echo "$file is decrypted and cached." >&2
-    else
-      echo "# decryption failed" >"$decrypted"
-      echo "$file is failed to decrypt." >&2
+  if [[ -f "$failed" ]]; then
+    if [[ -n "$symlink_target" ]]; then
+      rm -f -- "$symlink_target"
     fi
+    echo /dev/null
+    return 1
   fi
 
   if [[ -n "$symlink_target" ]]; then
@@ -70,8 +92,16 @@ if [[ "$recursive" = true && -d "$arg" ]]; then
       name=$(basename "$rel_path")
       symlink_target="$symlink/$dir/${name/.sops/}"
     fi
-    decrypt_file "$file" "$symlink_target"
+    if ! decrypt_file "$file" "$symlink_target"; then
+      has_failures=true
+    fi
   done < <(find "$arg" -type f \( -name "*.sops" -o -name "*.sops.*" \) -print0 | sort -z)
 elif [[ -n "$arg" ]]; then
-  decrypt_file "$arg" "$symlink"
+  if ! decrypt_file "$arg" "$symlink"; then
+    has_failures=true
+  fi
+fi
+
+if [[ "$has_failures" = true ]]; then
+  exit 1
 fi

@@ -1,11 +1,9 @@
 {
   name = "thinkpad";
-  hardware-configuration =
-    { config, lib, pkgs, inputs, modulesPath, ... }:
+  hardware-configuration = { pkgs, inputs, ... }:
 
   {
     imports = [
-      (modulesPath + "/installer/scan/not-detected.nix")
       # p16v actually, p15v is the closest one available in the list.
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-p15v-intel-gen3
       ./thinkpad/osquery.nix
@@ -13,26 +11,11 @@
     ];
 
     boot = {
-      initrd = {
-        availableKernelModules = [
-          "nvme"
-          "rtsx_pci_sdmmc"
-          "sd_mod"
-          "thunderbolt"
-          "usb_storage"
-          "vmd"
-          "xhci_pci"
-        ];
-        kernelModules = [ ];
-      };
-
       kernel = {
         sysctl = {
           "vm.swappiness" = 10; # Plenty of RAM allows reducing swap usage.
         };
       };
-      kernelModules = [ "kvm-intel" ];
-      extraModulePackages = [ ];
       kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
     };
 
@@ -40,15 +23,20 @@
     # even though this machine (p16v) does not have nvidia gpu.
     services.xserver.videoDrivers = [ "modesetting" ];
 
-    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     hardware = {
-      cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+      facter = {
+        reportPath = ./thinkpad/facter.json;
+        # NetworkManager manages all interfaces itself, whereas facter's per-interface
+        # `useDHCP = true` defaults would additionally enable dhcpcd as a second DHCP client.
+        detected.dhcp.enable = false;
+      };
 
       logitech.wireless = {
         enable = true;
         enableGraphical = true;
       };
     };
+
     environment = {
       etc = {
         "ssl/certs/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;

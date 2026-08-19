@@ -212,7 +212,9 @@ def _restart_secret_services() -> None:
     commands = [
         ["systemctl", "--user", "restart", "ssh-agent-keys.service"],
         ["systemctl", "--user", "restart", "decrypt-secrets.service"],
+        ["systemctl", "--user", "restart", "merge-config.service"],
         ["sudo", "systemctl", "restart", "decrypt-secrets.service"],
+        ["sudo", "systemctl", "restart", "merge-config.service"],
     ]
     for command in commands:
         if run_shell(command, check=False).returncode != 0:

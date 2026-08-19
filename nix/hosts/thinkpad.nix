@@ -1,11 +1,9 @@
 {
   name = "thinkpad";
-  hardware-configuration = { pkgs, inputs, ... }:
+  hardware-configuration = { pkgs, ... }:
 
   {
     imports = [
-      # p16v actually, p15v is the closest one available in the list.
-      inputs.nixos-hardware.nixosModules.lenovo-thinkpad-p15v-intel-gen3
       ./thinkpad/osquery.nix
       ./thinkpad/splitty.nix
     ];
@@ -19,10 +17,6 @@
       kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
     };
 
-    # `lenovo-thinkpad-p15v-intel-gen3` unconditionally imports the NVIDIA PRIME and Turing modules,
-    # even though this machine (p16v) does not have nvidia gpu.
-    services.xserver.videoDrivers = [ "modesetting" ];
-
     hardware = {
       facter = {
         reportPath = ./thinkpad/facter.json;
@@ -31,11 +25,24 @@
         detected.dhcp.enable = false;
       };
 
+      trackpoint = {
+        enable = true;
+        emulateWheel = true;
+        device = "TPPS/2 Elan TrackPoint";
+      };
+      graphics.extraPackages = with pkgs; [
+        intel-media-driver
+        intel-compute-runtime
+        vpl-gpu-rt
+      ];
+
       logitech.wireless = {
         enable = true;
         enableGraphical = true;
       };
     };
+
+    services.fstrim.enable = true;
 
     environment = {
       etc = {

@@ -22,6 +22,12 @@
   #      "$osqueryd" --database_path /var/tmp/osq-copy.db --database_dump 2>/dev/null | grep -c "^logs\[tls_r_"
   #      rm -rf /var/tmp/osq-copy.db'
   #    ```
+  #
+  # 4. And... there is actually a simple server-side confirmation.
+  #    ```bash
+  #    xdg-open $(sops --decrypt nix/secrets/corp/auth.sops.json | jq -r ".osquery_logs_server")/$(sudo cat /sys/class/dmi/id/product_uuid)
+  #    ```
+  #
   services.osquery = {
     enable = true;
     flags = {

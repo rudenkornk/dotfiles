@@ -137,9 +137,13 @@
     # tpm2-pkcs11's system-wide token store, created group-writable to the TSS group,
     # so that tokens provisioned here are usable by the hardened wpa_supplicant service:
     # tpm2-pkcs11 refuses to use a store it cannot lock and update.
-    # The contents are left alone, so anything provisioned as root needs a one-time `chmod -R g+rwX`.
+    # The `Z` line normalizes root-provisioned files (0644 by default) on every boot and switch;
+    # owners are left unchanged, and the `~` mask keeps files non-executable.
     # Backport of the `security.tpm2` part of the same pending branch.
-    tmpfiles.rules = [ "d /etc/tpm2_pkcs11 2770 root ${config.security.tpm2.tssGroup} -" ];
+    tmpfiles.rules = [
+      "d /etc/tpm2_pkcs11 2770 root ${config.security.tpm2.tssGroup} -"
+      "Z /etc/tpm2_pkcs11 ~2770 - ${config.security.tpm2.tssGroup} -"
+    ];
   };
   # TEMPORARY, third piece of the certificate access above: group-grant the decrypted
   # certificate to the service user.

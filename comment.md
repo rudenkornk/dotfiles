@@ -31,9 +31,9 @@
 
   Notes before you post
 
-  - Reply 2 presupposes pushing the store rework first. The two engine-2 commits that do exactly this (60d7b7bf tpm2 tmpfiles rule, 23cd2766 TSS-group access) are delivery-independent and directly answer the review — they can be cherry-picked onto the
+- Reply 2 presupposes pushing the store rework first. The two engine-2 commits that do exactly this (60d7b7bf tpm2 tmpfiles rule, 23cd2766 TSS-group access) are delivery-independent and directly answer the review — they can be cherry-picked onto the
   PR branch as-is.
-  - I'd keep OPENSSL_ENGINES delivery upstream and not push the other two engine-2 commits (150a207 conf-file delivery, 7ba26d0 pkcs11.module option): your live test just confirmed conf delivery is dead under NM, and reply 1 turns that finding into
+- I'd keep OPENSSL_ENGINES delivery upstream and not push the other two engine-2 commits (150a207 conf-file delivery, 7ba26d0 pkcs11.module option): your live test just confirmed conf delivery is dead under NM, and reply 1 turns that finding into
   the argument for the env var.
 
   If you want, I can prepare that updated PR branch (v1 delivery + the two store commits, with the option docs reconciled), and/or fix wpa_test the same way — restore OPENSSL_ENGINES while keeping the tmpfiles/tss-group store fix from yesterday's

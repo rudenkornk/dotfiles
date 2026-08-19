@@ -1,7 +1,8 @@
-# ruff: noqa: INP001, PT009
+# ruff: noqa: INP001, PT009, PT027
 
 import json
 import os
+import runpy
 import stat
 import subprocess
 import sys
@@ -9,6 +10,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from textwrap import dedent
+from unittest import mock
 
 PROGRAM = Path(__file__).with_name("merge-config.py")
 
@@ -193,6 +195,22 @@ class MergeConfigTest(unittest.TestCase):
         self.assertEqual(self.decrypt_invocations(), [["--retry", str(source)]])
         self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o600)
 
+    def test_json_creates_private_read_only_target(self) -> None:
+        source = self.write("source.sops.json", '{"managed": true}')
+        target = self.directory / "target.json"
+
+        self.run_merge(
+            "json",
+            "--read-only-target",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(json.loads(target.read_text()), {"managed": True})
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o400)
+
     def test_json_decryption_failure_preserves_target(self) -> None:
         source = self.write("fail.sops.json", '{"managed": true}')
         target = self.write("target.json", '{"existing": true}\n')
@@ -244,6 +262,23 @@ class MergeConfigTest(unittest.TestCase):
 
         self.assertEqual(json.loads(target.read_text()), {"managed": True})
 
+    def test_json_updates_read_only_target_and_preserves_mode(self) -> None:
+        source = self.write("source.json", '{"managed": true}')
+        target = self.write("target.json", '{"local": true}')
+        target.chmod(0o454)
+
+        self.run_merge(
+            "json",
+            "--read-only-target",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(json.loads(target.read_text()), {"local": True, "managed": True})
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o454)
+
     def test_json_preserves_target_and_mode_on_failure(self) -> None:
         source = self.write("source.json", "not JSON")
         target = self.write("target.json", '{"existing": true}\n')
@@ -285,6 +320,44 @@ class MergeConfigTest(unittest.TestCase):
         self.assertEqual(target.stat().st_ino, first_stat.st_ino)
         self.assertEqual(target.stat().st_mtime_ns, first_stat.st_mtime_ns)
         self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+
+    def test_json_read_only_target_removes_write_bits_from_unchanged_target(self) -> None:
+        source = self.write("source.json", '{"managed": true}')
+        target = self.write("target.json", '{"local": true}')
+        self.run_merge("json", "--source", str(source), "--target", str(target))
+        target.chmod(0o666)
+        before = target.stat()
+
+        self.run_merge(
+            "json",
+            "--read-only-target",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(target.stat().st_ino, before.st_ino)
+        self.assertEqual(target.stat().st_mtime_ns, before.st_mtime_ns)
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o444)
+
+    def test_read_only_target_relocks_after_write_failure(self) -> None:
+        target = self.write("target.json", "old")
+        target.chmod(0o444)
+        write_target = runpy.run_path(str(PROGRAM))["_write_target"]
+
+        def fail_write(*_args: object, **_kwargs: object) -> None:
+            self.assertNotEqual(target.stat().st_mode & stat.S_IWUSR, 0)
+            msg = "write failed"
+            raise OSError(msg)
+
+        with (
+            mock.patch.object(Path, "write_text", side_effect=fail_write),
+            self.assertRaisesRegex(OSError, "write failed"),
+        ):
+            write_target(target, "new", "old", private=False, read_only=True)
+
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o444)
 
     def test_block_appends_with_inferred_marker(self) -> None:
         source = self.write("source", "managed=true\n")
@@ -631,6 +704,26 @@ class MergeConfigTest(unittest.TestCase):
 
         self.assertTrue(target.is_symlink())
         self.assertIn("managed\n", referent.read_text())
+
+    def test_block_read_only_target_relocks_symlink_referent(self) -> None:
+        source = self.write("source", "managed\n")
+        referent = self.write("referent.conf", "local=true\n")
+        referent.chmod(0o444)
+        target = self.directory / "target.conf"
+        target.symlink_to(referent)
+
+        self.run_merge(
+            "block",
+            "--read-only-target",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertTrue(target.is_symlink())
+        self.assertIn("managed\n", referent.read_text())
+        self.assertEqual(stat.S_IMODE(referent.stat().st_mode), 0o444)
 
 
 if __name__ == "__main__":

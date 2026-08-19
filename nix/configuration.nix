@@ -79,35 +79,28 @@
     };
     # Smart cards and TPM for wifi connections work with hardening enabled,
     # thanks to the token access granted in `systemd.services.wpa_supplicant` below.
-    wireless = {
-      enableHardening = true;
-      # Adds `-I /etc/wpa_supplicant/nixos.conf` to the daemon arguments, so the generated
-      # global configuration below is included even though all networks are imperative.
-      # Backport of the config inclusion pending in nixpkgs (branch `nixos-wireless-pkcs11-engine-2`).
-      allowAuxiliaryImperativeNetworks = true;
-      # wpa_supplicant loads the pkcs11 engine through OpenSSL's dynamic engine mechanism,
-      # which searches only OpenSSL's own store path, so the engine (built separately, in `libp11`)
-      # can only be found through its full path.
-      # The module is the p11-kit proxy, which dispatches to every module registered
-      # system-wide in `/etc/pkcs11/modules`, where the TPM2 module is registered below.
-      # Backport of `networking.wireless.pkcs11` pending in nixpkgs (branch `nixos-wireless-pkcs11-engine-2`).
-      # See `./nix/nixpkgs/overlays/libp11.nix` for the whole picture.
-      extraConfig = ''
-        pkcs11_engine_path=${pkgs.lib.getLib pkgs.libp11}/lib/engines/pkcs11.so
-        pkcs11_module_path=${pkgs.lib.getLib pkgs.p11-kit}/lib/p11-kit-proxy.so
-      '';
-    };
+    wireless.enableHardening = true;
   };
 
   systemd = {
     services.wpa_supplicant = {
       environment = {
+        # OpenSSL's dynamic engine loader only searches OpenSSL's own store path,
+        # which does not contain the `pkcs11` engine (it is built separately, in `libp11`),
+        # so `ENGINE_by_id("pkcs11")` fails unless the search path is redirected to `libp11`.
+        # The environment variable is the only delivery covering D-Bus-added interfaces:
+        # they get an empty per-interface config, so `pkcs11_engine_path=` globals
+        # from any config file never reach them.
+        # Backport of `networking.wireless.pkcs11.enable` pending in nixpkgs
+        # (branch `nixos-wireless-pkcs11-engine`).
+        # See `./nix/nixpkgs/overlays/libp11.nix` for the whole picture.
+        OPENSSL_ENGINES = "${pkgs.lib.getLib pkgs.libp11}/lib/engines";
         # `security.tpm2.tctiEnvironment` exports this variable only to login shells,
         # not to systemd units, so mirror it here for the TPM2 PKCS#11 module.
         inherit (config.environment.variables) TPM2_PKCS11_TCTI;
       };
       # Token access for the hardened service, backport of the same pending nixpkgs branch
-      # (`nixos-wireless-pkcs11-engine-2`).
+      # (`nixos-wireless-pkcs11-engine`).
       # The additions merge with the hardening attrset of the upstream wireless module:
       # repeated `BindPaths`/`DeviceAllow` assignments append in systemd.
       # The tabrmd D-Bus policy only admits the tss user and group, which the `SupplementaryGroups`

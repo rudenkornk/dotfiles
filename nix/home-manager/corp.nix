@@ -58,6 +58,9 @@
         clearTarget = true;
         readOnlyTarget = true;
       };
+
+      "${config.home.homeDirectory}/.codex/config.toml".source =
+        pkgs.locallib.secrets + /corp/codex.config.toml.sops;
     };
 
     secrets.links =

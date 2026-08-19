@@ -6,7 +6,8 @@ import re
 import stat
 import subprocess
 import sys
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
 from typing import cast
 
@@ -262,11 +263,23 @@ def _merge_block(
     return "".join(lines)
 
 
-def _write_target(path: Path, content: str, previous: str, *, private: bool) -> None:
+@contextmanager
+def _allow_readonly_write(path: Path) -> Iterator[None]:
+    mode = stat.S_IMODE(path.stat().st_mode)
+    path.chmod(mode | 0o200)
+    try:
+        yield
+    finally:
+        path.chmod(mode & 0o555)
+
+
+def _write_target(path: Path, content: str, previous: str, *, private: bool, read_only: bool) -> None:
     target_perms = 0o644 if not path.exists() else stat.S_IMODE(path.stat().st_mode)
 
     if private:
         target_perms &= 0o700
+    if read_only:
+        target_perms &= 0o555
 
     if not path.exists():
         path.touch(target_perms)
@@ -279,10 +292,12 @@ def _write_target(path: Path, content: str, previous: str, *, private: bool) -> 
     if content == previous:
         return
 
-    path.write_text(content, encoding="utf-8")
+    manage_write = _allow_readonly_write(path) if read_only else nullcontext()
+    with manage_write:
+        path.write_text(content, encoding="utf-8")
 
 
-def _run_json(sources: Sequence[Path], target: Path, *, private_target: bool) -> None:
+def _run_json(sources: Sequence[Path], target: Path, *, private_target: bool, read_only_target: bool) -> None:
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
     result = _load_json_object(target_text, target) if target_text.strip() else {}
     for source in sources:
@@ -293,16 +308,18 @@ def _run_json(sources: Sequence[Path], target: Path, *, private_target: bool) ->
         json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n",
         target_text,
         private=private_target,
+        read_only=read_only_target,
     )
 
 
-def _run_block(
+def _run_block(  # noqa: PLR0913
     sources: Sequence[Path],
     target: Path,
     marker: str | None,
     insert_after: str,
     *,
     private_target: bool,
+    read_only_target: bool,
 ) -> None:
     try:
         pattern = re.compile(insert_after) if insert_after else None
@@ -313,10 +330,15 @@ def _run_block(
     source_text = _merge_block_sources(sources, pattern)
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
     result = _merge_block(source_text, target_text, target, marker, pattern)
-    _write_target(target, result, target_text, private=private_target)
+    _write_target(target, result, target_text, private=private_target, read_only=read_only_target)
 
 
 def _add_common_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--read-only-target",
+        action="store_true",
+        help="Remove all target write permissions after merging.",
+    )
     parser.add_argument("--retry-decrypt", action="store_true", help="Retry cached decryption failures.")
     parser.add_argument("--source", nargs="+", required=True, type=Path)
     parser.add_argument(
@@ -347,6 +369,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     sources = cast("list[Path]", arguments.source)
     target = cast("Path", arguments.target)
     private_target = any(_is_encrypted(source) for source in sources)
+    read_only_target = cast("bool", arguments.read_only_target)
 
     try:
         original_sources = sources
@@ -360,7 +383,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             raise MergeError(msg)  # noqa: TRY301
         target.parent.mkdir(parents=True, exist_ok=True)
         if arguments.command == "json":
-            _run_json(sources, target, private_target=private_target)
+            _run_json(
+                sources,
+                target,
+                private_target=private_target,
+                read_only_target=read_only_target,
+            )
         else:
             _run_block(
                 sources,
@@ -368,6 +396,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 cast("str | None", arguments.marker),
                 cast("str", arguments.insert_after),
                 private_target=private_target,
+                read_only_target=read_only_target,
             )
     except subprocess.CalledProcessError as error:
         detail = error.stderr.strip()

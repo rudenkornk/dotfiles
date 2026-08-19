@@ -160,6 +160,29 @@ def _adjust_after_cut(insertion_line: int, begin: int, end: int) -> int:
     return insertion_line - (end - begin)
 
 
+def _insert_source(source: str, target: str, pattern: re.Pattern[str] | None) -> str:
+    source_lines = source.splitlines()
+    if not source_lines:
+        return target
+
+    lines = target.splitlines(keepends=True)
+    insertion_line = _insertion_line(lines, pattern, None)
+    if insertion_line > 0 and not lines[insertion_line - 1].endswith("\n"):
+        lines[insertion_line - 1] += "\n"
+    lines[insertion_line:insertion_line] = [f"{line}\n" for line in source_lines]
+    return "".join(lines)
+
+
+def _merge_block_sources(sources: Sequence[Path], pattern: re.Pattern[str] | None) -> str:
+    if not sources:
+        return ""
+
+    result = sources[-1].read_text(encoding="utf-8")
+    for source in reversed(sources[:-1]):
+        result = _insert_source(result, source.read_text(encoding="utf-8"), pattern)
+    return result
+
+
 def _managed_block(source: str, begin_marker: str, end_marker: str, newline: str) -> list[str]:
     source_lines = source.splitlines()
     if begin_marker in source_lines or end_marker in source_lines:
@@ -216,7 +239,7 @@ def _run_block(sources: Sequence[Path], target: Path, marker: str | None, insert
         msg = f"invalid --insert-after regular expression: {error}"
         raise MergeError(msg) from error
 
-    source_text = "\n".join(source.read_text(encoding="utf-8") for source in sources)
+    source_text = _merge_block_sources(sources, pattern)
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
     result = _merge_block(source_text, target_text, target, marker, pattern)
     _write_target(target, result, target_text)

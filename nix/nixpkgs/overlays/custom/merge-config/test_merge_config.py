@@ -171,14 +171,16 @@ class MergeConfigTest(unittest.TestCase):
             "local=true\n# BEGIN NIX MANAGED BLOCK\nmanaged=true\n# END NIX MANAGED BLOCK\n",
         )
 
-    def test_block_concatenates_multiple_sources_with_newlines(self) -> None:
-        source1 = self.write("source1", "first")
-        source2 = self.write("source2", "second\n")
-        source3 = self.write("source3", "third")
-        target = self.write("target.conf", "local=true\n")
+    def test_block_inserts_later_sources_into_earlier_sources(self) -> None:
+        source1 = self.write("source1", "first before\nanchor one\nfirst after\n")
+        source2 = self.write("source2", "second before\nanchor two\nsecond after\n")
+        source3 = self.write("source3", "third\n")
+        target = self.write("target.conf", "target before\nanchor target\ntarget after\n")
 
         self.run_merge(
             "block",
+            "--insert-after",
+            "^anchor",
             "--source",
             str(source1),
             str(source2),
@@ -189,7 +191,44 @@ class MergeConfigTest(unittest.TestCase):
 
         self.assertEqual(
             target.read_text(),
-            "local=true\n# BEGIN NIX MANAGED BLOCK\nfirst\nsecond\n\nthird\n# END NIX MANAGED BLOCK\n",
+            "target before\n"
+            "anchor target\n"
+            "# BEGIN NIX MANAGED BLOCK\n"
+            "first before\n"
+            "anchor one\n"
+            "second before\n"
+            "anchor two\n"
+            "third\n"
+            "second after\n"
+            "first after\n"
+            "# END NIX MANAGED BLOCK\n"
+            "target after\n",
+        )
+
+    def test_block_appends_later_sources_when_regex_does_not_match(self) -> None:
+        source1 = self.write("source1", "first")
+        source2 = self.write("source2", "second\n")
+        source3 = self.write("source3", "third")
+        target = self.write(
+            "target.conf",
+            "before\n# BEGIN NIX MANAGED BLOCK\nold\n# END NIX MANAGED BLOCK\nafter\n",
+        )
+
+        self.run_merge(
+            "block",
+            "--insert-after",
+            "missing",
+            "--source",
+            str(source1),
+            str(source2),
+            str(source3),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(
+            target.read_text(),
+            "before\n# BEGIN NIX MANAGED BLOCK\nfirst\nsecond\nthird\n# END NIX MANAGED BLOCK\nafter\n",
         )
 
     def test_block_replaces_old_block_at_its_position_without_regex(self) -> None:

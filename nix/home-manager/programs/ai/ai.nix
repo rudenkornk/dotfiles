@@ -19,7 +19,16 @@ in
     (locallib.with_secrets { pkg = github-copilot-cli; })
     (locallib.with_secrets { pkg = grok-cli; })
     (locallib.with_secrets { pkg = pi-coding-agent; })
-    (locallib.with_secrets { pkg = unstable.claude-code; })
+    (locallib.with_secrets {
+      pkg = unstable.claude-code;
+      extraScript = ''
+        if [[ -s "$HOME/.claude/mcp-corp.json" ]]; then
+          set -- --mcp-config ${./claude.mcp.json} "$HOME/.claude/mcp-corp.json" "$@"
+        else
+          set -- --mcp-config ${./claude.mcp.json} "$@"
+        fi
+      '';
+    })
     (locallib.with_secrets {
       pkg = unstable.codex;
       extraScript = ''

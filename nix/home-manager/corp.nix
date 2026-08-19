@@ -23,8 +23,7 @@
 
     file = {
       ".itsme/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
-      # `ai.nix` installs the default opencode config unconditionally.
-      # Disable it here so the encrypted corp config from `local.secrets.links` owns this path.
+      # `local.merge-config` owns the corp target instead of the default Home Manager symlink.
       "${config.xdg.configHome}/opencode/opencode.jsonc".enable = false;
     };
   };
@@ -49,15 +48,24 @@
   };
 
   local = lib.optionalAttrs (user.userkind == "corp") {
+    merge-config.files = {
+      "${config.xdg.configHome}/opencode/opencode.jsonc" = {
+        source = [
+          ./programs/ai/configs/.config/opencode/opencode.jsonc
+          (pkgs.locallib.secrets + /corp/opencode.jsonc.sops)
+        ];
+        insertAfter = "INSERTION POINT";
+        clearTarget = true;
+        readOnlyTarget = true;
+      };
+    };
+
     secrets.links =
       let
         home = config.home.homeDirectory;
       in
       {
         "${home}/.ssh/corp/config".source = pkgs.locallib.secrets + /corp/ssh_config.sops;
-
-        "${config.xdg.configHome}/opencode/opencode.jsonc".source =
-          pkgs.locallib.secrets + /corp/opencode.jsonc.sops;
 
         "${home}/.itsme/config.yaml".source = pkgs.locallib.secrets + /corp/config.yaml.sops;
         "${home}/.itsme/initial_ovpn.conf".source = pkgs.locallib.secrets + /corp/initial_ovpn.conf.sops;

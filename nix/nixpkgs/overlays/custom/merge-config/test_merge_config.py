@@ -155,6 +155,23 @@ class MergeConfigTest(unittest.TestCase):
             },
         )
 
+    def test_json_clear_target_ignores_existing_content(self) -> None:
+        source = self.write("source.json", '{"managed": {"value": 1}}')
+        target = self.write("target.json", "not JSON\n")
+        target.chmod(0o640)
+
+        self.run_merge(
+            "json",
+            "--clear-target",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+
+        self.assertEqual(json.loads(target.read_text()), {"managed": {"value": 1}})
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+
     def test_json_decrypts_supported_source_names_in_order(self) -> None:
         source1 = self.write("source1.json", '{"shared": "plain", "plain": true}')
         source2 = self.write("source2.sops.json", '{"shared": "infix", "infix": true}')
@@ -403,6 +420,31 @@ class MergeConfigTest(unittest.TestCase):
             "# END NIX MANAGED BLOCK\n"
             "target after\n",
         )
+
+    def test_block_clear_target_ignores_existing_content_and_is_idempotent(self) -> None:
+        source = self.write("source", "managed\n")
+        target = self.write("target.conf", "anchor\n# BEGIN NIX MANAGED BLOCK\nincomplete\n")
+
+        arguments = (
+            "block",
+            "--clear-target",
+            "--insert-after",
+            "^anchor$",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        )
+        self.run_merge(*arguments)
+        first_stat = target.stat()
+        self.run_merge(*arguments)
+
+        self.assertEqual(
+            target.read_text(),
+            "# BEGIN NIX MANAGED BLOCK\nmanaged\n# END NIX MANAGED BLOCK\n",
+        )
+        self.assertEqual(target.stat().st_ino, first_stat.st_ino)
+        self.assertEqual(target.stat().st_mtime_ns, first_stat.st_mtime_ns)
 
     def test_block_appends_later_sources_when_regex_does_not_match(self) -> None:
         source1 = self.write("source1", "first")

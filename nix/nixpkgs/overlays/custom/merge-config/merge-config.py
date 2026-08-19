@@ -297,9 +297,16 @@ def _write_target(path: Path, content: str, previous: str, *, private: bool, rea
         path.write_text(content, encoding="utf-8")
 
 
-def _run_json(sources: Sequence[Path], target: Path, *, private_target: bool, read_only_target: bool) -> None:
+def _run_json(
+    sources: Sequence[Path],
+    target: Path,
+    *,
+    clear_target: bool,
+    private_target: bool,
+    read_only_target: bool,
+) -> None:
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
-    result = _load_json_object(target_text, target) if target_text.strip() else {}
+    result = _load_json_object(target_text, target) if not clear_target and target_text.strip() else {}
     for source in sources:
         source_object = _load_json_object(source.read_text(encoding="utf-8"), source)
         result = _merge_json_objects(result, source_object)
@@ -318,6 +325,7 @@ def _run_block(  # noqa: PLR0913
     marker: str | None,
     insert_after: str,
     *,
+    clear_target: bool,
     private_target: bool,
     read_only_target: bool,
 ) -> None:
@@ -329,11 +337,16 @@ def _run_block(  # noqa: PLR0913
 
     source_text = _merge_block_sources(sources, pattern)
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
-    result = _merge_block(source_text, target_text, target, marker, pattern)
+    result = _merge_block(source_text, "" if clear_target else target_text, target, marker, pattern)
     _write_target(target, result, target_text, private=private_target, read_only=read_only_target)
 
 
 def _add_common_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--clear-target",
+        action="store_true",
+        help="Treat the target as empty when merging.",
+    )
     parser.add_argument(
         "--read-only-target",
         action="store_true",
@@ -368,6 +381,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     arguments = parser.parse_args(argv)
     sources = cast("list[Path]", arguments.source)
     target = cast("Path", arguments.target)
+    clear_target = cast("bool", arguments.clear_target)
     private_target = any(_is_encrypted(source) for source in sources)
     read_only_target = cast("bool", arguments.read_only_target)
 
@@ -386,6 +400,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             _run_json(
                 sources,
                 target,
+                clear_target=clear_target,
                 private_target=private_target,
                 read_only_target=read_only_target,
             )
@@ -395,6 +410,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 target,
                 cast("str | None", arguments.marker),
                 cast("str", arguments.insert_after),
+                clear_target=clear_target,
                 private_target=private_target,
                 read_only_target=read_only_target,
             )

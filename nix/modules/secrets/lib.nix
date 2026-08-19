@@ -18,6 +18,11 @@
       type = lib.types.attrsOf (
         lib.types.submodule (_: {
           options = {
+            enable = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Whether this secret should be decrypted and linked.";
+            };
             source = lib.mkOption { type = lib.types.path; };
             recursive = lib.mkOption {
               type = lib.types.bool;
@@ -42,7 +47,7 @@
     };
   };
 
-  hasLinks = cfg: cfg.links != { };
+  hasLinks = cfg: lib.any (value: value.enable) (lib.attrValues cfg.links);
 
   mkScript =
     cfg:
@@ -64,6 +69,8 @@
         echo "Decrypting secrets..."
 
       ''
-      + lib.concatStringsSep "\n" (lib.mapAttrsToList mkCmd cfg.links);
+      + lib.concatStringsSep "\n" (
+        lib.mapAttrsToList mkCmd (lib.filterAttrs (_: value: value.enable) cfg.links)
+      );
     };
 }

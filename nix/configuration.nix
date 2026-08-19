@@ -79,65 +79,74 @@
     };
     # Smart cards and TPM for wifi connections work with hardening enabled,
     # thanks to the token access granted in `systemd.services.wpa_supplicant` below.
-    wireless.enableHardening = true;
+    wireless = {
+      enableHardening = true;
+      # Adds `-I /etc/wpa_supplicant/nixos.conf` to the daemon arguments, so the generated
+      # global configuration below is included even though all networks are imperative.
+      # Backport of the config inclusion pending in nixpkgs (branch `nixos-wireless-pkcs11-engine-2`).
+      allowAuxiliaryImperativeNetworks = true;
+      # wpa_supplicant loads the pkcs11 engine through OpenSSL's dynamic engine mechanism,
+      # which searches only OpenSSL's own store path, so the engine (built separately, in `libp11`)
+      # can only be found through its full path.
+      # The module is the p11-kit proxy, which dispatches to every module registered
+      # system-wide in `/etc/pkcs11/modules`, where the TPM2 module is registered below.
+      # Backport of `networking.wireless.pkcs11` pending in nixpkgs (branch `nixos-wireless-pkcs11-engine-2`).
+      # See `./nix/nixpkgs/overlays/libp11.nix` for the whole picture.
+      extraConfig = ''
+        pkcs11_engine_path=${pkgs.lib.getLib pkgs.libp11}/lib/engines/pkcs11.so
+        pkcs11_module_path=${pkgs.lib.getLib pkgs.p11-kit}/lib/p11-kit-proxy.so
+      '';
+    };
   };
 
-  systemd.services.wpa_supplicant = {
-    environment = {
-      # OpenSSL's dynamic engine loader only searches OpenSSL's own store path,
-      # which does not contain the `pkcs11` engine (it is built separately, in `libp11`),
-      # so `ENGINE_by_id("pkcs11")` fails unless the search path is redirected to `libp11`.
-      # Backport of `networking.wireless.pkcs11.enable` pending in nixpkgs
-      # (branch `nixos-wireless-pkcs11-engine`).
-      # See `./nix/nixpkgs/overlays/libp11.nix` for the whole picture.
-      OPENSSL_ENGINES = "${pkgs.lib.getLib pkgs.libp11}/lib/engines";
-      # `security.tpm2.tctiEnvironment` exports this variable only to login shells,
-      # not to systemd units, so mirror it here for the TPM2 PKCS#11 module.
-      inherit (config.environment.variables) TPM2_PKCS11_TCTI;
+  systemd = {
+    services.wpa_supplicant = {
+      environment = {
+        # `security.tpm2.tctiEnvironment` exports this variable only to login shells,
+        # not to systemd units, so mirror it here for the TPM2 PKCS#11 module.
+        inherit (config.environment.variables) TPM2_PKCS11_TCTI;
+      };
+      # Token access for the hardened service, backport of the same pending nixpkgs branch
+      # (`nixos-wireless-pkcs11-engine-2`).
+      # The additions merge with the hardening attrset of the upstream wireless module:
+      # repeated `BindPaths`/`DeviceAllow` assignments append in systemd.
+      # The tabrmd D-Bus policy only admits the tss user and group, which the `SupplementaryGroups`
+      # below satisfies: dbus-broker checks the actual peer groups via `SO_PEERGROUPS`.
+      serviceConfig = {
+        BindPaths = [
+          # Token access for the PKCS#11 backends: the kernel TPM resource manager,
+          # the pcscd socket for smartcard readers, and the writable tpm2-pkcs11 token store
+          # (nested bind mounts apply in path order, so it overrides the read-only `/etc`).
+          # Missing paths are skipped ("-" prefix).
+          "-/dev/tpmrm0"
+          "-/run/pcscd"
+          "-/etc/tpm2_pkcs11"
+        ];
+        # TEMPORARY, for testing the hardened token access: the wifi profile references its
+        # client certificate at root's sops-cached path, which the sandbox cannot see.
+        # The read access is a three-piece construction, tested outside the service
+        # with a sandbox replica (see `wpa-supplicant-cert-access` below for the third piece):
+        # 1. The bind makes the certificate symlink and its decrypted target visible.
+        # 2. `ProtectHome=true` would plant an inaccessible mask over `/run/user`
+        #    and systemd silently drops bind mounts nested under a masked path,
+        #    so it is lowered to "read-only", which masks without dropping the bind.
+        # The durable fix is embedding the certificate as a `data:;base64,` blob
+        # in the connection profile, making all of this unnecessary.
+        BindReadOnlyPaths = [ "-/run/user/0/secrets" ];
+        ProtectHome = pkgs.lib.mkForce "read-only";
+        DeviceAllow = [ "/dev/tpmrm0 rw" ];
+        # The TPM resource manager device node is owned by the tss group
+        # (see the udev rules in the `security.tpm2` module).
+        # Membership also grants write access to the token store created by the tmpfiles rule below.
+        SupplementaryGroups = [ config.security.tpm2.tssGroup ];
+      };
     };
-    # Token access for the hardened service, backport of the same pending nixpkgs branch.
-    # The additions merge with the hardening attrset of the upstream wireless module:
-    # repeated `BindPaths`/`DeviceAllow` assignments append in systemd.
-    # The tabrmd D-Bus policy only admits the tss user and group, which the `SupplementaryGroups`
-    # below satisfies: dbus-broker checks the actual peer groups via `SO_PEERGROUPS`.
-    serviceConfig = {
-      # The token store must be writable by the service: tpm2-pkcs11 refuses to initialize
-      # without the advisory lock file it creates next to its sqlite database,
-      # and write access also keeps schema migrations and token state updates working.
-      # The "+" prefix runs the commands with full privileges outside the sandbox,
-      # same as the upstream module's own chown lines, and "-" tolerates hosts without a store.
-      # Re-running recursively on every start keeps files created by root-side tools
-      # (the lock file, sqlite journals) group-writable as well.
-      ExecStartPre = [
-        "-+${pkgs.coreutils}/bin/chgrp --recursive wpa_supplicant /etc/tpm2_pkcs11"
-        "-+${pkgs.coreutils}/bin/chmod --recursive g+w /etc/tpm2_pkcs11"
-      ];
-      BindPaths = [
-        # Token access for the PKCS#11 backends: the kernel TPM resource manager,
-        # the pcscd socket for smartcard readers, and the writable tpm2-pkcs11 token store
-        # (nested bind mounts apply in path order, so it overrides the read-only `/etc`).
-        # Missing paths are skipped ("-" prefix).
-        "-/dev/tpmrm0"
-        "-/run/pcscd"
-        "-/etc/tpm2_pkcs11"
-      ];
-      # TEMPORARY, for testing the hardened token access: the wifi profile references its
-      # client certificate at root's sops-cached path, which the sandbox cannot see.
-      # The read access is a three-piece construction, tested outside the service
-      # with a sandbox replica (see `wpa-supplicant-cert-access` below for the third piece):
-      # 1. The bind makes the certificate symlink and its decrypted target visible.
-      # 2. `ProtectHome=true` would plant an inaccessible mask over `/run/user`
-      #    and systemd silently drops bind mounts nested under a masked path,
-      #    so it is lowered to "read-only", which masks without dropping the bind.
-      # The durable fix is embedding the certificate as a `data:;base64,` blob
-      # in the connection profile, making all of this unnecessary.
-      BindReadOnlyPaths = [ "-/run/user/0/secrets" ];
-      ProtectHome = pkgs.lib.mkForce "read-only";
-      DeviceAllow = [ "/dev/tpmrm0 rw" ];
-      # The TPM resource manager device node is owned by the tss group
-      # (see the udev rules in the `security.tpm2` module).
-      SupplementaryGroups = [ config.security.tpm2.tssGroup ];
-    };
+    # tpm2-pkcs11's system-wide token store, created group-writable to the TSS group,
+    # so that tokens provisioned here are usable by the hardened wpa_supplicant service:
+    # tpm2-pkcs11 refuses to use a store it cannot lock and update.
+    # The contents are left alone, so anything provisioned as root needs a one-time `chmod -R g+rwX`.
+    # Backport of the `security.tpm2` part of the same pending branch.
+    tmpfiles.rules = [ "d /etc/tpm2_pkcs11 2770 root ${config.security.tpm2.tssGroup} -" ];
   };
   # TEMPORARY, third piece of the certificate access above: group-grant the decrypted
   # certificate to the service user.

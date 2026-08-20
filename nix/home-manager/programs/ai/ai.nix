@@ -38,11 +38,23 @@ in
       pkg = nur.repos.charmbracelet.crush;
       binary = "crush";
     })
-    (locallib.with_secrets { pkg = unstable.opencode; })
+    (locallib.with_secrets {
+      pkg = unstable.opencode;
+      extraScript = ''
+        export OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true
+        export OPENCODE_EXPERIMENTAL_LSP_TOOL=true
+
+        # `omo` consults `PATH` for these only as a last resort, behind a Node version gate it does not need.
+        export OMO_CODEGRAPH_BIN=${unstable.codegraph}/bin/codegraph
+        export OMO_AST_GREP_SG_PATH=${ast-grep}/bin/ast-grep
+      '';
+    })
     (locallib.with_secrets { pkg = qwen-code; })
 
     mcp-nixos
+    custom.comment-checker
     custom.playwright-cli
+    unstable.codegraph
   ];
 
   home.file =

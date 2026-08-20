@@ -55,6 +55,15 @@
       "auto_commit": false,
     },
 
+    "tmux": {
+      "enabled": true,
+      "isolation": "inline",
+      "layout": "main-vertical",
+      "main_pane_size": 60,
+      "main_pane_min_width": 120,
+      "agent_pane_min_width": 40,
+    },
+
     "experimental": {
       "task_system": true,
       "disable_omo_env": true, // The injected date and locale break OpenAI prompt caching.

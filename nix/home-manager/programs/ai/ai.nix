@@ -47,6 +47,7 @@ in
         pkg = unstable.opencode;
         extraScript = ''
           export OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true
+          export OPENCODE_CONFIG=${./opencode.omo.jsonc}
 
           # OMO tmux subagents attach to the parent OpenCode server on port 4096.
           if [[ $# -eq 0 || -d "$1" ]]; then

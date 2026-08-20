@@ -48,6 +48,11 @@ in
         extraScript = ''
           export OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true
 
+          # OMO tmux subagents attach to the parent OpenCode server on port 4096.
+          if [[ $# -eq 0 || -d "$1" ]]; then
+            set -- --hostname 127.0.0.1 --port 4096 "$@"
+          fi
+
           # `omo` consults `PATH` for these only as a last resort, behind a Node version gate it does not need.
           export OMO_CODEGRAPH_BIN=${unstable.codegraph}/bin/codegraph
           export OMO_AST_GREP_SG_PATH=${ast-grep}/bin/ast-grep

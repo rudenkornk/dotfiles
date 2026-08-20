@@ -1,0 +1,7 @@
+{
+  // A config without `$schema` is rewritten on load, which fails silently against the read-only store path.
+  "$schema": "https://opencode.ai/config.json",
+
+  // `plugin` lists from every config source are unioned, so this entry can only be added, never subtracted.
+  "plugin": ["oh-my-openagent@4.19.4"],
+}

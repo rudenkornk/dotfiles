@@ -53,6 +53,10 @@
       "auto_commit": false,
     },
 
+    "tmux": {
+      "enabled": false,
+    },
+
     "experimental": {
       "task_system": true,
       "disable_omo_env": true, // The injected date and locale break OpenAI prompt caching.

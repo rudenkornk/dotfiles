@@ -20,8 +20,7 @@
     hardware = {
       facter = {
         reportPath = ./thinkpad/facter.json;
-        # NetworkManager manages all interfaces itself, whereas facter's per-interface
-        # `useDHCP = true` defaults would additionally enable dhcpcd as a second DHCP client.
+        # NetworkManager already manages DHCP; facter defaults would enable second DHCP client.
         detected.dhcp.enable = false;
       };
 

@@ -17,8 +17,7 @@
       facter = {
         reportPath = ./dellxps/facter.json;
         detected = {
-          # NetworkManager manages all interfaces itself, whereas facter's per-interface
-          # `useDHCP = true` defaults would additionally enable dhcpcd as a second DHCP client.
+          # NetworkManager already manages DHCP; facter defaults would enable second DHCP client.
           dhcp.enable = false;
           # The report records the proprietary `nvidia` driver for the discrete GPU,
           # and the facter graphics module would put it into `boot.initrd.kernelModules`,

@@ -27,5 +27,7 @@
     },
     // INSERTION POINT.
   },
-  "provider": {},
+  "provider": {
+    "openai": {},
+  },
 }

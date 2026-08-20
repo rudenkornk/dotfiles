@@ -37,6 +37,8 @@ _: final: prev: {
 
     ast-grep-skill = import ./custom/ast-grep-skill.nix final prev;
 
+    comment-checker = import ./custom/comment-checker.nix final prev;
+
     merge-config = import ./custom/merge-config final prev;
 
     playwright-cli = import ./custom/playwright-cli.nix final prev;

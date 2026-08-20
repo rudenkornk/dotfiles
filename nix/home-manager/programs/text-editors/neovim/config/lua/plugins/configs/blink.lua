@@ -39,7 +39,7 @@ M.opts = {
         module = "blink-cmp-dictionary",
         min_keyword_length = 4, -- Start matching with 4+ letters.
         score_offset = -40,
-        max_items = 5,
+        max_items = 2,
         opts = {
           dictionary_files = { vim.env.WORDLIST },
           -- Fix for weird spurious bug where complete items appear in one line with
@@ -60,12 +60,12 @@ M.opts = {
       },
       buffer = {
         score_offset = -10,
-        max_items = 5,
+        max_items = 2,
       },
       tmux = {
         name = "tmux",
         score_offset = -30,
-        max_items = 5,
+        max_items = 2,
         opts = { label = " ", all_panes = true },
       },
       minuet = {

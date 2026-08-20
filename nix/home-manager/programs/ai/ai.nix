@@ -11,6 +11,10 @@ let
 in
 {
   home = {
+    sessionVariables = {
+      OPENCODE_EXPERIMENTAL_LSP_TOOL = "true";
+    };
+
     packages = with pkgs; [
       (locallib.with_secrets { pkg = aider-chat-full; })
       (locallib.with_secrets { pkg = amazon-q-cli; })
@@ -43,7 +47,6 @@ in
         pkg = unstable.opencode;
         extraScript = ''
           export OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true
-          export OPENCODE_EXPERIMENTAL_LSP_TOOL=true
 
           # OMO tmux subagents attach to the parent OpenCode server on port 4096.
           if [[ $# -eq 0 || -d "$1" ]]; then

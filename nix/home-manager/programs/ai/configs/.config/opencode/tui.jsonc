@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/tui.json",
-  "plugin": ["@slkiser/opencode-quota@4.8.2"],
+  "plugin": ["@slkiser/opencode-quota@4.8.2", "oh-my-openagent@4.19.4"],
   "keybinds": {
     // ctrl-a move to start of current line.
     // ctrl-b move cursor back one character.

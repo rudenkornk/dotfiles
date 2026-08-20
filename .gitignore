@@ -34,3 +34,5 @@ credentials.yaml
 .aider*
 /result
 /nix/secrets/corp/packages_info.json
+
+/.omo/

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v4.19.4/assets/omo.schema.json",
+
+  // Rewrites of this file fail against the read-only store path, and an unmarked migration retries on every start.
+  "_migrations": [
+    "2026-07-opencode-config-unification",
+    "2026-07-codex-config-jsonc",
+    "2026-08-reasoning-unification",
+  ],
+  "profiles": {}, // Required by the published schema, so omitting it is a standing editor error.
+
+  "[opencode]": {
+    "telemetry": false,
+    "auto_update": false,
+    "model_capabilities": {
+      "auto_refresh_on_start": false, // Avoids a ~1MiB fetch on every session start.
+    },
+
+    "disabled_mcps": ["lsp"], // `OPENCODE_EXPERIMENTAL_LSP_TOOL` in `ai.nix` covers this natively.
+    "disabled_hooks": [
+      "session-notification",
+      "ast-grep-sg-provision",
+      "startup-toast",
+    ],
+
+    // `ast-grep` is absent deliberately: matching is by name alone, so it would drop the nixpkgs skill too.
+    "disabled_skills": [
+      "lsp-setup",
+      "ultimate-browsing",
+      "security-research",
+      "security-review",
+    ],
+
+    "browser_automation_engine": {
+      "provider": "playwright-cli", // The default provider launches its MCP through `npx`.
+    },
+
+    "codegraph": {
+      "enabled": true,
+      "auto_init": true,
+      "auto_provision": false,
+      "daemon": true,
+      "telemetry": false,
+    },
+
+    "git_master": {
+      "commit_footer": false,
+      "include_co_authored_by": false,
+      "git_env_prefix": "", // A non-empty prefix rewrites the git commands inside the skill text.
+    },
+
+    "start_work": {
+      "auto_commit": false,
+    },
+
+    "experimental": {
+      "task_system": true,
+      "disable_omo_env": true, // The injected date and locale break OpenAI prompt caching.
+    },
+
+    "runtime_fallback": {
+      "enabled": true, // Without this, `fallback_models` covers an unreachable model but not a rate limit.
+      "notify_on_fallback": true,
+      "restore_primary_after_cooldown": true,
+    },
+
+    "background_task": {
+      "defaultConcurrency": 5,
+      // A `modelConcurrency` entry gives that model its own bucket, raising rather than capping the total.
+      "providerConcurrency": {
+        "openai": 5,
+      },
+    },
+  },
+}

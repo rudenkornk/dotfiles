@@ -2,7 +2,7 @@ local M = {}
 
 M.opts = {
   provider = "openai_fim_compatible",
-  n_completions = 2,
+  n_completions = 1,
   context_window = 8192,
   request_timeout = 3,
   throttle = 1500, -- Time to send a new request after the last request was sent.

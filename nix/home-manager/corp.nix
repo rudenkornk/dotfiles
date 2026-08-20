@@ -19,11 +19,13 @@
       # CURL_CA_BUNDLE = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
       NODE_EXTRA_CA_CERTS = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
       NSS_DEFAULT_SSL_DIR = "${config.xdg.dataHome}/ca-certificates/";
+      OMO_PROFILE = "corp";
     };
 
     file = {
       ".itsme/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
-      # `local.merge-config` owns the corp target instead of the default Home Manager symlink.
+      # `local.merge-config` owns the corp targets instead of the default Home Manager symlinks.
+      ".omo/omo.jsonc".enable = false;
       "${config.xdg.configHome}/opencode/opencode.jsonc".enable = false;
     };
   };
@@ -49,6 +51,16 @@
 
   local = lib.optionalAttrs (user.userkind == "corp") {
     merge-config.files = {
+      "${config.home.homeDirectory}/.omo/omo.jsonc" = {
+        source = [
+          ./programs/ai/configs/.omo/omo.jsonc
+          (pkgs.locallib.secrets + /corp/omo.jsonc.sops)
+        ];
+        insertAfter = "INSERTION POINT";
+        clearTarget = true;
+        readOnlyTarget = true;
+      };
+
       "${config.xdg.configHome}/opencode/opencode.jsonc" = {
         source = [
           ./programs/ai/configs/.config/opencode/opencode.jsonc

@@ -7,7 +7,9 @@
     "2026-07-codex-config-jsonc",
     "2026-08-reasoning-unification",
   ],
-  "profiles": {}, // Required by the published schema, so omitting it is a standing editor error.
+  "profiles": {
+    // INSERTION POINT.
+  },
 
   "[opencode]": {
     "telemetry": false,

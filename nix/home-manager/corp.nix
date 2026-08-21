@@ -70,6 +70,10 @@
       {
         "${home}/.ssh/corp/config".source = pkgs.locallib.secrets + /corp/ssh_config.sops;
 
+        "${config.xdg.dataHome}/atuin/key".source = lib.mkForce (
+          pkgs.locallib.secrets + /corp/atuin_key.sops
+        );
+
         "${home}/.claude/mcp-corp.json".source = pkgs.locallib.secrets + /corp/claude.mcp.json.sops;
 
         "${home}/.itsme/config.yaml".source = pkgs.locallib.secrets + /corp/config.yaml.sops;

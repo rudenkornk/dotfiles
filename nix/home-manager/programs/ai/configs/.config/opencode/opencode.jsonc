@@ -31,6 +31,7 @@
       "~/.config/mozilla/*": "deny",
       "~/.config/sops/*": "deny",
       "~/.gnupg/*": "deny",
+      "~/.local/share/atuin/key": "deny",
       "~/.local/share/keyrings/*": "deny",
       "~/.local/share/TelegramDesktop/*": "deny",
       "~/.pki/*": "deny",

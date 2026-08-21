@@ -12,7 +12,7 @@ in
 {
   home = {
     sessionVariables = {
-
+      OPENCODE_EXPERIMENTAL_LSP_TOOL = "true";
     };
 
     packages = with pkgs; [

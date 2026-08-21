@@ -56,7 +56,7 @@ M.opts = {
       env = {
         name = "Env",
         module = "blink-cmp-env",
-        max_items = 5,
+        max_items = 2,
       },
       buffer = {
         score_offset = -10,

@@ -3,7 +3,6 @@
 # Shells & shells extensions.
 {
   home.packages = with pkgs; [
-    atuin
     bash-completion
     carapace
     fish

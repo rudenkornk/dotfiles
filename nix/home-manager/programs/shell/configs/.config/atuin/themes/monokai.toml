@@ -1,0 +1,20 @@
+[theme]
+name = "monokai"
+parent = "default"
+
+[colors]
+AlertInfo = "#a6e22e"
+AlertWarn = "#fd971f"
+AlertError = "#f92672"
+Annotation = "#75715e"
+Base = "#f8f8f2"
+Guidance = "#66d9ef"
+Important = "#e6db74"
+Title = "#ae81ff"
+Muted = "#75715e"
+SyntaxCommand = "#a6e22e"
+SyntaxFlag = "#66d9ef"
+SyntaxString = "#e6db74"
+SyntaxVariable = "#ae81ff"
+SyntaxOperator = "#f92672"
+SyntaxComment = "#75715e"

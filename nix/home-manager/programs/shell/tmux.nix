@@ -104,12 +104,6 @@
     packages = [ pkgs.custom.tmux-agent-status ];
   };
 
-  xdg = {
-    configFile = {
-      "tmux/toggle_pane.py".source = ./tmux/toggle_pane.py;
-    };
-  };
-
   programs.fish = {
     interactiveShellInit = builtins.readFile ./tmux/fish/conf.d/tmux.fish;
   };

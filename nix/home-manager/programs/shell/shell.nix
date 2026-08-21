@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 # Shells & shells extensions.
 {
@@ -12,6 +12,11 @@
     powershell
     tmux
   ];
+
+  home.file = pkgs.locallib.homefiles {
+    inherit (config) xdg;
+    path = ./configs;
+  };
 
   # Control keys:
   # ctrl-a beginning of the line.

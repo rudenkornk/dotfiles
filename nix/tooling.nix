@@ -27,6 +27,7 @@ let
     # Secrets tooling for `updatekeys` and `bootstrap-crypto`.
     age-plugin-tpm
     sops
+    unstable.atuin # TODO(rudenkornk): change to stable in next 26.11 release.
 
     # Format & lint tools.
     fish

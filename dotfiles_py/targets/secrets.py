@@ -1,7 +1,9 @@
+import json
 import logging
 import os
 import platform
 import shutil
+import subprocess
 import tempfile
 from collections.abc import Mapping
 from pathlib import Path
@@ -63,6 +65,7 @@ def _bootstrap_crypto(*, repo_path: Path, tmp: Path) -> None:
     _install_identity(identity_file=identity_file, tmp=tmp)
     _restart_secret_services()
     _switch_origin_to_ssh(repo_path)
+    _atuin_login(repo_path)
     _logger.info("Done: this machine now decrypts repo secrets with TPM key.")
 
 
@@ -236,6 +239,28 @@ def _switch_origin_to_ssh(repo_path: Path) -> None:
     ssh_url = "git@github.com:" + url.removeprefix(https_prefix).removesuffix(".git") + ".git"
     run_shell(["git", "remote", "set-url", "origin", ssh_url], cwd=repo_path)
     _logger.info(f"Switched the 'origin' remote to {ssh_url}.")
+
+
+def _atuin_login(repo_path: Path) -> None:
+    secret_path = repo_path / "nix/secrets/"
+    if os.getenv("USERKIND") == "corp":
+        secret_path /= "corp"
+    secret_path /= "atuin_credentials.sops.json"
+
+    creds_raw = run_shell(["sops", "--decrypt", secret_path], capture_output=True, check=False)
+    if creds_raw.returncode != 0:
+        _logger.warning("Failed to decrypt atuin creds, skipping the atuin login.")
+        return
+
+    creds = json.loads(creds_raw.stdout)
+    # Intentionally skipping encryption key -- it is decrypted at boot atuomatically.
+    # Also using subprocess.run instead of run_shell to avoid printing the password.
+    _logger.warning("Logging into atuin.")
+    subprocess.run(  # noqa: S603
+        ["atuin", "login", "--username", creds["username"], "--password", creds["password"], "--key", ""],  # noqa: S607
+        check=False,
+        text=True,
+    )
 
 
 def _commit_recipient_change(repo_path: Path) -> None:

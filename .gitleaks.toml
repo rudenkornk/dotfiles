@@ -6,6 +6,14 @@ useDefault = true
 
 [[allowlists]]
 paths = [".gitsecret/paths/mapping.cfg"]
+commits = [
+  "da6ae24cdd06d40b7fa3c6ba419be87d46357f40",
+  "67c1d72132b574a344b54544695ee23f780e36f3",
+  "a79fe4940f70d9c292c9d4d9ffadd54bc9217b91",
+  "b682fda8234c4d8bd1d38ccfb1d7e5070f0827be",
+  "daab2439202d1d59ed1cb369b25bdd572b10ebdd",
+  "3592e05758bb336129fd72a6d956443ecfd75e82",
+]
 
 # APT repos keys
 stopwords = [
@@ -20,7 +28,7 @@ stopwords = [
 [[rules]]
 id = "yandex-internal"
 description = "Yandex internal URL"
-regex = '''(?i)yandex.net|yandex-team.ru'''
+regex = '''(?i)yandex.net|yandex-team.ru|yteam.(.*)'''
 
 [[rules]]
 id = "facter-serial-number"

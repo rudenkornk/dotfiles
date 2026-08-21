@@ -9,11 +9,6 @@
     ];
 
     boot = {
-      kernel = {
-        sysctl = {
-          "vm.swappiness" = 10; # Plenty of RAM allows reducing swap usage.
-        };
-      };
       kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
     };
 

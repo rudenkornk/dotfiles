@@ -5,14 +5,6 @@
   {
     imports = [ inputs.nixos-hardware.nixosModules.dell-xps-15-9510-nvidia ];
 
-    boot = {
-      kernel = {
-        sysctl = {
-          "vm.swappiness" = 10; # Plenty of RAM allows reducing swap usage.
-        };
-      };
-    };
-
     hardware = {
       facter = {
         reportPath = ./dellxps/facter.json;

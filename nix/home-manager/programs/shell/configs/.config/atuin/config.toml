@@ -1,0 +1,26 @@
+dialect = "uk"
+enter_accept = false
+inline_height = 0
+invert = true
+prefers_reduced_motion = true
+show_numeric_shortcuts = false
+style = "auto"
+update_check = false
+search_mode = "daemon-fuzzy"
+
+[keymap.emacs]
+"ctrl-u" = "scroll-half-page-up"
+"ctrl-d" = "scroll-half-page-down"
+"ctrl-b" = "scroll-page-up"
+"ctrl-f" = "scroll-page-down"
+"ctrl-t" = "cycle-search-mode"
+
+[theme]
+name = "monokai"
+
+[ai]
+enabled = true
+
+[daemon]
+enabled = true
+autostart = true

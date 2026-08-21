@@ -8,6 +8,4 @@ _: {
     enableNushellIntegration = true;
     enableZshIntegration = true;
   };
-
-  xdg.configFile."direnv/direnv.toml".source = ./configs/.config/direnv/direnv.toml;
 }

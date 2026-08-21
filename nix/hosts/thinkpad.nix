@@ -51,8 +51,8 @@
     local = {
       secrets = {
         links = {
-          "/etc/NetworkManager/system-connections/YTeam.nmconnection".source =
-            pkgs.locallib.secrets + /corp/YTeam.nmconnection.sops;
+          "/etc/NetworkManager/system-connections/corp_wifi.nmconnection".source =
+            pkgs.locallib.secrets + /corp/corp_wifi.nmconnection.sops;
           "/run/user/0/secrets/rudenkornk.pem".source = pkgs.locallib.secrets + /corp/rudenkornk.pem.sops;
         };
         before = [ "NetworkManager.service" ];

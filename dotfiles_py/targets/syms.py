@@ -1,6 +1,7 @@
 import logging
 import os
 import shutil
+import time
 from pathlib import Path
 
 _logger = logging.getLogger(__name__)
@@ -34,8 +35,9 @@ def _create_symlink(*, source: Path, dest: Path, home_dir: Path) -> None:
         _logger.debug(f"Overwriting existing symlink {dest_repr}")
         dest.unlink()
     elif dest.exists():
-        msg = f"Target {dest_repr} already exists as a file or directory"
-        raise RuntimeError(msg)
+        backup = dest.with_name(f"{dest.name}.{time.strftime('%y.%m.%d-%H.%M')}.bak")
+        dest.rename(backup)
+        _logger.warning(f"Backed up existing {dest_repr} to {_path_repr(backup, home_dir)}")
 
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.symlink_to(source.resolve())

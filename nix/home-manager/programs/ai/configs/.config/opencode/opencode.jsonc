@@ -5,12 +5,14 @@
   "subagent_depth": 2,
   "permission": {
     "external_directory": {
+      // "allow" rules allow both reads and writes.
       "*": "ask",
       "~/projects/arcadia/**": "allow",
       "~/projects/dotfiles/**": "allow",
       "~/projects/home-manager/**": "allow",
       "~/projects/nixpkgs/**": "allow",
 
+      "~/.cache/**": "allow",
       "~/.config/**": "allow",
       "~/.local/share/**": "allow",
       "~/.local/state/**": "allow",
@@ -35,6 +37,29 @@
       "~/.local/share/keyrings/*": "deny",
       "~/.local/share/TelegramDesktop/*": "deny",
       "~/.pki/*": "deny",
+    },
+
+    "edit": {
+      // These rules are not effective, only written for future reference.
+      // Blocked by these issues/PRs:
+      // https://github.com/anomalyco/opencode/pull/40149
+      // https://github.com/anomalyco/opencode/pull/41070
+      // After merge & update these rules may require adjustments.
+
+      "*": "allow", // CWD.
+      "/**": "ask",
+      "/etc/**": "ask",
+      "/run/**": "ask",
+
+      "/tmp/**": "allow",
+
+      "/bin/**": "deny",
+      "/dev/**": "deny",
+      "/lib64/**": "deny",
+      "/nix/**": "deny",
+      "/sys/**": "deny",
+      "/usr/**": "deny",
+      "/var/**": "deny",
     },
   },
   "lsp": {},

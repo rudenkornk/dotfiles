@@ -7,6 +7,7 @@
     "external_directory": {
       // "allow" rules allow both reads and writes.
       "*": "ask",
+      "~/Downloads/**": "allow",
       "~/projects/arcadia/**": "allow",
       "~/projects/dotfiles/**": "allow",
       "~/projects/home-manager/**": "allow",

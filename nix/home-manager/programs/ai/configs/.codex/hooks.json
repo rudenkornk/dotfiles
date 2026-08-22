@@ -39,6 +39,15 @@
             "command": "tmux-agent-status set --state waiting --emit-json"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "atuin hook codex"
+          }
+        ],
+        "matcher": "^Bash$"
       }
     ],
     "PermissionRequest": [
@@ -61,6 +70,26 @@
             "command": "tmux-agent-status set --state running --emit-json"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "atuin hook codex"
+          }
+        ],
+        "matcher": "^Bash$"
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "atuin hook codex"
+          }
+        ],
+        "matcher": "^Bash$"
       }
     ],
     "PreCompact": [

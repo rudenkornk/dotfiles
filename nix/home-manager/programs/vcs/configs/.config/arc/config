@@ -1,7 +1,7 @@
 # Configuration for arc -- exotic VCS from yandex.
 [alias]
   bl = blame
-  br = branch -vv
+  br = branch
   ck = checkout
   cm = commit
   cma = commit --all --message a # Commit all.

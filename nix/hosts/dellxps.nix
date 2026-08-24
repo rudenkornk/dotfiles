@@ -1,3 +1,9 @@
+{ pkgs, ... }:
+
+let
+  facterReportPath = ./dellxps/facter.json;
+  facter = pkgs.locallib.facter facterReportPath;
+in
 {
   name = "dellxps";
   hardware-configuration = { inputs, ... }:
@@ -7,7 +13,7 @@
 
     hardware = {
       facter = {
-        reportPath = ./dellxps/facter.json;
+        reportPath = facterReportPath;
         detected = {
           # NetworkManager already manages DHCP; facter defaults would enable second DHCP client.
           dhcp.enable = false;
@@ -26,7 +32,7 @@
     };
   };
 
-  ramGiB = 64;
+  inherit (facter) ramGiB;
   disk = {
     device = "/dev/disk/by-path/pci-0000:00:0e.0-pci-10000:e2:00.0-nvme-1";
   };
@@ -35,6 +41,6 @@
     noctalia = import ./dellxps/noctalia_monitors.nix;
   };
   gpu = {
-    cudaSupport = true;
+    cudaSupport = facter.hasNvidiaGpu;
   };
 }

@@ -1,6 +1,12 @@
+{ pkgs, ... }:
+
+let
+  facterReportPath = ./thinkpad/facter.json;
+  facter = pkgs.locallib.facter facterReportPath;
+in
 {
   name = "thinkpad";
-  hardware-configuration = { pkgs, ... }:
+  hardware-configuration = { ... }:
 
   {
     imports = [
@@ -14,7 +20,7 @@
 
     hardware = {
       facter = {
-        reportPath = ./thinkpad/facter.json;
+        reportPath = facterReportPath;
         # NetworkManager already manages DHCP; facter defaults would enable second DHCP client.
         detected.dhcp.enable = false;
       };
@@ -55,12 +61,15 @@
     };
   };
 
-  ramGiB = 32;
+  inherit (facter) ramGiB;
   disk = {
     device = "/dev/disk/by-path/pci-0000:05:00.0-nvme-1";
   };
   monitors = {
     niri = import ./thinkpad/niri_monitors.nix;
     noctalia = import ./thinkpad/noctalia_monitors.nix;
+  };
+  gpu = {
+    cudaSupport = facter.hasNvidiaGpu;
   };
 }

@@ -28,7 +28,7 @@
 
   ramGiB = 64;
   disk = {
-    device = "/dev/nvme1n1";
+    device = "/dev/disk/by-path/pci-0000:00:0e.0-pci-10000:e2:00.0-nvme-1";
   };
   monitors = {
     niri = import ./dellxps/niri_monitors.nix;

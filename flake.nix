@@ -54,7 +54,7 @@
         overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
       };
       hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
-      hosts = mapAttrs (lib.const import) hostfiles;
+      hosts = mapAttrs (_: path: import path { inherit pkgs; }) hostfiles;
       userfiles = pkgs.locallib.get_modules_map ./nix/users;
       users = mapAttrs (lib.const import) userfiles;
       standalonePackages = pkgs.locallib.get_modules_map ./nix/packages;

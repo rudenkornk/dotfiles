@@ -255,7 +255,7 @@ def _atuin_login(repo_path: Path) -> None:
     creds = json.loads(creds_raw.stdout)
     # Intentionally skipping encryption key -- it is decrypted at boot atuomatically.
     # Also using subprocess.run instead of run_shell to avoid printing the password.
-    _logger.warning("Logging into atuin.")
+    _logger.info("Logging into atuin.")
     subprocess.run(  # noqa: S603
         ["atuin", "login", "--username", creds["username"], "--password", creds["password"], "--key", ""],  # noqa: S607
         check=False,

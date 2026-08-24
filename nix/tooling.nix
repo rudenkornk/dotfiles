@@ -3,18 +3,13 @@
 let
   python = pkgs.python313;
 
-  # Python env with libraries of the `dotfiles` CLI itself, plus the markdown formatter:
-  # `mdformat` and its plugins must live in the same python env to see each other.
+  # Python env with libraries of the `dotfiles` CLI itself.
   pyEnv = python.withPackages (
     ps: with ps; [
       click
       rich
       ruamel-yaml
       typer
-
-      mdformat
-      mdformat-beautysh
-      mdformat-gfm
     ]
   );
 
@@ -46,6 +41,13 @@ let
     stylua
     typos
     yamllint
+    (mdformat.withPlugins (
+      ps: with ps; [
+        mdformat-beautysh
+        mdformat-gfm
+      ]
+    ))
+
   ];
 
   # Only the CLI sources, so unrelated repo changes do not rebuild the package.

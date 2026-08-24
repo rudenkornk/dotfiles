@@ -57,7 +57,7 @@
 
   ramGiB = 32;
   disk = {
-    device = "/dev/nvme1n1";
+    device = "/dev/disk/by-path/pci-0000:05:00.0-nvme-1";
   };
   monitors = {
     niri = import ./thinkpad/niri_monitors.nix;

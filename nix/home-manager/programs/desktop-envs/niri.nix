@@ -39,13 +39,6 @@ in
       "niri/monitors.kdl".text = outputsKdl;
 
       "systemd/user/niri.service.d/override.conf".text =
-        let
-          envList = lib.mapAttrsToList (name: value: "Environment=${name}=${value}") (
-            host.gpu.offloadVars or { }
-          );
-          offloadLinesRaw = lib.concatStringsSep "\n" envList;
-          offloadLines = if (host.gpu.niri.enable or false) then offloadLinesRaw else "";
-        in
         # toml
         ''
           [Service]
@@ -54,9 +47,6 @@ in
           UnsetEnvironment=SHELL
           UnsetEnvironment=TERM
           UnsetEnvironment=PWD
-
-          # GPU offload.
-          ${offloadLines}
         '';
     };
   };

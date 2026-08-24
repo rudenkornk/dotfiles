@@ -52,7 +52,9 @@ def noctalia_config(*, settings_path: Path, monitor_settings_path: Path) -> None
     settings_path.write_text(json.dumps(settings, indent=2, sort_keys=True))
 
     monitors_dump = json.dumps(monitors, indent=2, sort_keys=True)
-    monitors_nix = run_shell(
+    header = "# This file is auto-generated. Do not edit.\n"
+    monitors_nix = header
+    monitors_nix += run_shell(
         ["nix", "eval", "--expr", f"builtins.fromJSON ''{monitors_dump}''", "--pretty"],
         capture_output=True,
         loglevel=logging.DEBUG,

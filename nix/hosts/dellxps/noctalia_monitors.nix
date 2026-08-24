@@ -1,3 +1,4 @@
+# This file is auto-generated. Do not edit.
 {
   bar = {
     monitors = [ "eDP-1" ];

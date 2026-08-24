@@ -50,6 +50,15 @@ let
 
   ];
 
+  installTools = with pkgs; [
+    disko
+    e2fsprogs # chattr, lsattr, etc.
+    mokutil
+    nixos-install
+    sbctl
+    vim
+  ];
+
   # Only the CLI sources, so unrelated repo changes do not rebuild the package.
   cliSrc = pkgs.lib.fileset.toSource {
     root = ../.;
@@ -90,14 +99,7 @@ in
     };
 
     install = pkgs.mkShell {
-      packages = with pkgs; [
-        disko
-        e2fsprogs # chattr, lsattr, etc.
-        mokutil
-        nixos-install
-        sbctl
-        vim
-      ];
+      packages = installTools;
 
       shellHook =
         # bash

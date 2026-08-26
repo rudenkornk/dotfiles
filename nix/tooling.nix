@@ -14,7 +14,7 @@ let
   );
 
   # Tools the `dotfiles` CLI shells out to, shared between the dev shell and the CLI package.
-  tools = with pkgs; [
+  managingTools = with pkgs; [
     # Tools for dumping gnome settings.
     dconf
     dconf2nix
@@ -65,37 +65,44 @@ let
     fileset = ../dotfiles_py;
   };
 
-  dotfiles = pkgs.writeShellApplication {
+  mkDotfiles =
+    { name, runtimeInputs }:
+    pkgs.writeShellApplication {
+      inherit name runtimeInputs;
+      text = ''
+        # `mypy` resolves the CLI's third-party imports through PYTHONPATH, so expose the python env there too.
+        export PYTHONPATH="${cliSrc}:${pyEnv}/${python.sitePackages}''${PYTHONPATH:+:$PYTHONPATH}"
+        exec python3 -m dotfiles_py "$@"
+      '';
+    };
+
+  dotfiles = mkDotfiles {
     name = "dotfiles";
-    runtimeInputs = tools ++ [ pyEnv ];
-    text = ''
-      # `mypy` resolves the CLI's third-party imports through PYTHONPATH, so expose the python env there too.
-      export PYTHONPATH="${cliSrc}:${pyEnv}/${python.sitePackages}''${PYTHONPATH:+:$PYTHONPATH}"
-      exec python3 -m dotfiles_py "$@"
-    '';
+    runtimeInputs = managingTools ++ [ pyEnv ];
   };
+
+  commonShellHook =
+    # bash
+    ''
+      # `mypy` resolves the CLI's third-party imports through PYTHONPATH, so expose the python env there too.
+      export PYTHONPATH="$PWD/src:$PWD:${pyEnv}/${python.sitePackages}:$PYTHONPATH"
+      mkdir --parents __build
+      echo -e '#!/usr/bin/env bash\n\npython3 -m dotfiles_py "$@"' > __build/dotfiles
+      chmod +x __build/dotfiles
+      export PATH="$PWD/__build:$PATH"
+
+      # Hook setup is an idempotent symlink refresh, so it is safe to run on every shell entry.
+      # Worktrees are skipped (`.git` is a file there); they share the main checkout's hooks anyway.
+      if [ -d .git ]; then
+        dotfiles --log-level warning hooks
+      fi
+    '';
 in
 {
   devShells = {
     default = pkgs.mkShell {
-      packages = [ pyEnv ] ++ tools;
-
-      shellHook =
-        # bash
-        ''
-          # `mypy` resolves the CLI's third-party imports through PYTHONPATH, so expose the python env there too.
-          export PYTHONPATH="$PWD/src:$PWD:${pyEnv}/${python.sitePackages}:$PYTHONPATH"
-          mkdir --parents __build
-          echo -e '#!/usr/bin/env bash\n\npython3 -m dotfiles_py "$@"' > __build/dotfiles
-          chmod +x __build/dotfiles
-          export PATH="$PWD/__build:$PATH"
-
-          # Hook setup is an idempotent symlink refresh, so it is safe to run on every shell entry.
-          # Worktrees are skipped (`.git` is a file there); they share the main checkout's hooks anyway.
-          if [ -d .git ]; then
-            dotfiles --log-level warning hooks
-          fi
-        '';
+      packages = [ pyEnv ] ++ managingTools;
+      shellHook = commonShellHook;
     };
 
     install = pkgs.mkShell {

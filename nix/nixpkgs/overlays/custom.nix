@@ -35,6 +35,17 @@ _: final: prev: {
           (builtins.readFile ./custom/sing-box-run.sh);
     };
 
+    rvim = final.lib.hiPrio (
+      final.writeShellApplication {
+        name = "rvim";
+        runtimeInputs = [
+          final.util-linux
+          final.vim
+        ];
+        text = builtins.readFile ./custom/rvim.sh;
+      }
+    );
+
     ast-grep-skill = import ./custom/ast-grep-skill.nix final prev;
 
     comment-checker = import ./custom/comment-checker.nix final prev;

@@ -12,6 +12,7 @@ import typer
 from . import utils
 from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
+from .targets import host as host_target
 from .targets import lint as lint_target
 from .targets import noctalia as noctalia_target
 from .targets import secrets as secrets_target
@@ -121,6 +122,19 @@ def updatekeys() -> None:
 def bootstrap_crypto() -> None:
     """Provision AGE keys on a fresh machine: verify a pasted key, then register a machine-local TPM key."""
     secrets_target.bootstrap_crypto(repo_path=REPO_PATH)
+
+
+@app.command()
+@utils.typer_exit()
+def bootstrap_host(
+    *,
+    force: Annotated[
+        bool,
+        typer.Option("-f", "--force", help="Force regeneration of existing host."),
+    ] = False,
+) -> None:
+    """Generate an initial host definition for this machine."""
+    host_target.bootstrap_host(repo_path=REPO_PATH, templates_path=DATA_PATH / "templates", force=force)
 
 
 @app.command()

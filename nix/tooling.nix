@@ -53,9 +53,12 @@ let
   installTools = with pkgs; [
     disko
     e2fsprogs # chattr, lsattr, etc.
+    git
     mokutil
+    nixos-facter
     nixos-install
     sbctl
+    util-linux # lsblk.
     vim
   ];
 

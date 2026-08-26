@@ -8,9 +8,9 @@
 {
   home = {
     packages = with pkgs; [
+      gh
       git
       git-lfs
-      gh
     ];
     shellAliases = {
       g = "git";

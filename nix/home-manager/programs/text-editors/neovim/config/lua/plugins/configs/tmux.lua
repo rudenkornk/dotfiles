@@ -36,6 +36,12 @@ M.keys = {
   tmux_move("right", "<C-l>"),
   tmux_move("bottom", "<C-j>"),
   tmux_move("top", "<C-k>"),
+
+  tmux_move("left", "<C-w>h"),
+  tmux_move("right", "<C-w>l"),
+  tmux_move("bottom", "<C-w>j"),
+  tmux_move("top", "<C-w>k"),
+
   tmux_resize("left", "<A-z>h", 15),
   tmux_resize("right", "<A-z>l", 15),
   tmux_resize("bottom", "<A-z>j", 10),

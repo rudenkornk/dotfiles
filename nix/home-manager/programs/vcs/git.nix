@@ -14,7 +14,6 @@
     ];
     shellAliases = {
       g = "git";
-      a = "arc";
     };
 
     file = pkgs.locallib.homefiles {

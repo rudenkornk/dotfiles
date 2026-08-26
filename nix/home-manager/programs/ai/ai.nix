@@ -9,7 +9,21 @@ let
     playwright-cli = "${pkgs.custom.playwright-cli}/share/skills/playwright-cli";
   };
 
-  opencode = pkgs.locallib.with_secrets { pkg = pkgs.unstable.opencode; };
+  opencode-omo = pkgs.writeShellScriptBin "opencode-omo" ''
+    export OPENCODE_CONFIG=${./opencode.omo.jsonc}
+    export OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true # `omo` serves `~/.claude` through its own compatibility layer.
+
+    # `omo` consults `PATH` for these only as a last resort, behind a Node version gate it does not need.
+    export OMO_CODEGRAPH_BIN=${pkgs.unstable.codegraph}/bin/codegraph
+    export OMO_AST_GREP_SG_PATH=${pkgs.ast-grep}/bin/ast-grep
+
+    # OMO tmux subagents attach to the parent OpenCode server on port 4096.
+    if [[ $# -eq 0 || -d "$1" ]]; then
+      set -- --hostname 127.0.0.1 --port 4096 "$@"
+    fi
+
+    exec -a opencode-omo ${pkgs.lib.getExe pkgs.unstable.opencode} "$@"
+  '';
 in
 {
   home = {
@@ -45,22 +59,8 @@ in
         pkg = nur.repos.charmbracelet.crush;
         binary = "crush";
       })
-      opencode
-      (writeShellScriptBin "opencode-omo" ''
-        export OPENCODE_CONFIG=${./opencode.omo.jsonc}
-        export OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true # `omo` serves `~/.claude` through its own compatibility layer.
-
-        # `omo` consults `PATH` for these only as a last resort, behind a Node version gate it does not need.
-        export OMO_CODEGRAPH_BIN=${unstable.codegraph}/bin/codegraph
-        export OMO_AST_GREP_SG_PATH=${ast-grep}/bin/ast-grep
-
-        # OMO tmux subagents attach to the parent OpenCode server on port 4096.
-        if [[ $# -eq 0 || -d "$1" ]]; then
-          set -- --hostname 127.0.0.1 --port 4096 "$@"
-        fi
-
-        exec ${lib.getExe opencode} "$@"
-      '')
+      (locallib.with_secrets { pkg = unstable.opencode; })
+      (locallib.with_secrets { pkg = opencode-omo; })
       (locallib.with_secrets { pkg = qwen-code; })
 
       mcp-nixos

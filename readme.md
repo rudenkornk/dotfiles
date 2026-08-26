@@ -11,9 +11,10 @@ A `NixOS` configuration.
 1. Clone the repo and format disk:
 
    ```bash
+   HOSTNAME=dellxps
    git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
    sudo nix --extra-experimental-features "nix-command flakes" develop .#install
-   disko --mode destroy,format,mount --flake .#dellxps
+   disko --mode destroy,format,mount --flake .#$HOSTNAME
    ```
 
 1. Generate Secure Boot keys and copy them into persistent storage:
@@ -30,7 +31,7 @@ A `NixOS` configuration.
 1. Install `NixOS`:
 
    ```bash
-   nixos-install --flake .#dellxps --root /mnt
+   nixos-install --flake .#$HOSTNAME --root /mnt
    reboot
    ```
 
@@ -96,10 +97,11 @@ nh home switch . -b $(date '+%y.%m.%d-%H.%M')
 ### System recovery from live USB
 
 ```bash
+HOSTNAME=dellxps
 git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
 sudo nix --extra-experimental-features "nix-command flakes" develop .#install
-disko --mode mount --flake .#dellxps
-nixos-install --flake .#dellxps --root /mnt
+disko --mode mount --flake .#$HOSTNAME
+nixos-install --flake .#$HOSTNAME --root /mnt
 reboot
 ```
 

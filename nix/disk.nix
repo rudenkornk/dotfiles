@@ -17,7 +17,7 @@
     };
 
     disk.main = {
-      inherit (host.disk) device;
+      device = host.disk_device;
       type = "disk";
       content = {
         type = "gpt";

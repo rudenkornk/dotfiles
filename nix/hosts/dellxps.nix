@@ -6,6 +6,9 @@ let
 in
 {
   name = "dellxps";
+  smbiosUUIDHash = "87cada6bb572d69c87e1991ec678762bbffede52";
+  disk_device = "/dev/disk/by-path/pci-0000:00:0e.0-pci-10000:e2:00.0-nvme-1";
+
   hardware-configuration = { inputs, ... }:
 
   {
@@ -33,9 +36,6 @@ in
   };
 
   inherit (facter) ramGiB;
-  disk = {
-    device = "/dev/disk/by-path/pci-0000:00:0e.0-pci-10000:e2:00.0-nvme-1";
-  };
   monitors = {
     niri = import ./dellxps/niri_monitors.nix;
     noctalia = import ./dellxps/noctalia_monitors.nix;

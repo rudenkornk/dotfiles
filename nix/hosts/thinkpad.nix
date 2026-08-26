@@ -6,6 +6,9 @@ let
 in
 {
   name = "thinkpad";
+  smbiosUUIDHash = "4cc3d7d1d69c8a0372d34bbbbebc4c82e1c5f22f";
+  disk_device = "/dev/disk/by-path/pci-0000:05:00.0-nvme-1";
+
   hardware-configuration = { ... }:
 
   {
@@ -62,9 +65,6 @@ in
   };
 
   inherit (facter) ramGiB;
-  disk = {
-    device = "/dev/disk/by-path/pci-0000:05:00.0-nvme-1";
-  };
   monitors = {
     niri = import ./thinkpad/niri_monitors.nix;
     noctalia = import ./thinkpad/noctalia_monitors.nix;

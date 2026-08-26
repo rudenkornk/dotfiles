@@ -6,6 +6,14 @@ set -euo pipefail
 win="${1:-}"
 [ -n "$win" ] || exit 0
 
+# Generic icons shortlist for AI clis.
+#   fa-infinity (U+EDFE).
+# 󰁨  md-auto_fix (U+F0068).
+# 󰙴  md-creation (U+F0674).
+#   fa-biohazard (U+EF35).
+#   fae-radioactive (U+E238).
+#   fa-flask (U+F0C3).
+
 # Map one candidate executable token (see subtree_exes) to the agent's identity glyph.
 match_agent() {
   local base="${1##*/}"
@@ -19,6 +27,7 @@ match_agent() {
   claude) printf '#[fg=#d97757] #[fg=default]' ;;
   codex) printf '#[fg=#10a37f] #[fg=default]' ;;
   gemini) printf '#[fg=#4796e3] #[fg=default]' ;;
+  opencode-omo) printf '#[fg=#ffd60a] #[fg=default]' ;;
   opencode) printf '#[fg=#9aa5ce]󱞟 #[fg=default]' ;;
   *) : ;;
   esac

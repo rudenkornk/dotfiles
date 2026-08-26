@@ -13,6 +13,9 @@
       corp.openconnect-run
       corp.openvpn-run
     ];
+    shellAliases = {
+      a = "arc";
+    };
 
     sessionVariables = {
       # CURL_CA_BUNDLE mess up with curl, blocking other non-copr requests.

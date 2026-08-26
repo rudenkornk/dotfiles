@@ -78,7 +78,12 @@ let
 
   dotfiles = mkDotfiles {
     name = "dotfiles";
-    runtimeInputs = managingTools ++ [ pyEnv ];
+    runtimeInputs = [ pyEnv ] ++ managingTools ++ installTools;
+  };
+
+  dotfilesInstall = mkDotfiles {
+    name = "dotfiles-install";
+    runtimeInputs = [ pyEnv ] ++ installTools;
   };
 
   commonShellHook =
@@ -101,14 +106,16 @@ in
 {
   devShells = {
     default = pkgs.mkShell {
-      packages = [ pyEnv ] ++ managingTools;
+      packages = [ pyEnv ] ++ managingTools ++ installTools;
       shellHook = commonShellHook;
     };
 
     install = pkgs.mkShell {
-      packages = installTools;
+      packages = [ pyEnv ] ++ installTools;
 
       shellHook =
+        commonShellHook
+        +
         # bash
         ''
           echo "You are in the project NixOS install shell."
@@ -121,10 +128,19 @@ in
     };
   };
 
-  packages = { inherit dotfiles; };
+  packages = {
+    inherit dotfiles;
+    install = dotfilesInstall;
+  };
 
-  apps.default = {
-    type = "app";
-    program = pkgs.lib.getExe dotfiles;
+  apps = {
+    default = {
+      type = "app";
+      program = pkgs.lib.getExe dotfiles;
+    };
+    install = {
+      type = "app";
+      program = pkgs.lib.getExe dotfilesInstall;
+    };
   };
 }

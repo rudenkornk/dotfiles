@@ -51,6 +51,7 @@ let
   ];
 
   installTools = with pkgs; [
+    bashInteractive # Without this there would be broken console when using direnv.
     disko
     e2fsprogs # chattr, lsattr, etc.
     git

@@ -20,6 +20,7 @@
     yubikey-manager
 
     custom.rvim
+    custom.sops-diff
   ];
 
   home = {

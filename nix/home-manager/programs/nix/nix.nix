@@ -13,6 +13,7 @@
       nix-output-monitor
       nix-top
       nix-tree
+      nixos-facter
     ];
 
     sessionVariables = {

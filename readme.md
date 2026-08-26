@@ -14,6 +14,7 @@ A `NixOS` configuration.
    HOSTNAME=dellxps
    git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
    sudo nix --extra-experimental-features "nix-command flakes" develop .#install
+   dotfiles bootstrap-host
    disko --mode destroy,format,mount --flake .#$HOSTNAME
    ```
 
@@ -43,6 +44,7 @@ A `NixOS` configuration.
    sudo fprintd-enroll "$USER"
 
    git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
+   nix run . -- bootstrap-host
    nix run . -- bootstrap-crypto
    ```
 

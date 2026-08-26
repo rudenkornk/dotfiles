@@ -1,8 +1,12 @@
 {
+  lib,
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  binutils,
+  dpkg,
+  makeBinaryWrapper,
+  tpm2-pkcs11,
+  tpm2-tools,
   corp,
 }:
 
@@ -10,26 +14,39 @@ let
   info = corp.pkgs-info.itsme-cli;
 in
 stdenv.mkDerivation {
-  name = "itsme-cli";
+  pname = "itsme-cli";
+  inherit (info) version;
+
   src = fetchurl {
-    inherit (info) url;
+    inherit (info) url curlOptsList;
     hash = info.hash_unencrypted;
   };
 
-  dontUnpack = true;
   nativeBuildInputs = [
     autoPatchelfHook
-    binutils
+    dpkg
+    makeBinaryWrapper
   ];
 
-  buildPhase = ''
-    ar x $src
-    tar xvf data.tar.gz
+  unpackPhase = ''
+    dpkg-deb -x $src .
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv usr/bin/itsme-cli $out/bin
+    runHook preInstall
+    install -Dm755 usr/bin/itsme-cli $out/bin/itsme-cli
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/itsme-cli \
+      --set SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          tpm2-pkcs11
+          tpm2-tools
+        ]
+      }
   '';
 
   meta = {

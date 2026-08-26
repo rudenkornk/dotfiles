@@ -3,7 +3,9 @@ import hashlib
 import logging
 import os
 import shlex
+import shutil
 import subprocess
+import sys
 import time
 from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
@@ -106,6 +108,48 @@ def run_shell(  # noqa: PLR0913
         text=True,
         cwd=cwd,
     )
+
+
+def sudo_shell(  # noqa: PLR0913
+    cmd: Sequence[str | Path],
+    *,
+    env: Mapping[str, str | Path] | None = None,
+    extra_env: Mapping[str, str | Path] | None = None,
+    extra_paths: Sequence[Path] | None = None,
+    capture_output: bool = False,
+    cwd: Path | None = None,
+    check: bool = True,
+    loglevel: int = logging.INFO,
+) -> subprocess.CompletedProcess[str]:
+    if os.geteuid() != 0:
+        sudo = shutil.which("sudo")
+        if sudo is None:
+            msg = "sudo is required for this command but is not available on PATH."
+            raise RuntimeError(msg)
+        cmd = [sudo, "--", *cmd]
+
+    return run_shell(
+        cmd,
+        env=env,
+        extra_env=extra_env,
+        extra_paths=extra_paths,
+        capture_output=capture_output,
+        cwd=cwd,
+        check=check,
+        loglevel=loglevel,
+    )
+
+
+def sudo_cat(path: Path) -> str:
+    return sudo_shell(
+        # catless cat.
+        [
+            sys.executable,
+            "-c",
+            f"from pathlib import Path; print(Path('{path}').read_text(), end='')",
+        ],
+        capture_output=True,
+    ).stdout
 
 
 @overload

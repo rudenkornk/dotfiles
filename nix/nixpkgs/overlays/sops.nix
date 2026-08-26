@@ -5,8 +5,7 @@ _: final: prev: {
       name = "sops";
       runtimeInputs = [
         prev.sops
-        prev.util-linux
-        prev.vim
+        final.custom.rvim
       ];
       text = builtins.readFile ./sops/sops.sh;
     };

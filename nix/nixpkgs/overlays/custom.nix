@@ -46,6 +46,17 @@ _: final: prev: {
       }
     );
 
+    sops-diff = final.writeShellApplication {
+      name = "sops-diff";
+      runtimeInputs = [
+        final.coreutils
+        final.custom.rvim
+        final.git
+        final.sops
+      ];
+      text = builtins.readFile ./custom/sops-diff.sh;
+    };
+
     ast-grep-skill = import ./custom/ast-grep-skill.nix final prev;
 
     comment-checker = import ./custom/comment-checker.nix final prev;

@@ -79,7 +79,7 @@
     // An explicit `model` short-circuits the chain that would otherwise supply a variant, so each entry pins one.
     "agents": {
       "sisyphus": {
-        "model": "openai/gpt-5.6-sol",
+        "model": "openai/gpt-5.6-sol-fast",
         "variant": "medium",
         // GLM 5.2 is the only orchestrator reachable here that upstream still calibrates a prompt for.
         "fallback_models": [
@@ -89,7 +89,7 @@
       },
       // A non-GPT model reroutes Hephaestus to Sisyphus, so a fallback chain would never fire.
       "hephaestus": {
-        "model": "openai/gpt-5.6-sol",
+        "model": "openai/gpt-5.6-sol-fast",
         "variant": "medium",
       },
       "oracle": {
@@ -98,7 +98,7 @@
       },
       // Upstream offers no OpenAI rung for either agent, and Metis also loses its prompt, hence the extra effort.
       "prometheus": {
-        "model": "openai/gpt-5.6-sol",
+        "model": "openai/gpt-5.6-sol-fast",
         "variant": "max",
       },
       "metis": {
@@ -110,7 +110,7 @@
         "variant": "high",
       },
       "atlas": {
-        "model": "openai/gpt-5.6-sol",
+        "model": "openai/gpt-5.6-sol-fast",
         "variant": "medium",
       },
       "sisyphus-junior": {

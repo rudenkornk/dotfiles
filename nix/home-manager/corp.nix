@@ -33,10 +33,6 @@
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {
     dataFile = {
-      # This allows to configure direnv to automatically change "g" from git to arc.
-      # Intentionally do not add similar "git" alias, to make git still available.
-      "arc/bin/g".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nix-profile/bin/arc";
       "ca-certificates/YandexInternalRootCA.crt".source =
         pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt;
     };

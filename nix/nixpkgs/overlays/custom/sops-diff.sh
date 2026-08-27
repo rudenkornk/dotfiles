@@ -77,4 +77,4 @@ fi
 sops --decrypt "$start_encrypted" >"$start_decrypted"
 sops --decrypt "$end_encrypted" >"$end_decrypted"
 
-rvim -c "colorscheme **habamax**" -d -- "$start_decrypted" "$end_decrypted"
+rvim -c "colorscheme **desert**" -d -- "$start_decrypted" "$end_decrypted"

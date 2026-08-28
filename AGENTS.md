@@ -265,7 +265,7 @@ caches results (avoiding costly TPM re-decryption), and optionally creates symli
 - `nix/nixpkgs/overlays/custom/scripts/sops-cached.sh` — decryption engine.
 - `nix/nixpkgs/overlays/locallib/with_secrets.nix` — wraps binaries with secret env vars.
 - `nix/nixpkgs/overlays/locallib/bash_secrets.nix` — shell snippet sourcing `keys.sh.sops`/`proxy.sh.sops`.
-- `nix/nixpkgs/overlays/sops/sops.sh` — network-isolated vim for editing secrets.
+- `nix/nixpkgs/overlays/sops.nix` — network-isolated vim wrapper for editing secrets.
 - `dotfiles_py/targets/secrets.py` — `dotfiles updatekeys` re-encrypts all `.sops` files.
 
 **Security layers**: pre-commit hook blocks plaintext private keys/VPN configs, gitleaks scans full history for credentials,

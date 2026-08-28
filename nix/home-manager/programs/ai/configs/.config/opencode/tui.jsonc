@@ -18,7 +18,7 @@
     // ctrl-n move cursor to next line.
     // ctrl-o command list.
     // ctrl-p move cursor to upper line.
-    // ctrl-q
+    // ctrl-q toggle sidebar.
     // ctrl-r rename session.
     // ctrl-s tmux reserved.
     // ctrl-t model variants.
@@ -31,6 +31,7 @@
 
     "editor_open": "alt+e",
     "app_exit": "ctrl+c,<leader>q",
+    "sidebar_toggle": "ctrl+q",
 
     "tool_details": "ctrl+g",
     "display_thinking": "alt+g",

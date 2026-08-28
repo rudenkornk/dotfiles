@@ -5,7 +5,8 @@
     {
       "context": "Global",
       "bindings": {
-        "ctrl+t": "app:toggleTodos",
+        "ctrl+t": null,
+        "ctrl+q": "app:toggleTodos",
         "ctrl+o": null,
         "ctrl+g": "app:toggleTranscript",
         "ctrl+x q": "app:exit",

@@ -205,7 +205,8 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
   linters, debuggers, desktop-envs, ai, vcs, browsers, messengers, media, networking, vpn, remote-desktop, and virtualization.
 - `nix/packages/`: Standalone packages installed outside the main config (`arc`, `itsme-cli`, `openvpn-ya`, `skotty`, `splitty`, `ya`).
 - `nix/modules/secrets/`: sops secrets modules (`nixos.nix`, `home-manager.nix`, `lib.nix`).
-- `nix/nixpkgs/`: Overlays (`custom`, `locallib`, `sops`) and `unfree.nix`.
+- `nix/overlays/`: Nixpkgs overlays (`custom`, `locallib`, `sops`, and others).
+- `nix/unfree.nix`: Nixpkgs unfree-package allowlist.
 - `nix/keyboard/`: Custom keyboard layouts (`qwerty_rnk`, `jcuken_rnk`).
 - `nix/secrets/`: Encrypted secrets (`corp`, `nmconnections`, `ssh`, `vpn`) using sops.
 - `nix/tooling.nix`: The `dotfiles` CLI package and its default flake app, plus the `default` and `install` dev shells.
@@ -221,16 +222,16 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 
 ### Overlay Rules
 
-- `nix/nixpkgs/overlays/unstable.nix` introduces `pkgs.unstable` from the `nixpkgs-unstable` input
-  and auto-loads native overlays from regular `nix/nixpkgs/overlays/unstable/*.nix` files.
-- Put each `pkgs.unstable` amendment in its own file under `nix/nixpkgs/overlays/unstable/`.
+- `nix/overlays/unstable.nix` introduces `pkgs.unstable` from the `nixpkgs-unstable` input
+  and auto-loads native overlays from regular `nix/overlays/unstable/*.nix` files.
+- Put each `pkgs.unstable` amendment in its own file under `nix/overlays/unstable/`.
   Do not define package-specific overrides directly in `unstable.nix`.
   Each amendment must have the shape `final: prev: { ... }` and must not accept repository arguments.
-- `nix/nixpkgs/overlays/custom.nix` maps each regular `nix/nixpkgs/overlays/custom/<name>.nix` module
+- `nix/overlays/custom.nix` maps each regular `nix/overlays/custom/<name>.nix` module
   to `pkgs.custom.<name>`.
   Each module must have the shape `final: prev: derivation`.
 - The custom loader is not recursive, so keep package modules at the root of `custom/`.
-- Store all non-Nix custom package assets under `nix/nixpkgs/overlays/custom/scripts/`,
+- Store all non-Nix custom package assets under `nix/overlays/custom/scripts/`,
   using package-specific subdirectories where useful.
 
 ## Secrets Management
@@ -241,7 +242,7 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 TPM-bound keys ensure secrets decrypt only on the physical host.
 Private keys live in `~/.config/sops/` and `/root/.config/sops/`, preserved across reboots by the `preservation` module in `disk.nix`.
 
-**Decryption**: Both paths use `sops-cached` (`nix/nixpkgs/overlays/custom/scripts/sops-cached.sh`),
+**Decryption**: Both paths use `sops-cached` (`nix/overlays/custom/scripts/sops-cached.sh`),
 which decrypts `.sops` files into `/run/user/$UID/secrets/` (tmpfs),
 caches results (avoiding costly TPM re-decryption), and optionally creates symlinks to target paths.
 
@@ -253,7 +254,7 @@ caches results (avoiding costly TPM re-decryption), and optionally creates symli
 
 1. **On-demand via `with_secrets` wrapper** — `bash_secrets.nix` sources `keys.sh.sops` and `proxy.sh.sops` using `sops-cached`,
    injecting API keys, tokens, and proxy settings into the shell environment.
-   `with_secrets` (`nix/nixpkgs/overlays/locallib/with_secrets.nix`) wraps any binary with these env vars at launch.
+   `with_secrets` (`nix/overlays/locallib/with_secrets.nix`) wraps any binary with these env vars at launch.
    Used by all AI CLI tools (`ai.nix`) and Neovim (`extraWrapperArgs`).
 
    Additionally, fish shell sources `tokens.sh.sops` at startup (`corp.nix`), and the SSH agent decrypts `~/.ssh/*.sops` on demand (`ssh_client.sh`).
@@ -262,10 +263,10 @@ caches results (avoiding costly TPM re-decryption), and optionally creates symli
 
 - `.sops.yaml` — age recipients and encryption rules.
 - `nix/modules/secrets/{lib,nixos,home-manager}.nix` — the custom secrets module.
-- `nix/nixpkgs/overlays/custom/scripts/sops-cached.sh` — decryption engine.
-- `nix/nixpkgs/overlays/locallib/with_secrets.nix` — wraps binaries with secret env vars.
-- `nix/nixpkgs/overlays/locallib/bash_secrets.nix` — shell snippet sourcing `keys.sh.sops`/`proxy.sh.sops`.
-- `nix/nixpkgs/overlays/sops.nix` — network-isolated vim wrapper for editing secrets.
+- `nix/overlays/custom/scripts/sops-cached.sh` — decryption engine.
+- `nix/overlays/locallib/with_secrets.nix` — wraps binaries with secret env vars.
+- `nix/overlays/locallib/bash_secrets.nix` — shell snippet sourcing `keys.sh.sops`/`proxy.sh.sops`.
+- `nix/overlays/sops.nix` — network-isolated vim wrapper for editing secrets.
 - `dotfiles_py/targets/secrets.py` — `dotfiles updatekeys` re-encrypts all `.sops` files.
 
 **Security layers**: pre-commit hook blocks plaintext private keys/VPN configs, gitleaks scans full history for credentials,

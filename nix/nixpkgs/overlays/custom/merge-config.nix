@@ -4,7 +4,7 @@ final.stdenvNoCC.mkDerivation {
   pname = "merge-config";
   version = "1.1.0";
 
-  src = ./.;
+  src = ./scripts/merge-config;
 
   dontConfigure = true;
   dontBuild = true;

@@ -221,9 +221,17 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 
 ### Overlay Rules
 
-- `nix/nixpkgs/overlays/unstable.nix` exists only to introduce `pkgs.unstable` from the `nixpkgs-unstable` input.
-- Do not define overrides of packages under `pkgs.unstable` in `unstable.nix`.
-  Put them in another existing overlay file or create a dedicated overlay file.
+- `nix/nixpkgs/overlays/unstable.nix` introduces `pkgs.unstable` from the `nixpkgs-unstable` input
+  and auto-loads native overlays from regular `nix/nixpkgs/overlays/unstable/*.nix` files.
+- Put each `pkgs.unstable` amendment in its own file under `nix/nixpkgs/overlays/unstable/`.
+  Do not define package-specific overrides directly in `unstable.nix`.
+  Each amendment must have the shape `final: prev: { ... }` and must not accept repository arguments.
+- `nix/nixpkgs/overlays/custom.nix` maps each regular `nix/nixpkgs/overlays/custom/<name>.nix` module
+  to `pkgs.custom.<name>`.
+  Each module must have the shape `final: prev: derivation`.
+- The custom loader is not recursive, so keep package modules at the root of `custom/`.
+- Store all non-Nix custom package assets under `nix/nixpkgs/overlays/custom/scripts/`,
+  using package-specific subdirectories where useful.
 
 ## Secrets Management
 
@@ -233,7 +241,7 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 TPM-bound keys ensure secrets decrypt only on the physical host.
 Private keys live in `~/.config/sops/` and `/root/.config/sops/`, preserved across reboots by the `preservation` module in `disk.nix`.
 
-**Decryption**: Both paths use `sops-cached` (`nix/nixpkgs/overlays/custom/sops-cached.sh`),
+**Decryption**: Both paths use `sops-cached` (`nix/nixpkgs/overlays/custom/scripts/sops-cached.sh`),
 which decrypts `.sops` files into `/run/user/$UID/secrets/` (tmpfs),
 caches results (avoiding costly TPM re-decryption), and optionally creates symlinks to target paths.
 
@@ -254,7 +262,7 @@ caches results (avoiding costly TPM re-decryption), and optionally creates symli
 
 - `.sops.yaml` — age recipients and encryption rules.
 - `nix/modules/secrets/{lib,nixos,home-manager}.nix` — the custom secrets module.
-- `nix/nixpkgs/overlays/custom/sops-cached.sh` — decryption engine.
+- `nix/nixpkgs/overlays/custom/scripts/sops-cached.sh` — decryption engine.
 - `nix/nixpkgs/overlays/locallib/with_secrets.nix` — wraps binaries with secret env vars.
 - `nix/nixpkgs/overlays/locallib/bash_secrets.nix` — shell snippet sourcing `keys.sh.sops`/`proxy.sh.sops`.
 - `nix/nixpkgs/overlays/sops/sops.sh` — network-isolated vim for editing secrets.

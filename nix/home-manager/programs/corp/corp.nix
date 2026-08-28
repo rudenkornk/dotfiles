@@ -54,7 +54,7 @@
     merge-config.files = {
       "${config.xdg.configHome}/opencode/opencode.jsonc" = {
         source = [
-          ./programs/ai/configs/.config/opencode/opencode.jsonc
+          ../ai/configs/.config/opencode/opencode.jsonc
           (pkgs.locallib.secrets + /corp/opencode.jsonc.sops)
         ];
         insertAfter = "INSERTION POINT";

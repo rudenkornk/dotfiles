@@ -54,7 +54,6 @@
   fonts.fontconfig.enable = true;
 
   imports = [
-    ./corp.nix
     ../modules/merge-config/home-manager.nix
     ../modules/secrets/home-manager.nix
   ]

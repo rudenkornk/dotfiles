@@ -129,6 +129,8 @@
       enable = true;
     };
 
+    logind.settings.Login.HandleLidSwitch = "ignore";
+
     power-profiles-daemon = {
       enable = true;
     };

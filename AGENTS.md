@@ -77,15 +77,27 @@ Each of them can also run without the dev shell via `nix run . -- <command>`.
    - `typos`: Spell checking.
    - `markdownlint-cli2`: Markdown linting (the binary ships in the dev shell and is invoked directly).
 
-1. **Flake Check** (~10 seconds):
+1. **Flake Check** (~60 seconds):
 
    ```bash
-   nix flake check
+   nix flake check --no-build
    ```
 
    Validates flake structure and evaluates every NixOS and Home Manager configuration.
    Home Manager configs are the cartesian product of users (`rudenkornk`, `rudenkornk_corp`) and hosts (`dellxps`, `thinkpad`),
    registered as checks so `nix flake check` builds each `user@host` activation package.
+
+   **Do not run `nix flake check` during intermediate code changes.**
+   If Nix validation is actually needed while a change is in progress, evaluate or build only the exact affected flake output.
+   For example, to evaluate one Home Manager check without building it:
+
+   ```bash
+   nix eval --raw '.#checks.x86_64-linux."rudenkornk_corp@thinkpad".drvPath'
+   ```
+
+   In general avoid running this expensive command unless doing quirky nix changes, which have to be verified.
+   In this case run the full `nix flake check --no-build` only as the final step of the entire validation pipeline,
+   immediately before reporting to the user.
 
 1. **Git Hooks Setup**:
 
@@ -207,6 +219,12 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - Fish is the primary shell; Neovim config is based on LazyVim.
 - NOTE: WHEN ADDING A NEW NIX OR CONFIG FILE, ADD IT TO THE GIT STAGING AREA. OTHERWISE NIX WILL NOT SEE IT.
 
+### Overlay Rules
+
+- `nix/nixpkgs/overlays/unstable.nix` exists only to introduce `pkgs.unstable` from the `nixpkgs-unstable` input.
+- Do not define overrides of packages under `pkgs.unstable` in `unstable.nix`.
+  Put them in another existing overlay file or create a dedicated overlay file.
+
 ## Secrets Management
 
 **Tools**: sops + age. No community `sops-nix` — the repo uses a custom `local.secrets` module.
@@ -260,7 +278,7 @@ Before submitting changes:
 
 1. **Format**: `nix develop --command dotfiles format`
 1. **Lint**: `nix develop --command dotfiles lint` (takes ~1-2 seconds; linters run in parallel)
-1. **Flake Check**: `nix flake check` (takes ~10 seconds)
+1. **Flake Check (final step only)**: `nix flake check --no-build` (takes ~60 seconds)
 
 If making Python changes:
 

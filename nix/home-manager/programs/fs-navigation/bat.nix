@@ -1,10 +1,19 @@
 _: {
-  programs.bat = {
-    enable = true;
-  };
+  programs = {
+    bat = {
+      enable = true;
+    };
 
-  home.shellAliases = {
-    b = "bat";
+    fish = {
+      functions = {
+        # Upgraded shellAlias, which recognises images.
+        b = {
+          wraps = "bat";
+          body = builtins.readFile ./fish/functions/b.fish;
+        };
+      };
+    };
+
   };
 
   home.sessionVariables = {

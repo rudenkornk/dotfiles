@@ -1,13 +1,50 @@
 diff --git a/packages/tui/src/routes/session/index.tsx b/packages/tui/src/routes/session/index.tsx
 --- a/packages/tui/src/routes/session/index.tsx
 +++ b/packages/tui/src/routes/session/index.tsx
-@@ -1614,6 +1614,9 @@ function ReasoningPart(props: { part: ReasoningPart; message: AssistantMessage })
+@@ -252,7 +252,7 @@ export function Session() {
+   const thinking = useThinkingMode()
+   const thinkingMode = thinking.mode
+   const showThinking = createMemo(() => true)
+-  const [timestamps, setTimestamps] = kv.signal<"hide" | "show">("timestamps", "hide")
++  const [timestamps, setTimestamps] = kv.signal<"hide" | "show">("timestamps", "show")
+   const [showDetails, setShowDetails] = kv.signal("tool_details_visibility", true)
+   const [showAssistantMetadata, _setShowAssistantMetadata] = kv.signal("assistant_metadata_visibility", true)
+   const [showScrollbar, setShowScrollbar] = kv.signal("scrollbar_visible", false)
+@@ -1572,3 +1572,15 @@
++function formatThoughtTimestamp(input: number) {
++  const date = new Date(input)
++  const hour = String(date.getHours()).padStart(2, "0")
++  const minute = String(date.getMinutes()).padStart(2, "0")
++  const time = `${hour}:${minute}`
++  if (date.toDateString() === new Date().toDateString()) return time
++  const day = String(date.getDate()).padStart(2, "0")
++  const month = String(date.getMonth() + 1).padStart(2, "0")
++  const year = String(date.getFullYear()).padStart(4, "0")
++  return `${time} · ${day}.${month}.${year}`
++}
++
+ function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: AssistantMessage }) {
+   const { theme } = useTheme()
+   const ctx = use()
+@@ -1606,7 +1616,7 @@ function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: Ass
+         flexDirection="column"
+         flexShrink={0}
+       >
+-        <box onMouseUp={toggle}>
++        <box onMouseUp={toggle} flexDirection="row">
+           <ReasoningHeader
+             toggleable={inMinimal()}
+             open={!inMinimal() || expanded()}
+@@ -1615,6 +1625,12 @@ function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: Ass
+             title={summary().title}
              duration={isDone() ? Locale.duration(duration()) : undefined}
            />
++          <Show when={isDone() && ctx.showTimestamps()}>
++            <text fg={theme.textMuted} flexShrink={0}>
++              {" · "}
++              {formatThoughtTimestamp(props.part.time.start)}
++            </text>
++          </Show>
          </box>
-+        <Show when={isDone() && ctx.showTimestamps()}>
-+          <text fg={theme.textMuted}>{Locale.todayTimeOrDateTime(props.part.time.start)}</text>
-+        </Show>
          <Show when={(!inMinimal() || expanded()) && summary().body}>
            <box paddingLeft={inMinimal() ? 2 : 0} marginTop={1}>
-             <code

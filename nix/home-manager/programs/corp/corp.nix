@@ -24,11 +24,16 @@
       NSS_DEFAULT_SSL_DIR = "${config.xdg.dataHome}/ca-certificates/";
     };
 
-    file = {
-      ".itsme/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
-      # `local.merge-config` owns the corp target instead of the default Home Manager symlink.
-      "${config.xdg.configHome}/opencode/opencode.jsonc".enable = false;
-    };
+    file =
+      pkgs.locallib.homefiles {
+        inherit (config) xdg;
+        path = ./configs;
+      }
+      // {
+        ".itsme/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
+        # `local.merge-config` owns the corp target instead of the default Home Manager symlink.
+        "${config.xdg.configHome}/opencode/opencode.jsonc".enable = false;
+      };
   };
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {

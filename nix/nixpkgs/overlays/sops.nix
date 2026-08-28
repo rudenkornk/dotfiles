@@ -7,6 +7,11 @@ _: final: prev: {
         prev.sops
         final.custom.rvim
       ];
-      text = builtins.readFile ./sops/sops.sh;
+      text = ''
+        export SOPS_EDITOR="rvim"
+        export EDITOR="$SOPS_EDITOR"
+
+        exec sops "$@"
+      '';
     };
 }

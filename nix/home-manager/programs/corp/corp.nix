@@ -40,9 +40,15 @@
 
   programs = lib.optionalAttrs (user.userkind == "corp") {
     fish = {
+      functions.g = {
+        wraps = "git";
+        body = builtins.readFile ./fish/functions/g.fish;
+      };
       interactiveShellInit =
         # fish
         ''
+          source ${config.xdg.configHome}/fish/functions/g.fish
+
           source "$(${pkgs.lib.getExe pkgs.custom.sops-cached} ${
             pkgs.locallib.secrets + /corp/tokens.sh.sops
           })"

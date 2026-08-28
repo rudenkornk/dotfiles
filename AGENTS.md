@@ -199,9 +199,9 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - `nix/configuration.nix`: Shared NixOS system configuration (boot, networking, users, desktop, VPN, sops secrets).
 - `nix/hosts/`: Per-machine definitions (`dellxps.nix`, `thinkpad.nix`); hardware config is inlined per host, plus host subdirs (e.g. `dellxps/noctalia_monitors.nix`).
 - `nix/users/`: Per-user definitions (`rudenkornk.nix`, `rudenkornk_corp.nix`) with profile images.
-- `nix/home-manager/home.nix`: Home Manager entry point importing all program modules.
-- `nix/home-manager/programs/`: One `<name>.nix` module per program or category, with a sibling `<name>/` directory holding
-  that program's configs, scripts, and dotfiles. Categories include shell, terminals, text-editors (neovim), toolchains, lsp,
+- `nix/home.nix`: Home Manager entry point importing all program modules.
+- `nix/home-manager/`: One directory per program or category, holding its modules, configs, scripts, and dotfiles.
+  Categories include shell, terminals, text-editors (neovim), toolchains, lsp,
   linters, debuggers, desktop-envs, ai, vcs, browsers, messengers, media, networking, vpn, remote-desktop, and virtualization.
 - `nix/packages/`: Standalone packages installed outside the main config (`arc`, `itsme-cli`, `openvpn-ya`, `skotty`, `splitty`, `ya`).
 - `nix/modules/secrets/`: sops secrets modules (`nixos.nix`, `home-manager.nix`, `lib.nix`).
@@ -274,7 +274,7 @@ AI tools are denied access to secrets dirs, sops editor runs with `unshare --net
 ### Important File Locations
 
 - Python source: `dotfiles_py/{cli.py,utils.py,targets/*.py}`
-- Nix configs: `nix/{configuration.nix,home-manager/home.nix,home-manager/programs/*.nix}`
+- Nix configs: `nix/{configuration.nix,home.nix,home-manager/**/*.nix}`
 - Git hooks: `dotfiles_py/data/hooks/pre-commit`
 - CI workflow: `.github/workflows/workflow.yml`
 - Format configs: `.editorconfig`, `.prettierrc.json`, `.stylua.toml`, `pyproject.toml` (ruff sections)

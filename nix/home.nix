@@ -54,10 +54,10 @@
   fonts.fontconfig.enable = true;
 
   imports = [
-    ../modules/merge-config/home-manager.nix
-    ../modules/secrets/home-manager.nix
+    ./modules/merge-config/home-manager.nix
+    ./modules/secrets/home-manager.nix
   ]
   # We cannot use `pkgs.locallib.get_modules2` in `imports`, because it will result in
   # infinite recursion error.
-  ++ import ../nixpkgs/overlays/locallib/get_modules2.nix null ./programs;
+  ++ import ./nixpkgs/overlays/locallib/get_modules2.nix null ./home-manager;
 }

@@ -82,7 +82,7 @@
       extraConfig = ''
         # Note: this configuration is a no-op due to NetworkManager not passing it to wpa_supplicant.
         # It is only specified here if any future upstream changes fix the problem.
-        # See `./nix/nixpkgs/overlays/wpa_supplicant.nix` in this repo for details.
+        # See `./nix/overlays/wpa_supplicant.nix` in this repo for details.
 
         # Hint wpa_supplicant on where to search for hardware-keys providers.
         pkcs11_engine_path=/run/current-system/sw/lib/engines/pkcs11.so

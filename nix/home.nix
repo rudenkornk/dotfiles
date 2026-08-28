@@ -59,5 +59,5 @@
   ]
   # We cannot use `pkgs.locallib.get_modules2` in `imports`, because it will result in
   # infinite recursion error.
-  ++ import ./nixpkgs/overlays/locallib/get_modules2.nix null ./home-manager;
+  ++ import ./overlays/locallib/get_modules2.nix null ./home-manager;
 }

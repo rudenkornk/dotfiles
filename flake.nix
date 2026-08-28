@@ -45,13 +45,14 @@
           preservation
           ;
       };
+      overlay_modules = import ./nix/overlays/locallib/get_modules.nix null ./nix/overlays;
       system = "x86_64-linux";
       pkgs = import inputs.nixpkgs {
         localSystem = system;
         config = {
-          allowUnfreePredicate = import ./nix/nixpkgs/unfree.nix { inherit lib; };
+          allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
         };
-        overlays = import ./nix/nixpkgs/overlays.nix { inherit inputs; };
+        overlays = map (overlay: import overlay { inherit inputs; }) overlay_modules;
       };
       hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
       hosts = mapAttrs (_: path: import path { inherit pkgs; }) hostfiles;

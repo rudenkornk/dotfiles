@@ -1,0 +1,13 @@
+diff --git a/packages/tui/src/routes/session/index.tsx b/packages/tui/src/routes/session/index.tsx
+--- a/packages/tui/src/routes/session/index.tsx
++++ b/packages/tui/src/routes/session/index.tsx
+@@ -1614,6 +1614,9 @@ function ReasoningPart(props: { part: ReasoningPart; message: AssistantMessage })
+             duration={isDone() ? Locale.duration(duration()) : undefined}
+           />
+         </box>
++        <Show when={isDone() && ctx.showTimestamps()}>
++          <text fg={theme.textMuted}>{Locale.todayTimeOrDateTime(props.part.time.start)}</text>
++        </Show>
+         <Show when={(!inMinimal() || expanded()) && summary().body}>
+           <box paddingLeft={inMinimal() ? 2 : 0} marginTop={1}>
+             <code

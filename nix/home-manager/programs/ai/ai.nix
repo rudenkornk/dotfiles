@@ -17,11 +17,6 @@ let
     export OMO_CODEGRAPH_BIN=${pkgs.unstable.codegraph}/bin/codegraph
     export OMO_AST_GREP_SG_PATH=${pkgs.ast-grep}/bin/ast-grep
 
-    # OMO tmux subagents attach to the parent OpenCode server on port 4096.
-    if [[ $# -eq 0 || -d "$1" ]]; then
-      set -- --hostname 127.0.0.1 --port 4096 "$@"
-    fi
-
     exec -a opencode-omo ${pkgs.lib.getExe pkgs.unstable.opencode} "$@"
   '';
 in

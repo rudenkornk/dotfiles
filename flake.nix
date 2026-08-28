@@ -73,7 +73,7 @@
             user = user.value;
             host = host.value;
           };
-          modules = [ ./nix/home-manager/home.nix ];
+          modules = [ ./nix/home.nix ];
         };
     in
     rec {

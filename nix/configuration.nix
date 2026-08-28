@@ -272,7 +272,7 @@
       # To work around this, we re-export `user` through `_module.args` here,
       # which makes it available as a regular module argument in home-manager modules.
       _module.args.user = user;
-      imports = [ ./home-manager/home.nix ];
+      imports = [ ./home.nix ];
     }) users;
     backupCommand = "${pkgs.lib.getExe pkgs.trash-cli}";
   };
@@ -301,7 +301,7 @@
       # System-wide htop defaults. htop reads `/etc/htoprc` when a user has no
       # `~/.config/htop/htoprc`. Regular users get their own via home-manager,
       # so this covers root and any other config-less account.
-      "htoprc".source = ./home-manager/programs/system/configs/.config/htop/htoprc;
+      "htoprc".source = ./home-manager/system/configs/.config/htop/htoprc;
     };
   };
 

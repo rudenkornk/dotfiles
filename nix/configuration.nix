@@ -122,6 +122,7 @@
 
   services = {
     displayManager.gdm = {
+      autoSuspend = false;
       enable = true;
     };
 

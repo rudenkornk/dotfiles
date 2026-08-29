@@ -15,6 +15,15 @@ input {
     }
  // focus-follows-mouse
 }
+// Niri keeps the sole laptop output enabled on lid close, so explicitly disable it for headless work.
+switch-events {
+    lid-close {
+        spawn "niri" "msg" "output" "eDP-1" "off"
+    }
+    lid-open {
+        spawn "niri" "msg" "output" "eDP-1" "on"
+    }
+}
 cursor {
     xcursor-theme "Bibata-Original-Amber"
     xcursor-size 40

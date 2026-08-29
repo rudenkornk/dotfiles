@@ -391,7 +391,7 @@
     "allowPasswordWithFprintd": true,
     "animationDisabled": true,
     "animationSpeed": 2,
-    "autoStartAuth": false,
+    "autoStartAuth": true,
     "avatarImage": "~/.face",
     "boxRadiusRatio": 1,
     "clockFormat": "HH:mm t",

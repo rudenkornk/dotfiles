@@ -11,6 +11,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/Showtime/State" = {
+      end-timestamp-type = "Duration";
       is-maximized = false;
     };
 
@@ -152,6 +153,10 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/notifications/application/org-gnome-geary" = {
       application-id = "org.gnome.Geary.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-gnome-goa-daemon" = {
+      application-id = "org.gnome.goa-daemon.desktop";
     };
 
     "org/gnome/desktop/notifications/application/org-telegram-desktop" = {
@@ -341,9 +346,15 @@ with lib.hm.gvariant;
       dual-page = false;
       dual-page-odd-left = false;
       enable-spellchecking = true;
+      eraser-mode-objects = "true";
+      highlight-color = "yellow";
+      highlight-stroke = 2.0;
+      pen-color = "blue";
+      pen-stroke = 1.0;
       show-sidebar = true;
       sidebar-page = "thumbnails";
       sizing-mode = "automatic";
+      text-color = "blue";
       window-maximized = true;
       zoom = 1.007486;
     };

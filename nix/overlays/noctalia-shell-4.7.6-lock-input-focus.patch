@@ -1,0 +1,23 @@
+diff --git a/Modules/LockScreen/LockScreen.qml b/Modules/LockScreen/LockScreen.qml
+index 1150cc8..0cc7d4b 100644
+--- a/Modules/LockScreen/LockScreen.qml
++++ b/Modules/LockScreen/LockScreen.qml
+@@ -128,10 +128,14 @@ Loader {
+                   anchors.fill: parent
+                   hoverEnabled: true
+                   acceptedButtons: Qt.NoButton
++                  Timer {
++                    // Retry after the session-lock surface can receive keyboard focus.
++                    interval: 100
++                    running: true
++                    onTriggered: passwordInput.forceActiveFocus()
++                  }
+-                  onEntered: {
+-                    // Avoid repeatedly forcing focus on every mouse move.
+-                    // This can churn text-input surface state during monitor/suspend transitions.
+-                    if (passwordInput && !passwordInput.activeFocus) {
++                  onPositionChanged: {
++                    if (passwordInput) {
+                       passwordInput.forceActiveFocus();
+                     }
+                   }

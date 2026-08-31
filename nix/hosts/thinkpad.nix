@@ -54,7 +54,7 @@ in
     };
     local = {
       secrets = {
-        links = {
+        file = {
           "/etc/NetworkManager/system-connections/corp_wifi.nmconnection".source =
             pkgs.locallib.secrets + /corp/corp_wifi.nmconnection.sops;
           "/run/user/0/secrets/rudenkornk.pem".source = pkgs.locallib.secrets + /corp/rudenkornk.pem.sops;

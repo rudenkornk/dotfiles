@@ -31,7 +31,7 @@ in
 {
   # Decrypt the config at boot, ordered before this unit.
   local.secrets = {
-    links.${config_file}.source = encrypted_config;
+    file.${config_file}.source = encrypted_config;
     before = [ "splitty.service" ];
   };
 

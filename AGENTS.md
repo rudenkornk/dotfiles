@@ -250,7 +250,7 @@ caches results (avoiding costly TPM re-decryption), and optionally creates symli
 
 1. **Systemd services at startup** — a custom module (`nix/modules/secrets/`) generates two `decrypt-secrets.service` oneshots:
 
-   - System-level (as root, at boot) — decrypts secrets listed in `local.secrets.links` before NetworkManager and osquery start.
+   - System-level (as root, at boot) — decrypts secrets listed in `local.secrets.file` before NetworkManager and osquery start.
    - User-level (at login) — decrypts user secrets (itsme VPN, SSH, opencode auth) before `default.target`.
      Both produce symlinks-from-tmpfs, so programs read decrypted files at their normal paths.
 

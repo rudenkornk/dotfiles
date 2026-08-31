@@ -118,7 +118,7 @@
 
   local = {
     secrets = {
-      links = {
+      file = {
         "/run/user/0/secrets/osquery/enroll_secret".source =
           pkgs.locallib.secrets + /corp/osquery_enroll_secret.sops;
         "/run/user/0/secrets/osquery/environment_file".source =

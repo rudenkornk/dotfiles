@@ -16,7 +16,7 @@
   };
 
   local = {
-    secrets.links = {
+    secrets.file = {
       "${config.xdg.dataHome}/atuin/key".source = pkgs.locallib.secrets + /atuin_key.sops;
     };
   };

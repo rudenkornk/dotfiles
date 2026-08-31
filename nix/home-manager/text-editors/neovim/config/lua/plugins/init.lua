@@ -156,6 +156,11 @@ return {
   },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {
+    "chrisgrieser/nvim-spider",
+    opts = require("plugins.configs.spider").opts,
+    keys = require("plugins.configs.spider").keys,
+  },
+  {
     "milanglacier/minuet-ai.nvim",
     -- `opts` must be defined for this plugin (at least to `{}`).
     opts = require("plugins.configs.minuet").opts,

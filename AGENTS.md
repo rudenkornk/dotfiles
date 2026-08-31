@@ -233,6 +233,8 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 - The custom loader is not recursive, so keep package modules at the root of `custom/`.
 - Store all non-Nix custom package assets under `nix/overlays/custom/scripts/`,
   using package-specific subdirectories where useful.
+- Store all package patches in `nix/overlays/patches/` and reference them via `final.locallib.patches + /<name>.patch`.
+  `pkgs.unstable` also carries `locallib`, so the same reference works inside `nix/overlays/unstable/`.
 
 ## Secrets Management
 

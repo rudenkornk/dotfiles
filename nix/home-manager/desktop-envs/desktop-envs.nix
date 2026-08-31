@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 {
   home = {
@@ -18,11 +18,6 @@
       zbar
     ];
 
-    file = pkgs.locallib.homefiles {
-      inherit (config) xdg;
-      path = ./configs;
-    };
-
     pointerCursor = {
       gtk.enable = true;
       x11.enable = true;
@@ -37,6 +32,12 @@
     cursorTheme = {
       package = pkgs.bibata-cursors;
       name = "Bibata-Original-Amber"; # Keep in sync with home.pointerCursor.name.
+    };
+  };
+
+  local = {
+    home.file = {
+      ".".source = ./configs;
     };
   };
 }

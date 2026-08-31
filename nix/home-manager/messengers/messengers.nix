@@ -1,13 +1,13 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 {
   home = {
     packages = with pkgs; [ telegram-desktop ];
-
-    file = pkgs.locallib.homefiles {
-      inherit (config) xdg;
-      path = ./configs;
-    };
   };
 
+  local = {
+    home.file = {
+      ".".source = ./configs;
+    };
+  };
 }

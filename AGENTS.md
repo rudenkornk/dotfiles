@@ -204,6 +204,8 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
   Categories include shell, terminals, text-editors (neovim), toolchains, lsp,
   linters, debuggers, desktop-envs, ai, vcs, browsers, messengers, media, networking, vpn, remote-desktop, and virtualization.
 - `nix/packages/`: Standalone packages installed outside the main config (`arc`, `itsme-cli`, `openvpn-ya`, `skotty`, `splitty`, `ya`).
+- `nix/modules/home/`: `local.home.file`, which links whole directory trees into `$HOME` one file at a time,
+  so several modules can populate a shared target directory.
 - `nix/modules/secrets/`: sops secrets modules (`nixos.nix`, `home-manager.nix`, `lib.nix`).
 - `nix/overlays/`: Nixpkgs overlays (`custom`, `locallib`, `sops`, and others).
 - `nix/unfree.nix`: Nixpkgs unfree-package allowlist.

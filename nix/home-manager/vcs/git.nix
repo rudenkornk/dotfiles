@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  user,
-  ...
-}:
+{ pkgs, user, ... }:
 
 {
   home = {
@@ -15,10 +10,11 @@
     shellAliases = {
       g = "git";
     };
+  };
 
-    file = pkgs.locallib.homefiles {
-      inherit (config) xdg;
-      path = ./configs;
+  local = {
+    home.file = {
+      ".".source = ./configs;
     };
   };
 

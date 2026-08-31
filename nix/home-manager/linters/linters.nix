@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 # Formatters & linters.
 {
@@ -48,9 +48,10 @@
     yamllint
 
   ];
-  home.file = pkgs.locallib.homefiles {
-    inherit (config) xdg;
-    path = ./configs;
+  local = {
+    home.file = {
+      ".".source = ./configs;
+    };
   };
 
   programs.mypy = {

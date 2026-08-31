@@ -5,7 +5,7 @@ _: final: prev: {
       name = "sops";
       runtimeInputs = [
         prev.sops
-        final.custom.rvim
+        final.vim
       ];
       text = ''
         export SOPS_EDITOR="rvim"

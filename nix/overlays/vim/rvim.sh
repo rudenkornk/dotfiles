@@ -2,11 +2,11 @@
 
 arguments=(
   # Disable network.
-  unshare --net
+  @unshare@ --net
   # Prevent 'Operation not permitted' errors by appearing as pseudo-root in the namespace.
   # https://unix.stackexchange.com/a/370484/500020
   --map-root-user
-  vim
+  @vim@
   # Restricted mode.
   -Z
   # Disable all config files.

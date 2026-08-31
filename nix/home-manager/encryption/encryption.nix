@@ -19,7 +19,7 @@
     yubico-piv-tool
     yubikey-manager
 
-    custom.rvim
+    vim # rvim with custom hardening inside.
     custom.sops-diff
   ];
 

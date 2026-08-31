@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 # CLI AI tools.
 
@@ -63,21 +63,21 @@ in
       custom.playwright-cli
       unstable.codegraph
     ];
+  };
 
-    file =
-      (pkgs.locallib.homefiles {
-        inherit (config) xdg;
-        path = ./configs;
-      })
-      # Claude Code and OpenCode read `~/.claude/skills`, Codex reads `~/.codex/skills`.
-      // (pkgs.lib.concatMapAttrs (name: source: {
-        ".claude/skills/${name}" = {
-          inherit source;
-          recursive = true;
-        };
-        # Codex ignores symlinked `SKILL.md` files, but follows symlinked skill directories,
-        # thus omitting `recursive = true` here.
-        ".codex/skills/${name}".source = source;
-      }) skills);
+  local = {
+    home.file = {
+      ".".source = ./configs;
+    }
+    # Claude Code and OpenCode read `~/.claude/skills`, Codex reads `~/.codex/skills`.
+    // pkgs.lib.concatMapAttrs (name: source: {
+      ".claude/skills/${name}".source = source;
+      # Codex ignores symlinked `SKILL.md` files, but follows symlinked skill directories,
+      # thus disabling `recursive` here.
+      ".codex/skills/${name}" = {
+        inherit source;
+        recursive = false;
+      };
+    }) skills;
   };
 }

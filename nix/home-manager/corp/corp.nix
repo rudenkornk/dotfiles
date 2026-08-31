@@ -23,20 +23,13 @@
       NODE_EXTRA_CA_CERTS = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
       NSS_DEFAULT_SSL_DIR = "${config.xdg.dataHome}/ca-certificates/";
     };
-
-    file =
-      pkgs.locallib.homefiles {
-        inherit (config) xdg;
-        path = ./configs;
-      }
-      // {
-        ".itsme/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
-        # `local.merge-config` owns the corp target instead of the default Home Manager symlink.
-        "${config.xdg.configHome}/opencode/opencode.jsonc".enable = false;
-      };
   };
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {
+    configFile = {
+      # `local.merge-config` owns the corp target instead of the default Home Manager symlink.
+      "opencode/opencode.jsonc".enable = false;
+    };
     dataFile = {
       "ca-certificates/YandexInternalRootCA.crt".source =
         pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt;
@@ -62,6 +55,11 @@
   };
 
   local = lib.optionalAttrs (user.userkind == "corp") {
+    home.file = {
+      ".".source = ./configs;
+      ".itsme/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
+    };
+
     merge-config.file = {
       "${config.xdg.configHome}/opencode/opencode.jsonc" = {
         source = [

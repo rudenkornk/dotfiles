@@ -6,18 +6,6 @@
   ...
 }:
 
-let
-  ssh_keys = {
-    ".ssh" = {
-      source = pkgs.locallib.secrets + /ssh;
-      recursive = true;
-    };
-  };
-  ssh_configs = pkgs.locallib.homefiles {
-    inherit (config) xdg;
-    path = ./configs;
-  };
-in
 {
   home = {
     packages = with pkgs; [
@@ -27,10 +15,15 @@ in
       samba
     ];
 
-    file = ssh_keys // ssh_configs;
-
     sessionVariables = {
       SSH_AUTH_SOCK = "${config.home.homeDirectory}/.ssh/agent.sock";
+    };
+  };
+
+  local = {
+    home.file = {
+      ".".source = ./configs;
+      ".ssh".source = pkgs.locallib.secrets + /ssh;
     };
   };
 

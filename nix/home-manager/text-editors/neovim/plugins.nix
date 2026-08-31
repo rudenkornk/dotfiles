@@ -88,6 +88,7 @@ let
     nvim-nio
     nvim-paredit
     nvim-scrollbar
+    nvim-spider
     nvim-treesitter
     nvim-treesitter-context
     nvim-treesitter-textobjects

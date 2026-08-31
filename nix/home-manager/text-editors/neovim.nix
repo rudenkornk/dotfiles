@@ -44,6 +44,7 @@
           luacheck
           luafilesystem
           luasec
+          luautf8 # Required by nvim-spider for non-ASCII motions.
           magick
         ];
 

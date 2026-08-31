@@ -92,7 +92,7 @@
   };
   local = {
     secrets = {
-      links = {
+      file = {
         "/etc/NetworkManager/system-connections/" = {
           source = pkgs.locallib.secrets + /nmconnections;
           recursive = true;

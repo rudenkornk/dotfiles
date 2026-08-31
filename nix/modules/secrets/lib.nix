@@ -14,7 +14,7 @@
 
 {
   options = {
-    links = lib.mkOption {
+    file = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule (_: {
           options = {
@@ -47,7 +47,7 @@
     };
   };
 
-  hasLinks = cfg: lib.any (value: value.enable) (lib.attrValues cfg.links);
+  hasFiles = cfg: lib.any (value: value.enable) (lib.attrValues cfg.file);
 
   mkScript =
     cfg:
@@ -68,7 +68,7 @@
 
       ''
       + lib.concatStringsSep "\n" (
-        lib.mapAttrsToList mkCmd (lib.filterAttrs (_: value: value.enable) cfg.links)
+        lib.mapAttrsToList mkCmd (lib.filterAttrs (_: value: value.enable) cfg.file)
       );
     };
 }

@@ -62,7 +62,7 @@
   };
 
   local = lib.optionalAttrs (user.userkind == "corp") {
-    merge-config.files = {
+    merge-config.file = {
       "${config.xdg.configHome}/opencode/opencode.jsonc" = {
         source = [
           ../ai/configs/.config/opencode/opencode.jsonc
@@ -77,7 +77,7 @@
         pkgs.locallib.secrets + /corp/codex.config.toml.sops;
     };
 
-    secrets.links =
+    secrets.file =
       let
         home = config.home.homeDirectory;
       in

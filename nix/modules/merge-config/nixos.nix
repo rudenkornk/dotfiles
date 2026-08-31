@@ -11,7 +11,7 @@ let
 in
 {
   options = {
-    local.merge-config = { inherit (mergeConfigLib.options) files before requiredBy; };
+    local.merge-config = { inherit (mergeConfigLib.options) file before requiredBy; };
   };
 
   config = lib.mkIf (mergeConfigLib.hasFiles cfg) {

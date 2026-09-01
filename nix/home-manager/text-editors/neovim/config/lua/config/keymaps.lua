@@ -146,7 +146,17 @@ vim.opt.langmap =
   "ЙЦУКЕНГШЩЗХЪ;QWERTYUIOPÜÅ,ФЫВАПРОЛДЖЭ;ASDFGHJKLÖÄ,ЯЧСМИТЬБЮ;ZXCVBNMØÆ,йцукенгшщзхъ;qwertyuiopüå,фывапролджэ;asdfghjklöä,ячсмитьбю;zxcvbnmøæ"
 vim.opt.iminsert = 0
 vim.opt.imsearch = -1
+vim.keymap.set({ "n" }, "<C-q>", "a<C-^><ESC>", { desc = "Toggle keyboard layout" })
+vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
 
+-- Enhanced motions in insert mode.
+vim.keymap.set("i", "<C-f>", "<Right>", { desc = "Move character forward" })
+vim.keymap.set("i", "<C-b>", "<Left>", { desc = "Move character backward" })
+
+vim.keymap.set("i", "<C-a>", "<Home>", { desc = "Jump to beginning of line" })
+vim.keymap.set("i", "<C-e>", "<End>", { desc = "Jump to end of line" })
+
+-- Some quality of life mappings.
 vim.keymap.set(
   { "n", "x" },
   "<C-z>",
@@ -156,9 +166,6 @@ vim.keymap.set(
 vim.keymap.set({ "n", "x" }, "<C-e>", "3<C-e>", { silent = true, desc = "Scroll up" })
 vim.keymap.set({ "n", "x" }, "<C-y>", "3<C-y>", { silent = true, desc = "Scroll down" })
 vim.keymap.set({ "x" }, "<leader>vs", ":sort i<CR>", { desc = "Sort selected lines" })
-vim.keymap.set({ "n" }, "<C-q>", "a<C-^><ESC>", { desc = "Toggle keyboard layout" })
-
-vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
 
 -- Mitigate the long clipboard loading issue.
 vim.g.clipboard = require("config.clipboard")

@@ -189,6 +189,7 @@ stop=" $(
     debug debugs debugged debugging \
     enable enables enabled enabling \
     fix fixes fixed fixing \
+    get gets got getting \
     implement implements implemented implementing \
     inspect inspects inspected inspecting \
     investigate investigates investigated investigating \

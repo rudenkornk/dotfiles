@@ -157,6 +157,7 @@ return {
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {
     "chrisgrieser/nvim-spider",
+    enabled = false,
     opts = require("plugins.configs.spider").opts,
     keys = require("plugins.configs.spider").keys,
   },

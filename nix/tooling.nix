@@ -14,7 +14,9 @@ let
   );
 
   # Tools the `dotfiles` CLI shells out to, shared between the dev shell and the CLI package.
-  managingTools = with pkgs; [
+  tools = with pkgs; [
+    bashInteractive # Without this there would be broken console when using direnv.
+
     # Tools for dumping gnome settings.
     dconf
     dconf2nix
@@ -48,10 +50,7 @@ let
       ]
     ))
 
-  ];
-
-  installTools = with pkgs; [
-    bashInteractive # Without this there would be broken console when using direnv.
+    # Install tools.
     disko
     e2fsprogs # chattr, lsattr, etc.
     git
@@ -82,12 +81,7 @@ let
 
   dotfiles = mkDotfiles {
     name = "dotfiles";
-    runtimeInputs = [ pyEnv ] ++ managingTools ++ installTools;
-  };
-
-  dotfilesInstall = mkDotfiles {
-    name = "dotfiles-install";
-    runtimeInputs = [ pyEnv ] ++ installTools;
+    runtimeInputs = [ pyEnv ] ++ tools;
   };
 
   commonShellHook =
@@ -110,41 +104,17 @@ in
 {
   devShells = {
     default = pkgs.mkShell {
-      packages = [ pyEnv ] ++ managingTools ++ installTools;
+      packages = [ pyEnv ] ++ tools;
       shellHook = commonShellHook;
     };
-
-    install = pkgs.mkShell {
-      packages = [ pyEnv ] ++ installTools;
-
-      shellHook =
-        commonShellHook
-        +
-        # bash
-        ''
-          echo "You are in the project NixOS install shell."
-          echo "It is supposed to run from inside NixOS live OS via:"
-          echo ""
-          echo "sudo nix --extra-experimental-features \"nix-command flakes\" develop .#install"
-          echo ""
-          echo 'After that `disko`, `sbctl` and `nixos-install` can be used to install or recover the system.'
-        '';
-    };
   };
 
-  packages = {
-    inherit dotfiles;
-    install = dotfilesInstall;
-  };
+  packages = { inherit dotfiles; };
 
   apps = {
     default = {
       type = "app";
       program = pkgs.lib.getExe dotfiles;
-    };
-    install = {
-      type = "app";
-      program = pkgs.lib.getExe dotfilesInstall;
     };
   };
 }

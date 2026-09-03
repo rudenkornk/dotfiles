@@ -13,7 +13,7 @@ A `NixOS` configuration.
    ```bash
    HOSTNAME=dellxps
    git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
-   sudo nix --extra-experimental-features "nix-command flakes" develop .#install
+   sudo nix --extra-experimental-features "nix-command flakes" develop
    dotfiles bootstrap-host
    disko --mode destroy,format,mount --flake .#$HOSTNAME
    ```
@@ -101,7 +101,7 @@ nh home switch . -b $(date '+%y.%m.%d-%H.%M')
 ```bash
 HOSTNAME=dellxps
 git clone https://github.com/rudenkornk/dotfiles.git && cd dotfiles
-sudo nix --extra-experimental-features "nix-command flakes" develop .#install
+sudo nix --extra-experimental-features "nix-command flakes" develop
 disko --mode mount --flake .#$HOSTNAME
 nixos-install --flake .#$HOSTNAME --root /mnt
 reboot

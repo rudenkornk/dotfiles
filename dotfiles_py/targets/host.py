@@ -14,6 +14,7 @@ from rich.table import Table
 from rich.text import Text
 
 from ..utils import run_shell, sudo_cat, sudo_shell
+from .lint import format_code
 
 _logger = logging.getLogger(__name__)
 
@@ -183,6 +184,7 @@ def bootstrap_host(*, repo_path: Path, templates_path: Path, force: bool) -> Non
 
 
 def _commit_generated_host(*, repo_path: Path, host: Host) -> None:
+    format_code(repo_path=repo_path, check=False)
     generated_paths = (host.path, host.facter_path, host.niri_monitors_path, host.noctalia_monitors_path)
     relative_paths = [str(path.relative_to(repo_path)) for path in generated_paths]
     run_shell(["git", "add", "--", *relative_paths], cwd=repo_path)

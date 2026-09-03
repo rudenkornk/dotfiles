@@ -64,20 +64,34 @@
       mkCmd =
         target: value:
         let
-          blockArgs = lib.optionalString (value.mode == "block") (
-            lib.optionalString (value.marker != null) "--marker ${lib.escapeShellArg value.marker} "
-            + lib.optionalString (
-              value.insertAfter != ""
-            ) "--insert-after ${lib.escapeShellArg value.insertAfter} "
+          blockArgs = lib.optionals (value.mode == "block") (
+            lib.optionals (value.marker != null) [
+              "--marker"
+              value.marker
+            ]
+            ++ lib.optionals (value.insertAfter != "") [
+              "--insert-after"
+              value.insertAfter
+            ]
           );
-          sources = lib.concatMapStringsSep " " lib.escapeShellArg (lib.toList value.source);
+
+          args = [
+            (lib.getExe pkgs.custom.merge-config)
+            value.mode
+            "--retry-decrypt"
+            "--suppress-decrypt-errors"
+          ]
+          ++ blockArgs
+          ++ lib.optional value.clearTarget "--clear-target"
+          ++ lib.optional value.readOnlyTarget "--read-only-target"
+          ++ [
+            "--target"
+            target
+            "--source"
+          ]
+          ++ map toString (lib.toList value.source);
         in
-        "${lib.getExe pkgs.custom.merge-config} ${value.mode} "
-        + "--retry-decrypt --suppress-decrypt-errors "
-        + blockArgs
-        + lib.optionalString value.clearTarget "--clear-target "
-        + lib.optionalString value.readOnlyTarget "--read-only-target "
-        + "--source ${sources} --target ${lib.escapeShellArg target} || true";
+        "${lib.escapeShellArgs args} || true";
     in
     pkgs.writeShellApplication {
       name = "merge-configs";

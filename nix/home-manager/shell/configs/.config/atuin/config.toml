@@ -14,6 +14,12 @@ search_mode = "daemon-fuzzy"
 "ctrl-b" = "scroll-page-up"
 "ctrl-f" = "scroll-page-down"
 "ctrl-t" = "cycle-search-mode"
+"ctrl-o" = "accept" # `enter_accept = false` leaves nothing bound to "run immediately".
+"ctrl-v" = "toggle-tab"
+
+[keymap.inspector]
+"ctrl-o" = "accept"
+"ctrl-v" = "toggle-tab"
 
 [theme]
 name = "monokai"

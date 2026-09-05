@@ -28,6 +28,7 @@
 
     nix-search-tv = {
       enable = true;
+      package = pkgs.unstable.nix-search-tv; # TODO: remove unstable after nixos-26.11
       settings.indexes = [
         "home-manager"
         "nixos"

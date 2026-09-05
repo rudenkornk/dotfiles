@@ -29,13 +29,20 @@
     nix-search-tv = {
       enable = true;
       package = pkgs.unstable.nix-search-tv; # TODO: remove unstable after nixos-26.11
-      settings.indexes = [
-        "home-manager"
-        "nixos"
-        "nixpkgs"
-        "noogle"
-        "nur"
-      ];
+      settings = {
+        indexes = [
+          "home-manager"
+          "nixos"
+          "nixpkgs"
+          "noogle"
+          "nur"
+        ];
+        experimental.render_docs_indexes = {
+          "home-manager-26.05" = "https://home-manager.dev/manual/26.05/options.xhtml";
+          "nixos-26.05" =
+            "https://hydra.nixos.org/job/nixos/release-26.05/nixos.manual.x86_64-linux/latest/download-by-type/doc/manual/options.html";
+        };
+      };
     };
   };
 }

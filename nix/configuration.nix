@@ -40,8 +40,6 @@
       };
       efi.canTouchEfiVariables = true;
     };
-
-    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   hardware = {

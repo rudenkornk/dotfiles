@@ -9,7 +9,7 @@ _: final: prev: {
     postBuild = ''
       rm -f "$out/bin/rvim"
       install -m755 ${
-        final.writeText "rvim" (
+        final.writeShellScript "rvim" (
           final.lib.replaceStrings
             [ "@unshare@" "@vim@" ]
             [ "${final.util-linux}/bin/unshare" "${prev.vim}/bin/vim" ]

@@ -95,7 +95,8 @@ let
 
   # ── ctrl-o: nix-search-tv ────────────────────────────────────────────────
 
-  nsBin = "${lib.getExe pkgs.nix-search-tv}";
+  # TODO: remove unstable after nixos-26.11
+  nsBin = lib.getExe pkgs.unstable.nix-search-tv;
 
   nsScript = pkgs.writeShellScript "fzf-ns" ''
     set -euo pipefail

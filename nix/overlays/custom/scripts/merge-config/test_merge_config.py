@@ -80,6 +80,40 @@ class MergeConfigTest(unittest.TestCase):
             return []
         return [json.loads(line) for line in self.decrypt_log.read_text().splitlines()]
 
+    def test_cli_rejects_invalid_arguments_without_writing(self) -> None:
+        source = self.write("source.json", '{"managed": true}')
+        target = self.directory / "target.json"
+        for arguments in (
+            (),
+            ("unknown", "--source", str(source), "--target", str(target)),
+            ("dict", "--target", str(target)),
+            ("dict", "--source", str(source)),
+            ("dict", "--source", str(source), "--target", str(target), "--marker", "# {mark}"),
+        ):
+            with self.subTest(arguments=arguments):
+                result = self.run_merge(*arguments, success=False)
+                self.assertEqual(result.returncode, 2)
+                self.assertFalse(target.exists())
+
+    def test_cli_preserves_source_order_and_paths_with_spaces(self) -> None:
+        source1 = self.write("first source", '{"first": true, "shared": 1}')
+        source2 = self.write("second source", '{"second": true, "shared": 2}')
+        source3 = self.write("last source", '{"shared": 3}')
+        target = self.directory / "target.json"
+
+        self.run_merge(
+            "dict",
+            "--source",
+            str(source1),
+            "--source",
+            str(source2),
+            "--target",
+            str(target),
+            f"--source={source3}",
+        )
+
+        self.assertEqual(json.loads(target.read_text()), {"first": True, "second": True, "shared": 3})
+
     def test_json_recursively_merges_objects_and_replaces_other_values(self) -> None:
         source = self.write(
             "source.json",
@@ -140,7 +174,9 @@ class MergeConfigTest(unittest.TestCase):
             "dict",
             "--source",
             str(source1),
+            "--source",
             str(source2),
+            "--source",
             str(source3),
             "--target",
             str(target),
@@ -183,7 +219,9 @@ class MergeConfigTest(unittest.TestCase):
             "dict",
             "--source",
             str(source1),
+            "--source",
             str(source2),
+            "--source",
             str(source3),
             "--target",
             str(target),
@@ -248,6 +286,7 @@ class MergeConfigTest(unittest.TestCase):
             "--suppress-decrypt-errors",
             "--source",
             str(failed),
+            "--source",
             str(source),
             "--target",
             str(target),
@@ -317,6 +356,7 @@ class MergeConfigTest(unittest.TestCase):
             "dict",
             "--source",
             str(source1),
+            "--source",
             str(source2),
             "--target",
             str(target),
@@ -399,7 +439,9 @@ class MergeConfigTest(unittest.TestCase):
             "^anchor",
             "--source",
             str(source1),
+            "--source",
             str(source2),
+            "--source",
             str(source3),
             "--target",
             str(target),
@@ -461,7 +503,9 @@ class MergeConfigTest(unittest.TestCase):
             "missing",
             "--source",
             str(source1),
+            "--source",
             str(source2),
+            "--source",
             str(source3),
             "--target",
             str(target),

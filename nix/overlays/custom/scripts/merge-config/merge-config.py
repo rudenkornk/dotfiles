@@ -118,7 +118,7 @@ def _resolve_sources(sources: Sequence[Path], *, retry: bool, suppress_errors: b
     return resolved
 
 
-def _load_json_object(text: str, path: Path) -> JsonObject:
+def _load_dict(text: str, path: Path) -> JsonObject:
     try:
         value = cast("JsonValue", json.loads(text))
     except json.JSONDecodeError as error:
@@ -131,12 +131,12 @@ def _load_json_object(text: str, path: Path) -> JsonObject:
     return value
 
 
-def _merge_json_objects(target: JsonObject, source: JsonObject) -> JsonObject:
+def _merge_dicts(target: JsonObject, source: JsonObject) -> JsonObject:
     result = target.copy()
     for key, source_value in source.items():
         target_value = result.get(key)
         if isinstance(target_value, dict) and isinstance(source_value, dict):
-            result[key] = _merge_json_objects(target_value, source_value)
+            result[key] = _merge_dicts(target_value, source_value)
         else:
             result[key] = source_value
     return result
@@ -297,7 +297,7 @@ def _write_target(path: Path, content: str, previous: str, *, private: bool, rea
         path.write_text(content, encoding="utf-8")
 
 
-def _run_json(
+def _run_dict(
     sources: Sequence[Path],
     target: Path,
     *,
@@ -306,10 +306,10 @@ def _run_json(
     read_only_target: bool,
 ) -> None:
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
-    result = _load_json_object(target_text, target) if not clear_target and target_text.strip() else {}
+    result = _load_dict(target_text, target) if not clear_target and target_text.strip() else {}
     for source in sources:
-        source_object = _load_json_object(source.read_text(encoding="utf-8"), source)
-        result = _merge_json_objects(result, source_object)
+        source_object = _load_dict(source.read_text(encoding="utf-8"), source)
+        result = _merge_dicts(result, source_object)
     _write_target(
         target,
         json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n",
@@ -366,8 +366,8 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Merge a managed source file into a mutable target file.")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    json_parser = subparsers.add_parser("json", help="Recursively merge JSON objects.")
-    _add_common_arguments(json_parser)
+    dict_parser = subparsers.add_parser("dict", help="Recursively merge JSON objects.")
+    _add_common_arguments(dict_parser)
 
     block_parser = subparsers.add_parser("block", help="Insert or replace a marker-delimited text block.")
     block_parser.add_argument("--insert-after", default="", metavar="REGEX")
@@ -396,8 +396,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             msg = "source and target must be different files"
             raise MergeError(msg)  # noqa: TRY301
         target.parent.mkdir(parents=True, exist_ok=True)
-        if arguments.command == "json":
-            _run_json(
+        if arguments.command == "dict":
+            _run_dict(
                 sources,
                 target,
                 clear_target=clear_target,

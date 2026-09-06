@@ -7,11 +7,17 @@ import subprocess
 import sys
 from collections.abc import Iterator, Mapping, MutableMapping, Sequence
 from contextlib import contextmanager, nullcontext
+from io import StringIO
 from pathlib import Path
 from typing import Annotated, cast
 
 import click
+import tomlkit
 import typer
+from ruamel.yaml import YAML
+from ruamel.yaml.error import YAMLError
+from ruamel.yaml.events import CollectionStartEvent, NodeEvent, ScalarEvent
+from tomlkit.items import InlineTable
 
 type DictObject = MutableMapping[str, object]
 
@@ -24,6 +30,7 @@ app = typer.Typer(
 MARKER_PLACEHOLDER = "{mark}"
 MARKER_TEXT = "NIX MANAGED BLOCK"
 ENCRYPTED_SUFFIXES = (".sops", ".sops.json", ".sops.yaml")
+DICT_SUFFIXES = (".json", ".toml", ".yaml", ".yml")
 LINE_MARKERS = {
     ".bash": "#",
     ".c": "//",
@@ -125,16 +132,44 @@ def _resolve_sources(sources: Sequence[Path], *, retry: bool, suppress_errors: b
     return resolved
 
 
-def _load_dict(text: str, path: Path) -> DictObject:
+def _validate_dict_keys(value: object, path: Path) -> None:
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            if not isinstance(key, str):
+                msg = f"{path} must use string dictionary keys"
+                raise MergeError(msg)
+            _validate_dict_keys(item, path)
+    elif isinstance(value, list):
+        for item in value:
+            _validate_dict_keys(item, path)
+
+
+def _load_dict(text: str, path: Path, suffix: str) -> DictObject:
     try:
-        value: object = json.loads(text)
-    except json.JSONDecodeError as error:
-        msg = f"failed to parse {path}: {error}"
+        value: object
+        if suffix == ".json":
+            value = json.loads(text)
+        elif suffix == ".toml":
+            value = tomlkit.parse(text)
+        else:
+            yaml = YAML(typ="rt")
+            yaml.preserve_quotes = True
+            for event in yaml.parse(text):
+                if isinstance(event, NodeEvent) and event.anchor is not None:
+                    msg = f"{path}: YAML anchors and aliases are unsupported"
+                    raise MergeError(msg)
+                if isinstance(event, (CollectionStartEvent, ScalarEvent)) and event.tag is not None:
+                    msg = f"{path}: explicit YAML tags are unsupported"
+                    raise MergeError(msg)
+            value = yaml.load(text)
+    except (json.JSONDecodeError, tomlkit.exceptions.ParseError, YAMLError) as error:
+        msg = f"failed to parse {path}: {type(error).__name__}"  # Parser messages may quote decrypted values.
         raise MergeError(msg) from error
 
     if not isinstance(value, MutableMapping):
-        msg = f"{path} must contain a top-level JSON object"
+        msg = f"{path} must contain a top-level dictionary"
         raise MergeError(msg)
+    _validate_dict_keys(value, path)
     return cast("DictObject", value)
 
 
@@ -143,6 +178,8 @@ def _merge_dicts(target: DictObject, source: Mapping[str, object]) -> None:
         target_value = target.get(key)
         if isinstance(target_value, MutableMapping) and isinstance(source_value, Mapping):
             _merge_dicts(target_value, source_value)
+        elif isinstance(target, InlineTable) and hasattr(source_value, "unwrap"):
+            target[key] = source_value.unwrap()
         else:
             target[key] = source_value
 
@@ -310,14 +347,29 @@ def _run_dict(
     private_target: bool,
     read_only_target: bool,
 ) -> None:
+    suffix = target.suffix.lower()
     target_text = target.read_text(encoding="utf-8") if target.exists() else ""
-    result = _load_dict(target_text, target) if not clear_target and target_text.strip() else {}
+    result = _load_dict(target_text, target, suffix) if not clear_target and target_text.strip() else None
     for source in sources:
-        source_object = _load_dict(source.read_text(encoding="utf-8"), source)
-        _merge_dicts(result, source_object)
+        source_object = _load_dict(source.read_text(encoding="utf-8"), source, suffix)
+        if result is None:
+            result = source_object
+        else:
+            _merge_dicts(result, source_object)
+    if result is None:
+        result = {}
+    if suffix == ".json":
+        content = json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n"
+    elif suffix == ".toml":
+        content = tomlkit.dumps(result)
+        _load_dict(content, target, suffix)
+    else:
+        output = StringIO()
+        YAML(typ="rt").dump(result, output)
+        content = output.getvalue()
     _write_target(
         target,
-        json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n",
+        content,
         target_text,
         private=private_target,
         read_only=read_only_target,
@@ -353,7 +405,9 @@ def main(  # noqa: PLR0913
     sources: Annotated[
         list[Path], typer.Option("--source", help="Source file; repeat to merge multiple files in order.")
     ],
-    target: Annotated[Path, typer.Option("--target")],
+    target: Annotated[
+        Path, typer.Option("--target", help="Dict mode detects .json, .toml, .yaml or .yml from this filename.")
+    ],
     clear_target: Annotated[
         bool, typer.Option("--clear-target", help="Treat the target as empty when merging.")
     ] = False,
@@ -370,6 +424,9 @@ def main(  # noqa: PLR0913
     if mode != "block" and (marker is not None or insert_after):
         msg = "--marker and --insert-after require block mode"
         raise typer.BadParameter(msg)
+    if mode == "dict" and target.suffix.lower() not in DICT_SUFFIXES:
+        msg = f"unsupported target extension: {target.suffix or '(none)'}"
+        raise typer.BadParameter(msg, param_hint="--target")
 
     private_target = any(_is_encrypted(source) for source in sources)
 

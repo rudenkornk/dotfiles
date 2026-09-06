@@ -1,11 +1,15 @@
 final: _prev:
 
 let
-  python = final.python3.withPackages (ps: [ ps.typer ]);
+  python = final.python3.withPackages (ps: [
+    ps.ruamel-yaml
+    ps.tomlkit
+    ps.typer
+  ]);
 in
 final.stdenvNoCC.mkDerivation {
   pname = "merge-config";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = ./scripts/merge-config;
 
@@ -47,7 +51,7 @@ final.stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "Merge managed JSON or text blocks into mutable configuration files";
+    description = "Merge managed dictionaries or text blocks into mutable configuration files";
     license = final.lib.licenses.mit;
     mainProgram = "merge-config";
     platforms = final.lib.platforms.linux;

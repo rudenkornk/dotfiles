@@ -7,10 +7,14 @@ import stat
 import subprocess
 import sys
 import tempfile
+import tomllib
 import unittest
+from datetime import date
 from pathlib import Path
 from textwrap import dedent
 from unittest import mock
+
+from ruamel.yaml import YAML
 
 PROGRAM = Path(__file__).with_name("merge-config.py")
 
@@ -397,6 +401,204 @@ class MergeConfigTest(unittest.TestCase):
         self.assertEqual(target.stat().st_ino, before.st_ino)
         self.assertEqual(target.stat().st_mtime_ns, before.st_mtime_ns)
         self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o444)
+
+    def test_dict_formats_merge_in_order_and_preserve_style(self) -> None:
+        fixtures = {
+            "toml": (
+                "# Target header.\nname = 'quoted' # Target inline.\n'literal.key' = 'literal'\n"
+                "items = [1, 2]\npromote = 0\ndemote = { old = true }\ndate = 2020-01-01\n"
+                "untouched = { keep = 1 }\n"
+                "nested.keep = 1\nnested.shared = 'target'\n"
+                "[[workers]]\nid = 1\nlocal = true\n[[workers]]\nid = 2\n",
+                "items = [3]\npromote = { new = true }\ndemote = 'scalar'\ndate = 2026-09-06\n"
+                "untouched = {}\n"
+                "nested.shared = 'first'\nnested.add = 2\n[[workers]]\nid = 3\n",
+                "nested.shared = 'last'\n",
+            ),
+            "yaml": (
+                "# Target header.\nname: 'quoted' # Target inline.\n'literal.key': literal\n"
+                "items: [1, 2]\npromote: 0\ndemote: {old: true}\ndate: 2020-01-01\n"
+                "untouched: {keep: 1}\n"
+                "nested: {keep: 1, shared: target}\nworkers: [{id: 1, local: true}, {id: 2}]\n",
+                "items: [3]\npromote: {new: true}\ndemote: scalar\ndate: 2026-09-06\n"
+                "untouched: {}\n"
+                "nested: {shared: first, add: 2}\nworkers: [{id: 3}]\n",
+                "nested: {shared: last}\n",
+            ),
+        }
+        expected = {
+            "name": "quoted",
+            "literal.key": "literal",
+            "items": [3],
+            "promote": {"new": True},
+            "demote": "scalar",
+            "date": date(2026, 9, 6),
+            "untouched": {"keep": 1},
+            "nested": {"keep": 1, "shared": "last", "add": 2},
+            "workers": [{"id": 3}],
+        }
+        for suffix in (".TOML", ".YAML", ".yml"):
+            with self.subTest(suffix=suffix):
+                original, first, last = fixtures["toml" if suffix == ".TOML" else "yaml"]
+                target = self.write(f"target{suffix}", original)
+                target.chmod(0o640)
+                source1 = self.write("first source", first)
+                source2 = self.write("last.sops.json", last)
+                previous_decryptions = self.decrypt_invocations()
+                arguments = (
+                    "dict",
+                    "--target",
+                    str(target),
+                    "--source",
+                    str(source1),
+                    "--source",
+                    str(source2),
+                    "--read-only-target",
+                )
+
+                self.run_merge(*arguments)
+
+                text = target.read_text()
+                parsed = tomllib.loads(text) if suffix == ".TOML" else YAML(typ="rt").load(text)
+                self.assertEqual(parsed, expected)
+                for preserved in ("# Target header.", "# Target inline.", "'quoted'"):
+                    self.assertIn(preserved, text)
+                self.assertEqual(self.decrypt_invocations(), [*previous_decryptions, [str(source2)]])
+                self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o400)
+                before = target.stat()
+                self.run_merge(*arguments)
+                self.assertEqual(target.read_text(), text)
+                self.assertEqual(target.stat().st_ino, before.st_ino)
+                self.assertEqual(target.stat().st_mtime_ns, before.st_mtime_ns)
+                self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o400)
+
+    def test_dict_formats_seed_missing_or_cleared_target_from_first_source(self) -> None:
+        for suffix, first, second in (
+            (".toml", "name = 'quoted' # Source inline.\n[section]\nfirst = 1\n", "section.second = 2\n"),
+            (".yaml", "name: 'quoted' # Source inline.\nsection: {first: 1}\n", "section: {second: 2}\n"),
+            (".yml", "name: 'quoted' # Source inline.\nsection: {first: 1}\n", "section: {second: 2}\n"),
+        ):
+            for clear_target in (False, True):
+                with self.subTest(suffix=suffix, clear_target=clear_target):
+                    source1 = self.write("first", "# Source header.\n" + first)
+                    source2 = self.write("second", second)
+                    target = self.directory / f"seed-{clear_target}{suffix}"
+                    if clear_target:
+                        target.write_text("invalid [ target\n")
+                        target.chmod(0o640)
+                    arguments = ["dict", "--target", str(target), "--source", str(source1), "--source", str(source2)]
+                    if clear_target:
+                        arguments.append("--clear-target")
+
+                    self.run_merge(*arguments)
+
+                    text = target.read_text()
+                    parsed = tomllib.loads(text) if suffix == ".toml" else YAML(typ="rt").load(text)
+                    self.assertEqual(parsed, {"name": "quoted", "section": {"first": 1, "second": 2}})
+                    for preserved in ("# Source header.", "# Source inline.", "'quoted'"):
+                        self.assertIn(preserved, text)
+                    if clear_target:
+                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+
+    def test_toml_merges_tables_into_inline_tables(self) -> None:
+        for source_text, expected in (
+            ("[section.nested]\nmanaged = 2\n", {"keep": 1, "nested": {"managed": 2}}),
+            ("[[section.workers]]\nid = 3\n", {"keep": 1, "workers": [{"id": 3}]}),
+            (
+                "[section.nested.first]\na = 1\n[other]\nvalue = true\n[section.nested]\nb = 2\n",
+                {"keep": 1, "nested": {"first": {"a": 1}, "b": 2}},
+            ),
+        ):
+            with self.subTest(source=source_text):
+                target = self.write("inline.toml", "section = { keep = 1 } # Inline.\n")
+                source = self.write("source", source_text)
+                arguments = ("dict", "--source", str(source), "--target", str(target))
+
+                self.run_merge(*arguments)
+
+                content = target.read_text()
+                self.assertEqual(tomllib.loads(content)["section"], expected)
+                self.assertIn("# Inline.", content)
+                self.run_merge(*arguments)
+                self.assertEqual(target.read_text(), content)
+
+    def test_dict_invalid_documents_preserve_target_bytes_and_mode(self) -> None:
+        constructed = self.directory / "constructor-must-not-run"
+        for suffix, valid, invalid_documents in (
+            (".json", '{"keep": true}\n', ('{"key":', "[]", "null")),
+            (".toml", "keep = true\n", ("key = [", "key = 1\nkey = 2\n", "date = 2026-99-99\n")),
+            (
+                ".yaml",
+                "keep: true\n",
+                (
+                    "key: [",
+                    "- item\n",
+                    "scalar\n",
+                    "null\n",
+                    "1: value\n",
+                    "nested: {1: value}\n",
+                    "items: [{false: value}]\n",
+                    "key: 1\nkey: 2\n",
+                    "nested: {key: 1, key: 2}\n",
+                    "first: 1\n---\nsecond: 2\n",
+                    "key: &unused value\n",
+                    "key: &shared {value: 1}\nother: *shared\n",
+                    "key: *missing\n",
+                    "key: !!str 1\n",
+                    "!!map {key: 1}\n",
+                    "key: !custom value\n",
+                    f"key: !!python/object/apply:builtins.open [{json.dumps(str(constructed))}, 'w']\n",
+                ),
+            ),
+        ):
+            for invalid in invalid_documents:
+                for invalid_target in (False, True):
+                    with self.subTest(suffix=suffix, invalid=invalid, invalid_target=invalid_target):
+                        source1 = self.write("first", valid)
+                        source2 = self.write("second.sops.json", valid if invalid_target else invalid)
+                        target = self.write(f"target{suffix}", invalid if invalid_target else valid)
+                        target.chmod(0o640)
+                        before = target.read_bytes()
+
+                        self.run_merge(
+                            "dict",
+                            "--target",
+                            str(target),
+                            "--source",
+                            str(source1),
+                            "--source",
+                            str(source2),
+                            "--read-only-target",
+                            success=False,
+                        )
+
+                        self.assertEqual(target.read_bytes(), before)
+                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+                        self.assertFalse(constructed.exists())
+
+    def test_dict_rejects_unsupported_suffix_before_decryption_or_writes(self) -> None:
+        source = self.write("source.sops.json", '{"managed": true}\n')
+        for suffix in ("", ".conf", ".json.sops", ".yaml.bak"):
+            for scenario in ("existing", "clear", "missing"):
+                with self.subTest(suffix=suffix, scenario=scenario):
+                    target = self.directory / f"target{suffix}"
+                    if scenario == "missing":
+                        target = self.directory / f"missing{suffix}" / f"target{suffix}"
+                    else:
+                        target.write_text('{"local": true}\n')
+                        target.chmod(0o640)
+                    arguments = ["dict", "--target", str(target), "--source", str(source)]
+                    if scenario == "clear":
+                        arguments.append("--clear-target")
+
+                    self.run_merge(*arguments, success=False)
+
+                    self.assertEqual(self.decrypt_invocations(), [])
+                    if scenario == "missing":
+                        self.assertFalse(target.parent.exists())
+                    else:
+                        self.assertEqual(target.read_bytes(), b'{"local": true}\n')
+                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
 
     def test_read_only_target_relocks_after_write_failure(self) -> None:
         target = self.write("target.json", "old")

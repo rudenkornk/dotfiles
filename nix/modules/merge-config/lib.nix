@@ -87,9 +87,11 @@
           ++ [
             "--target"
             target
-            "--source"
           ]
-          ++ map toString (lib.toList value.source);
+          ++ lib.concatMap (source: [
+            "--source"
+            (toString source)
+          ]) (lib.toList value.source);
         in
         "${lib.escapeShellArgs args} || true";
     in

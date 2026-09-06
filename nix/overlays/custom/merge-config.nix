@@ -1,5 +1,8 @@
 final: _prev:
 
+let
+  python = final.python3.withPackages (ps: [ ps.typer ]);
+in
 final.stdenvNoCC.mkDerivation {
   pname = "merge-config";
   version = "1.1.0";
@@ -10,7 +13,7 @@ final.stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   nativeBuildInputs = [ final.makeWrapper ];
-  nativeCheckInputs = [ final.python3 ];
+  nativeCheckInputs = [ python ];
   doCheck = true;
   checkPhase = ''
     runHook preCheck
@@ -21,7 +24,7 @@ final.stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    printf '#!${final.python3}/bin/python3\n' > $out/bin/merge-config
+    printf '#!${python}/bin/python3\n' > $out/bin/merge-config
     cat merge-config.py >> $out/bin/merge-config
     chmod 755 $out/bin/merge-config
     wrapProgram $out/bin/merge-config \

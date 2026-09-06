@@ -1,6 +1,5 @@
 # ruff: noqa: INP001
 
-import argparse
 import json
 import re
 import stat
@@ -9,9 +8,18 @@ import sys
 from collections.abc import Iterator, Mapping, MutableMapping, Sequence
 from contextlib import contextmanager, nullcontext
 from pathlib import Path
-from typing import cast
+from typing import Annotated, cast
+
+import click
+import typer
 
 type DictObject = MutableMapping[str, object]
+
+app = typer.Typer(
+    context_settings={"help_option_names": ["-h", "--help"]},
+    add_completion=False,
+    pretty_exceptions_enable=False,
+)
 
 MARKER_PLACEHOLDER = "{mark}"
 MARKER_TEXT = "NIX MANAGED BLOCK"
@@ -338,62 +346,45 @@ def _run_block(  # noqa: PLR0913
     _write_target(target, result, target_text, private=private_target, read_only=read_only_target)
 
 
-def _add_common_arguments(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument(
-        "--clear-target",
-        action="store_true",
-        help="Treat the target as empty when merging.",
-    )
-    parser.add_argument(
-        "--read-only-target",
-        action="store_true",
-        help="Remove all target write permissions after merging.",
-    )
-    parser.add_argument("--retry-decrypt", action="store_true", help="Retry cached decryption failures.")
-    parser.add_argument("--source", nargs="+", required=True, type=Path)
-    parser.add_argument(
-        "--suppress-decrypt-errors",
-        action="store_true",
-        help="Skip sources that fail to decrypt.",
-    )
-    parser.add_argument("--target", required=True, type=Path)
+@app.command(help="Merge managed sources into a mutable configuration file.")
+def main(  # noqa: PLR0913
+    mode: Annotated[str, typer.Argument(click_type=click.Choice(["dict", "block"]))],
+    *,
+    sources: Annotated[
+        list[Path], typer.Option("--source", help="Source file; repeat to merge multiple files in order.")
+    ],
+    target: Annotated[Path, typer.Option("--target")],
+    clear_target: Annotated[
+        bool, typer.Option("--clear-target", help="Treat the target as empty when merging.")
+    ] = False,
+    read_only_target: Annotated[
+        bool, typer.Option("--read-only-target", help="Remove all target write permissions after merging.")
+    ] = False,
+    retry_decrypt: Annotated[bool, typer.Option("--retry-decrypt", help="Retry cached decryption failures.")] = False,
+    suppress_decrypt_errors: Annotated[
+        bool, typer.Option("--suppress-decrypt-errors", help="Skip sources that fail to decrypt.")
+    ] = False,
+    insert_after: Annotated[str, typer.Option("--insert-after", help="Block mode only.", metavar="REGEX")] = "",
+    marker: Annotated[str | None, typer.Option("--marker", help="Block mode only.", metavar="TEMPLATE")] = None,
+) -> None:
+    if mode != "block" and (marker is not None or insert_after):
+        msg = "--marker and --insert-after require block mode"
+        raise typer.BadParameter(msg)
 
-
-def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Merge a managed source file into a mutable target file.")
-    subparsers = parser.add_subparsers(dest="command", required=True)
-
-    dict_parser = subparsers.add_parser("dict", help="Recursively merge JSON objects.")
-    _add_common_arguments(dict_parser)
-
-    block_parser = subparsers.add_parser("block", help="Insert or replace a marker-delimited text block.")
-    block_parser.add_argument("--insert-after", default="", metavar="REGEX")
-    block_parser.add_argument("--marker", metavar="TEMPLATE")
-    _add_common_arguments(block_parser)
-    return parser
-
-
-def main(argv: Sequence[str] | None = None) -> int:
-    parser = _parser()
-    arguments = parser.parse_args(argv)
-    sources = cast("list[Path]", arguments.source)
-    target = cast("Path", arguments.target)
-    clear_target = cast("bool", arguments.clear_target)
     private_target = any(_is_encrypted(source) for source in sources)
-    read_only_target = cast("bool", arguments.read_only_target)
 
     try:
         original_sources = sources
         sources = _resolve_sources(
             sources,
-            retry=cast("bool", arguments.retry_decrypt),
-            suppress_errors=cast("bool", arguments.suppress_decrypt_errors),
+            retry=retry_decrypt,
+            suppress_errors=suppress_decrypt_errors,
         )
         if target.exists() and any(source.samefile(target) for source in [*original_sources, *sources]):
             msg = "source and target must be different files"
             raise MergeError(msg)  # noqa: TRY301
         target.parent.mkdir(parents=True, exist_ok=True)
-        if arguments.command == "dict":
+        if mode == "dict":
             _run_dict(
                 sources,
                 target,
@@ -405,8 +396,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             _run_block(
                 sources,
                 target,
-                cast("str | None", arguments.marker),
-                cast("str", arguments.insert_after),
+                marker,
+                insert_after,
                 clear_target=clear_target,
                 private_target=private_target,
                 read_only_target=read_only_target,
@@ -414,12 +405,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     except subprocess.CalledProcessError as error:
         detail = error.stderr.strip()
         sys.stderr.write(f"merge-config: {detail or error}\n")
-        return 1
+        raise typer.Exit(1) from error
     except (MergeError, OSError, ValueError) as error:
         sys.stderr.write(f"merge-config: {error}\n")
-        return 1
-    return 0
+        raise typer.Exit(1) from error
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    app()

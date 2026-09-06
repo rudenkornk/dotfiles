@@ -14,7 +14,7 @@
             mode = lib.mkOption {
               type = lib.types.enum [
                 "block"
-                "json"
+                "dict"
               ];
               default = "block";
             };

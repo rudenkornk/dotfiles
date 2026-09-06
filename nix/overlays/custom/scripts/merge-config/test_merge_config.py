@@ -105,7 +105,7 @@ class MergeConfigTest(unittest.TestCase):
             ),
         )
 
-        self.run_merge("json", "--source", str(source), "--target", str(target))
+        self.run_merge("dict", "--source", str(source), "--target", str(target))
 
         self.assertEqual(
             json.loads(target.read_text()),
@@ -137,7 +137,7 @@ class MergeConfigTest(unittest.TestCase):
         )
 
         self.run_merge(
-            "json",
+            "dict",
             "--source",
             str(source1),
             str(source2),
@@ -161,7 +161,7 @@ class MergeConfigTest(unittest.TestCase):
         target.chmod(0o640)
 
         self.run_merge(
-            "json",
+            "dict",
             "--clear-target",
             "--source",
             str(source),
@@ -180,7 +180,7 @@ class MergeConfigTest(unittest.TestCase):
         target.chmod(0o640)
 
         self.run_merge(
-            "json",
+            "dict",
             "--source",
             str(source1),
             str(source2),
@@ -201,7 +201,7 @@ class MergeConfigTest(unittest.TestCase):
         target = self.directory / "target.json"
 
         self.run_merge(
-            "json",
+            "dict",
             "--retry-decrypt",
             "--source",
             str(source),
@@ -217,7 +217,7 @@ class MergeConfigTest(unittest.TestCase):
         target = self.directory / "target.json"
 
         self.run_merge(
-            "json",
+            "dict",
             "--read-only-target",
             "--source",
             str(source),
@@ -233,7 +233,7 @@ class MergeConfigTest(unittest.TestCase):
         target = self.write("target.json", '{"existing": true}\n')
         before = target.read_bytes()
 
-        result = self.run_merge("json", "--source", str(source), "--target", str(target), success=False)
+        result = self.run_merge("dict", "--source", str(source), "--target", str(target), success=False)
 
         self.assertIn("fake decryption failure", result.stderr)
         self.assertEqual(target.read_bytes(), before)
@@ -244,7 +244,7 @@ class MergeConfigTest(unittest.TestCase):
         target = self.write("target.json", '{"existing": true}')
 
         self.run_merge(
-            "json",
+            "dict",
             "--suppress-decrypt-errors",
             "--source",
             str(failed),
@@ -260,7 +260,7 @@ class MergeConfigTest(unittest.TestCase):
         target = self.directory / "target.json"
 
         self.run_merge(
-            "json",
+            "dict",
             "--suppress-decrypt-errors",
             "--source",
             str(source),
@@ -275,7 +275,7 @@ class MergeConfigTest(unittest.TestCase):
         source = self.write("source.json", '{"managed": true}')
         target = self.directory / "missing" / "target.json"
 
-        self.run_merge("json", "--source", str(source), "--target", str(target))
+        self.run_merge("dict", "--source", str(source), "--target", str(target))
 
         self.assertEqual(json.loads(target.read_text()), {"managed": True})
 
@@ -285,7 +285,7 @@ class MergeConfigTest(unittest.TestCase):
         target.chmod(0o454)
 
         self.run_merge(
-            "json",
+            "dict",
             "--read-only-target",
             "--source",
             str(source),
@@ -302,7 +302,7 @@ class MergeConfigTest(unittest.TestCase):
         target.chmod(0o640)
         before = target.read_bytes()
 
-        self.run_merge("json", "--source", str(source), "--target", str(target), success=False)
+        self.run_merge("dict", "--source", str(source), "--target", str(target), success=False)
 
         self.assertEqual(target.read_bytes(), before)
         self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
@@ -314,7 +314,7 @@ class MergeConfigTest(unittest.TestCase):
         target.hardlink_to(source2)
 
         self.run_merge(
-            "json",
+            "dict",
             "--source",
             str(source1),
             str(source2),
@@ -330,9 +330,9 @@ class MergeConfigTest(unittest.TestCase):
         target = self.write("target.json", '{"local": true}')
         target.chmod(0o640)
 
-        self.run_merge("json", "--source", str(source), "--target", str(target))
+        self.run_merge("dict", "--source", str(source), "--target", str(target))
         first_stat = target.stat()
-        self.run_merge("json", "--source", str(source), "--target", str(target))
+        self.run_merge("dict", "--source", str(source), "--target", str(target))
 
         self.assertEqual(target.stat().st_ino, first_stat.st_ino)
         self.assertEqual(target.stat().st_mtime_ns, first_stat.st_mtime_ns)
@@ -341,12 +341,12 @@ class MergeConfigTest(unittest.TestCase):
     def test_json_read_only_target_removes_write_bits_from_unchanged_target(self) -> None:
         source = self.write("source.json", '{"managed": true}')
         target = self.write("target.json", '{"local": true}')
-        self.run_merge("json", "--source", str(source), "--target", str(target))
+        self.run_merge("dict", "--source", str(source), "--target", str(target))
         target.chmod(0o666)
         before = target.stat()
 
         self.run_merge(
-            "json",
+            "dict",
             "--read-only-target",
             "--source",
             str(source),

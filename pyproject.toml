@@ -109,6 +109,7 @@ exclude = [
   '^result/',
   '^__build/',
   '^\.direnv/',
+  '^nix/overlays/',
 ]
 
 [tool.pydocstyle]

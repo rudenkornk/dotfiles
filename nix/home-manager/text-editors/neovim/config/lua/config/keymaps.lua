@@ -3,11 +3,11 @@
 -- Add any additional keymaps here
 
 -- <C-a> -- increment.
--- <C-b> -- scroll back page.
+-- <C-b> -- scroll back page. Scroll doc in insert mode.
 -- <C-c> -- ???
 -- <C-d> -- scroll down half page.
 -- <C-e> -- scroll up lines.
--- <C-f> -- scroll down page.
+-- <C-f> -- scroll down page. Scroll doc in insert mode.
 -- <C-g> -- lazygit.
 -- <C-h> -- pane navigation.
 -- <C-i> -- go forward.
@@ -148,10 +148,6 @@ vim.opt.iminsert = 0
 vim.opt.imsearch = -1
 vim.keymap.set({ "n" }, "<C-q>", "a<C-^><ESC>", { desc = "Toggle keyboard layout" })
 vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
-
--- Enhanced motions in insert mode.
-vim.keymap.set("i", "<C-f>", "<Right>", { desc = "Move character forward" })
-vim.keymap.set("i", "<C-b>", "<Left>", { desc = "Move character backward" })
 
 vim.keymap.set("i", "<C-a>", "<Home>", { desc = "Jump to beginning of line" })
 vim.keymap.set("i", "<C-e>", "<End>", { desc = "Jump to end of line" })

@@ -47,7 +47,7 @@ in
       (locallib.with_secrets {
         pkg = unstable.codex;
         extraScript = ''
-          set -- --profile nixos "$@"
+          set -- --profile nixos --dangerously-bypass-hook-trust "$@"
         '';
       })
       (locallib.with_secrets {

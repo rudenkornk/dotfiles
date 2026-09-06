@@ -108,6 +108,7 @@ def gui() -> None:
     noctalia_settings = REPO_PATH / "nix/home-manager/desktop-envs/noctalia/settings.json"
     monitor_settings = REPO_PATH / f"nix/hosts/{platform.node()}/noctalia_monitors.nix"
     noctalia_target.noctalia_config(settings_path=noctalia_settings, monitor_settings_path=monitor_settings)
+    format_code()
 
 
 @app.command()

@@ -11,7 +11,11 @@ extends = ":workspace"
 
 [permissions.development.filesystem]
 glob_scan_max_depth = 3
-"/run/user/*/secrets/*" = "deny"
+# codex has a stupid bug at startup, which makes it awkwardly fail if it cannot grep denied dirs 🤦
+# We need to keep explicit "user/1000" because of it.
+# Similar issue: github.com/openai/codex/issues/37390
+"/run/user/1000/secrets" = "deny"
+"/run/user/1001/secrets" = "deny"
 "~/.config/sops" = "deny"
 "~/.gnupg" = "deny"
 "~/.pki" = "deny"

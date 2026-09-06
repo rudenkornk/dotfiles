@@ -6,13 +6,12 @@ import re
 import stat
 import subprocess
 import sys
-from collections.abc import Iterator, Sequence
+from collections.abc import Iterator, Mapping, MutableMapping, Sequence
 from contextlib import contextmanager, nullcontext
 from pathlib import Path
 from typing import cast
 
-type JsonValue = dict[str, JsonValue] | list[JsonValue] | str | int | float | bool | None
-type JsonObject = dict[str, JsonValue]
+type DictObject = MutableMapping[str, object]
 
 MARKER_PLACEHOLDER = "{mark}"
 MARKER_TEXT = "NIX MANAGED BLOCK"
@@ -118,28 +117,26 @@ def _resolve_sources(sources: Sequence[Path], *, retry: bool, suppress_errors: b
     return resolved
 
 
-def _load_dict(text: str, path: Path) -> JsonObject:
+def _load_dict(text: str, path: Path) -> DictObject:
     try:
-        value = cast("JsonValue", json.loads(text))
+        value: object = json.loads(text)
     except json.JSONDecodeError as error:
         msg = f"failed to parse {path}: {error}"
         raise MergeError(msg) from error
 
-    if not isinstance(value, dict):
+    if not isinstance(value, MutableMapping):
         msg = f"{path} must contain a top-level JSON object"
         raise MergeError(msg)
-    return value
+    return cast("DictObject", value)
 
 
-def _merge_dicts(target: JsonObject, source: JsonObject) -> JsonObject:
-    result = target.copy()
+def _merge_dicts(target: DictObject, source: Mapping[str, object]) -> None:
     for key, source_value in source.items():
-        target_value = result.get(key)
-        if isinstance(target_value, dict) and isinstance(source_value, dict):
-            result[key] = _merge_dicts(target_value, source_value)
+        target_value = target.get(key)
+        if isinstance(target_value, MutableMapping) and isinstance(source_value, Mapping):
+            _merge_dicts(target_value, source_value)
         else:
-            result[key] = source_value
-    return result
+            target[key] = source_value
 
 
 def _line_text(line: str) -> str:
@@ -309,7 +306,7 @@ def _run_dict(
     result = _load_dict(target_text, target) if not clear_target and target_text.strip() else {}
     for source in sources:
         source_object = _load_dict(source.read_text(encoding="utf-8"), source)
-        result = _merge_dicts(result, source_object)
+        _merge_dicts(result, source_object)
     _write_target(
         target,
         json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n",

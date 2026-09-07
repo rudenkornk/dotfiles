@@ -8,6 +8,9 @@
   ...
 }:
 
+let
+  ibus = pkgs.ibus-with-plugins;
+in
 {
   imports = [
     host.hardware-configuration
@@ -103,6 +106,7 @@
   time.timeZone = "Europe/Moscow";
 
   i18n = {
+    inputMethod.enable = false;
     defaultLocale = "en_GB.UTF-8";
     extraLocales = "all";
     extraLocaleSettings = {
@@ -119,6 +123,8 @@
   };
 
   services = {
+    dbus.packages = [ ibus ];
+
     displayManager.gdm = {
       autoSuspend = false;
       enable = true;
@@ -286,6 +292,8 @@
       NOCTALIA_PAM_SERVICE = "noctalia";
     };
     systemPackages = with pkgs; [
+      ibus
+
       # Bare minimal devset.
       git
       vim
@@ -313,6 +321,8 @@
   };
 
   programs = {
+    dconf.packages = [ ibus ];
+
     niri.enable = true;
 
     wireshark = {
@@ -356,5 +366,7 @@
     docker.enable = true;
     libvirtd.enable = true;
   };
+
+  xdg.portal.extraPortals = [ ibus ];
 
 }

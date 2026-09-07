@@ -10,7 +10,7 @@ let
 in
 final.stdenvNoCC.mkDerivation {
   pname = "merge-config";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = ./scripts/merge-config;
 

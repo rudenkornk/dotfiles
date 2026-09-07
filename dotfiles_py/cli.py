@@ -106,8 +106,8 @@ def gui() -> None:
     gnome_target.gnome_config(rules=rules, nix_path=nix_path)
 
     noctalia_settings = REPO_PATH / "nix/home-manager/desktop-envs/noctalia/settings.json"
-    monitor_settings = REPO_PATH / f"nix/hosts/{platform.node()}/noctalia_monitors.nix"
-    noctalia_target.noctalia_config(settings_path=noctalia_settings, monitor_settings_path=monitor_settings)
+    noctalia_host_settings = REPO_PATH / f"nix/hosts/{platform.node()}/noctalia.nix"
+    noctalia_target.noctalia_config(settings_path=noctalia_settings, host_settings_path=noctalia_host_settings)
     format_code()
 
 

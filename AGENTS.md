@@ -197,7 +197,8 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 **Structure**:
 
 - `nix/configuration.nix`: Shared NixOS system configuration (boot, networking, users, desktop, VPN, sops secrets).
-- `nix/hosts/`: Per-machine definitions (`dellxps.nix`, `thinkpad.nix`); hardware config is inlined per host, plus host subdirs (e.g. `dellxps/noctalia_monitors.nix`).
+- `nix/hosts/`: Per-machine definitions (`dellxps.nix`, `thinkpad.nix`); hardware config is inlined per host,
+  plus host subdirs (e.g. `dellxps/noctalia.nix`).
 - `nix/users/`: Per-user definitions (`rudenkornk.nix`, `rudenkornk_corp.nix`) with profile images.
 - `nix/home.nix`: Home Manager entry point importing all program modules.
 - `nix/home-manager/`: One directory per program or category, holding its modules, configs, scripts, and dotfiles.

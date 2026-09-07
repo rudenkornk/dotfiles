@@ -11,13 +11,15 @@ _logger = logging.getLogger(__name__)
 _home = str(Path.home())
 
 
-def _replace_home(obj: dict[str, Any] | list[Any]) -> None:
+def _normalize_values(obj: dict[str, Any] | list[Any]) -> None:
     iter_obj = obj.items() if isinstance(obj, dict) else enumerate(obj)
     for k, v in iter_obj:
-        if isinstance(v, str) and v.startswith(_home):
+        if isinstance(v, float):
+            obj[k] = float(f"{v:.3g}")  # type: ignore[index]  # pyright: ignore [reportArgumentType, reportCallIssue]
+        elif isinstance(v, str) and (v == _home or v.startswith(_home + "/")):
             obj[k] = "~" + v.removeprefix(_home)  # type: ignore[index]  # pyright: ignore [reportArgumentType, reportCallIssue]
         elif isinstance(v, (dict, list)):
-            _replace_home(v)
+            _normalize_values(v)
 
 
 def _extract_host_settings[T: list[Any] | dict[str, Any]](obj: T) -> T:
@@ -43,7 +45,7 @@ def noctalia_config(*, settings_path: Path, host_settings_path: Path) -> None:
     state_raw = run_shell(["noctalia-shell", "ipc", "call", "state", "all"], capture_output=True).stdout
     state = json.loads(state_raw)
     settings = state["settings"]
-    _replace_home(settings)
+    _normalize_values(settings)
     host_settings = _extract_host_settings(settings)
 
     # Do not enforce dark/light mode.

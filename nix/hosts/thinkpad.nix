@@ -67,8 +67,8 @@ in
   inherit (facter) ramGiB;
   monitors = {
     niri = import ./thinkpad/niri_monitors.nix;
-    noctalia = import ./thinkpad/noctalia_monitors.nix;
   };
+  noctalia = import ./thinkpad/noctalia.nix;
   gpu = {
     cudaSupport = facter.hasNvidiaGpu;
   };

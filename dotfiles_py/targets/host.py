@@ -35,8 +35,8 @@ class Host:
         return self.facter_path.parent / "niri_monitors.nix"
 
     @property
-    def noctalia_monitors_path(self) -> Path:
-        return self.facter_path.parent / "noctalia_monitors.nix"
+    def noctalia_path(self) -> Path:
+        return self.facter_path.parent / "noctalia.nix"
 
     def render(self, template_path: Path) -> str:
         facter_report_path = self.facter_path.relative_to(self.path.parent)
@@ -176,7 +176,7 @@ def bootstrap_host(*, repo_path: Path, templates_path: Path, force: bool) -> Non
     host.path.write_text(host_text)
     host.facter_path.write_text(f"{json.dumps(report, indent=2)}\n")
     host.niri_monitors_path.write_text("{ }\n")
-    host.noctalia_monitors_path.write_text("{ }\n")
+    host.noctalia_path.write_text("{ }\n")
 
     _commit_generated_host(repo_path=repo_path, host=host)
 
@@ -185,7 +185,7 @@ def bootstrap_host(*, repo_path: Path, templates_path: Path, force: bool) -> Non
 
 def _commit_generated_host(*, repo_path: Path, host: Host) -> None:
     format_code(repo_path=repo_path, check=False)
-    generated_paths = (host.path, host.facter_path, host.niri_monitors_path, host.noctalia_monitors_path)
+    generated_paths = (host.path, host.facter_path, host.niri_monitors_path, host.noctalia_path)
     relative_paths = [str(path.relative_to(repo_path)) for path in generated_paths]
     run_shell(["git", "add", "--", *relative_paths], cwd=repo_path)
     run_shell(["git", "commit", "--message", f"feat(hosts): add {host.name} host"], cwd=repo_path)

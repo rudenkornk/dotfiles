@@ -20,27 +20,31 @@ def _replace_home(obj: dict[str, Any] | list[Any]) -> None:
             _replace_home(v)
 
 
-def _extract_monitors[T: list[Any] | dict[str, Any]](obj: T) -> T:
-    res = type(obj)()
+def _extract_host_settings[T: list[Any] | dict[str, Any]](obj: T) -> T:
+    host_settings = type(obj)()
     iter_obj = obj.copy().items() if isinstance(obj, dict) else enumerate(obj.copy())
     for k, v in iter_obj:
         if k in ("monitors", "lockScreenMonitors"):
-            res[k] = v  # type: ignore[call-overload] # pyright: ignore [reportArgumentType, reportCallIssue]
+            host_settings[k] = v  # type: ignore[call-overload] # pyright: ignore [reportArgumentType, reportCallIssue]
             del obj[k]  # type: ignore[arg-type] # pyright: ignore [reportArgumentType, reportCallIssue]
-        elif isinstance(res, dict) and isinstance(v, (list, dict)) and (extracted := _extract_monitors(v)):
-            res[k] = extracted  # type: ignore[index]  # pyright: ignore [reportArgumentType, reportCallIssue]
-        elif isinstance(res, list) and isinstance(v, (list, dict)) and (extracted := _extract_monitors(v)):
-            res.append(extracted)
+        elif (
+            isinstance(host_settings, dict) and isinstance(v, (list, dict)) and (extracted := _extract_host_settings(v))
+        ):
+            host_settings[k] = extracted  # type: ignore[index]  # pyright: ignore [reportArgumentType, reportCallIssue]
+        elif (
+            isinstance(host_settings, list) and isinstance(v, (list, dict)) and (extracted := _extract_host_settings(v))
+        ):
+            host_settings.append(extracted)
 
-    return res  # type: ignore[return-value]  # pyright: ignore [reportGeneralTypeIssues]
+    return host_settings  # type: ignore[return-value]  # pyright: ignore [reportGeneralTypeIssues]
 
 
-def noctalia_config(*, settings_path: Path, monitor_settings_path: Path) -> None:
+def noctalia_config(*, settings_path: Path, host_settings_path: Path) -> None:
     state_raw = run_shell(["noctalia-shell", "ipc", "call", "state", "all"], capture_output=True).stdout
     state = json.loads(state_raw)
     settings = state["settings"]
     _replace_home(settings)
-    monitors = _extract_monitors(settings)
+    host_settings = _extract_host_settings(settings)
 
     # Do not enforce dark/light mode.
     del settings["colorSchemes"]["darkMode"]
@@ -51,13 +55,13 @@ def noctalia_config(*, settings_path: Path, monitor_settings_path: Path) -> None
     settings_path.parent.mkdir(parents=True, exist_ok=True)
     settings_path.write_text(json.dumps(settings, indent=2, sort_keys=True))
 
-    monitors_dump = json.dumps(monitors, indent=2, sort_keys=True)
+    host_settings_dump = json.dumps(host_settings, indent=2, sort_keys=True)
     header = "# This file is auto-generated. Do not edit.\n"
-    monitors_nix = header
-    monitors_nix += run_shell(
-        ["nix", "eval", "--expr", f"builtins.fromJSON ''{monitors_dump}''", "--pretty"],
+    host_settings_nix = header
+    host_settings_nix += run_shell(
+        ["nix", "eval", "--expr", f"builtins.fromJSON ''{host_settings_dump}''", "--pretty"],
         capture_output=True,
         loglevel=logging.DEBUG,
     ).stdout
-    monitor_settings_path.parent.mkdir(parents=True, exist_ok=True)
-    monitor_settings_path.write_text(monitors_nix)
+    host_settings_path.parent.mkdir(parents=True, exist_ok=True)
+    host_settings_path.write_text(host_settings_nix)

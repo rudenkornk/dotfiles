@@ -35,9 +35,9 @@ in
       "noctalia/settings.json".source =
         let
           main_settings = fromJSON (readFile ./noctalia/settings.json);
-          nix_settings = lib.recursiveUpdate main_settings (host.monitors.noctalia or { });
+          host_settings = lib.recursiveUpdate main_settings (host.noctalia or { });
         in
-        toJson "noctalia-settings.json" nix_settings;
+        toJson "noctalia-settings.json" host_settings;
     };
   };
 }

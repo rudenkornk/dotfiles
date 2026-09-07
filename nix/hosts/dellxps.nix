@@ -38,8 +38,8 @@ in
   inherit (facter) ramGiB;
   monitors = {
     niri = import ./dellxps/niri_monitors.nix;
-    noctalia = import ./dellxps/noctalia_monitors.nix;
   };
+  noctalia = import ./dellxps/noctalia.nix;
   gpu = {
     cudaSupport = facter.hasNvidiaGpu;
   };

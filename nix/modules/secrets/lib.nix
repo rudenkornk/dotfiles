@@ -28,6 +28,11 @@
               type = lib.types.bool;
               default = false;
             };
+            fallback = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "Non-secret contents to use when the secret cannot be decrypted.";
+            };
           };
         })
       );
@@ -58,6 +63,7 @@
         + "--retry "
         + "--symlink ${lib.escapeShellArg target} "
         + "${lib.optionalString v.recursive "--recursive "}"
+        + "${lib.optionalString (v.fallback != null) "--fallback ${lib.escapeShellArg v.fallback} "}"
         + "${lib.escapeShellArg v.source} || true";
     in
     pkgs.writeShellApplication {

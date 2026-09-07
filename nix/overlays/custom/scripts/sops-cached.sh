@@ -6,6 +6,8 @@ umask 077
 retry=false
 symlink=""
 recursive=false
+fallback_set=false
+fallback=""
 has_failures=false
 
 while [[ $# -gt 0 ]]; do
@@ -22,6 +24,11 @@ while [[ $# -gt 0 ]]; do
     recursive=true
     shift
     ;;
+  --fallback)
+    fallback_set=true
+    fallback="$2"
+    shift 2
+    ;;
   *)
     break
     ;;
@@ -30,6 +37,7 @@ done
 
 arg="$1"
 arg="${arg%/}"
+cache_directory="${XDG_RUNTIME_DIR:-/run/user/$(id --user)}/secrets"
 
 get_decrypted_name() {
   local -r file="$1"
@@ -57,8 +65,9 @@ decrypt_file() {
   local -r file="$1"
   local -r symlink_target="${2:-}"
   local -r decrypted_name=$(get_decrypted_name "$file")
-  local -r decrypted=/run/user/"$(id --user)"/secrets/"$decrypted_name"
+  local -r decrypted="$cache_directory/$decrypted_name"
   local -r failed="$decrypted.failed"
+  local output="$decrypted"
   local temporary_decrypted
   local error_output
   local status
@@ -86,10 +95,16 @@ decrypt_file() {
       } >"$failed"
       rm -- "$error_output"
       echo "$file is failed to decrypt." >&2
+
+      if [[ "$fallback_set" = true ]]; then
+        output="$decrypted.fallback"
+        printf '%s' "$fallback" >"$output"
+        echo "Using fallback content." >&2
+      fi
     fi
   fi
 
-  if [[ -f "$failed" ]]; then
+  if [[ -f "$failed" && "$fallback_set" = false ]]; then
     if [[ -n "$symlink_target" ]]; then
       rm -f -- "$symlink_target"
     fi
@@ -99,10 +114,10 @@ decrypt_file() {
 
   if [[ -n "$symlink_target" ]]; then
     mkdir --parents "$(dirname "$symlink_target")"
-    ln -sf "$decrypted" "$symlink_target"
+    ln -sf "$output" "$symlink_target"
   fi
 
-  echo "$decrypted"
+  echo "$output"
 }
 
 if [[ "$recursive" = true && -d "$arg" ]]; then

@@ -12,4 +12,7 @@ final.writeShellApplication {
     final.uutils-coreutils-noprefix
   ];
   text = builtins.readFile ./scripts/sops-cached.sh;
+  derivationArgs.postCheck = ''
+    ${final.bash}/bin/bash ${./scripts/test-sops-cached.sh} "$target"
+  '';
 }

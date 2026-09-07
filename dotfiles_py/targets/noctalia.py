@@ -1,7 +1,9 @@
-import json
 import logging
+import tomllib
 from pathlib import Path
 from typing import Any
+
+import tomli_w
 
 from ..utils import run_shell
 
@@ -22,48 +24,46 @@ def _normalize_values(obj: dict[str, Any] | list[Any]) -> None:
             _normalize_values(v)
 
 
-def _extract_host_settings[T: list[Any] | dict[str, Any]](obj: T) -> T:
-    host_settings = type(obj)()
-    iter_obj = obj.copy().items() if isinstance(obj, dict) else enumerate(obj.copy())
-    for k, v in iter_obj:
-        if k in ("monitors", "lockScreenMonitors"):
-            host_settings[k] = v  # type: ignore[call-overload] # pyright: ignore [reportArgumentType, reportCallIssue]
-            del obj[k]  # type: ignore[arg-type] # pyright: ignore [reportArgumentType, reportCallIssue]
-        elif (
-            isinstance(host_settings, dict) and isinstance(v, (list, dict)) and (extracted := _extract_host_settings(v))
-        ):
-            host_settings[k] = extracted  # type: ignore[index]  # pyright: ignore [reportArgumentType, reportCallIssue]
-        elif (
-            isinstance(host_settings, list) and isinstance(v, (list, dict)) and (extracted := _extract_host_settings(v))
-        ):
-            host_settings.append(extracted)
+def _extract_host_settings(settings: dict[str, Any]) -> dict[str, Any]:
+    host_settings: dict[str, Any] = {}
+    if "device" in settings.get("battery", {}):
+        host_settings["battery"] = {"device": settings["battery"].pop("device")}
+    for section in ("dock", "lockscreen", "notification", "osd"):
+        if "monitors" in settings.get(section, {}):
+            host_settings[section] = {"monitors": settings[section].pop("monitors")}
+    if "lockscreen_widgets" in settings:
+        host_settings["lockscreen_widgets"] = settings.pop("lockscreen_widgets")
+    for name, bar in settings.get("bar", {}).items():
+        if "monitor" in bar:
+            host_settings.setdefault("bar", {})[name] = {"monitor": bar.pop("monitor")}
+    if "monitor" in settings.get("brightness", {}):
+        host_settings["brightness"] = {"monitor": settings["brightness"].pop("monitor")}
+    return host_settings
 
-    return host_settings  # type: ignore[return-value]  # pyright: ignore [reportGeneralTypeIssues]
+
+def _remove_irrelevant_settings(settings: dict[str, Any]) -> None:
+    for key in ("default", "last", "monitors"):
+        settings.get("wallpaper", {}).pop(key, None)
+
+
+def _remove_secret_settings(settings: dict[str, Any]) -> None:
+    wallhaven = settings.get("plugin_settings", {}).get("noctalia/wallhaven", {})
+    wallhaven.pop("api_key", None)
 
 
 def noctalia_config(*, settings_path: Path, host_settings_path: Path) -> None:
-    state_raw = run_shell(["noctalia-shell", "ipc", "call", "state", "all"], capture_output=True).stdout
-    state = json.loads(state_raw)
-    settings = state["settings"]
+    settings_raw = run_shell(["noctalia", "config", "export"], capture_output=True).stdout
+    settings = tomllib.loads(settings_raw)
+    _remove_irrelevant_settings(settings)
+    _remove_secret_settings(settings)
     _normalize_values(settings)
     host_settings = _extract_host_settings(settings)
 
-    # Do not enforce dark/light mode.
-    del settings["colorSchemes"]["darkMode"]
-    # In theory we should also do the same for color scheme,
-    # but that makes color scheme reset to default after reload.
-    # -- del settings["colorSchemes"]["predefinedScheme"]
-
     settings_path.parent.mkdir(parents=True, exist_ok=True)
-    settings_path.write_text(json.dumps(settings, indent=2, sort_keys=True))
+    settings_path.write_text(
+        tomli_w.dumps({"include": {"autoload": False, "files": ["host.toml", "secrets.toml"]}, **settings})
+    )
 
-    host_settings_dump = json.dumps(host_settings, indent=2, sort_keys=True)
     header = "# This file is auto-generated. Do not edit.\n"
-    host_settings_nix = header
-    host_settings_nix += run_shell(
-        ["nix", "eval", "--expr", f"builtins.fromJSON ''{host_settings_dump}''", "--pretty"],
-        capture_output=True,
-        loglevel=logging.DEBUG,
-    ).stdout
     host_settings_path.parent.mkdir(parents=True, exist_ok=True)
-    host_settings_path.write_text(host_settings_nix)
+    host_settings_path.write_text(header + tomli_w.dumps(host_settings))

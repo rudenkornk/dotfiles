@@ -4,11 +4,14 @@
   home = {
     packages = with pkgs; [
       # Screenshot tools.
+      bc
       ffmpeg
       gifski
       grim
+      hyprpicker
       imagemagick
       ksnip
+      mpv
       satty
       slurp
       tesseract

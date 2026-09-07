@@ -224,11 +224,6 @@ in
     rtkit.enable = true;
     pam = {
       services = {
-        noctalia = {
-          fprintAuth = true;
-          rules.auth.fprintd.settings.timeout = -1;
-          unixAuth = true;
-        };
         sudo = {
           # Right now fingerprints on linux is a security theater.
           # Still better than typing a long password every time though.
@@ -288,9 +283,6 @@ in
   };
 
   environment = {
-    sessionVariables = {
-      NOCTALIA_PAM_SERVICE = "noctalia";
-    };
     systemPackages = with pkgs; [
       ibus
 

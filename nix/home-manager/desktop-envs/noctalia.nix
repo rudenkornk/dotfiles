@@ -1,43 +1,30 @@
 {
-  pkgs,
   config,
-  lib,
+  pkgs,
   host,
   ...
 }:
 
-let
-  inherit (builtins) fromJSON readFile;
-  toJson = (pkgs.formats.json { }).generate;
-in
 {
-  home = {
-    packages = with pkgs; [
-      noctalia-shell
-      # https://docs.noctalia.dev/v4/getting-started/installation/#dependencies-explained
-      bluez # Bluetooth support.
-      brightnessctl # Brightness control.
-      cliphist # Clipboard history support.
-      ddcutil # Brightness control for external monitors.
-      evolution-data-server # Calendar events.
-      git # Update checking and the plugin system.
-      imagemagick # Template processing & wallpaper resizing.
-      power-profiles-daemon # Power profile selection.
-      python3 # Template processing & calendar events.
-      upower # Battery state.
-      wlsunset # Night light functionality.
-      xdg-desktop-portal # Screen sharing and file picker functionality.
-    ];
-  };
+  home.packages = [ pkgs.noctalia ];
 
   xdg = {
     configFile = {
-      "noctalia/settings.json".source =
-        let
-          main_settings = fromJSON (readFile ./noctalia/settings.json);
-          host_settings = lib.recursiveUpdate main_settings (host.noctalia or { });
-        in
-        toJson "noctalia-settings.json" host_settings;
+      "noctalia/host.toml".source = host.noctalia;
+    };
+  };
+
+  local.secrets = {
+    before = [ "niri.service" ];
+    file = {
+      "${config.xdg.configHome}/noctalia/secrets.toml" = {
+        source = pkgs.locallib.secrets + /noctalia.toml.sops;
+        fallback = "";
+      };
+      "${config.xdg.configHome}/noctalia/storage-key" = {
+        source = pkgs.locallib.secrets + /noctalia-storage-key.sops;
+        fallback = "";
+      };
     };
   };
 }

@@ -1,0 +1,428 @@
+[include]
+autoload = false
+files = [
+    "host.toml",
+    "secrets.toml",
+]
+
+[accessibility]
+ui_scale = 1.1
+
+[audio]
+enable_overdrive = true
+enable_sounds = false
+
+[bar]
+order = [
+    "main",
+]
+
+[bar.main]
+auto_hide = false
+center = [
+    "keyboard_layout",
+    "clock",
+    "notifications",
+    "clipboard",
+]
+concave_edge_corners = false
+enabled = true
+end = [
+    "cpu",
+    "network_rx",
+    "network_tx",
+    "brightness",
+    "volume",
+    "network",
+    "bluetooth",
+    "power_profile",
+    "battery",
+    "session",
+]
+font_weight = 400
+margin_ends = 4
+position = "bottom"
+scale = 1.2
+start = [
+    "launcher",
+    "group:g1",
+    "wallhaven",
+    "spacer_2",
+    "taskbar",
+]
+
+[[bar.main.capsule_group]]
+accordion = false
+accordion_direction = "end"
+enabled = true
+fill = "surface_variant"
+id = "g1"
+members = [
+    "workspaces",
+]
+opacity = 1.0
+padding = 6.0
+
+[battery]
+warning_threshold = 15
+
+[brightness]
+enable_ddcutil = true
+minimum_brightness = 0.01
+
+[calendar]
+enabled = true
+
+[control_center]
+hidden_tabs = [
+    "media",
+    "monitor",
+    "weather",
+]
+width = 750
+shortcuts = [
+    { type = "bluetooth" },
+    { type = "wifi" },
+    { type = "caffeine" },
+    { type = "clipboard" },
+    { type = "noctalia/wallhaven:shortcut" },
+    { type = "alexander/screen-toolkit:toggle" },
+]
+
+[desktop_widgets]
+enabled = true
+schema_version = 2
+widget_order = []
+
+[desktop_widgets.grid]
+cell_size = 16
+major_interval = 4
+visible = true
+
+[desktop_widgets.widget]
+
+[dock]
+auto_hide = true
+enabled = false
+reserve_space = false
+
+[idle]
+pre_action_fade_seconds = 10
+
+[idle.behavior.lock]
+action = "lock"
+enabled = true
+timeout = 1800
+
+[idle.behavior.screen-off]
+action = "screen_off"
+enabled = true
+timeout = 3600
+
+[keybinds]
+cancel = [
+    "escape",
+    "ctrl+x",
+]
+delete = [
+    "del",
+]
+down = [
+    "down",
+    "ctrl+n",
+    "ctrl+j",
+]
+left = [
+    "left",
+    "ctrl+h",
+]
+right = [
+    "right",
+    "ctrl+l",
+]
+up = [
+    "up",
+    "ctrl+p",
+    "ctrl+k",
+]
+validate = [
+    "return",
+    "kp_enter",
+    "ctrl+m",
+]
+
+[location]
+address = "Moscow"
+
+[lockscreen]
+blur_intensity = 0.4
+enabled = true
+fingerprint = true
+lock_before_suspend = true
+
+[notification]
+background_opacity = 1.0
+enable_daemon = true
+filter_order = [
+    "two_seconds",
+]
+history_retention_hours = 12
+layer = "overlay"
+position = "bottom_left"
+
+[notification.filter.two_seconds]
+enabled = true
+match_content = ".*"
+override_duration = 2000
+
+[osd]
+background_opacity = 1.0
+position = "top_right"
+
+[osd.kinds]
+bluetooth = false
+caffeine = false
+dnd = false
+keyboard_backlight = false
+keyboard_layout = false
+lock_keys = false
+media = false
+nightlight = false
+power_profile = false
+wifi = false
+
+[plugin_settings."alexander/screen-toolkit"]
+panel-mode = "legacy"
+
+[plugin_settings."noctalia/screen_recorder"]
+color_range = "full"
+directory = "~/Downloads/recordings"
+
+[plugin_settings."noctalia/wallhaven"]
+download_dir = "~/Downloads/Wallpapers"
+
+[plugin_settings."yuuto/calculator"]
+precision = 8
+
+[plugins]
+auto_update = "all"
+enabled = [
+    "alexander/screen-toolkit",
+    "noctalia/kaomoji",
+    "noctalia/translator",
+    "notfinaldev/web-search",
+    "noctalia/wallhaven",
+]
+
+[shell]
+avatar_path = "~/.face"
+clipboard_auto_paste = "off"
+clipboard_enabled = true
+corner_radius_scale = 1.5
+external_ip_enabled = true
+font_family = "JetBrainsMono NF"
+niri_overview_type_to_launch_enabled = true
+polkit_agent = true
+setup_wizard_enabled = false
+telemetry_enabled = true
+time_format = "{:%H:%M %Z}"
+
+[shell.animation]
+enabled = false
+speed = 2.0
+
+[shell.launcher]
+auto_paste = "off"
+
+[shell.launcher.providers.session]
+global = true
+
+[shell.launcher.providers.wallpaper]
+global = true
+
+[shell.launcher.providers.windows]
+global = true
+
+[shell.panel]
+floating_layer = "top"
+open_near_click_control_center = true
+session_placement = "floating"
+session_position = "center"
+wallpaper_placement = "floating"
+
+[shell.screen_corners]
+enabled = true
+size = 10
+
+[shell.session]
+grid_columns = 5
+
+[[shell.session.actions]]
+action = "lock"
+shortcut = "l"
+
+[[shell.session.actions]]
+action = "lock_and_suspend"
+shortcut = "s"
+
+[[shell.session.actions]]
+action = "command"
+command = "systemctl hibernate"
+countdown_seconds = 3
+glyph = "snowflake"
+label = "Hibernate"
+shortcut = "h"
+
+[[shell.session.actions]]
+action = "logout"
+countdown_seconds = 3
+shortcut = "o"
+
+[[shell.session.actions]]
+action = "reboot"
+countdown_seconds = 3
+shortcut = "r"
+
+[[shell.session.actions]]
+action = "command"
+command = "systemctl reboot --firmware-setup"
+countdown_seconds = 3
+glyph = "device-desktop-cog"
+label = "Reboot to UEFI"
+shortcut = "u"
+
+[[shell.session.actions]]
+action = "command"
+command = "systemctl soft-reboot"
+countdown_seconds = 3
+glyph = "refresh"
+label = "Userspace reboot"
+shortcut = "b"
+
+[[shell.session.actions]]
+action = "shutdown"
+countdown_seconds = 3
+shortcut = "d"
+variant = "destructive"
+
+[shell.shadow]
+direction = "down_right"
+
+[storage]
+key_file = "~/.config/noctalia/storage-key"
+key_source = "file"
+
+[system.monitor]
+cpu_temp_activity_threshold = 80
+cpu_temp_critical_threshold = 90
+cpu_usage_activity_threshold = 80
+disk_used_critical_threshold = 90
+disk_used_pct_critical_threshold = 90
+gpu_poll_seconds = 0
+ram_pct_activity_threshold = 80
+swap_pct_activity_threshold = 80
+swap_pct_critical_threshold = 90
+
+[theme]
+builtin = "Noctalia"
+community_palette = "Tomorrow"
+mode = "light"
+source = "community"
+wallpaper_scheme = "m3-content"
+
+[theme.templates]
+builtin_ids = []
+community_ids = []
+enable_builtin_templates = false
+enable_community_templates = false
+
+[wallpaper]
+directory = "~/Downloads/Wallpapers"
+enabled = true
+fill_color = "#000000"
+transition = [
+    "disc",
+]
+
+[weather]
+effects = false
+enabled = true
+
+[widget.battery]
+display_mode = "graphic"
+
+[widget.calculator]
+show_bar_value = true
+type = "yuuto/calculator:bar"
+
+[widget.clock]
+font_family = "JetBrainsMono Nerd Font"
+format = "{:%H:%M %A, %d %b %Y}"
+tooltip_format = "{:%H:%M %a, %b %d}"
+vertical_format = "{:%H %M - %d %m}"
+
+[widget.cpu]
+stat = "cpu_usage"
+type = "sysmon"
+visualization = "none"
+
+[widget.disk]
+path = "/persistent"
+stat = "disk_used"
+type = "sysmon"
+visualization = "none"
+
+[widget.launcher]
+glyph = "snowflake"
+
+[widget.memory]
+stat = "ram_used"
+type = "sysmon"
+visualization = "none"
+
+[widget.network]
+show_label = false
+
+[widget.network_rx]
+network_speed_compact = true
+network_speed_unit = "mb"
+stat = "net_rx"
+type = "sysmon"
+visualization = "graph"
+
+[widget.network_tx]
+network_speed_compact = true
+network_speed_unit = "mb"
+stat = "net_tx"
+type = "sysmon"
+visualization = "none"
+
+[widget.privacy]
+inactive_color = "on_surface"
+
+[widget.session]
+icon_color = "error"
+
+[widget.spacer_2]
+type = "spacer"
+
+[widget.taskbar]
+active_indicator_color = "on_primary"
+icon_scale = 1.0
+inactive_opacity = 0.45
+show_all_outputs = true
+show_window_title = true
+taskbar_max_width = 500
+window_title_max_width = 125
+
+[widget.volume.actions]
+middle = "exec pwvucontrol || pavucontrol"
+
+[widget.wallhaven]
+type = "noctalia/wallhaven:wallhaven"
+
+[widget.workspaces]
+font_weight = 700
+hide_when_empty = true
+max_label_chars = 2
+pill_scale = 0.8

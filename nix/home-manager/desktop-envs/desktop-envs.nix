@@ -16,6 +16,9 @@
       wl-clipboard
       wl-screenrec
       zbar
+
+      # Wallpapers.
+      mpvpaper
     ];
 
     pointerCursor = {

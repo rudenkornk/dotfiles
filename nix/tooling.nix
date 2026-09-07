@@ -9,6 +9,7 @@ let
       click
       rich
       ruamel-yaml
+      tomli-w
       typer
     ]
   );

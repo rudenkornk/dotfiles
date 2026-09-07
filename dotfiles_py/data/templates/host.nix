@@ -32,7 +32,7 @@ in
   monitors = {
     niri = import ./__host_directory__/niri_monitors.nix;
   };
-  noctalia = import ./__host_directory__/noctalia.nix;
+  noctalia = ./__host_directory__/noctalia.toml;
 
   gpu.cudaSupport = facter.hasNvidiaGpu;
 }

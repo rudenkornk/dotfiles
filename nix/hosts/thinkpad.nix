@@ -68,7 +68,7 @@ in
   monitors = {
     niri = import ./thinkpad/niri_monitors.nix;
   };
-  noctalia = import ./thinkpad/noctalia.nix;
+  noctalia = ./thinkpad/noctalia.toml;
   gpu = {
     cudaSupport = facter.hasNvidiaGpu;
   };

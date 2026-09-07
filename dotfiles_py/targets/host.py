@@ -36,7 +36,7 @@ class Host:
 
     @property
     def noctalia_path(self) -> Path:
-        return self.facter_path.parent / "noctalia.nix"
+        return self.facter_path.parent / "noctalia.toml"
 
     def render(self, template_path: Path) -> str:
         facter_report_path = self.facter_path.relative_to(self.path.parent)
@@ -176,7 +176,7 @@ def bootstrap_host(*, repo_path: Path, templates_path: Path, force: bool) -> Non
     host.path.write_text(host_text)
     host.facter_path.write_text(f"{json.dumps(report, indent=2)}\n")
     host.niri_monitors_path.write_text("{ }\n")
-    host.noctalia_path.write_text("{ }\n")
+    host.noctalia_path.write_text("")
 
     _commit_generated_host(repo_path=repo_path, host=host)
 

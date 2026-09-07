@@ -29,19 +29,19 @@ cursor {
     xcursor-size 40
 }
 environment {
+    TERMINAL "kitty"
     QT_QPA_PLATFORM "wayland"
     XDG_CURRENT_DESKTOP "niri"
 }
-spawn-at-startup "noctalia-shell"
+spawn-at-startup "noctalia"
 spawn-at-startup "kitty"
-spawn-sh-at-startup "sleep 5 && noctalia-shell ipc call darkMode setLight"
+spawn-sh-at-startup "sleep 5 && noctalia msg theme-mode-set light"
 hotkey-overlay {
     skip-at-startup
 }
 binds {
     // Free Ctrl+Alt binds:
-    // Ctrl+Alt+P
-    // Ctrl+Alt+Y
+    // Ctrl+Alt+0
     Alt+1 {
         spawn "kitty"
     }
@@ -52,7 +52,7 @@ binds {
         spawn-sh "grim -g \"$(slurp)\" - | satty --filename - "
     }
     Ctrl+Alt+3 {
-        spawn "noctalia-shell" "ipc" "call" "plugin:screen-toolkit" "toggle"
+        spawn "noctalia" "msg" "panel-toggle" "alexander/screen-toolkit:panel-legacy"
     }
     Print {
         screenshot
@@ -64,7 +64,7 @@ binds {
         screenshot-screen
     }
     Alt+4 {
-        spawn "noctalia-shell" "ipc" "call" "settings" "toggle"
+        spawn "noctalia" "msg" "settings-toggle"
     }
     Alt+5 {
         spawn "nautilus"
@@ -73,37 +73,40 @@ binds {
         spawn "gnome-calculator"
     }
     Alt+ssharp {
-        spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
+        spawn "noctalia" "msg" "panel-toggle" "launcher"
     }
     Alt+Cyrillic_io {
-        spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
+        spawn "noctalia" "msg" "panel-toggle" "launcher"
     }
     Ctrl+Alt+F {
-        spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"
+        spawn "noctalia" "msg" "panel-toggle" "launcher"
     }
     Ctrl+Alt+V {
-        spawn "noctalia-shell" "ipc" "call" "settings" "toggle"
+        spawn "noctalia" "msg" "settings-toggle"
     }
     Ctrl+Alt+C {
-        spawn "noctalia-shell" "ipc" "call" "controlCenter" "toggle"
+        spawn "noctalia" "msg" "panel-toggle" "control-center"
     }
     Ctrl+Alt+Period {
-        spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"
+        spawn "noctalia" "msg" "panel-toggle" "session"
     }
     Ctrl+Alt+U {
-        spawn "noctalia-shell" "ipc" "call" "darkMode" "toggle"
+        spawn "noctalia" "msg" "theme-mode-toggle"
     }
     Ctrl+Alt+B {
-        spawn "noctalia-shell" "ipc" "call" "notifications" "toggleHistory"
+        spawn "noctalia" "msg" "panel-toggle" "control-center" "notifications"
     }
     Ctrl+Alt+G {
-        spawn "noctalia-shell" "ipc" "call" "notifications" "toggleDND"
+        spawn "noctalia" "msg" "notification-dnd-toggle"
     }
     Ctrl+Alt+Z {
-        spawn "noctalia-shell" "ipc" "call" "calendar" "toggle"
+        spawn "noctalia" "msg" "panel-toggle" "control-center" "calendar"
     }
-    Ctrl+Alt+0 {
-        spawn "noctalia-shell" "ipc" "call" "plugin:noctalia-calculator" "toggle"
+    Ctrl+Alt+Y {
+        spawn "noctalia" "msg" "panel-toggle" "clipboard"
+    }
+    Ctrl+Alt+P {
+        spawn "noctalia" "msg" "power-cycle"
     }
     // M-hjkl only navigates niri windows and deliberately does not descend into tmux panes or nvim splits.
     // Unifying it with the terminal's C-hjkl navigation was analyzed and rejected for the following reasons.
@@ -273,10 +276,10 @@ binds {
         spawn "playerctl" "next"
     }
     XF86MonBrightnessUp allow-when-locked=true {
-        spawn "noctalia-shell" "ipc" "call" "brightness" "increase"
+        spawn "noctalia" "msg" "brightness-up"
     }
     XF86MonBrightnessDown allow-when-locked=true {
-        spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"
+        spawn "noctalia" "msg" "brightness-down"
     }
 }
 recent-windows {

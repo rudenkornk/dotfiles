@@ -105,8 +105,8 @@ def gui() -> None:
     rules = gnome_target.DomainRules.load(domain_rules_path)
     gnome_target.gnome_config(rules=rules, nix_path=nix_path)
 
-    noctalia_settings = REPO_PATH / "nix/home-manager/desktop-envs/noctalia/settings.json"
-    noctalia_host_settings = REPO_PATH / f"nix/hosts/{platform.node()}/noctalia.nix"
+    noctalia_settings = REPO_PATH / "nix/home-manager/desktop-envs/configs/.config/noctalia/config.toml"
+    noctalia_host_settings = REPO_PATH / f"nix/hosts/{platform.node()}/noctalia.toml"
     noctalia_target.noctalia_config(settings_path=noctalia_settings, host_settings_path=noctalia_host_settings)
     format_code()
 
@@ -157,10 +157,6 @@ def syms() -> None:
     syms_target.create_symlinks(source_dir=home_manager / "system/configs")
     syms_target.create_symlinks(source_dir=home_manager / "terminals/configs")
     syms_target.create_symlinks(source_dir=home_manager / "vcs/configs")
-
-    # We need to additionally unlink noctalia settings, to prevent noctalia from randomly reloading pinned settings,
-    # which were modified in memory, but not yet backuped in nix config.
-    syms_target.materialize_symlink(xdg_config_home / "noctalia/settings.json")
 
 
 @app.command()

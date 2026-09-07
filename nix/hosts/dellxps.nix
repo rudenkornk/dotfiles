@@ -39,7 +39,7 @@ in
   monitors = {
     niri = import ./dellxps/niri_monitors.nix;
   };
-  noctalia = import ./dellxps/noctalia.nix;
+  noctalia = ./dellxps/noctalia.toml;
   gpu = {
     cudaSupport = facter.hasNvidiaGpu;
   };

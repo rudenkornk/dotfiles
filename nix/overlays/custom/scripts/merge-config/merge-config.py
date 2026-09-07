@@ -1,6 +1,8 @@
 # ruff: noqa: INP001
 
+import hashlib
 import json
+import os
 import re
 import stat
 import subprocess
@@ -32,6 +34,7 @@ MARKER_PLACEHOLDER = "{mark}"
 MARKER_TEXT = "NIX MANAGED BLOCK"
 ENCRYPTED_SUFFIXES = (".sops", ".sops.json", ".sops.yaml")
 DICT_SUFFIXES = (".json", ".jsonc", ".toml", ".yaml", ".yml")
+RUNTIME_ROOT = Path(os.environ.get("XDG_RUNTIME_DIR") or f"/run/user/{os.geteuid()}")
 LINE_MARKERS = {
     ".bash": "#",
     ".c": "//",
@@ -319,7 +322,7 @@ def _allow_readonly_write(path: Path) -> Iterator[None]:
         path.chmod(mode & 0o555)
 
 
-def _write_target(path: Path, content: str, previous: str, *, private: bool, read_only: bool) -> None:
+def _write_target_direct(path: Path, content: str, previous: str, *, private: bool, read_only: bool) -> None:
     target_perms = 0o644 if not path.exists() else stat.S_IMODE(path.stat().st_mode)
 
     if private:
@@ -343,6 +346,33 @@ def _write_target(path: Path, content: str, previous: str, *, private: bool, rea
         path.write_text(content, encoding="utf-8")
 
 
+def _write_target(  # noqa: PLR0913
+    path: Path,
+    content: str,
+    previous: str,
+    *,
+    private: bool,
+    read_only: bool,
+    route_via_runtime_dir: bool,
+) -> None:
+    if not route_via_runtime_dir:
+        _write_target_direct(path, content, previous, private=private, read_only=read_only)
+        return
+
+    directory = RUNTIME_ROOT / ("secrets" if private else "merge-configs")
+    directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+
+    digest = hashlib.sha256(content.encode("utf-8")).hexdigest()[:10]
+    runtime_path = directory / f"{path.stem}_{digest}{path.suffix}"
+    previous = runtime_path.read_text(encoding="utf-8") if runtime_path.exists() else ""
+    _write_target_direct(runtime_path, content, previous, private=private, read_only=read_only)
+
+    if path.is_symlink() and path.readlink() == runtime_path:
+        return
+    path.unlink(missing_ok=True)
+    path.symlink_to(runtime_path)
+
+
 def _run_dict(
     sources: Sequence[Path],
     target: Path,
@@ -352,8 +382,8 @@ def _run_dict(
     read_only_target: bool,
 ) -> None:
     suffix = target.suffix.lower()
-    target_text = target.read_text(encoding="utf-8") if target.exists() else ""
-    result = _load_dict(target_text, target, suffix) if not clear_target and target_text.strip() else None
+    target_text = target.read_text(encoding="utf-8") if not clear_target and target.exists() else ""
+    result = _load_dict(target_text, target, suffix) if target_text.strip() else None
     for source in sources:
         source_object = _load_dict(source.read_text(encoding="utf-8"), source, suffix)
         if result is None:
@@ -380,6 +410,7 @@ def _run_dict(
         target_text,
         private=private_target,
         read_only=read_only_target,
+        route_via_runtime_dir=clear_target,
     )
 
 
@@ -400,9 +431,16 @@ def _run_block(  # noqa: PLR0913
         raise MergeError(msg) from error
 
     source_text = _merge_block_sources(sources, pattern)
-    target_text = target.read_text(encoding="utf-8") if target.exists() else ""
-    result = _merge_block(source_text, "" if clear_target else target_text, target, marker, pattern)
-    _write_target(target, result, target_text, private=private_target, read_only=read_only_target)
+    target_text = target.read_text(encoding="utf-8") if not clear_target and target.exists() else ""
+    result = _merge_block(source_text, target_text, target, marker, pattern)
+    _write_target(
+        target,
+        result,
+        target_text,
+        private=private_target,
+        read_only=read_only_target,
+        route_via_runtime_dir=clear_target,
+    )
 
 
 @app.command(help="Merge managed sources into a mutable configuration file.")
@@ -416,7 +454,7 @@ def main(  # noqa: PLR0913
         Path, typer.Option("--target", help="Dict mode detects .json, .jsonc, .toml, .yaml or .yml from this filename.")
     ],
     clear_target: Annotated[
-        bool, typer.Option("--clear-target", help="Treat the target as empty when merging.")
+        bool, typer.Option("--clear-target", help="Ignore target content and symlink it to a hashed runtime file.")
     ] = False,
     read_only_target: Annotated[
         bool, typer.Option("--read-only-target", help="Remove all target write permissions after merging.")

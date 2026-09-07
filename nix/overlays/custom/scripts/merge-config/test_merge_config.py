@@ -1,6 +1,7 @@
 # ruff: noqa: INP001, PT009, PT027
 
 import copy
+import hashlib
 import json
 import os
 import re
@@ -29,6 +30,7 @@ class MergeConfigTest(unittest.TestCase):
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary_directory.cleanup)
         self.directory = Path(self.temporary_directory.name)
+        self.runtime_root = self.directory / "runtime"
         self.bin_directory = self.directory / "bin"
         self.bin_directory.mkdir()
         self.decrypt_log = self.directory / "decrypt.log"
@@ -66,6 +68,7 @@ class MergeConfigTest(unittest.TestCase):
         environment = os.environ.copy()
         environment["MERGE_CONFIG_DECRYPT_LOG"] = str(self.decrypt_log)
         environment["PATH"] = f"{self.bin_directory}:{environment['PATH']}"
+        environment["XDG_RUNTIME_DIR"] = str(self.runtime_root)
         result = subprocess.run(  # noqa: S603
             [sys.executable, PROGRAM, *arguments],
             check=False,
@@ -88,6 +91,191 @@ class MergeConfigTest(unittest.TestCase):
         if not self.decrypt_log.exists():
             return []
         return [json.loads(line) for line in self.decrypt_log.read_text().splitlines()]
+
+    def assert_cached_target(self, target: Path, *, private: bool, permissions: int) -> Path:
+        self.assertTrue(target.is_symlink())
+        generated = target.readlink()
+        expected_directory = self.runtime_root / ("secrets" if private else "merge-configs")
+        digest = hashlib.sha256(target.read_bytes()).hexdigest()[:10]
+        self.assertEqual(generated, expected_directory / f"{target.stem}_{digest}{target.suffix}")
+        self.assertEqual(stat.S_IMODE(expected_directory.stat().st_mode), 0o700)
+        self.assertEqual(stat.S_IMODE(generated.stat().st_mode), permissions)
+        return generated
+
+    def test_runtime_root_uses_xdg_runtime_dir_or_uid_fallback(self) -> None:
+        for configured in (str(self.directory / "custom runtime"), "", None):
+            with (
+                self.subTest(configured=configured),
+                mock.patch.dict(os.environ),
+                mock.patch("os.geteuid", return_value=1234),
+            ):
+                if configured is None:
+                    os.environ.pop("XDG_RUNTIME_DIR", None)
+                else:
+                    os.environ["XDG_RUNTIME_DIR"] = configured
+                program = runpy.run_path(str(PROGRAM))
+                self.assertEqual(program["RUNTIME_ROOT"], Path(configured or "/run/user/1234"))
+
+    def test_clear_target_runtime_paths_and_permissions(self) -> None:
+        for mode, suffix, content in (("dict", ".JSON", '{"managed": true}'), ("block", ".conf", "managed\n")):
+            for scenario in ("plain", "encrypted", "failed"):
+                for read_only in (False, True):
+                    with self.subTest(mode=mode, scenario=scenario, read_only=read_only):
+                        self.assert_runtime_paths_and_permissions(
+                            mode=mode, suffix=suffix, content=content, scenario=scenario, read_only=read_only
+                        )
+
+    def assert_runtime_paths_and_permissions(
+        self, *, mode: str, suffix: str, content: str, scenario: str, read_only: bool
+    ) -> None:
+        source = self.write("source.sops.json" if scenario == "encrypted" else "source", content)
+        target = self.write(f"config.part-{mode}-{scenario}-{read_only}{suffix}", "ignored")
+        target.chmod(0o640)
+        arguments = [mode, "--clear-target", "--target", str(target), "--source", str(source)]
+        if scenario == "failed":
+            failed = self.write("fail.sops.json", content)
+            arguments.extend(("--source", str(failed), "--suppress-decrypt-errors"))
+        if read_only:
+            arguments.append("--read-only-target")
+
+        self.run_merge(*arguments)
+
+        permissions = 0o644 if scenario == "plain" else 0o600
+        self.assert_cached_target(
+            target,
+            private=scenario != "plain",
+            permissions=permissions & (0o555 if read_only else 0o777),
+        )
+        if mode == "dict":
+            self.assertEqual(json.loads(target.read_text()), {"managed": True})
+        else:
+            self.assertEqual(target.read_text(), "# BEGIN NIX MANAGED BLOCK\nmanaged\n# END NIX MANAGED BLOCK\n")
+
+    def test_clear_target_replaces_files_and_links_without_reading_or_editing_referents(self) -> None:
+        for mode, suffix, content in (("dict", ".json", '{"managed": true}'), ("block", ".conf", "managed\n")):
+            generated_paths = set()
+            for kind in ("regular", "symlink", "dangling"):
+                with self.subTest(mode=mode, kind=kind):
+                    generated_paths.add(
+                        self.assert_target_replacement_preserves_referent(
+                            mode=mode, suffix=suffix, content=content, kind=kind
+                        )
+                    )
+            self.assertEqual(len(generated_paths), 1)
+
+    def assert_target_replacement_preserves_referent(self, *, mode: str, suffix: str, content: str, kind: str) -> Path:
+        source = self.write("source", content)
+        target = self.directory / f"{mode}-{kind}" / f"target{suffix}"
+        target.parent.mkdir()
+        referent = target.parent / "referent"
+        original = b"\xff\xfe\x00not a configuration\n"
+        before = None
+        if kind == "regular":
+            target.write_bytes(original)
+            target.chmod(0o440)
+        else:
+            if kind != "dangling":
+                referent.write_bytes(original)
+                referent.chmod(0o440)
+                before = referent.stat()
+            target.symlink_to(referent.name)
+
+        self.run_merge(mode, "--clear-target", "--source", str(source), "--target", str(target))
+
+        generated = self.assert_cached_target(target, private=False, permissions=0o644)
+        if before is not None:
+            self.assertEqual(referent.read_bytes(), original)
+            self.assertEqual(referent.stat().st_mtime_ns, before.st_mtime_ns)
+            self.assertEqual(referent.stat().st_ctime_ns, before.st_ctime_ns)
+            self.assertEqual(referent.stat().st_mode, before.st_mode)
+        else:
+            self.assertFalse(referent.exists())
+        self.assertIn("managed", target.read_text())
+        return generated
+
+    def test_clear_target_reuses_unchanged_output_and_retargets_changed_output(self) -> None:
+        for mode, suffix, first, second in (
+            ("dict", ".json", '{"value": 1}', '{"value": 2}'),
+            ("block", ".conf", "first\n", "second\n"),
+        ):
+            with self.subTest(mode=mode):
+                source = self.write("source", first)
+                target = self.directory / f"target{suffix}"
+                arguments = (mode, "--clear-target", "--source", str(source), "--target", str(target))
+                self.run_merge(*arguments)
+                generated = self.assert_cached_target(target, private=False, permissions=0o644)
+                original = generated.read_bytes()
+                cached_stat, link_stat = generated.stat(), target.lstat()
+
+                self.run_merge(*arguments)
+
+                self.assertEqual(target.readlink(), generated)
+                self.assertEqual(
+                    (generated.stat().st_ino, generated.stat().st_mtime_ns),
+                    (cached_stat.st_ino, cached_stat.st_mtime_ns),
+                )
+                self.assertEqual(
+                    (target.lstat().st_ino, target.lstat().st_mtime_ns), (link_stat.st_ino, link_stat.st_mtime_ns)
+                )
+                source.write_text(second)
+                self.run_merge(*arguments)
+                self.assertNotEqual(target.readlink(), generated)
+                self.assertNotEqual(target.read_bytes(), original)
+                self.assertEqual(generated.read_bytes(), original)
+                self.assertEqual(generated.stat().st_mtime_ns, cached_stat.st_mtime_ns)
+
+    def test_clear_target_changed_source_bytes_with_same_output_reuse_runtime_file(self) -> None:
+        for mode, suffix, first, changed, last in (
+            ("dict", ".json", '{"value": 0}', '{"value": 1}', '{"value": 2}'),
+            ("block", ".conf", "same", "same\n", "last\n"),
+        ):
+            with self.subTest(mode=mode):
+                source1 = self.write("first", first)
+                source2 = self.write("last", last)
+                target = self.directory / f"target{suffix}"
+                base = (mode, "--clear-target", "--target", str(target))
+                arguments = ("--source", str(source1), "--source", str(source2))
+                self.run_merge(*base, *arguments)
+                initial = target.readlink()
+                expected = target.read_bytes()
+
+                source1.write_text(changed)
+                self.run_merge(*base, *arguments)
+                self.assertEqual(target.readlink(), initial)
+                self.assertEqual(target.read_bytes(), expected)
+
+    def test_clear_target_invalid_sources_preserve_existing_file_or_link(self) -> None:
+        for mode, suffix, invalid in (("dict", ".json", "not JSON"), ("block", ".conf", "# BEGIN NIX MANAGED BLOCK\n")):
+            for kind in ("regular", "symlink", "dangling"):
+                with self.subTest(mode=mode, kind=kind):
+                    self.assert_invalid_source_preserves_target(mode, suffix, invalid, kind)
+
+    def assert_invalid_source_preserves_target(self, mode: str, suffix: str, invalid: str, kind: str) -> None:
+        source = self.write("source", invalid)
+        target = self.directory / f"{mode}-{kind}{suffix}"
+        referent = self.directory / f"referent-{mode}-{kind}"
+        if kind == "regular":
+            target.write_text("original")
+            target.chmod(0o440)
+        else:
+            if kind == "symlink":
+                referent.write_text("original")
+                referent.chmod(0o440)
+            target.symlink_to(referent)
+        before = target.lstat()
+
+        self.run_merge(mode, "--clear-target", "--source", str(source), "--target", str(target), success=False)
+
+        self.assertEqual(target.lstat().st_ino, before.st_ino)
+        self.assertEqual(target.lstat().st_mtime_ns, before.st_mtime_ns)
+        if kind != "regular":
+            self.assertEqual(target.readlink(), referent)
+        if kind == "dangling":
+            self.assertFalse(referent.exists())
+        else:
+            self.assertEqual(target.read_text(), "original")
+            self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o440)
+        self.assertFalse(any(self.runtime_root.rglob("*")))
 
     def read_jsonc(self, path: Path) -> object:
         text = re.sub(
@@ -225,7 +413,8 @@ class MergeConfigTest(unittest.TestCase):
         )
 
         self.assertEqual(json.loads(target.read_text()), {"managed": {"value": 1}})
-        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o644)
+        self.assertTrue(target.is_symlink())
 
     def test_json_decrypts_supported_source_names_in_order(self) -> None:
         source1 = self.write("source1.json", '{"shared": "plain", "plain": true}')
@@ -557,6 +746,7 @@ class MergeConfigTest(unittest.TestCase):
 
                 self.assertEqual(target.read_text(), original if scenario == "existing" else "{}\n")
                 self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o400)
+                self.assertEqual(target.is_symlink(), scenario == "clear")
 
     def test_jsonc_merges_in_order_preserving_base_trivia_and_private_read_only_mode(self) -> None:
         original = (
@@ -627,8 +817,9 @@ class MergeConfigTest(unittest.TestCase):
                 self.run_merge(*arguments)
 
                 self.assertEqual(target.read_bytes(), first.encode())
+                self.assertEqual(target.is_symlink(), scenario == "clear")
                 if initial is not None:
-                    self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+                    self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o644 if scenario == "clear" else 0o640)
 
     def test_jsonc_new_and_replacement_containers_keep_source_value_comments(self) -> None:
         source1 = self.write(
@@ -801,29 +992,36 @@ class MergeConfigTest(unittest.TestCase):
             for invalid in documents:
                 for invalid_target in (False, True):
                     with self.subTest(suffix=suffix, invalid=invalid, invalid_target=invalid_target):
-                        valid = '{"keep": true}\n'
-                        source2 = self.write("second.jsonc.sops", valid if invalid_target else invalid)
-                        target = self.write(f"target{suffix}", invalid if invalid_target else valid)
-                        target.chmod(0o640)
-                        before = target.read_bytes()
-
-                        result = self.run_merge(
-                            "dict",
-                            "--source",
-                            str(source1),
-                            "--source",
-                            str(source2),
-                            "--target",
-                            str(target),
-                            "--read-only-target",
-                            success=False,
+                        self.assert_invalid_json_preserves_target_without_input_leaks(
+                            source1=source1, suffix=suffix, invalid=invalid, invalid_target=invalid_target
                         )
 
-                        self.assertEqual(result.returncode, 1, result.stderr)
-                        self.assertNotIn("DUMMY_JSONC_INPUT", result.stderr)
-                        self.assertNotIn("Traceback", result.stderr)
-                        self.assertEqual(target.read_bytes(), before)
-                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+    def assert_invalid_json_preserves_target_without_input_leaks(
+        self, *, source1: Path, suffix: str, invalid: str, invalid_target: bool
+    ) -> None:
+        valid = '{"keep": true}\n'
+        source2 = self.write("second.jsonc.sops", valid if invalid_target else invalid)
+        target = self.write(f"target{suffix}", invalid if invalid_target else valid)
+        target.chmod(0o640)
+        before = target.read_bytes()
+
+        result = self.run_merge(
+            "dict",
+            "--source",
+            str(source1),
+            "--source",
+            str(source2),
+            "--target",
+            str(target),
+            "--read-only-target",
+            success=False,
+        )
+
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertNotIn("DUMMY_JSONC_INPUT", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+        self.assertEqual(target.read_bytes(), before)
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
 
     def test_dict_formats_merge_in_order_and_preserve_style(self) -> None:
         fixtures = {
@@ -903,25 +1101,31 @@ class MergeConfigTest(unittest.TestCase):
         ):
             for clear_target in (False, True):
                 with self.subTest(suffix=suffix, clear_target=clear_target):
-                    source1 = self.write("first", "# Source header.\n" + first)
-                    source2 = self.write("second", second)
-                    target = self.directory / f"seed-{clear_target}{suffix}"
-                    if clear_target:
-                        target.write_text("invalid [ target\n")
-                        target.chmod(0o640)
-                    arguments = ["dict", "--target", str(target), "--source", str(source1), "--source", str(source2)]
-                    if clear_target:
-                        arguments.append("--clear-target")
+                    self.assert_seeded_dict_preserves_style(
+                        suffix=suffix, first=first, second=second, clear_target=clear_target
+                    )
 
-                    self.run_merge(*arguments)
+    def assert_seeded_dict_preserves_style(self, *, suffix: str, first: str, second: str, clear_target: bool) -> None:
+        source1 = self.write("first", "# Source header.\n" + first)
+        source2 = self.write("second", second)
+        target = self.directory / f"seed-{clear_target}{suffix}"
+        if clear_target:
+            target.write_text("invalid [ target\n")
+            target.chmod(0o640)
+        arguments = ["dict", "--target", str(target), "--source", str(source1), "--source", str(source2)]
+        if clear_target:
+            arguments.append("--clear-target")
 
-                    text = target.read_text()
-                    parsed = tomllib.loads(text) if suffix == ".toml" else YAML(typ="rt").load(text)
-                    self.assertEqual(parsed, {"name": "quoted", "section": {"first": 1, "second": 2}})
-                    for preserved in ("# Source header.", "# Source inline.", "'quoted'"):
-                        self.assertIn(preserved, text)
-                    if clear_target:
-                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+        self.run_merge(*arguments)
+
+        text = target.read_text()
+        parsed = tomllib.loads(text) if suffix == ".toml" else YAML(typ="rt").load(text)
+        self.assertEqual(parsed, {"name": "quoted", "section": {"first": 1, "second": 2}})
+        for preserved in ("# Source header.", "# Source inline.", "'quoted'"):
+            self.assertIn(preserved, text)
+        self.assertEqual(target.is_symlink(), clear_target)
+        if clear_target:
+            self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o644)
 
     def test_toml_merges_tables_into_inline_tables(self) -> None:
         for source_text, expected in (
@@ -977,56 +1181,72 @@ class MergeConfigTest(unittest.TestCase):
             for invalid in invalid_documents:
                 for invalid_target in (False, True):
                     with self.subTest(suffix=suffix, invalid=invalid, invalid_target=invalid_target):
-                        source1 = self.write("first", valid)
-                        source2 = self.write("second.sops.json", valid if invalid_target else invalid)
-                        target = self.write(f"target{suffix}", invalid if invalid_target else valid)
-                        target.chmod(0o640)
-                        before = target.read_bytes()
-
-                        self.run_merge(
-                            "dict",
-                            "--target",
-                            str(target),
-                            "--source",
-                            str(source1),
-                            "--source",
-                            str(source2),
-                            "--read-only-target",
-                            success=False,
+                        self.assert_invalid_dict_preserves_target(
+                            suffix=suffix,
+                            valid=valid,
+                            invalid=invalid,
+                            invalid_target=invalid_target,
+                            constructed=constructed,
                         )
 
-                        self.assertEqual(target.read_bytes(), before)
-                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
-                        self.assertFalse(constructed.exists())
+    def assert_invalid_dict_preserves_target(
+        self, *, suffix: str, valid: str, invalid: str, invalid_target: bool, constructed: Path
+    ) -> None:
+        source1 = self.write("first", valid)
+        source2 = self.write("second.sops.json", valid if invalid_target else invalid)
+        target = self.write(f"target{suffix}", invalid if invalid_target else valid)
+        target.chmod(0o640)
+        before = target.read_bytes()
+
+        self.run_merge(
+            "dict",
+            "--target",
+            str(target),
+            "--source",
+            str(source1),
+            "--source",
+            str(source2),
+            "--read-only-target",
+            success=False,
+        )
+
+        self.assertEqual(target.read_bytes(), before)
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+        self.assertFalse(constructed.exists())
 
     def test_dict_rejects_unsupported_suffix_before_decryption_or_writes(self) -> None:
         source = self.write("source.sops.json", '{"managed": true}\n')
         for suffix in ("", ".conf", ".json.sops", ".yaml.bak"):
             for scenario in ("existing", "clear", "missing"):
                 with self.subTest(suffix=suffix, scenario=scenario):
-                    target = self.directory / f"target{suffix}"
-                    if scenario == "missing":
-                        target = self.directory / f"missing{suffix}" / f"target{suffix}"
-                    else:
-                        target.write_text('{"local": true}\n')
-                        target.chmod(0o640)
-                    arguments = ["dict", "--target", str(target), "--source", str(source)]
-                    if scenario == "clear":
-                        arguments.append("--clear-target")
+                    self.assert_unsupported_suffix_does_not_decrypt_or_write(
+                        source=source, suffix=suffix, scenario=scenario
+                    )
 
-                    self.run_merge(*arguments, success=False)
+    def assert_unsupported_suffix_does_not_decrypt_or_write(self, *, source: Path, suffix: str, scenario: str) -> None:
+        target = self.directory / f"target{suffix}"
+        if scenario == "missing":
+            target = self.directory / f"missing{suffix}" / f"target{suffix}"
+        else:
+            target.write_text('{"local": true}\n')
+            target.chmod(0o640)
+        arguments = ["dict", "--target", str(target), "--source", str(source)]
+        if scenario == "clear":
+            arguments.append("--clear-target")
 
-                    self.assertEqual(self.decrypt_invocations(), [])
-                    if scenario == "missing":
-                        self.assertFalse(target.parent.exists())
-                    else:
-                        self.assertEqual(target.read_bytes(), b'{"local": true}\n')
-                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+        self.run_merge(*arguments, success=False)
+
+        self.assertEqual(self.decrypt_invocations(), [])
+        if scenario == "missing":
+            self.assertFalse(target.parent.exists())
+        else:
+            self.assertEqual(target.read_bytes(), b'{"local": true}\n')
+            self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
 
     def test_read_only_target_relocks_after_write_failure(self) -> None:
         target = self.write("target.json", "old")
         target.chmod(0o444)
-        write_target = runpy.run_path(str(PROGRAM))["_write_target"]
+        write_target = runpy.run_path(str(PROGRAM))["_write_target_direct"]
 
         def fail_write(*_args: object, **_kwargs: object) -> None:
             self.assertNotEqual(target.stat().st_mode & stat.S_IWUSR, 0)
@@ -1110,6 +1330,7 @@ class MergeConfigTest(unittest.TestCase):
             target.read_text(),
             "# BEGIN NIX MANAGED BLOCK\nmanaged\n# END NIX MANAGED BLOCK\n",
         )
+        self.assertTrue(target.is_symlink())
         self.assertEqual(target.stat().st_ino, first_stat.st_ino)
         self.assertEqual(target.stat().st_mtime_ns, first_stat.st_mtime_ns)
 

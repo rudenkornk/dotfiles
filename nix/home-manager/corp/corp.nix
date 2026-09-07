@@ -62,11 +62,11 @@
 
     merge-config.file = {
       "${config.xdg.configHome}/opencode/opencode.jsonc" = {
+        mode = "dict";
         source = [
           ../ai/configs/.config/opencode/opencode.jsonc
           (pkgs.locallib.secrets + /corp/opencode.jsonc.sops)
         ];
-        insertAfter = "INSERTION POINT";
         clearTarget = true;
         readOnlyTarget = true;
       };

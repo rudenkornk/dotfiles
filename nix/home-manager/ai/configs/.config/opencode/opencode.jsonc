@@ -69,7 +69,6 @@
       "type": "local",
       "command": ["mcp-nixos"],
     },
-    // INSERTION POINT.
   },
   "provider": {
     "openai": {},

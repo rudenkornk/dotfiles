@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Annotated, cast
 
 import click
+import jsonc
 import tomlkit
 import typer
 from ruamel.yaml import YAML
@@ -30,7 +31,7 @@ app = typer.Typer(
 MARKER_PLACEHOLDER = "{mark}"
 MARKER_TEXT = "NIX MANAGED BLOCK"
 ENCRYPTED_SUFFIXES = (".sops", ".sops.json", ".sops.yaml")
-DICT_SUFFIXES = (".json", ".toml", ".yaml", ".yml")
+DICT_SUFFIXES = (".json", ".jsonc", ".toml", ".yaml", ".yml")
 LINE_MARKERS = {
     ".bash": "#",
     ".c": "//",
@@ -149,6 +150,8 @@ def _load_dict(text: str, path: Path, suffix: str) -> DictObject:
         value: object
         if suffix == ".json":
             value = json.loads(text)
+        elif suffix == ".jsonc":
+            value = jsonc.loads(text)
         elif suffix == ".toml":
             value = tomlkit.parse(text)
         else:
@@ -162,8 +165,9 @@ def _load_dict(text: str, path: Path, suffix: str) -> DictObject:
                     msg = f"{path}: explicit YAML tags are unsupported"
                     raise MergeError(msg)
             value = yaml.load(text)
-    except (json.JSONDecodeError, tomlkit.exceptions.ParseError, YAMLError) as error:
-        msg = f"failed to parse {path}: {type(error).__name__}"  # Parser messages may quote decrypted values.
+    except (json.JSONDecodeError, jsonc.ParseError, tomlkit.exceptions.ParseError, YAMLError) as error:
+        detail = str(error) if isinstance(error, jsonc.ParseError) else type(error).__name__
+        msg = f"failed to parse {path}: {detail}"  # Third-party parser messages may quote decrypted values.
         raise MergeError(msg) from error
 
     if not isinstance(value, MutableMapping):
@@ -358,7 +362,10 @@ def _run_dict(
             _merge_dicts(result, source_object)
     if result is None:
         result = {}
-    if suffix == ".json":
+    if suffix == ".jsonc":
+        content = jsonc.dumps(result)
+        _load_dict(content, target, suffix)
+    elif suffix == ".json":
         content = json.dumps(result, allow_nan=False, ensure_ascii=False, indent=2) + "\n"
     elif suffix == ".toml":
         content = tomlkit.dumps(result)
@@ -406,7 +413,7 @@ def main(  # noqa: PLR0913
         list[Path], typer.Option("--source", help="Source file; repeat to merge multiple files in order.")
     ],
     target: Annotated[
-        Path, typer.Option("--target", help="Dict mode detects .json, .toml, .yaml or .yml from this filename.")
+        Path, typer.Option("--target", help="Dict mode detects .json, .jsonc, .toml, .yaml or .yml from this filename.")
     ],
     clear_target: Annotated[
         bool, typer.Option("--clear-target", help="Treat the target as empty when merging.")

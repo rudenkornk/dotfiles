@@ -1,7 +1,9 @@
 # ruff: noqa: INP001, PT009, PT027
 
+import copy
 import json
 import os
+import re
 import runpy
 import stat
 import subprocess
@@ -9,11 +11,14 @@ import sys
 import tempfile
 import tomllib
 import unittest
+from collections.abc import MutableMapping
 from datetime import date
 from pathlib import Path
 from textwrap import dedent
+from types import MappingProxyType
 from unittest import mock
 
+import jsonc
 from ruamel.yaml import YAML
 
 PROGRAM = Path(__file__).with_name("merge-config.py")
@@ -83,6 +88,16 @@ class MergeConfigTest(unittest.TestCase):
         if not self.decrypt_log.exists():
             return []
         return [json.loads(line) for line in self.decrypt_log.read_text().splitlines()]
+
+    def read_jsonc(self, path: Path) -> object:
+        text = re.sub(
+            r'("(?:\\.|[^"\\])*")|//[^\r\n]*|/\*[\s\S]*?\*/',
+            lambda match: match[1] or " ",
+            path.read_text(),
+        )
+        text = re.sub(r'("(?:\\.|[^"\\])*")|,(?=\s*[}\]])', lambda match: match[1] or "", text)
+        value: object = json.loads(text)
+        return value
 
     def test_cli_rejects_invalid_arguments_without_writing(self) -> None:
         source = self.write("source.json", '{"managed": true}')
@@ -401,6 +416,414 @@ class MergeConfigTest(unittest.TestCase):
         self.assertEqual(target.stat().st_ino, before.st_ino)
         self.assertEqual(target.stat().st_mtime_ns, before.st_mtime_ns)
         self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o444)
+
+    def test_jsonc_uses_shared_dictionary_loading_and_merging(self) -> None:
+        program = runpy.run_path(str(PROGRAM))
+        load_dict = program["_load_dict"]
+        merge_dicts = program["_merge_dicts"]
+        original = '// Header.\n{"nested": {"value": 0 /* Inline. */}, "after": 0}\n'
+        target = load_dict(original, self.directory / "target.jsonc", ".jsonc")
+        first = load_dict('{"nested": {"value": 12345678901234567890}}', self.directory / "first", ".jsonc")
+        second = load_dict('{"after": false}', self.directory / "second", ".jsonc")
+        self.assertIsInstance(target, MutableMapping)
+        self.assertIsInstance(target["nested"], MutableMapping)
+        self.assertEqual(list(target), ["nested", "after"])
+
+        merge_dicts(target, first)
+        merge_dicts(target, second)
+
+        expected = original.replace('"value": 0', '"value": 12345678901234567890').replace(
+            '"after": 0', '"after": false'
+        )
+        self.assertEqual(jsonc.dumps(target), expected)
+
+    def test_jsonc_mapping_supports_native_values_and_nested_mutation(self) -> None:
+        program = runpy.run_path(str(PROGRAM))
+        target = program["_load_dict"](
+            '// Header.\n{"nested": {/* Nested. */ "keep": true}, "items": [{"keep": true}], "remove": null}\n',
+            self.directory / "target.jsonc",
+            ".jsonc",
+        )
+        program["_merge_dicts"](
+            target,
+            {"nested": {"added": 2}, "new": {"value": "quoted"}, "flag": False},
+        )
+        nested = target["nested"]
+        nested.update({"keep": False})
+        self.assertIs(nested, target.get("nested"))
+        self.assertIsInstance(target["new"], MutableMapping)
+        self.assertIsInstance(target["items"], list)
+        self.assertIsInstance(target["items"][0], MutableMapping)
+        target["items"][0]["added"] = "array object"
+        self.assertIsNone(target.pop("remove"))
+        target["remove"] = "reinserted"
+
+        output = self.write("output.jsonc", jsonc.dumps(target))
+
+        self.assertEqual(
+            self.read_jsonc(output),
+            {
+                "nested": {"keep": False, "added": 2},
+                "items": [{"keep": True, "added": "array object"}],
+                "new": {"value": "quoted"},
+                "flag": False,
+                "remove": "reinserted",
+            },
+        )
+        self.assertIn("// Header.", output.read_text())
+        self.assertIn("/* Nested. */", output.read_text())
+        self.assertEqual(list(target), ["nested", "items", "new", "flag", "remove"])
+        target.clear()
+        self.assertEqual(dict(jsonc.loads(jsonc.dumps(target))), {})
+
+    def test_jsonc_noop_source_retains_current_comments_after_restoring_a_value(self) -> None:
+        target = self.write("target.jsonc", '{"items": [/* Original. */ 0]}\n')
+        first = self.write("first", '{"items": [/* Changed. */ 1]}')
+        second = self.write("second", '{"items": [/* Restored. */ 0]}')
+        last = self.write("last", '{"items": [/* No-op. */ 0,]}')
+        arguments = (
+            "dict",
+            "--source",
+            str(first),
+            "--source",
+            str(second),
+            "--source",
+            str(last),
+            "--target",
+            str(target),
+        )
+
+        self.run_merge(*arguments)
+
+        self.assertEqual(target.read_text(), '{"items": [/* Restored. */ 0]}\n')
+        before = target.stat()
+        self.run_merge(*arguments)
+        self.assertEqual(target.stat().st_mtime_ns, before.st_mtime_ns)
+
+    def test_jsonc_mapping_copy_preserves_decoded_strings_and_lexemes(self) -> None:
+        for original in (
+            '// Header.\n{"name": "value", "nested": {"items": [/* Keep. */ 1,]}}\n',
+            '{"1e10000": "1.2300", "escaped": "\\u0041"}\n',
+        ):
+            with self.subTest(original=original):
+                target = jsonc.loads(original)
+                duplicate = copy.deepcopy(target)
+
+                self.assertEqual(duplicate, target)
+                self.assertEqual(list(duplicate), list(target))
+                self.assertEqual(jsonc.dumps(duplicate), original)
+
+    def test_jsonc_inplace_update_uses_mapping_assignment_rules(self) -> None:
+        program = runpy.run_path(str(PROGRAM))
+        target = program["_load_dict"]('{"items": [/* Keep. */ true]}\n', self.directory / "target.jsonc", ".jsonc")
+        target |= {"items": [True], "nested": MappingProxyType({"keep": True})}
+        program["_merge_dicts"](target, {"nested": {"added": False}})
+
+        output = self.write("output.jsonc", jsonc.dumps(target))
+
+        self.assertEqual(self.read_jsonc(output), {"items": [True], "nested": {"keep": True, "added": False}})
+        self.assertIn("/* Keep. */", output.read_text())
+        with self.assertRaises(TypeError):
+            target |= {1: True}
+        self.assertEqual(jsonc.dumps(target), output.read_text())
+
+    def test_jsonc_merges_empty_input_when_all_decryptions_fail(self) -> None:
+        source = self.write("fail.jsonc.sops", '{"failed": true}')
+        original = '// Keep header.\n{"keep": true,}\n'
+        for scenario, initial in (
+            ("missing", None),
+            ("empty", " \t\n"),
+            ("existing", original),
+            ("clear", "invalid ["),
+        ):
+            with self.subTest(scenario=scenario):
+                target = self.directory / f"{scenario}.jsonc"
+                if initial is not None:
+                    target.write_text(initial)
+                    target.chmod(0o640)
+                arguments = [
+                    "dict",
+                    "--suppress-decrypt-errors",
+                    "--read-only-target",
+                    "--source",
+                    str(source),
+                    "--target",
+                    str(target),
+                ]
+                if scenario == "clear":
+                    arguments.append("--clear-target")
+
+                self.run_merge(*arguments)
+
+                self.assertEqual(target.read_text(), original if scenario == "existing" else "{}\n")
+                self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o400)
+
+    def test_jsonc_merges_in_order_preserving_base_trivia_and_private_read_only_mode(self) -> None:
+        original = (
+            "\t// Target header.\n{\n\n"
+            '  "literal.key"\t : "local", /* Inline block. */\n'
+            "  // Target key comment.\n"
+            '  "nested": {\n'
+            '    "keep": [1, /* Untouched array. */ 2,],\n'
+            '    "shared" /* Before colon. */ : "target", // Inline value.\n'
+            '    "deep": { "keep": true, "shared": 0, },\n'
+            "  },\n"
+            '  "firstOnly": false\n'
+            "}\t\n/* Target footer.\n   Second footer line. */\n\n"
+        )
+        expected = original.replace('"target"', '"last"').replace('"shared": 0', '"shared": 2')
+        expected = expected.replace('"firstOnly": false', '"firstOnly": true')
+        source1 = self.write(
+            "z-first source.toml",
+            '{"nested": {"shared": "first", "deep": {"shared": 1}}, "firstOnly": true,}',
+        )
+        source2 = self.write("a-last.sops.json", '{"nested": {"shared": "last", "deep": {"shared": 2}}}')
+        for suffix in (".jsonc", ".JSONC"):
+            with self.subTest(suffix=suffix):
+                target = self.write(f"target{suffix}", original)
+                target.chmod(0o640)
+                previous_decryptions = self.decrypt_invocations()
+                arguments = (
+                    "dict",
+                    "--source",
+                    str(source1),
+                    "--target",
+                    str(target),
+                    f"--source={source2}",
+                    "--read-only-target",
+                )
+
+                self.run_merge(*arguments)
+
+                self.assertEqual(target.read_bytes(), expected.encode())
+                self.assertEqual(self.decrypt_invocations(), [*previous_decryptions, [str(source2)]])
+                self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o400)
+                before = target.stat()
+                self.run_merge(*arguments)
+                self.assertEqual(target.read_bytes(), expected.encode())
+                self.assertEqual(target.stat().st_ino, before.st_ino)
+                self.assertEqual(target.stat().st_mtime_ns, before.st_mtime_ns)
+                self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o400)
+
+    def test_jsonc_seeds_missing_empty_or_cleared_target_verbatim(self) -> None:
+        first = (
+            " \t/* Source header. */\n{\n"
+            "  // Source key comment.\n"
+            '  "nested" : { /* Source value. */ "value": 1, }, // Source inline.\n'
+            "}\n\n// Source footer without final newline."
+        )
+        source = self.write("source.data", first)
+        empty_source = self.write("empty source.json", "{}")
+        for scenario, initial in (("missing", None), ("empty", ""), ("whitespace", " \t\n"), ("clear", "invalid [")):
+            with self.subTest(scenario=scenario):
+                target = self.directory / f"{scenario}.jsonc"
+                if initial is not None:
+                    target.write_text(initial)
+                    target.chmod(0o640)
+                arguments = ["dict", "--source", str(source), "--source", str(empty_source), "--target", str(target)]
+                if scenario == "clear":
+                    arguments.append("--clear-target")
+
+                self.run_merge(*arguments)
+
+                self.assertEqual(target.read_bytes(), first.encode())
+                if initial is not None:
+                    self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+
+    def test_jsonc_new_and_replacement_containers_keep_source_value_comments(self) -> None:
+        source1 = self.write(
+            "first.yaml",
+            '{"nested": {"added": { /* Added object. */ "first": 1,}}, '
+            '"items": [/* First array. */ 1], "promote": 0, "demote": {"old": true}, '
+            '"arrayToObject": [0], "objectToArray": {"old": true}, "toNull": {"old": true}}',
+        )
+        source2 = self.write(
+            "second.conf",
+            "/* Later header need not be imported. */\n{\n"
+            "  // Standalone key comment need not be imported.\n"
+            '  "nested": {"added": {"last": 2}, "newArray": [/* Added array. */ 3,]},\n'
+            '  "items": [/* Replacement array. */ {"id": 2,}, // Array inline.\n  ],\n'
+            '  "promote": { // Replacement object.\n    "new": true,\n  },\n'
+            '  "demote": "scalar", "arrayToObject": {/* New type. */ "new": true}, "toNull": null,\n'
+            '  "objectToArray": [/* Object to array. */ false,],\n'
+            "}\n",
+        )
+        target = self.write(
+            "target.jsonc",
+            '{"local": true, "nested": {"keep": 0},\n'
+            '  /* Array key. */ "items"\t: [0], // After array.\n'
+            '  "promote": false /* After scalar. */\n}\n',
+        )
+
+        self.run_merge("dict", "--source", str(source1), "--source", str(source2), "--target", str(target))
+
+        self.assertEqual(
+            self.read_jsonc(target),
+            {
+                "local": True,
+                "nested": {"keep": 0, "added": {"first": 1, "last": 2}, "newArray": [3]},
+                "items": [{"id": 2}],
+                "promote": {"new": True},
+                "demote": "scalar",
+                "arrayToObject": {"new": True},
+                "objectToArray": [False],
+                "toNull": None,
+            },
+        )
+        text = target.read_text()
+        for comment in (
+            "/* Added object. */",
+            "/* Added array. */",
+            "/* Replacement array. */",
+            "// Array inline.",
+            "// Replacement object.",
+            "/* New type. */",
+            "/* Object to array. */",
+            '/* Array key. */ "items"\t: ',
+            ", // After array.\n",
+            " /* After scalar. */",
+        ):
+            self.assertIn(comment, text)
+        self.assertNotIn("/* First array. */", text)
+
+    def test_jsonc_adds_keys_to_empty_or_trailing_comma_objects_without_moving_inline_comments(self) -> None:
+        source = self.write("source", '{"added": [true,],}')
+        for original, comment in (
+            ("{}\n", ""),
+            ("{\n  // Empty object.\n}\n", "// Empty object."),
+            ("{ /* Empty object. */ }\n", "/* Empty object. */"),
+            ('{"keep": 1,}\n', ""),
+            ('{\n  "keep": 1 // Keep inline.\n}\n', "// Keep inline."),
+            ('{\n  "keep": 1, // Keep inline.\n}\n', "// Keep inline."),
+            ('{ "keep": 1 /* Keep inline. */ }\n', "/* Keep inline. */"),
+        ):
+            with self.subTest(original=original):
+                target = self.write("target.jsonc", original)
+
+                self.run_merge("dict", "--source", str(source), "--target", str(target))
+
+                expected: dict[str, object] = {"added": [True]}
+                if '"keep"' in original:
+                    expected["keep"] = 1
+                self.assertEqual(self.read_jsonc(target), expected)
+                text = target.read_text()
+                if comment:
+                    self.assertIn(comment, text)
+                    if '"keep"' in original:
+                        self.assertRegex(text, r'"keep"\s*:\s*1[ \t,]*' + re.escape(comment))
+
+    def test_jsonc_identical_arrays_and_scalars_ignore_source_trivia_without_writes(self) -> None:
+        original = (
+            "// Target header.\n{\n"
+            '  "items": [1, /* Keep item. */ {"x": true,}, // Keep array.\n'
+            '    ["text", /* Keep nested array. */ null,],\n  ],\n'
+            '  "scalar": /* Before scalar. */ "value", // After scalar.\n'
+            '  "number": 1.2500e+02,\n'
+            '  "empty": { /* Keep empty object. */ },\n'
+            "}\n"
+        )
+        target = self.write("target.jsonc", original)
+        target.chmod(0o640)
+        source = self.write(
+            "source",
+            '{"items": [/* Different trivia. */ 1, {"x": true}, ["text", null]], '
+            '"scalar": /* Different scalar trivia. */ "value", "number": 1.2500e+02, "empty": {}}',
+        )
+        before = target.stat()
+
+        self.run_merge("dict", "--source", str(source), "--target", str(target))
+
+        self.assertEqual(target.read_bytes(), original.encode())
+        self.assertEqual(target.stat().st_ino, before.st_ino)
+        self.assertEqual(target.stat().st_mtime_ns, before.st_mtime_ns)
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
+
+    def test_jsonc_preserves_string_and_number_lexemes_without_type_coercion(self) -> None:
+        changes = (
+            (
+                "literal.key",
+                '"old"',
+                r'"https://example.test/a//b /* literal */ \"quoted\" C:\\tmp\\file \u263a \ud83d\ude00"',
+            ),
+            ("unicode", '"old"', '"\u2603 \U0001f600"'),
+            ("trueToNumber", "true", "1"),
+            ("numberToTrue", "1", "true"),
+            ("falseToNumber", "false", "0"),
+            ("numberToFalse", "0", "false"),
+            ("integer", "9007199254740992", "9007199254740993"),
+            ("huge", "1e10000", "2E+10000"),
+            ("tiny", "1e-10000", "2E-10000"),
+            ("scaled", "0", "1.2300e+02"),
+            ("typedArray", "[true, false]", "[1, 0]"),
+            ("preciseArray", "[9007199254740992, 1e10000]", "[9007199254740993, 2E+10000]"),
+        )
+        original = "{\n" + "".join(f'  "{key}": {old},\n' for key, old, _new in changes) + "}\n"
+        expected = "{\n" + "".join(f'  "{key}": {new},\n' for key, _old, new in changes) + "}\n"
+        target = self.write("target.jsonc", original)
+        source = self.write("source.txt", "{" + ",".join(f'"{key}": {new}' for key, _old, new in changes) + "}")
+
+        self.run_merge("dict", "--source", str(source), "--target", str(target))
+
+        self.assertEqual(target.read_bytes(), expected.encode())
+
+    def test_jsonc_and_strict_json_reject_invalid_documents_without_writes_or_input_leaks(self) -> None:
+        invalid_jsonc = (
+            '{"DUMMY_JSONC_INPUT": }',
+            '{"DUMMY_JSONC_INPUT" 1}',
+            '{"DUMMY_JSONC_INPUT": 1 "other": 2}',
+            '{"DUMMY_JSONC_INPUT": [1,,2]}',
+            '{"DUMMY_JSONC_INPUT": 1} trailing',
+            "{DUMMY_JSONC_INPUT: 1}",
+            "{'DUMMY_JSONC_INPUT': 1}",
+            '["DUMMY_JSONC_INPUT"]',
+            '"DUMMY_JSONC_INPUT"',
+            "/* DUMMY_JSONC_INPUT */ null",
+            '{"DUMMY_JSONC_INPUT": 1, "DUMMY_JSONC_INPUT": 2}',
+            '{"nested": {"DUMMY_JSONC_INPUT": 1, "DUMMY_JSONC_INPUT": 2}}',
+            '{"items": [[{"DUMMY_JSONC_INPUT": 1, "DUMMY_JSONC_INPUT": 2}]]}',
+            r'{"DUMMY_JSONC_INPUT": 1, "\u0044UMMY_JSONC_INPUT": 2}',
+            '{"value": /* DUMMY_JSONC_INPUT',
+            '{"value": 1} /* DUMMY_JSONC_INPUT',
+            '{"value": "DUMMY_JSONC_INPUT}',
+            '{"value": "DUMMY_JSONC_INPUT\n"}',
+            r'{"value": "DUMMY_JSONC_INPUT\q"}',
+            r'{"value": "DUMMY_JSONC_INPUT\u00xz"}',
+            *(f'{{"DUMMY_JSONC_INPUT": {value}}}' for value in ("+1", "0x10", ".1", "1.", "01", "NaN", "Infinity")),
+        )
+        invalid_json = (
+            '// DUMMY_JSONC_INPUT\n{"keep": true}',
+            '{"DUMMY_JSONC_INPUT": /* JSONC block. */ true}',
+            '{"DUMMY_JSONC_INPUT": true,}',
+            '{"DUMMY_JSONC_INPUT": [1,]}',
+        )
+        source1 = self.write("first", '{"managed": true}')
+        for suffix, documents in ((".jsonc", invalid_jsonc), (".json", invalid_json)):
+            for invalid in documents:
+                for invalid_target in (False, True):
+                    with self.subTest(suffix=suffix, invalid=invalid, invalid_target=invalid_target):
+                        valid = '{"keep": true}\n'
+                        source2 = self.write("second.jsonc.sops", valid if invalid_target else invalid)
+                        target = self.write(f"target{suffix}", invalid if invalid_target else valid)
+                        target.chmod(0o640)
+                        before = target.read_bytes()
+
+                        result = self.run_merge(
+                            "dict",
+                            "--source",
+                            str(source1),
+                            "--source",
+                            str(source2),
+                            "--target",
+                            str(target),
+                            "--read-only-target",
+                            success=False,
+                        )
+
+                        self.assertEqual(result.returncode, 1, result.stderr)
+                        self.assertNotIn("DUMMY_JSONC_INPUT", result.stderr)
+                        self.assertNotIn("Traceback", result.stderr)
+                        self.assertEqual(target.read_bytes(), before)
+                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o640)
 
     def test_dict_formats_merge_in_order_and_preserve_style(self) -> None:
         fixtures = {

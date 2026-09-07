@@ -4,6 +4,7 @@
   home = {
     packages = with pkgs; [
       exiftool
+      gpu-screen-recorder
       shotcut # typos: ignore
     ];
   };

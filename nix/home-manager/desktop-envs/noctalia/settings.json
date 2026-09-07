@@ -357,7 +357,7 @@
     "overviewEnabled": true
   },
   "dock": {
-    "animationSpeed": 1.5000000000000002,
+    "animationSpeed": 1.5,
     "backgroundOpacity": 1,
     "colorizeIcons": false,
     "deadOpacity": 0.6,

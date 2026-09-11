@@ -201,28 +201,28 @@ binds {
         move-workspace-to-monitor-right
     }
     Ctrl+Alt+H {
-        set-column-width "-5%"
+        set-column-width "-3%"
     }
     Ctrl+Alt+J {
-        set-window-height "+10%"
+        set-window-height "+3%"
     }
     Ctrl+Alt+K {
-        set-window-height "-10%"
+        set-window-height "-3%"
     }
     Ctrl+Alt+L {
-        set-column-width "+5%"
+        set-column-width "+3%"
     }
     Alt+Minus {
-        set-column-width "-5%"
+        set-column-width "-3%"
     }
     Alt+Equal {
-        set-column-width "+5%"
+        set-column-width "+3%"
     }
     Alt+Shift+Minus {
-        set-window-height "-10%"
+        set-window-height "-3%"
     }
     Alt+Shift+Equal {
-        set-window-height "+10%"
+        set-window-height "+3%"
     }
     Ctrl+Alt+Q {
         toggle-window-floating

@@ -17,6 +17,7 @@
       "~/.config/**": "allow",
       "~/.local/share/**": "allow",
       "~/.local/state/**": "allow",
+      "~/.claude/skills/**": "allow",
 
       "/bin/**": "allow",
       "/dev/**": "allow",

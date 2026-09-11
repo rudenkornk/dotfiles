@@ -24,6 +24,12 @@ def _normalize_values(obj: dict[str, Any] | list[Any]) -> None:
             _normalize_values(v)
 
 
+def _extract_bar_settings(bar: dict[str, Any] | list[str]) -> dict[str, Any]:
+    if not isinstance(bar, dict):
+        return {}
+    return {key: bar.pop(key) for key in ("enabled", "monitor") if key in bar}
+
+
 def _extract_host_settings(settings: dict[str, Any]) -> dict[str, Any]:
     host_settings: dict[str, Any] = {}
     if "device" in settings.get("battery", {}):
@@ -34,8 +40,8 @@ def _extract_host_settings(settings: dict[str, Any]) -> dict[str, Any]:
     if "lockscreen_widgets" in settings:
         host_settings["lockscreen_widgets"] = settings.pop("lockscreen_widgets")
     for name, bar in settings.get("bar", {}).items():
-        if "monitor" in bar:
-            host_settings.setdefault("bar", {})[name] = {"monitor": bar.pop("monitor")}
+        if host_bar := _extract_bar_settings(bar):
+            host_settings.setdefault("bar", {})[name] = host_bar
     if "monitor" in settings.get("brightness", {}):
         host_settings["brightness"] = {"monitor": settings["brightness"].pop("monitor")}
     return host_settings

@@ -57,5 +57,8 @@ show_session_buttons = true
 show_unlock_hint = true
 show_weather = true
 
+[bar.main]
+enabled = false
+
 [bar.main.monitor.eDP-1]
 enabled = true

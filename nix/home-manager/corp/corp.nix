@@ -9,6 +9,7 @@
 {
   home = lib.optionalAttrs (user.userkind == "corp") {
     packages = with pkgs; [
+      yandex-cloud
       corp.ldaps
       corp.openconnect-run
       corp.openvpn-run

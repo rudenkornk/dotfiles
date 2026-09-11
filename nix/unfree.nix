@@ -33,6 +33,7 @@ builtins.any (prefix: lib.hasPrefix prefix (lib.getName pkg)) [
   "terraform"
   "unrar"
   "vagrant"
+  "yandex-browser"
   "yandex-cloud"
 
   # Vim plugins.

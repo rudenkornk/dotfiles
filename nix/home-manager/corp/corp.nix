@@ -55,6 +55,37 @@
     };
   };
 
+  systemd.user.services = lib.optionalAttrs (user.userkind == "corp") {
+    skotty =
+      let
+        skotty = "${config.home.homeDirectory}/.nix-profile/bin/skotty";
+      in
+      {
+        Unit = {
+          Wants = [ "dbus.socket" ];
+          Requires = [ "merge-config.service" ];
+          After = [
+            "dbus.socket"
+            "merge-config.service"
+          ];
+          Before = [ "graphical-session-pre.target" ];
+          ConditionPathIsExecutable = skotty;
+        };
+        Install.WantedBy = [ "default.target" ];
+        Service = {
+          Type = "simple";
+          # Do not restart on ordinary errors, which can include a rejected token PIN.
+          Restart = "on-abnormal";
+          RestartSec = 1;
+          ExecStartPre = [
+            "${pkgs.systemd}/bin/systemctl --user set-environment GSM_SKIP_SSH_AGENT_WORKAROUND=true"
+            "${skotty} ssh export-env"
+          ];
+          ExecStart = "${skotty} start";
+        };
+      };
+  };
+
   local = lib.optionalAttrs (user.userkind == "corp") {
     home.file = {
       ".".source = ./configs;
@@ -74,6 +105,12 @@
 
       "${config.home.homeDirectory}/.codex/config.toml".source =
         pkgs.locallib.secrets + /corp/codex.config.toml.sops;
+
+      "${config.home.homeDirectory}/.skotty/config.yaml" = {
+        # After reinstall, run `skotty renew --fetch-only && skotty renew` to restore runtime state.
+        mode = "dict";
+        source = pkgs.locallib.secrets + /corp/skotty.yaml.sops;
+      };
     };
 
     secrets.file =

@@ -171,6 +171,11 @@
 
         "${home}/.claude/mcp-corp.json".source = pkgs.locallib.secrets + /corp/claude.mcp.json.sops;
 
+        "${config.xdg.configHome}/ycp/config.yaml".source =
+          pkgs.locallib.secrets + /corp/ycp.config.yaml.sops;
+        "${config.xdg.configHome}/yandex-cloud/config.yaml".source =
+          pkgs.locallib.secrets + /corp/yc.config.yaml.sops;
+
         "${home}/.itsme/config.yaml".source = pkgs.locallib.secrets + /corp/config.yaml.sops;
         "${home}/.itsme/initial_ovpn.conf".source = pkgs.locallib.secrets + /corp/initial_ovpn.conf.sops;
         "${home}/.itsme/openvpn.conf".source = pkgs.locallib.secrets + /corp/openvpn.conf.sops;

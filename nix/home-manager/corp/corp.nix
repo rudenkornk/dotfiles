@@ -56,6 +56,50 @@
   };
 
   systemd.user.services = lib.optionalAttrs (user.userkind == "corp") {
+    ssh-agent-corp-keys =
+      let
+        skottyConfig = pkgs.locallib.secrets + /corp/skotty.yaml.sops;
+        corp_askpass = pkgs.writeShellApplication {
+          name = "corp-yubikey-askpass";
+          runtimeInputs = [
+            pkgs.custom.sops-cached
+            pkgs.yq-go
+          ];
+          text = lib.replaceStrings [ "@skotty_config@" ] [ "${skottyConfig}" ] (
+            builtins.readFile ./scripts/ssh_askpass.sh
+          );
+        };
+        client = pkgs.writeShellApplication {
+          name = "ssh-client-corp";
+          runtimeInputs = [
+            corp_askpass
+            pkgs.openssh
+            pkgs.custom.sops-cached
+            pkgs.yq-go
+            pkgs.yubikey-manager
+          ];
+          text =
+            lib.replaceStrings
+              [ "@skotty_config@" "@pkcs11_provider@" ]
+              [ "${skottyConfig}" "${pkgs.yubico-piv-tool}/lib/libykcs11.so" ]
+              (builtins.readFile ./scripts/ssh_client.sh);
+        };
+      in
+      {
+        Unit = {
+          Description = "Load SSH YubiKey keys into the OpenSSH agent";
+          Requires = [ "ssh-agent-keys.service" ];
+          After = [ "ssh-agent-keys.service" ];
+        };
+        Install.WantedBy = [ "default.target" ];
+        Service = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          Restart = "no";
+          ExecStart = lib.getExe client;
+        };
+      };
+
     skotty =
       let
         skotty = "${config.home.homeDirectory}/.nix-profile/bin/skotty";
@@ -119,6 +163,7 @@
       in
       {
         "${home}/.ssh/corp/config".source = pkgs.locallib.secrets + /corp/ssh_config.sops;
+        "${home}/.ssh/corp/known_hosts".source = pkgs.locallib.secrets + /corp/ssh_known_hosts.sops;
 
         "${config.xdg.dataHome}/atuin/key".source = lib.mkForce (
           pkgs.locallib.secrets + /corp/atuin_key.sops

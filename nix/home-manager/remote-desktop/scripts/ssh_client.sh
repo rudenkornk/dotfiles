@@ -23,7 +23,8 @@ set -o errexit
 if [[ "$agent_status" -eq 2 ]]; then
   echo "Initializing new SSH agent ..."
   rm -f "$SSH_AUTH_SOCK"
-  ssh-agent -a "$SSH_AUTH_SOCK" &>/dev/null
+  ssh-agent -a "$SSH_AUTH_SOCK" \
+    -P "@yubico_piv_tool@/lib/libykcs11.so*" &>/dev/null
 fi
 
 add_keys

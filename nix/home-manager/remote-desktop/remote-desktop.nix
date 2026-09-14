@@ -44,7 +44,9 @@
             pkgs.openssh
             pkgs.sops
           ];
-          text = builtins.readFile ./scripts/ssh_client.sh;
+          text = lib.replaceStrings [ "@yubico_piv_tool@" ] [ "${pkgs.yubico-piv-tool}" ] (
+            builtins.readFile ./scripts/ssh_client.sh
+          );
         }
       )}";
     };

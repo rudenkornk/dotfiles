@@ -1,6 +1,10 @@
 {
   "permissions": {
-    "allow": ["Read(~/projects/dotfiles/**)", "Read(~/projects/arcadia/**)"],
+    "allow": [
+      "Read(~/projects/dotfiles/**)",
+      "Read(~/projects/arcadia*/**)",
+      "Read(~/projects/cloudia*/**)"
+    ],
     "deny": [
       "Read(//run/user/*/secrets/**)",
       "Edit(//run/user/*/secrets/**)",

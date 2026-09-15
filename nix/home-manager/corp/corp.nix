@@ -48,6 +48,7 @@
         ''
           source ${config.xdg.configHome}/fish/functions/g.fish
 
+          source "$(${lib.getExe pkgs.custom.sops-cached} ${pkgs.locallib.secrets + /corp/env.sh.sops})"
           source "$(${pkgs.lib.getExe pkgs.custom.sops-cached} ${
             pkgs.locallib.secrets + /corp/tokens.sh.sops
           })"
@@ -162,6 +163,10 @@
         home = config.home.homeDirectory;
       in
       {
+        "${config.xdg.configHome}/git/corp.ini".source = pkgs.locallib.secrets + /corp/git-corp.ini.sops;
+        "${config.xdg.configHome}/git/credentials".source =
+          pkgs.locallib.secrets + /corp/git-credentials.sops;
+
         "${home}/.ssh/corp/config".source = pkgs.locallib.secrets + /corp/ssh_config.sops;
         "${home}/.ssh/corp/known_hosts".source = pkgs.locallib.secrets + /corp/ssh_known_hosts.sops;
 

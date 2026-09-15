@@ -9,6 +9,7 @@
       "*": "ask",
       "~/Downloads/**": "allow",
       "~/projects/arcadia*/**": "allow",
+      "~/projects/cloudia*/**": "allow",
       "~/projects/dotfiles/**": "allow",
       "~/projects/home-manager/**": "allow",
       "~/projects/nixpkgs/**": "allow",

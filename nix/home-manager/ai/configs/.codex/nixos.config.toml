@@ -27,6 +27,7 @@ glob_scan_max_depth = 3
 [permissions.development.workspace_roots]
 "~/projects/dotfiles" = true
 "~/projects/arcadia" = true
+"~/projects/cloudia" = true
 
 [tui]
 status_line = [

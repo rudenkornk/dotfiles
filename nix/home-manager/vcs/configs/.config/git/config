@@ -1,5 +1,6 @@
 [include]
   path = user.ini
+  path = corp.ini
 
 [init]
   defaultBranch = "main"

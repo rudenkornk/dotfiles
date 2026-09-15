@@ -176,11 +176,11 @@ binds {
     Ctrl+Alt+E {
         switch-preset-column-width
     }
-    Ctrl+Alt+M {
-        consume-or-expel-window-right
+    Ctrl+Alt+M repeat=false {
+        spawn-sh "python3 ~/.config/niri/layout_step.py stack-left --full-width 99"
     }
-    Ctrl+Alt+N {
-        consume-or-expel-window-left
+    Ctrl+Alt+N repeat=false {
+        spawn-sh "python3 ~/.config/niri/layout_step.py stack-right --full-width 99"
     }
     Ctrl+Alt+I {
         consume-window-into-column

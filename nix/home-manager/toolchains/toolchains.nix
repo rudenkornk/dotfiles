@@ -18,6 +18,7 @@
     openjdk21
     perl
     php
+    protobuf
     ruby
     tcl
     terraform

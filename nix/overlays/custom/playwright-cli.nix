@@ -4,16 +4,16 @@ final: prev:
 
 final.buildNpmPackage {
   pname = "playwright-cli";
-  version = "0.1.18";
+  version = "0.1.20";
 
   src = final.fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-cli";
-    rev = "v0.1.18";
-    hash = "sha256-E/AzDJhD12PWSaA3iRY+hloPsSWnAw18gTa/ItVhr3E=";
+    rev = "v0.1.20";
+    hash = "sha256-MSBXygESmOlZi8qryAsUN6jb30RbysdEZRBXocrXZ14=";
   };
 
-  npmDepsHash = "sha256-3kqiQvGtZfsmLHVWeCSM1yOYb+ws2x1vMPC1OuvrKAI=";
+  npmDepsHash = "sha256-PZrjfveGYvPapua4eRV6FJRc9txh8OXSsbsxQmkiZPw=";
 
   dontNpmBuild = true;
 
@@ -64,7 +64,7 @@ final.buildNpmPackage {
   meta = {
     description = "Playwright CLI for browser automation from coding agents";
     homepage = "https://github.com/microsoft/playwright-cli";
-    changelog = "https://github.com/microsoft/playwright-cli/releases/tag/v0.1.18";
+    changelog = "https://github.com/microsoft/playwright-cli/releases/tag/v0.1.20";
     license = final.lib.licenses.asl20;
     platforms = final.lib.platforms.linux;
     mainProgram = "playwright-cli";

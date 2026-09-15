@@ -1,4 +1,4 @@
-if string match --quiet '*/arcadia*' "$PWD"
+if string match --quiet --regex '/(arcadia|cloudia)' "$PWD"
     arc $argv
 else
     git $argv

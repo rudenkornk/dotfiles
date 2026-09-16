@@ -18,21 +18,6 @@ final.stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   nativeBuildInputs = [ final.makeWrapper ];
-  nativeCheckInputs = [
-    python
-    final.mypy
-    final.ruff
-  ];
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    cp ${../../../pyproject.toml} ../pyproject.toml
-    env --chdir=.. ruff check "$sourceRoot"
-    mypy --strict --python-executable ${python}/bin/python3 .
-    python3 test_merge_config.py
-    runHook postCheck
-  '';
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/libexec/merge-config

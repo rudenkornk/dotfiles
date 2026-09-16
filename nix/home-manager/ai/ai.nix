@@ -61,7 +61,6 @@ in
       (locallib.with_secrets { pkg = qwen-code; })
 
       mcp-nixos
-      custom.comment-checker
       custom.playwright-cli
       unstable.codegraph
     ];

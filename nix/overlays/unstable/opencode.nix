@@ -1,25 +1,20 @@
 final: prev:
 let
-  version = "1.18.29"; # NOTE: Pinned ahead of `nixpkgs`, until it ships the Codex OAuth GPT-6 model filter fix.
-  src = final.fetchFromGitHub {
-    owner = "anomalyco";
-    repo = "opencode";
-    tag = "v${version}";
-    hash = "sha256-lCXlxTOhcX70jxJAbpolyGlIxQK2nst+6bFhq3Xzdmc=";
+  # NOTE: Bun 1.4 bundles opencode so that every prompt crashes, see https://github.com/anomalyco/opencode/issues/48876
+  bun = prev.bun.overrideAttrs rec {
+    version = "1.3.13";
+    src = final.fetchurl {
+      url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64-baseline.zip";
+      hash = "sha256-nYokKSpwaAkCBdqsCloiP19pc29Sh+N7+I07QDHtx1A=";
+    };
   };
 in
 {
-  opencode = prev.opencode.overrideAttrs (
+  opencode = (prev.opencode.override { inherit bun; }).overrideAttrs (
     _: prevAttrs: {
-      inherit version src;
       patches = (prevAttrs.patches or [ ]) ++ [
         (final.locallib.patches + /opencode-1.18.29-thought-start-timestamp.patch)
       ];
-      passthru = prevAttrs.passthru // {
-        node_modules = prevAttrs.passthru.node_modules.overrideAttrs {
-          outputHash = "sha256-0rpyP6nqK4FrJNjl0WV5adPjEQhe8a55RM7CgP9wlak=";
-        };
-      };
     }
   );
 }

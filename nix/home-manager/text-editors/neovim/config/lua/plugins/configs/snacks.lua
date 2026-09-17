@@ -5,7 +5,14 @@ local function filter_colorscheme(entry, light)
   if entry.file:find(vim.env.VIMRUNTIME .. "/colors", 1, true) then
     return false
   end
-  local light_suffixes = { "light", "day", "latte", "rose-pine-dawn", "kanagawa-lotus" }
+  -- Random selectors can reuse a palette cached for the opposite background.
+  if entry.text:find("^randombones") then
+    return false
+  end
+  if entry.text:find("^github_light") then
+    return light
+  end
+  local light_suffixes = { "light", "day", "latte", "rose-pine-dawn", "kanagawa-lotus", "vimbones" }
   for _, ending in ipairs(light_suffixes) do
     if entry.text:sub(-#ending) == ending then
       return light

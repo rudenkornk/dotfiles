@@ -8,7 +8,10 @@ return {
   { "Mofiqul/dracula.nvim" },
   { "Mofiqul/vscode.nvim" }, -- Picks `vim.o.background` settings for light or dark.
   { "navarasu/onedark.nvim", opts = { style = "dark" } }, -- Styles: dark, darker, cool, deep, warm, warmer.
+  { "projekt0n/github-nvim-theme" },
   { "rose-pine/neovim", name = "rose-pine", opts = { variant = "auto" } }, -- Styles: auto, main, moon, dawn.
+  { "sainnhe/edge" },
   { "sainnhe/everforest" },
   { "shaunsingh/nord.nvim" },
+  { "zenbones-theme/zenbones.nvim", dependencies = { "rktjmp/lush.nvim" } },
 }

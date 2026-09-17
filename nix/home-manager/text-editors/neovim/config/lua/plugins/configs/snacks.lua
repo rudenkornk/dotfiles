@@ -1,18 +1,17 @@
 local M = {}
 
-local function filter_colorscheme(entry)
+local function filter_colorscheme(entry, light)
   -- Filter out original vim themes.
   if entry.file:find(vim.env.VIMRUNTIME .. "/colors", 1, true) then
     return false
   end
-  -- Filter out light themes.
-  local light = { "light", "day", "latte", "rose-pine-dawn", "kanagawa-lotus" }
-  for _, ending in ipairs(light) do
+  local light_suffixes = { "light", "day", "latte", "rose-pine-dawn", "kanagawa-lotus" }
+  for _, ending in ipairs(light_suffixes) do
     if entry.text:sub(-#ending) == ending then
-      return false
+      return light
     end
   end
-  return true
+  return not light
 end
 
 M.opts = {
@@ -31,11 +30,13 @@ M.opts = {
         hidden = true,
       },
       colorschemes = {
-        -- Amend list of colorschemes by excluding original vim themes and light themes.
+        title = "Colorschemes (dark)",
         -- See https://github.com/LazyVim/LazyVim/discussions/6032#discussioncomment-13031344
-        finder = function()
+        finder = function(opts)
           local items = require("snacks.picker.source.vim").colorschemes()
-          return vim.tbl_filter(filter_colorscheme, items)
+          return vim.tbl_filter(function(item)
+            return filter_colorscheme(item, opts.light == true)
+          end, items)
         end,
       },
     },
@@ -96,6 +97,20 @@ end
 local root_detectors = require("config.root_detectors")
 
 M.keys = {
+  {
+    "<leader>uC",
+    function()
+      Snacks.picker.colorschemes()
+    end,
+    desc = "Colorschemes (dark)",
+  },
+  {
+    "<leader>uB",
+    function()
+      Snacks.picker.colorschemes({ light = true, title = "Colorschemes (light)" })
+    end,
+    desc = "Colorschemes (light)",
+  },
   {
     "<S-q>",
     function()

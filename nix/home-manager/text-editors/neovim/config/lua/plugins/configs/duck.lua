@@ -4,7 +4,7 @@ M.keys = {
   {
     "<leader>uu",
     function()
-      require("duck").hatch()
+      require("duck").hatch(nil, 1)
     end,
     mode = { "n" },
     desc = "Hatch a duck",

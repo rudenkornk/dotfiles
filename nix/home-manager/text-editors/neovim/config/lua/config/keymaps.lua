@@ -50,7 +50,7 @@
 -- <S-p> -- paste before cursor.
 -- <S-q> -- delete buffer (custom).
 -- <S-r> -- replace sequence.
--- <S-s> -- leap back.
+-- <S-s> -- Leap from another window.
 -- <S-t> -- find prev symbol.
 -- <S-u> --
 -- <S-v> -- visual select line.

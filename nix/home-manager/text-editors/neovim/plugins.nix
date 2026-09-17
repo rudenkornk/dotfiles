@@ -24,7 +24,6 @@ let
     duck-nvim
     everforest
     flash-nvim
-    flit-nvim
     friendly-snippets
     gh-nvim
     gitsigns-nvim

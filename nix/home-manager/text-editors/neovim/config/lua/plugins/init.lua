@@ -107,11 +107,6 @@ return {
     opts = require("plugins.configs.sidekick").opts,
   },
   {
-    "ggandor/flit.nvim", -- editor.leap
-    -- https://github.com/LazyVim/LazyVim/discussions/6037
-    opts = { labeled_modes = "nxo" },
-  },
-  {
     "gbprod/yanky.nvim", -- coding.yanky
     opts = { highlight = { on_put = false, on_yank = false, timer = 0 } },
   },

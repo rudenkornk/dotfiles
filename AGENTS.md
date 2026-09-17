@@ -2,226 +2,147 @@
 
 ## Repository Overview
 
-This is a **NixOS configuration repository** (~5MiB, ~250 tracked files) that provides a complete, reproducible personal machine setup.
-The repository focuses on configuring development tools including Neovim (LazyVim-based), tmux, fish shell, and support for C++, Python, LaTeX, and Lua development.
+This repository defines a reproducible NixOS and Home Manager setup through Nix flakes.
+It includes a Python CLI, Neovim (LazyVim), tmux, fish, and development toolchains.
 
-**Key Technologies:**
+## Implementation Scope and Complexity
 
-- **NixOS/Nix Flakes**: Primary configuration system (~95 .nix files)
-- **Python 3.13**: CLI tooling and automation (12 .py files in `dotfiles_py/`)
-- **Home Manager**: User environment configuration
-- **Languages**: Shell scripts (.sh, .fish), Lua configs (23 files), Nix expressions
-- **Package Management**: Nix flakes
-- **Secrets**: sops + age, stored encrypted directly in the repo
+Prefer the most straightforward implementation for the current task.
+Small behavioral compromises are acceptable when avoiding them requires substantially more complexity.
+Optimize for readable code and fewer responsibilities to maintain.
 
-## Build and Validation Commands
+### Start with the simplest viable approach
 
-### Environment Setup
+- For existing code, first consider changing configuration, adding a parameter, or using an existing extension point.
+- For new code, start with a direct implementation for the current inputs and callers.
 
-**ALWAYS run commands inside the Nix development shell unless you're running nixos-rebuild:**
+### Weigh behavior against implementation cost
 
-```bash
-nix develop
-```
+A small compromise affects convenience or optional coverage while preserving the main workflow.
+Examples include retaining an existing upstream limitation or supporting explicitly named variants
+instead of every possible configuration.
 
-This command:
+Prefer such compromises when the alternative requires substantial special-case code, adapters, or state management.
+If unsure whether a compromise is acceptable, present explained choices.
 
-- Takes ~10-60 seconds on first run (may fetch packages from cache.nixos.org)
-- Provides all necessary tools: python313, formatters, linters, and more
-- Generates a `__build/dotfiles` wrapper and puts it on `PATH`, so `dotfiles` invokes the local CLI
-- Installs the git pre-commit hook (equivalent to `dotfiles hooks`; skipped in git worktrees, which share the main checkout's hooks)
+### Let simple utilities fail naturally
 
-**CRITICAL:** Do NOT run `uv sync` or `pip install` manually. The `nix develop` shell hook wires up the Python env automatically.
+For internal utilities and configuration glue, exceptions or panics are acceptable when an operation cannot succeed.
+Use the caller's established preconditions and the underlying API's error behavior.
 
-There is also a bootstrap-only shell used from a NixOS live USB (provides `disko`, `sbctl`, `nixos-install`):
+### When new code/infrastructure is required or recommended
 
-```bash
-nix develop .#install
-```
+If decided to go with a complex solution, then **design a plan** and split it into these major steps:
 
-### Primary Commands
+1. Refactoring existing **code structure** (if needed).\
+   This step never changes functionality or behavior. Usually includes code motion, formatting, renaming.
+   This is something which is very easy to prove equivalence with a previous version.
 
-All commands below assume you're inside `nix develop`.
-Each of them can also run without the dev shell via `nix run . -- <command>`.
+   This steps typically deserve its one single separate commit and is not limited by size.
 
-1. **Format Check** (~1-2 seconds):
+1. Refactoring existing **code functionality**. Adding new glue/infrastructure code.\
+   Not yet a meaningful part of an actual feature. Examples include:
 
-   ```bash
-   dotfiles format --check
-   ```
+   - Add new glue/infrastructure/helpers.
+   - Use new glue/infrastructure/helpers in existing code replacing old inline implementation.
+   - Support new simple cases in existing code.
+   - Make existing code more defensive.
+   - Add the tests for an untested area vulnerable to dev mistakes.
+   - Add more logging / instrumentation where it was needed.
 
-   Runs formatters in check mode: statix, nixfmt, ruff, mdformat, shfmt, fish_indent, prettier, stylua, kdlfmt.
+   This step NEVER includes changes related to changed code indent, changed formatting, style, etc.
+   All of that should have happened on the previous step.
 
-1. **Format (Apply)** (~1-2 seconds):
+   This steps may consist of any number of commits. Each of those should be readable and easy to verify on its own.
 
-   ```bash
-   dotfiles format
-   ```
+1. Implementing an actual feature.\
+   This bullet typically deserve only one single commit with mostly `+` diff, less that 250 lines of code.
 
-   Same formatters as above, but applies changes (also runs `ruff check --fix --unsafe-fixes`).
+   If implementing a big feature with different functionality, decompose it:
 
-1. **Lint** (~1-2 seconds; the independent linters run in parallel):
+   - For new files: a simple and straightforward base layer. Commit.
+   - Next several complications, each should have its own commit.
+     (This relate both when adding to new file, or changing existing one.)
 
-   ```bash
-   dotfiles lint
-   ```
+1. Apply feature to the code.\
+   Typically a single refactoring commit which replaces old approach with a new one over the codebase.
 
-   Runs comprehensive linting:
+As said, this should be applied recursively.
+Refactoring existing functionality on upper level may become a feature if decomposed further.
+A good sign that a stage decomposition is needed (except for structural refactoring)
+is net addition of more than 250 lines of code (do not treat this too literally, though).
 
-   - `gitleaks git`: Checks entire git history for leaked credentials (~1900 commits at time of writing).
-   - `statix check`: Nix linter.
-   - `mypy`: Python type checking (strict mode).
-   - `ruff check`: Python linter.
-   - `yamllint --strict`: YAML linting for the `.github/` directory.
-   - `shellcheck`: Shell script linting (tracked `.sh` files).
-   - `typos`: Spell checking.
-   - `markdownlint-cli2`: Markdown linting (the binary ships in the dev shell and is invoked directly).
+**Each step on its own is affected by main rules of simplicity from previous topics.**
 
-1. **Flake Check** (~60 seconds):
+Example of this workflow:
 
-   ```bash
-   nix flake check --no-build
-   ```
+1. Refactoring code **structure**:\
+   9c1678df7a54: refactor(merge-config): rename json mode to dict.
+1. Refactoring code **functionality** (simple generalization):\
+   8cd565661db1: refactor(merge-config): generalize dictionary merging.
+1. Refactoring code infra
+   (added `typer` since future code now requires non-stdlib deps and we can relax stdlib requirement):\
+   742c9b4965cd: refactor(merge-config): use typer for argument parsing.
+1. Adding lint tests:\
+   e35a6fba6419: test(merge-config): add package-local lint checks.
+1. Feature 1 (decomposed out of a bigger feature request):\
+   f43183ebdb62: feat(merge-config): infer dictionary formats from target.
+1. Feature 2 (the main requested part):\
+   5126b3df0523: feat(merge-config): support jsonc in merge-config util.
+1. Feature 3 (additional planned feature):\
+   c807d4773ec9: feat(merge-config): route clear merge-config configs via XDG_RUNTIME_DIR.
+1. Refactoring: finally a usage of requested feature in the code:\
+   15d128092db0: refactor(corp): generate opencode corp config using dict merge instead of a block one.
 
-   Validates flake structure and evaluates every NixOS and Home Manager configuration.
-   Home Manager configs are the cartesian product of users (`rudenkornk`, `rudenkornk_corp`) and hosts (`dellxps`, `thinkpad`),
-   registered as checks so `nix flake check` builds each `user@host` activation package.
+This entire sequence can itself be a prerequisite stage of a larger change.
 
-   **Do not run `nix flake check` during intermediate code changes.**
-   If Nix validation is actually needed while a change is in progress, evaluate or build only the exact affected flake output.
-   For example, to evaluate one Home Manager check without building it:
+## Development and Validation
 
-   ```bash
-   nix eval --raw '.#checks.x86_64-linux."rudenkornk_corp@thinkpad".drvPath'
-   ```
+### Command Execution
 
-   In general avoid running this expensive command unless doing quirky nix changes, which have to be verified.
-   In this case run the full `nix flake check --no-build` only as the final step of the entire validation pipeline,
-   immediately before reporting to the user.
+Run ordinary commands, including Git, searches, and installed tools, directly in the normal shell environment.
+Use `nix run . -- <command>` for the repository management CLI.
+The flake app supplies the CLI's Python environment and tools; no manual dependency installation is needed.
+For example, use `nix run . -- hooks` to install the repository hooks.
+See `readme.md` for bootstrap and recovery instructions.
 
-1. **Git Hooks Setup**:
+### Validation Policy
 
-   ```bash
-   dotfiles hooks
-   ```
+For routine changes, run `nix run . -- format` (or `nix run . -- format --check`) and `nix run . -- lint`.
+Formatting also runs `ruff check --fix --unsafe-fixes`; lint includes strict mypy and full-history gitleaks scanning.
+The complete formatter and linter lists live in `dotfiles_py/targets/lint.py`.
+Run any checks specific to the changed behavior before finishing.
 
-   Symlinks a pre-commit hook that refuses plaintext secrets by filename and scans the staged diff with gitleaks.
-   Runs automatically on `nix develop` entry, so the manual command is only needed outside the dev shell.
+**Keep Nix configuration evaluation and build checks rare, and only at the end of the entire change set.**
+Keep Nix configuration evaluation and build checks rare and at the end of the change set.
+When required, the flake check must be the final validation step, after all changes and other checks are complete.
+All required checks must pass before the final commit or reporting completion.
+If validation requires further edits, rerun the affected checks and keep any required flake check last.
+CI runs the same checks; see `.github/workflows/workflow.yml`.
 
-### CI Pipeline
+If lint reports that git history is shallow, run `git fetch --unshallow` and rerun lint.
+Use this documented workaround rather than investigating alternatives.
 
-The GitHub Actions workflow (`.github/workflows/workflow.yml`) runs on all PRs to `main` and on `main` pushes:
+## Repository Map and Conventions
 
-```yaml
-- nix flake check --no-build
-- nix run . -- format --check
-- nix run . -- lint
-```
+- `flake.nix` defines flake outputs; `flake.lock` pins dependencies.
+  `nix/tooling.nix` defines the CLI package, default app, and development shells.
+- `nix/configuration.nix` and `nix/home.nix` are the system and Home Manager entry points.
+  `nix/hosts/` and `nix/users/` hold machine and user definitions; hardware configuration is inlined per host.
+- `nix/home-manager/` holds program/category modules, configs, scripts, and dotfiles.
+  Neovim's Lua configuration is in `nix/home-manager/text-editors/neovim/config/`.
+- `nix/modules/` holds local modules; `nix/overlays/` holds package overlays.
+  `nix/packages/` holds standalone packages; `nix/unfree.nix` is the unfree-package allowlist.
+- `dotfiles_py/cli.py` defines CLI commands, `targets/` implements them, and `utils.py` provides shared utilities.
+  Hooks and scripts live in `dotfiles_py/data/`.
 
-CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential scan can run.
-**ALWAYS replicate these three commands locally before committing** to avoid CI failures.
+### Nix Conventions
 
-## Known Issues and Workarounds
-
-1. **Gitleaks Requires Full Git History**:
-
-   - The lint command checks the entire git history starting from first commit `78946fc7d7e562042c62d589b331abf222c688e7`.
-   - If git history is shallow, `dotfiles lint` will fail with "Looks like git history is shallow and credential check cannot be performed."
-   - **Workaround**: Ensure you have the full git history (`git fetch --unshallow` if needed).
-
-1. **Path Dependencies**:
-
-   - All tools (nixfmt, ruff, mypy, etc.) must be available in the `nix develop` environment.
-   - Do NOT attempt to use system Python or pip-installed tools—they will be incorrect versions.
-
-## Project Structure
-
-### Root Directory Files
-
-- `flake.nix`: Nix flake defining `nixosConfigurations` (per host), `homeConfigurations` (per `user@host` pair), standalone `packages`,
-  the `dotfiles` CLI package with its default `nix run` app, and dev shells.
-- `flake.lock`: Locked dependency versions (nixpkgs 26.05, home-manager release-26.05, plus nixpkgs_unstable, nur, nixos-hardware, preservation, disko).
-- `pyproject.toml`: Python project config with dependencies and ruff/mypy settings.
-- `readme.md`: User-facing documentation with bootstrap and recovery instructions.
-- `history.md`: Narrative history of the repository's evolution.
-- `license.md`: MIT license.
-
-### Configuration Files
-
-- `.editorconfig`: Code style (2-space indents for `.sh`, 120 char line length for `.yaml`).
-- `.gitleaks.toml`: Credential leak detection config with allowlists.
-- `.yamllint.yaml`: YAML linting rules (120 char max, document-start disabled).
-- `.markdownlint.yaml`: Markdown rules (180 char line length, MD033/MD024/MD025 disabled).
-- `.prettierrc.json`: Empty (uses defaults).
-- `.prettierignore`: Ignores lazy-lock.json, lazyvim.json, \_\_build\_\_, \_\_artifacts\_\_, .venv, and `*.md` (markdown is handled by mdformat/markdownlint).
-- `.stylua.toml`: Lua formatter config (2-space indents).
-- `.luarc.json`: Lua LSP config for Neovim development.
-- `.sops.yaml`: sops rules mapping age recipients to encrypted secret paths.
-
-### Python CLI (`dotfiles_py/`)
-
-**Entry point**: `dotfiles_py/__main__.py` runs the typer app in `dotfiles_py/cli.py`, which defines commands:
-
-- `lint`: Runs all linters (see Build Commands above).
-- `format`: Runs all formatters, with a `--check`/`-c` flag.
-- `hooks`: Sets up git hooks from `dotfiles_py/data/hooks/`.
-- `gui`: Regenerates GNOME dconf settings and Noctalia settings from rules.
-- `updatekeys`: Re-encrypts sops secrets when age recipients change.
-- `bootstrap-host`: Probes the current machine and interactively generates its initial host definition and Facter report.
-- `bootstrap-crypto`: Provisions AGE keys on a fresh machine: verifies a pasted key against repo secrets,
-  optionally generates and registers a TPM key (re-encrypting and committing secrets),
-  installs the TPM identity into user and root `keys.txt`, restarts the secret decryption services,
-  and switches the repo `origin` from https to ssh.
-- `syms`: Symlinks dotfile configs (nvim, ai, desktop-envs, linters, messengers, remote-desktop, system, terminals, vcs) into the home directory.
-- `password`: Generates random passwords.
-
-**Key modules**:
-
-- `cli.py`: Main CLI app, command definitions, logging setup.
-- `utils.py`: Shell command runner, git-file helpers, retry/makelike decorators, YAML utilities.
-- `targets/lint.py`: Lint and format implementations.
-- `targets/hooks.py`: Git hooks symlinking logic.
-- `targets/gnome.py`: GNOME dconf configuration generation.
-- `targets/noctalia.py`: Noctalia shell settings generation.
-- `targets/host.py`: Initial host definition and Facter report generation.
-- `targets/secrets.py`: sops age-key rotation and fresh-machine AGE key provisioning.
-- `targets/syms.py`: Symlink materialization for configs.
-
-**Data files**:
-
-- `dotfiles_py/data/hooks/pre-commit`: Pre-commit hook preventing sensitive file commits.
-- `dotfiles_py/data/scripts/`: Utility shell scripts (google_takeout.sh, nvim_time.sh, select_nvim.sh, colors.sh).
-
-### Nix Configuration (`nix/`)
-
-**Structure**:
-
-- `nix/configuration.nix`: Shared NixOS system configuration (boot, networking, users, desktop, VPN, sops secrets).
-- `nix/hosts/`: Per-machine definitions (`dellxps.nix`, `thinkpad.nix`); hardware config is inlined per host,
-  plus host subdirs (e.g. `dellxps/noctalia.toml`).
-- `nix/users/`: Per-user definitions (`rudenkornk.nix`, `rudenkornk_corp.nix`) with profile images.
-- `nix/home.nix`: Home Manager entry point importing all program modules.
-- `nix/home-manager/`: One directory per program or category, holding its modules, configs, scripts, and dotfiles.
-  Categories include shell, terminals, text-editors (neovim), toolchains, lsp,
-  linters, debuggers, desktop-envs, ai, vcs, browsers, messengers, media, networking, vpn, remote-desktop, and virtualization.
-- `nix/packages/`: Standalone packages installed outside the main config (`arc`, `itsme-cli`, `openvpn-ya`, `skotty`, `splitty`, `ya`).
-- `nix/modules/home/`: `local.home.file`, which links whole directory trees into `$HOME` one file at a time,
-  so several modules can populate a shared target directory.
-- `nix/modules/secrets/`: sops secrets modules (`nixos.nix`, `home-manager.nix`, `lib.nix`).
-- `nix/overlays/`: Nixpkgs overlays (`custom`, `locallib`, `sops`, and others).
-- `nix/unfree.nix`: Nixpkgs unfree-package allowlist.
-- `nix/keyboard/`: Custom keyboard layouts (`qwerty_rnk`, `jcuken_rnk`).
-- `nix/secrets/`: Encrypted secrets (`corp`, `nmconnections`, `ssh`, `vpn`) using sops.
-- `nix/tooling.nix`: The `dotfiles` CLI package and its default flake app, plus the `default` and `install` dev shells.
-
-**Key Nix Patterns**:
-
-- Uses NixOS 26.05 (stable channel), with `nixpkgs_unstable` available as a separate input.
-- Home Manager builds a config for every `user@host` pair (`rudenkornk` / `rudenkornk_corp` × `dellxps` / `thinkpad`).
-- Secrets are encrypted with sops and age; config still evaluates even when secrets are not decrypted.
-- Custom keyboard layouts via xkb.
-- Fish is the primary shell; Neovim config is based on LazyVim.
-- NOTE: WHEN ADDING A NEW NIX OR CONFIG FILE, ADD IT TO THE GIT STAGING AREA. OTHERWISE NIX WILL NOT SEE IT.
+- **Add new Nix and configuration files to the git staging area so the flake can see them.**
+- The default package set is stable; `pkgs.unstable` provides packages from a separate input.
+- Home Manager configurations cover every configured `user@host` pair and are registered as flake checks.
+- `local.home.file` in `nix/modules/home/` links directory trees into `$HOME` one file at a time,
+  allowing several modules to populate a shared target directory.
 
 ### Overlay Rules
 
@@ -241,68 +162,21 @@ CI checks out the full history (`fetch-depth: 0`) so the gitleaks credential sca
 
 ## Secrets Management
 
-**Tools**: sops + age. No community `sops-nix` — the repo uses a custom `local.secrets` module.
+Secrets in `nix/secrets/` use sops + age with the custom `local.secrets` modules in `nix/modules/secrets/`,
+not community `sops-nix`.
+Configurations must still evaluate without decrypted secrets.
 
-**Age keys**: Three recipients in `.sops.yaml`: one regular key, two TPM-bound via `age-plugin-tpm` (one per laptop).
-TPM-bound keys ensure secrets decrypt only on the physical host.
-Private keys live in `~/.config/sops/` and `/root/.config/sops/`, preserved across reboots by the `preservation` module in `disk.nix`.
-
-**Decryption**: Both paths use `sops-cached` (`nix/overlays/custom/scripts/sops-cached.sh`),
-which decrypts `.sops` files into `/run/user/$UID/secrets/` (tmpfs),
-caches results (avoiding costly TPM re-decryption), and optionally creates symlinks to target paths.
-
-1. **Systemd services at startup** — a custom module (`nix/modules/secrets/`) generates two `decrypt-secrets.service` oneshots:
-
-   - System-level (as root, at boot) — decrypts secrets listed in `local.secrets.file` before NetworkManager and osquery start.
-   - User-level (at login) — decrypts user secrets (itsme VPN, SSH, opencode auth) before `default.target`.
-     Both produce symlinks-from-tmpfs, so programs read decrypted files at their normal paths.
-
-1. **On-demand via `with_secrets` wrapper** — `bash_secrets.nix` sources `keys.sh.sops` and `proxy.sh.sops` using `sops-cached`,
-   injecting API keys, tokens, and proxy settings into the shell environment.
-   `with_secrets` (`nix/overlays/locallib/with_secrets.nix`) wraps any binary with these env vars at launch.
-   Used by all AI CLI tools (`ai.nix`) and Neovim (`extraWrapperArgs`).
-
-   Additionally, fish shell sources `tokens.sh.sops` at startup (`corp.nix`), and the SSH agent decrypts `~/.ssh/*.sops` on demand (`ssh_client.sh`).
-
-**Key files**:
-
-- `.sops.yaml` — age recipients and encryption rules.
-- `nix/modules/secrets/{lib,nixos,home-manager}.nix` — the custom secrets module.
-- `nix/overlays/custom/scripts/sops-cached.sh` — decryption engine.
-- `nix/overlays/locallib/with_secrets.nix` — wraps binaries with secret env vars.
-- `nix/overlays/locallib/bash_secrets.nix` — shell snippet sourcing `keys.sh.sops`/`proxy.sh.sops`.
-- `nix/overlays/sops.nix` — network-isolated vim wrapper for editing secrets.
-- `dotfiles_py/targets/secrets.py` — `dotfiles updatekeys` re-encrypts all `.sops` files.
-
-**Security layers**: pre-commit hook blocks plaintext private keys/VPN configs, gitleaks scans full history for credentials,
-AI tools are denied access to secrets dirs, sops editor runs with `unshare --net` and vim in restricted mode.
-
-### Important File Locations
-
-- Python source: `dotfiles_py/{cli.py,utils.py,targets/*.py}`
-- Nix configs: `nix/{configuration.nix,home.nix,home-manager/**/*.nix}`
-- Git hooks: `dotfiles_py/data/hooks/pre-commit`
-- CI workflow: `.github/workflows/workflow.yml`
-- Format configs: `.editorconfig`, `.prettierrc.json`, `.stylua.toml`, `pyproject.toml` (ruff sections)
-- Lint configs: `.yamllint.yaml`, `.markdownlint.yaml`, `.gitleaks.toml`, `pyproject.toml` (mypy/ruff sections)
-
-## Validation Steps
-
-Before submitting changes:
-
-1. **Format**: `nix develop --command dotfiles format`
-1. **Lint**: `nix develop --command dotfiles lint` (takes ~1-2 seconds; linters run in parallel)
-1. **Flake Check (final step only)**: `nix flake check --no-build` (takes ~60 seconds)
-
-If making Python changes:
-
-1. **Type Check**: `mypy` is run as part of `dotfiles lint`
-1. **Ruff**: `ruff check` and `ruff format` are run as part of lint/format
-
-If making Nix changes:
-
-1. **Statix**: `statix check` and `statix fix` are run as part of lint/format
-1. **Nixfmt**: `nixfmt` is run as part of format
+- `.sops.yaml` defines recipients and encryption rules, including TPM-bound identities.
+  Private keys live in `~/.config/sops/` and `/root/.config/sops/`, preserved across reboots by `nix/disk.nix`.
+  `nix run . -- updatekeys` in `dotfiles_py/targets/secrets.py` re-encrypts secrets after recipient changes.
+- `nix/overlays/custom/scripts/sops-cached.sh` decrypts into `/run/user/$UID/secrets/` (tmpfs), caches results,
+  and optionally symlinks them to their target paths.
+  Both system and user `decrypt-secrets.service` units use it.
+- `nix/overlays/locallib/with_secrets.nix` uses `bash_secrets.nix` to inject decrypted environment variables at launch.
+  This wrapper is used by all AI CLI tools and Neovim.
+- The pre-commit hook blocks plaintext secret filenames and scans the staged diff with gitleaks.
+  AI tools are denied access to secrets directories.
+  `nix/overlays/sops.nix` runs the secret editor with `unshare --net` and restricted vim.
 
 ## Code Style Guidelines
 
@@ -492,18 +366,7 @@ and why it went away just trades one piece of dead weight for another.
 Delete the code cleanly and put the explanation in the commit body instead, where `git log` and `git blame` will surface it
 for whoever wonders why the workaround disappeared.
 
-### Refactoring commits come first
-
-If a patch requires changes in existing code — extracting a helper, extending a function signature,
-moving things around — commit that refactoring separately, before the commit that builds on it.
-The refactoring commit must not change behavior; the main commit then contains only the new functionality.
-
 ## Trust These Instructions
 
-These instructions are comprehensive and tested. Only search for additional information if:
-
-- The instructions are incomplete for your specific task
-- You encounter an error not documented here
-- You need details about code not covered in the structure section
-
-When you encounter the documented gitleaks shallow-history issue, apply the documented workaround rather than investigating alternatives.
+Use the documented workflows.
+Look up additional information only for task-specific details not covered here or errors without a documented workaround.

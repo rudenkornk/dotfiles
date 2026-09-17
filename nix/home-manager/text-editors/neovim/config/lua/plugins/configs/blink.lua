@@ -96,6 +96,7 @@ M.opts = {
     documentation = { auto_show_delay_ms = 0 },
   },
   keymap = {
+    preset = "super-tab",
     ["<C-k>"] = { "show", "show_documentation", "hide_documentation" },
     ["<C-d>"] = {
       function(cmp)

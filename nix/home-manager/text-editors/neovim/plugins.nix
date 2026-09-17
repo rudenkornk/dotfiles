@@ -11,6 +11,7 @@ let
     blink-cmp-dictionary
     blink-cmp-env
     blink-compat
+    blink-copilot
     bufferline-nvim
     clangd_extensions-nvim
     cmake-tools-nvim
@@ -18,6 +19,7 @@ let
     cmp-tmux
     conform-nvim
     conjure
+    copilot-lua
     crates-nvim
     dial-nvim
     dracula-nvim

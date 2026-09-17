@@ -24,10 +24,12 @@ let
     dial-nvim
     dracula-nvim
     duck-nvim
+    edge
     everforest
     flash-nvim
     friendly-snippets
     gh-nvim
+    github-nvim-theme
     gitsigns-nvim
     grug-far-nvim
     gruvbox-nvim
@@ -43,6 +45,7 @@ let
     litee-nvim
     lualine-nvim
     luasnip
+    lush-nvim
     markdown-preview-nvim
     mini-ai
     mini-comment
@@ -124,6 +127,7 @@ let
     vscode-nvim
     which-key-nvim
     yanky-nvim
+    zenbones-nvim
 
     # When a plugin's name in nixpkgs doesn't match what Lazy expects, manually specify the name.
     {

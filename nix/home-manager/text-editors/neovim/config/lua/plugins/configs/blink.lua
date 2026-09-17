@@ -34,6 +34,9 @@ M.opts = {
       "dictionary",
     },
     providers = {
+      copilot = {
+        score_offset = 10,
+      },
       dictionary = {
         name = "Dict",
         module = "blink-cmp-dictionary",
@@ -69,13 +72,14 @@ M.opts = {
         opts = { label = " ", all_panes = true },
       },
       minuet = {
+        enabled = false,
         name = "minuet",
         module = "minuet.blink",
         async = true,
         -- Should match `minuet.config.request_timeout * 1000`,
         -- since `minuet.config.request_timeout` is in seconds.
         timeout_ms = 3000,
-        score_offset = 10,
+        score_offset = 0,
       },
     },
   },

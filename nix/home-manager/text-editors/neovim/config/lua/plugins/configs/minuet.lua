@@ -8,7 +8,9 @@ M.opts = {
   throttle = 1500, -- Time to send a new request after the last request was sent.
   debounce = 300, -- Time to send a request after the last keystroke was hit.
   virtualtext = {
-    auto_trigger_ft = { "*" },
+    auto_trigger_ft = {
+      --  "*"  -- Disabled in favor of Sidekick NES.
+    },
     keymap = {
       accept_line = "<A-f>",
       -- Cycle to next/prev completion item, or manually invoke completion.

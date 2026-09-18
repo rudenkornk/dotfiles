@@ -50,7 +50,7 @@
 -- <S-p> -- paste before cursor.
 -- <S-q> -- delete buffer (custom).
 -- <S-r> -- replace sequence.
--- <S-s> -- leap back.
+-- <S-s> -- Leap from another window.
 -- <S-t> -- find prev symbol.
 -- <S-u> --
 -- <S-v> -- visual select line.
@@ -151,6 +151,8 @@ vim.keymap.set({ "i" }, "<C-q>", "<C-^>", { desc = "Toggle keyboard layout" })
 
 vim.keymap.set("i", "<C-a>", "<Home>", { desc = "Jump to beginning of line" })
 vim.keymap.set("i", "<C-e>", "<End>", { desc = "Jump to end of line" })
+vim.keymap.set("i", "<C-n>", "<Down>", { desc = "Move cursor down" })
+vim.keymap.set("i", "<C-p>", "<Up>", { desc = "Move cursor up" })
 
 -- Some quality of life mappings.
 vim.keymap.set(

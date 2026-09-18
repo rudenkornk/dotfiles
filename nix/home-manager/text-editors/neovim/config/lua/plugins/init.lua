@@ -36,7 +36,12 @@ return {
     build = "", -- Don't run anything when installing/updating.
   },
   {
+    "windwp/nvim-ts-autotag",
+    opts = require("plugins.configs.ts_autotag").opts,
+  },
+  {
     "mfussenegger/nvim-dap", -- Core DAP plugin.
+    opts = require("plugins.configs.dap").opts,
     keys = require("plugins.configs.dap").keys,
   },
   {
@@ -52,6 +57,10 @@ return {
     "saghen/blink.cmp", -- Core lang plugin for completion.
     dependencies = require("plugins.configs.blink").dependencies,
     opts = require("plugins.configs.blink").opts,
+  },
+  {
+    "nvim-mini/mini.pairs",
+    config = require("plugins.configs.mini_pairs").config,
   },
   -- Mason plugins for fetching binaries like LSPs, formatters, linters, debuggers.
   -- Completely disable them since we use nix to manage these tools.
@@ -105,11 +114,6 @@ return {
     "folke/sidekick.nvim", -- ai.sidekick
     keys = require("plugins.configs.sidekick").keys,
     opts = require("plugins.configs.sidekick").opts,
-  },
-  {
-    "ggandor/flit.nvim", -- editor.leap
-    -- https://github.com/LazyVim/LazyVim/discussions/6037
-    opts = { labeled_modes = "nxo" },
   },
   {
     "gbprod/yanky.nvim", -- coding.yanky

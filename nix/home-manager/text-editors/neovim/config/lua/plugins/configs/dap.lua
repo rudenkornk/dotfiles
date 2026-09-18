@@ -1,5 +1,10 @@
 local M = {}
 
+M.opts = function()
+  -- CodeLLDB listens on IPv4, but localhost can resolve to IPv6.
+  require("dap").adapters.codelldb.host = "127.0.0.1"
+end
+
 -- Please do not reserve `<A-b>` and `<A-f>`.
 -- These keys are used by the floating terminal.
 

@@ -134,7 +134,10 @@
         # /var/lib/systemd/timers   -- Last-run timestamps for systemd calendar timers.
         # /var/lib/tpm2-tss         -- TPM2 software-layer key storage (TSS keystore).
         # /var/lib/upower           -- Battery charge/discharge history.
-        "/var/lib"
+        {
+          directory = "/var/lib";
+          inInitrd = true; # User activation needs the persisted UID/GID allocation tables.
+        }
 
         # Skipped directories (commented out with rationale):
 

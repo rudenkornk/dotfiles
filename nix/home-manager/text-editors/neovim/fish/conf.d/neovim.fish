@@ -8,6 +8,7 @@
 # they were specifically set for neovim.
 # Keep this unset list in sync with bash/init_extra.sh.
 if test -n "$NVIM" && test -n "$MYVIMRC"
+    set --unexport FORCE_PROXY
     set --unexport HTTP_PROXY
     set --unexport HTTPS_PROXY
     set --unexport http_proxy

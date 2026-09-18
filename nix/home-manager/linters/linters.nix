@@ -18,6 +18,7 @@
     gitlint
     gofumpt
     golangci-lint
+    hadolint
     isort
     kdlfmt
     ktlint

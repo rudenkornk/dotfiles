@@ -41,6 +41,7 @@ return {
   },
   {
     "mfussenegger/nvim-dap", -- Core DAP plugin.
+    opts = require("plugins.configs.dap").opts,
     keys = require("plugins.configs.dap").keys,
   },
   {

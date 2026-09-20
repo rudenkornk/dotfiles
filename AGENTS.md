@@ -5,97 +5,6 @@
 This repository defines a reproducible NixOS and Home Manager setup through Nix flakes.
 It includes a Python CLI, Neovim (LazyVim), tmux, fish, and development toolchains.
 
-## Implementation Scope and Complexity
-
-Prefer the most straightforward implementation for the current task.
-Small behavioral compromises are acceptable when avoiding them requires substantially more complexity.
-Optimize for readable code and fewer responsibilities to maintain.
-
-### Start with the simplest viable approach
-
-- For existing code, first consider changing configuration, adding a parameter, or using an existing extension point.
-- For new code, start with a direct implementation for the current inputs and callers.
-
-### Weigh behavior against implementation cost
-
-A small compromise affects convenience or optional coverage while preserving the main workflow.
-Examples include retaining an existing upstream limitation or supporting explicitly named variants
-instead of every possible configuration.
-
-Prefer such compromises when the alternative requires substantial special-case code, adapters, or state management.
-If unsure whether a compromise is acceptable, present explained choices.
-
-### Let simple utilities fail naturally
-
-For internal utilities and configuration glue, exceptions or panics are acceptable when an operation cannot succeed.
-Use the caller's established preconditions and the underlying API's error behavior.
-
-### When new code/infrastructure is required or recommended
-
-If decided to go with a complex solution, then **design a plan** and split it into these major steps:
-
-1. Refactoring existing **code structure** (if needed).\
-   This step never changes functionality or behavior. Usually includes code motion, formatting, renaming.
-   This is something which is very easy to prove equivalence with a previous version.
-
-   This steps typically deserve its one single separate commit and is not limited by size.
-
-1. Refactoring existing **code functionality**. Adding new glue/infrastructure code.\
-   Not yet a meaningful part of an actual feature. Examples include:
-
-   - Add new glue/infrastructure/helpers.
-   - Use new glue/infrastructure/helpers in existing code replacing old inline implementation.
-   - Support new simple cases in existing code.
-   - Make existing code more defensive.
-   - Add the tests for an untested area vulnerable to dev mistakes.
-   - Add more logging / instrumentation where it was needed.
-
-   This step NEVER includes changes related to changed code indent, changed formatting, style, etc.
-   All of that should have happened on the previous step.
-
-   This steps may consist of any number of commits. Each of those should be readable and easy to verify on its own.
-
-1. Implementing an actual feature.\
-   This bullet typically deserve only one single commit with mostly `+` diff, less that 250 lines of code.
-
-   If implementing a big feature with different functionality, decompose it:
-
-   - For new files: a simple and straightforward base layer. Commit.
-   - Next several complications, each should have its own commit.
-     (This relate both when adding to new file, or changing existing one.)
-
-1. Apply feature to the code.\
-   Typically a single refactoring commit which replaces old approach with a new one over the codebase.
-
-As said, this should be applied recursively.
-Refactoring existing functionality on upper level may become a feature if decomposed further.
-A good sign that a stage decomposition is needed (except for structural refactoring)
-is net addition of more than 250 lines of code (do not treat this too literally, though).
-
-**Each step on its own is affected by main rules of simplicity from previous topics.**
-
-Example of this workflow:
-
-1. Refactoring code **structure**:\
-   9c1678df7a54: refactor(merge-config): rename json mode to dict.
-1. Refactoring code **functionality** (simple generalization):\
-   8cd565661db1: refactor(merge-config): generalize dictionary merging.
-1. Refactoring code infra
-   (added `typer` since future code now requires non-stdlib deps and we can relax stdlib requirement):\
-   742c9b4965cd: refactor(merge-config): use typer for argument parsing.
-1. Adding lint tests:\
-   e35a6fba6419: test(merge-config): add package-local lint checks.
-1. Feature 1 (decomposed out of a bigger feature request):\
-   f43183ebdb62: feat(merge-config): infer dictionary formats from target.
-1. Feature 2 (the main requested part):\
-   5126b3df0523: feat(merge-config): support jsonc in merge-config util.
-1. Feature 3 (additional planned feature):\
-   c807d4773ec9: feat(merge-config): route clear merge-config configs via XDG_RUNTIME_DIR.
-1. Refactoring: finally a usage of requested feature in the code:\
-   15d128092db0: refactor(corp): generate opencode corp config using dict merge instead of a block one.
-
-This entire sequence can itself be a prerequisite stage of a larger change.
-
 ## Development and Validation
 
 ### Command Execution
@@ -187,6 +96,97 @@ Configurations must still evaluate without decrypted secrets.
 - **YAML**: 120 char line length, no document-start
 - **Lua**: stylua (2-space indents)
 - **KDL**: kdlfmt
+
+## Implementation Scope and Complexity
+
+Prefer the most straightforward implementation for the current task.
+Small behavioral compromises are acceptable when avoiding them requires substantially more complexity.
+Optimize for readable code and fewer responsibilities to maintain.
+
+### Start with the simplest viable approach
+
+- For existing code, first consider changing configuration, adding a parameter, or using an existing extension point.
+- For new code, start with a direct implementation for the current inputs and callers.
+
+### Weigh behavior against implementation cost
+
+A small compromise affects convenience or optional coverage while preserving the main workflow.
+Examples include retaining an existing upstream limitation or supporting explicitly named variants
+instead of every possible configuration.
+
+Prefer such compromises when the alternative requires substantial special-case code, adapters, or state management.
+If unsure whether a compromise is acceptable, present explained choices.
+
+### Let simple utilities fail naturally
+
+For internal utilities and configuration glue, exceptions or panics are acceptable when an operation cannot succeed.
+Use the caller's established preconditions and the underlying API's error behavior.
+
+### When new code/infrastructure is required or recommended
+
+If decided to go with a complex solution, then **design a plan** and split it into these major steps:
+
+1. Refactoring existing **code structure** (if needed).\
+   This step never changes functionality or behavior. Usually includes code motion, formatting, renaming.
+   This is something which is very easy to prove equivalence with a previous version.
+
+   This steps typically deserve its one single separate commit and is not limited by size.
+
+1. Refactoring existing **code functionality**. Adding new glue/infrastructure code.\
+   Not yet a meaningful part of an actual feature. Examples include:
+
+   - Add new glue/infrastructure/helpers.
+   - Use new glue/infrastructure/helpers in existing code replacing old inline implementation.
+   - Support new simple cases in existing code.
+   - Make existing code more defensive.
+   - Add the tests for an untested area vulnerable to dev mistakes.
+   - Add more logging / instrumentation where it was needed.
+
+   This step NEVER includes changes related to changed code indent, changed formatting, style, etc.
+   All of that should have happened on the previous step.
+
+   This steps may consist of any number of commits. Each of those should be readable and easy to verify on its own.
+
+1. Implementing an actual feature.\
+   This bullet typically deserve only one single commit with mostly `+` diff, less that 250 lines of code.
+
+   If implementing a big feature with different functionality, decompose it:
+
+   - For new files: a simple and straightforward base layer. Commit.
+   - Next several complications, each should have its own commit.
+     (This relate both when adding to new file, or changing existing one.)
+
+1. Apply feature to the code.\
+   Typically a single refactoring commit which replaces old approach with a new one over the codebase.
+
+As said, this should be applied recursively.
+Refactoring existing functionality on upper level may become a feature if decomposed further.
+A good sign that a stage decomposition is needed (except for structural refactoring)
+is net addition of more than 250 lines of code (do not treat this too literally, though).
+
+**Each step on its own is affected by main rules of simplicity from previous topics.**
+
+Example of this workflow:
+
+1. Refactoring code **structure**:\
+   9c1678df7a54: refactor(merge-config): rename json mode to dict.
+1. Refactoring code **functionality** (simple generalization):\
+   8cd565661db1: refactor(merge-config): generalize dictionary merging.
+1. Refactoring code infra
+   (added `typer` since future code now requires non-stdlib deps and we can relax stdlib requirement):\
+   742c9b4965cd: refactor(merge-config): use typer for argument parsing.
+1. Adding lint tests:\
+   e35a6fba6419: test(merge-config): add package-local lint checks.
+1. Feature 1 (decomposed out of a bigger feature request):\
+   f43183ebdb62: feat(merge-config): infer dictionary formats from target.
+1. Feature 2 (the main requested part):\
+   5126b3df0523: feat(merge-config): support jsonc in merge-config util.
+1. Feature 3 (additional planned feature):\
+   c807d4773ec9: feat(merge-config): route clear merge-config configs via XDG_RUNTIME_DIR.
+1. Refactoring: finally a usage of requested feature in the code:\
+   15d128092db0: refactor(corp): generate opencode corp config using dict merge instead of a block one.
+
+This entire sequence can itself be a prerequisite stage of a larger change.
 
 ## Comment & Markdown Style Guidelines
 

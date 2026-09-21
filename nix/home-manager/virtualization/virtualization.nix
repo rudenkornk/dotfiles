@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 # Virtualization & containerization tools.
 {
@@ -19,12 +19,21 @@
       d = "docker";
       p = "podman";
     };
+
+    sessionVariables = {
+      DOCKER_CONFIG = "${config.xdg.configHome}/docker";
+    };
   };
 
-  programs.docker-cli = {
-    enable = true;
-    settings = {
-      detachKeys = "ctrl-z";
+  local = {
+    merge-config = {
+      file = {
+        # Allow docker to add creds to the file.
+        "${config.xdg.configHome}/docker/config.json" = {
+          mode = "dict";
+          source = (pkgs.formats.json { }).generate "docker-config.json" { detachKeys = "ctrl-z"; };
+        };
+      };
     };
   };
 }

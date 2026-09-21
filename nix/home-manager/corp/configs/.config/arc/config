@@ -9,7 +9,7 @@
   cmm = commit --amend
   cms = commit --message s # Commit staged.
   cp = cherry-pick
-  df = diff --relative=.
+  df = diff
   ft = fetch
   l = log
   lg = log --graph
@@ -22,6 +22,6 @@
   rb = rebase
   rbi = rebase --interactive HEAD~26
   rh = reset --hard
-  sg = diff --staged --relative=.
-  sh = show --relative=.
+  sg = diff --staged
+  sh = show
   st = status

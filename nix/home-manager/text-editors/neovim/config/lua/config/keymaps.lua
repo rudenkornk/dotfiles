@@ -3,11 +3,11 @@
 -- Add any additional keymaps here
 
 -- <C-a> -- increment.
--- <C-b> -- scroll back page. Scroll doc in insert mode.
+-- <C-b> -- scroll back page. Scroll doc or move cursor left in insert mode.
 -- <C-c> -- ???
 -- <C-d> -- scroll down half page.
 -- <C-e> -- scroll up lines.
--- <C-f> -- scroll down page. Scroll doc in insert mode.
+-- <C-f> -- scroll down page. Scroll doc or move cursor right in insert mode.
 -- <C-g> -- lazygit.
 -- <C-h> -- pane navigation.
 -- <C-i> -- go forward.
@@ -153,6 +153,8 @@ vim.keymap.set("i", "<C-a>", "<Home>", { desc = "Jump to beginning of line" })
 vim.keymap.set("i", "<C-e>", "<End>", { desc = "Jump to end of line" })
 vim.keymap.set("i", "<C-n>", "<Down>", { desc = "Move cursor down" })
 vim.keymap.set("i", "<C-p>", "<Up>", { desc = "Move cursor up" })
+vim.keymap.set("i", "<C-f>", "<Right>", { desc = "Move cursor right" })
+vim.keymap.set("i", "<C-b>", "<Left>", { desc = "Move cursor left" })
 
 -- Some quality of life mappings.
 vim.keymap.set(

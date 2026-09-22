@@ -28,49 +28,93 @@ If unsure whether a compromise is acceptable, present explained choices.
 For internal utilities and configuration glue, exceptions or panics are acceptable when an operation cannot succeed.
 Use the caller's established preconditions and the underlying API's error behavior.
 
-## When new code/infrastructure is required or recommended
+# Implementation Planning and Commit History
 
-If decided to go with a complex solution, then **design a plan** and split it into these major steps:
+Clear, straightforward Git history is a primary deliverable, alongside clear code.
+Apply this workflow proactively, without waiting for the user to request decomposition or commits.
+The simplicity rules above apply to every stage.
 
-1. Refactoring existing **code structure** (if needed).\
-   This step never changes functionality or behavior. Usually includes code motion, formatting, renaming.
-   This is something which is very easy to prove equivalence with a previous version.
+## Plan the commit sequence first
 
-   This steps typically deserve its one single separate commit and is not limited by size.
+Before presenting a nontrivial implementation plan or editing code, inspect the existing implementation
+and consider the following stages in order.
+The initial plan must identify the applicable stages and intended commit boundaries.
 
-1. Refactoring existing **code functionality**. Adding new glue/infrastructure code.\
-   Not yet a meaningful part of an actual feature. Examples include:
+1. Structural refactoring.
 
-   - Add new glue/infrastructure/helpers.
-   - Use new glue/infrastructure/helpers in existing code replacing old inline implementation.
-   - Support new simple cases in existing code.
-   - Make existing code more defensive.
-   - Add the tests for an untested area vulnerable to dev mistakes.
-   - Add more logging / instrumentation where it was needed.
+   Move, rename, or reorganize existing code without changing functionality or behavior.
+   Put necessary formatting and indentation changes here.
+   Keep this mechanical and easy to verify for equivalence.
 
-   This step NEVER includes changes related to changed code indent, changed formatting, style, etc.
-   All of that should have happened on the previous step.
+   Commit this separately before introducing supporting functionality or the feature.
+   Purely mechanical changes are not limited by size.
 
-   This steps may consist of any number of commits. Each of those should be readable and easy to verify on its own.
+1. Supporting functionality.
 
-1. Implementing an actual feature.\
-   This bullet typically deserve only one single commit with mostly `+` diff, less that 250 lines of code.
+   Add or adapt the small helpers, parameters, or extension points needed by the feature.
+   Adopt them in existing code where appropriate before introducing the feature itself.
+   Add tests, logging, or other supporting work only where independently justified.
 
-   If implementing a big feature with different functionality, decompose it:
+   Keep this separate from structural cleanup and actual feature behavior.
+   This stage may contain several commits, each coherent and independently verifiable.
 
-   - For new files: a simple and straightforward base layer. Commit.
-   - Next several complications, each should have its own commit.
-     (This relate both when adding to new file, or changing existing one.)
+1. Feature implementation.
 
-1. Apply feature to the code.\
-   Typically a single refactoring commit which replaces old approach with a new one over the codebase.
+   Implement the requested behavior on top of the prepared structure.
+   Prefer a small, focused commit with mostly additions.
+   Roughly 250 added lines is a useful signal to consider further decomposition, not a hard limit.
 
-As said, this should be applied recursively.
-Refactoring existing functionality on upper level may become a feature if decomposed further.
-A good sign that a stage decomposition is needed (except for structural refactoring)
-is net addition of more than 250 lines of code (do not treat this too literally, though).
+   For larger features, implement a straightforward base first.
+   Add further capabilities in separate commits.
 
-**Each step on its own is affected by main rules of simplicity from previous topics.**
+1. Integration.
+
+   Apply or enable the feature in existing callers and configurations.
+   Keep this separate from implementing the feature when there is a meaningful integration step.
+
+Each applicable stage must form a separate commit or coherent sequence of commits.
+Skip stages that have no useful work.
+Do not invent abstractions, introduce unnecessary helpers, or split a trivial change merely to fill these stages.
+
+## Apply the decomposition recursively
+
+Whenever a stage itself mixes preparation, implementation, and integration, apply the same sequence within it.
+Supporting functionality at one level may be a feature requiring its own preparation at the next level.
+
+Revisit the decomposition when implementation reveals a missed dependency or an incorrect earlier decision.
+Do not wait until the end of the task or until the user asks to organize the history.
+
+## Commit completed work
+
+This is a standing explicit request to create commits for completed implementation work,
+unless the user requests otherwise or the active mode forbids modifications.
+
+Create commits at the planned boundaries.
+Keep intermediate commits usable and each patch focused on one responsibility.
+Stage only changes belonging to the task and follow the commit-message rules below.
+
+Run checks appropriate to each stage.
+Complete repository-specific validation before finishing the series.
+
+## Maintain a coherent history
+
+This is standing explicit authorization to rewrite commits created during the current session
+for the current task whenever doing so produces a clearer, more coherent history.
+
+Before each history-rewriting operation, create a uniquely named backup branch
+pointing to the branch tip before the rewrite.
+Report its name and preserve it until the user requests its removal.
+Preserve any uncommitted work as well.
+
+When implementation reveals a missed change or an incorrect earlier decision,
+incorporate the correction into the appropriate commit and replay subsequent eligible commits.
+Amend, reorder, split, or squash eligible commits as needed.
+Prefer correcting the relevant commit over appending cleanup or fixup commits.
+
+Do not rewrite commits that predate the current session or belong to another task.
+Review the resulting commit sequence and final diff, and rerun affected checks after rewriting.
+
+Pushing, including force-pushing rewritten history, requires an explicit user request.
 
 # Comment & Markdown Style Guidelines
 
@@ -234,6 +278,12 @@ they fit within 120 characters. A sentence must never be split across a line bou
 ```
 
 # Commit Message Style
+
+No line in a commit message, including the title and body, may exceed 120 characters.
+
+All Comment & Markdown Style Guidelines above also apply to commit message bodies,
+including prose, capitalization, punctuation, and sentence wrapping.
+Those style rules do not apply to titles, which follow the `type(scope): summary` format.
 
 Commit messages must be short.
 In ~95% of cases the message is only the title (`type(scope): summary`, as in the existing history) — no body at all.

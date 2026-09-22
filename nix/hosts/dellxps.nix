@@ -38,6 +38,7 @@ in
   inherit (facter) ramGiB;
   monitors = {
     niri = import ./dellxps/niri_monitors.nix;
+    externalAbove = "eDP-1";
   };
   noctalia = ./dellxps/noctalia.toml;
   gpu = {

@@ -7,6 +7,7 @@
 }:
 
 let
+  externalAbove = host.monitors.externalAbove or null;
   mkMonitorKdl =
     name: cfg: # kdl
     ''
@@ -35,6 +36,22 @@ in
     xdg-desktop-portal-gtk # Screen sharing.
     xwayland-satellite # X11 proxy.
   ];
+
+  systemd.user.services.niri-monitor-layout = lib.mkIf (externalAbove != null) {
+    Unit = {
+      Description = "Arrange external monitors above the laptop display";
+      After = [ "niri.service" ];
+      PartOf = [ "niri.service" ];
+    };
+    Install = {
+      WantedBy = [ "niri.service" ];
+    };
+    Service = {
+      ExecStart = "${lib.getExe pkgs.python3} ${config.xdg.configHome}/niri/monitor_layout.py ${externalAbove}";
+      Restart = "on-failure";
+      RestartSec = 1;
+    };
+  };
 
   xdg = {
     configFile = {

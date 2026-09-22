@@ -1,0 +1,275 @@
+diff --git a/src/auth/fingerprint_authenticator.cpp b/src/auth/fingerprint_authenticator.cpp
+--- a/src/auth/fingerprint_authenticator.cpp
++++ b/src/auth/fingerprint_authenticator.cpp
+@@ -81,9 +81,13 @@ FingerprintAuthenticator::FingerprintAuthenticator(SystemBus& bus) : m_bus(bus)
+         // refuses to run while m_sleeping, so only the re-arm state needs clearing.
+         m_retryTimer.stop();
+         m_verifying = false;
+-      } else if (m_active && !m_abort) {
++      } else if (m_active) {
++        m_abort = false;
++        m_recoveryAttempted = false;
+         m_authorizationRetries = 0;
+         startVerify(false);
++      } else {
++        releaseDevice();
+       }
+     });
+   } catch (const sdbus::Error& e) {
+@@ -110,6 +114,7 @@ void FingerprintAuthenticator::start() {
+   m_retries = 0;
+   m_authorizationRetries = 0;
+   m_reclaimAttempted = false;
++  m_recoveryAttempted = false;
+   if (m_sleeping) {
+     return;
+   }
+@@ -121,10 +126,8 @@ void FingerprintAuthenticator::stop() {
+   m_active = false;
+   m_verifying = false;
+   m_claiming = false;
+-  if (!m_abort) {
++  if (!m_sleeping) {
+     releaseDevice();
+-  } else {
+-    m_device.reset();
+   }
+ }
+
+@@ -306,11 +309,7 @@ void FingerprintAuthenticator::releaseDevice() {
+ }
+
+ void FingerprintAuthenticator::handleVerifyStatus(const std::string& result, bool done) {
+-  if (!m_active) {
+-    return;
+-  }
+-  if (m_sleeping) {
+-    stopVerify();
++  if (!m_active || m_sleeping || m_abort) {
+     return;
+   }
+
+@@ -358,11 +357,25 @@ void FingerprintAuthenticator::handleVerifyStatus(const std::string& result, boo
+     retryInPlace = true;
+     emitStatus(i18n::tr("auth.fingerprint.remove-and-retry"), false);
+     break;
+-  case MatchResult::Disconnected:
++  case MatchResult::Disconnected: {
+     stopVerify();
+     m_abort = true;
+     emitStatus(i18n::tr("auth.fingerprint.disconnected"), true);
++    const bool retry = !std::exchange(m_recoveryAttempted, true);
++    // Protocol errors also report disconnection; reopen once to reinitialize a reset sensor.
++    // Defer releasing the proxy until this signal handler has returned.
++    m_retryTimer.start(kRetryDelay, [this, retry]() {
++      if (!m_active || m_sleeping) {
++        return;
++      }
++      releaseDevice();
++      if (retry) {
++        m_abort = false;
++        startVerify(false);
++      }
++    });
+     break;
++  }
+   case MatchResult::UnknownError:
+     stopVerify();
+     ownsRestart = true;
+diff --git a/src/auth/fingerprint_authenticator.h b/src/auth/fingerprint_authenticator.h
+--- a/src/auth/fingerprint_authenticator.h
++++ b/src/auth/fingerprint_authenticator.h
+@@ -56,6 +56,7 @@ private:
+   bool m_sleeping = false;
+   bool m_abort = false;
+   bool m_reclaimAttempted = false;
++  bool m_recoveryAttempted = false;
+   int m_retries = 0;
+   int m_authorizationRetries = 0;
+ };
+diff --git a/tests/fingerprint_authenticator_integration_test.cpp b/tests/fingerprint_authenticator_integration_test.cpp
+--- a/tests/fingerprint_authenticator_integration_test.cpp
++++ b/tests/fingerprint_authenticator_integration_test.cpp
+@@ -63,10 +63,20 @@ namespace {
+                 assert(finger == "any");
+                 enqueue(Method::VerifyStart, std::move(result));
+               }),
+-              sdbus::registerMethod("VerifyStop").implementedAs([]() {}),
++              sdbus::registerMethod("VerifyStop").implementedAs([this]() {
++                std::scoped_lock lock(m_mutex);
++                ++m_stopCalls;
++              }),
+               sdbus::registerMethod("Release").implementedAs([this]() {
+                 std::scoped_lock lock(m_mutex);
++                ++m_releaseCalls;
+                 m_claimed = false;
++                if (m_releaseFails) {
++                  // Match fprintd's close-error cleanup: ownership is already cleared.
++                  throw sdbus::Error{
++                      sdbus::Error::Name{"net.reactivated.Fprint.Error.Internal"}, "Power down failed: 101"
++                  };
++                }
+               }),
+               sdbus::registerSignal("VerifyStatus").withParameters<std::string, bool>()
+           )
+@@ -96,6 +106,21 @@ namespace {
+       return method == Method::Claim ? m_claimCalls : m_verifyCalls;
+     }
+
++    int releaseCalls() const {
++      std::scoped_lock lock(m_mutex);
++      return m_releaseCalls;
++    }
++
++    int stopCalls() const {
++      std::scoped_lock lock(m_mutex);
++      return m_stopCalls;
++    }
++
++    void failRelease() {
++      std::scoped_lock lock(m_mutex);
++      m_releaseFails = true;
++    }
++
+     void reply(Method method, std::optional<sdbus::Error> error = std::nullopt) {
+       std::optional<sdbus::Result<>> result;
+       {
+@@ -145,8 +170,11 @@ namespace {
+     std::optional<sdbus::Result<>> m_pending;
+     Method m_method = Method::Claim;
+     bool m_claimed = false;
++    bool m_releaseFails = false;
+     int m_claimCalls = 0;
+     int m_verifyCalls = 0;
++    int m_releaseCalls = 0;
++    int m_stopCalls = 0;
+   };
+
+   struct Fixture {
+@@ -217,6 +245,12 @@ namespace {
+         pending(Method::VerifyStart);
+       }
+     }
++
++    void disconnect() {
++      services.verifyStatus("verify-disconnected");
++      until([&]() { return statuses.back() == i18n::tr("auth.fingerprint.disconnected"); });
++      assert(authenticated == 0);
++    }
+   };
+
+   void claimAndVerifyRecoverAfterWake() {
+@@ -351,6 +385,99 @@ namespace {
+     assert(!Access::retryPending(f.auth));
+     assert(f.authenticated == 0);
+   }
++
++  void disconnectedStopReleasesClaim() {
++    Fixture f;
++    f.startScanning();
++    f.disconnect();
++    f.auth.stop();
++    assert(f.services.releaseCalls() == 1);
++    assert(!Access::retryPending(f.auth));
++    f.startScanning();
++  }
++
++  void disconnectedReaderRecovers(bool releaseFails) {
++    Fixture f;
++    f.startScanning();
++    f.services.verifyStatus("verify-no-match");
++    f.pending(Method::VerifyStart, true);
++    f.verified();
++    assert(Access::matchRetries(f.auth) == 1);
++    f.sleep(true);
++    f.sleep(false);
++    f.pending(Method::VerifyStart);
++    f.verified();
++    if (releaseFails) {
++      f.services.failRelease();
++    }
++    f.disconnect();
++    f.services.verifyStatus("verify-match");
++    f.pending(Method::Claim, true);
++    assert(f.authenticated == 0);
++    assert(f.services.releaseCalls() == 1);
++    assert(f.services.calls(Method::Claim) == 2);
++    f.deny(Method::Claim);
++    f.pending(Method::Claim, true);
++    f.services.reply(Method::Claim);
++    f.pending(Method::VerifyStart);
++    f.verified();
++    assert(Access::matchRetries(f.auth) == 1);
++    f.services.verifyStatus("verify-match");
++    f.until([&]() { return f.authenticated == 1; });
++  }
++
++  void repeatedDisconnectIsBounded(bool resume) {
++    Fixture f;
++    f.startScanning();
++    f.disconnect();
++    f.pending(Method::Claim, true);
++    f.services.reply(Method::Claim);
++    f.pending(Method::VerifyStart);
++    f.verified();
++    f.disconnect();
++    f.until([&]() { return f.services.releaseCalls() == 2; }, true);
++    assert(f.services.calls(Method::Claim) == 2);
++    assert(!Access::retryPending(f.auth));
++    if (resume) {
++      f.sleep(true);
++      f.sleep(false);
++    } else {
++      f.auth.stop();
++      f.auth.start();
++    }
++    f.pending(Method::Claim);
++    f.services.reply(Method::Claim);
++    f.pending(Method::VerifyStart);
++    f.verified();
++    f.disconnect();
++    f.pending(Method::Claim, true);
++    assert(f.services.releaseCalls() == 3);
++  }
++
++  void suspendCancelsRecovery() {
++    Fixture f;
++    f.startScanning();
++    f.disconnect();
++    f.sleep(true);
++    assert(!Access::retryPending(f.auth));
++    assert(f.services.releaseCalls() == 0);
++    f.auth.stop();
++    assert(f.services.releaseCalls() == 0);
++    f.sleep(false);
++    assert(f.services.releaseCalls() == 1);
++    assert(f.services.calls(Method::Claim) == 1);
++  }
++
++  void sleepingStatusDoesNotTouchReader() {
++    Fixture f;
++    f.startScanning();
++    f.sleep(true);
++    f.services.verifyStatus("verify-disconnected");
++    f.sleep(false);
++    assert(f.services.stopCalls() == 0);
++    f.pending(Method::VerifyStart);
++    f.verified();
++  }
+ } // namespace
+
+ int main() {
+@@ -362,6 +489,13 @@ int main() {
+     return 1;
+   }
+
++  disconnectedStopReleasesClaim();
++  disconnectedReaderRecovers(false);
++  disconnectedReaderRecovers(true);
++  repeatedDisconnectIsBounded(false);
++  repeatedDisconnectIsBounded(true);
++  suspendCancelsRecovery();
++  sleepingStatusDoesNotTouchReader();
+   claimAndVerifyRecoverAfterWake();
+   retainedClaimRecoversAfterWake();
+   for (auto method : {Method::Claim, Method::VerifyStart}) {

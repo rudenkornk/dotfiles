@@ -312,7 +312,7 @@ layout {
         on
     }
     always-center-single-column
-    center-focused-column "on-overflow"
+    center-focused-column "never"
     preset-column-widths {
         proportion 0.5
         proportion 0.99

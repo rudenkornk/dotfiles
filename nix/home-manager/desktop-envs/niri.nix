@@ -12,7 +12,9 @@ let
     ''
       output "${name}" {
         mode "${cfg.mode}"
-        position x=${toString cfg.position.x} y=${toString cfg.position.y}
+        ${lib.optionalString (
+          cfg ? position
+        ) "position x=${toString cfg.position.x} y=${toString cfg.position.y}"}
         scale ${toString cfg.scale}
       }
     '';

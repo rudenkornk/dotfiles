@@ -26,7 +26,6 @@ center = [
     "clipboard",
 ]
 concave_edge_corners = false
-enabled = true
 end = [
     "cpu",
     "network_rx",

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Monitor calibration</title>
+    <style>
+      @font-face {
+        font-family: CalibrationMono;
+        src: local("JetBrainsMonoNF-Regular");
+        font-weight: 400;
+        font-style: normal;
+      }
+      body {
+        margin: 32px;
+        color: #111;
+        background: #fff;
+        font: 16px/1.5 sans-serif;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+      .specimen {
+        margin: 36px 0;
+        overflow: auto;
+        padding: 12px 2px;
+      }
+      #reference {
+        position: relative;
+        display: inline-block;
+        white-space: pre;
+        font: 400 16px/24px CalibrationMono;
+        font-kerning: none;
+        font-variant-ligatures: none;
+        font-synthesis: none;
+        letter-spacing: 0;
+      }
+      #reference::before,
+      #reference::after {
+        content: "";
+        position: absolute;
+        top: -10px;
+        height: 44px;
+        border-left: 1px solid #b00020;
+      }
+      #reference::before {
+        left: 0;
+      }
+      #reference::after {
+        left: 100%;
+      }
+      #metrics {
+        white-space: pre-wrap;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 8px 16px 8px 0;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Monitor calibration</h1>
+    <p>
+      Reset browser zoom with <strong>Ctrl+0</strong>. Keep this window entirely
+      on the display being measured, and use your normal viewing distance.
+    </p>
+    <h2>1. Measure the reference line.</h2>
+    <p>
+      Measure between the left edges of the two red marks with a physical ruler.
+      Report the width in millimetres and whether the text feels comfortable.
+    </p>
+    <div class="specimen" hidden>
+      <span id="reference"
+        >The quick brown fox jumps over the lazy dog. 0123456789</span
+      >
+    </div>
+    <pre id="metrics" role="status">Loading the pinned font…</pre>
+    <h2>2. Compare readability.</h2>
+    <p>
+      Choose the smallest row that is comfortably readable, rather than merely
+      decipherable. Report its row number on each display.
+    </p>
+    <table hidden>
+      <thead>
+        <tr>
+          <th>Row</th>
+          <th>Logical font size</th>
+          <th>H raster height</th>
+          <th>Sample</th>
+        </tr>
+      </thead>
+      <tbody id="samples"></tbody>
+    </table>
+    <p>
+      The H column counts physical bitmap rows with at least 50% ink coverage in
+      a separately rendered capital H. Browser pixel ratio should match the Niri
+      scale on this display; report any mismatch before measuring.
+    </p>
+    <script>
+      const font = (size) => `400 ${size}px CalibrationMono`;
+      const screenName = new URLSearchParams(location.search).get("screen");
+      if (screenName) {
+        document.title += ` — ${screenName}`;
+        document.querySelector("h1").textContent = document.title;
+      }
+
+      function renderText(text, size, ratio) {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        context.font = font(size);
+        context.fontKerning = "none";
+        const width = Math.ceil(context.measureText(text).width + 4);
+        canvas.width = Math.ceil(width * ratio);
+        canvas.height = Math.ceil(32 * ratio);
+        canvas.style.width = `${canvas.width / ratio}px`;
+        canvas.style.height = `${canvas.height / ratio}px`;
+        context.scale(ratio, ratio);
+        context.font = font(size);
+        context.fontKerning = "none";
+        context.fillText(text, 2, 24);
+        return canvas;
+      }
+
+      function inkHeight(canvas) {
+        const { width, height } = canvas;
+        const pixels = canvas
+          .getContext("2d")
+          .getImageData(0, 0, width, height).data;
+        let first = height;
+        let last = -1;
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            if (pixels[(y * width + x) * 4 + 3] >= 128) {
+              first = Math.min(first, y);
+              last = Math.max(last, y);
+            }
+          }
+        }
+        return last < first ? 0 : last - first + 1;
+      }
+
+      function updateSamples() {
+        const ratio = window.devicePixelRatio;
+        const reference = document.querySelector("#reference");
+        const context = document.createElement("canvas").getContext("2d");
+        context.font = font(16);
+        const h = context.measureText("H");
+        document.querySelector("#metrics").textContent =
+          `Font: JetBrainsMono NF Regular, 16 logical px, no ligatures or kerning.\n` +
+          `Reference width: ${reference.getBoundingClientRect().width.toFixed(3)} logical px.\n` +
+          `H outline height: ${(h.actualBoundingBoxAscent + h.actualBoundingBoxDescent).toFixed(3)} logical px.\n` +
+          `Browser pixel ratio: ${ratio.toFixed(6)}. Reference H raster height: ${inkHeight(renderText("H", 16, ratio))} physical px.`;
+        document.querySelector("#samples").replaceChildren();
+        [24, 20, 18, 16, 14, 12, 10, 8].forEach((size, index) => {
+          const row = document.querySelector("#samples").insertRow();
+          row.insertCell().textContent = index + 1;
+          row.insertCell().textContent = `${size} px`;
+          row.insertCell().textContent = `${inkHeight(renderText("H", size, ratio))} px`;
+          row
+            .insertCell()
+            .append(renderText("Il1 O0 HAMBURG 0123456789", size, ratio));
+        });
+        matchMedia(`(resolution: ${ratio}dppx)`).addEventListener(
+          "change",
+          updateSamples,
+          { once: true },
+        );
+      }
+
+      document.fonts
+        .load(font(16))
+        .then(() => {
+          document.querySelector(".specimen").hidden = false;
+          document.querySelector("table").hidden = false;
+          updateSamples();
+        })
+        .catch((error) => {
+          document.querySelector("#metrics").textContent =
+            `Cannot load JetBrainsMono NF Regular: ${error.message}`;
+        });
+    </script>
+  </body>
+</html>

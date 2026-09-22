@@ -39,6 +39,7 @@ in
   monitors = {
     niri = import ./dellxps/niri_monitors.nix;
     externalAbove = "eDP-1";
+    autoScale = true;
   };
   noctalia = ./dellxps/noctalia.toml;
   gpu = {

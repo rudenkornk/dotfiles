@@ -8,6 +8,7 @@
 
 let
   externalAbove = host.monitors.externalAbove or null;
+  autoScale = host.monitors.autoScale or false;
   mkMonitorKdl =
     name: cfg: # kdl
     ''
@@ -16,7 +17,7 @@ let
         ${lib.optionalString (
           cfg ? position
         ) "position x=${toString cfg.position.x} y=${toString cfg.position.y}"}
-        scale ${toString cfg.scale}
+        ${lib.optionalString (cfg ? scale) "scale ${toString cfg.scale}"}
       }
     '';
   outputsKdl = lib.concatStringsSep "\n" (
@@ -47,7 +48,9 @@ in
       WantedBy = [ "niri.service" ];
     };
     Service = {
-      ExecStart = "${lib.getExe pkgs.python3} ${config.xdg.configHome}/niri/monitor_layout.py ${externalAbove}";
+      ExecStart =
+        "${lib.getExe pkgs.python3} ${config.xdg.configHome}/niri/monitor_layout.py ${externalAbove}"
+        + lib.optionalString autoScale " --auto-scale";
       Restart = "on-failure";
       RestartSec = 1;
     };

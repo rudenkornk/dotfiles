@@ -149,6 +149,10 @@ binds {
     Alt+Shift+H {
         focus-column-or-monitor-left
     }
+    Ctrl+Alt+1 {
+        // Ctrl+Alt+W on some laptops is not viable bind on a keyboard physical level.
+        spawn-sh "if [ $(niri msg -j outputs | jq 'length') -gt 1 ]; then niri msg action move-column-to-monitor-up; else niri msg action move-window-up-or-to-workspace-up; fi"
+    }
     Ctrl+Alt+W {
         spawn-sh "if [ $(niri msg -j outputs | jq 'length') -gt 1 ]; then niri msg action move-column-to-monitor-up; else niri msg action move-window-up-or-to-workspace-up; fi"
     }

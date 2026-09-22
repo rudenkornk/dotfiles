@@ -70,6 +70,7 @@ in
   monitors = {
     niri = import ./thinkpad/niri_monitors.nix;
     externalAbove = "eDP-1";
+    autoScale = true;
   };
   noctalia = ./thinkpad/noctalia.toml;
   gpu = {

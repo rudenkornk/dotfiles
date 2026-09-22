@@ -69,6 +69,7 @@ in
   inherit (facter) ramGiB;
   monitors = {
     niri = import ./thinkpad/niri_monitors.nix;
+    externalAbove = "eDP-1";
   };
   noctalia = ./thinkpad/noctalia.toml;
   gpu = {

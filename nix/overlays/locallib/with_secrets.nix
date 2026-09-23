@@ -9,25 +9,28 @@
 }:
 
 let
-  inherit (pkgs.lib) getExe getExe';
-  bash_secrets = import ./bash_secrets.nix { inherit pkgs; };
-  extra_secrets_loaded = map (secret: ''
-    # shellcheck source=/dev/null
-    source "$(${getExe pkgs.custom.sops-cached} ${secret})"
-  '') extraSecrets;
-  extra_secrets_script = builtins.concatStringsSep "\n" extra_secrets_loaded;
-  pkg_bin_path = if (binary == null) then (getExe pkg) else (getExe' pkg binary);
-  pkg_bin = builtins.baseNameOf pkg_bin_path;
+  inherit (pkgs) lib;
+  inherit (lib) getExe getExe';
+  binaryPath = if binary == null then getExe pkg else getExe' pkg binary;
+  binaryName = builtins.baseNameOf binaryPath;
+
+  secretsScript = import ./bash_secrets.nix { inherit pkgs; };
+  extraSecretsScript = builtins.concatStringsSep "\n" (
+    map (secret: ''
+      # shellcheck source=/dev/null
+      source "$(${getExe pkgs.custom.sops-cached} ${secret})"
+    '') extraSecrets
+  );
 in
-pkgs.writeScriptBin pkg_bin
+pkgs.writeScriptBin binaryName
   # bash
   ''
     #!${pkgs.stdenv.shell}
 
-    export PROXY_APP=${pkgs.lib.escapeShellArg pkg_bin}
-    ${bash_secrets}
-    ${extra_secrets_script}
+    export PROXY_APP=${lib.escapeShellArg binaryName}
+    ${secretsScript}
+    ${extraSecretsScript}
     ${extraScript}
 
-    exec ${pkg_bin_path} "$@"
+    exec ${binaryPath} "$@"
   ''

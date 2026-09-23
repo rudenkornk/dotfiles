@@ -24,6 +24,7 @@ pkgs.writeScriptBin pkg_bin
   ''
     #!${pkgs.stdenv.shell}
 
+    export PROXY_APP=${pkgs.lib.escapeShellArg pkg_bin}
     ${bash_secrets}
     ${extra_secrets_script}
     ${extraScript}

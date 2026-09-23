@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   inputs,
   hm_inputs,
@@ -20,6 +19,7 @@ in
     ./modules/merge-config/nixos.nix
     ./modules/secrets/nixos.nix
     ./disk.nix
+    ./virtualization.nix
   ];
 
   # This value determines the NixOS release from which the default
@@ -255,9 +255,7 @@ in
 
       hashedPassword = pkgs.lib.fileContents (pkgs.locallib.secrets + /hashedPasswordFile);
       extraGroups = [
-        "docker"
         "i2c"
-        "libvirtd"
         "networkmanager"
         "tss"
         "wheel"
@@ -344,19 +342,6 @@ in
           ];
       };
     };
-    virt-manager.enable = true;
-  };
-
-  virtualisation = {
-    containers.enable = true;
-    podman = {
-      enable = true;
-
-      # Required for containers under podman-compose to be able to talk to each other.
-      defaultNetwork.settings.dns_enabled = true;
-    };
-    docker.enable = true;
-    libvirtd.enable = true;
   };
 
   xdg.portal.extraPortals = [ ibus ];

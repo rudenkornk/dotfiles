@@ -1,15 +1,36 @@
-{ users, ... }:
+{
+  lib,
+  pkgs,
+  users,
+  ...
+}:
 
 {
   virtualisation = {
-    containers.enable = true;
+    containers = {
+      enable = true;
+      containersConf = {
+        settings = {
+          containers = {
+            http_proxy = false;
+          };
+        };
+      };
+    };
     podman = {
       enable = true;
+      package = pkgs.locallib.with_secrets { pkg = pkgs.podman; };
 
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
-    docker.enable = true;
+    docker = {
+      enable = true;
+      package = pkgs.locallib.with_secrets {
+        pkg = pkgs.docker;
+        binary = "dockerd";
+      };
+    };
     libvirtd.enable = true;
   };
 
@@ -22,4 +43,12 @@
     ];
   }) users;
 
+  systemd = {
+    services.docker = {
+      environment = {
+        HOME = "/root";
+        USERKIND = lib.mkDefault "default";
+      };
+    };
+  };
 }

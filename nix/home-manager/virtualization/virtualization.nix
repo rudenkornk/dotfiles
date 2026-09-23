@@ -4,13 +4,13 @@
 {
   home = {
     packages = with pkgs; [
+      (locallib.with_secrets { pkg = podman; })
       docker
       docker-compose
       k9s
       kubectl
       kubernetes
       minikube
-      podman
       qemu_full
       vagrant
     ];

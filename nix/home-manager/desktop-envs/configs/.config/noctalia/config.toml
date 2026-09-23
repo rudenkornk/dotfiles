@@ -27,13 +27,12 @@ center = [
 ]
 concave_edge_corners = false
 end = [
-    "cpu",
-    "network_rx",
-    "network_tx",
+    "group:g2",
     "brightness",
     "volume",
     "network",
     "bluetooth",
+    "caffeine",
     "power_profile",
     "battery",
     "session",
@@ -62,6 +61,21 @@ members = [
 opacity = 1.0
 padding = 6.0
 
+[[bar.main.capsule_group]]
+accordion = false
+accordion_direction = "end"
+enabled = true
+fill = "surface_variant"
+id = "g2"
+members = [
+    "cpu",
+    "network_rx",
+    "network_tx",
+    "disk",
+]
+opacity = 0.5
+padding = 6.0
+
 [battery]
 warning_threshold = 15
 
@@ -78,7 +92,6 @@ hidden_tabs = [
     "monitor",
     "weather",
 ]
-width = 750
 shortcuts = [
     { type = "bluetooth" },
     { type = "wifi" },
@@ -87,6 +100,7 @@ shortcuts = [
     { type = "noctalia/wallhaven:shortcut" },
     { type = "alexander/screen-toolkit:toggle" },
 ]
+width = 750
 
 [desktop_widgets]
 enabled = true

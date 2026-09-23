@@ -19,12 +19,14 @@ let
   pkg_bin_path = if (binary == null) then (getExe pkg) else (getExe' pkg binary);
   pkg_bin = builtins.baseNameOf pkg_bin_path;
 in
-pkgs.writeScriptBin pkg_bin ''
-  #!${pkgs.stdenv.shell}
+pkgs.writeScriptBin pkg_bin
+  # bash
+  ''
+    #!${pkgs.stdenv.shell}
 
-  ${bash_secrets}
-  ${extra_secrets_script}
-  ${extraScript}
+    ${bash_secrets}
+    ${extra_secrets_script}
+    ${extraScript}
 
-  exec ${pkg_bin_path} "$@"
-''
+    exec ${pkg_bin_path} "$@"
+  ''

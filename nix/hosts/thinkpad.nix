@@ -47,6 +47,16 @@ in
 
     services.fstrim.enable = true;
 
+    systemd = {
+      services = {
+        docker = {
+          environment = {
+            USERKIND = "corp";
+          };
+        };
+      };
+    };
+
     environment = {
       etc = {
         "ssl/certs/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;

@@ -47,6 +47,14 @@
     stateVersion = "26.05"; # Did you read the comment?
   };
 
+  systemd = {
+    user = {
+      sessionVariables = {
+        USERKIND = user.userkind;
+      };
+    };
+  };
+
   xdg = {
     enable = true;
   };

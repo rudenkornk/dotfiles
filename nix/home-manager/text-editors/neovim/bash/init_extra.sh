@@ -2,7 +2,7 @@
 # See neovim.fish for explanation.
 # Keep this unset list in sync with neovim.fish.
 if [[ -n "$NVIM" && -n "$MYVIMRC" ]]; then
-  unset FORCE_PROXY
+  unset PROXY_APP
   unset HTTP_PROXY
   unset HTTPS_PROXY
   unset http_proxy

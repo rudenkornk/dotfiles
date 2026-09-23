@@ -25,9 +25,9 @@
         "--run"
         # bash
         ''
-          FORCE_PROXY=true
+          PROXY_APP=nvim
           ${pkgs.locallib.bash_secrets}
-          unset FORCE_PROXY
+          unset PROXY_APP
 
           # Workaround for https://github.com/iamcco/markdown-preview.nvim/issues/737
           export NVIM_MKDP_LOG_FILE="/tmp/mkdp-nvim-$USER.log"

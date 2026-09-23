@@ -18,12 +18,19 @@
       a = "arc";
     };
 
-    sessionVariables = {
-      # CURL_CA_BUNDLE mess up with curl, blocking other non-copr requests.
-      # CURL_CA_BUNDLE = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
-      NODE_EXTRA_CA_CERTS = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
-      NSS_DEFAULT_SSL_DIR = "${config.xdg.dataHome}/ca-certificates/";
-    };
+    sessionVariables =
+      let
+        corpCacert = pkgs.cacert.override {
+          extraCertificateFiles = [ (pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt) ];
+        };
+      in
+      {
+        CERT_PATH = "${corpCacert}/etc/ssl/certs/ca-bundle.crt";
+        CURL_CA_BUNDLE = "${corpCacert}/etc/ssl/certs/ca-bundle.crt";
+        SSL_CERT_FILE = "${corpCacert}/etc/ssl/certs/ca-bundle.crt";
+        NODE_EXTRA_CA_CERTS = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
+        NSS_DEFAULT_SSL_DIR = "${config.xdg.dataHome}/ca-certificates/";
+      };
   };
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {
@@ -34,6 +41,7 @@
     dataFile = {
       "ca-certificates/YandexInternalRootCA.crt".source =
         pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt;
+      "ca-certificates/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
     };
   };
 

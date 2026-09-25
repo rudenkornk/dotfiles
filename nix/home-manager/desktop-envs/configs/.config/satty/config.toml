@@ -1,5 +1,5 @@
 [general]
-copy-command = "wl-copy"
+copy-command = "tee ~/Downloads/screenshots/latest.png | wl-copy"
 corner-roundness = 12
 fullscreen = false
 initial-tool = "rectangle"

@@ -3,6 +3,12 @@
 These are global rules.
 Follow them for all code, unless specific rules were overridden with project-local rules.
 
+# Math Formatting
+
+In responses intended for the OpenCode terminal UI, write equations in readable Unicode or plain text rather than LaTeX math
+delimiters (`$...$`, `$$...$$`, `\\(...\\)`, or `\\[...\\]`). Use ASCII when a Unicode expression would be unclear.
+When the user requests LaTeX source, or when editing a LaTeX file, preserve the requested syntax.
+
 # Implementation Scope and Complexity
 
 Prefer the most straightforward implementation for the current task.

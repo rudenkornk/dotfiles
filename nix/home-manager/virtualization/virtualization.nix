@@ -4,7 +4,6 @@
 {
   home = {
     packages = with pkgs; [
-      (locallib.with_secrets { pkg = podman; })
       docker
       docker-compose
       k9s
@@ -13,6 +12,16 @@
       minikube
       qemu_full
       vagrant
+
+      (locallib.with_secrets { pkg = podman; })
+      (wrapHelm kubernetes-helm {
+        plugins = with kubernetes-helmPlugins; [
+          helm-diff
+          helm-mapkubeapis
+          helm-secrets
+          helm-unittest
+        ];
+      })
     ];
 
     shellAliases = {

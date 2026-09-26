@@ -28,6 +28,10 @@ return {
     opts = require("plugins.configs.lspconfig").opts,
   },
   {
+    "mrcjkb/rustaceanvim",
+    opts = require("plugins.configs.rustaceanvim").opts,
+  },
+  {
     "nvim-lualine/lualine.nvim", -- Core UI plugin for statusline.
     opts = require("plugins.configs.lualine").opts,
   },

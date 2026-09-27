@@ -16,6 +16,8 @@ REFERENCE_WIDTH_LOGICAL_PX = 528.0
 CALIBRATION_POINTS = ((340 * 210, 60.775), (600 * 340, 94.875))
 # Row 6 on eDP-1: a 12 px font at 4/3 scale, equivalent to the reference at 1:1.
 MIN_REFERENCE_WIDTH_PHYSICAL_PX = 528.0
+# Niri rounds fractional logical dimensions up internally but truncates them in IPC replies.
+NIRI_FRACTIONAL_SIZE_PADDING = 1
 
 
 class LogicalOutput(TypedDict):
@@ -90,13 +92,13 @@ def apply_scales(request: Request, outputs: dict[str, Output], scales: dict[str,
 
 def positions(outputs: dict[str, LogicalOutput], main: str) -> dict[str, tuple[int, int]]:
     external = sorted(name for name in outputs if name != main)
-    width = sum(outputs[name]["width"] for name in external)
+    width = sum(outputs[name]["width"] + NIRI_FRACTIONAL_SIZE_PADDING for name in external)
     x = (outputs[main]["width"] - width) // 2 if main in outputs else 0
     bottom = 0 if main in outputs else max((output["height"] for output in outputs.values()), default=0)
     result = {}
     for name in external:
-        result[name] = (x, bottom - outputs[name]["height"])
-        x += outputs[name]["width"]
+        result[name] = (x, bottom - outputs[name]["height"] - NIRI_FRACTIONAL_SIZE_PADDING)
+        x += outputs[name]["width"] + NIRI_FRACTIONAL_SIZE_PADDING
     if main in outputs:
         result[main] = (0, 0)
     return result

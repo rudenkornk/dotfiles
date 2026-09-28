@@ -7,6 +7,15 @@
       gpu-screen-recorder
       pdfarranger
       shotcut # typos: ignore
+      (whisper-ctranslate2.override {
+        python3Packages = python313Packages.overrideScope (
+          _: prev: {
+            ctranslate2 = prev.ctranslate2.override {
+              ctranslate2-cpp = ctranslate2.override { withCUDA = host.gpu.cudaSupport or false; };
+            };
+          }
+        );
+      })
     ];
   };
 

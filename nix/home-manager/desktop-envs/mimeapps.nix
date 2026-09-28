@@ -7,7 +7,7 @@ _:
   xdg.mimeApps.defaultApplications =
     let
       browser = "firefox.desktop";
-      editor = "nvim.desktop";
+      editor = "org.gnome.TextEditor.desktop";
       video = "org.gnome.Showtime.desktop";
       image = "org.gnome.Loupe.desktop";
       audio = "org.gnome.Decibels.desktop";
@@ -23,6 +23,27 @@ _:
 
       "text/plain" = editor;
       "application/json" = editor;
+      "application/x-subrip" = editor;
+      "text/tab-separated-values" = editor;
+      "text/vtt" = editor;
+      "text/markdown" = editor;
+      "text/csv" = editor;
+      "application/yaml" = editor;
+      "application/xml" = editor;
+      "application/toml" = editor;
+      "application/x-shellscript" = editor;
+      "text/x-python" = editor;
+      "text/javascript" = editor;
+      "text/css" = editor;
+      "text/rust" = editor;
+      "text/x-go" = editor;
+      "text/x-lua" = editor;
+      "text/x-csrc" = editor;
+      "text/x-chdr" = editor;
+      "text/x-c++src" = editor;
+      "text/x-c++hdr" = editor;
+      "text/x-java" = editor;
+      "application/x-ruby" = editor;
 
       "video/mp4" = video;
       "video/x-matroska" = video;

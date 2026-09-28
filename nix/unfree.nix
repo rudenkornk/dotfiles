@@ -5,6 +5,7 @@ builtins.any (prefix: lib.hasPrefix prefix (lib.getName pkg)) [
   # nvidia-related stuff.
   "cuda-"
   "cuda_"
+  "cudnn"
   "libcu"
   "libnpp"
   "libnvjitlink"

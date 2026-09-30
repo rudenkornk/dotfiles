@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Per-tab agent STATUS icon (rendered after the tab name, via tmux-agent-label).
+# Per-pane agent status (rendered after the tab name, via tmux-agent-label).
 #
 # The option stores the semantic state name; all presentation (glyphs, colors)
 # lives in tmux-agent-label, which renders the option into the status line.
@@ -108,8 +108,8 @@ esac
 
 win="$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}' 2>/dev/null || true)"
 if [ -n "$win" ]; then
-  prev="$(tmux show-option -wqv -t "$win" @agent_status 2>/dev/null || true)"
-  tmux set-option -w -t "$win" @agent_status "$state"
+  prev="$(tmux show-option -pqv -t "$TMUX_PANE" @agent_status 2>/dev/null || true)"
+  tmux set-option -p -t "$TMUX_PANE" @agent_status "$state"
   # Force an immediate status redraw so the flip is instant.
   tmux refresh-client -S 2>/dev/null || true
   # Hooks must never see notification plumbing on stderr, and must not fail over it.

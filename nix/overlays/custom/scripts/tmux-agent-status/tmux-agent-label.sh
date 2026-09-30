@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The single tab-bar fragment: emits a window's agent icon + status icon.
+# The single tab-bar fragment: emits each agent pane's icon and status.
 # Invoked from tmux as: #(tmux-agent-label #{window_id})
 set -euo pipefail
 
@@ -95,27 +95,37 @@ detect_pane() {
   done < <(subtree_exes "$pid")
 }
 
-# Identity glyph for a whole window: first agent found across any of its panes.
-# Keying on the window (not the active pane) shows the icon regardless of focus.
-detect_window() {
-  local w="$1" pid out
-  while read -r pid; do
-    [ -n "$pid" ] || continue
-    out="$(detect_pane "$pid")"
-    if [ -n "$out" ]; then
-      printf '%s' "$out"
-      return 0
-    fi
-  done < <(tmux list-panes -t "$w" -F '#{pane_pid}' 2>/dev/null || true)
-}
+visible=0
+while read -r visible_win; do
+  if [ "$visible_win" = "$win" ]; then
+    visible=1
+    break
+  fi
+done < <(tmux list-clients -F '#{window_id}' 2>/dev/null || true)
 
-icon="$(detect_window "$win")"
-status="$(tmux show-option -wqv -t "$win" @agent_status 2>/dev/null || true)"
+has_agent=0
+while read -r pane pid; do
+  icon="$(detect_pane "$pid")"
+  status="$(tmux show-option -pqv -t "$pane" @agent_status 2>/dev/null || true)"
+  if [ -z "$icon" ]; then
+    [ -z "$status" ] || tmux set-option -pu -t "$pane" @agent_status 2>/dev/null || true
+    continue
+  fi
+  has_agent=1
 
-# No agent -> no label at all. Also drop a leftover status, so an agent
-# started later in this window does not inherit its predecessor's state.
-if [ -z "$icon" ]; then
-  [ -z "$status" ] || tmux set-option -wu -t "$win" @agent_status 2>/dev/null || true
+  if [ "$status" = "done" ] && [ "$visible" = 1 ]; then
+    tmux set-option -pu -t "$pane" @agent_status 2>/dev/null || true
+    status=""
+  fi
+
+  # The agent icon carries its brand color as a leading `#[fg=#rrggbb]`.
+  agent_color="${icon#*fg=}"
+  agent_color="${agent_color%%]*}"
+  status_out="$(render_status "$status" "$agent_color")"
+  printf ' %s%s' "$icon" "$status_out"
+done < <(tmux list-panes -t "$win" -F '#{pane_id} #{pane_pid}' 2>/dev/null || true)
+
+if [ "$has_agent" = 0 ]; then
   # `@agent_name_user` is the ownership marker set by tmux-agent-name on its first attempt:
   # absent means the window's name was never touched and is not ours to manage.
   # Present means restore the saved tab name (or re-enable auto-naming for the
@@ -131,28 +141,4 @@ if [ -z "$icon" ]; then
       tmux rename-window -t "$win" "$user_name" 2>/dev/null || true
     fi
   fi
-  exit 0
-fi
-
-if [ "$status" = "done" ]; then
-  while read -r visible_win; do
-    if [ "$visible_win" = "$win" ]; then
-      tmux set-option -wu -t "$win" @agent_status 2>/dev/null || true
-      status=""
-      break
-    fi
-  done < <(tmux list-clients -F '#{window_id}' 2>/dev/null || true)
-fi
-
-# The agent icon carries its brand color as a leading `#[fg=#rrggbb]`; extract it
-# so the running status glyph can be tinted to match.
-agent_color="${icon#*fg=}"
-agent_color="${agent_color%%]*}"
-
-# Leading space separates the label from the window name.
-status_out="$(render_status "$status" "$agent_color")"
-if [ -n "$status_out" ]; then
-  printf ' %s%s' "$icon" "$status_out"
-else
-  printf ' %s' "$icon"
 fi

@@ -64,117 +64,116 @@
       },
     },
 
-    // An explicit `model` short-circuits the chain that would otherwise supply a variant, so each entry pins one.
+    // Explicit models bypass the built-in reasoning defaults, so each entry pins its effort.
     "agents": {
       "sisyphus": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "medium",
-        // GLM 5.2 is the only orchestrator reachable here that upstream still calibrates a prompt for.
-        "fallback_models": [
-          "openrouter/z-ai/glm-5.2:free",
-          "openrouter/z-ai/glm-5.2",
+        "models": [
+          { "model": "openai/gpt-6.1-sol", "reasoning": "medium" },
+          { "model": "openai/gpt-6-sol", "reasoning": "medium" },
+          { "model": "openai/gpt-5.6-sol", "reasoning": "medium" },
         ],
       },
-      // A non-GPT model reroutes Hephaestus to Sisyphus, so a fallback chain would never fire.
+      // Hephaestus stays GPT-only because other families reroute to Sisyphus.
       "hephaestus": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "medium",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "medium",
       },
       "oracle": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "xhigh",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "xhigh",
       },
-      // Upstream offers no OpenAI rung for either agent, and Metis also loses its prompt, hence the extra effort.
+      // Upstream offers no OpenAI rung for either planning role; these are deliberate OpenAI-only substitutions.
       "prometheus": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "max",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "max",
       },
       "metis": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "max",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "max",
       },
       "momus": {
-        "model": "openai/gpt-5.6-terra-fast",
-        "variant": "high",
+        "model": "openai/gpt-6-astra",
+        "reasoning": "xhigh",
       },
       "atlas": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "medium",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "medium",
       },
       "sisyphus-junior": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "medium",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "medium",
       },
       "multimodal-looker": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "low",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "low",
       },
       "explore": {
-        "model": "openai/gpt-5.6-luna-fast",
-        "variant": "low",
-        // NOTE: A variant survives a fallback entry only in object form; `model:max` is dropped when parsed.
-        "fallback_models": [
+        "models": [
+          { "model": "openai/gpt-6-luna", "reasoning": "low" },
           {
-            "model": "openrouter/deepseek/deepseek-v4-flash",
-            "variant": "max",
+            "model": "openrouter/deepseek/deepseek-v4.1-flash",
+            "reasoning": "max",
           },
-          { "model": "deepseek/deepseek-v4-flash", "variant": "max" },
+          { "model": "deepseek/deepseek-flash", "reasoning": "max" },
         ],
       },
       "librarian": {
-        "model": "openai/gpt-5.6-luna-fast",
-        "variant": "low",
-        "fallback_models": [
+        "models": [
+          { "model": "openai/gpt-6-luna", "reasoning": "low" },
           {
-            "model": "openrouter/deepseek/deepseek-v4-flash",
-            "variant": "max",
+            "model": "openrouter/deepseek/deepseek-v4.1-flash",
+            "reasoning": "max",
           },
-          { "model": "deepseek/deepseek-v4-flash", "variant": "max" },
+          { "model": "deepseek/deepseek-flash", "reasoning": "max" },
         ],
       },
     },
 
     "categories": {
       "deep-low": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "medium",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "medium",
+      },
+      "deep-high": {
+        "model": "openai/gpt-6-astra",
+        "reasoning": "xhigh",
       },
       "ultrabrain": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "max",
+        "model": "openai/gpt-6-astra",
+        "reasoning": "max",
       },
+      // Upstream prefers Claude/Kimi here; Sol keeps the general implementation lane on OpenAI.
       "unspecified-high": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "high",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "high",
       },
+      // These creative lanes also substitute Sol for upstream's Claude/Kimi choices.
       "visual-engineering": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "medium",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "medium",
       },
-      // Every rung of the built-in chain is unreachable here, which otherwise hides this category.
       "artistry": {
-        "model": "openai/gpt-5.6-sol-fast",
-        "variant": "xhigh",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "xhigh",
       },
+      // Terra is upstream's OpenAI rung, but Sol 6.1 costs less and avoids a separate legacy tier.
       "unspecified-low": {
-        "model": "openai/gpt-5.6-luna-fast",
-        "variant": "xhigh",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "medium",
       },
-      // The built-in chain lands on Gemini, off the subscription.
+      // The built-in writing chain is Claude-only, so this category needs an explicit OpenAI substitution.
       "writing": {
-        "model": "openai/gpt-5.6-terra-fast",
-        "variant": "medium",
+        "model": "openai/gpt-6.1-sol",
+        "reasoning": "medium",
       },
-      // The built-in GPT rung sits under a `quotio-openai` provider, unavailable here.
       "quick": {
-        "model": "openai/gpt-5.6-luna-fast",
-        "variant": "low",
-        "fallback_models": [
+        "models": [
+          { "model": "openai/gpt-6-luna", "reasoning": "low" },
           {
-            "model": "openrouter/deepseek/deepseek-v4-flash",
-            "variant": "off",
+            "model": "openrouter/deepseek/deepseek-v4.1-flash",
+            "reasoning": "off",
           },
-          { "model": "deepseek/deepseek-v4-flash", "variant": "off" },
+          { "model": "deepseek/deepseek-flash", "reasoning": "off" },
         ],
       },
     },

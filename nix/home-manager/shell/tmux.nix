@@ -105,6 +105,9 @@
   };
 
   programs.fish = {
-    interactiveShellInit = builtins.readFile ./tmux/fish/conf.d/tmux.fish;
+    interactiveShellInit = ''
+      ${builtins.readFile ./tmux/fish/conf.d/tmux.fish}
+      source ${./tmux/fish}/conf.d/tasks.fish
+    '';
   };
 }

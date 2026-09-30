@@ -1,7 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": false,
-  "plugin": ["@slkiser/opencode-quota@4.10.6"],
   "subagent_depth": 2,
   "permission": {
     "external_directory": {

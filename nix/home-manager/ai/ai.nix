@@ -11,6 +11,7 @@ let
 
   opencode-omo = pkgs.writeShellScriptBin "opencode-omo" ''
     export OPENCODE_CONFIG=${./opencode.omo.jsonc}
+    export OPENCODE_TUI_CONFIG=${./tui.omo.jsonc}
     export OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true # `omo` serves `~/.claude` through its own compatibility layer.
 
     # `omo` consults `PATH` only as a last resort, behind a Node version gate it does not need.
@@ -55,7 +56,14 @@ in
         pkg = nur.repos.charmbracelet.crush;
         binary = "crush";
       })
-      (locallib.with_secrets { pkg = unstable.opencode; })
+      (locallib.with_secrets {
+        pkg = unstable.opencode;
+        extraScript = # bash
+          ''
+            export OPENCODE_CONFIG=${./opencode.regular.jsonc}
+            export OPENCODE_TUI_CONFIG=${./tui.regular.jsonc}
+          '';
+      })
       (locallib.with_secrets { pkg = opencode-omo; })
       (locallib.with_secrets { pkg = qwen-code; })
 

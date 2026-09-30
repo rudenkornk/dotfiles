@@ -228,7 +228,10 @@ in
           # Right now fingerprints on linux is a security theater.
           # Still better than typing a long password every time though.
           fprintAuth = true;
-          rules.auth.fprintd.settings.timeout = -1;
+          rules.auth.fprintd.settings = {
+            timeout = -1;
+            max-tries = 21;
+          };
         };
       };
     };

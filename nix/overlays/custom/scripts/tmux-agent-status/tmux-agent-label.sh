@@ -125,6 +125,16 @@ if [ -z "$icon" ]; then
   exit 0
 fi
 
+if [ "$status" = "done" ]; then
+  while read -r visible_win; do
+    if [ "$visible_win" = "$win" ]; then
+      tmux set-option -wu -t "$win" @agent_status 2>/dev/null || true
+      status=""
+      break
+    fi
+  done < <(tmux list-clients -F '#{window_id}' 2>/dev/null || true)
+fi
+
 # The agent icon carries its brand color as a leading `#[fg=#rrggbb]`; extract it
 # so the running status glyph can be tinted to match.
 agent_color="${icon#*fg=}"

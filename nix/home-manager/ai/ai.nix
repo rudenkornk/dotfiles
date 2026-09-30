@@ -13,8 +13,7 @@ let
     export OPENCODE_CONFIG=${./opencode.omo.jsonc}
     export OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true # `omo` serves `~/.claude` through its own compatibility layer.
 
-    # `omo` consults `PATH` for these only as a last resort, behind a Node version gate it does not need.
-    export OMO_CODEGRAPH_BIN=${pkgs.unstable.codegraph}/bin/codegraph
+    # `omo` consults `PATH` only as a last resort, behind a Node version gate it does not need.
     export OMO_AST_GREP_SG_PATH=${pkgs.ast-grep}/bin/ast-grep
 
     exec -a opencode-omo ${pkgs.lib.getExe pkgs.unstable.opencode} "$@"
@@ -62,7 +61,6 @@ in
 
       mcp-nixos
       custom.playwright-cli
-      unstable.codegraph
     ];
   };
 

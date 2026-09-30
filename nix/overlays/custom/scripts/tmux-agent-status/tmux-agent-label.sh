@@ -95,6 +95,15 @@ detect_pane() {
   done < <(subtree_exes "$pid")
 }
 
+render_entry() {
+  local icon="$1" status="$2" agent_color status_out
+  # The agent icon carries its brand color as a leading `#[fg=#rrggbb]`.
+  agent_color="${icon#*fg=}"
+  agent_color="${agent_color%%]*}"
+  status_out="$(render_status "$status" "$agent_color")"
+  printf ' %s%s' "$icon" "$status_out"
+}
+
 visible=0
 while read -r visible_win; do
   if [ "$visible_win" = "$win" ]; then
@@ -118,11 +127,7 @@ while read -r pane pid; do
     status=""
   fi
 
-  # The agent icon carries its brand color as a leading `#[fg=#rrggbb]`.
-  agent_color="${icon#*fg=}"
-  agent_color="${agent_color%%]*}"
-  status_out="$(render_status "$status" "$agent_color")"
-  printf ' %s%s' "$icon" "$status_out"
+  render_entry "$icon" "$status"
 done < <(tmux list-panes -t "$win" -F '#{pane_id} #{pane_pid}' 2>/dev/null || true)
 
 if [ "$has_agent" = 0 ]; then

@@ -60,6 +60,16 @@ maybe_notify() {
     "$(tmux display-message -p -t "$win" '#{window_name}' 2>/dev/null || true)" || true
 }
 
+update_status() {
+  local prev
+  prev="$(tmux show-option -pqv -t "$TMUX_PANE" @agent_status 2>/dev/null || true)"
+  tmux set-option -p -t "$TMUX_PANE" @agent_status "$state"
+  # Force an immediate status redraw so the flip is instant.
+  tmux refresh-client -S 2>/dev/null || true
+  # Hooks must never see notification plumbing on stderr, and must not fail over it.
+  maybe_notify "$state" "$prev" "$win" 2>/dev/null || true
+}
+
 cmd="${1:-}"
 [ $# -gt 0 ] && shift || true
 
@@ -108,12 +118,7 @@ esac
 
 win="$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}' 2>/dev/null || true)"
 if [ -n "$win" ]; then
-  prev="$(tmux show-option -pqv -t "$TMUX_PANE" @agent_status 2>/dev/null || true)"
-  tmux set-option -p -t "$TMUX_PANE" @agent_status "$state"
-  # Force an immediate status redraw so the flip is instant.
-  tmux refresh-client -S 2>/dev/null || true
-  # Hooks must never see notification plumbing on stderr, and must not fail over it.
-  maybe_notify "$state" "$prev" "$win" 2>/dev/null || true
+  update_status
 fi
 
 finish

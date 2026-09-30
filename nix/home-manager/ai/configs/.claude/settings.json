@@ -1,6 +1,7 @@
 {
   "permissions": {
     "allow": [
+      "Read(~/.cargo/registry/**)",
       "Read(~/projects/dotfiles/**)",
       "Read(~/projects/arcadia*/**)",
       "Read(~/projects/cloudia*/**)"

@@ -4,6 +4,7 @@
 {
   home.packages = with pkgs; [
     curl
+    libnotify
     moreutils
     patch
     uutils-coreutils-noprefix

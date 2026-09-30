@@ -84,19 +84,28 @@ subtree_exes() {
   }'
 }
 
+detect_pane() {
+  local pid="$1" tok out
+  while read -r tok; do
+    out="$(match_agent "$tok")"
+    if [ -n "$out" ]; then
+      printf '%s' "$out"
+      return 0
+    fi
+  done < <(subtree_exes "$pid")
+}
+
 # Identity glyph for a whole window: first agent found across any of its panes.
 # Keying on the window (not the active pane) shows the icon regardless of focus.
 detect_window() {
-  local w="$1" pid tok out
+  local w="$1" pid out
   while read -r pid; do
     [ -n "$pid" ] || continue
-    while read -r tok; do
-      out="$(match_agent "$tok")"
-      if [ -n "$out" ]; then
-        printf '%s' "$out"
-        return 0
-      fi
-    done < <(subtree_exes "$pid")
+    out="$(detect_pane "$pid")"
+    if [ -n "$out" ]; then
+      printf '%s' "$out"
+      return 0
+    fi
   done < <(tmux list-panes -t "$w" -F '#{pane_pid}' 2>/dev/null || true)
 }
 

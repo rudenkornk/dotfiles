@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v4.19.4/assets/omo.schema.json",
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v5.1.5/assets/omo.schema.json",
 
   // Rewrites of this file fail against the read-only store path, and an unmarked migration retries on every start.
   "_migrations": [
@@ -35,26 +35,14 @@
       "provider": "playwright-cli", // The default provider launches its MCP through `npx`.
     },
 
-    "codegraph": {
-      "enabled": true,
-      "auto_init": true,
-      "auto_provision": false,
-      "daemon": true,
-      "telemetry": false,
-    },
-
     "git_master": {
       "commit_footer": false,
       "include_co_authored_by": false,
       "git_env_prefix": "", // A non-empty prefix rewrites the git commands inside the skill text.
     },
 
-    "start_work": {
+    "ulw_execute": {
       "auto_commit": false,
-    },
-
-    "tmux": {
-      "enabled": false,
     },
 
     "experimental": {
@@ -147,7 +135,7 @@
     },
 
     "categories": {
-      "deep": {
+      "deep-low": {
         "model": "openai/gpt-5.6-sol-fast",
         "variant": "medium",
       },

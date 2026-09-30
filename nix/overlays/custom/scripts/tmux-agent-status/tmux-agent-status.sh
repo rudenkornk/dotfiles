@@ -5,6 +5,7 @@
 # lives in tmux-agent-label, which renders the option into the status line.
 #
 # Usage: agent-status set --state <running|waiting|done|error|clear> [--emit-json]
+# Optional: --agent process.
 set -euo pipefail
 
 # Fire a desktop notification when the agent needs attention but its tmux session is not on screen.
@@ -51,11 +52,9 @@ maybe_notify() {
     fi
   done < <(tmux list-clients -t "$TMUX_PANE" -F '#{client_pid}' 2>/dev/null || true)
 
-  # The pane's foreground process is the agent itself: hooks run while it is still alive.
   local agent
   agent="$(tmux display-message -p -t "$TMUX_PANE" '#{pane_current_command}' 2>/dev/null || true)"
   agent="${agent:-AI agent}"
-  # The window name (usually the AI-derived tab name) tells which task this is about.
   notify-send -a "$agent" -u normal "$agent $state" \
     "$(tmux display-message -p -t "$win" '#{window_name}' 2>/dev/null || true)" || true
 }
@@ -63,7 +62,8 @@ maybe_notify() {
 update_status() {
   local prev
   prev="$(tmux show-option -pqv -t "$TMUX_PANE" @agent_status 2>/dev/null || true)"
-  tmux set-option -p -t "$TMUX_PANE" @agent_status "$state"
+  tmux set-option -p -t "$TMUX_PANE" @agent_type "$agent_type" \; \
+    set-option -p -t "$TMUX_PANE" @agent_status "$state"
   # Force an immediate status redraw so the flip is instant.
   tmux refresh-client -S 2>/dev/null || true
   # Hooks must never see notification plumbing on stderr, and must not fail over it.
@@ -75,6 +75,7 @@ cmd="${1:-}"
 
 state=""
 emit_json=0
+agent_type=""
 
 if [ "$cmd" = "set" ]; then
   while [ $# -gt 0 ]; do
@@ -86,6 +87,10 @@ if [ "$cmd" = "set" ]; then
     --emit-json)
       emit_json=1
       shift
+      ;;
+    --agent)
+      agent_type="${2:?}"
+      shift 2
       ;;
     *) shift ;;
     esac
@@ -115,6 +120,12 @@ case "$state" in
 running | waiting | done | error) : ;;
 *) state="" ;; # clear / unknown.
 esac
+
+case "$agent_type" in
+"" | process) : ;;
+*) exit 1 ;;
+esac
+[ -n "$state" ] || agent_type=""
 
 win="$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}' 2>/dev/null || true)"
 if [ -n "$win" ]; then

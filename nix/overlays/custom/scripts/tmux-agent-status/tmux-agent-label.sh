@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The single tab-bar fragment: emits each agent pane's icon and status.
+# The single tab-bar fragment: emits each pane's detected or explicit agent entry.
 # Invoked from tmux as: #(tmux-agent-label #{window_id})
 set -euo pipefail
 
@@ -14,7 +14,7 @@ win="${1:-}"
 #   fae-radioactive (U+E238).
 #   fa-flask (U+F0C3).
 
-# Map one candidate executable token (see subtree_exes) to the agent's identity glyph.
+# Map one candidate executable token (see subtree_exes) to an agent identity.
 match_agent() {
   local base="${1##*/}"
   base="${base#.}"
@@ -23,12 +23,20 @@ match_agent() {
   base="${base%.mjs}"
   base="${base%.cjs}"
   case "$base" in
+  cursor-agent | claude | codex | gemini | opencode-omo | opencode) printf '%s' "$base" ;;
+  *) : ;;
+  esac
+}
+
+render_agent() {
+  case "$1" in
   cursor-agent) printf '#[fg=#dadada] #[fg=default]' ;;
   claude) printf '#[fg=#d97757] #[fg=default]' ;;
   codex) printf '#[fg=#10a37f] #[fg=default]' ;;
   gemini) printf '#[fg=#4796e3] #[fg=default]' ;;
   opencode-omo) printf '#[fg=##6ff7f7] #[fg=default]' ;;
   opencode) printf '#[fg=#9aa5ce]󱞟 #[fg=default]' ;;
+  process) printf '#[fg=#7aa2f7] #[fg=default]' ;;
   *) : ;;
   esac
 }
@@ -85,7 +93,12 @@ subtree_exes() {
 }
 
 detect_pane() {
-  local pid="$1" tok out
+  local pane="$1" pid="$2" agent tok out
+  agent="$(tmux show-option -pqv -t "$pane" @agent_type 2>/dev/null || true)"
+  if [ "$agent" = process ]; then
+    printf '%s' "$agent"
+    return 0
+  fi
   while read -r tok; do
     out="$(match_agent "$tok")"
     if [ -n "$out" ]; then
@@ -114,20 +127,22 @@ done < <(tmux list-clients -F '#{window_id}' 2>/dev/null || true)
 
 has_agent=0
 while read -r pane pid; do
-  icon="$(detect_pane "$pid")"
+  agent="$(detect_pane "$pane" "$pid")"
   status="$(tmux show-option -pqv -t "$pane" @agent_status 2>/dev/null || true)"
-  if [ -z "$icon" ]; then
+  if [ -z "$agent" ]; then
     [ -z "$status" ] || tmux set-option -pu -t "$pane" @agent_status 2>/dev/null || true
     continue
   fi
-  has_agent=1
+  [ "$agent" = process ] || has_agent=1
 
   if [ "$status" = "done" ] && [ "$visible" = 1 ]; then
-    tmux set-option -pu -t "$pane" @agent_status 2>/dev/null || true
+    tmux set-option -pu -t "$pane" @agent_status \; \
+      set-option -pu -t "$pane" @agent_type 2>/dev/null || true
     status=""
   fi
 
-  render_entry "$icon" "$status"
+  [ "$agent" != process ] || [ -n "$status" ] || continue
+  render_entry "$(render_agent "$agent")" "$status"
 done < <(tmux list-panes -t "$win" -F '#{pane_id} #{pane_pid}' 2>/dev/null || true)
 
 if [ "$has_agent" = 0 ]; then

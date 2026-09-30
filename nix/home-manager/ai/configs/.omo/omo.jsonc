@@ -42,7 +42,7 @@
     },
 
     "ulw_execute": {
-      "auto_commit": false,
+      "auto_commit": true,
     },
 
     "experimental": {

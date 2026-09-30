@@ -11,6 +11,7 @@ extends = ":workspace"
 
 [permissions.development.filesystem]
 glob_scan_max_depth = 3
+"~/.cargo/registry" = "read"
 # codex has a stupid bug at startup, which makes it awkwardly fail if it cannot grep denied dirs 🤦
 # We need to keep explicit "user/1000" because of it.
 # Similar issue: github.com/openai/codex/issues/37390

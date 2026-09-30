@@ -15,6 +15,7 @@
       "~/projects/nixpkgs/**": "allow",
 
       "~/.cache/**": "allow",
+      "~/.cargo/registry/**": "allow",
       "~/.config/**": "allow",
       "~/.local/share/**": "allow",
       "~/.local/state/**": "allow",

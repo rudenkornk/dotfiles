@@ -75,9 +75,10 @@ While being decently generic, this config focuses more on some tools rather than
    while still being "blazingly fast", thanks to lazy-loading.
 1. **`tmux`**.
    `tmux` integrates with `Neovim`, which allows to seamlessly use keys for moving around and resizing windows.
-1. **`fish`**.
-   Main shell in this config is `fish`, which integrates with interactive `fzf`, `ripgrep` and `bat`.
-   There is some support for `bash` though.
+1. **Shells**.
+   `zsh` and `fish` integrate with interactive `fzf`, `ripgrep`, `bat` and `Atuin`.
+   Fish remains available, including its `fish_remove_path` helper for fish-specific universal PATH entries.
+   There is also some support for `bash`.
 1. **`C++`**.
    Config provides releases of `cmake`, `LLVM` and `GCC` toolchains as well as editor support.
 1. Config also provides some support for **`Python`**, **`LaTeX`** and **`Lua`**.

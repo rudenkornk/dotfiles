@@ -25,7 +25,7 @@
   # ctrl-d delete one char.
   # ctrl-e end of the line.
   # ctrl-f one char forward.
-  # ctrl-g fzf git.
+  # Ctrl-G opens lazygit.
   # ctrl-h goto left window.
   # ctrl-i tab (shell reserved).
   # ctrl-j goto lower window.
@@ -36,14 +36,14 @@
   # ctrl-o fzf nix-search-tv.
   # ctrl-p previous history command.
   # ctrl-q fzf search text.
-  # ctrl-r fzf command history.
+  # Ctrl-R searches Atuin history.
   # ctrl-s tmux reserved.
   # ctrl-t fzf search files.
   # ctrl-u delete all to the left.
   # ctrl-v fzf search tldr (previously paste).
   # ctrl-w delete one word to the left.
   # ctrl-x fzf search processes (previously copy fish command).
-  # ctrl-y fzf yazi.
+  # Ctrl-Y opens Yazi.
   # ctrl-z undo.
 
 }

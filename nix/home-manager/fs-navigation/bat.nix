@@ -14,6 +14,10 @@ _: {
       };
     };
 
+    zsh = {
+      initContent = builtins.readFile ./zsh/functions/b.zsh;
+    };
+
   };
 
   home.sessionVariables = {

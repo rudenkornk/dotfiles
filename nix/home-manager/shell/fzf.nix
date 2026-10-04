@@ -346,8 +346,10 @@ in
         zle -N _fzf_tldr_widget
         bindkey '^v' _fzf_tldr_widget
 
-        # ctrl-x is a prefix key in zsh (exchange-point-and-mark / execute-named-cmd)
-        # and overriding it would break zsh line-editing conventions.
+        function _fzf_ps_widget() { ${psScript}; echo; zle reset-prompt }
+        zle -N _fzf_ps_widget
+        bindkey -M emacs -rp '^X' # Remove prefix sequences so Ctrl-X does not wait for another key.
+        bindkey -M emacs '^X' _fzf_ps_widget
       '';
 
     nushell.extraConfig = # nu

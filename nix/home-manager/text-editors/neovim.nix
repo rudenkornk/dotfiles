@@ -152,5 +152,8 @@
     bash = {
       initExtra = builtins.readFile ./neovim/bash/init_extra.sh;
     };
+    zsh = {
+      initContent = builtins.readFile ./neovim/bash/init_extra.sh;
+    };
   };
 }

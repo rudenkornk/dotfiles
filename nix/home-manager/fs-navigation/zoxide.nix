@@ -15,5 +15,8 @@ _: {
         };
       };
     };
+    zsh = {
+      initContent = builtins.readFile ./zsh/functions/c.zsh;
+    };
   };
 }

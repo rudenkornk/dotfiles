@@ -5,18 +5,7 @@ set -q TMUX TMUX_PANE; or return
 test "$(tmux display-message -p -t "$TMUX_PANE" '#{pane_pid}')" = "$fish_pid"; or return
 
 set -q tmux_task_min_duration_ms; or set -g tmux_task_min_duration_ms 10000
-set -q tmux_task_exclude; or set -g tmux_task_exclude (string join '' \
-    '(^|[\s;|&])(\S*/)?(' \
-    'claude|codex|gemini|opencode|opencode-omo|cursor-agent|pi|grok|q|kiro-cli|aider|goose|amp|crush|copilot|' \
-    'nvim|vim|vi|emacs|nano|ed|ex|view|nview|hx|helix|micro|kak|kakoune|ne|joe|jed|mg|vis|nvr|' \
-    'less|more|man|most|w3m|lynx|links|elinks|info|fzf|atuin|' \
-    'yazi|ranger|mc|nnn|lf|broot|btop|htop|top|watch|nethogs|iftop|iotop|nvtop|glances|' \
-    'lazygit|tig|gitui|lazydocker|ssh|mosh|tmux|screen|' \
-    '(git|g)[[:space:]]+(log|l|lg|ll|llg|ls|diff|df|sg|show|sh|blame|bl|branch|br|reflog)|' \
-    'jupyter(\s+|-)(lab|notebook|console|qtconsole)|ipython|bpython|ptpython|ptipython|irb|pry|ghci|iex|' \
-    'sing-box|sing-box-run|openvpn|openvpn-corp-run|openconnect|openconnect-corp-run|' \
-    'fish|bash|zsh|sh|nu|elvish|dash|ash|ksh|mksh|yash|csh|tcsh|xonsh|nushell|pwsh|exec|exit' \
-    ')([\s;|&]|$)')
+set -q tmux_task_exclude; or set -g tmux_task_exclude (tr -d '\n' <(status dirname)/../../task-exclude.regex)
 
 set -g __tmux_task_timer (path resolve (status dirname)/../task-timer.fish)
 set -g __tmux_task_lock "fish-task-$TMUX_PANE"

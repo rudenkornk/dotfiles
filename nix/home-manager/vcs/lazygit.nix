@@ -49,7 +49,9 @@ _: {
     zsh.initContent =
       # zsh
       ''
-        # ctrl-g is the abort key in zsh (cancel current operation) and should not be overridden.
+        function _lazygit_widget() { lazygit; zle reset-prompt }
+        zle -N _lazygit_widget
+        bindkey '^g' _lazygit_widget
       '';
 
     nushell.extraConfig =

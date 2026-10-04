@@ -46,6 +46,16 @@
   };
 
   programs = lib.optionalAttrs (user.userkind == "corp") {
+    zsh.initContent = lib.mkMerge [
+      # zsh
+      ''
+        source "$(${lib.getExe pkgs.custom.sops-cached} ${pkgs.locallib.secrets + /corp/env.sh.sops})"
+        source "$(${pkgs.lib.getExe pkgs.custom.sops-cached} ${
+          pkgs.locallib.secrets + /corp/tokens.sh.sops
+        })"
+      ''
+      (lib.mkOrder 1150 (builtins.readFile ./zsh/functions/g.zsh))
+    ];
     fish = {
       functions.g = {
         wraps = "git";

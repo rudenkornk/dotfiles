@@ -155,5 +155,8 @@
     zsh = {
       initContent = builtins.readFile ./neovim/bash/init_extra.sh;
     };
+    nushell = {
+      extraConfig = builtins.readFile ./neovim/nushell/init.nu;
+    };
   };
 }

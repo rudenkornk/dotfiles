@@ -119,12 +119,15 @@
   local = {
     secrets = {
       file = {
-        "/run/user/0/secrets/osquery/enroll_secret".source =
-          pkgs.locallib.secrets + /corp/osquery_enroll_secret.sops;
-        "/run/user/0/secrets/osquery/environment_file".source =
-          pkgs.locallib.secrets + /corp/osquery_environment_file.sops;
+        "/run/user/0/secrets/osquery/enroll_secret" = {
+          source = pkgs.locallib.secrets + /corp/osquery_enroll_secret.sops;
+          before = [ "osqueryd.service" ];
+        };
+        "/run/user/0/secrets/osquery/environment_file" = {
+          source = pkgs.locallib.secrets + /corp/osquery_environment_file.sops;
+          before = [ "osqueryd.service" ];
+        };
       };
-      before = [ "osqueryd.service" ];
     };
   };
 }

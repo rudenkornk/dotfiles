@@ -65,13 +65,19 @@ in
     local = {
       secrets = {
         file = {
-          "/etc/NetworkManager/system-connections/corp_wifi.nmconnection".source =
-            pkgs.locallib.secrets + /corp/corp_wifi.nmconnection.sops;
-          "/etc/tpm2_pkcs11/tpm2_pkcs11.sqlite3".source =
-            pkgs.locallib.secrets + /corp/tpm2_pkcs11.sqlite3.sops;
-          "/run/user/0/secrets/rudenkornk.pem".source = pkgs.locallib.secrets + /corp/rudenkornk.pem.sops;
+          "/etc/NetworkManager/system-connections/corp_wifi.nmconnection" = {
+            source = pkgs.locallib.secrets + /corp/corp_wifi.nmconnection.sops;
+            before = [ "NetworkManager.service" ];
+          };
+          "/etc/tpm2_pkcs11/tpm2_pkcs11.sqlite3" = {
+            source = pkgs.locallib.secrets + /corp/tpm2_pkcs11.sqlite3.sops;
+            before = [ "NetworkManager.service" ];
+          };
+          "/run/user/0/secrets/rudenkornk.pem" = {
+            source = pkgs.locallib.secrets + /corp/rudenkornk.pem.sops;
+            before = [ "NetworkManager.service" ];
+          };
         };
-        before = [ "NetworkManager.service" ];
       };
     };
   };

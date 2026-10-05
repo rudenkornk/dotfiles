@@ -8,21 +8,22 @@
 let
   cfg = config.local.secrets;
   secretsLib = import ./lib.nix { inherit lib pkgs; };
+  dependencies = secretsLib.dependencies cfg;
 in
 {
   options = {
-    local.secrets = { inherit (secretsLib.options) file before requiredBy; };
+    local.secrets = { inherit (secretsLib.options) file; };
   };
 
   config = lib.mkIf (secretsLib.hasFiles cfg) {
     systemd.user.services.decrypt-secrets = {
       Unit = {
         Description = "Decrypt SOPS secrets to tmpfs and symlink them into place";
-        Before = cfg.before;
+        Before = dependencies.before;
       };
       Install = {
         WantedBy = [ "default.target" ];
-        RequiredBy = cfg.requiredBy;
+        RequiredBy = dependencies.requiredBy;
       };
       Service = {
         Type = "oneshot";

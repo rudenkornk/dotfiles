@@ -11,12 +11,12 @@ let
 in
 {
   options = {
-    local.secrets = { inherit (secretsLib.options) file before requiredBy; };
+    local.secrets = { inherit (secretsLib.options) file; };
   };
 
   config = lib.mkIf (secretsLib.hasFiles cfg) {
     systemd.services.decrypt-secrets = {
-      inherit (cfg) before requiredBy;
+      inherit (secretsLib.dependencies cfg) before requiredBy;
       description = "Decrypt SOPS secrets to tmpfs and symlink them into place";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

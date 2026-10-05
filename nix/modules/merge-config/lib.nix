@@ -21,6 +21,16 @@
             source = lib.mkOption {
               type = lib.types.either lib.types.path (lib.types.nonEmptyListOf lib.types.path);
             };
+            before = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = "Systemd units that should start after the service that merges this file.";
+            };
+            requiredBy = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = "Systemd units that require the service that merges this file.";
+            };
             marker = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
               default = null;
@@ -42,21 +52,19 @@
       );
       default = { };
     };
-
-    before = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = "Systemd units that should start only after configurations have been merged.";
-    };
-
-    requiredBy = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = "Systemd units that require configurations to be merged.";
-    };
   };
 
   hasFiles = cfg: lib.any (value: value.enable) (lib.attrValues cfg.file);
+
+  dependencies =
+    cfg:
+    let
+      files = lib.filter (value: value.enable) (lib.attrValues cfg.file);
+    in
+    {
+      before = lib.unique (lib.concatMap (value: value.before) files);
+      requiredBy = lib.unique (lib.concatMap (value: value.requiredBy) files);
+    };
 
   mkScript =
     cfg:

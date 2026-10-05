@@ -76,7 +76,8 @@ While being decently generic, this config focuses more on some tools rather than
 1. **`tmux`**.
    `tmux` integrates with `Neovim`, which allows to seamlessly use keys for moving around and resizing windows.
 1. **Shells**.
-   `zsh` and `fish` integrate with interactive `fzf`, `ripgrep`, `bat` and `Atuin`.
+   `zsh`, `fish` and `nushell` integrate with interactive `fzf`, `ripgrep`, `bat` and `Atuin`.
+   Nushell keeps its native structured `ls` and line editor; tmux command-status tracking is available only in zsh and fish.
    Fish remains available, including its `fish_remove_path` helper for fish-specific universal PATH entries.
    There is also some support for `bash`.
 1. **`C++`**.

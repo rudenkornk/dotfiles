@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   ignoreFile = toString ./fzf/ignore;
@@ -36,6 +41,16 @@ let
         --stdin=no --place="$FZF_PREVIEW_COLUMNS"x"$FZF_PREVIEW_LINES""@0x0" -- "$1" ;;
       *) ${lib.getExe pkgs.bat} --color=always --style=numbers --line-range :300 -- "$1" ;;
     esac
+  '';
+
+  fdScript = pkgs.writeShellScript "fzf-fd" ''
+    set -euo pipefail
+
+    export FZF_DEFAULT_COMMAND=${lib.escapeShellArg fd1}
+    ${lib.getExe pkgs.fzf} \
+      ${lib.concatStringsSep " " config.programs.fzf.fileWidgetOptions} \
+      --with-shell '${lib.getExe pkgs.bash} -c' \
+      --bind 'enter:become(nvim {+})'
   '';
 
   # ── ctrl-q: ripgrep search ────────────────────────────────────────────────
@@ -275,6 +290,7 @@ in
       enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;
+      # enableNushellIntegration = true; # TODO: enable after 26.11.
       enableZshIntegration = true;
 
       defaultOptions = [
@@ -356,6 +372,13 @@ in
     nushell.extraConfig = # nu
       ''
         $env.config.keybindings = ($env.config.keybindings | append [
+          {
+            name: fzf_file
+            modifier: control
+            keycode: char_t
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: ExecuteHostCommand cmd: "${fdScript}" }
+          }
           {
             name: fzf_ns
             modifier: control

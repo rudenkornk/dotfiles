@@ -31,8 +31,10 @@ in
 {
   # Decrypt the config at boot, ordered before this unit.
   local.secrets = {
-    file.${config_file}.source = encrypted_config;
-    before = [ "splitty.service" ];
+    file.${config_file} = {
+      source = encrypted_config;
+      before = [ "splitty.service" ];
+    };
   };
 
   # Splitty's Linux split-DNS backend works only through `systemd-resolved`,

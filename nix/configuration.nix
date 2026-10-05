@@ -97,9 +97,9 @@ in
         "/etc/NetworkManager/system-connections/" = {
           source = pkgs.locallib.secrets + /nmconnections;
           recursive = true;
+          before = [ "NetworkManager.service" ];
         };
       };
-      before = [ "NetworkManager.service" ];
     };
   };
 

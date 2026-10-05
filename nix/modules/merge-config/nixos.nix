@@ -11,12 +11,12 @@ let
 in
 {
   options = {
-    local.merge-config = { inherit (mergeConfigLib.options) file before requiredBy; };
+    local.merge-config = { inherit (mergeConfigLib.options) file; };
   };
 
   config = lib.mkIf (mergeConfigLib.hasFiles cfg) {
     systemd.services.merge-config = {
-      inherit (cfg) before requiredBy;
+      inherit (mergeConfigLib.dependencies cfg) before requiredBy;
       description = "Merge managed configuration into mutable files";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

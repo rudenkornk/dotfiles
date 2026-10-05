@@ -116,11 +116,7 @@
       {
         Unit = {
           Wants = [ "dbus.socket" ];
-          Requires = [ "merge-config.service" ];
-          After = [
-            "dbus.socket"
-            "merge-config.service"
-          ];
+          After = [ "dbus.socket" ];
           Before = [ "graphical-session-pre.target" ];
           ConditionPathIsExecutable = skotty;
         };
@@ -163,6 +159,8 @@
         # After reinstall, run `skotty renew --fetch-only && skotty renew` to restore runtime state.
         mode = "dict";
         source = pkgs.locallib.secrets + /corp/skotty.yaml.sops;
+        before = [ "skotty.service" ];
+        requiredBy = [ "skotty.service" ];
       };
     };
 

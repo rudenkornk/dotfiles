@@ -24,6 +24,16 @@
               description = "Whether this secret should be decrypted and linked.";
             };
             source = lib.mkOption { type = lib.types.path; };
+            before = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = "Systemd units that should start after the service that decrypts this file.";
+            };
+            requiredBy = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = "Systemd units that require the service that decrypts this file.";
+            };
             recursive = lib.mkOption {
               type = lib.types.bool;
               default = false;
@@ -38,21 +48,19 @@
       );
       default = { };
     };
-
-    before = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = "Systemd units that should start only after secrets have been decrypted.";
-    };
-
-    requiredBy = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = "Systemd units that require secrets to be decrypted.";
-    };
   };
 
   hasFiles = cfg: lib.any (value: value.enable) (lib.attrValues cfg.file);
+
+  dependencies =
+    cfg:
+    let
+      files = lib.filter (value: value.enable) (lib.attrValues cfg.file);
+    in
+    {
+      before = lib.unique (lib.concatMap (value: value.before) files);
+      requiredBy = lib.unique (lib.concatMap (value: value.requiredBy) files);
+    };
 
   mkScript =
     cfg:

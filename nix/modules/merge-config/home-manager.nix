@@ -8,21 +8,22 @@
 let
   cfg = config.local.merge-config;
   mergeConfigLib = import ./lib.nix { inherit lib pkgs; };
+  dependencies = mergeConfigLib.dependencies cfg;
 in
 {
   options = {
-    local.merge-config = { inherit (mergeConfigLib.options) file before requiredBy; };
+    local.merge-config = { inherit (mergeConfigLib.options) file; };
   };
 
   config = lib.mkIf (mergeConfigLib.hasFiles cfg) {
     systemd.user.services.merge-config = {
       Unit = {
         Description = "Merge managed configuration into mutable files";
-        Before = cfg.before;
+        Before = dependencies.before;
       };
       Install = {
         WantedBy = [ "default.target" ];
-        RequiredBy = cfg.requiredBy;
+        RequiredBy = dependencies.requiredBy;
       };
       Service = {
         Type = "oneshot";

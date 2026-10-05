@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v5.1.5/assets/omo.schema.json",
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v5.1.19/assets/omo.schema.json",
 
   // Rewrites of this file fail against the read-only store path, and an unmarked migration retries on every start.
   "_migrations": [
@@ -7,7 +7,6 @@
     "2026-07-codex-config-jsonc",
     "2026-08-reasoning-unification",
   ],
-  "profiles": {}, // Required by the published schema, so omitting it is a standing editor error.
 
   "[opencode]": {
     "telemetry": false,
@@ -136,7 +135,7 @@
       },
       "deep-high": {
         "model": "openai/gpt-6-astra",
-        "reasoning": "xhigh",
+        "reasoning": "high",
       },
       "ultrabrain": {
         "model": "openai/gpt-6-astra",

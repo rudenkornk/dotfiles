@@ -40,6 +40,10 @@
         extraConfig = # tmux
           ''
             set -g @fingers-key 'C-f'
+            # Replace greedy Git captures so padded terminal UI borders are not copied.
+            set -g @fingers-enabled-builtin-patterns 'ip,uuid,sha,digit,url,path,hex,kubernetes,git-status-branch'
+            set -g @fingers-pattern-git-diff '(?:(?:---|[+]{3}) [ab]/|diff --git a/\S+ b/)(?<match>\S+)'
+            set -g @fingers-pattern-git-status '(modified|deleted|deleted by us|new file): +(?<match>\S+)'
           '';
       }
       {

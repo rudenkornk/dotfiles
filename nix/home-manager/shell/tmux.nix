@@ -107,12 +107,13 @@
 
     fish = {
       interactiveShellInit = ''
-        ${builtins.readFile ./tmux/fish/conf.d/tmux.fish}
+        source ${./tmux}/fish/conf.d/autoattach.fish
         source ${./tmux}/fish/conf.d/tasks.fish
       '';
     };
     zsh = {
       initContent = ''
+        source ${./tmux}/zsh/autoattach.zsh
         source ${./tmux}/zsh/tasks.zsh
       '';
     };

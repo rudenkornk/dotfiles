@@ -61,7 +61,7 @@ get_decrypted_name() {
   printf '%s_%s_decrypted%s\n' "$stem" "$(sha1sum "$file" | head -c 10)" "$extension"
 }
 
-decrypt_file() {
+decrypt_file() (
   local -r file="$1"
   local -r symlink_target="${2:-}"
   local -r decrypted_name=$(get_decrypted_name "$file")
@@ -71,13 +71,17 @@ decrypt_file() {
   local temporary_decrypted
   local error_output
   local status
+  local lock_fd
+
+  mkdir --parents "$cache_directory" || return
+  exec {lock_fd}>"$decrypted.lock" || return
+  flock --exclusive "$lock_fd" || return
 
   if [[ -f "$failed" && "$retry" = true ]]; then
     rm -- "$failed"
   fi
 
   if [[ ! -f "$decrypted" && ! -f "$failed" ]]; then
-    mkdir --parents "$(dirname "$decrypted")"
     temporary_decrypted=$(mktemp "$decrypted.XXXXXX")
     error_output=$(mktemp "$failed.XXXXXX")
     if sops --decrypt "$file" >"$temporary_decrypted" 2>"$error_output"; then
@@ -117,7 +121,7 @@ decrypt_file() {
   fi
 
   echo "$output"
-}
+)
 
 if [[ "$recursive" = true && -d "$arg" ]]; then
   while IFS= read -r -d '' file; do

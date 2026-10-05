@@ -18,5 +18,8 @@ _: {
     zsh = {
       initContent = builtins.readFile ./zsh/functions/c.zsh;
     };
+    nushell = {
+      extraConfig = builtins.readFile ./nushell/functions/c.nu;
+    };
   };
 }

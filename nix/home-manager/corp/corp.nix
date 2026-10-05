@@ -117,7 +117,6 @@
         Unit = {
           Wants = [ "dbus.socket" ];
           After = [ "dbus.socket" ];
-          Before = [ "graphical-session-pre.target" ];
           ConditionPathIsExecutable = skotty;
         };
         Install.WantedBy = [ "default.target" ];
@@ -126,10 +125,6 @@
           # Do not restart on ordinary errors, which can include a rejected token PIN.
           Restart = "on-abnormal";
           RestartSec = 1;
-          ExecStartPre = [
-            "${pkgs.systemd}/bin/systemctl --user set-environment GSM_SKIP_SSH_AGENT_WORKAROUND=true"
-            "${skotty} ssh export-env"
-          ];
           ExecStart = "${skotty} start";
         };
       };

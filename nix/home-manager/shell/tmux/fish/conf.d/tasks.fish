@@ -12,6 +12,7 @@ set -q tmux_task_exclude; or set -g tmux_task_exclude (string join '' \
     'less|more|man|most|w3m|lynx|links|elinks|info|fzf|atuin|' \
     'yazi|ranger|mc|nnn|lf|broot|btop|htop|top|watch|nethogs|iftop|iotop|nvtop|glances|' \
     'lazygit|tig|gitui|lazydocker|ssh|mosh|tmux|screen|' \
+    '(git|g)[[:space:]]+(log|l|lg|ll|llg|ls|diff|df|sg|show|sh|blame|bl|branch|br|reflog)|' \
     'fish|bash|zsh|sh|nu|elvish|dash|ash|ksh|mksh|yash|csh|tcsh|xonsh|nushell|pwsh|exec|exit' \
     ')([\s;|&]|$)')
 

@@ -46,6 +46,20 @@
   };
 
   programs = lib.optionalAttrs (user.userkind == "corp") {
+    nushell = {
+      shellAliases.g = lib.mkForce "corp-g";
+      extraConfig =
+        lib.replaceStrings
+          [ "@bash@" "@sops_cached@" "@corp_env@" "@corp_tokens@" "@env@" ]
+          [
+            (lib.getExe pkgs.bash)
+            (lib.getExe pkgs.custom.sops-cached)
+            "${pkgs.locallib.secrets + /corp/env.sh.sops}"
+            "${pkgs.locallib.secrets + /corp/tokens.sh.sops}"
+            "${pkgs.coreutils}/bin/env"
+          ]
+          (builtins.readFile ./nushell/init.nu);
+    };
     zsh.initContent = lib.mkMerge [
       # zsh
       ''

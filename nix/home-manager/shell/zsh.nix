@@ -44,6 +44,16 @@
           'm:{a-zA-Z}={A-Za-z}' \
           'm:{a-zA-Z}={A-Za-z} r:|[._-]=* r:|=*'
 
+        function _complete_parent_directory() {
+          local -a words=("''${(@z)LBUFFER}")
+          if [[ $RBUFFER = (|[[:space:]]*) && ''${words[-1]} = (..|*/..) ]]; then
+            LBUFFER+=/
+          fi
+          zle expand-or-complete
+        }
+        zle -N _complete_parent_directory
+        bindkey -M emacs '^I' _complete_parent_directory
+
         bindkey -M menuselect '^I' menu-complete
         bindkey -M menuselect '\e[Z' reverse-menu-complete
         bindkey -M menuselect '^N' menu-complete

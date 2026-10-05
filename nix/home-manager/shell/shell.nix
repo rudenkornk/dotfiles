@@ -4,7 +4,6 @@
 {
   home.packages = with pkgs; [
     bash-completion
-    carapace
     fish
     nushell
     oh-my-posh

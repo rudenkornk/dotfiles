@@ -95,21 +95,20 @@ decrypt_file() {
       } >"$failed"
       rm -- "$error_output"
       echo "$file is failed to decrypt." >&2
-
-      if [[ "$fallback_set" = true ]]; then
-        output="$decrypted.fallback"
-        printf '%s' "$fallback" >"$output"
-        echo "Using fallback content." >&2
-      fi
     fi
   fi
 
-  if [[ -f "$failed" && "$fallback_set" = false ]]; then
-    if [[ -n "$symlink_target" ]]; then
-      rm -f -- "$symlink_target"
+  if [[ -f "$failed" ]]; then
+    if [[ "$fallback_set" = false ]]; then
+      if [[ -n "$symlink_target" ]]; then
+        rm -f -- "$symlink_target"
+      fi
+      echo /dev/null
+      return 1
     fi
-    echo /dev/null
-    return 1
+    output="$decrypted.fallback"
+    printf '%s' "$fallback" >"$output"
+    echo "Using fallback content." >&2
   fi
 
   if [[ -n "$symlink_target" ]]; then

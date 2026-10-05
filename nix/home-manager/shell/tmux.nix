@@ -117,6 +117,9 @@
         source ${./tmux}/zsh/tasks.zsh
       '';
     };
+    nushell = {
+      extraConfig = builtins.readFile ./tmux/nushell/autoattach.nu;
+    };
   };
 
   home = {

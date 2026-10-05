@@ -7,7 +7,7 @@ test "$(tmux display-message -p -t "$TMUX_PANE" '#{pane_pid}')" = "$fish_pid"; o
 set -q tmux_task_min_duration_ms; or set -g tmux_task_min_duration_ms 10000
 set -q tmux_task_exclude; or set -g tmux_task_exclude (tr -d '\n' <(status dirname)/../../task-exclude.regex)
 
-set -g __tmux_task_timer (path resolve (status dirname)/../task-timer.fish)
+set -g __tmux_task_timer (path resolve (status dirname)/../../task-timer.sh)
 set -g __tmux_task_lock "fish-task-$TMUX_PANE"
 set -q __tmux_task_generation; or set -g __tmux_task_generation 0
 
@@ -32,7 +32,7 @@ function __tmux_task_started --on-event fish_preexec
     set -g __tmux_task_active "$fish_pid-$__tmux_task_generation"
     set -g __tmux_task_minimum_ms "$tmux_task_min_duration_ms"
     tmux set-option -p -t "$TMUX_PANE" @fish_task_token "$__tmux_task_active"
-    fish --no-config "$__tmux_task_timer" "$__tmux_task_active" \
+    bash "$__tmux_task_timer" "$__tmux_task_active" \
         (math "$__tmux_task_minimum_ms / 1000") </dev/null >/dev/null 2>&1 &
     disown $last_pid
 end

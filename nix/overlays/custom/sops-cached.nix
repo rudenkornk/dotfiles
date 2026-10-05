@@ -10,6 +10,7 @@ final.writeShellApplication {
     final.age-plugin-tpm
     final.sops
     final.uutils-coreutils-noprefix
+    final.util-linux
   ];
   text = builtins.readFile ./scripts/sops-cached.sh;
 }

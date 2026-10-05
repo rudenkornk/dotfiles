@@ -28,6 +28,10 @@ return {
     opts = require("plugins.configs.lspconfig").opts,
   },
   {
+    "mfussenegger/nvim-lint",
+    opts = require("plugins.configs.lint").opts,
+  },
+  {
     "mrcjkb/rustaceanvim",
     opts = require("plugins.configs.rustaceanvim").opts,
   },

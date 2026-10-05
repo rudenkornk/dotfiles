@@ -8,15 +8,20 @@
 let
   cfg = config.local.secrets;
   secretsLib = import ./lib.nix { inherit lib pkgs; };
-  dependencies = secretsLib.dependencies cfg;
 in
 {
   options = {
     local.secrets = { inherit (secretsLib.options) file; };
   };
 
-  config = lib.mkIf (secretsLib.hasFiles cfg) {
-    systemd.user.services.decrypt-secrets = {
+  config = {
+    systemd.user.services = lib.mapAttrs (
+      _: file:
+      let
+        group = { inherit file; };
+        dependencies = secretsLib.dependencies group;
+      in
+      {
         Unit = {
           Description = "Decrypt SOPS secrets to tmpfs and symlink them into place";
           Before = dependencies.before;
@@ -28,8 +33,9 @@ in
         Service = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = lib.getExe (secretsLib.mkScript cfg);
+          ExecStart = lib.getExe (secretsLib.mkScript group);
         };
-      };
+      }
+    ) (secretsLib.groupFiles cfg);
   };
 }

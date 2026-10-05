@@ -14,17 +14,23 @@ in
     local.merge-config = { inherit (mergeConfigLib.options) file; };
   };
 
-  config = lib.mkIf (mergeConfigLib.hasFiles cfg) {
-    systemd.services.merge-config = {
-        inherit (mergeConfigLib.dependencies cfg) before requiredBy;
+  config = {
+    systemd.services = lib.mapAttrs (
+      _: file:
+      let
+        group = { inherit file; };
+      in
+      {
+        inherit (mergeConfigLib.dependencies group) before requiredBy;
         description = "Merge managed configuration into mutable files";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
           Environment = "HOME=/root";
-          ExecStart = lib.getExe (mergeConfigLib.mkScript cfg);
+          ExecStart = lib.getExe (mergeConfigLib.mkScript group);
         };
-      };
+      }
+    ) (mergeConfigLib.groupFiles cfg);
   };
 }

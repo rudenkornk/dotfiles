@@ -8,15 +8,20 @@
 let
   cfg = config.local.merge-config;
   mergeConfigLib = import ./lib.nix { inherit lib pkgs; };
-  dependencies = mergeConfigLib.dependencies cfg;
 in
 {
   options = {
     local.merge-config = { inherit (mergeConfigLib.options) file; };
   };
 
-  config = lib.mkIf (mergeConfigLib.hasFiles cfg) {
-    systemd.user.services.merge-config = {
+  config = {
+    systemd.user.services = lib.mapAttrs (
+      _: file:
+      let
+        group = { inherit file; };
+        dependencies = mergeConfigLib.dependencies group;
+      in
+      {
         Unit = {
           Description = "Merge managed configuration into mutable files";
           Before = dependencies.before;
@@ -28,8 +33,9 @@ in
         Service = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = lib.getExe (mergeConfigLib.mkScript cfg);
+          ExecStart = lib.getExe (mergeConfigLib.mkScript group);
         };
-      };
+      }
+    ) (mergeConfigLib.groupFiles cfg);
   };
 }

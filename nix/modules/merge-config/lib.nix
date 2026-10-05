@@ -21,6 +21,11 @@
             source = lib.mkOption {
               type = lib.types.either lib.types.path (lib.types.nonEmptyListOf lib.types.path);
             };
+            service-name = lib.mkOption {
+              type = lib.types.strMatching "[a-zA-Z0-9_-]+";
+              default = "merge-config";
+              description = "Service that merges this file, without the .service suffix.";
+            };
             before = lib.mkOption {
               type = lib.types.listOf lib.types.str;
               default = [ ];
@@ -54,7 +59,13 @@
     };
   };
 
-  hasFiles = cfg: lib.any (value: value.enable) (lib.attrValues cfg.file);
+  groupFiles =
+    cfg:
+    lib.mapAttrs (_: lib.listToAttrs) (
+      lib.groupBy (entry: entry.value.service-name) (
+        lib.mapAttrsToList lib.nameValuePair (lib.filterAttrs (_: value: value.enable) cfg.file)
+      )
+    );
 
   dependencies =
     cfg:

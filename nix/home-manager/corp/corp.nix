@@ -159,6 +159,7 @@
         # After reinstall, run `skotty renew --fetch-only && skotty renew` to restore runtime state.
         mode = "dict";
         source = pkgs.locallib.secrets + /corp/skotty.yaml.sops;
+        service-name = "merge-skotty-config";
         before = [ "skotty.service" ];
         requiredBy = [ "skotty.service" ];
       };

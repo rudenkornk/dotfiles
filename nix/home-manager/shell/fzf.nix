@@ -10,7 +10,7 @@ let
 
   # ── ctrl-t: fd search ────────────────────────────────────────────────
 
-  fdCommon = "${lib.getExe pkgs.fd} --type file --follow --color always";
+  fdCommon = "${lib.getExe pkgs.fd} --type file --follow --color always --print0";
   fd1 = "${fdCommon} --no-hidden --ignore --ignore-file ${ignoreFile}";
   fd2 = "${fdCommon} --hidden --ignore --ignore-file ${ignoreFile}";
   fd3 = "${fdCommon} --hidden --no-ignore --ignore-file ${ignoreFile}";
@@ -305,6 +305,7 @@ in
 
       fileWidgetCommand = fd1;
       fileWidgetOptions = [
+        "--read0"
         "--prompt='${h1}'"
         "--preview='${fdPreview} {}'"
         "--bind='ctrl-t:transform:${fdCycleTransform}'"

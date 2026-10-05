@@ -111,6 +111,11 @@
         source ${./tmux}/fish/conf.d/tasks.fish
       '';
     };
+    zsh = {
+      initContent = ''
+        source ${./tmux}/zsh/tasks.zsh
+      '';
+    };
   };
 
   home = {

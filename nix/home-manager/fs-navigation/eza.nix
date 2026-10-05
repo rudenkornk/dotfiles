@@ -2,11 +2,11 @@ _: {
   home = {
     shellAliases =
       let
-        eza_common_args = "eza --classify --icons --all --group-directories-first --long --header --tree";
+        eza_common_args = "eza --classify=always --icons --all --group-directories-first --long --header --tree";
         eza_long_args = "--binary --group --smart-group --links --inode --modified --created --accessed --time-style relative --flags --blocksize";
       in
       {
-        l = "eza --classify --icons --all --group-directories-first";
+        l = "eza --classify=always --icons --all --group-directories-first";
         lg = "${eza_common_args} --level 1 --git-ignore";
         lgs = "${eza_common_args} --level 1 --git-ignore --total-size --sort size";
         ll = "${eza_common_args} --level 1";
@@ -26,6 +26,6 @@ _: {
     enableNushellIntegration = false; # Do not replace nushell's ls builtin.
     enableZshIntegration = true;
     icons = "always";
-    extraOptions = [ "--classify" ];
+    extraOptions = [ "--classify=always" ];
   };
 }

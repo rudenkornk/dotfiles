@@ -18,6 +18,10 @@ _: {
       initContent = builtins.readFile ./zsh/functions/b.zsh;
     };
 
+    nushell = {
+      extraConfig = builtins.readFile ./nushell/functions/b.nu;
+    };
+
   };
 
   home.sessionVariables = {

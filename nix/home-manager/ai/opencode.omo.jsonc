@@ -3,5 +3,5 @@
   "$schema": "https://opencode.ai/config.json",
 
   // `plugin` lists from every config source are unioned, so this entry can only be added, never subtracted.
-  "plugin": ["oh-my-openagent@5.1.5"],
+  "plugin": ["oh-my-openagent@5.1.19"],
 }

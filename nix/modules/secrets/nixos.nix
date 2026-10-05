@@ -16,15 +16,15 @@ in
 
   config = lib.mkIf (secretsLib.hasFiles cfg) {
     systemd.services.decrypt-secrets = {
-      inherit (secretsLib.dependencies cfg) before requiredBy;
-      description = "Decrypt SOPS secrets to tmpfs and symlink them into place";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        Environment = "HOME=/root";
-        ExecStart = lib.getExe (secretsLib.mkScript cfg);
+        inherit (secretsLib.dependencies cfg) before requiredBy;
+        description = "Decrypt SOPS secrets to tmpfs and symlink them into place";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          Environment = "HOME=/root";
+          ExecStart = lib.getExe (secretsLib.mkScript cfg);
+        };
       };
-    };
   };
 }

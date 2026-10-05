@@ -17,19 +17,19 @@ in
 
   config = lib.mkIf (mergeConfigLib.hasFiles cfg) {
     systemd.user.services.merge-config = {
-      Unit = {
-        Description = "Merge managed configuration into mutable files";
-        Before = dependencies.before;
+        Unit = {
+          Description = "Merge managed configuration into mutable files";
+          Before = dependencies.before;
+        };
+        Install = {
+          WantedBy = [ "default.target" ];
+          RequiredBy = dependencies.requiredBy;
+        };
+        Service = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = lib.getExe (mergeConfigLib.mkScript cfg);
+        };
       };
-      Install = {
-        WantedBy = [ "default.target" ];
-        RequiredBy = dependencies.requiredBy;
-      };
-      Service = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = lib.getExe (mergeConfigLib.mkScript cfg);
-      };
-    };
   };
 }

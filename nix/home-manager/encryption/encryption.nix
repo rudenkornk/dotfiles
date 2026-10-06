@@ -23,6 +23,8 @@
     custom.sops-diff
   ];
 
+  systemd.user.services.preload-bash-secrets = pkgs.locallib.preload-bash-secrets;
+
   home = {
     sessionVariables = {
       SOPS_EDITOR = "rvim";

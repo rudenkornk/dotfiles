@@ -3,7 +3,6 @@
 # Compilers, interpreters, build systems & language processors.
 {
   home.packages = with pkgs; [
-    ansible
     dart
     dotnet-sdk
     gleam
@@ -11,7 +10,6 @@
     jq
     lean4
     lua5_4
-    molecule
     nodejs
     nushell
     ocaml
@@ -21,7 +19,6 @@
     protobuf
     ruby
     tcl
-    terraform
     yq
     zig
   ];

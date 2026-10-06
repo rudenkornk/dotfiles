@@ -6,22 +6,10 @@
     packages = with pkgs; [
       docker
       docker-compose
-      k9s
-      kubectl
-      kubernetes
-      minikube
       qemu_full
       vagrant
 
       (locallib.with_secrets { pkg = podman; })
-      (wrapHelm kubernetes-helm {
-        plugins = with kubernetes-helmPlugins; [
-          helm-diff
-          helm-mapkubeapis
-          helm-secrets
-          helm-unittest
-        ];
-      })
     ];
 
     shellAliases = {

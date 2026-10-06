@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     ansible
+    awscli2
     k9s
     kubectl
     kubernetes

@@ -7,6 +7,7 @@
       docker
       docker-compose
       qemu_full
+      skopeo
       vagrant
 
       (locallib.with_secrets { pkg = podman; })

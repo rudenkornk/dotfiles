@@ -64,6 +64,7 @@
 
         WORDCHARS=''${WORDCHARS//\/}
         bindkey -M emacs '^Z' undo
+        bindkey -M emacs '\e[3~' delete-char
         bindkey -M emacs ' ' magic-space
 
         source ${pkgs.custom.zsh-manydots-magic}/manydots-magic

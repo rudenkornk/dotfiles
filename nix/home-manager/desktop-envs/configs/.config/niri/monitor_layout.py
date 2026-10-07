@@ -14,8 +14,7 @@ _logger = logging.getLogger(__name__)
 REFERENCE_WIDTH_LOGICAL_PX = 528.0
 # At 3840 px width: scale 1.3 on the 340 mm-wide laptop and 1.15 on the 600 mm-wide external monitor.
 CALIBRATION_POINTS = ((340 * 210, 60.775), (600 * 340, 94.875))
-# Row 6 on eDP-1: a 12 px font at 4/3 scale, equivalent to the reference at 1:1.
-MIN_REFERENCE_WIDTH_PHYSICAL_PX = 528.0
+MIN_REFERENCE_WIDTH_PHYSICAL_PX = REFERENCE_WIDTH_LOGICAL_PX * 0.8
 # Niri rounds fractional logical dimensions up internally but truncates them in IPC replies.
 NIRI_FRACTIONAL_SIZE_PADDING = 1
 

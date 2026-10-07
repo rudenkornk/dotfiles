@@ -105,6 +105,12 @@
       ];
     };
 
+    bash = {
+      initExtra = ''
+        source ${pkgs.bash-preexec}/share/bash/bash-preexec.sh
+        source ${./tmux}/bash/tasks.sh
+      '';
+    };
     fish = {
       interactiveShellInit = ''
         source ${./tmux}/fish/conf.d/autoattach.fish

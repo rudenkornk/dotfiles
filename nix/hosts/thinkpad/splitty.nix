@@ -33,6 +33,7 @@ in
   local.secrets = {
     file.${config_file} = {
       source = encrypted_config;
+      service-name = "decrypt-splitty";
       before = [ "splitty.service" ];
     };
   };
@@ -50,7 +51,7 @@ in
     # A non-zero exit here is caught by `Restart = "always"` and retried with backoff.
     script = ''
       if [[ ! -r ${config_file} ]]; then
-        echo "${config_file} is missing: config was not decrypted, check decrypt-secrets.service." >&2
+        echo "${config_file} is missing: config was not decrypted, check decrypt-splitty.service." >&2
         exit 1
       fi
       for candidate in ${toString candidates}; do

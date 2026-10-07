@@ -80,7 +80,10 @@ Configurations must still evaluate without decrypted secrets.
   `nix run . -- updatekeys` in `dotfiles_py/targets/secrets.py` re-encrypts secrets after recipient changes.
 - `nix/overlays/custom/scripts/sops-cached.sh` decrypts into `/run/user/$UID/secrets/` (tmpfs), caches results,
   and optionally symlinks them to their target paths.
-  Both system and user `decrypt-secrets.service` units use it.
+  System and user decryption services use it.
+  Assign secrets with consumer dependencies to a shared `service-name = "decrypt-<consumer>"` group,
+  so the consumer waits only for its own secrets instead of the default `decrypt-secrets.service` batch.
+  Bootstrap recovery restarts loaded `decrypt-*.service` and `merge-*.service` groups.
 - `nix/overlays/locallib/with_secrets.nix` uses `bash_secrets.nix` to inject decrypted environment variables at launch.
   This wrapper is used by all AI CLI tools and Neovim.
 - The pre-commit hook blocks plaintext secret filenames and scans the staged diff with gitleaks.

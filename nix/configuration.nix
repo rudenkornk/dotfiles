@@ -96,6 +96,7 @@ in
       file = {
         "/etc/NetworkManager/system-connections/" = {
           source = pkgs.locallib.secrets + /nmconnections;
+          service-name = "decrypt-networkmanager";
           recursive = true;
           before = [ "NetworkManager.service" ];
         };

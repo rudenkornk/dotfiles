@@ -76,10 +76,7 @@ While being decently generic, this config focuses more on some tools rather than
 1. **`tmux`**.
    `tmux` integrates with `Neovim`, which allows to seamlessly use keys for moving around and resizing windows.
 1. **Shells**.
-   `zsh`, `fish` and `nushell` integrate with interactive `fzf`, `ripgrep`, `bat` and `Atuin`.
-   Nushell keeps its native structured `ls` and line editor; tmux command-status tracking is available only in zsh and fish.
-   Fish remains available, including its `fish_remove_path` helper for fish-specific universal PATH entries.
-   There is also some support for `bash`.
+   `zsh`, `fish`, `bash` and `nushell` integrate with interactive `fzf`, `ripgrep`, `bat` and `Atuin`.
 1. **`C++`**.
    Config provides releases of `cmake`, `LLVM` and `GCC` toolchains as well as editor support.
 1. Config also provides some support for **`Python`**, **`LaTeX`** and **`Lua`**.

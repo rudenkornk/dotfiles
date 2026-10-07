@@ -214,10 +214,10 @@ def _restart_secret_services() -> None:
     # so re-run them to bring secrets online without a reboot.
     commands = [
         ["systemctl", "--user", "restart", "ssh-agent-keys.service"],
-        ["systemctl", "--user", "restart", "decrypt-secrets.service"],
-        ["systemctl", "--user", "restart", "merge-config.service"],
-        ["sudo", "systemctl", "restart", "decrypt-secrets.service"],
-        ["sudo", "systemctl", "restart", "merge-config.service"],
+        ["systemctl", "--user", "restart", "decrypt-*.service"],
+        ["systemctl", "--user", "restart", "merge-*.service"],
+        ["sudo", "systemctl", "restart", "decrypt-*.service"],
+        ["sudo", "systemctl", "restart", "merge-*.service"],
     ]
     for command in commands:
         if run_shell(command, check=False).returncode != 0:

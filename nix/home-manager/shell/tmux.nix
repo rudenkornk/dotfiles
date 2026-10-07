@@ -107,6 +107,7 @@
 
     bash = {
       initExtra = ''
+        source ${./tmux}/bash/autoattach.sh
         source ${pkgs.bash-preexec}/share/bash/bash-preexec.sh
         source ${./tmux}/bash/tasks.sh
       '';

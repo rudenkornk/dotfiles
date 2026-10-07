@@ -46,6 +46,13 @@
   };
 
   programs = lib.optionalAttrs (user.userkind == "corp") {
+    bash = {
+      initExtra = ''
+        source "$(${lib.getExe pkgs.custom.sops-cached} ${pkgs.locallib.secrets + /corp/env.sh.sops})"
+        source "$(${lib.getExe pkgs.custom.sops-cached} ${pkgs.locallib.secrets + /corp/tokens.sh.sops})"
+        ${builtins.readFile ./bash/functions/g.sh}
+      '';
+    };
     nushell = {
       shellAliases.g = lib.mkForce "corp-g";
       extraConfig =

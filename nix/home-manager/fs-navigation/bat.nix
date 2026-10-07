@@ -18,6 +18,10 @@ _: {
       initContent = builtins.readFile ./zsh/functions/b.zsh;
     };
 
+    bash = {
+      initExtra = builtins.readFile ./bash/functions/b.sh;
+    };
+
     nushell = {
       extraConfig = builtins.readFile ./nushell/functions/b.nu;
     };

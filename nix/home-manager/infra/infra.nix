@@ -9,6 +9,7 @@
     kubernetes
     minikube
     molecule
+    postgresql
     terraform
 
     (wrapHelm kubernetes-helm {

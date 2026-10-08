@@ -331,6 +331,16 @@ window-rule {
     open-floating true
 }
 window-rule {
+    match app-id="org.gnome.Solanum"
+    default-column-width {
+        fixed 360
+    }
+    default-window-height {
+        fixed 400
+    }
+    open-floating true
+}
+window-rule {
     match app-id="org.gnome.Nautilus"
     default-column-width {
         proportion 0.5

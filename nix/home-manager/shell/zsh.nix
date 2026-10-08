@@ -11,7 +11,7 @@
     ];
     syntaxHighlighting = {
       enable = true;
-      styles.comment = "fg=250";
+      styles.comment = "fg=245";
     };
     autosuggestion = {
       enable = true;

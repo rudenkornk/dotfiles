@@ -294,9 +294,21 @@ Those style rules do not apply to titles, which follow the `type(scope): summary
 Commit messages must be short.
 In ~95% of cases the message is only the title (`type(scope): summary`, as in the existing history) — no body at all.
 
+Keep commit titles concrete and concise.
+
+For fixes, describe the broken behavior being corrected.
+Name the affected command or workflow when relevant, rather than only describing the technical solution.
+
+GOOD: `fix(host): prevent bootstrap-host crash when loading existing hosts`.
+POOR: `fix(host): parse host metadata as native JSON`.
+
+For features and refactors, a direct description of the addition or restructuring is usually sufficient.
+Include motivation when it adds useful context; do not force benefit statements into otherwise clear titles.
+
 A small body is allowed only for notes about git ordering and implementation plans rather than about the code itself —
 e.g. "Preparation for the upcoming change...", or how this commit relates to neighboring patches in a series.
-All information related to the code itself MUST live in the code (comments, docs), not in the commit message.
+Keep implementation explanations in code or documentation when they need to be recorded.
+The commit title should still identify the broken behavior for fixes.
 
 ## Exception: commits that delete code
 

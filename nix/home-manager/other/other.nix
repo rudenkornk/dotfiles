@@ -6,10 +6,12 @@
     packages = with pkgs; [
       asciinema
       dos2unix
+      gnome-solanum
       hyperfine
       openldap
       stress
       stress-ng
+      tomato-c
       wiki-tui
       xh
     ];

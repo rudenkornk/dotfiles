@@ -63,6 +63,7 @@
         bindkey -M menuselect '^G' send-break
 
         WORDCHARS=''${WORDCHARS//\/}
+        bindkey -M emacs '^W' vi-backward-kill-word
         bindkey -M emacs '^Z' undo
         bindkey -M emacs '\e[3~' delete-char
         bindkey -M emacs ' ' magic-space

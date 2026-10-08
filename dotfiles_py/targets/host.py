@@ -58,23 +58,27 @@ class Host:
             [
                 "nix-instantiate",
                 "--eval",
-                path,
-                "--arg",
-                "pkgs",
-                "{}",
+                "--strict",
+                "--json",
+                "--expr",
+                """
+                { hostPath }:
+                let
+                  host = import (builtins.toPath hostPath) { pkgs = {}; };
+                in
+                {
+                  inherit (host) name disk_device;
+                  smbiosUUIDHash = host.smbiosUUIDHash or null;
+                }
+                """,
+                "--argstr",
+                "hostPath",
+                path.resolve(),
                 "--readonly-mode",
             ],
             capture_output=True,
         ).stdout
-        json_text = (
-            output.strip()
-            .replace("{ ", '{"', 1)
-            .replace(" = ", '": ')
-            .replace("; }", "}")
-            .replace("; ", ', "')
-            .replace("<CODE>", "null")
-        )
-        definition = json.loads(json_text)
+        definition = json.loads(output)
         hostname = definition["name"]
         if path.stem != hostname:
             msg = f"Host filename {path.name!r} does not match hostname {hostname!r}."

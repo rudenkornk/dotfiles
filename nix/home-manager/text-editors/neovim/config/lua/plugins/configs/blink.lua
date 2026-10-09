@@ -67,7 +67,7 @@ M.opts = {
       },
       tmux = {
         name = "tmux",
-        score_offset = -50,
+        score_offset = -20,
         max_items = 2,
         opts = { label = " ", all_panes = true },
       },

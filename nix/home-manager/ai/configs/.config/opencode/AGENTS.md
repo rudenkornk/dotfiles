@@ -115,9 +115,9 @@ Preserve any uncommitted work as well.
 When implementation reveals a missed change or an incorrect earlier decision,
 incorporate the correction into the appropriate commit and replay subsequent eligible commits.
 Amend, reorder, split, or squash eligible commits as needed.
-Prefer correcting the relevant commit over appending cleanup or fixup commits.
+PREFER CORRECTING THE RELEVANT COMMIT OVER APPENDING CLEANUP OR FIXUP COMMITS.
 
-Do not rewrite commits that predate the current session or belong to another task.
+Do not rewrite commits that predate the current session or belong to another task, unless the user explicitly allowed it.
 Review the resulting commit sequence and final diff, and rerun affected checks after rewriting.
 
 Pushing, including force-pushing rewritten history, requires an explicit user request.

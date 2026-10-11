@@ -27,6 +27,7 @@ in
 {
   home.packages = with pkgs; [
     brightnessctl # Brightness control.
+    custom.wl-mirror-run
     ddcutil # Brightness control for external monitors.
     gnome-keyring # Secret manager.
     playerctl # Media control.

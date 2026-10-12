@@ -47,13 +47,17 @@
       };
       overlay_modules = import ./nix/overlays/locallib/get_modules.nix null ./nix/overlays;
       system = "x86_64-linux";
-      pkgs = import inputs.nixpkgs {
-        localSystem = system;
-        config = {
-          allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
+      makePkgs =
+        config:
+        import inputs.nixpkgs {
+          localSystem = system;
+          config = {
+            allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
+          }
+          // config;
+          overlays = map (overlay: import overlay { inherit inputs; }) overlay_modules;
         };
-        overlays = map (overlay: import overlay { inherit inputs; }) overlay_modules;
-      };
+      pkgs = makePkgs { };
       hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
       hosts = mapAttrs (_: path: import path { inherit pkgs; }) hostfiles;
       userfiles = pkgs.locallib.get_modules_map ./nix/users;

@@ -1,5 +1,13 @@
 _: final: prev: {
   corp = {
+    ca-bundle = final.concatText "corp-ca-bundle.pem" [
+      (final.locallib.secrets + /corp/YandexInternalRootCA.crt)
+      (final.locallib.secrets + /corp/YCKZInternalRootCA.crt)
+      (final.locallib.secrets + /corp/YandexInternalCA.crt)
+    ];
+
+    cacert = final.cacert.override { extraCertificateFiles = [ final.corp.ca-bundle ]; };
+
     ldaps = final.writeShellApplication {
       name = "ldaps";
       runtimeInputs = [

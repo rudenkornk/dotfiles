@@ -123,6 +123,16 @@ in
     };
   };
 
+  systemd = {
+    services = {
+      nix-daemon = {
+        serviceConfig = {
+          Nice = 10;
+        };
+      };
+    };
+  };
+
   services = {
     dbus.packages = [ ibus ];
 

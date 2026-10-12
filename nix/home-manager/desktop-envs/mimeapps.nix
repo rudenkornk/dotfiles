@@ -74,6 +74,6 @@ _:
       "image/bmp" = image;
       "image/avif" = image;
 
-      "application/pdf" = pdf;
+      "application/pdf" = browser;
     };
 }

@@ -1,4 +1,4 @@
-{ pkgs, host, ... }:
+{ pkgs, ... }:
 
 {
   home = {
@@ -7,23 +7,18 @@
       gpu-screen-recorder
       pdfarranger
       shotcut # typos: ignore
-      (whisper-ctranslate2.override {
-        python3Packages = python313Packages.overrideScope (
-          _: prev: {
-            ctranslate2 = prev.ctranslate2.override {
-              ctranslate2-cpp = ctranslate2.override { withCUDA = host.gpu.cudaSupport or false; };
-            };
-          }
-        );
-      })
+      (
+        if pkgs.config.cudaSupport then
+          whisper-ctranslate2
+        else
+          whisper-cpp.override { vulkanSupport = true; }
+      )
     ];
   };
 
   programs = {
     obs-studio = {
       enable = true;
-
-      package = pkgs.obs-studio.override { cudaSupport = host.gpu.cudaSupport or false; };
 
       plugins = with pkgs.obs-studio-plugins; [
         obs-backgroundremoval

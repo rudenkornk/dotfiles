@@ -34,7 +34,7 @@
       # Main flags.
       # tls_hostname = <encrypted in EnvironmentFile>;
       fromenv = "tls_hostname";
-      tls_server_certs = "${pkgs.locallib.secrets + /corp/allCAs.pem}";
+      tls_server_certs = "${pkgs.corp.ca-bundle}";
       disable_audit = "false";
       disable_extensions = "true";
       host_identifier = "uuid";

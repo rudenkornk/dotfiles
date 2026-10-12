@@ -5,6 +5,7 @@
     packages = with pkgs; [
       exiftool
       gpu-screen-recorder
+      pdfarranger
       shotcut # typos: ignore
     ];
   };

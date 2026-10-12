@@ -60,6 +60,7 @@
       pkgs = makePkgs { };
       hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
       hosts = mapAttrs (_: path: import path { inherit pkgs; }) hostfiles;
+      hostPkgs = mapAttrs (_: host: makePkgs { cudaSupport = host.gpu.cudaSupport or false; }) hosts;
       userfiles = pkgs.locallib.get_modules_map ./nix/users;
       users = mapAttrs (lib.const import) userfiles;
       standalonePackages = pkgs.locallib.get_modules_map ./nix/packages;
@@ -72,7 +73,7 @@
       makeHomeConfig =
         { user, host }:
         home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+          pkgs = hostPkgs.${host.name};
           extraSpecialArgs = {
             inputs = hm_inputs;
             user = user.value;
@@ -85,7 +86,8 @@
       nixosConfigurations = mapAttrs (
         name: host:
         lib.nixosSystem {
-          inherit system pkgs;
+          inherit system;
+          pkgs = hostPkgs.${name};
           specialArgs = {
             inputs = nixos_inputs;
             inherit hm_inputs users host;

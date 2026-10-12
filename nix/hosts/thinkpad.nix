@@ -59,7 +59,7 @@ in
 
     environment = {
       etc = {
-        "ssl/certs/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
+        "corp/ca-bundle.pem".source = pkgs.corp.ca-bundle;
       };
     };
     local = {

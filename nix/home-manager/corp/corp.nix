@@ -18,30 +18,18 @@
       a = "arc";
     };
 
-    sessionVariables =
-      let
-        corpCacert = pkgs.cacert.override {
-          extraCertificateFiles = [ (pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt) ];
-        };
-      in
-      {
-        CERT_PATH = "${corpCacert}/etc/ssl/certs/ca-bundle.crt";
-        CURL_CA_BUNDLE = "${corpCacert}/etc/ssl/certs/ca-bundle.crt";
-        SSL_CERT_FILE = "${corpCacert}/etc/ssl/certs/ca-bundle.crt";
-        NODE_EXTRA_CA_CERTS = "${config.xdg.dataHome}/ca-certificates/YandexInternalRootCA.crt";
-        NSS_DEFAULT_SSL_DIR = "${config.xdg.dataHome}/ca-certificates/";
-      };
+    sessionVariables = {
+      CERT_PATH = "${pkgs.corp.cacert}/etc/ssl/certs/ca-bundle.crt";
+      CURL_CA_BUNDLE = "${pkgs.corp.cacert}/etc/ssl/certs/ca-bundle.crt";
+      SSL_CERT_FILE = "${pkgs.corp.cacert}/etc/ssl/certs/ca-bundle.crt";
+      NODE_EXTRA_CA_CERTS = "${pkgs.corp.ca-bundle}";
+    };
   };
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {
     configFile = {
       # `local.merge-config` owns the corp target instead of the default Home Manager symlink.
       "opencode/opencode.jsonc".enable = false;
-    };
-    dataFile = {
-      "ca-certificates/YandexInternalRootCA.crt".source =
-        pkgs.locallib.secrets + /corp/YandexInternalRootCA.crt;
-      "ca-certificates/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
     };
   };
 
@@ -164,7 +152,7 @@
   local = lib.optionalAttrs (user.userkind == "corp") {
     home.file = {
       ".".source = ./configs;
-      ".itsme/allCAs.pem".source = pkgs.locallib.secrets + /corp/allCAs.pem;
+      ".itsme/allCAs.pem".source = pkgs.corp.ca-bundle;
     };
 
     merge-config.file = {

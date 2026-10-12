@@ -1,3 +1,4 @@
+# `pkgs` is the generic package set, without host-specific configuration.
 { pkgs, ... }:
 
 let
@@ -9,7 +10,8 @@ in
   smbiosUUIDHash = "87cada6bb572d69c87e1991ec678762bbffede52";
   disk_device = "/dev/disk/by-path/pci-0000:00:0e.0-pci-10000:e2:00.0-nvme-1";
 
-  hardware-configuration = { inputs, ... }:
+  # The hardware module receives its own host-specific `pkgs` from NixOS.
+  hardware-configuration = { pkgs, inputs, ... }:
 
   {
     imports = [ inputs.nixos-hardware.nixosModules.dell-xps-15-9510-nvidia ];

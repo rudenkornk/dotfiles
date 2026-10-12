@@ -1,3 +1,4 @@
+# `pkgs` is the generic package set, without host-specific configuration.
 { pkgs, ... }:
 
 let
@@ -9,7 +10,8 @@ in
   smbiosUUIDHash = "__smbios_uuid_hash__";
   disk_device = "__disk_device__";
 
-  hardware-configuration = { ... }:
+  # The hardware module receives its own host-specific `pkgs` from NixOS.
+  hardware-configuration = { pkgs, inputs, ... }:
 
   {
     imports = [ ];

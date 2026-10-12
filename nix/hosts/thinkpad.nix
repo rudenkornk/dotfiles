@@ -1,3 +1,4 @@
+# `pkgs` is the generic package set, without host-specific configuration.
 { pkgs, ... }:
 
 let
@@ -9,7 +10,8 @@ in
   smbiosUUIDHash = "4cc3d7d1d69c8a0372d34bbbbebc4c82e1c5f22f";
   disk_device = "/dev/disk/by-path/pci-0000:05:00.0-nvme-1";
 
-  hardware-configuration = { ... }:
+  # The hardware module receives its own host-specific `pkgs` from NixOS.
+  hardware-configuration = { pkgs, ... }:
 
   {
     imports = [

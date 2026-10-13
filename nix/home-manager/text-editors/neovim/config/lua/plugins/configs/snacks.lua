@@ -151,9 +151,13 @@ M.keys = {
   },
 }
 
+-- Our terminal reports Shift explicitly for Cyrillic keys instead of sending uppercase characters.
 add_terminal_key(M.keys, "<A-F>", "float", 0.9)
+add_terminal_key(M.keys, "<A-S-а>", "float", 0.9)
 add_terminal_key(M.keys, "<C-_>", "right", 0.4)
 add_terminal_key(M.keys, "<A-M>", "right", 0.4)
+add_terminal_key(M.keys, "<A-S-ь>", "right", 0.4)
 add_terminal_key(M.keys, "<A-N>", "bottom", 0.5)
+add_terminal_key(M.keys, "<A-S-т>", "bottom", 0.5)
 
 return M

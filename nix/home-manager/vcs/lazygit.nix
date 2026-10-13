@@ -1,4 +1,4 @@
-_: {
+{ config, lib, ... }: {
   programs = {
     lazygit = {
       enable = true;
@@ -6,31 +6,6 @@ _: {
       enableFishIntegration = true;
       enableNushellIntegration = true;
       enableZshIntegration = true;
-      settings = {
-        gui = {
-          # The number of lines you scroll by when scrolling the main window.
-          scrollHeight = 20;
-        };
-        keybinding = {
-          # Keep `C-h`, `C-j`, `C-k`, and `C-l` unbound so tmux pane navigation passes through lazygit.
-          universal = {
-            prevPage = "<c-u>";
-            nextPage = "<c-d>";
-            scrollUpMain-alt2 = "<c-b>";
-            scrollDownMain-alt2 = "<c-f>";
-            createPatchOptionsMenu = "<c-v>"; # Relocated from `<c-p>`, which now moves a commit up.
-          };
-          commits = {
-            moveDownCommit = "<c-n>"; # Was `<c-j>`.
-            moveUpCommit = "<c-p>"; # Was `<c-k>`.
-            openLogMenu = "<c-g>"; # Was `<c-l>`.
-          };
-          files = {
-            findBaseCommitForFixup = ""; # Conflicts with universal `C-f`.
-            openStatusFilter = ""; # Conflicts with universal `C-b`.
-          };
-        };
-      };
     };
     fish.interactiveShellInit =
       # fish
@@ -66,4 +41,11 @@ _: {
         })
       '';
   };
+
+  # Empty LazyGit settings still declare a disabled file upstream.
+  home.file."${config.xdg.configHome}/lazygit/config.yml" = {
+    enable = lib.mkForce true;
+    source = lib.mkForce config.xdg.configFile."lazygit/config.yml".source;
+  };
+
 }

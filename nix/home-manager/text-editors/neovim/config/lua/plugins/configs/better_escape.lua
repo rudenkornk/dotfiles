@@ -115,4 +115,18 @@ M.opts = {
   },
 }
 
+function M.config(_, opts)
+  require("better_escape").setup(opts)
+
+  -- `better-escape` overwrites our `а` and `ы` command-line aliases when it loads.
+  -- Preserve its escape detection while translating ordinary keys only in `:` commands.
+  for source, target in pairs({ ["а"] = "f", ["ы"] = "s" }) do
+    local handler = vim.fn.maparg(source, "c", false, true).callback
+    vim.keymap.set("c", source, function()
+      local key = handler()
+      return vim.fn.getcmdtype() == ":" and key == source and target or key
+    end, { expr = true })
+  end
+end
+
 return M

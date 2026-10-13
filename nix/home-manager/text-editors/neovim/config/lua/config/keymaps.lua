@@ -144,6 +144,20 @@
 vim.opt.keymap = "rnk-qwerty-jcuken"
 vim.opt.langmap =
   "ЙЦУКЕНГШЩЗХЪ;QWERTYUIOPÜÅ,ФЫВАПРОЛДЖЭ;ASDFGHJKLÖÄ,ЯЧСМИТЬБЮ;ZXCVBNMØÆ,йцукенгшщзхъ;qwertyuiopüå,фывапролджэ;asdfghjklöä,ячсмитьбю;zxcvbnmøæ"
+
+for _, group in ipairs(vim.split(vim.o.langmap, ",", { plain = true })) do
+  local from, to = group:match("^(.-);(.*)$")
+  local sources = vim.fn.split(from, "\\zs")
+  local targets = vim.fn.split(to, "\\zs")
+
+  for i, source in ipairs(sources) do
+    local target = targets[i]
+    vim.keymap.set("c", source, function()
+      return vim.fn.getcmdtype() == ":" and target or source
+    end, { expr = true })
+  end
+end
+
 vim.opt.iminsert = 0
 vim.opt.imsearch = -1
 vim.keymap.set({ "n" }, "<C-q>", "a<C-^><ESC>", { desc = "Toggle keyboard layout" })

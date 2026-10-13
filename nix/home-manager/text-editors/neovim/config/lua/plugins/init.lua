@@ -165,6 +165,7 @@ return {
     "max397574/better-escape.nvim",
     event = "InsertEnter",
     opts = require("plugins.configs.better_escape").opts,
+    config = require("plugins.configs.better_escape").config,
   },
   { "petertriho/nvim-scrollbar", event = "VeryLazy", config = true },
   {

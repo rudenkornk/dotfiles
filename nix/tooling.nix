@@ -33,6 +33,7 @@ let
     gitleaks
     jq
     kdlfmt
+    unstable.lazygit # TODO(rudenkornk): Switch to stable after NixOS 26.11.
     markdownlint-cli2
     mypy
     nixfmt

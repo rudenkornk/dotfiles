@@ -35,6 +35,18 @@ M.opts = {
       files = {
         -- For some reason, upper-level "hidden" opt is not picked up here.
         hidden = true,
+        on_show = function(picker)
+          for _, group in ipairs(vim.split(vim.o.langmap, ",", { plain = true })) do
+            local from, to = group:match("^(.-);(.*)$")
+            local sources = vim.fn.split(from, "\\zs")
+            local targets = vim.fn.split(to, "\\zs")
+
+            -- Remapping routes `ыа` through our Latin `sf` escape handlers.
+            for i, source in ipairs(sources) do
+              vim.keymap.set("i", source, targets[i], { buffer = picker.input.win.buf, remap = true })
+            end
+          end
+        end,
       },
       colorschemes = {
         title = "Colorschemes (dark)",

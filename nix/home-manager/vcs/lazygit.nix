@@ -1,7 +1,14 @@
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   programs = {
     lazygit = {
       enable = true;
+      package = pkgs.unstable.lazygit; # TODO(rudenkornk): Switch to stable after NixOS 26.11.
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableNushellIntegration = true;

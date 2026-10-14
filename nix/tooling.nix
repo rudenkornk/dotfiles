@@ -34,7 +34,6 @@ let
     gitleaks
     jq
     kdlfmt
-    unstable.lazygit # TODO(rudenkornk): Switch to stable after NixOS 26.11.
     markdownlint-cli2
     mypy
     nixfmt
@@ -53,6 +52,11 @@ let
         mdformat-gfm
       ]
     ))
+
+    # Config generation.
+    custom.keymap-defaults
+    unstable.dua # TODO(rudenkornk): Switch to stable after NixOS 26.11.
+    unstable.lazygit # TODO(rudenkornk): Switch to stable after NixOS 26.11.
 
     # Install tools.
     disko

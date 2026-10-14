@@ -134,9 +134,12 @@
       in
       {
         Unit = {
-          Wants = [ "dbus.socket" ];
+          Wants = [
+            "dbus.socket"
+            "merge-skotty-config.service"
+          ];
           After = [ "dbus.socket" ];
-          ConditionPathIsExecutable = skotty;
+          ConditionFileIsExecutable = skotty;
         };
         Install.WantedBy = [ "default.target" ];
         Service = {
@@ -175,7 +178,6 @@
         source = pkgs.locallib.secrets + /corp/skotty.yaml.sops;
         service-name = "merge-skotty-config";
         before = [ "skotty.service" ];
-        requiredBy = [ "skotty.service" ];
       };
     };
 

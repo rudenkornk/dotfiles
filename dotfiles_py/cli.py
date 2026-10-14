@@ -167,6 +167,7 @@ def syms() -> None:
     )
     syms_target.create_symlinks(source_dir=home_manager / "ai/configs")
     syms_target.create_symlinks(source_dir=home_manager / "desktop-envs/configs")
+    syms_target.create_symlinks(source_dir=home_manager / "fs-navigation/configs")
     syms_target.create_symlinks(source_dir=home_manager / "linters/configs")
     syms_target.create_symlinks(source_dir=home_manager / "messengers/configs")
     syms_target.create_symlinks(source_dir=home_manager / "remote-desktop/configs")

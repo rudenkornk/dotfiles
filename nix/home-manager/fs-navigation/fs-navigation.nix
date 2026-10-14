@@ -13,4 +13,6 @@
     ripgrep
     rsync
   ];
+
+  local.home.file.".".source = ./configs;
 }

@@ -30,11 +30,6 @@ in
         detected.dhcp.enable = false;
       };
 
-      trackpoint = {
-        enable = true;
-        emulateWheel = true;
-        device = "TPPS/2 Elan TrackPoint";
-      };
       graphics.extraPackages = with pkgs; [
         intel-media-driver
         intel-compute-runtime

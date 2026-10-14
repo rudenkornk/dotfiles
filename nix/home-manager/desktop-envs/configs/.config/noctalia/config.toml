@@ -1,8 +1,8 @@
 [include]
 autoload = false
 files = [
-    "host.toml",
-    "secrets.toml",
+  "host.toml",
+  "secrets.toml",
 ]
 
 [accessibility]
@@ -14,39 +14,39 @@ enable_sounds = false
 
 [bar]
 order = [
-    "main",
+  "main",
 ]
 
 [bar.main]
 auto_hide = false
 center = [
-    "keyboard_layout",
-    "clock",
-    "notifications",
-    "clipboard",
+  "keyboard_layout",
+  "clock",
+  "notifications",
+  "clipboard",
 ]
 concave_edge_corners = false
 end = [
-    "group:g2",
-    "brightness",
-    "volume",
-    "network",
-    "bluetooth",
-    "caffeine",
-    "power_profile",
-    "battery",
-    "session",
+  "group:g2",
+  "brightness",
+  "volume",
+  "network",
+  "bluetooth",
+  "caffeine",
+  "power_profile",
+  "battery",
+  "session",
 ]
 font_weight = 400
 margin_ends = 4
 position = "bottom"
 scale = 1.2
 start = [
-    "launcher",
-    "group:g1",
-    "wallhaven",
-    "spacer_2",
-    "taskbar",
+  "launcher",
+  "group:g1",
+  "wallhaven",
+  "spacer_2",
+  "taskbar",
 ]
 
 [[bar.main.capsule_group]]
@@ -56,7 +56,7 @@ enabled = true
 fill = "surface_variant"
 id = "g1"
 members = [
-    "workspaces",
+  "workspaces",
 ]
 opacity = 1.0
 padding = 6.0
@@ -68,10 +68,10 @@ enabled = true
 fill = "surface_variant"
 id = "g2"
 members = [
-    "cpu",
-    "network_rx",
-    "network_tx",
-    "disk",
+  "cpu",
+  "network_rx",
+  "network_tx",
+  "disk",
 ]
 opacity = 0.5
 padding = 6.0
@@ -88,17 +88,17 @@ enabled = true
 
 [control_center]
 hidden_tabs = [
-    "media",
-    "monitor",
-    "weather",
+  "media",
+  "monitor",
+  "weather",
 ]
 shortcuts = [
-    { type = "bluetooth" },
-    { type = "wifi" },
-    { type = "caffeine" },
-    { type = "clipboard" },
-    { type = "noctalia/wallhaven:shortcut" },
-    { type = "alexander/screen-toolkit:toggle" },
+  { type = "bluetooth" },
+  { type = "wifi" },
+  { type = "caffeine" },
+  { type = "clipboard" },
+  { type = "noctalia/wallhaven:shortcut" },
+  { type = "alexander/screen-toolkit:toggle" },
 ]
 width = 750
 
@@ -134,34 +134,34 @@ timeout = 3600
 
 [keybinds]
 cancel = [
-    "escape",
-    "ctrl+x",
+  "escape",
+  "ctrl+x",
 ]
 delete = [
-    "del",
+  "del",
 ]
 down = [
-    "down",
-    "ctrl+n",
-    "ctrl+j",
+  "down",
+  "ctrl+n",
+  "ctrl+j",
 ]
 left = [
-    "left",
-    "ctrl+h",
+  "left",
+  "ctrl+h",
 ]
 right = [
-    "right",
-    "ctrl+l",
+  "right",
+  "ctrl+l",
 ]
 up = [
-    "up",
-    "ctrl+p",
-    "ctrl+k",
+  "up",
+  "ctrl+p",
+  "ctrl+k",
 ]
 validate = [
-    "return",
-    "kp_enter",
-    "ctrl+m",
+  "return",
+  "kp_enter",
+  "ctrl+m",
 ]
 
 [location]
@@ -177,7 +177,7 @@ lock_before_suspend = true
 background_opacity = 1.0
 enable_daemon = true
 filter_order = [
-    "two_seconds",
+  "two_seconds",
 ]
 history_retention_hours = 12
 layer = "overlay"
@@ -220,11 +220,11 @@ precision = 8
 [plugins]
 auto_update = "all"
 enabled = [
-    "alexander/screen-toolkit",
-    "noctalia/kaomoji",
-    "noctalia/translator",
-    "notfinaldev/web-search",
-    "noctalia/wallhaven",
+  "alexander/screen-toolkit",
+  "noctalia/kaomoji",
+  "noctalia/translator",
+  "notfinaldev/web-search",
+  "noctalia/wallhaven",
 ]
 
 [shell]
@@ -354,7 +354,7 @@ directory = "~/Downloads/Wallpapers"
 enabled = true
 fill_color = "#000000"
 transition = [
-    "disc",
+  "disc",
 ]
 
 [weather]

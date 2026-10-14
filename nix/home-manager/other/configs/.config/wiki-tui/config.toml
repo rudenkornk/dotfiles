@@ -1,0 +1,91 @@
+# This file is auto-generated. Edit config-overlay.toml and run
+# `nix run . -- configs` followed by `nix run . -- format`.
+[bindings.global]
+scroll_down = [
+  "j",
+  "down",
+  "о",
+]
+scroll_up = [
+  "k",
+  "up",
+  "л",
+]
+scroll_to_top = [
+  "g",
+  "home",
+  "п",
+]
+scroll_to_bottom = [
+  { code = "G", modifiers = "SHIFT" },
+  "end",
+  { code = "П", modifiers = "SHIFT" },
+]
+pop_popup = "esc"
+half_down = [
+  { code = "d", modifiers = "CONTROL" },
+  "pagedown",
+  { code = "в", modifiers = "CONTROL" },
+]
+half_up = [
+  { code = "u", modifiers = "CONTROL" },
+  "pageup",
+  { code = "г", modifiers = "CONTROL" },
+]
+unselect_scroll = [
+  "h",
+  "р",
+]
+submit = "enter"
+quit = [
+  "q",
+  { code = "c", modifiers = "CONTROL" },
+  "й",
+  { code = "с", modifiers = "CONTROL" },
+]
+enter_search_bar = [
+  "i",
+  "ш",
+]
+exit_search_bar = "esc"
+switch_context_search = [
+  "s",
+  "ы",
+]
+switch_context_page = [
+  "p",
+  "з",
+]
+toggle_search_language_selection = "f2"
+toggle_logger = [
+  "l",
+  "д",
+]
+help = "?"
+
+[bindings.search]
+continue_search = [
+  "c",
+  "с",
+]
+
+[bindings.page]
+pop_page = "esc"
+jump_to_header = "enter"
+select_prev_link = "left"
+select_next_link = "right"
+open_link = "enter"
+toggle_page_language_selection = "f3"
+toggle_zen_mode = "f4"
+toggle_toc = [
+  "tab",
+  "backtab",
+]
+
+[bindings.page.select_first_link]
+code = "left"
+modifiers = "SHIFT"
+
+[bindings.page.select_last_link]
+code = "right"
+modifiers = "SHIFT"

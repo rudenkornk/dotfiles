@@ -364,6 +364,13 @@ def _build_lazygit(config_path: Path) -> Settings:
 def generate_configs(*, repo_path: Path, check: bool) -> None:
     configs: list[tuple[str, Callable[[Path], Config]]] = [
         ("vcs/configs/.config/lazygit/config.yml", _build_lazygit),
+        ("fs-navigation/configs/.config/yazi/keymap.toml", _build_yazi),
+        ("ai/configs/.config/opencode/tui.jsonc", _build_opencode),
+        ("ai/configs/.gemini/keybindings.json", _build_gemini),
+        ("ai/configs/.claude/keybindings.json", _build_claude),
+        ("shell/configs/.config/atuin/config.toml", _build_atuin),
+        ("other/configs/.config/wiki-tui/config.toml", _build_wiki),
+        ("fs-navigation/configs/.config/dua-cli/config.toml", _build_dua),
     ]
     for relative_path, build in configs:
         config_path = repo_path / "nix/home-manager" / relative_path

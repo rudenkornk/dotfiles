@@ -5,7 +5,7 @@
   home.packages = with pkgs; [
     ast-grep # Structural search-and-replace backend for grug-far.
     bat
-    dua
+    unstable.dua # TODO(rudenkornk): Switch to stable after NixOS 26.11.
     dust
     fd
     file

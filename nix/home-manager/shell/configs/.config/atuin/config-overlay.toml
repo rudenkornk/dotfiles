@@ -1,0 +1,32 @@
+dialect = "uk"
+enter_accept = false
+inline_height = 0
+invert = true
+prefers_reduced_motion = true
+show_numeric_shortcuts = false
+style = "auto"
+update_check = false
+search_mode = "daemon-fuzzy"
+
+[keymap.emacs]
+"ctrl-u" = "scroll-half-page-up"
+"ctrl-d" = "scroll-half-page-down"
+"ctrl-b" = "scroll-page-up"
+"ctrl-f" = "scroll-page-down"
+"ctrl-t" = "cycle-search-mode"
+"ctrl-o" = "accept"                # `enter_accept = false` leaves nothing bound to "run immediately".
+"ctrl-v" = "toggle-tab"
+
+[keymap.inspector]
+"ctrl-o" = "accept"
+"ctrl-v" = "toggle-tab"
+
+[theme]
+name = "monokai"
+
+[ai]
+enabled = true
+
+[daemon]
+enabled = true
+autostart = true

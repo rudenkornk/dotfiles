@@ -23,4 +23,6 @@
       settings.updates.auto_update = true;
     };
   };
+
+  local.home.file.".".source = ./configs;
 }

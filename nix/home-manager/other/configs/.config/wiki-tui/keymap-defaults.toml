@@ -1,0 +1,34 @@
+# This baseline follows wiki-tui 0.9.2, including alternatives omitted from its reference page.
+[global]
+scroll_down = ["j", "down"]
+scroll_up = ["k", "up"]
+scroll_to_top = ["g", "home"]
+scroll_to_bottom = [{ code = "G", modifiers = "SHIFT" }, "end"]
+pop_popup = "esc"
+half_down = [{ code = "d", modifiers = "CONTROL" }, "pagedown"]
+half_up = [{ code = "u", modifiers = "CONTROL" }, "pageup"]
+unselect_scroll = "h"
+submit = "enter"
+quit = ["q", { code = "c", modifiers = "CONTROL" }]
+enter_search_bar = "i"
+exit_search_bar = "esc"
+switch_context_search = "s"
+switch_context_page = "p"
+toggle_search_language_selection = "f2"
+toggle_logger = "l"
+help = "?"
+
+[search]
+continue_search = "c"
+
+[page]
+pop_page = "esc"
+jump_to_header = "enter"
+select_first_link = { code = "left", modifiers = "SHIFT" }
+select_last_link = { code = "right", modifiers = "SHIFT" }
+select_prev_link = "left"
+select_next_link = "right"
+open_link = "enter"
+toggle_page_language_selection = "f3"
+toggle_zen_mode = "f4"
+toggle_toc = ["tab", "backtab"]

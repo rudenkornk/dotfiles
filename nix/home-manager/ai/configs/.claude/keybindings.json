@@ -13,7 +13,15 @@
         "ctrl+shift+b": "app:toggleBrief",
         "ctrl+shift+o": "app:toggleTeammatePreview",
         "ctrl+r": "history:search",
-        "ctrl+]": "app:openArtifact"
+        "ctrl+]": "app:openArtifact",
+        "ctrl+е": null,
+        "ctrl+й": "app:toggleTodos",
+        "ctrl+щ": null,
+        "ctrl+п": "app:toggleTranscript",
+        "ctrl+ч й": "app:exit",
+        "ctrl+shift+и": "app:toggleBrief",
+        "ctrl+shift+щ": "app:toggleTeammatePreview",
+        "ctrl+к": "history:search"
       }
     },
     {
@@ -44,7 +52,21 @@
         "ctrl+s": null,
         "meta+s": "chat:stash",
         "ctrl+v": "chat:imagePaste",
-        "space": "voice:pushToTalk"
+        "space": "voice:pushToTalk",
+        "ctrl+п": null,
+        "cmd+л": "chat:clearScreen",
+        "ctrl+ч ctrl+л": "chat:killAgents",
+        "meta+з": "chat:modelPicker",
+        "meta+щ": "chat:fastMode",
+        "meta+е": "chat:thinkingToggle",
+        "meta+ц": "chat:workflowKeywordToggle",
+        "ctrl+з": "history:previous",
+        "ctrl+т": "history:next",
+        "ctrl+ч ctrl+у": "chat:externalEditor",
+        "meta+у": "chat:externalEditor",
+        "ctrl+ы": null,
+        "meta+ы": "chat:stash",
+        "ctrl+м": "chat:imagePaste"
       }
     },
     {
@@ -55,7 +77,9 @@
         "ctrl+p": "autocomplete:previous",
         "ctrl+n": "autocomplete:next",
         "up": "autocomplete:previous",
-        "down": "autocomplete:next"
+        "down": "autocomplete:next",
+        "ctrl+з": "autocomplete:previous",
+        "ctrl+т": "autocomplete:next"
       }
     },
     {
@@ -76,13 +100,24 @@
         "w": "settings:periodWeek",
         "t": "settings:sortByTokens",
         "ctrl+u": "scroll:halfPageUp",
-        "ctrl+v": "scroll:halfPageDown"
+        "ctrl+v": "scroll:halfPageDown",
+        "л": "select:previous",
+        "о": "select:next",
+        "ctrl+з": "select:previous",
+        "ctrl+т": "select:next",
+        "к": "settings:retry",
+        "в": "settings:periodDay",
+        "ц": "settings:periodWeek",
+        "е": "settings:sortByTokens",
+        "ctrl+г": "scroll:halfPageUp",
+        "ctrl+м": "scroll:halfPageDown"
       }
     },
     {
       "context": "Doctor",
       "bindings": {
-        "f": "doctor:fix"
+        "f": "doctor:fix",
+        "а": "doctor:fix"
       }
     },
     {
@@ -99,7 +134,12 @@
         "tab": "confirm:nextField",
         "space": "confirm:toggle",
         "shift+tab": "confirm:cycleMode",
-        "ctrl+e": "confirm:toggleExplanation"
+        "ctrl+e": "confirm:toggleExplanation",
+        "н": "confirm:yes",
+        "т": "confirm:no",
+        "ctrl+з": "confirm:previous",
+        "ctrl+т": "confirm:next",
+        "ctrl+у": "confirm:toggleExplanation"
       }
     },
     {
@@ -133,7 +173,21 @@
         "up": "scroll:lineUp",
         "down": "scroll:lineDown",
         "home": "scroll:top",
-        "end": "scroll:bottom"
+        "end": "scroll:bottom",
+        "ctrl+п": "transcript:toggleShowAll",
+        "й": "transcript:exit",
+        "ctrl+г": "scroll:halfPageUp",
+        "ctrl+и": "scroll:fullPageUp",
+        "ctrl+а": "scroll:fullPageDown",
+        "ctrl+у": "scroll:lineDown",
+        "ctrl+н": "scroll:lineUp",
+        "ctrl+т": "scroll:lineDown",
+        "ctrl+з": "scroll:lineUp",
+        "п": "scroll:top",
+        "shift+п": "scroll:bottom",
+        "о": "scroll:lineDown",
+        "л": "scroll:lineUp",
+        "и": "scroll:fullPageUp"
       }
     },
     {
@@ -144,21 +198,28 @@
         "tab": "historySearch:accept",
         "enter": "historySearch:execute",
         "ctrl+s": null,
-        "meta+s": "historySearch:cycleScope"
+        "meta+s": "historySearch:cycleScope",
+        "ctrl+к": "historySearch:next",
+        "ctrl+ы": null,
+        "meta+ы": "historySearch:cycleScope"
       }
     },
     {
       "context": "Task",
       "bindings": {
         "ctrl+x ctrl+b": "task:background",
-        "ctrl+b": "task:background"
+        "ctrl+b": "task:background",
+        "ctrl+ч ctrl+и": "task:background",
+        "ctrl+и": "task:background"
       }
     },
     {
       "context": "ThemePicker",
       "bindings": {
         "ctrl+t": "theme:toggleSyntaxHighlighting",
-        "ctrl+e": "theme:editCustom"
+        "ctrl+e": "theme:editCustom",
+        "ctrl+е": "theme:toggleSyntaxHighlighting",
+        "ctrl+у": "theme:editCustom"
       }
     },
     {
@@ -181,7 +242,13 @@
         "shift+up": "selection:extendUp",
         "shift+down": "selection:extendDown",
         "shift+home": "selection:extendLineStart",
-        "shift+end": "selection:extendLineEnd"
+        "shift+end": "selection:extendLineEnd",
+        "ctrl+г": "scroll:halfPageUp",
+        "ctrl+м": "scroll:halfPageDown",
+        "ctrl+у": "scroll:lineDown",
+        "ctrl+н": "scroll:lineUp",
+        "ctrl+shift+с": "selection:copy",
+        "cmd+с": "selection:copy"
       }
     },
     {
@@ -212,7 +279,10 @@
         "left": "footer:previous",
         "enter": "footer:openSelected",
         "escape": "footer:clearSelection",
-        "x": "footer:close"
+        "x": "footer:close",
+        "ctrl+з": "footer:up",
+        "ctrl+т": "footer:down",
+        "ч": "footer:close"
       }
     },
     {
@@ -232,7 +302,13 @@
         "shift+down": "messageSelector:bottom",
         "meta+down": "messageSelector:bottom",
         "shift+j": "messageSelector:bottom",
-        "enter": "messageSelector:select"
+        "enter": "messageSelector:select",
+        "л": "messageSelector:up",
+        "о": "messageSelector:down",
+        "ctrl+з": "messageSelector:up",
+        "ctrl+т": "messageSelector:down",
+        "shift+л": "messageSelector:top",
+        "shift+о": "messageSelector:bottom"
       }
     },
     {
@@ -262,7 +338,20 @@
         "g": "scroll:top",
         "shift+g": "scroll:bottom",
         "home": "scroll:top",
-        "end": "scroll:bottom"
+        "end": "scroll:bottom",
+        "ctrl+з": "diff:previousFile",
+        "ctrl+т": "diff:nextFile",
+        "р": "diff:previousSource",
+        "д": "diff:nextSource",
+        "о": "diff:nextFile",
+        "л": "diff:previousFile",
+        "ctrl+г": "scroll:pageUp",
+        "ctrl+м": "scroll:pageDown",
+        "ctrl+а": "scroll:fullPageDown",
+        "ctrl+и": "scroll:fullPageUp",
+        "и": "scroll:fullPageUp",
+        "п": "scroll:top",
+        "shift+п": "scroll:bottom"
       }
     },
     {
@@ -270,7 +359,10 @@
       "bindings": {
         "h": "modelPicker:decreaseEffort",
         "l": "modelPicker:increaseEffort",
-        "d": "modelPicker:setAsDefault"
+        "d": "modelPicker:setAsDefault",
+        "р": "modelPicker:decreaseEffort",
+        "д": "modelPicker:increaseEffort",
+        "в": "modelPicker:setAsDefault"
       }
     },
     {
@@ -289,7 +381,13 @@
         "home": "select:first",
         "end": "select:last",
         "enter": "select:accept",
-        "escape": "select:cancel"
+        "escape": "select:cancel",
+        "о": "select:next",
+        "л": "select:previous",
+        "ctrl+т": "select:next",
+        "ctrl+з": "select:previous",
+        "ctrl+г": "select:pageUp",
+        "ctrl+м": "select:pageDown"
       }
     },
     {
@@ -297,7 +395,9 @@
       "bindings": {
         "space": "plugin:toggle",
         "i": "plugin:install",
-        "f": "plugin:favorite"
+        "f": "plugin:favorite",
+        "ш": "plugin:install",
+        "а": "plugin:favorite"
       }
     }
   ]

@@ -10,10 +10,10 @@ import click
 import typer
 
 from . import utils
+from .targets import config_gen as config_target
 from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
 from .targets import host as host_target
-from .targets import lazygit as lazygit_target
 from .targets import lint as lint_target
 from .targets import noctalia as noctalia_target
 from .targets import secrets as secrets_target
@@ -100,10 +100,7 @@ def configs(
     ] = False,
 ) -> None:
     """Regenerate some cli tools settings."""
-    lazygit_target.lazygit_config(
-        config_path=REPO_PATH / "nix/home-manager/vcs/configs/.config/lazygit/config.yml",
-        check=check,
-    )
+    config_target.generate_configs(repo_path=REPO_PATH, check=check)
 
 
 @app.command()

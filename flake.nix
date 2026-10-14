@@ -48,19 +48,18 @@
       overlay_modules = import ./nix/overlays/locallib/get_modules.nix null ./nix/overlays;
       system = "x86_64-linux";
       makePkgs =
-        config:
+        host:
         import inputs.nixpkgs {
           localSystem = system;
           config = {
             allowUnfreePredicate = import ./nix/unfree.nix { inherit lib; };
-          }
-          // config;
-          overlays = map (overlay: import overlay { inherit inputs; }) overlay_modules;
+          };
+          overlays = map (overlay: import overlay { inherit inputs host; }) overlay_modules;
         };
       pkgs = makePkgs { };
       hostfiles = pkgs.locallib.get_modules_map ./nix/hosts;
       hosts = mapAttrs (_: path: import path { inherit pkgs; }) hostfiles;
-      hostPkgs = mapAttrs (_: host: makePkgs { cudaSupport = host.gpu.cudaSupport or false; }) hosts;
+      hostPkgs = mapAttrs (_: makePkgs) hosts;
       userfiles = pkgs.locallib.get_modules_map ./nix/users;
       users = mapAttrs (lib.const import) userfiles;
       standalonePackages = pkgs.locallib.get_modules_map ./nix/packages;

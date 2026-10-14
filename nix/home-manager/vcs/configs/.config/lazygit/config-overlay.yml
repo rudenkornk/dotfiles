@@ -1,0 +1,18 @@
+gui:
+  # The number of lines you scroll by when scrolling the main window.
+  scrollHeight: 20
+keybinding:
+  # Keep `C-h`, `C-j`, `C-k`, and `C-l` unbound so tmux pane navigation passes through lazygit.
+  universal:
+    prevPage: <ctrl+u>
+    nextPage: <ctrl+d>
+    scrollUpMain-alt2: <ctrl+b>
+    scrollDownMain-alt2: <ctrl+f>
+    createPatchOptionsMenu: <ctrl+v> # Relocated from `<ctrl+p>`, which now moves a commit up.
+  commits:
+    moveDownCommit: <ctrl+n> # Was `<ctrl+j>`.
+    moveUpCommit: <ctrl+p> # Was `<ctrl+k>`.
+    openLogMenu: <ctrl+g> # Was `<ctrl+l>`.
+  files:
+    findBaseCommitForFixup: "" # Conflicts with universal `C-f`.
+    openStatusFilter: "" # Conflicts with universal `C-b`.

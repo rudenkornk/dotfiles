@@ -1,18 +1,182 @@
+# This file is auto-generated. Edit config-overlay.yml and run `nix run . -- configs` followed by `nix run . -- format`.
 gui:
-  # The number of lines you scroll by when scrolling the main window.
   scrollHeight: 20
 keybinding:
-  # Keep `C-h`, `C-j`, `C-k`, and `C-l` unbound so tmux pane navigation passes through lazygit.
-  universal:
-    prevPage: <ctrl+u>
-    nextPage: <ctrl+d>
-    scrollUpMain-alt2: <ctrl+b>
-    scrollDownMain-alt2: <ctrl+f>
-    createPatchOptionsMenu: <ctrl+v> # Relocated from `<ctrl+p>`, which now moves a commit up.
+  amendAttribute:
+    addCoAuthor: [c, с]
+    resetAuthor: [a, ф]
+    setAuthor: [A, Ф]
+  branches:
+    addForkRemote: [F, А]
+    checkoutBranchByName: [c, с]
+    checkoutPreviousBranch: "-"
+    copyPullRequestURL: [<ctrl+y>, <ctrl+н>]
+    createPullRequest: [o, щ]
+    createTag: [T, Е]
+    fastForward: [f, а]
+    fetchRemote: [f, а]
+    forceCheckoutBranch: [F, А]
+    mergeIntoCurrentBranch: [M, Ь]
+    moveCommitsToNewBranch: [N, Т]
+    openPullRequestInBrowser: [G, П]
+    pushTag: [P, З]
+    rebaseBranch: [r, к]
+    renameBranch: [R, К]
+    setUpstream: [u, г]
+    sortOrder: [s, ы]
+    viewGitFlowOptions: [i, ш]
+    viewPullRequestOptions: [O, Щ]
+  commitFiles:
+    checkoutCommitFile: [c, с]
+  commitMessage:
+    commitMenu: [<ctrl+o>, <ctrl+щ>]
   commits:
-    moveDownCommit: <ctrl+n> # Was `<ctrl+j>`.
-    moveUpCommit: <ctrl+p> # Was `<ctrl+k>`.
-    openLogMenu: <ctrl+g> # Was `<ctrl+l>`.
+    amendToCommit: [A, Ф]
+    checkoutCommit: <space>
+    cherryPickCopy: [C, С]
+    copyCommitAttributeToClipboard: [y, н]
+    createFixupCommit: [F, А]
+    markCommitAsBaseForRebase: [B, И]
+    markCommitAsFixup: [f, а]
+    moveDownCommit: [<ctrl+n>, <ctrl+т>]
+    moveUpCommit: [<ctrl+p>, <ctrl+з>]
+    openInBrowser: [o, щ]
+    openLogMenu: [<ctrl+g>, <ctrl+п>]
+    openPullRequestInBrowser: [G, П]
+    pasteCommits: [V, М]
+    pickCommit: [p, з]
+    renameCommit: [r, к]
+    renameCommitWithEditor: [R, К]
+    resetCherryPick: [<ctrl+r>, <ctrl+к>]
+    resetCommitAuthor: [a, ф]
+    revertCommit: [t, е]
+    selectCommitsOfCurrentBranch: "*"
+    setFixupMessage: [c, с]
+    squashAboveCommits: [S, Ы]
+    squashDown: [s, ы]
+    startInteractiveRebase: [i, ш]
+    tagCommit: [T, Е]
+    viewBisectOptions: [b, и]
+    viewResetOptions: [g, п]
   files:
-    findBaseCommitForFixup: "" # Conflicts with universal `C-f`.
-    openStatusFilter: "" # Conflicts with universal `C-b`.
+    amendLastCommit: [A, Ф]
+    collapseAll: "-"
+    commitChanges: [c, с]
+    commitChangesWithEditor: [C, С]
+    commitChangesWithoutHook: [w, ц]
+    confirmDiscard: [x, ч]
+    copyFileInfoToClipboard: [y, н]
+    expandAll: "="
+    fetch: [f, а]
+    findBaseCommitForFixup: ""
+    ignoreFile: [i, ш]
+    openMergeOptions: [M, Ь]
+    openStatusFilter: ""
+    refreshFiles: [r, к]
+    stashAllChanges: [s, ы]
+    toggleStagedAll: [a, ф]
+    toggleTreeView: "`"
+    viewResetOptions: [D, В]
+    viewStashOptions: [S, Ы]
+  main:
+    editSelectHunk: [E, У]
+    nextHunk: [<right>, l, д]
+    pickBothHunks: [b, и]
+    prevHunk: [<left>, h, р]
+    toggleSelectHunk: [a, ф]
+  stash:
+    popStash: [g, п]
+    renameStash: [r, к]
+  status:
+    allBranchesLogGraph: [a, ф]
+    allBranchesLogGraphReverse: [A, Ф]
+    checkForUpdate: [u, г]
+    recentRepos: <enter>
+  submodules:
+    bulkMenu: [b, и]
+    init: [i, ш]
+    update: [u, г]
+  universal:
+    backspaceWord: <ctrl+backspace>
+    confirm: <enter>
+    confirmInEditor: <ctrl+enter>
+    confirmInEditor-alt: [<ctrl+s>, <ctrl+ы>]
+    confirmMenu: <enter>
+    confirmSuggestion: <enter>
+    copyToClipboard: [<ctrl+o>, <ctrl+щ>]
+    createPatchOptionsMenu: [<ctrl+v>, <ctrl+м>]
+    createRebaseOptionsMenu: [m, ь]
+    cycleDiffRenderers: "|"
+    cycleDiffRenderersReverse: \
+    decreaseContextInDiffView: "{"
+    decreaseRenameSimilarityThreshold: (
+    diffingMenu: [W, Ц]
+    diffingMenu-alt: [<ctrl+e>, <ctrl+у>]
+    edit: [e, у]
+    editConfig: [<alt+shift+c>, <alt+shift+с>]
+    executeShellCommand: ":"
+    extrasMenu: "@"
+    filteringMenu: [<ctrl+s>, <ctrl+ы>]
+    focusMainView: "0"
+    forwardDeleteWord: <ctrl+delete>
+    goInto: <enter>
+    gotoBottom: ">"
+    gotoBottom-alt: <end>
+    gotoTop: <
+    gotoTop-alt: <home>
+    increaseContextInDiffView: "}"
+    increaseRenameSimilarityThreshold: )
+    jumpToBlock: ["1", "2", "3", "4", "5"]
+    moveWordLeft: <ctrl+left>
+    moveWordRight: <ctrl+right>
+    new: [n, т]
+    newWorktree: [w, ц]
+    nextBlock: <right>
+    nextBlock-alt: [l, д]
+    nextBlock-alt2: <tab>
+    nextItem: <down>
+    nextItem-alt: [j, о]
+    nextMatch: [n, т]
+    nextPage: [<ctrl+d>, <ctrl+в>]
+    nextScreenMode: +
+    nextTab: "]"
+    openDiffTool: [<ctrl+t>, <ctrl+е>]
+    openFile: [o, щ]
+    openRecentRepos: [<ctrl+r>, <ctrl+к>]
+    optionMenu: "?"
+    prevBlock: <left>
+    prevBlock-alt: [h, р]
+    prevBlock-alt2: <backtab>
+    prevItem: <up>
+    prevItem-alt: [k, л]
+    prevMatch: [N, Т]
+    prevPage: [<ctrl+u>, <ctrl+г>]
+    prevScreenMode: _
+    prevTab: "["
+    pullFiles: [p, з]
+    pushFiles: [P, З]
+    quit: [q, й]
+    quit-alt1: [<ctrl+c>, <ctrl+с>]
+    quitWithoutChangingDirectory: [Q, Й]
+    rangeSelectDown: <shift+down>
+    rangeSelectUp: <shift+up>
+    redo: [Z, Я]
+    refresh: [R, К]
+    remove: [d, в]
+    return: <esc>
+    scrollDownMain: <pgdown>
+    scrollDownMain-alt1: [J, О]
+    scrollDownMain-alt2: [<ctrl+f>, <ctrl+а>]
+    scrollLeft: [H, Р]
+    scrollRight: [L, Д]
+    scrollUpMain: <pgup>
+    scrollUpMain-alt1: [K, Л]
+    scrollUpMain-alt2: [<ctrl+b>, <ctrl+и>]
+    select: <space>
+    startSearch: /
+    submitEditorText: <enter>
+    suspendApp: [<ctrl+z>, <ctrl+я>]
+    togglePanel: <tab>
+    toggleRangeSelect: [v, м]
+    toggleWhitespaceInDiffView: [<ctrl+w>, <ctrl+ц>]
+    undo: [z, я]

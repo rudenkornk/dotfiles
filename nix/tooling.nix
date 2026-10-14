@@ -7,6 +7,7 @@ let
   pyEnv = python.withPackages (
     ps: with ps; [
       click
+      json5
       rich
       ruamel-yaml
       tomli-w

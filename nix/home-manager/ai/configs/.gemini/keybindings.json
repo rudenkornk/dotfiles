@@ -1,0 +1,198 @@
+[
+  {
+    "command": "basic.quit",
+    "key": "ctrl+с"
+  },
+  {
+    "command": "basic.exit",
+    "key": "ctrl+в"
+  },
+  {
+    "command": "cursor.home",
+    "key": "ctrl+ф"
+  },
+  {
+    "command": "cursor.end",
+    "key": "ctrl+у"
+  },
+  {
+    "command": "cursor.right",
+    "key": "ctrl+а"
+  },
+  {
+    "command": "cursor.wordLeft",
+    "key": "alt+и"
+  },
+  {
+    "command": "cursor.wordRight",
+    "key": "alt+а"
+  },
+  {
+    "command": "edit.deleteRightAll",
+    "key": "ctrl+л"
+  },
+  {
+    "command": "edit.deleteLeftAll",
+    "key": "ctrl+г"
+  },
+  {
+    "command": "edit.clear",
+    "key": "ctrl+с"
+  },
+  {
+    "command": "edit.deleteWordLeft",
+    "key": "ctrl+ц"
+  },
+  {
+    "command": "edit.deleteWordRight",
+    "key": "alt+в"
+  },
+  {
+    "command": "edit.deleteLeft",
+    "key": "ctrl+р"
+  },
+  {
+    "command": "edit.deleteRight",
+    "key": "ctrl+в"
+  },
+  {
+    "command": "edit.undo",
+    "key": "ctrl+я"
+  },
+  {
+    "command": "edit.undo",
+    "key": "alt+я"
+  },
+  {
+    "command": "edit.undo",
+    "key": "cmd+я"
+  },
+  {
+    "command": "edit.redo",
+    "key": "ctrl+shift+я"
+  },
+  {
+    "command": "edit.redo",
+    "key": "shift+cmd+я"
+  },
+  {
+    "command": "edit.redo",
+    "key": "alt+shift+я"
+  },
+  {
+    "command": "history.previous",
+    "key": "ctrl+з"
+  },
+  {
+    "command": "history.next",
+    "key": "ctrl+т"
+  },
+  {
+    "command": "history.search.start",
+    "key": "ctrl+к"
+  },
+  {
+    "command": "nav.dialog.up",
+    "key": "л"
+  },
+  {
+    "command": "nav.dialog.down",
+    "key": "о"
+  },
+  {
+    "command": "suggest.focusPrevious",
+    "key": "ctrl+з"
+  },
+  {
+    "command": "suggest.focusNext",
+    "key": "ctrl+т"
+  },
+  {
+    "command": "input.newline",
+    "key": "ctrl+о"
+  },
+  {
+    "command": "input.openExternalEditor",
+    "key": "ctrl+п"
+  },
+  {
+    "command": "input.openExternalEditor",
+    "key": "ctrl+shift+п"
+  },
+  {
+    "command": "input.deprecatedOpenExternalEditor",
+    "key": "ctrl+ч"
+  },
+  {
+    "command": "input.paste",
+    "key": "ctrl+м"
+  },
+  {
+    "command": "input.paste",
+    "key": "cmd+м"
+  },
+  {
+    "command": "input.paste",
+    "key": "alt+м"
+  },
+  {
+    "command": "app.showFullTodos",
+    "key": "ctrl+е"
+  },
+  {
+    "command": "app.toggleMarkdown",
+    "key": "alt+ь"
+  },
+  {
+    "command": "app.toggleMouseMode",
+    "key": "ctrl+ы"
+  },
+  {
+    "command": "app.toggleYolo",
+    "key": "ctrl+н"
+  },
+  {
+    "command": "app.showMoreLines",
+    "key": "ctrl+щ"
+  },
+  {
+    "command": "app.expandPaste",
+    "key": "ctrl+щ"
+  },
+  {
+    "command": "app.clearScreen",
+    "key": "ctrl+д"
+  },
+  {
+    "command": "app.restart",
+    "key": "к"
+  },
+  {
+    "command": "app.restart",
+    "key": "shift+к"
+  },
+  {
+    "command": "app.suspend",
+    "key": "ctrl+я"
+  },
+  {
+    "command": "background.toggle",
+    "key": "ctrl+и"
+  },
+  {
+    "command": "background.toggleList",
+    "key": "ctrl+д"
+  },
+  {
+    "command": "background.kill",
+    "key": "ctrl+л"
+  },
+  {
+    "command": "extension.update",
+    "key": "ш"
+  },
+  {
+    "command": "extension.link",
+    "key": "д"
+  }
+]

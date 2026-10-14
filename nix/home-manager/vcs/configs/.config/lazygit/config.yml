@@ -1,4 +1,5 @@
-# This file is auto-generated. Edit config-overlay.yml and run `nix run . -- configs` followed by `nix run . -- format`.
+# This file is auto-generated. Edit config-overlay.yml and run
+# `nix run . -- configs` followed by `nix run . -- format`.
 gui:
   scrollHeight: 20
 keybinding:

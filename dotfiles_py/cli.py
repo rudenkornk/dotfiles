@@ -101,6 +101,8 @@ def configs(
 ) -> None:
     """Regenerate some cli tools settings."""
     config_target.generate_configs(repo_path=REPO_PATH, check=check)
+    if not check:
+        format_code()
 
 
 @app.command()
@@ -167,6 +169,7 @@ def syms() -> None:
     syms_target.create_symlinks(source_dir=home_manager / "fs-navigation/configs")
     syms_target.create_symlinks(source_dir=home_manager / "linters/configs")
     syms_target.create_symlinks(source_dir=home_manager / "messengers/configs")
+    syms_target.create_symlinks(source_dir=home_manager / "other/configs")
     syms_target.create_symlinks(source_dir=home_manager / "remote-desktop/configs")
     syms_target.create_symlinks(source_dir=home_manager / "shell/configs")
     syms_target.create_symlinks(source_dir=home_manager / "system/configs")

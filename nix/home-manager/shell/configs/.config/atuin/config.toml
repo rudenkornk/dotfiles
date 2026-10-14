@@ -1,3 +1,5 @@
+# This file is auto-generated. Edit config-overlay.toml and run
+# `nix run . -- configs` followed by `nix run . -- format`.
 dialect = "uk"
 enter_accept = false
 inline_height = 0
@@ -9,17 +11,176 @@ update_check = false
 search_mode = "daemon-fuzzy"
 
 [keymap.emacs]
-"ctrl-u" = "scroll-half-page-up"
-"ctrl-d" = "scroll-half-page-down"
-"ctrl-b" = "scroll-page-up"
-"ctrl-f" = "scroll-page-down"
-"ctrl-t" = "cycle-search-mode"
-"ctrl-o" = "accept"                # `enter_accept = false` leaves nothing bound to "run immediately".
-"ctrl-v" = "toggle-tab"
+ctrl-a = "enter-prefix-mode"
+ctrl-c = "return-original"
+ctrl-g = "return-original"
+ctrl-o = "accept"
+ctrl-b = "scroll-page-up"
+ctrl-f = "scroll-page-down"
+ctrl-e = "cursor-end"
+ctrl-w = "delete-to-word-boundary"
+ctrl-u = "scroll-half-page-up"
+ctrl-r = "cycle-filter-mode"
+ctrl-n = "select-next"
+ctrl-p = "select-previous"
+alt-b = "cursor-word-left"
+alt-f = "cursor-word-right"
+alt-d = "delete-word-after"
+ctrl-d = "scroll-half-page-down"
+ctrl-t = "cycle-search-mode"
+ctrl-v = "toggle-tab"
+"ctrl-ф" = "enter-prefix-mode"
+"ctrl-с" = "return-original"
+"ctrl-п" = "return-original"
+"ctrl-щ" = "accept"
+"ctrl-и" = "scroll-page-up"
+"ctrl-а" = "scroll-page-down"
+"ctrl-у" = "cursor-end"
+"ctrl-ц" = "delete-to-word-boundary"
+"ctrl-г" = "scroll-half-page-up"
+"ctrl-к" = "cycle-filter-mode"
+"ctrl-т" = "select-next"
+"ctrl-з" = "select-previous"
+"alt-и" = "cursor-word-left"
+"alt-а" = "cursor-word-right"
+"alt-в" = "delete-word-after"
+"ctrl-в" = "scroll-half-page-down"
+"ctrl-е" = "cycle-search-mode"
+"ctrl-м" = "toggle-tab"
+
+[keymap.vim-normal]
+ctrl-a = "enter-prefix-mode"
+ctrl-c = "return-original"
+ctrl-g = "return-original"
+ctrl-o = "toggle-tab"
+h = "cursor-left"
+l = "cursor-right"
+w = "cursor-word-right"
+b = "cursor-word-left"
+e = "cursor-word-end"
+x = "delete-char-after"
+"d d" = "clear-line"
+D = "clear-to-end"
+C = "vim-change-to-end"
+a = "vim-enter-insert-after"
+A = "vim-enter-insert-at-end"
+i = "vim-enter-insert"
+I = "vim-enter-insert-at-start"
+ctrl-u = "scroll-half-page-up"
+ctrl-d = "scroll-half-page-down"
+ctrl-b = "scroll-page-up"
+ctrl-f = "scroll-page-down"
+G = "scroll-to-bottom"
+"g g" = "scroll-to-top"
+H = "scroll-to-screen-top"
+M = "scroll-to-screen-middle"
+L = "scroll-to-screen-bottom"
+j = "select-next"
+k = [
+  { when = "list-at-start", action = "exit" },
+  { action = "select-previous" },
+]
+"ctrl-ф" = "enter-prefix-mode"
+"ctrl-с" = "return-original"
+"ctrl-п" = "return-original"
+"ctrl-щ" = "toggle-tab"
+"р" = "cursor-left"
+"д" = "cursor-right"
+"ц" = "cursor-word-right"
+"и" = "cursor-word-left"
+"у" = "cursor-word-end"
+"ч" = "delete-char-after"
+"в в" = "clear-line"
+"В" = "clear-to-end"
+"С" = "vim-change-to-end"
+"ф" = "vim-enter-insert-after"
+"Ф" = "vim-enter-insert-at-end"
+"ш" = "vim-enter-insert"
+"Ш" = "vim-enter-insert-at-start"
+"ctrl-г" = "scroll-half-page-up"
+"ctrl-в" = "scroll-half-page-down"
+"ctrl-и" = "scroll-page-up"
+"ctrl-а" = "scroll-page-down"
+"П" = "scroll-to-bottom"
+"п п" = "scroll-to-top"
+"Р" = "scroll-to-screen-top"
+"Ь" = "scroll-to-screen-middle"
+"Д" = "scroll-to-screen-bottom"
+"о" = "select-next"
+"л" = [
+  { when = "list-at-start", action = "exit" },
+  { action = "select-previous" },
+]
 
 [keymap.inspector]
-"ctrl-o" = "accept"
-"ctrl-v" = "toggle-tab"
+ctrl-a = "enter-prefix-mode"
+ctrl-c = "return-original"
+ctrl-g = "return-original"
+ctrl-o = "accept"
+ctrl-d = "delete"
+ctrl-v = "toggle-tab"
+"ctrl-ф" = "enter-prefix-mode"
+"ctrl-с" = "return-original"
+"ctrl-п" = "return-original"
+"ctrl-щ" = "accept"
+"ctrl-в" = "delete"
+"ctrl-м" = "toggle-tab"
+
+[keymap.prefix]
+d = "delete"
+D = "delete-all"
+a = "cursor-start"
+c = [
+  { when = "has-context", action = "clear-context" },
+  { action = "switch-context" },
+]
+"в" = "delete"
+"В" = "delete-all"
+"ф" = "cursor-start"
+"с" = [
+  { when = "has-context", action = "clear-context" },
+  { action = "switch-context" },
+]
+
+[keymap.vim-insert]
+ctrl-a = "enter-prefix-mode"
+ctrl-c = "return-original"
+ctrl-g = "return-original"
+ctrl-o = "toggle-tab"
+ctrl-b = "cursor-left"
+ctrl-f = "cursor-right"
+ctrl-e = "cursor-end"
+ctrl-w = "delete-to-word-boundary"
+ctrl-u = "clear-line"
+ctrl-r = "cycle-filter-mode"
+ctrl-n = "select-next"
+ctrl-p = "select-previous"
+alt-b = "cursor-word-left"
+alt-f = "cursor-word-right"
+alt-d = "delete-word-after"
+ctrl-d = [
+  { when = "input-empty", action = "return-original" },
+  { action = "delete-char-after" },
+]
+"ctrl-ф" = "enter-prefix-mode"
+"ctrl-с" = "return-original"
+"ctrl-п" = "return-original"
+"ctrl-щ" = "toggle-tab"
+"ctrl-и" = "cursor-left"
+"ctrl-а" = "cursor-right"
+"ctrl-у" = "cursor-end"
+"ctrl-ц" = "delete-to-word-boundary"
+"ctrl-г" = "clear-line"
+"ctrl-к" = "cycle-filter-mode"
+"ctrl-т" = "select-next"
+"ctrl-з" = "select-previous"
+"alt-и" = "cursor-word-left"
+"alt-а" = "cursor-word-right"
+"alt-в" = "delete-word-after"
+"ctrl-в" = [
+  { when = "input-empty", action = "return-original" },
+  { action = "delete-char-after" },
+]
 
 [theme]
 name = "monokai"

@@ -1,0 +1,173 @@
+# This file is auto-generated. Edit config-overlay.toml and run
+# `nix run . -- configs` followed by `nix run . -- format`.
+[keys]
+esc_navigates_back = true
+close_pane = "esc"
+quit = [
+  "q",
+  "й",
+]
+quit_immediately = [
+  "ctrl+c",
+  "ctrl+с",
+]
+suspend = [
+  "ctrl+z",
+  "ctrl+я",
+]
+repaint = [
+  "ctrl+l",
+  "ctrl+д",
+]
+cycle_panes = "tab"
+toggle_right_panes = "]"
+toggle_help = "?"
+open_search = "/"
+move_down = [
+  "j",
+  "down",
+  "о",
+]
+move_up = [
+  "k",
+  "up",
+  "л",
+]
+page_down = [
+  "ctrl+d",
+  "page-down",
+  "ctrl+в",
+]
+page_up = [
+  "ctrl+u",
+  "page-up",
+  "ctrl+г",
+]
+move_to_top = [
+  "H",
+  "home",
+  "Р",
+]
+move_to_bottom = [
+  "G",
+  "end",
+  "П",
+]
+descend = [
+  "o",
+  "l",
+  "enter",
+  "right",
+  "щ",
+  "д",
+]
+ascend = [
+  "u",
+  "h",
+  "backspace",
+  "left",
+  "г",
+  "р",
+]
+scan_parent = [
+  "U",
+  "Г",
+]
+sort_by_size = [
+  "s",
+  "ы",
+]
+sort_by_mtime = [
+  "m",
+  "ь",
+]
+cycle_mtime_mode = [
+  "M",
+  "Ь",
+]
+sort_by_count = [
+  "c",
+  "с",
+]
+toggle_count_column = [
+  "C",
+  "С",
+]
+sort_by_name = [
+  "n",
+  "т",
+]
+cycle_visualization = [
+  "g",
+  "S",
+  "п",
+  "Ы",
+]
+open_entry = [
+  "O",
+  "Щ",
+]
+toggle_mark = "space"
+mark_for_deletion = [
+  "x",
+  "ч",
+]
+toggle_mark_and_move_down = [
+  "d",
+  "в",
+]
+toggle_all = [
+  "a",
+  "ф",
+]
+toggle_cleanup = [
+  "t",
+  "е",
+]
+mark_cleanup = [
+  "X",
+  "Ч",
+]
+toggle_gitignore = [
+  "i",
+  "ш",
+]
+mark_gitignore = [
+  "I",
+  "Ш",
+]
+refresh_selected = [
+  "r",
+  "к",
+]
+refresh_all = [
+  "R",
+  "К",
+]
+remove_mark = [
+  "x",
+  "d",
+  "space",
+  "ч",
+  "в",
+]
+remove_all_marks = [
+  "a",
+  "ф",
+]
+delete_marked = [
+  "ctrl+r",
+  "ctrl+к",
+]
+trash_marked = [
+  "ctrl+t",
+  "ctrl+е",
+]
+search_confirm = "enter"
+search_toggle_case = [
+  "ctrl+f",
+  "ctrl+а",
+]
+search_backspace = "backspace"
+search_left = "left"
+search_right = "right"

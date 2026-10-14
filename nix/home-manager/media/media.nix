@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, host, ... }:
 
 {
   home = {
@@ -8,7 +8,7 @@
       pdfarranger
       shotcut # typos: ignore
       (
-        if pkgs.config.cudaSupport then
+        if host.gpu.cudaSupport or false then
           whisper-ctranslate2
         else
           whisper-cpp.override { vulkanSupport = true; }

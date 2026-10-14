@@ -7,12 +7,12 @@ monitors = []
 
 [lockscreen]
 monitors = [
-    "eDP-1",
+  "eDP-1",
 ]
 
 [notification]
 monitors = [
-    "eDP-1",
+  "eDP-1",
 ]
 
 [osd]
@@ -22,7 +22,7 @@ monitors = []
 enabled = false
 schema_version = 2
 widget_order = [
-    "lockscreen-login-box@eDP-1",
+  "lockscreen-login-box@eDP-1",
 ]
 
 [lockscreen_widgets.grid]

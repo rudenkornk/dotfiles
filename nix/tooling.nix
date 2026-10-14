@@ -43,6 +43,7 @@ let
     shfmt
     statix
     stylua
+    taplo
     typos
     yamllint
     (mdformat.withPlugins (

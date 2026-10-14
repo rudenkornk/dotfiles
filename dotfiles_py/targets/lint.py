@@ -36,6 +36,7 @@ def _linters(repo_path: Path) -> list[Linter]:
         Linter(["ruff", "check"]),
         Linter(["yamllint", "--strict", repo_path / ".github"]),
         Linter(["shellcheck", *git_files(repo_path, ".sh")]),
+        Linter(["taplo", "lint", "--config", repo_path / ".taplo.toml", *git_files(repo_path, ".toml")]),
         Linter(["typos"]),
         Linter(["markdownlint-cli2", "."]),
     ]
@@ -93,6 +94,9 @@ def _formatters(repo_path: Path, *, check: bool) -> list[Formatter]:
         Formatter(["mdformat", *git_files(repo_path, ".md"), *check_arg]),
         Formatter(["shfmt", *write_arg, *diff_arg, *git_files(repo_path, ".sh")]),  # NOTE: `shfmt` ignores .gitignore.
         Formatter(["prettier", *write_arg, repo_path, *check_arg]),
+        Formatter(
+            ["taplo", "format", "--config", repo_path / ".taplo.toml", *check_arg, *git_files(repo_path, ".toml")]
+        ),
         Formatter(["stylua", repo_path, *check_arg]),
         Formatter(["kdlfmt", "format" if not check else "check", *git_files(repo_path, ".kdl")]),
         # `fish_indent` is a fish builtin, so it must be invoked through a fish shell.

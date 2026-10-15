@@ -123,6 +123,7 @@ in
     default = {
       type = "app";
       program = pkgs.lib.getExe dotfiles;
+      meta.description = "Dotfiles management CLI";
     };
   };
 }

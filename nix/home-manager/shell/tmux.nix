@@ -130,6 +130,9 @@
   };
 
   home = {
-    packages = [ pkgs.custom.tmux-agent-status ];
+    packages = [
+      pkgs.custom.tmux-agent-status
+      pkgs.custom.tmux-russian-keymaps
+    ];
   };
 }

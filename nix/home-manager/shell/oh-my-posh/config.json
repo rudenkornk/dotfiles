@@ -79,8 +79,10 @@
         },
         {
           "foreground": "#7FD5EA",
+          "options": { "fetch_version": false },
+          "timeout": 100,
           "style": "plain",
-          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "template": " ",
           "type": "go"
         },
         {

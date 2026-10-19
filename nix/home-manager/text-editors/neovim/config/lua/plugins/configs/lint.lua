@@ -1,7 +1,17 @@
 local M = {}
 
 M.opts = {
+  linters_by_ft = {
+    proto = { "buf_lint" },
+  },
   linters = {
+    buf_lint = {
+      condition = function(ctx)
+        local root = vim.fs.root(ctx.filename, { "buf.yaml" })
+        require("lint").linters.buf_lint.cwd = root
+        return root ~= nil
+      end,
+    },
     -- Adapted for parent-root validation and child-module diagnostic paths.
     -- Upstream issues:
     -- https://codeberg.org/mfussenegger/nvim-lint/issues/18

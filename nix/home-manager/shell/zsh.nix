@@ -8,6 +8,7 @@
     setOptions = [
       "IGNORE_EOF" # Ignore ctrl-d to exit shell.
       "NO_FLOW_CONTROL" # Let Ctrl-Q reach shell keybindings.
+      "INC_APPEND_HISTORY_TIME"
     ];
     syntaxHighlighting = {
       enable = true;
@@ -24,6 +25,7 @@
     history = {
       append = true;
       extended = true;
+      share = false;
       size = 100000;
     };
     initContent = lib.mkMerge [

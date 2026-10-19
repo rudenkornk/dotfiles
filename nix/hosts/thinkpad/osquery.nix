@@ -74,7 +74,10 @@
   };
 
   systemd.services.osqueryd = {
+    environment.SQLITE_TMPDIR = "/run/osquery";
+
     serviceConfig = {
+      RuntimeDirectory = "osquery";
       EnvironmentFile = "/run/user/0/secrets/osquery/environment_file";
       ReadOnlyPaths = [ "/" ];
       ReadWritePaths = [

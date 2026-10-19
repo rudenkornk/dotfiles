@@ -1,6 +1,7 @@
 local M = {}
 
 M.opts = function(_, opts)
+  opts.sections.lualine_c[4][1] = LazyVim.lualine.pretty_path({ length = 0 })
   table.insert(opts.sections.lualine_a, {
     function()
       if vim.o.iminsert == 1 then

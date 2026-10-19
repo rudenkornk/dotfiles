@@ -9,6 +9,7 @@
     ansible-lint
     beautysh
     black
+    buf
     clang-tools
     cmake-lint
     cpplint

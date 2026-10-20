@@ -1,5 +1,5 @@
 [core]
-  pager = delta
+  pager = arc-delta
 
 # Configuration for arc -- exotic VCS from yandex.
 [alias]
@@ -12,7 +12,7 @@
   cmm = commit --amend
   cms = commit --message s # Commit staged.
   cc = cherry-pick
-  df = diff
+  df = diff --git
   ft = fetch
   l = log
   lg = log --graph
@@ -25,6 +25,6 @@
   rb = rebase
   rbi = rebase --interactive HEAD~26
   rh = reset --hard
-  sg = diff --staged
-  sh = show
+  sg = diff --staged --git
+  sh = show --git
   st = status

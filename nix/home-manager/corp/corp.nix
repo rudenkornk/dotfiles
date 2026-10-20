@@ -9,6 +9,7 @@
 {
   home = lib.optionalAttrs (user.userkind == "corp") {
     packages = with pkgs; [
+      corp.arc-delta
       yandex-cloud
       corp.ldaps
       corp.openconnect-run

@@ -39,8 +39,28 @@
 
 [core]
   editor = "nvim"
+  pager = "delta"
   preloadIndex = true
   untrackedCache = true
+
+[interactive]
+  diffFilter = "delta --color-only"
+
+[delta]
+  relative-paths = true
+  file-transformation = "s|(^[^.])|./$1|"
+  navigate = true
+
+  minus-style = red
+  minus-emph-style = red bold
+  plus-style = green
+  plus-emph-style = green bold
+  zero-style = raw normal
+  hunk-header-style = raw
+  hunk-header-decoration-style = none
+  file-style = bold normal
+  file-decoration-style = none
+  keep-plus-minus-markers = true
 
 # https://www.youtube.com/watch?v=0FkBpQxOPt4
 [gpg]

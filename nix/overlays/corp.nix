@@ -1,5 +1,11 @@
 _: final: prev: {
   corp = {
+    arc-delta = final.writeShellApplication {
+      name = "arc-delta";
+      runtimeInputs = [ final.delta ];
+      text = builtins.readFile ./corp/arc-delta.sh;
+    };
+
     ca-bundle = final.concatText "corp-ca-bundle.pem" [
       (final.locallib.secrets + /corp/YandexInternalRootCA.crt)
       (final.locallib.secrets + /corp/YCKZInternalRootCA.crt)

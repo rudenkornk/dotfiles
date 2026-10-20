@@ -1,3 +1,6 @@
+[core]
+  pager = delta
+
 # Configuration for arc -- exotic VCS from yandex.
 [alias]
   bl = blame

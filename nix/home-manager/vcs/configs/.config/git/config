@@ -14,7 +14,7 @@
   cmd = "commit --amend --reuse-message @"
   cmm = "commit --amend"
   cms = "commit --message 's'" # Commit staged.
-  cp = "cherry-pick"
+  cc = "cherry-pick"
   df = "diff"
   fp = "format-patch"
   ft = "fetch --all"

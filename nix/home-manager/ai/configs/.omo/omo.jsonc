@@ -1,180 +1,97 @@
 {
-  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v5.1.19/assets/omo.schema.json",
-
-  // Rewrites of this file fail against the read-only store path, and an unmarked migration retries on every start.
-  "_migrations": [
-    "2026-07-opencode-config-unification",
-    "2026-07-codex-config-jsonc",
-    "2026-08-reasoning-unification",
-  ],
-
-  "[opencode]": {
-    "telemetry": false,
-    "auto_update": false,
-    "model_capabilities": {
-      "auto_refresh_on_start": false, // Avoids a ~1MiB fetch on every session start.
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v5.1.40/assets/omo.schema.json",
+  "telemetry": { "enabled": false },
+  "git_master": { "commit_footer": false, "git_env_prefix": "" },
+  "model_profile": "geeky-normal",
+  "model_profiles": {
+    "geeky-normal": {
+      "models": [
+        {
+          "model": "chatgpt-subscription/gpt-6.1-sol-fast",
+          "reasoning": "medium",
+        },
+        { "model": "chatgpt-subscription/gpt-6.1-sol", "reasoning": "medium" },
+        { "model": "chatgpt-subscription/gpt-5.6-sol", "reasoning": "medium" },
+      ],
     },
-
-    "disabled_mcps": ["lsp"], // `OPENCODE_EXPERIMENTAL_LSP_TOOL` in `ai.nix` covers this natively.
-    "disabled_hooks": [
-      "session-notification",
-      "ast-grep-sg-provision",
-      "startup-toast",
-    ],
-
-    // `ast-grep` is absent deliberately: matching is by name alone, so it would drop the nixpkgs skill too.
-    "disabled_skills": [
-      "lsp-setup",
-      "ultimate-browsing",
-      "security-research",
-      "security-review",
-    ],
-
-    "browser_automation_engine": {
-      "provider": "playwright-cli", // The default provider launches its MCP through `npx`.
+    "geeky-heavy": {
+      "models": [
+        { "model": "chatgpt-subscription/gpt-6-astra", "reasoning": "high" },
+      ],
     },
-
-    "git_master": {
-      "commit_footer": false,
-      "include_co_authored_by": false,
-      "git_env_prefix": "", // A non-empty prefix rewrites the git commands inside the skill text.
+  },
+  "agents": {
+    "explore": {
+      "model": "chatgpt-subscription/gpt-6-luna-fast",
+      "reasoning": "low",
     },
-
-    "ulw_execute": {
-      "auto_commit": true,
+    "librarian": {
+      "model": "chatgpt-subscription/gpt-6-luna-fast",
+      "reasoning": "low",
     },
-
-    "experimental": {
-      "task_system": true,
-      "disable_omo_env": true, // The injected date and locale break OpenAI prompt caching.
+    "plan-consultant": {
+      "model": "chatgpt-subscription/gpt-6-astra",
+      "reasoning": "high",
     },
-
-    "runtime_fallback": {
-      "enabled": true, // Without this, `fallback_models` covers an unreachable model but not a rate limit.
-      "notify_on_fallback": true,
-      "restore_primary_after_cooldown": true,
+    "plan-reviewer": {
+      "model": "chatgpt-subscription/gpt-6-astra",
+      "reasoning": "xhigh",
     },
-
-    "background_task": {
-      "defaultConcurrency": 5,
-      // A `modelConcurrency` entry gives that model its own bucket, raising rather than capping the total.
-      "providerConcurrency": {
-        "openai": 5,
-      },
+  },
+  "categories": {
+    "quick": {
+      "model": "chatgpt-subscription/gpt-6-luna-fast",
+      "reasoning": "low",
     },
-
-    // Explicit models bypass the built-in reasoning defaults, so each entry pins its effort.
-    "agents": {
-      "sisyphus": {
-        "models": [
-          { "model": "openai/gpt-6.1-sol", "reasoning": "medium" },
-          { "model": "openai/gpt-6-sol", "reasoning": "medium" },
-          { "model": "openai/gpt-5.6-sol", "reasoning": "medium" },
-        ],
-      },
-      // Hephaestus stays GPT-only because other families reroute to Sisyphus.
-      "hephaestus": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "medium",
-      },
-      "oracle": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "xhigh",
-      },
-      // Upstream offers no OpenAI rung for either planning role; these are deliberate OpenAI-only substitutions.
-      "prometheus": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "max",
-      },
-      "metis": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "max",
-      },
-      "momus": {
-        "model": "openai/gpt-6-astra",
-        "reasoning": "xhigh",
-      },
-      "atlas": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "medium",
-      },
-      "sisyphus-junior": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "medium",
-      },
-      "multimodal-looker": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "low",
-      },
-      "explore": {
-        "models": [
-          { "model": "openai/gpt-6-luna", "reasoning": "low" },
-          {
-            "model": "openrouter/deepseek/deepseek-v4.1-flash",
-            "reasoning": "max",
-          },
-          { "model": "deepseek/deepseek-flash", "reasoning": "max" },
-        ],
-      },
-      "librarian": {
-        "models": [
-          { "model": "openai/gpt-6-luna", "reasoning": "low" },
-          {
-            "model": "openrouter/deepseek/deepseek-v4.1-flash",
-            "reasoning": "max",
-          },
-          { "model": "deepseek/deepseek-flash", "reasoning": "max" },
-        ],
-      },
+    "deep-low": {
+      "models": [
+        { "model": "chatgpt-subscription/gpt-6.1-sol", "reasoning": "medium" },
+        {
+          "model": "chatgpt-subscription/gpt-6.1-sol-fast",
+          "reasoning": "medium",
+        },
+        { "model": "chatgpt-subscription/gpt-5.6-sol", "reasoning": "medium" },
+        {
+          "model": "chatgpt-subscription/gpt-5.6-sol-fast",
+          "reasoning": "medium",
+        },
+      ],
     },
-
-    "categories": {
-      "deep-low": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "medium",
-      },
-      "deep-high": {
-        "model": "openai/gpt-6-astra",
-        "reasoning": "high",
-      },
-      "ultrabrain": {
-        "model": "openai/gpt-6-astra",
-        "reasoning": "max",
-      },
-      // Upstream prefers Claude/Kimi here; Sol keeps the general implementation lane on OpenAI.
-      "unspecified-high": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "high",
-      },
-      // These creative lanes also substitute Sol for upstream's Claude/Kimi choices.
-      "visual-engineering": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "medium",
-      },
-      "artistry": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "xhigh",
-      },
-      // Terra is upstream's OpenAI rung, but Sol 6.1 costs less and avoids a separate legacy tier.
-      "unspecified-low": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "medium",
-      },
-      // The built-in writing chain is Claude-only, so this category needs an explicit OpenAI substitution.
-      "writing": {
-        "model": "openai/gpt-6.1-sol",
-        "reasoning": "medium",
-      },
-      "quick": {
-        "models": [
-          { "model": "openai/gpt-6-luna", "reasoning": "low" },
-          {
-            "model": "openrouter/deepseek/deepseek-v4.1-flash",
-            "reasoning": "off",
-          },
-          { "model": "deepseek/deepseek-flash", "reasoning": "off" },
-        ],
-      },
+    "deep-high": {
+      "model": "chatgpt-subscription/gpt-6-astra",
+      "reasoning": "high",
+    },
+    "ultrabrain": {
+      "models": [
+        { "model": "chatgpt-subscription/gpt-6-astra", "reasoning": "max" },
+        { "model": "chatgpt-subscription/gpt-5.6-sol", "reasoning": "max" },
+      ],
+    },
+    "architect": {
+      "model": "chatgpt-subscription/gpt-6-astra",
+      "reasoning": "high",
+    },
+    "unspecified-low": {
+      "models": [
+        { "model": "chatgpt-subscription/gpt-6.1-sol", "reasoning": "medium" },
+        { "model": "chatgpt-subscription/gpt-5.6-sol", "reasoning": "medium" },
+      ],
+    },
+    "unspecified-high": {
+      "model": "chatgpt-subscription/gpt-6.1-sol",
+      "reasoning": "high",
+    },
+    "visual-engineering": {
+      "model": "chatgpt-subscription/gpt-6.1-sol",
+      "reasoning": "high",
+    },
+    "artistry": {
+      "model": "chatgpt-subscription/gpt-6.1-sol",
+      "reasoning": "high",
+    },
+    "writing": {
+      "model": "chatgpt-subscription/gpt-6.1-sol",
+      "reasoning": "medium",
     },
   },
 }

@@ -42,6 +42,7 @@ in
         binary = "crush";
       })
       (locallib.with_secrets { pkg = unstable.opencode; })
+      (locallib.with_secrets { pkg = custom.omo; })
       (locallib.with_secrets { pkg = qwen-code; })
 
       mcp-nixos

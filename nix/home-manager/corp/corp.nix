@@ -25,6 +25,8 @@
       SSL_CERT_FILE = "${pkgs.corp.cacert}/etc/ssl/certs/ca-bundle.crt";
       NODE_EXTRA_CA_CERTS = "${pkgs.corp.ca-bundle}";
     };
+
+    file.".omo/agent/mcp.json".enable = false;
   };
 
   xdg = lib.optionalAttrs (user.userkind == "corp") {
@@ -199,6 +201,8 @@
         );
 
         "${home}/.claude/mcp-corp.json".source = pkgs.locallib.secrets + /corp/claude.mcp.json.sops;
+
+        "${home}/.omo/agent/mcp.json".source = pkgs.locallib.secrets + /corp/omo.mcp.json.sops;
 
         "${config.xdg.configHome}/ycp/config.yaml".source =
           pkgs.locallib.secrets + /corp/ycp.config.yaml.sops;

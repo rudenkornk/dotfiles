@@ -131,6 +131,7 @@
 
   home = {
     packages = [
+      pkgs.util-linux
       pkgs.custom.tmux-agent-status
       pkgs.custom.tmux-russian-keymaps
     ];

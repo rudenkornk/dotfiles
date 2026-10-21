@@ -1,6 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v5.1.40/assets/omo.schema.json",
   "telemetry": { "enabled": false },
+  "side_panel": {
+    "enabled": true,
+    "sections": { "usage": true },
+  },
   "git_master": { "commit_footer": false, "git_env_prefix": "" },
   "model_profile": "geeky-normal",
   "model_profiles": {

@@ -9,17 +9,12 @@ tmux_task_min_duration_ms=${tmux_task_min_duration_ms:-10000}
 __tmux_task_root=$(dirname -- "${BASH_SOURCE[0]}")/..
 tmux_task_exclude=${tmux_task_exclude:-$(tr -d '\n' <"$__tmux_task_root/task-exclude.regex")}
 __tmux_task_timer="$__tmux_task_root/task-timer.sh"
-__tmux_task_lock="fish-task-$TMUX_PANE"
+__tmux_task_status="$__tmux_task_root/task-status.sh"
 __tmux_task_generation=0
 
-__tmux_task_clear() (
-  tmux wait-for -L "$__tmux_task_lock" || return
-  trap 'tmux wait-for -U "$__tmux_task_lock"' EXIT
-  tmux set-option -pu -t "$TMUX_PANE" @fish_task_token
-  if [[ $(tmux show-option -pqv -t "$TMUX_PANE" @agent_type) == process ]]; then
-    tmux-agent-status set --agent process --state clear </dev/null
-  fi
-)
+__tmux_task_clear() {
+  bash "$__tmux_task_status" clear
+}
 
 __tmux_task_started() {
   __tmux_task_clear
@@ -41,23 +36,14 @@ __tmux_task_started() {
   return 0
 }
 
-__tmux_task_report() (
-  local exit_status=$1 duration_ms=$2 token=$3
-  tmux wait-for -L "$__tmux_task_lock" || return
-  trap 'tmux wait-for -U "$__tmux_task_lock"' EXIT
-  [[ $(tmux show-option -pqv -t "$TMUX_PANE" @fish_task_token) == "$token" ]] || return 0
-  tmux set-option -pu -t "$TMUX_PANE" @fish_task_token
-  local agent_type agent_status state=clear
-  agent_type=$(tmux show-option -pqv -t "$TMUX_PANE" @agent_type)
-  agent_status=$(tmux show-option -pqv -t "$TMUX_PANE" @agent_status)
-  if [[ $agent_type == process || -z $agent_status ]]; then
-    if ((duration_ms >= __tmux_task_minimum_ms)); then
-      state="done"
-      ((exit_status == 0)) || state=error
-    fi
-    tmux-agent-status set --agent process --state "$state" </dev/null
+__tmux_task_report() {
+  local exit_status=$1 duration_ms=$2 token=$3 state=clear
+  if ((duration_ms >= __tmux_task_minimum_ms)); then
+    state="done"
+    ((exit_status == 0)) || state=error
   fi
-)
+  bash "$__tmux_task_status" finish "$token" "$state"
+}
 
 __tmux_task_finished() {
   local exit_status=$?

@@ -2,6 +2,7 @@
 // `nix run . -- configs` followed by `nix run . -- format`.
 {
   "$schema": "https://opencode.ai/tui.json",
+  "plugin": ["@slkiser/opencode-quota@4.10.6"],
   "keybinds": {
     "leader": "ctrl+x",
     "app_exit": [

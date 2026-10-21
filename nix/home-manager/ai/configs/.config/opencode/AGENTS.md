@@ -104,18 +104,23 @@ Complete repository-specific validation before finishing the series.
 
 ## Maintain a coherent history
 
-This is standing explicit authorization to rewrite commits created during the current session
-for the current task whenever doing so produces a clearer, more coherent history.
+You MUST actively maintain a coherent commit sequence for work created during the current session and task.
+Rewriting those commits is explicitly authorized and expected; do not ask for additional permission.
 
-Before each history-rewriting operation, create a uniquely named backup branch
-pointing to the branch tip before the rewrite.
-Report its name and preserve it until the user requests its removal.
-Preserve any uncommitted work as well.
+Fixes, missed changes, and minor improvements to work already committed during this session
+MUST normally be incorporated into the relevant existing commit rather than appended as separate commits.
+Amend or squash the correction into that commit and replay subsequent eligible commits as needed.
+Create a separate commit when the change represents distinct functionality or an independently meaningful step.
+Temporary fixup commits are allowed, but MUST be folded into their target commits before the final report.
 
-When implementation reveals a missed change or an incorrect earlier decision,
-incorporate the correction into the appropriate commit and replay subsequent eligible commits.
-Amend, reorder, split, or squash eligible commits as needed.
-PREFER CORRECTING THE RELEVANT COMMIT OVER APPENDING CLEANUP OR FIXUP COMMITS.
+Do not create backup branches during the session.
+Immediately before the first history rewrite, record the full HEAD commit hash in the session context.
+Keep this original hash unchanged across all subsequent rewrites.
+Appending commits does not count as rewriting history and does not trigger this requirement.
+If history was rewritten, include exactly this one original hash in the final report,
+labelled "HEAD before the first rewrite".
+Do not report intermediate pre-rewrite hashes.
+Preserve any uncommitted work throughout rewriting.
 
 Do not rewrite commits that predate the current session or belong to another task, unless the user explicitly allowed it.
 Review the resulting commit sequence and final diff, and rerun affected checks after rewriting.

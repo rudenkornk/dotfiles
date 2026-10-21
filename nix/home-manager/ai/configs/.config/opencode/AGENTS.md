@@ -3,6 +3,55 @@
 These are global rules.
 Follow them for all code, unless specific rules were overridden with project-local rules.
 
+# Decision Review and Autonomy
+
+By default, the user retains control over behavioral and design decisions.
+You MUST ask for approval before resolving any such choice not already settled by the user's instructions
+or an explicitly approved plan.
+This applies in both Build and Plan modes, regardless of task size.
+
+Decisions requiring review include architecture, dependencies, scope, externally visible behavior,
+error handling, compatibility, behavioral compromises, and testing strategy.
+Routine naming, formatting, and mechanical implementation details may follow existing conventions without approval.
+Do not treat a preferred approach, repository precedent, or the simplicity guidelines below
+as approval of an unresolved behavioral or design choice.
+
+## Ask before implementing
+
+Investigate enough to identify the concrete decision and explain its consequences before asking.
+Use the interactive question tool when available.
+Present questions in small related batches, with concrete options, relevant tradeoffs, and a recommendation.
+Allow the user to propose a different approach.
+Ask follow-up questions when an answer exposes further decisions.
+
+When a decision requires review, pause ALL implementation until the user answers.
+Read-only investigation may continue to clarify the question.
+Do not implement your preferred option provisionally or ask for approval only after making the change.
+Do not silently choose a fallback when an approved approach encounters a problem.
+Explain the problem and ask how to proceed.
+
+Approval covers only the choices actually presented and accepted.
+A general instruction to proceed, including switching to Build mode, does not authorize new decisions.
+Do not ask again about decisions already settled unless new information materially changes their tradeoffs.
+
+## Anticipate decisions in Plan mode
+
+Actively investigate the task to uncover likely problems and behavioral and architectural choices before implementation.
+Consider boundaries, failure cases, dependencies, compatibility, testing, and integration where relevant.
+Work through the resulting questions interactively rather than presenting a plan built on unapproved assumptions.
+Continue asking focused questions until the known behavioral and design choices are settled.
+Do not limit questions merely to keep planning short, but avoid speculative questions unrelated to the task.
+
+The implementation plan must reflect the user's decisions and clearly identify anything still unresolved.
+New decisions discovered during implementation still require review.
+
+## Explicit delegation
+
+The user may explicitly delegate decisions with instructions such as "take decisions yourself".
+Unless the user specifies a different scope, this permission applies only to the current task.
+Within that scope, make reasonable decisions and summarize consequential choices in the final report.
+Return to the default review requirement for the next task.
+
 # Math Formatting
 
 In responses intended for the OpenCode terminal UI, write equations in readable Unicode or plain text rather than LaTeX math
@@ -12,7 +61,8 @@ When the user requests LaTeX source, or when editing a LaTeX file, preserve the 
 # Implementation Scope and Complexity
 
 Prefer the most straightforward implementation for the current task.
-Small behavioral compromises are acceptable when avoiding them requires substantially more complexity.
+Recommend small behavioral compromises when avoiding them requires substantially more complexity,
+subject to the decision-review requirements above.
 Optimize for readable code and fewer responsibilities to maintain.
 
 ## Start with the simplest viable approach
@@ -26,12 +76,14 @@ A small compromise affects convenience or optional coverage while preserving the
 Examples include retaining an existing upstream limitation or supporting explicitly named variants
 instead of every possible configuration.
 
-Prefer such compromises when the alternative requires substantial special-case code, adapters, or state management.
-If unsure whether a compromise is acceptable, present explained choices.
+Recommend such compromises when the alternative requires substantial special-case code, adapters, or state management.
+Present the tradeoffs and obtain approval before adopting an unresolved behavioral compromise,
+unless the user has explicitly delegated the decision.
 
 ## Let simple utilities fail naturally
 
-For internal utilities and configuration glue, exceptions or panics are acceptable when an operation cannot succeed.
+For internal utilities and configuration glue, recommend exceptions or panics when an operation cannot succeed.
+Obtain approval for unresolved error-handling choices unless the user has explicitly delegated the decision.
 Use the caller's established preconditions and the underlying API's error behavior.
 
 # Implementation Planning and Commit History

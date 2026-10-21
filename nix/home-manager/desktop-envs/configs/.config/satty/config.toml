@@ -1,5 +1,5 @@
 [general]
-copy-command = "tee ~/Downloads/screenshots/latest.png | wl-copy"
+copy-command = "bash ~/.config/satty/copy-screenshot.sh"
 corner-roundness = 12
 fullscreen = false
 initial-tool = "rectangle"

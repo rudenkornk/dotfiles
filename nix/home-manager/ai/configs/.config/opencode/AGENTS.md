@@ -52,6 +52,24 @@ Unless the user specifies a different scope, this permission applies only to the
 Within that scope, make reasonable decisions and summarize consequential choices in the final report.
 Return to the default review requirement for the next task.
 
+# Screenshots
+
+Resolve screenshot references under `~/Downloads/screenshots`.
+The user may call screenshots "screens" and omit the directory and `.png` extension.
+
+- `latest` means `latest.png`, the newest screenshot.
+- `latest-N` means `latest-N.png`, where N is from 1 through 5.
+- `latest-A-B` means the inclusive range from `latest-A.png` through `latest-B.png`.
+  For example, `latest-1-4` selects indices 1, 2, 3, and 4.
+
+When opening multiple screenshots, open them oldest first, from highest index to lowest.
+Open only the requested images.
+If a requested file is missing or cannot be opened, report it and continue with the remaining requested files.
+Do not search for replacements.
+
+Resolve these references directly to their fixed paths.
+Do not list or scan the screenshots directory or load unrelated images.
+
 # Math Formatting
 
 In responses intended for the OpenCode terminal UI, write equations in readable Unicode or plain text rather than LaTeX math

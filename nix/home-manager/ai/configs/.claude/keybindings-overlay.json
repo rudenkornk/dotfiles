@@ -43,7 +43,8 @@
         "meta+e": "chat:externalEditor",
         "ctrl+s": null,
         "meta+s": "chat:stash",
-        "ctrl+v": "chat:imagePaste",
+        "ctrl+v": null,
+        "meta+v": "chat:imagePaste",
         "space": "voice:pushToTalk"
       }
     },
@@ -118,6 +119,9 @@
         "escape": "transcript:exit",
         "q": "transcript:exit",
         "ctrl+u": "scroll:halfPageUp",
+        "ctrl+v": "scroll:halfPageDown",
+        "pageup": "scroll:fullPageUp",
+        "pagedown": "scroll:fullPageDown",
         "ctrl+b": "scroll:fullPageUp",
         "ctrl+f": "scroll:fullPageDown",
         "ctrl+e": "scroll:lineDown",
@@ -164,8 +168,8 @@
     {
       "context": "Scroll",
       "bindings": {
-        "pageup": "scroll:pageUp",
-        "pagedown": "scroll:pageDown",
+        "pageup": "scroll:fullPageUp",
+        "pagedown": "scroll:fullPageDown",
         "ctrl+u": "scroll:halfPageUp",
         "ctrl+v": "scroll:halfPageDown",
         "ctrl+e": "scroll:lineDown",

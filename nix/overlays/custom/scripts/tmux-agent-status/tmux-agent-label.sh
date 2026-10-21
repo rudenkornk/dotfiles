@@ -23,7 +23,7 @@ match_agent() {
   base="${base%.mjs}"
   base="${base%.cjs}"
   case "$base" in
-  cursor-agent | claude | codex | gemini | opencode-omo | opencode) printf '%s' "$base" ;;
+  cursor-agent | claude | codex | gemini | omo | opencode) printf '%s' "$base" ;;
   *) : ;;
   esac
 }
@@ -34,7 +34,7 @@ render_agent() {
   claude) printf '#[fg=#d97757] #[fg=default]' ;;
   codex) printf '#[fg=#10a37f] #[fg=default]' ;;
   gemini) printf '#[fg=#4796e3] #[fg=default]' ;;
-  opencode-omo) printf '#[fg=##6ff7f7] #[fg=default]' ;;
+  omo) printf '#[fg=##6ff7f7] #[fg=default]' ;;
   opencode) printf '#[fg=#9aa5ce]󱞟 #[fg=default]' ;;
   process) printf '#[fg=#7aa2f7] #[fg=default]' ;;
   *) : ;;

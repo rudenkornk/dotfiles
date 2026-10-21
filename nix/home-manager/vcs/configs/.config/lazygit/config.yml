@@ -81,8 +81,10 @@ keybinding:
     viewStashOptions: [S, Ы]
   main:
     editSelectHunk: [E, У]
+    nextFile: [n, т]
     nextHunk: [<right>, l, д]
     pickBothHunks: [b, и]
+    prevFile: [N, Т]
     prevHunk: [<left>, h, р]
     toggleSelectHunk: [a, ф]
   stash:
@@ -128,6 +130,7 @@ keybinding:
     increaseContextInDiffView: "}"
     increaseRenameSimilarityThreshold: )
     jumpToBlock: ["1", "2", "3", "4", "5"]
+    jumpToFile: [<ctrl+g>, <ctrl+п>]
     moveWordLeft: <ctrl+left>
     moveWordRight: <ctrl+right>
     new: [n, т]

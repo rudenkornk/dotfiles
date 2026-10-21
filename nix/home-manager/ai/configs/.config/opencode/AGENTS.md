@@ -52,6 +52,11 @@ Unless the user specifies a different scope, this permission applies only to the
 Within that scope, make reasonable decisions and summarize consequential choices in the final report.
 Return to the default review requirement for the next task.
 
+# Task Progress
+
+Use a structured todo tool when it is available.
+When it is unavailable, track multi-step work and completion in concise prose updates.
+
 # Screenshots
 
 Resolve screenshot references under `~/Downloads/screenshots`.

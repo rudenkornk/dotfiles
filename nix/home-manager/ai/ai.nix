@@ -11,10 +11,6 @@ let
 in
 {
   home = {
-    sessionVariables = {
-      OPENCODE_EXPERIMENTAL_LSP_TOOL = "true";
-    };
-
     packages = with pkgs; [
       (locallib.with_secrets { pkg = aider-chat-full; })
       (locallib.with_secrets { pkg = amazon-q-cli; })

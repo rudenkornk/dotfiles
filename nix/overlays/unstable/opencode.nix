@@ -1,20 +1,15 @@
-final: prev:
-let
-  # NOTE: Bun 1.4 bundles opencode so that every prompt crashes, see https://github.com/anomalyco/opencode/issues/48876
-  bun = prev.bun.overrideAttrs rec {
-    version = "1.3.13";
-    src = final.fetchurl {
-      url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64-baseline.zip";
-      hash = "sha256-nYokKSpwaAkCBdqsCloiP19pc29Sh+N7+I07QDHtx1A=";
+final: prev: {
+  opencode = final.symlinkJoin {
+    inherit (prev.opencode) name meta;
+    paths = [ prev.opencode ];
+    nativeBuildInputs = [ final.makeBinaryWrapper ];
+    # The native watcher needs libstdc++, see https://github.com/anomalyco/opencode/pull/53213
+    postBuild = ''
+      wrapProgram "$out/bin/opencode" \
+        --prefix LD_LIBRARY_PATH : ${final.lib.makeLibraryPath [ final.stdenv.cc.cc.lib ]}
+    '';
+    passthru = (prev.opencode.passthru or { }) // {
+      inherit (prev.opencode) pname version src;
     };
   };
-in
-{
-  opencode = (prev.opencode.override { inherit bun; }).overrideAttrs (
-    _: prevAttrs: {
-      patches = (prevAttrs.patches or [ ]) ++ [
-        (final.locallib.patches + /opencode-1.18.29-thought-start-timestamp.patch)
-      ];
-    }
-  );
 }

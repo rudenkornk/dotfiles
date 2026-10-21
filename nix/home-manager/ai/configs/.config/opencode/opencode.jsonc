@@ -1,8 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": false,
-  "plugin": ["@slkiser/opencode-quota@4.10.6"],
-  "subagent_depth": 2,
+  "plugins": ["@slkiser/opencode-quota@5.0.3"],
+  "experimental": {
+    "subagent_depth": 2,
+  },
   "permission": {
     "external_directory": {
       // "allow" rules allow both reads and writes.
@@ -66,7 +68,6 @@
       "/var/**": "deny",
     },
   },
-  "lsp": {},
   "mcp": {
     "nixos": {
       "type": "local",

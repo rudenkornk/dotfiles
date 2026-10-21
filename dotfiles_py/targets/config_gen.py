@@ -154,7 +154,7 @@ def _opencode_defaults(source: str) -> dict[str, OpenCodeBinding]:
     definitions = source.split("export const Definitions = {", 1)[1].split("} satisfies", 1)[0]
     defaults: dict[str, OpenCodeBinding] = {}
     for line in definitions.splitlines():
-        if not line.strip():
+        if not line.strip() or line.lstrip().startswith("//"):
             continue
         match = re.fullmatch(r'\s*("[^"]+"|\w+): keybind\((.+), "[^"]*"\),?', line)
         if match is None:
@@ -365,7 +365,7 @@ def generate_configs(*, repo_path: Path, check: bool) -> None:
     configs: list[tuple[str, Callable[[Path], Config]]] = [
         ("vcs/configs/.config/lazygit/config.yml", _build_lazygit),
         ("fs-navigation/configs/.config/yazi/keymap.toml", _build_yazi),
-        ("ai/configs/.config/opencode/tui.jsonc", _build_opencode),
+        ("ai/configs/.config/opencode/cli.json", _build_opencode),
         ("ai/configs/.gemini/keybindings.json", _build_gemini),
         ("ai/configs/.claude/keybindings.json", _build_claude),
         ("shell/configs/.config/atuin/config.toml", _build_atuin),

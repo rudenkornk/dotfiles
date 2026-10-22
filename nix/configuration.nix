@@ -133,6 +133,7 @@ in
         };
         serviceConfig = {
           Nice = 10;
+          PassEnvironment = [ "WITHOUT_SECRETS" ];
           ExecStart = pkgs.lib.mkForce (
             let
               wrappedNix = pkgs.locallib.with_proxy {

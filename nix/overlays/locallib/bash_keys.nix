@@ -5,13 +5,15 @@ let
 in
 # bash
 ''
-  if [[ "$USERKIND" == "default" ]]; then
-    # shellcheck source=/dev/null
-    source "$(${sops-cached} ${pkgs.locallib.secrets + /keys.sh.sops})"
-  elif [[ "$USERKIND" == "corp" ]]; then
-    # shellcheck source=/dev/null
-    source "$(${sops-cached} ${pkgs.locallib.secrets + /keys.sh.sops})"
-    # shellcheck source=/dev/null
-    source "$(${sops-cached} ${pkgs.locallib.secrets + /corp/keys.sh.sops})"
+  if [[ "''${WITHOUT_SECRETS:-}" != "keys" && "''${WITHOUT_SECRETS:-}" != "all" ]]; then
+    if [[ "$USERKIND" == "default" ]]; then
+      # shellcheck source=/dev/null
+      source "$(${sops-cached} ${pkgs.locallib.secrets + /keys.sh.sops})"
+    elif [[ "$USERKIND" == "corp" ]]; then
+      # shellcheck source=/dev/null
+      source "$(${sops-cached} ${pkgs.locallib.secrets + /keys.sh.sops})"
+      # shellcheck source=/dev/null
+      source "$(${sops-cached} ${pkgs.locallib.secrets + /corp/keys.sh.sops})"
+    fi
   fi
 ''

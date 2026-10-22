@@ -44,10 +44,20 @@
   }) users;
 
   systemd = {
-    services.docker = {
-      environment = {
-        HOME = "/root";
-        USERKIND = lib.mkDefault "default";
+    services = {
+      podman = {
+        serviceConfig = {
+          PassEnvironment = [ "WITHOUT_SECRETS" ];
+        };
+      };
+      docker = {
+        environment = {
+          HOME = "/root";
+          USERKIND = lib.mkDefault "default";
+        };
+        serviceConfig = {
+          PassEnvironment = [ "WITHOUT_SECRETS" ];
+        };
       };
     };
   };

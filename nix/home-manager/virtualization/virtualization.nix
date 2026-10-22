@@ -10,7 +10,7 @@
       skopeo
       vagrant
 
-      (locallib.with_secrets { pkg = podman; })
+      (locallib.with_proxy { pkg = podman; })
     ];
 
     shellAliases = {

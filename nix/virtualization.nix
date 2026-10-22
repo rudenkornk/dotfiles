@@ -19,14 +19,14 @@
     };
     podman = {
       enable = true;
-      package = pkgs.locallib.with_secrets { pkg = pkgs.podman; };
+      package = pkgs.locallib.with_proxy { pkg = pkgs.podman; };
 
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
     docker = {
       enable = true;
-      package = pkgs.locallib.with_secrets {
+      package = pkgs.locallib.with_proxy {
         pkg = pkgs.docker;
         binary = "dockerd";
       };

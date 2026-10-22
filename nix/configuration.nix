@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   inputs,
   hm_inputs,
@@ -126,8 +127,24 @@ in
   systemd = {
     services = {
       nix-daemon = {
+        environment = {
+          HOME = "/root";
+          USERKIND = "default";
+        };
         serviceConfig = {
           Nice = 10;
+          ExecStart = pkgs.lib.mkForce (
+            let
+              wrappedNix = pkgs.locallib.with_proxy {
+                pkg = config.nix.package;
+                binary = "nix-daemon";
+              };
+            in
+            [
+              ""
+              "${pkgs.lib.getExe' wrappedNix "nix-daemon"} --daemon"
+            ]
+          );
         };
       };
     };

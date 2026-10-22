@@ -2,6 +2,7 @@
 
 {
   pkg,
+  secretsScript,
   binary ? null,
   extraSecrets ? [ ],
   extraScript ? "",
@@ -17,7 +18,6 @@ pkgs.lib.makeOverridable (
     binaryPath = if binary == null then getExe package else getExe' package binary;
     binaryName = builtins.baseNameOf binaryPath;
 
-    secretsScript = import ./bash_secrets.nix { inherit pkgs; };
     extraSecretsScript = builtins.concatStringsSep "\n" (
       map (secret: ''
         # shellcheck source=/dev/null

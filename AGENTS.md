@@ -69,6 +69,92 @@ Use this documented workaround rather than investigating alternatives.
 - Store all package patches in `nix/overlays/patches/` and reference them via `final.locallib.patches + /<name>.patch`.
   `pkgs.unstable` also carries `locallib`, so the same reference works inside `nix/overlays/unstable/`.
 
+# Keyboard Layout and Keymap Design
+
+Design keymaps around shared muscle memory, home-row reachability, and clear ownership between layers.
+Use the conventions below when planning shortcuts.
+Consult the reference files only for relevant conflicts, exceptions, or implementation details.
+
+## Navigation and Shared Semantics
+
+- Never use plain or modified arrow keys as convenient keymaps or recommend them as ergonomic alternatives.
+  Existing arrow aliases may remain, but must not be the only convenient way to perform an action.
+- In input contexts, analogous to Vim insert mode, prefer Emacs-style navigation:
+  - `Ctrl+B/F` moves backward/forward by character.
+  - `Alt+B/F` moves backward/forward by word.
+  - `Ctrl+W` deletes the previous word.
+  - `Ctrl+P/N` navigates previous/next entries, history items, or completion candidates.
+  - `Ctrl+A` moves to the start of the line.
+  - Do not assume `Ctrl+E` is available for moving to line end; it is generally used for line scrolling.
+- In non-input contexts, analogous to Vim normal mode, prefer Vim-style `hjkl` navigation.
+  Do not bind bare letters globally when they would interfere with typing.
+- In both contexts, prefer `Ctrl+U/D` for page or half-page navigation and `Ctrl+Y/E` for scrolling up/down by line.
+  `Ctrl+B/F` can provide full-page or preview paging in non-input contexts.
+- `Ctrl+R` generally has search semantics.
+  `Ctrl+C` generally cancels the current operation or exits.
+- Prefer consistent meanings across applications rather than preserving conflicting upstream defaults.
+  Respect context: text editing, list selection, transcript scrolling, and pane navigation are different operations.
+- For additional actions, extend existing application-local leaders and mnemonic groups
+  before inventing modifier chords.
+
+## Shortcut Ownership
+
+- Reserve all `Ctrl+Alt+*` and `Shift+Alt+*` combinations for niri, even when a particular chord is currently unbound.
+  Existing application-specific exceptions do not make these namespaces available for new shortcuts.
+- `Alt+hjkl` belongs to niri window navigation.
+  `Ctrl+hjkl` belongs to integrated tmux pane and Neovim split navigation.
+  Keep these layers separate; do not reuse their navigation chords for application-local actions.
+- `Ctrl+S` is the tmux prefix.
+  Preserve the `Alt+Z` resizing sequences used by the Neovim/tmux integration.
+- An application binding does not make a shortcut available if the compositor, terminal, or tmux intercepts it first.
+  Account for inherited defaults, plugins, and mode-specific bindings when checking a concrete conflict.
+- Prefer a reachable, conflict-free application keymap over adding terminal forwarding workarounds.
+  Changes to shortcut ownership or cross-layer forwarding require explicit review.
+
+## Custom Layout and Language Support
+
+- Design for the custom `qwerty_rnk` and `jcuken_rnk` layouts, not standard US QWERTY.
+  Win keys produce Alt, physical Alt keys provide Level3 symbols, Caps Lock provides Ctrl,
+  and right Ctrl provides Super.
+- Check the actual gestures needed for punctuation and modifier combinations.
+  A mnemonic-looking symbol is not necessarily convenient on this layout.
+- Preserve equivalent physical gestures in English and Russian.
+  Use the existing generated aliases, tmux alias mechanism, and Neovim language mappings where applicable.
+- For generated configurations, edit their `*-overlay.*` sources and regenerate with `nix run . -- configs`.
+  Do not maintain generated bindings or Russian aliases manually when an existing generator handles them.
+
+## Cross-Application Conventions
+
+AI tools generally align on `Ctrl+Enter` to submit, Enter to insert a newline,
+`Alt+E` for the external editor, and `Alt+V` for image paste.
+Preserve these conventions where supported, without assuming every application exposes identical commands or contexts.
+
+Verify that newly chosen modifier combinations remain distinct through Kitty and tmux.
+Do not assume that a shortcut accepted by an application's configuration reaches it unchanged.
+
+## Reference Map
+
+Paths below are relative to the repository root.
+
+- Custom keyboard layouts: `nix/keyboard/qwerty_rnk` and `nix/keyboard/jcuken_rnk`.
+- niri shortcuts: `nix/home-manager/desktop-envs/configs/.config/niri/config.kdl`.
+- Kitty mappings and key forwarding: `nix/home-manager/terminals/configs/.config/kitty/kitty.conf`.
+- tmux prefix and plugins: `nix/home-manager/shell/tmux.nix`.
+- tmux navigation and forwarding: `nix/home-manager/shell/tmux/tmux.conf`.
+- tmux Russian aliases: `nix/overlays/custom/scripts/tmux-russian-keymaps.py`.
+- Neovim keymaps and language mappings:
+  `nix/home-manager/text-editors/neovim/config/lua/config/keymaps.lua`.
+- Neovim plugin-specific bindings:
+  `nix/home-manager/text-editors/neovim/config/lua/plugins/configs/`,
+  especially `tmux.lua`, `snacks.lua`, `blink.lua`, and `dap.lua`.
+- Shell editing conventions: `nix/home-manager/shell/shell.nix` and shell-specific modules beside it.
+- Shell picker bindings: `nix/home-manager/shell/fzf.nix`.
+- Application keymaps and overlays: the `configs/` trees under `nix/home-manager/ai/`,
+  `nix/home-manager/fs-navigation/`, `nix/home-manager/vcs/`, `nix/home-manager/shell/`,
+  and `nix/home-manager/other/`.
+- Configuration generation and Russian aliases: `dotfiles_py/targets/config_gen.py`.
+- Pinned upstream keybinding catalogs: `nix/overlays/custom/keymap-defaults.nix`.
+
 # Secrets Management
 
 Secrets in `nix/secrets/` use sops + age with the custom `local.secrets` modules in `nix/modules/secrets/`,

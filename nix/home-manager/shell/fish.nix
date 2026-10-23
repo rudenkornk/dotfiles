@@ -1,30 +1,32 @@
 { pkgs, ... }:
 
 {
-  programs.fish = {
-    enable = true;
+  programs = {
+    fish = {
+      enable = true;
 
-    functions = {
-      fish_greeting = {
-        body = "";
+      functions = {
+        fish_greeting = {
+          body = "";
+        };
+        fish_remove_path = {
+          body = builtins.readFile ./fish/functions/fish_remove_path.fish;
+          description = "Shows user added PATH entries and removes the selected one";
+        };
       };
-      fish_remove_path = {
-        body = builtins.readFile ./fish/functions/fish_remove_path.fish;
-        description = "Shows user added PATH entries and removes the selected one";
-      };
+      interactiveShellInit = ''
+        source ${./fish/conf.d/shell_utils.fish}
+      '';
+      plugins = with pkgs.fishPlugins; [
+        {
+          name = "autopair";
+          inherit (autopair) src;
+        }
+        {
+          name = "puffer";
+          inherit (puffer) src;
+        }
+      ];
     };
-    interactiveShellInit = ''
-      source ${./fish/conf.d/shell_utils.fish}
-    '';
-    plugins = with pkgs.fishPlugins; [
-      {
-        name = "autopair";
-        inherit (autopair) src;
-      }
-      {
-        name = "puffer";
-        inherit (puffer) src;
-      }
-    ];
   };
 }

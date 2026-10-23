@@ -60,20 +60,10 @@ When it is unavailable, track multi-step work and completion in concise prose up
 # Screenshots
 
 Resolve screenshot references under `~/Downloads/screenshots`.
+This directory contains all screenshots containing date in their names (and sorting by date allows to get recent ones).
+As well as special ring of `latest.png` and `latest-N.png` (N=1..5) for the most recent screenshots.
 The user may call screenshots "screens" and omit the directory and `.png` extension.
-
-- `latest` means `latest.png`, the newest screenshot.
-- `latest-N` means `latest-N.png`, where N is from 1 through 5.
-- `latest-A-B` means the inclusive range from `latest-A.png` through `latest-B.png`.
-  For example, `latest-1-4` selects indices 1, 2, 3, and 4.
-
-When opening multiple screenshots, open them oldest first, from highest index to lowest.
-Open only the requested images.
-If a requested file is missing or cannot be opened, report it and continue with the remaining requested files.
-Do not search for replacements.
-
-Resolve these references directly to their fixed paths.
-Do not list or scan the screenshots directory or load unrelated images.
+When opening latest screenshots, prefer `latest[-N].png` over those with a date.
 
 # Math Formatting
 

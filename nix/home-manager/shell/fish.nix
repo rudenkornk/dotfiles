@@ -28,5 +28,9 @@
         }
       ];
     };
+    man = {
+      # fish triggers extremely long generation of man search index.
+      generateCaches = false;
+    };
   };
 }

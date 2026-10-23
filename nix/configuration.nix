@@ -267,7 +267,10 @@ in
     # /var/db/sudo (lecture tracking) is not preserved across reboots in the
     # impermanence setup, so disable the one-time lecture to avoid it printing
     # on every first sudo invocation after boot.
-    sudo.extraConfig = "Defaults lecture = never";
+    sudo.extraConfig = ''
+      Defaults lecture = never
+      Defaults env_keep += "SYSTEMD_EDITOR"
+    '';
     tpm2 = {
       # https://nixos.org/manual/nixos/stable/#module-security-tpm2-nixosmodule
       enable = true;
@@ -313,6 +316,7 @@ in
   };
 
   environment = {
+    variables.SYSTEMD_EDITOR = pkgs.lib.getExe pkgs.vim;
     systemPackages = with pkgs; [
       ibus
 

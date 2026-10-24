@@ -64,6 +64,7 @@ This directory contains all screenshots containing date in their names (and sort
 As well as special ring of `latest.png` and `latest-N.png` (N=1..5) for the most recent screenshots.
 The user may call screenshots "screens" and omit the directory and `.png` extension.
 When opening latest screenshots, prefer `latest[-N].png` over those with a date.
+If user refers to "screen" without additional context, assume they mean the most recent screenshot.
 
 # Math Formatting
 

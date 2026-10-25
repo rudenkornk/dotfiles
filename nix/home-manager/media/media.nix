@@ -7,6 +7,7 @@
       gpu-screen-recorder
       pdfarranger
       shotcut # typos: ignore
+      vlc
       (
         if host.gpu.cudaSupport or false then
           whisper-ctranslate2

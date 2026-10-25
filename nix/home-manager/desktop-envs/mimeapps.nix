@@ -8,7 +8,7 @@ _:
     let
       browser = "firefox.desktop";
       editor = "org.gnome.TextEditor.desktop";
-      video = "org.gnome.Showtime.desktop";
+      video = "vlc.desktop";
       image = "org.gnome.Loupe.desktop";
       audio = "org.gnome.Decibels.desktop";
       pdf = "org.gnome.Papers.desktop";

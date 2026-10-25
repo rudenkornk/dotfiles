@@ -4,6 +4,7 @@
 {
   home.packages = with pkgs; [
     bzip2
+    file-roller
     gnutar
     gzip
     libarchive

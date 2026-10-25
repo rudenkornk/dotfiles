@@ -331,6 +331,16 @@ window-rule {
     open-floating true
 }
 window-rule {
+    match app-id="org.gnome.FileRoller"
+    default-column-width {
+        fixed 800
+    }
+    default-window-height {
+        fixed 600
+    }
+    open-floating true
+}
+window-rule {
     match app-id="org.gnome.Solanum"
     default-column-width {
         fixed 360

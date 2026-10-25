@@ -12,6 +12,7 @@ _:
       image = "org.gnome.Loupe.desktop";
       audio = "org.gnome.Decibels.desktop";
       pdf = "org.gnome.Papers.desktop";
+      archive = "org.gnome.FileRoller.desktop";
     in
     {
       "text/html" = browser;
@@ -75,5 +76,28 @@ _:
       "image/avif" = image;
 
       "application/pdf" = browser;
+
+      "application/zip" = archive;
+      "application/x-7z-compressed" = archive;
+      "application/vnd.rar" = archive;
+      "application/x-rar" = archive;
+      "application/x-rar-compressed" = archive;
+      "application/x-tar" = archive;
+      "application/x-compressed-tar" = archive;
+      "application/x-bzip-compressed-tar" = archive;
+      "application/x-xz-compressed-tar" = archive;
+      "application/x-zstd-compressed-tar" = archive;
+      "application/x-lzma-compressed-tar" = archive;
+      "application/x-lzip-compressed-tar" = archive;
+      "application/x-tarz" = archive;
+      "application/gzip" = archive;
+      "application/x-gzip" = archive;
+      "application/x-bzip" = archive;
+      "application/x-bzip2" = archive;
+      "application/x-xz" = archive;
+      "application/zstd" = archive;
+      "application/x-lzma" = archive;
+      "application/x-lzip" = archive;
+      "application/x-compress" = archive;
     };
 }

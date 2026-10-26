@@ -24,6 +24,13 @@ end
 M.opts = {
   picker = {
     hidden = true,
+    config = function(opts)
+      for _, win in pairs(opts.win) do
+        if win.keys then
+          require("config.russian_keymaps").add(win.keys)
+        end
+      end
+    end,
     db = {
       -- Absolute path to `libsqlite3.so`, injected by nix. Enables sqlite-backed frecency and history.
       sqlite3_path = require("config.nix_sqlite"),

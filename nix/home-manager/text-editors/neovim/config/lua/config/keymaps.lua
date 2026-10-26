@@ -145,6 +145,7 @@ vim.opt.keymap = "rnk-qwerty-jcuken"
 vim.opt.langmap =
   "ЙЦУКЕНГШЩЗХЪ;QWERTYUIOPÜÅ,ФЫВАПРОЛДЖЭ;ASDFGHJKLÖÄ,ЯЧСМИТЬБЮ;ZXCVBNMØÆ,йцукенгшщзхъ;qwertyuiopüå,фывапролджэ;asdfghjklöä,ячсмитьбю;zxcvbnmøæ"
 
+local confirmation_keys = {}
 for _, group in ipairs(vim.split(vim.o.langmap, ",", { plain = true })) do
   local from, to = group:match("^(.-);(.*)$")
   local sources = vim.fn.split(from, "\\zs")
@@ -152,11 +153,21 @@ for _, group in ipairs(vim.split(vim.o.langmap, ",", { plain = true })) do
 
   for i, source in ipairs(sources) do
     local target = targets[i]
+    confirmation_keys[source] = target
     vim.keymap.set("c", source, function()
       return vim.fn.getcmdtype() == ":" and target or source
     end, { expr = true })
   end
 end
+
+vim.on_key(function(key)
+  local target = confirmation_keys[key]
+  if target and vim.fn.mode(1) == "r?" then
+    -- Native confirmation prompts bypass mappings.
+    vim.api.nvim_feedkeys(target, "in", false)
+    return ""
+  end
+end, vim.api.nvim_create_namespace("config.confirmation_keys"))
 
 vim.opt.iminsert = 0
 vim.opt.imsearch = -1

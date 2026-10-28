@@ -88,7 +88,7 @@ let
       target: value:
       map (source: {
         inherit target source;
-        inherit (value) recursive;
+        inherit (value) recursive force;
       }) value.source
     ) cfg
   );
@@ -98,6 +98,7 @@ let
       target,
       source,
       recursive,
+      force,
     }:
     map (
       file:
@@ -111,6 +112,7 @@ let
         ];
         source = "${source}/${rel}";
         recursive = false;
+        inherit force;
       }
     ) (lib.filesystem.listFilesRecursive source);
 
@@ -119,7 +121,7 @@ let
   ) cfg_list;
 
   entries_attrs = map (
-    entry: lib.setAttrByPath (destination_for entry.target) { inherit (entry) source recursive; }
+    entry: lib.setAttrByPath (destination_for entry.target) { inherit (entry) source recursive force; }
   ) entries_list;
 
   empty = {
@@ -153,6 +155,11 @@ in
               type = lib.types.bool;
               default = true;
             };
+            force = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Whether to replace existing files and symlinks without creating backups.";
+            };
           };
         }
       );
@@ -167,6 +174,7 @@ in
            Such sources skip enumeration and are handed to `home.file` untouched.
         3. It automatically replaces `.config`, `.cache`, `.local/share`, `.local/state` with `xdg` paths.
         4. `recursive` defaults to `true`, since sharing a target needs it.
+        5. `force` defaults to `true`, allowing activation to replace checkout symlinks created by `dotfiles syms`.
       '';
     };
   };

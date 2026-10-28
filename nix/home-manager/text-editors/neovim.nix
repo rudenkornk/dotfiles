@@ -12,7 +12,7 @@
       withPython3 = true;
       withRuby = true;
 
-      # We manage `init.lua` ourselves via the recursive `xdg.configFile."nvim"` below.
+      # We manage `init.lua` ourselves via `local.home.file.".config/nvim"` below.
       # Without this, our `config/init.lua` clobbers the one home-manager generates,
       # which carries the `extraLuaPackages` `package.path`/`cpath` bootstrap and the provider host vars,
       # so `require("jsregexp")` and the Node provider break.
@@ -76,14 +76,17 @@
     };
   };
 
+  local = {
+    home = {
+      file = {
+        ".config/nvim".source = ./neovim/config;
+      };
+    };
+  };
+
   xdg = {
 
     configFile = {
-      "nvim" = {
-        source = ./neovim/config;
-        recursive = true;
-      };
-
       "nvim/lua/config/nix_managed_plugins.lua".text = # Comment preventing fold.
         ''return "${import ./neovim/plugins.nix { inherit pkgs; }}"'';
 

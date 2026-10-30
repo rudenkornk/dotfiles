@@ -110,7 +110,9 @@
         }) userHostPairs
       );
       # Also register home-manager configs for `nix flake check`.
-      checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations;
+      checks."${system}" = mapAttrs (_: config: config.activationPackage) homeConfigurations // {
+        fzf = import ./nix/wrappers/fzf/check.nix { inherit pkgs wlib; };
+      };
 
       packages.${system} =
         mapAttrs (_: path: pkgs.callPackage path { }) standalonePackages // tooling.packages;

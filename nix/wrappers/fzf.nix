@@ -2,10 +2,28 @@
   config,
   pkgs,
   lib,
+  wlib,
   ...
 }:
 
 let
+  inherit (config) commands;
+  fzf = lib.getExe config.wrapper;
+  utilities = with pkgs; [
+    coreutils
+    gnused
+    gawk
+    gnugrep
+    findutils
+    procps
+  ];
+  writeScript =
+    name: text:
+    pkgs.writeShellScript name # bash
+      ''
+        export PATH=${lib.makeBinPath utilities}:"$PATH"
+        ${text}
+      '';
   ignoreFile = toString ./fzf/ignore;
 
   h1 = "[1/4]  > ";
@@ -22,7 +40,7 @@ let
   fd4 = "${fdCommon} --hidden --no-ignore";
 
   fdCycleTransform =
-    pkgs.writeShellScript "fzf-fd-cycle-transform" # bash
+    writeScript "fzf-fd-cycle-transform" # bash
       ''
         set -euo pipefail
 
@@ -36,27 +54,26 @@ let
       '';
 
   fdPreview =
-    pkgs.writeShellScript "fzf-fd-preview" # bash
+    writeScript "fzf-fd-preview" # bash
       ''
         set -euo pipefail
         mime="$(${lib.getExe pkgs.file} --mime-type -b -- "$1")"
         case "$mime" in
-          image/*) ${lib.getExe pkgs.kitty} +kitten icat --transfer-mode=memory \
-            --stdin=no --place="$FZF_PREVIEW_COLUMNS"x"$FZF_PREVIEW_LINES""@0x0" -- "$1" ;;
+          image/*) ${commands.imagePreview} "$1" ;;
           *) ${lib.getExe pkgs.bat} --color=always --style=numbers --line-range :300 -- "$1" ;;
         esac
       '';
 
   fdScript =
-    pkgs.writeShellScript "fzf-fd" # bash
+    writeScript "fzf-fd" # bash
       ''
         set -euo pipefail
 
         export FZF_DEFAULT_COMMAND=${lib.escapeShellArg fd1}
-        ${lib.getExe pkgs.fzf} \
-          ${lib.concatStringsSep " " config.programs.fzf.fileWidgetOptions} \
+        ${fzf} \
+          ${lib.concatStringsSep " " config.fileWidgetOptions} \
           --with-shell '${lib.getExe pkgs.bash} -c' \
-          --bind 'enter:become(nvim {+})'
+          --bind 'enter:become(${commands.editor} {+})'
       '';
 
   # ── ctrl-q: ripgrep search ────────────────────────────────────────────────
@@ -77,7 +94,7 @@ let
   rg4 = "${rgCommon} --hidden --no-ignore";
 
   rgCycleTransform =
-    pkgs.writeShellScript "fzf-rg-cycle-transform" # bash
+    writeScript "fzf-rg-cycle-transform" # bash
       ''
         set -euo pipefail
 
@@ -93,11 +110,11 @@ let
   rgBatPreview = "${lib.getExe pkgs.bat} --color=always --style=numbers --highlight-line {2} {1}";
 
   rgScript =
-    pkgs.writeShellScript "fzf-rg" # bash
+    writeScript "fzf-rg" # bash
       ''
         set -euo pipefail
 
-        ${lib.getExe pkgs.fzf} \
+        ${fzf} \
           --disabled \
           --prompt='${h1}' \
           --bind "start:reload:${rg1} -- {q} || true" \
@@ -106,12 +123,12 @@ let
           --delimiter : \
           --preview '${rgBatPreview}' \
           --preview-window='right,60%,wrap,+{2}+3/3,~3,<90(down,60%,wrap,+{2}+3/3,~3)' \
-          --bind 'ctrl-o:execute(nvim {1} +{2})' \
-          --bind 'enter:execute(nvim {1} +{2})'
+          --bind 'ctrl-o:execute(${commands.editor} {1} +{2})' \
+          --bind 'enter:execute(${commands.editor} {1} +{2})'
       '';
 
   historyPreview =
-    pkgs.writeShellScript "fzf-history-preview" # bash
+    writeScript "fzf-history-preview" # bash
       ''
         set -euo pipefail
         # This sed relies on specific format enforced in current version of `fzf`.
@@ -122,15 +139,14 @@ let
 
   # ── ctrl-o: nix-search-tv ────────────────────────────────────────────────
 
-  # TODO: remove unstable after nixos-26.11
-  nsBin = lib.getExe pkgs.unstable.nix-search-tv;
+  nsBin = lib.getExe config.dependencies.nixSearchTv;
 
   nsScript =
-    pkgs.writeShellScript "fzf-ns" # bash
+    writeScript "fzf-ns" # bash
       ''
         set -euo pipefail
 
-        ${lib.getExe pkgs.fzf} \
+        ${fzf} \
           --prompt='  > ' \
           --scheme=history \
           --bind "start:reload:${nsBin} print" \
@@ -142,14 +158,14 @@ let
   # ── ctrl-v: tealdeer ─────────────────────────────────────────────────────
 
   tldrScript =
-    pkgs.writeShellScript "fzf-tldr" # bash
+    writeScript "fzf-tldr" # bash
       ''
         set -euo pipefail
 
-        ${lib.getExe pkgs.fzf} \
+        ${fzf} \
           --prompt='  > ' \
-          --bind "start:reload:${lib.getExe pkgs.tealdeer} --list" \
-          --preview "${lib.getExe pkgs.tealdeer} {} | ${lib.getExe pkgs.bat} --style=plain --color=always --language=markdown"
+          --bind "start:reload:${lib.getExe config.dependencies.tealdeer} --list" \
+          --preview "${lib.getExe config.dependencies.tealdeer} {} | ${lib.getExe pkgs.bat} --style=plain --color=always --language=markdown"
       '';
 
   # ── ctrl-x: process search ────────────────────────────────────────────────
@@ -176,14 +192,14 @@ let
   psh5 = "[5/5] PID  > ";
 
   psPidScript =
-    pkgs.writeShellScript "fzf-ps-pid" # bash
+    writeScript "fzf-ps-pid" # bash
       ''
         set -euo pipefail
         printf '%s' "$1" | sed 's/\x1b\[[0-9;]*m//g' | awk '{print $1}'
       '';
 
   psPreview =
-    pkgs.writeShellScript "fzf-ps-preview" # bash
+    writeScript "fzf-ps-preview" # bash
       ''
         set -euo pipefail
         pid="$(${psPidScript} "$1")"
@@ -192,7 +208,7 @@ let
       '';
 
   psCycleTransform =
-    pkgs.writeShellScript "fzf-ps-cycle-transform" # bash
+    writeScript "fzf-ps-cycle-transform" # bash
       ''
         set -euo pipefail
 
@@ -207,7 +223,7 @@ let
       '';
 
   psReloadTransform =
-    pkgs.writeShellScript "fzf-ps-reload-transform" # bash
+    writeScript "fzf-ps-reload-transform" # bash
       ''
         set -euo pipefail
 
@@ -222,7 +238,7 @@ let
       '';
 
   psSignalScript =
-    pkgs.writeShellScript "fzf-ps-signal" # bash
+    writeScript "fzf-ps-signal" # bash
       ''
         set -euo pipefail
         pid="$(${psPidScript} "$1")"
@@ -260,13 +276,13 @@ let
           '30  SIGPWR      power failure' \
           '31  SIGSYS      bad system call')"
 
-        choice="$(printf '%s\n' "$signals" | ${lib.getExe pkgs.fzf} --prompt="signal > pid $pid > " --no-multi)" || exit 0
+        choice="$(printf '%s\n' "$signals" | ${fzf} --prompt="signal > pid $pid > " --no-multi)" || exit 0
         sig="$(printf '%s' "$choice" | awk '{print $1}')"
         kill "-$sig" "$pid"
       '';
 
   psEnterScript =
-    pkgs.writeShellScript "fzf-ps-enter" # bash
+    writeScript "fzf-ps-enter" # bash
       ''
         set -euo pipefail
         for line in "$@"; do
@@ -275,55 +291,99 @@ let
         done
         for line in "$@"; do
           ${psPidScript} "$line"
-        done | ${lib.getExe' pkgs.wl-clipboard "wl-copy"} --primary --trim-newline
+        done | ${commands.clipboard}
       '';
 
   psHtopScript =
-    pkgs.writeShellScript "fzf-ps-htop" # bash
+    writeScript "fzf-ps-htop" # bash
       ''
         set -euo pipefail
         pids="$(for line in "$@"; do ${psPidScript} "$line"; done | paste -sd,)"
-        sudo ${lib.getExe pkgs.htop-vim} --pid "$pids"
+        ${commands.privilege} ${lib.getExe pkgs.htop-vim} --pid "$pids"
       '';
 
   psScript =
-    pkgs.writeShellScript "fzf-ps" # bash
+    writeScript "fzf-ps" # bash
       ''
         set -euo pipefail
 
         # Note: alternative layout (`<1(...)` syntax) for `--preview-window` here is required.
         # Without it, `fzf` ignores custom layout from this CLI and applies defaultOptions for some reason.
-        fzf \
+        ${fzf} \
           --prompt='${psh1}' \
           --bind "start:reload:${ps1}" \
           --bind "ctrl-x:transform:${psCycleTransform}" \
           --bind "ctrl-r:transform:${psReloadTransform}" \
           --bind "enter:become(${psEnterScript} {+})" \
           --bind "ctrl-o:execute(${psHtopScript} {+})" \
-          --bind "ctrl-v:execute(sudo ${lib.getExe pkgs.htop-vim})" \
+          --bind "ctrl-v:execute(${commands.privilege} ${lib.getExe pkgs.htop-vim})" \
           --bind "ctrl-t:execute(${psSignalScript} {})+transform:${psReloadTransform}" \
           --preview "${psPreview} {}" \
           --preview-window 'down,8,wrap,<1(down,8,wrap)' \
           --header-lines 1
       '';
+  shellDefaults = {
+    FZF_DEFAULT_OPTS = lib.concatStringsSep " " config.defaultOptions;
+    FZF_CTRL_T_COMMAND = config.fileWidgetCommand;
+    FZF_CTRL_T_OPTS = lib.concatStringsSep " " config.fileWidgetOptions;
+    FZF_CTRL_R_OPTS = lib.concatStringsSep " " config.historyWidgetOptions;
+  };
+  posixDefaults = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (
+      name: value: "if [ \"\${${name}+x}\" != x ]; then export ${name}=${lib.escapeShellArg value}; fi"
+    ) shellDefaults
+  );
+  fishDefaults = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (name: value: ''
+      if not set -q ${name}
+        set -gx ${name} ${lib.escapeShellArg value}
+      end
+    '') shellDefaults
+  );
+  listOption =
+    description:
+    lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      inherit description;
+    };
+  commandOption =
+    description:
+    lib.mkOption {
+      type = lib.types.str;
+      inherit description;
+    };
 in
 {
-  programs = {
-    nix-search-tv = {
-      enable = true;
-    };
+  imports = [ wlib.modules.default ];
 
-    tealdeer = {
-      enable = true;
-      settings.updates.auto_update = true;
+  options = {
+    commands = {
+      editor = commandOption "Editor command accepting file names and +line arguments.";
+      imagePreview = commandOption "Image preview command accepting a file name and the FZF_PREVIEW_* environment.";
+      clipboard = commandOption "Command reading selected process IDs from standard input.";
+      privilege = commandOption "Command prefix for running the process monitor with elevated privileges.";
     };
+    dependencies = {
+      nixSearchTv = lib.mkOption {
+        type = lib.types.package;
+        description = "Nix search provider package.";
+      };
+      tealdeer = lib.mkOption {
+        type = lib.types.package;
+        description = "Tealdeer package used by the documentation picker.";
+      };
+    };
+    defaultOptions = listOption "Default fzf arguments, expressed as shell-quoted option strings.";
+    historyWidgetOptions = listOption "Shell-quoted options for the upstream history widget.";
+    fileWidgetOptions = listOption "Shell-quoted options for the file picker.";
+    fileWidgetCommand = commandOption "Command producing file picker candidates.";
+  };
 
-    fzf = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-      # enableNushellIntegration = true; # TODO: enable after 26.11.
-      enableZshIntegration = true;
+  config = {
+    package = lib.mkDefault pkgs.fzf;
+    runtimePkgs = utilities;
+    envDefault.FZF_DEFAULT_OPTS = shellDefaults.FZF_DEFAULT_OPTS;
 
     defaultOptions = [
       "--ansi"
@@ -357,11 +417,18 @@ in
       "--prompt='${h1}'"
       "--preview='${fdPreview} {}'"
       "--bind='ctrl-t:transform:${fdCycleTransform}'"
-      "--bind='ctrl-o:execute(nvim {})'"
+      "--bind='ctrl-o:execute(${commands.editor} {})'"
     ];
-    };
 
-        fish.interactiveShellInit =
+    passthru.shellIntegrations = {
+      fish = {
+        packages = [ config.wrapper ] ++ utilities;
+        earlyInteractiveInit = fishDefaults + ''
+          if status is-interactive
+            ${fzf} --fish | source
+          end
+        '';
+        interactiveInit =
           # fish
           ''
             for mode in default insert
@@ -371,16 +438,37 @@ in
               bind --mode $mode ctrl-x "commandline -f cancel; ${psScript}; echo; commandline -f repaint"
             end
           '';
+      };
 
-        bash.initExtra = # bash
+      bash = {
+        packages = [ config.wrapper ] ++ utilities;
+        earlyInteractiveInit =
+          posixDefaults
+          # bash
+          + ''
+
+            if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
+              eval "$(${fzf} --bash)"
+            fi
+          '';
+        interactiveInit = # bash
           ''
             bind -x '"\C-o": "${nsScript}"'
             bind -x '"\C-q": "${rgScript}"'
             bind -x '"\C-v": "${tldrScript}"'
             bind -x '"\C-x": "${psScript}"'
           '';
+      };
 
-        zsh.initContent =
+      zsh = {
+        packages = [ config.wrapper ] ++ utilities;
+        earlyInteractiveInit = posixDefaults + ''
+
+          if [[ $options[zle] = on ]]; then
+            source <(${fzf} --zsh)
+          fi
+        '';
+        interactiveInit =
           # zsh
           ''
             function _fzf_ns_widget() { ${nsScript}; zle reset-prompt }
@@ -400,8 +488,12 @@ in
             bindkey -M emacs -rp '^X' # Remove prefix sequences so Ctrl-X does not wait for another key.
             bindkey -M emacs '^X' _fzf_ps_widget
           '';
+      };
 
-        nushell.extraConfig = # nu
+      nushell = {
+        packages = [ config.wrapper ] ++ utilities;
+        earlyInteractiveInit = "";
+        interactiveInit = # nu
           ''
             $env.config.keybindings = ($env.config.keybindings | append [
               {
@@ -441,5 +533,7 @@ in
               }
             ])
           '';
+      };
+    };
   };
 }

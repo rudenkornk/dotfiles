@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   hm_inputs,
+  wlib,
   host,
   users,
   ...
@@ -301,6 +302,7 @@ in
 
   home-manager = {
     extraSpecialArgs = {
+      inherit wlib;
       inputs = hm_inputs;
       inherit pkgs host;
     };

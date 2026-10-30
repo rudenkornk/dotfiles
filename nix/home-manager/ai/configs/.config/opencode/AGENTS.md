@@ -29,6 +29,8 @@ Read-only investigation may continue to clarify the question.
 Do not implement your preferred option provisionally or ask for approval only after making the change.
 Do not silently choose a fallback when an approved approach encounters a problem.
 Explain the problem and ask how to proceed.
+When using question tool for asking always add option "explain/discuss the problem"
+to allow the user to request more context before making a decision.
 
 Approval covers only the choices actually presented and accepted.
 A general instruction to proceed, including switching to Build mode, does not authorize new decisions.

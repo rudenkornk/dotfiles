@@ -20,6 +20,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-wrapper-modules = {
+      url = "github:nix-community/nix-wrapper-modules";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     preservation = {
       url = "github:nix-community/preservation";
     };
@@ -37,6 +42,7 @@
       inherit (inputs.nixpkgs) lib;
       inherit (builtins) mapAttrs;
       hm_inputs = { };
+      wlib = inputs.nix-wrapper-modules.lib;
       nixos_inputs = {
         inherit (inputs)
           disko
@@ -74,6 +80,7 @@
         home-manager.lib.homeManagerConfiguration {
           pkgs = hostPkgs.${host.name};
           extraSpecialArgs = {
+            inherit wlib;
             inputs = hm_inputs;
             user = user.value;
             host = host.value;
@@ -88,6 +95,7 @@
           inherit system;
           pkgs = hostPkgs.${name};
           specialArgs = {
+            inherit wlib;
             inputs = nixos_inputs;
             inherit hm_inputs users host;
           };

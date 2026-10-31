@@ -1,0 +1,91 @@
+{
+  "log": { "loglevel": "info" },
+  "dns": {
+    "hosts": { "full:localhost": ["127.0.0.1", "::1"] },
+    "servers": [
+      {
+        "address": "127.0.0.1",
+        "domains": [],
+        "skipFallback": true,
+        "tag": "dns-direct"
+      },
+      { "address": "https://8.8.8.8/dns-query", "tag": "dns-remote" }
+    ],
+    "disableFallbackIfMatch": true,
+    "queryStrategy": "UseIP"
+  },
+  "inbounds": [
+    {
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "port": 2080,
+      "protocol": "socks",
+      "settings": { "auth": "noauth", "udp": true },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls", "quic"],
+        "routeOnly": true
+      }
+    },
+    {
+      "tag": "tun-in",
+      "protocol": "tun",
+      "settings": {
+        "name": "xray-tun",
+        "mtu": 1500,
+        "gateway": ["172.19.0.1/24"],
+        "autoSystemRoutingTable": ["0.0.0.0/0"],
+        "autoOutboundsInterface": "auto",
+        "autoSystemDnsToGateway": true
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls", "quic"],
+        "routeOnly": true
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "streamSettings": { "sockopt": { "domainStrategy": "UseIP" } }
+    },
+    { "tag": "block", "protocol": "blackhole" },
+    {
+      "tag": "dns-out",
+      "protocol": "dns",
+      "streamSettings": { "sockopt": { "dialerProxy": "proxy" } },
+      "settings": {
+        "rewriteAddress": "8.8.8.8",
+        "rewritePort": 53,
+        "rewriteNetwork": "tcp",
+        "rules": [
+          { "action": "hijack", "qType": "1,28" },
+          { "action": "direct" }
+        ]
+      }
+    }
+  ],
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "inboundTag": ["dns-direct"],
+        "outboundTag": "direct",
+        "ruleTag": "direct-dns"
+      },
+      {
+        "inboundTag": ["dns-remote"],
+        "outboundTag": "proxy",
+        "ruleTag": "proxied-dns"
+      },
+      {
+        "inboundTag": ["tun-in", "mixed-in"],
+        "port": "53",
+        "outboundTag": "dns-out",
+        "ruleTag": "dns-hijack"
+      }
+    ]
+  }
+}

@@ -1,4 +1,9 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 # See also https://github.com/LazyVim/LazyVim/discussions/1972
 {
@@ -87,6 +92,10 @@
   xdg = {
 
     configFile = {
+      # sideloadInitLua=true allows to manage `init.lua` ourselves,
+      # but also disables the same entry we use for our `init.lua` version.
+      "nvim/init.lua".enable = lib.mkForce true;
+
       "nvim/lua/config/nix_managed_plugins.lua".text = # Comment preventing fold.
         ''return "${import ./neovim/plugins.nix { inherit pkgs; }}"'';
 

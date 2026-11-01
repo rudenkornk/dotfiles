@@ -2,13 +2,13 @@ final: _:
 
 final.stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yandex-browser";
-  version = "26.8.1.1022";
+  version = "26.10.0.1860";
 
   src = final.fetchurl {
     url =
       "https://repo.yandex.ru/yandex-browser/deb/pool/main/y/yandex-browser-stable/"
       + "yandex-browser-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-auMULz/IeN9fTdXR38pVHDnn+FWtOjwX6nikdj0/uSE=";
+    hash = "sha256-hHm5ohlUoSPlwtmw9KiM1dp/0+OZ/ebr7T5iiI1oeMI=";
   };
 
   nativeBuildInputs = with final; [

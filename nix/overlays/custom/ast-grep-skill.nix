@@ -7,13 +7,13 @@ final: _prev:
 
 final.stdenvNoCC.mkDerivation {
   pname = "ast-grep-skill";
-  version = "0-unstable-2026-07-03";
+  version = "0-unstable-2026-09-13";
 
   src = final.fetchFromGitHub {
     owner = "ast-grep";
     repo = "agent-skill";
-    rev = "c2a9bc154f4ffe08b25d28d5e852dfac8c0d0d8a";
-    hash = "sha256-awochSE2OupbsmaGx0xc7wHf0ovVMSdtHv4gZAGWOus=";
+    rev = "f2175aff21f20cfb8e2db30c28febeb3a2d42b61";
+    hash = "sha256-dORqiMdFOUQVEF6wn1IZiTIcslzO+441A0GZP4KNcOQ=";
   };
 
   dontConfigure = true;

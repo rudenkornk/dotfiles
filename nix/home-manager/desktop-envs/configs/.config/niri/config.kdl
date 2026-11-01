@@ -147,7 +147,7 @@ binds {
     Alt+Shift+H {
         focus-column-or-monitor-left
     }
-    Ctrl+Alt+1 {
+    Ctrl+Alt+ß {
         // Ctrl+Alt+W on some laptops is not viable bind on a keyboard physical level.
         spawn-sh "if [ $(niri msg -j outputs | jq 'length') -gt 1 ]; then niri msg action move-column-to-monitor-up; else niri msg action move-window-up-or-to-workspace-up; fi"
     }
@@ -178,10 +178,10 @@ binds {
     Ctrl+Alt+E {
         switch-preset-column-width
     }
-    Ctrl+Alt+M repeat=false {
+    Ctrl+Alt+1 repeat=false {
         spawn-sh "python3 ~/.config/niri/layout_step.py stack-left --full-width 99"
     }
-    Ctrl+Alt+N repeat=false {
+    Ctrl+Alt+2 repeat=false {
         spawn-sh "python3 ~/.config/niri/layout_step.py stack-right --full-width 99"
     }
     Ctrl+Alt+I {

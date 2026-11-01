@@ -3,8 +3,6 @@ final: _prev:
 # The official `ast-grep` agent skills, maintained by the ast-grep org.
 # They are not shipped inside the `ast-grep` package itself (that only carries shell completions),
 # so we vendor them from GitHub and expose them under `share/skills`, mirroring `playwright-cli`.
-# The `outline` skill drives an `ast-grep outline` subcommand that first appeared in ast-grep 0.44,
-# whereas `fs-navigation.nix` still takes 0.42 from stable nixpkgs, so its commands fail until that is bumped.
 # It is installed as `ast-grep-outline`, so that the directory name matches the name declared in its frontmatter.
 
 final.stdenvNoCC.mkDerivation {

@@ -5,6 +5,7 @@ import re
 import uuid
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from enum import StrEnum
 from pathlib import Path
 from typing import Any, Self
 
@@ -17,6 +18,12 @@ from ..utils import run_shell, sudo_cat, sudo_shell
 from .lint import format_code
 
 _logger = logging.getLogger(__name__)
+
+
+class ForceMode(StrEnum):
+    none = "none"
+    hardware = "hardware"
+    all = "all"
 
 
 @dataclass(frozen=True)
@@ -50,6 +57,21 @@ class Host:
         rendered = template_path.read_text()
         for marker, value in replacements.items():
             rendered = rendered.replace(marker, _nixify_str(value))
+        return rendered
+
+    def render_hardware(self) -> str:
+        rendered = self.path.read_text()
+        replacements = {"smbiosUUIDHash": self.smbios_uuid_hash or "", "disk_device": self.disk_device}
+        for attribute, value in replacements.items():
+            pattern = re.compile(rf'(?m)^([ \t]*{attribute}[ \t]*=[ \t]*)"(?:[^"\\]|\\.)*"([ \t]*;)')
+
+            def replacement(match: re.Match[str], value: str = value) -> str:
+                return f'{match[1]}"{_nixify_str(value)}"{match[2]}'
+
+            rendered, count = pattern.subn(replacement, rendered)
+            if count != 1:
+                msg = f"Expected exactly one literal {attribute} assignment in {self.path}; found {count}."
+                raise RuntimeError(msg)
         return rendered
 
     @classmethod
@@ -139,16 +161,16 @@ class Disk:
         )
 
 
-def bootstrap_host(*, repo_path: Path, templates_path: Path, force: bool) -> None:
+def bootstrap_host(*, repo_path: Path, templates_path: Path, force: ForceMode) -> None:
     hosts_path = repo_path / "nix/hosts"
     smbios_uuid = _read_smbios_uuid()
     smbios_uuid_hash = hashlib.sha256(smbios_uuid.encode("ascii")).hexdigest()[:40]
     existing_hosts = _existing_hosts(hosts_path)
     matched_host = _matched_host(existing_hosts, smbios_uuid_hash)
 
-    if matched_host is not None and not force:
+    if matched_host is not None and force == ForceMode.none:
         _logger.info(f"Host {matched_host.name} is already registered.")
-        _logger.info("Use `--force` to regenerate it.")
+        _logger.info("Use `--force=hardware` to update hardware or `--force=all` to regenerate it.")
         return
 
     report = _facter_report()
@@ -164,8 +186,12 @@ def bootstrap_host(*, repo_path: Path, templates_path: Path, force: bool) -> Non
         if existing == matched_host:
             continue
         if existing.path.resolve() == host_path.resolve():
-            msg = f"Refusing to overwrite existing host files in {existing.path}"
-            raise RuntimeError(msg)
+            if force == ForceMode.none:
+                _logger.info(f"Host {existing.name} is already registered.")
+                _logger.info("Use `--force=hardware` to update hardware or `--force=all` to regenerate it.")
+                return
+            matched_host = existing
+            break
 
     selected_disk = _prompt_disk(_lsblk(), matched_host)
     host = Host(
@@ -174,13 +200,15 @@ def bootstrap_host(*, repo_path: Path, templates_path: Path, force: bool) -> Non
         smbios_uuid_hash=smbios_uuid_hash,
         disk_device=selected_disk.device_path,
     )
-    host_text = host.render(templates_path / "host.nix")
+    hardware_only = matched_host is not None and force == ForceMode.hardware
+    host_text = host.render_hardware() if hardware_only else host.render(templates_path / "host.nix")
 
     host.facter_path.parent.mkdir(exist_ok=True)
     host.path.write_text(host_text)
     host.facter_path.write_text(f"{json.dumps(report, indent=2)}\n")
-    host.niri_monitors_path.write_text("{ }\n")
-    host.noctalia_path.write_text("")
+    if not hardware_only:
+        host.niri_monitors_path.write_text("{ }\n")
+        host.noctalia_path.write_text("")
 
     _commit_generated_host(repo_path=repo_path, host=host)
 

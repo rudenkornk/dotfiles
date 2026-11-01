@@ -146,9 +146,13 @@ def bootstrap_crypto() -> None:
 def bootstrap_host(
     *,
     force: Annotated[
-        bool,
-        typer.Option("-f", "--force", help="Force regeneration of existing host."),
-    ] = False,
+        host_target.ForceMode,
+        typer.Option(
+            "-f",
+            "--force",
+            help="Overwrite an existing host: none skips; hardware updates hash, disk, and Facter; all regenerates.",
+        ),
+    ] = host_target.ForceMode.none,
 ) -> None:
     """Generate an initial host definition for this machine."""
     host_target.bootstrap_host(repo_path=REPO_PATH, templates_path=DATA_PATH / "templates", force=force)

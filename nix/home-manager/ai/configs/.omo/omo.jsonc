@@ -10,6 +10,7 @@
   "model_profiles": {
     "geeky-normal": {
       "models": [
+        { "model": "chatgpt-subscription/gpt-6-astra", "reasoning": "medium" },
         {
           "model": "chatgpt-subscription/gpt-6.1-sol-fast",
           "reasoning": "medium",

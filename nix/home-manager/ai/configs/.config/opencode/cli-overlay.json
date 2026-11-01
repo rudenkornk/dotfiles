@@ -11,6 +11,7 @@
     "session.toggle.thinking": "alt+g",
     "command.palette.show": "ctrl+o",
     "open.menu": "none",
+    "model.dialog.usage": "none",
     "session.list": "<leader>o",
     "session.tab.next": "ctrl+tab,<leader>l",
     "session.tab.previous": "<leader>h",

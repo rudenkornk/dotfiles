@@ -6,7 +6,6 @@
   "enableAnalytics": false,
   "tuiMode": "fullscreen",
   "theme": "grok-night",
-  "skills": ["~/.claude/skills", "!**/.claude/skills/ast-grep/SKILL.md"],
   "permissionPreset": "full-access",
   "permission": {
     "external_directory": {

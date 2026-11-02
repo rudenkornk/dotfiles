@@ -362,14 +362,19 @@ they fit within 120 characters. A sentence must never be split across a line bou
 
 # Commit Message Style
 
+Follow the project's documented commit-message rules and prominent conventions in its existing history.
+When no clear convention exists, including in new projects, use `type(scope): summary`.
+All remaining rules in this section—including line length, prose, and message structure—apply unless they conflict
+with project conventions.
+
 No line in a commit message, including the title and body, may exceed 120 characters.
 
 All Comment & Markdown Style Guidelines above also apply to commit message bodies,
 including prose, capitalization, punctuation, and sentence wrapping.
-Those style rules do not apply to titles, which follow the `type(scope): summary` format.
+Those prose rules do not apply to titles.
 
 Commit messages must be short.
-In ~95% of cases the message is only the title (`type(scope): summary`, as in the existing history) — no body at all.
+In ~95% of cases the message is only the title—no body at all.
 
 Keep commit titles concrete and concise.
 
@@ -392,5 +397,5 @@ The commit title should still identify the broken behavior for fixes.
 When a commit removes code — especially a workaround that is no longer needed — the rule above inverts.
 Deleted code has nowhere to live, so leaving behind a ghost comment describing what used to be there
 and why it went away just trades one piece of dead weight for another.
-Delete the code cleanly and put the explanation in the commit body instead, where `git log` and `git blame` will surface it
-for whoever wonders why the workaround disappeared.
+Delete the code cleanly and put the explanation in the commit body instead,
+where `git log` and `git blame` will surface it for whoever wonders why the workaround disappeared.

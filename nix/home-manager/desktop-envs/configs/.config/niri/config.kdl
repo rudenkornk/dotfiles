@@ -50,7 +50,7 @@ binds {
         spawn-sh "grim -g \"$(slurp)\" - | satty --filename - "
     }
     Ctrl+Alt+3 {
-        spawn "noctalia" "msg" "panel-toggle" "alexander/screen-toolkit:panel-legacy"
+        spawn "noctalia" "msg" "panel-toggle" "alexander/screen-toolkit:panel"
     }
     Print {
         screenshot
@@ -179,10 +179,10 @@ binds {
         switch-preset-column-width
     }
     Ctrl+Alt+1 repeat=false {
-        spawn-sh "python3 ~/.config/niri/layout_step.py stack-left --full-width 99"
+        spawn-sh "python3 ~/.config/niri/layout_step.py stack-right --full-width 99"
     }
     Ctrl+Alt+2 repeat=false {
-        spawn-sh "python3 ~/.config/niri/layout_step.py stack-right --full-width 99"
+        spawn-sh "python3 ~/.config/niri/layout_step.py stack-left --full-width 99"
     }
     Ctrl+Alt+I {
         consume-window-into-column

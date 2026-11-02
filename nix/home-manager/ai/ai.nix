@@ -3,11 +3,15 @@
 # CLI AI tools.
 
 let
-  skills = {
+  manualSkills = {
     ast-grep = "${pkgs.custom.ast-grep-skill}/share/skills/ast-grep";
     ast-grep-outline = "${pkgs.custom.ast-grep-skill}/share/skills/ast-grep-outline";
     playwright-cli = "${pkgs.custom.playwright-cli}/share/skills/playwright-cli";
   };
+  openspecSkills = pkgs.lib.genAttrs pkgs.custom.openspec.skills (
+    name: "${pkgs.custom.openspec}/share/skills/${name}"
+  );
+  skills = { } // manualSkills // openspecSkills;
 in
 {
   home = {
@@ -46,6 +50,7 @@ in
       (locallib.with_secrets { pkg = qwen-code; })
 
       mcp-nixos
+      custom.openspec
       custom.playwright-cli
     ];
   };
@@ -60,6 +65,10 @@ in
       # Codex ignores symlinked `SKILL.md` files, but follows symlinked skill directories,
       # thus disabling `recursive` here.
       ".codex/skills/${name}" = {
+        inherit source;
+        recursive = false;
+      };
+      ".omo/agent/skills/${name}" = {
         inherit source;
         recursive = false;
       };

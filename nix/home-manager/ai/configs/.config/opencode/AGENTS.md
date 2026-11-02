@@ -181,6 +181,10 @@ Amend or squash the correction into that commit and replay subsequent eligible c
 Create a separate commit when the change represents distinct functionality or an independently meaningful step.
 Temporary fixup commits are allowed, but MUST be folded into their target commits before the final report.
 
+User-requested corrections, simplifications, and refinements of the active task normally belong in its existing commits.
+Behavior changes may be folded into existing commits or recorded in new commits.
+When unsure which is appropriate, explicitly ask the user for clarification before committing.
+
 Do not create backup branches during the session.
 Immediately before the first history rewrite, record the full HEAD commit hash in the session context.
 Keep this original hash unchanged across all subsequent rewrites.

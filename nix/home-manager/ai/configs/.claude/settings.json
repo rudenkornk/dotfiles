@@ -177,6 +177,7 @@
     "command": "~/.claude/statusline.sh"
   },
   "theme": "dark",
+  "tui": "fullscreen",
   "editorMode": "normal",
   "skipAutoPermissionPrompt": true
 }

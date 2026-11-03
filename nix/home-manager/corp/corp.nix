@@ -199,6 +199,7 @@
         "${config.xdg.dataHome}/atuin/key".source = lib.mkForce (
           pkgs.locallib.secrets + /corp/atuin_key.sops
         );
+        "${home}/.atuin/data/key".source = lib.mkForce (pkgs.locallib.secrets + /corp/atuin_key.sops);
 
         "${home}/.claude/mcp-corp.json".source = pkgs.locallib.secrets + /corp/claude.mcp.json.sops;
 

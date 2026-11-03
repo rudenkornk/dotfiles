@@ -3,6 +3,11 @@
 These are global rules.
 Follow them for all code, unless specific rules were overridden with project-local rules.
 
+# Proxy Environment
+
+Agents usually run with proxy environment variables set.
+If they interfere with a command, unset them in the agent's shell before retrying.
+
 # Decision Review and Autonomy
 
 By default, the user retains control over behavioral and design decisions.

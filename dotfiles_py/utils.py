@@ -140,16 +140,37 @@ def sudo_shell(  # noqa: PLR0913
     )
 
 
+def sudo_python(
+    args: Sequence[str | Path], *, capture_output: bool = False, check: bool = True
+) -> subprocess.CompletedProcess[str]:
+    return sudo_shell([sys.executable, *args], capture_output=capture_output, check=check)
+
+
 def sudo_cat(path: Path) -> str:
-    return sudo_shell(
+    return sudo_python(
         # catless cat.
         [
-            sys.executable,
             "-c",
             f"from pathlib import Path; print(Path('{path}').read_text(), end='')",
         ],
         capture_output=True,
     ).stdout
+
+
+def sudo_mkdir(
+    path: Path, *, parents: bool = False, exist_ok: bool = False, check: bool = True
+) -> subprocess.CompletedProcess[str]:
+    return sudo_python(
+        [
+            "-c",
+            "import sys; from pathlib import Path; "
+            "Path(sys.argv[1]).mkdir(parents=sys.argv[2] == '1', exist_ok=sys.argv[3] == '1')",
+            path,
+            str(int(parents)),
+            str(int(exist_ok)),
+        ],
+        check=check,
+    )
 
 
 @overload

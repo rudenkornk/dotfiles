@@ -11,8 +11,7 @@
 #   2. The config. It carries internal endpoints, so it is committed encrypted and decrypted
 #      into tmpfs at boot by the shared `local.secrets` mechanism, which symlinks it into place.
 #
-# Either being absent is diagnosed to the journal and retried: `Restart = "always"` below turns
-# a non-zero exit into a retry loop that recovers once the binary is installed.
+# Missing prerequisites and daemon failures are logged and retried without failing system activation.
 { pkgs, ... }:
 
 let
@@ -47,21 +46,21 @@ in
     wantedBy = [ "multi-user.target" ];
     restartTriggers = [ encrypted_config ];
 
-    # Diagnose the two "not ready yet" cases, then hand off to the daemon.
-    # A non-zero exit here is caught by `Restart = "always"` and retried with backoff.
+    # NixOS activation treats auto-restarting services with nonzero exit status as failures.
     script = ''
       if [[ ! -r ${config_file} ]]; then
         echo "${config_file} is missing: config was not decrypted, check decrypt-splitty.service." >&2
-        exit 1
+        exit 0
       fi
       for candidate in ${toString candidates}; do
         if [[ -x "$candidate" ]]; then
-          exec "$candidate" start --config ${config_file}
+          "$candidate" start --config ${config_file} || echo "Splitty exited with status $?; retrying." >&2
+          exit 0
         fi
       done
       echo "splitty binary not found, checked: ${toString candidates}" >&2
       echo "Decrypt corp secrets, then run: sudo nix build --profile ${system_profile} <dotfiles>#splitty" >&2
-      exit 1
+      exit 0
     '';
 
     unitConfig = {
@@ -70,7 +69,7 @@ in
     };
 
     serviceConfig = {
-      ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      ExecReload = "${pkgs.procps}/bin/pkill -HUP -P $MAINPID";
 
       Restart = "always";
       # Upstream restarts instantly (`RestartSec=0`).

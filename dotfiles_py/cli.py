@@ -10,6 +10,7 @@ import click
 import typer
 
 from . import utils
+from .targets import backup as backup_target
 from .targets import config_gen as config_target
 from .targets import gnome as gnome_target
 from .targets import hooks as hooks_target
@@ -132,6 +133,15 @@ def gui() -> None:
 def updatekeys() -> None:
     """Update AGE keys in project secrets if recipients have changed."""
     secrets_target.updatekeys(repo_path=REPO_PATH)
+
+
+@app.command()
+@utils.typer_exit()
+def backup_corp(
+    backup_dir: Annotated[Path, typer.Argument(help="New directory for the mirrored corporate configuration backup.")],
+) -> None:
+    """Back up fresh not-yet-NixOSed system configuration, provisioned by corporate ServiceDesk."""
+    backup_target.backup_corp(backup_dir=backup_dir)
 
 
 @app.command()

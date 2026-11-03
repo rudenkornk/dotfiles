@@ -86,7 +86,17 @@
     preserveAt."/persistent" = {
       directories = [
         # All user home directories: dotfiles, shell history, SSH keys, user data.
-        "/home"
+        {
+          directory = "/home";
+          # NixOS activation creates missing home directories, and it runs in initrd.
+          # With a later mount, activation would create them on the root tmpfs,
+          # and the `/home` bind mount would then hide them.
+          # `nixos-install` does not help either, since it writes them to the tmpfs, not to `/persistent`,
+          # and that tmpfs is lost on reboot.
+          # On a fresh install `/persistent/home` would therefore have no user directories,
+          # and Home Manager services would fail on first boot.
+          inInitrd = true;
+        }
 
         # sops age key used to decrypt secrets at runtime.
         "/root/.config/sops"

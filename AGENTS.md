@@ -173,7 +173,9 @@ Configurations must still evaluate without decrypted secrets.
 - `nix/overlays/locallib/with_secrets.nix` uses `bash_secrets.nix` to inject decrypted environment variables at launch.
   This wrapper is used by all AI CLI tools and Neovim.
 - The pre-commit hook blocks plaintext secret filenames and scans the staged diff with gitleaks.
-  AI tools are denied access to secrets directories.
+  AI tools are denied access to secrets directories,
+  unless user explicitly and proactively allows it for the current task.
+  In that case decrypt only the necessary files, do not display secret values, and do not persist plaintext in the repository.
   `nix/overlays/sops.nix` runs the secret editor with `unshare --net` and restricted vim.
 
 # Code Style Guidelines

@@ -57,6 +57,16 @@ in
             service-name = "decrypt-networkmanager";
             before = [ "NetworkManager.service" ];
           };
+          "/etc/NetworkManager/system-connections/corp_wifi_out.nmconnection" = {
+            source = pkgs.locallib.secrets + /corp/corp_wifi_out.nmconnection.sops;
+            service-name = "decrypt-networkmanager";
+            before = [ "NetworkManager.service" ];
+          };
+          "/etc/NetworkManager/system-connections/corp_wired.nmconnection" = {
+            source = pkgs.locallib.secrets + /corp/corp_wired.nmconnection.sops;
+            service-name = "decrypt-networkmanager";
+            before = [ "NetworkManager.service" ];
+          };
           "/etc/tpm2_pkcs11/tpm2_pkcs11.sqlite3" = {
             source = pkgs.locallib.secrets + /corp/tpm2_pkcs11.sqlite3.sops;
             service-name = "decrypt-networkmanager";

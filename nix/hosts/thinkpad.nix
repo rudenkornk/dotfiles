@@ -44,16 +44,6 @@ in
 
     services.fstrim.enable = true;
 
-    systemd = {
-      services = {
-        docker = {
-          environment = {
-            USERKIND = "corp";
-          };
-        };
-      };
-    };
-
     environment = {
       etc = {
         "corp/ca-bundle.pem".source = pkgs.corp.ca-bundle;

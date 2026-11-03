@@ -6,11 +6,10 @@
     packages = with pkgs; [
       docker
       docker-compose
+      podman
       qemu_full
       skopeo
       vagrant
-
-      (locallib.with_proxy { pkg = podman; })
     ];
 
     shellAliases = {

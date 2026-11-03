@@ -7,7 +7,7 @@
     alsa-utils
     brightnessctl
     cups
-    custom.service-secrets
+    custom.service-proxy
     dbus
     ddcutil
     dmidecode

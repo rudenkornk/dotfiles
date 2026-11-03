@@ -7,8 +7,8 @@ let
 in
 {
   name = "thinkpad";
-  smbiosUUIDHash = "4cc3d7d1d69c8a0372d34bbbbebc4c82e1c5f22f";
-  disk_device = "/dev/disk/by-path/pci-0000:05:00.0-nvme-1";
+  smbiosUUIDHash = "b91f2ac947807bd13767e71a91d8b70e2e4a15f5";
+  disk_device = "/dev/disk/by-path/pci-0000:04:00.0-nvme-1";
 
   # The hardware module receives its own host-specific `pkgs` from NixOS.
   hardware-configuration = { pkgs, ... }:

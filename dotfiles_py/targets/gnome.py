@@ -1,5 +1,6 @@
 import enum
 import logging
+import re
 from itertools import chain
 from pathlib import Path, PurePath
 from tempfile import NamedTemporaryFile
@@ -8,6 +9,16 @@ from typing import Self
 from ..utils import run_shell, yaml_read, yaml_write
 
 _logger = logging.getLogger(__name__)
+
+
+def nautilus_config(*, bookmarks_path: Path, template_path: Path) -> None:
+    try:
+        content = bookmarks_path.read_text()
+    except FileNotFoundError:
+        _logger.info("No GTK bookmarks file; leaving the template unchanged.")
+        return
+    home_uri = re.escape(Path.home().as_uri())
+    template_path.write_text(re.sub(rf"(?m)^{home_uri}(?=/| |\r?$)", "file://@HOME@", content))
 
 
 class DConfKey(PurePath):

@@ -37,6 +37,10 @@
   };
 
   programs = lib.optionalAttrs (user.userkind == "corp") {
+    firefox.policies.Certificates.Install = [
+      "${pkgs.locallib.secrets}/corp/YandexInternalRootCA.crt"
+      "${pkgs.locallib.secrets}/corp/YCKZInternalRootCA.crt"
+    ];
     bash = {
       initExtra = ''
         source "$(${lib.getExe pkgs.custom.sops-cached} ${pkgs.locallib.secrets + /corp/env.sh.sops})"

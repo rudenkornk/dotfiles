@@ -4,8 +4,9 @@ c() {
   if [[ $# -eq 0 || ($# -eq 1 && "$1" == -) ]]; then
     popd >/dev/null || return
   else
-    pushd . >/dev/null || return
+    local old_pwd=$PWD
     z "$@" || return
+    pushd -n "$old_pwd" >/dev/null || return
   fi
   eza --classify=always --icons=always --all --group-directories-first
 }

@@ -3,8 +3,9 @@ c() {
   if [[ $# -eq 0 || ( $# -eq 1 && "$1" == - ) ]]; then
     popd -q || return
   else
-    pushd -q .
+    local old_pwd=$PWD
     z "$@" || return
+    dirstack=("$old_pwd" "${dirstack[@]}")
   fi
   eza --classify=always --icons=always --all --group-directories-first
 }

@@ -116,11 +116,16 @@ def hooks() -> None:
 @app.command()
 @utils.typer_exit()
 def gui() -> None:
-    """Regenerate gnome & noctalia settings."""
+    """Regenerate GNOME, GTK bookmarks, and Noctalia settings."""
     domain_rules_path = REPO_PATH / "nix/home-manager/desktop-envs/dconf/rules.yaml"
     nix_path = REPO_PATH / "nix/home-manager/desktop-envs/dconf.nix"
     rules = gnome_target.DomainRules.load(domain_rules_path)
     gnome_target.gnome_config(rules=rules, nix_path=nix_path)
+
+    gnome_target.nautilus_config(
+        bookmarks_path=Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config") / "gtk-3.0/bookmarks",
+        template_path=REPO_PATH / "nix/home-manager/desktop-envs/nautilus/bookmarks.in",
+    )
 
     noctalia_settings = REPO_PATH / "nix/home-manager/desktop-envs/configs/.config/noctalia/config.toml"
     noctalia_host_settings = REPO_PATH / f"nix/hosts/{platform.node()}/noctalia.toml"

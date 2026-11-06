@@ -73,11 +73,13 @@ The user may call screenshots "screens" and omit the directory and `.png` extens
 When opening latest screenshots, prefer `latest[-N].png` over those with a date.
 If user refers to "screen" without additional context, assume they mean the most recent screenshot.
 
-# Math Formatting
+# Code Formatting
 
 In responses intended for the OpenCode terminal UI, write equations in readable Unicode or plain text rather than LaTeX math
 delimiters (`$...$`, `$$...$$`, `\\(...\\)`, or `\\[...\\]`). Use ASCII when a Unicode expression would be unclear.
 When the user requests LaTeX source, or when editing a LaTeX file, preserve the requested syntax, but wrap it with TEXT backticks (\`\`\`text).
+
+For `bash` snippets (in terminal UI responses) do not break lines with backslashes up to 180 chars.
 
 # Implementation Scope and Complexity
 

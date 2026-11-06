@@ -68,10 +68,6 @@ in
         inherit source;
         recursive = false;
       };
-      ".omo/agent/skills/${name}" = {
-        inherit source;
-        recursive = false;
-      };
     }) skills;
   };
 }

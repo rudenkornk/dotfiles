@@ -5,6 +5,7 @@
   "enableInstallTelemetry": false,
   "enableAnalytics": false,
   "tuiMode": "fullscreen",
+  "showHardwareCursor": true,
   "theme": "grok-night",
   "permissionPreset": "full-access",
   "permission": {

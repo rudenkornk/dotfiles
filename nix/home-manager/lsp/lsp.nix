@@ -21,7 +21,6 @@
     phpactor
     pyright
     ruby-lsp
-    rust-analyzer
     svelte-language-server
     tailwindcss-language-server
     taplo
@@ -29,6 +28,7 @@
     texlab
     tinymist
     typescript-language-server
+    unstable.rust-analyzer # Use latest rust toolchain.
     vscode-extensions.elixir-lsp.vscode-elixir-ls
     vscode-extensions.gleam.gleam
     vscode-extensions.mathiasfrohlich.kotlin

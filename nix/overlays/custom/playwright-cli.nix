@@ -24,10 +24,10 @@ final.buildNpmPackage {
     mkdir -p $out/share/skills
     cp -r $out/lib/node_modules/@playwright/cli/skills/playwright-cli $out/share/skills/playwright-cli
 
-    # Generate config JSON with the chromium binary path resolved at build time.
-    chromium_dir=$(ls "${final.playwright-driver.browsers}" | grep '^chromium-' | head -1)
-    chrome_subdir=$(ls "${final.playwright-driver.browsers}/$chromium_dir" | grep '^chrome-linux' | head -1)
-    executable="${final.playwright-driver.browsers}/$chromium_dir/$chrome_subdir/chrome"
+    # TODO: Return to stable after upgrading to 26.11; Chromium 147 breaks Wayland scaling below 100%.
+    chromium_dir=$(ls "${final.unstable.playwright-driver.browsers}" | grep '^chromium-' | head -1)
+    chrome_subdir=$(ls "${final.unstable.playwright-driver.browsers}/$chromium_dir" | grep '^chrome-linux' | head -1)
+    executable="${final.unstable.playwright-driver.browsers}/$chromium_dir/$chrome_subdir/chrome"
 
     mkdir -p $out/share/playwright-cli
     cat > $out/share/playwright-cli/playwright-cli.json << EOF

@@ -8,16 +8,17 @@
 # Install it using the "Installing standalone packages" workflow in readme.md,
 # synchronize the Cloud CA keys as described in the Cloud guide, enroll yubikey certs & restart the service:
 # ```bash
-# pssh yubikey init
-# systemctl --user restart ssh-agent-keys.service
+# pssh yubikey init --yubikey-ssh-pubkey ~/.ssh/corp/yubikey.pub \
+#   --yubikey-ssh-certificate ~/.ssh/corp/yubikey-cert.pub
+# systemctl --user restart ssh-agent-corp-keys.service
 # ```
 #
-# Inspect certificate expiry with `ssh-keygen -L -f ~/.ssh/yubikey-cert.pub`
+# Inspect certificate expiry with `ssh-keygen -L -f ~/.ssh/corp/yubikey-cert.pub`
 # and renew through the Cloud tooling when needed.
 
 export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
-key="$HOME/.ssh/yubikey.pub"
-certificate="$HOME/.ssh/yubikey-cert.pub"
+key="$HOME/.ssh/corp/yubikey.pub"
+certificate="$HOME/.ssh/corp/yubikey-cert.pub"
 
 if [[ ! -s $key || ! -s $certificate ]]; then
   echo "Cloud SSH certificate files are absent; skipping YubiKey loading." >&2

@@ -200,6 +200,19 @@
         "${home}/.ssh/corp/config".source = pkgs.locallib.secrets + /corp/ssh_config.sops;
         "${home}/.ssh/corp/known_hosts".source = pkgs.locallib.secrets + /corp/ssh_known_hosts.sops;
 
+        "${home}/.ssh/corp/yubikey.pub" = {
+          source = pkgs.locallib.secrets + /corp/yubikey.pub.sops;
+          service-name = "decrypt-corp-ssh";
+          before = [ "ssh-agent-corp-keys.service" ];
+          requiredBy = [ "ssh-agent-corp-keys.service" ];
+        };
+        "${home}/.ssh/corp/yubikey-cert.pub" = {
+          source = pkgs.locallib.secrets + /corp/yubikey-cert.pub.sops;
+          service-name = "decrypt-corp-ssh";
+          before = [ "ssh-agent-corp-keys.service" ];
+          requiredBy = [ "ssh-agent-corp-keys.service" ];
+        };
+
         "${config.xdg.dataHome}/atuin/key".source = lib.mkForce (
           pkgs.locallib.secrets + /corp/atuin_key.sops
         );

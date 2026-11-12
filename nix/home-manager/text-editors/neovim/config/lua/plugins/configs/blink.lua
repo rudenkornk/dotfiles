@@ -35,13 +35,14 @@ M.opts = {
     },
     providers = {
       lsp = {
-        max_items = 6,
+        max_items = 64,
       },
       snippets = {
         max_items = 2,
       },
       copilot = {
         score_offset = 10,
+        max_items = 2,
       },
       dictionary = {
         name = "Dict",

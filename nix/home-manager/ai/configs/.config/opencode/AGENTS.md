@@ -3,6 +3,20 @@
 These are global rules.
 Follow them for all code, unless specific rules were overridden with project-local rules.
 
+# English Learning
+
+The user is learning English.
+At the end of every final answer, add a horizontal divider followed by a corrected English version of the user's request.
+Stay as close to the original wording and sentence structure as possible.
+Correct grammar, word choice, spelling, and typos without unnecessary rephrasing.
+Use pale or muted text where supported; otherwise, use an italic blockquote.
+Preserve the user's intent.
+Keep the corrected text within 150 words, which should cover a typical user message
+after excluding quotations, logs, code, and other supporting material.
+If the user's own text exceeds 150 words, correct only its beginning and omit the rest.
+Include only the rewritten request, without explanations or labels.
+Exclude quotations, pasted logs, code, and other supporting task material.
+
 # Proxy Environment
 
 Agents usually run with proxy environment variables set.

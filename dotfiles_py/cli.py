@@ -18,6 +18,7 @@ from .targets import host as host_target
 from .targets import lint as lint_target
 from .targets import noctalia as noctalia_target
 from .targets import secrets as secrets_target
+from .targets import standalone as standalone_target
 from .targets import syms as syms_target
 
 _logger = logging.getLogger(__name__)
@@ -30,6 +31,8 @@ app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},
     help="Main script for spawning Ansible operations or managing dotfiles.",
 )
+standalone_app = typer.Typer(help="Manage standalone packages in the default Nix profile.")
+app.add_typer(standalone_app, name="standalone")
 
 loglevel_map = {
     "s": logging.DEBUG - 5,
@@ -138,6 +141,24 @@ def gui() -> None:
 def updatekeys() -> None:
     """Update AGE keys in project secrets if recipients have changed."""
     secrets_target.updatekeys(repo_path=REPO_PATH)
+
+
+@standalone_app.command(name="add")
+@utils.typer_exit()
+def standalone_add(
+    packages: Annotated[list[str], typer.Argument(help="Package names from nix/packages/, or 'all'.")],
+) -> None:
+    """Add or refresh standalone packages."""
+    standalone_target.manage_packages(repo_path=REPO_PATH, action=standalone_target.Action.add, packages=packages)
+
+
+@standalone_app.command(name="rm")
+@utils.typer_exit()
+def standalone_rm(
+    packages: Annotated[list[str], typer.Argument(help="Package names from nix/packages/, or 'all'.")],
+) -> None:
+    """Remove standalone packages."""
+    standalone_target.manage_packages(repo_path=REPO_PATH, action=standalone_target.Action.rm, packages=packages)
 
 
 @app.command()

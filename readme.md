@@ -119,14 +119,3 @@ Or without entering the dev shell:
 ```bash
 nix run . -- lint
 ```
-
-## Installing standalone packages
-
-Some packages are not included into main config due to their volatile and restricted availability.
-To install them run:
-
-```bash
-sops --decrypt nix/secrets/corp/packages_info.sops.json | sponge nix/secrets/corp/packages_info.sops.json
-nix profile add .#<pkg>
-git checkout nix/secrets/corp/packages_info.sops.json
-```

@@ -6,6 +6,7 @@ let
   manualSkills = {
     ast-grep = "${pkgs.custom.ast-grep-skill}/share/skills/ast-grep";
     ast-grep-outline = "${pkgs.custom.ast-grep-skill}/share/skills/ast-grep-outline";
+    human-in-the-way = "${pkgs.custom.human-in-the-way}/share/skills/human-in-the-way";
     playwright-cli = "${pkgs.custom.playwright-cli}/share/skills/playwright-cli";
   };
   openspecSkills = pkgs.lib.genAttrs pkgs.custom.openspec.skills (
@@ -58,6 +59,10 @@ in
   local = {
     home.file = {
       ".".source = ./configs;
+      ".agents/skills/human-in-the-way" = {
+        source = manualSkills.human-in-the-way;
+        recursive = false;
+      };
     }
     # Claude Code and OpenCode read `~/.claude/skills`, Codex reads `~/.codex/skills`.
     // pkgs.lib.concatMapAttrs (name: source: {

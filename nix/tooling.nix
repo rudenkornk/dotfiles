@@ -49,6 +49,7 @@ let
     (mdformat.withPlugins (
       ps: with ps; [
         mdformat-beautysh
+        mdformat-frontmatter
         mdformat-gfm
       ]
     ))

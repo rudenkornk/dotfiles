@@ -2,11 +2,11 @@ final: _:
 
 final.stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "omo";
-  version = "5.1.57";
+  version = "5.1.75";
 
   src = final.fetchurl {
     url = "https://github.com/code-yeongyu/oh-my-openagent/releases/download/v${finalAttrs.version}/omo-linux-x64-baseline";
-    hash = "sha256-HV/3o0PvLAe4GCtxJi/2MGiicfTa/7e8On76ndQaopQ=";
+    hash = "sha256-HD9vJiTSFn2y5ppqGA/luWDjMbkS4GsoQ3Z7Loc87ig=";
   };
 
   dontUnpack = true;

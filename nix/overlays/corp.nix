@@ -58,8 +58,15 @@ _: final: prev: {
           (builtins.readFile ./corp/openvpn-run.sh);
     };
 
-    pkgs-info = builtins.fromJSON (
-      builtins.readFile (final.locallib.secrets + /corp/packages_info.sops.json)
-    );
+    pkgs-info =
+      let
+        override = builtins.getEnv "DOTFILES_PACKAGES_INFO_FILE";
+      in
+      builtins.fromJSON (
+        if override != "" then
+          builtins.readFile override
+        else
+          builtins.readFile (final.locallib.secrets + /corp/packages_info.sops.json)
+      );
   };
 }

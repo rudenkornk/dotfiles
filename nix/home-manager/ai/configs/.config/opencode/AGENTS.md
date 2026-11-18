@@ -73,28 +73,6 @@ Unless the user specifies a different scope, this permission applies only to the
 Within that scope, make reasonable decisions and summarize consequential choices in the final report.
 Return to the default review requirement for the next task.
 
-# Task Progress
-
-Use a structured todo tool when it is available.
-When it is unavailable, track multi-step work and completion in concise prose updates.
-
-# Screenshots
-
-Resolve screenshot references under `~/Downloads/screenshots`.
-This directory contains all screenshots containing date in their names (and sorting by date allows to get recent ones).
-As well as special ring of `latest.png` and `latest-N.png` (N=1..5) for the most recent screenshots.
-The user may call screenshots "screens" and omit the directory and `.png` extension.
-When opening latest screenshots, prefer `latest[-N].png` over those with a date.
-If user refers to "screen" without additional context, assume they mean the most recent screenshot.
-
-# Code Formatting
-
-In responses intended for the OpenCode terminal UI, write equations in readable Unicode or plain text rather than LaTeX math
-delimiters (`$...$`, `$$...$$`, `\\(...\\)`, or `\\[...\\]`). Use ASCII when a Unicode expression would be unclear.
-When the user requests LaTeX source, or when editing a LaTeX file, preserve the requested syntax, but wrap it with TEXT backticks (\`\`\`text).
-
-For `bash` snippets (in terminal UI responses) do not break lines with backslashes up to 180 chars.
-
 # Implementation Scope and Complexity
 
 Prefer the most straightforward implementation for the current task.
@@ -219,6 +197,28 @@ Do not rewrite commits that predate the current session or belong to another tas
 Review the resulting commit sequence and final diff, and rerun affected checks after rewriting.
 
 Pushing, including force-pushing rewritten history, requires an explicit user request.
+
+# Task Progress
+
+Use a structured todo tool when it is available.
+When it is unavailable, track multi-step work and completion in concise prose updates.
+
+# Screenshots
+
+Resolve screenshot references under `~/Downloads/screenshots`.
+This directory contains all screenshots containing date in their names (and sorting by date allows to get recent ones).
+As well as special ring of `latest.png` and `latest-N.png` (N=1..5) for the most recent screenshots.
+The user may call screenshots "screens" and omit the directory and `.png` extension.
+When opening latest screenshots, prefer `latest[-N].png` over those with a date.
+If user refers to "screen" without additional context, assume they mean the most recent screenshot.
+
+# Code Formatting
+
+In responses intended for the OpenCode terminal UI, write equations in readable Unicode or plain text rather than LaTeX math
+delimiters (`$...$`, `$$...$$`, `\\(...\\)`, or `\\[...\\]`). Use ASCII when a Unicode expression would be unclear.
+When the user requests LaTeX source, or when editing a LaTeX file, preserve the requested syntax, but wrap it with TEXT backticks (\`\`\`text).
+
+For `bash` snippets (in terminal UI responses) do not break lines with backslashes up to 180 chars.
 
 # Comment & Markdown Style Guidelines
 

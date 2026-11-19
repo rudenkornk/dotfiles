@@ -28,6 +28,7 @@ in
       creduce
       delve # Provides `dlv`, the Go debug adapter.
       gdb
+      gef
       lldb
       netcoredbg
       python3Packages.debugpy

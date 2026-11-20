@@ -23,7 +23,7 @@
       mouse = true;
       baseIndex = 1;
       terminal = "tmux-256color";
-      shell = "${pkgs.lib.getExe pkgs.zsh}";
+      shell = "${pkgs.lib.getExe pkgs.fish}";
 
       prefix = "C-s";
       extraConfig = builtins.readFile ./tmux/tmux.conf;

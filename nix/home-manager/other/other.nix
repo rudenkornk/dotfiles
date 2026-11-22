@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 # Other useful tools.
 {
@@ -24,5 +24,15 @@
     };
   };
 
-  local.home.file.".".source = ./configs;
+  local = {
+    home.file.".".source = ./configs;
+    secrets = {
+      file = {
+        "${config.home.homeDirectory}/.kaggle/access_token" = {
+          source = pkgs.locallib.secrets + /kaggle-access-token.sops;
+          service-name = "decrypt-kaggle";
+        };
+      };
+    };
+  };
 }

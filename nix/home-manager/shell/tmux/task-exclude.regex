@@ -9,5 +9,5 @@ lazygit|tig|gitui|lazydocker|ssh|pssh|mosh|tmux|screen|
 jupyter([[:space:]]+|-)(lab|notebook|console|qtconsole)|ipython|bpython|ptpython|ptipython|irb|pry|ghci|iex|
 sing-box|sing-box-run|xray|xray-run|openvpn|openvpn-corp-run|openconnect|openconnect-corp-run|
 (docker|d|podman|p)[[:space:]]+compose|docker-compose|podman-compose|
-fish|bash|zsh|sh|nu|elvish|dash|ash|ksh|mksh|yash|csh|tcsh|xonsh|nushell|pwsh|exec|exit
+fish|bash|zsh|sh|nu|elvish|dash|ash|ksh|mksh|yash|csh|tcsh|xonsh|nushell|nix-shell|pwsh|exec|exit
 )([[:space:];|&]|$)
